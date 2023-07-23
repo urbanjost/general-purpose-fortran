@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>selected_real_kind (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>selected_real_kind (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>selected_real_kind(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-selected_real_kind(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SELECTED_REAL_KIND(3) - [KIND] Choose real kind
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ SELECTED_REAL_KIND(3) - [KIND] Choose real kind
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = selected_real_kind([p] [,r] [,radix] )
 <P>
 integer function selected_int_kind(r)
 <P>
 <PRE>
-           real(kind=KIND),intent(in),optional :: p
-           real(kind=KIND),intent(in),optional :: r
-           real(kind=KIND),intent(in),optional :: radix
+         real(kind=KIND),intent(in),optional :: p
+         real(kind=KIND),intent(in),optional :: r
+         real(kind=KIND),intent(in),optional :: radix
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ integer function selected_int_kind(r)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -121,16 +115,17 @@ the result is an default integer scalar
 
 </A>
 <BLOCKQUOTE>
-SELECTED_REAL_KIND(3) return the kind value of a real data type with decimal
-precision of at least P digits, exponent range of at least R, and with a
-radix of RADIX. That is, if such a kind exists
+<P>
+SELECTED_REAL_KIND(3) return the kind value of a real data type with
+decimal precision of at least P digits, exponent range of at least R,
+and with a radix of RADIX. That is, if such a kind exists
 <P>
 <PRE>
-      + it has the decimal precision as returned by **precision**(3) of at
-        least **p** digits.
-      + a decimal exponent range, as returned by the function **range**(3)
-        of at least **r**
-      + a radix, as returned by the function **radix**(3) , of **radix**,
+    + it has the decimal precision as returned by **precision**(3) of at
+      least **p** digits.
+    + a decimal exponent range, as returned by the function **range**(3)
+      of at least **r**
+    + a radix, as returned by the function **radix**(3) , of **radix**,
 <P>
 </PRE>
 If the requested kind does not exist, <B>-1</B> is returned.
@@ -143,6 +138,7 @@ At least one argument shall be present.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -161,8 +157,8 @@ RADIX : the desired radix
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-      Before FORTRAN 2008, at least one of the arguments R or P shall be
-      present; since FORTRAN 2008, they are assumed to be zero if absent.
+    Before FORTRAN 2008, at least one of the arguments R or P shall be
+    present; since FORTRAN 2008, they are assumed to be zero if absent.
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -172,34 +168,35 @@ RADIX : the desired radix
 
 </A>
 <BLOCKQUOTE>
-selected_real_kind returns the value of the kind type parameter of a real
-data type with decimal precision of at least P digits, a decimal exponent
-range of at least R, and with the requested RADIX.
 <P>
-If P or R is absent, the result value is the same as if it were present with
-the value zero.
+selected_real_kind returns the value of the kind type parameter of a
+real data type with decimal precision of at least P digits, a decimal
+exponent range of at least R, and with the requested RADIX.
 <P>
-If the RADIX parameter is absent, there is no requirement on the radix of
-the selected kind and real kinds with any radix can be returned.
+If P or R is absent, the result value is the same as if it were present
+with the value zero.
 <P>
-If more than one real data type meet the criteria, the kind of the data type
-with the smallest decimal precision is returned. If no real data type
-matches the criteria, the result is
-<TABLE cellpadding=3><!-- tsb: If more than one real data type meet the criteria, the kind of the data type
+If the RADIX parameter is absent, there is no requirement on the radix
+of the selected kind and real kinds with any radix can be returned.
+<P>
+If more than one real data type meet the criteria, the kind of the data
+type with the smallest decimal precision is returned. If no real data
+type matches the criteria, the result is
+<TABLE cellpadding=3><!-- tsb: If more than one real data type meet the criteria, the kind of the data
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>-1</B> : if the processor does not support a real data type with a precision
-greater than or equal to P, but the R and RADIX requirements can be
-fulfilled
+<B>-1</B> : if the processor does not support a real data type with a
+precision greater than or equal to P, but the R and RADIX
+requirements can be fulfilled
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-<B>-2</B> : if the processor does not support a real type with an exponent range
-greater than or equal to R, but P and RADIX are fulfillable
+<B>-2</B> : if the processor does not support a real type with an exponent
+range greater than or equal to R, but P and RADIX are fulfillable
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -223,30 +220,31 @@ o
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_selected_real_kind
-      implicit none
-      integer,parameter :: p6 = selected_real_kind(6)
-      integer,parameter :: p10r100 = selected_real_kind(10,100)
-      integer,parameter :: r400 = selected_real_kind(r=400)
-      real(kind=p6) :: x
-      real(kind=p10r100) :: y
-      real(kind=r400) :: z
+    program demo_selected_real_kind
+    implicit none
+    integer,parameter :: p6 = selected_real_kind(6)
+    integer,parameter :: p10r100 = selected_real_kind(10,100)
+    integer,parameter :: r400 = selected_real_kind(r=400)
+    real(kind=p6) :: x
+    real(kind=p10r100) :: y
+    real(kind=r400) :: z
 <P>
-         print *, precision(x), range(x)
-         print *, precision(y), range(y)
-         print *, precision(z), range(z)
-      end program demo_selected_real_kind
+       print *, precision(x), range(x)
+       print *, precision(y), range(y)
+       print *, precision(z), range(z)
+    end program demo_selected_real_kind
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        &gt;            6          37
-        &gt;           15         307
-        &gt;           18        4931
+      &gt;            6          37
+      &gt;           15         307
+      &gt;           18        4931
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -256,6 +254,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 ; with RADIX - Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -264,16 +263,13 @@ Fortran 95 ; with RADIX - Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 PRECISION(3), RANGE(3), RADIX(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022  selected_real_kind(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>selected_real_kind (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b962ffb3-edc6-4ea4-84c7-e18b8711fe48 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>selected_real_kind (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1a118a74-09b3-4ce6-8628-6f4f43469763 using man macros.</FONT>
 <br><br><center><img src="images/selected_real_kind.3fortran.gif"></center>
 </div>
 </div>

@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>aint (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>aint (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>aint(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-aint(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 AINT(3) - [NUMERIC] Truncate toward zero to a whole number
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ AINT(3) - [NUMERIC] Truncate toward zero to a whole number
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = aint(x [,kind])
 <P>
 <PRE>
-           elemental real(kind=KIND) function iaint(x,KIND)
+         elemental real(kind=KIND) function iaint(x,KIND)
 <P>
-            real(kind=**),intent(in)   :: x
-            integer(kind=**),intent(in),optional :: KIND
+          real(kind=**),intent(in)   :: x
+          integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = aint(x [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -116,6 +110,7 @@ parameter of the result.
 
 </A>
 <BLOCKQUOTE>
+<P>
 AINT(3) truncates its argument toward zero to a whole number.
 </BLOCKQUOTE>
 <A name=4>
@@ -124,6 +119,7 @@ AINT(3) truncates its argument toward zero to a whole number.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -142,11 +138,12 @@ KIND : indicates the kind parameter of the result.
 
 </A>
 <BLOCKQUOTE>
-The sign is the same as the sign of X unless the magnitude of X is less than
-one, in which case zero is returned.
 <P>
-Otherwise AINT(3) returns the largest whole number that does not exceed the
-magnitude of X with the same sign as the input.
+The sign is the same as the sign of X unless the magnitude of X is less
+than one, in which case zero is returned.
+<P>
+Otherwise AINT(3) returns the largest whole number that does not exceed
+the magnitude of X with the same sign as the input.
 <P>
 That is, it truncates the value towards zero.
 </BLOCKQUOTE>
@@ -156,43 +153,44 @@ That is, it truncates the value towards zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_aint
-      use, intrinsic :: iso_fortran_env, only : sp=&gt;real32, dp=&gt;real64
-      implicit none
-      real(kind=dp) :: x8
-         print *,&#146;basics:&#146;
-         print *,&#146; just chops off the fractional part&#146;
-         print *,  aint(-2.999), aint(-2.1111)
-         print *,&#146; if |x| &lt; 1 a positive zero is returned&#146;
-         print *,  aint(-0.999), aint( 0.9999)
-         print *,&#146; input may be of any real kind&#146;
-         x8 = 4.3210_dp
-         print *, aint(-x8), aint(x8)
-         print *,&#146;elemental:&#146;
-         print *,aint([ &
-          &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &
-          &  0.0,   &
-          &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])
-      end program demo_aint
+    program demo_aint
+    use, intrinsic :: iso_fortran_env, only : sp=&gt;real32, dp=&gt;real64
+    implicit none
+    real(kind=dp) :: x8
+       print *,&#146;basics:&#146;
+       print *,&#146; just chops off the fractional part&#146;
+       print *,  aint(-2.999), aint(-2.1111)
+       print *,&#146; if |x| &lt; 1 a positive zero is returned&#146;
+       print *,  aint(-0.999), aint( 0.9999)
+       print *,&#146; input may be of any real kind&#146;
+       x8 = 4.3210_dp
+       print *, aint(-x8), aint(x8)
+       print *,&#146;elemental:&#146;
+       print *,aint([ &
+        &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &
+        &  0.0,   &
+        &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])
+    end program demo_aint
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       basics:
-        just chops off the fractional part
-        -2.000000      -2.000000
-        if |x| &lt; 1 a positive zero is returned
-        0.0000000E+00  0.0000000E+00
-        input may be of any real kind
-        -4.00000000000000        4.00000000000000
-       elemental:
-        -2.000000      -2.000000      -2.000000      -2.000000      -1.000000
-        -1.000000      0.0000000E+00  0.0000000E+00  0.0000000E+00   1.000000
-         1.000000       2.000000       2.000000       2.000000       2.000000
+     basics:
+      just chops off the fractional part
+      -2.000000      -2.000000
+      if |x| &lt; 1 a positive zero is returned
+      0.0000000E+00  0.0000000E+00
+      input may be of any real kind
+      -4.00000000000000        4.00000000000000
+     elemental:
+      -2.000000      -2.000000      -2.000000      -2.000000      -1.000000
+      -1.000000      0.0000000E+00  0.0000000E+00  0.0000000E+00   1.000000
+       1.000000       2.000000       2.000000       2.000000       2.000000
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -202,6 +200,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -210,16 +209,13 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 ANINT(3), INT(3), NINT(3), SELECTED_INT_KIND(3), CEILING(3), FLOOR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                aint(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>aint (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3e715770-47c8-4bec-816a-e29581ae064a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>aint (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bf2717ef-23e9-4fc4-947e-61e3b527fe1a using man macros.</FONT>
 <br><br><center><img src="images/aint.3fortran.gif"></center>
 </div>
 </div>

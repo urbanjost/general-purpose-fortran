@@ -1,5 +1,7 @@
         program demo_drawstr
         use M_draw
+        implicit none
+        integer :: idum
         call vinit('')
         ! by default the drawing surface is
         ! a square ranging from -1 to 1 in both

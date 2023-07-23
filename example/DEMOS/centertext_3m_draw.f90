@@ -1,6 +1,8 @@
      program demo_centertext
      use :: M_draw
-     use :: M_units, only : cosd, sind
+     implicit none
+     real :: x1, y1, r, ang, xx, yy
+     integer :: i, j, ipaws
      !! set up drawing environment
      call prefsize(600,600)
      call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
@@ -23,7 +25,7 @@
         call color(D_RED)
         do i=1,80
            call move2(x1,y1)
-           call draw2(x1+150.0*cosd(i*12), y1+150.0*sind(i*12))
+           call draw2(x1+150.0*cosd(i*12.0), y1+150.0*sind(i*12.0))
         enddo
 
         !! draw rotated text

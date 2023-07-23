@@ -14,6 +14,7 @@ append("get_next_char.3m_io.html");
 append("get_tmp.3m_io.html");
 append("getline.3m_io.html");
 append("getname.3m_io.html");
+append("is_hidden_file.3m_io.html");
 append("joinpath.3m_io.html");
 append("lookfor.3m_io.html");
 append("notopen.3m_io.html");

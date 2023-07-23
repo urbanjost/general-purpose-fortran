@@ -1,57 +1,16 @@
-!@(#)  draw some polygons
-!(LICENSE:PD)
-!
-subroutine drawpoly
-use M_draw
-   integer,parameter :: YELLOW = 3, GREEN = 2, MAGENTA = 5
-!
-   real parray(3,4)                   ! An array of points for a polygon
-
-   data parray/ -8.0, -8.0, 0.0,  &
-              & -5.0, -8.0, 0.0,  &
-              & -5.0, -5.0, 0.0,  &
-              & -8.0, -5.0, 0.0 /
-
-   call color(YELLOW)
-!
-! Draw a polygon using poly, parray is our array of
-! points and 4 is the number of points in it.
-!
-   call poly(4, parray)
-
-   call color(GREEN)
-!
-! Draw a 5 sided figure by using move, draw and closepoly.
-!
-   call makepoly()
-      call move(0.0, 0.0, 0.0)
-      call draw(3.0, 0.0, 0.0)
-      call draw(3.0, 4.0, 0.0)
-      call draw(-1.0, 5.0, 0.0)
-      call draw(-2.0, 2.0, 0.0)
-   call closepoly()
-
-   call color(MAGENTA)
-!
-! draw a sector representing a 1/4 circle
-!
-   call sector(1.5, -7.0, 3.0, 0.0, 90.0)
-
-   idum=getkey()
-
-end subroutine drawpoly
 !
 ! Using polygons, hatching, and filling.
 !
-   program fpoly
+program fpoly
 
    use M_draw
+   implicit none
 
-   integer,parameter :: BLACK=0, YELLOW=3, GREEN=2, MAGENTA=5
+   integer, parameter :: BLACK = 0, YELLOW = 3, GREEN = 2, MAGENTA = 5
    character(len=50) :: device
 
-   print*,'Enter output device:'
-   read(*,'(a)')device
+   print *, 'Enter output device:'
+   read (*, '(a)') device
 
    call vinit(device)
 !
@@ -116,5 +75,50 @@ end subroutine drawpoly
 !
    call drawpoly
    call vexit
+contains
+!@(#)  draw some polygons
+!(LICENSE:PD)
+!
+   subroutine drawpoly
+      use M_draw
+      implicit none
+      integer :: idum
+      integer, parameter :: YELLOW = 3, GREEN = 2, MAGENTA = 5
+!
+      real parray(3, 4)                   ! An array of points for a polygon
+
+      data parray/-8.0, -8.0, 0.0,  &
+      & -5.0, -8.0, 0.0,  &
+      & -5.0, -5.0, 0.0,  &
+      & -8.0, -5.0, 0.0/
+
+      call color(YELLOW)
+!
+! Draw a polygon using poly, parray is our array of
+! points and 4 is the number of points in it.
+!
+      call poly(4, parray)
+
+      call color(GREEN)
+!
+! Draw a 5 sided figure by using move, draw and closepoly.
+!
+      call makepoly()
+      call move(0.0, 0.0, 0.0)
+      call draw(3.0, 0.0, 0.0)
+      call draw(3.0, 4.0, 0.0)
+      call draw(-1.0, 5.0, 0.0)
+      call draw(-2.0, 2.0, 0.0)
+      call closepoly()
+
+      call color(MAGENTA)
+!
+! draw a sector representing a 1/4 circle
+!
+      call sector(1.5, -7.0, 3.0, 0.0, 90.0)
+
+      idum = getkey()
+
+   end subroutine drawpoly
 
 end program fpoly

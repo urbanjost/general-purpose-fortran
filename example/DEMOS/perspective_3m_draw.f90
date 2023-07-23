@@ -2,9 +2,10 @@
      !
      !     Shows various combinations of viewing and projection transformations
      use M_draw
+     implicit none
      !
      character(len=50) :: device
-     integer :: ios
+     integer :: ios, idum
      !
         print*,'Enter output device:'
         read(*,'(a)',iostat=ios)device

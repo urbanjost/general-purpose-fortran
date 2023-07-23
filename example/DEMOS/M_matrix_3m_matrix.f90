@@ -5,6 +5,7 @@
       integer,allocatable          :: iarr(:,:)
       character(len=:),allocatable :: t(:)
       integer                      :: ierr
+      integer                      :: i
 
       ! store some data into lala(3)
       call put_into_lala('A',[1,2,3,4,5]*10.5,ierr)

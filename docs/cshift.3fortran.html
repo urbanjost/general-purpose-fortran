@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cshift (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cshift (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>cshift(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-cshift(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 CSHIFT(3) - [TRANSFORMATIONAL] Circular shift elements of an array
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ CSHIFT(3) - [TRANSFORMATIONAL] Circular shift elements of an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = cshift(array, shift [,dim])
 <P>
 <PRE>
-          type(TYPE, kind=KIND) function cshift(array, shift, dim )
+        type(TYPE(kind=KIND)) function cshift(array, shift, dim )
 <P>
-           type(TYPE,kind=KIND),intent(in) :: array(..)
-           integer(kind=**),intent(in)  :: shift
-           integer(kind=**),intent(in)  :: dim
+         type(TYPE(kind=KIND)),intent(in) :: array(..)
+         integer(kind=**),intent(in)  :: shift
+         integer(kind=**),intent(in)  :: dim
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = cshift(array, shift [,dim])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -102,15 +96,16 @@ ARRAY may be any type and rank
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT an integer scalar if ARRAY has rank one. Otherwise, it shall be
-scalar or of rank n-1 and of shape [d1, d2, &#46;&#46;&#46;, dDIM-1, dDIM+1,
+SHIFT an integer scalar if ARRAY has rank one. Otherwise, it shall
+be scalar or of rank n-1 and of shape [d1, d2, &#46;&#46;&#46;, dDIM-1, dDIM+1,
+&#46;&#46;&#46;, dn] where [d1, d2, ..., dn] is the shape of ARRAY.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM is an integer scalar with a value in the range 1 &lt;= DIM &lt;= n, where n
-is the rank of ARRAY. If DIM is absent, it is as if it were present with
-the value 1.
+DIM is an integer scalar with a value in the range 1 &lt;= DIM &lt;= n,
+where n is the rank of ARRAY. If DIM is absent, it is as if it were
+present with the value 1.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -126,14 +121,17 @@ ARRAY.
 
 </A>
 <BLOCKQUOTE>
-CSHIFT(3) performs a circular shift on elements of ARRAY along the dimension
-of DIM. If DIM is omitted it is taken to be 1. DIM is a scalar of type
-integer in the range of 1 &lt;= DIM &lt;= N, where "n" is the rank of ARRAY.
 <P>
-If the rank of ARRAY is one, then all elements of ARRAY are shifted by SHIFT
-places. If rank is greater than one, then all complete rank one sections of
-ARRAY along the given dimension are shifted. Elements shifted out one end of
-each rank one section are shifted back in the other end.
+CSHIFT(3) performs a circular shift on elements of ARRAY along the
+dimension of DIM. If DIM is omitted it is taken to be 1. DIM is a scalar
+of type integer in the range of 1 &lt;= DIM &lt;= N, where "n" is the rank of
+ARRAY.
+<P>
+If the rank of ARRAY is one, then all elements of ARRAY are shifted by
+SHIFT places. If rank is greater than one, then all complete rank one
+sections of ARRAY along the given dimension are shifted. Elements
+shifted out one end of each rank one section are shifted back in the
+other end.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -141,6 +139,7 @@ each rank one section are shifted back in the other end.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -150,22 +149,16 @@ ARRAY : An array of any type which is to be shifted
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT : the number of positions to circularly shift. A negative value
-produces a right shift, a positive value produces a left shift.
+SHIFT : the number of positions to circularly shift. A negative
+value produces a right shift, a positive value produces a left
+shift.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : the dimension along which to shift a multi-rank ARRAY. Defaults to
-<TABLE width=100% cellpadding=3><!-- tsb: DIM : the dimension along which to shift a multi-rank ARRAY. Defaults to
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-<P>
+DIM : the dimension along which to shift a multi-rank ARRAY.
+Defaults to 1.
 </TD></TR>
-<TR></TR></TABLE></TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
 
@@ -173,15 +166,16 @@ DIM : the dimension along which to shift a multi-rank ARRAY. Defaults to
 
 </A>
 <BLOCKQUOTE>
+<P>
 Returns an array of same type and rank as the ARRAY argument.
 <P>
-The rows of an array of rank two may all be shifted by the same amount or by
-different amounts.
+The rows of an array of rank two may all be shifted by the same amount
+or by different amounts.
+</BLOCKQUOTE>
 <P>
-<PRE>
-    cshift
 <P>
-</PRE>
+<BLOCKQUOTE>
+cshift
 </BLOCKQUOTE>
 <A name=6>
 
@@ -189,54 +183,55 @@ different amounts.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_cshift
-      implicit none
-      integer, dimension(5)   :: i1,i2,i3
-      integer, dimension(3,4) :: a, b
-         !basics
-          i1=[10,20,30,40,50]
-          print *,&#146;start with:&#146;
-          print &#146;(1x,5i3)&#146;, i1
-          print *,&#146;shift -2&#146;
-          print &#146;(1x,5i3)&#146;, cshift(i1,-2)
-          print *,&#146;shift +2&#146;
-          print &#146;(1x,5i3)&#146;, cshift(i1,+2)
+    program demo_cshift
+    implicit none
+    integer, dimension(5)   :: i1,i2,i3
+    integer, dimension(3,4) :: a, b
+       !basics
+        i1=[10,20,30,40,50]
+        print *,&#146;start with:&#146;
+        print &#146;(1x,5i3)&#146;, i1
+        print *,&#146;shift -2&#146;
+        print &#146;(1x,5i3)&#146;, cshift(i1,-2)
+        print *,&#146;shift +2&#146;
+        print &#146;(1x,5i3)&#146;, cshift(i1,+2)
 <P>
-          print *,&#146;start with a matrix&#146;
-          a = reshape( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ], [ 3, 4 ])
-          print &#146;(4i3)&#146;, a(1,:)
-          print &#146;(4i3)&#146;, a(2,:)
-          print &#146;(4i3)&#146;, a(3,:)
-          print *,&#146;matrix shifted along rows, each by its own amount [-1,0,1]&#146;
-          b = cshift(a, SHIFT=[1, 0, -1], DIM=2)
-          print *
-          print &#146;(4i3)&#146;, b(1,:)
-          print &#146;(4i3)&#146;, b(2,:)
-          print &#146;(4i3)&#146;, b(3,:)
-      end program demo_cshift
+        print *,&#146;start with a matrix&#146;
+        a = reshape( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ], [ 3, 4 ])
+        print &#146;(4i3)&#146;, a(1,:)
+        print &#146;(4i3)&#146;, a(2,:)
+        print &#146;(4i3)&#146;, a(3,:)
+        print *,&#146;matrix shifted along rows, each by its own amount [-1,0,1]&#146;
+        b = cshift(a, SHIFT=[1, 0, -1], DIM=2)
+        print *
+        print &#146;(4i3)&#146;, b(1,:)
+        print &#146;(4i3)&#146;, b(2,:)
+        print &#146;(4i3)&#146;, b(3,:)
+    end program demo_cshift
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  start with:
-       &gt;   10 20 30 40 50
-       &gt;  shift -2
-       &gt;   40 50 10 20 30
-       &gt;  shift +2
-       &gt;   30 40 50 10 20
-       &gt;  start with a matrix
-       &gt;   1  4  7 10
-       &gt;   2  5  8 11
-       &gt;   3  6  9 12
-       &gt;  matrix shifted along rows, each by its own amount
-       &gt;
-       &gt;   4  7 10  1
-       &gt;   2  5  8 11
-       &gt;  12  3  6  9
+     &gt;  start with:
+     &gt;   10 20 30 40 50
+     &gt;  shift -2
+     &gt;   40 50 10 20 30
+     &gt;  shift +2
+     &gt;   30 40 50 10 20
+     &gt;  start with a matrix
+     &gt;   1  4  7 10
+     &gt;   2  5  8 11
+     &gt;   3  6  9 12
+     &gt;  matrix shifted along rows, each by its own amount
+     &gt;
+     &gt;   4  7 10  1
+     &gt;   2  5  8 11
+     &gt;  12  3  6  9
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -246,6 +241,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -254,6 +250,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -273,8 +270,8 @@ PRODUCT(3) - Product of array elements
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-FINDLOC(3) - Location of first element of ARRAY identified by MASK along
-dimension DIM having a value
+FINDLOC(3) - Location of first element of ARRAY identified by MASK
+along dimension DIM having a value
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -282,13 +279,9 @@ o
 MAXLOC(3) - Location of the maximum value within an array
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022              cshift(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cshift (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 88105836-19d4-4558-85c8-f4cf6a8da582 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cshift (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4d7a93c3-4178-4ab9-aece-2d7dd898ac5a using man macros.</FONT>
 <br><br><center><img src="images/cshift.3fortran.gif"></center>
 </div>
 </div>

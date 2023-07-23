@@ -1,7 +1,8 @@
         program demo_vinit
         use M_draw
         use ISO_C_BINDING
-        integer :: ios
+        implicit none
+        integer :: ios, idum
         character(len=50) :: device
 
         ! read in device name and start graphics mode

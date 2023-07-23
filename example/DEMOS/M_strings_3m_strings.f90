@@ -6,6 +6,7 @@
       use M_strings,only : replace, join
       use M_strings,only : upper, lower, upper_quoted
       use M_strings,only : rotate13
+      use M_strings,only : percent_encode
       use M_strings,only : adjustc, compact, nospace, indent
       use M_strings,only : crop, clip, unquote, quote, matching_delimiter
       use M_strings,only : len_white, pad, lpad, cpad, rpad, zpad, &

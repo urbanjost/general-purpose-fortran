@@ -1,6 +1,7 @@
       program demo_slocator
 
       use M_draw
+  implicit none
 
       character(len=20) :: dev
       integer bt

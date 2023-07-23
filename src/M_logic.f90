@@ -22,7 +22,7 @@ module M_logic
 ! if ierr=0, no obvious error occurred.
 ! if ierr not equal=0, suggest stopping the calling program from processing input
 !===================================================================================================================================
-use M_journal, only : journal
+use M_framework__journal, only : journal
 use M_calculator, only : inum0
 implicit none
 private
@@ -104,26 +104,29 @@ character(len=*),parameter :: ident="@(#)M_logic(3fm): Allows if/else/elseif/end
 !!   lines from the file to output that are in true blocks...
 !!
 !!    program demo_cond
-!!    use M_journal, only : journal  ! for logging messages
+!!    use M_framework__journal, only : journal  ! for logging messages
 !!    use M_strings, only : lower, delim,v2s ! convert character case; split string
 !!    use M_logic, only : cond
 !!    use M_logic, only : write ! flag whether current data lines should be written
 !!    use M_logic, only : nest_level   ! nesting level for #IF/#ELSEIF/#ELSE/#ENDIF
 !!    use M_calculator, only : rnum0
+!!    implicit none
 !!    character(len=1)    :: prefix              ! directive prefix character
 !!    character(len=1024) :: line                ! input line
 !!    integer,parameter   :: max_words=2  ! maximum number of words allowed on line
 !!    character(len=1024) :: array(max_words)    ! working copy of input line
 !!    ! location where words start and end
 !!    integer             :: ibegin(max_words), iterm(max_words)
+!!    integer             :: icount, ierr_logic, ilen, ios
+!!    real                :: value
 !!    !----------------------------------------------------------------------------
 !!    PREFIX='#'              ! for the example, assume direct lines use a # prefix
 !!    write(*,*)'find conditional lines #if #else #elseif #endif #define'
 !!    !----------------------------------------------------------------------------
 !!    READLINE: do                                   ! read loop to read input file
 !!       read(*,'(a)',iostat=ios) line
-!!       if(ios.ne.0)then
-!!          if (nest_level.ne.0) then ! check to make sure all if blocks are closed
+!!       if(ios /= 0)then
+!!          if (nest_level /= 0) then ! check to make sure all if blocks are closed
 !!             call journal('sc',&
 !!             &'*logic* error - #IF BLOCK NOT CLOSED WHEN READING FILE FINISHED.')
 !!          endif
@@ -216,7 +219,7 @@ logical                        :: eb
    noelse=0
    write=.false.
    nest_level=nest_level+1                                    ! increment IF nest level
-   if (nest_level.gt.max_nest_level) then
+   if (nest_level >  max_nest_level) then
       call journal('sc','*logic* ABORT - "IF" BLOCK NESTING TOO DEEP:',nest_level)
       ierr_logic=-30
       nest_level=0
@@ -239,12 +242,12 @@ character(len=*),intent(in):: line
 integer                    :: ival
 integer                    :: status
    ival=inum0(line,ierr=status)
-   if(ival.eq.0)then
+   if(ival == 0)then
       dc=.true.
    else
       dc=.false.
    endif
-   if(status.ne.0)then
+   if(status /= 0)then
       dc=.false.
    endif
 end subroutine evalit
@@ -256,7 +259,7 @@ character(len=*),parameter :: ident="@(#)M_logic::else(3fp): process ELSE comman
 integer                    :: noelse
 logical                    :: eb
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if (noelse.eq.1.or.nest_level.eq.0) then                   ! test for else instead of elseif
+   if (noelse == 1.or.nest_level == 0) then                   ! test for else instead of elseif
       call journal('sc','*logic* FATAL - MISPLACED "ELSE" DIRECTIVE.')
       ierr_logic=-10
       nest_level=0
@@ -283,7 +286,7 @@ logical                    :: eb
 integer                    :: noelse
 character(len=*)           :: line                            ! line        - integer expression to evaluate
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if (noelse.eq.1.or.nest_level.eq.0) then                   ! test for else instead of elseif
+   if (noelse == 1.or.nest_level == 0) then                   ! test for else instead of elseif
       call journal('sc','*logic* FATAL - MISPLACED "ELSEIF" DIRECTIVE.')
       ierr_logic=-20
       nest_level=0
@@ -309,12 +312,12 @@ logical                    :: eb
 integer                    :: noelse
 !-----------------------------------------------------------------------------------------------------------------------------------
    ! if no ELSE or ELSEIF present insert ELSE to simplify logic
-   if(noelse.eq.0)then
+   if(noelse == 0)then
       call else(noelse,eb)
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
    nest_level=nest_level-1                                    ! decrease if level
-   if(nest_level.lt.0)then
+   if(nest_level <  0)then
       call journal('sc','*logic* FATAL - MISPLACED "ENDIF" DIRECTIVE.')
       ierr_logic=-40
       nest_level=0
@@ -325,7 +328,7 @@ integer                    :: noelse
    eb=.not.condop(nest_level+1)
    write=.not.eb
    condop(nest_level+1)=.false.
-   if (nest_level.eq.0) then
+   if (nest_level == 0) then
          write=.true.
          eb=.false.
    endif

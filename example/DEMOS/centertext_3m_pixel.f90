@@ -1,7 +1,7 @@
      program demo_centertext
      use :: M_pixel
      use :: M_pixel, only : cosd, sind
-     use :: M_writegif, only : writegif
+     use :: M_pixel__writegif, only : writegif
      implicit none
      real    :: x1, y1, xx, yy, ang, r
      integer :: i, j
@@ -41,8 +41,8 @@
         enddo
      enddo
 
-     call  writegif('centertext.3m_pixel.gif',P_pixel,P_colormap)
-     call  execute_command_line('display centertext.3m_pixel.gif')
+     call  writegif('centertext.3M_pixel.gif',P_pixel,P_colormap)
+     call  execute_command_line('display centertext.3M_pixel.gif')
 
      call vexit()
 

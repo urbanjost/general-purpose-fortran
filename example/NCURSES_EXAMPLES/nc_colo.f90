@@ -87,7 +87,7 @@ program colo
     enddo INFINITE
 
     ierr=endwin() ! wrapup curses
-end program colo
+contains
 !-------------------------------------------------------------------------------
 subroutine setcolors(number_of_colors)
 use M_ncurses
@@ -112,3 +112,4 @@ if(number_of_colors.gt.8)then
 endif
 end subroutine setcolors
 !-------------------------------------------------------------------------------
+end program colo

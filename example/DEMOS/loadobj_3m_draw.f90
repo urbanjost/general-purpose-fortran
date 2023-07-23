@@ -1,7 +1,8 @@
      program demo_loadobj
      ! test some object-related procedures
      use M_draw
-     integer                      :: env_len
+     implicit none
+     integer                      :: env_len, idum
      character(len=:),allocatable :: env
         !------------------------------------------------------------
         ! make an object file, which would normally be

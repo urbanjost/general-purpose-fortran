@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>shiftr (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>shiftr (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>shiftr(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-shiftr(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SHIFTR(3) - [BIT:SHIFT] Shift bits right
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ SHIFTR(3) - [BIT:SHIFT] Shift bits right
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = shiftr( i, shift )
 <P>
 <PRE>
-           elemental integer(kind=KIND) function shiftr(i, shift)
+         elemental integer(kind=KIND) function shiftr(i, shift)
 <P>
-            integer(kind=KIND),intent(in) :: i
-            integer(kind=**),intent(in) :: shift
+          integer(kind=KIND),intent(in) :: i
+          integer(kind=**),intent(in) :: shift
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = shiftr( i, shift )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -111,7 +105,8 @@ SHIFT is an integer of any kind
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result will automatically be of the same type, kind and rank as I.
+the result will automatically be of the same type, kind and rank as
+I.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -120,21 +115,22 @@ the result will automatically be of the same type, kind and rank as I.
 
 </A>
 <BLOCKQUOTE>
-SHIFTR(3) returns a value corresponding to I with all of the bits shifted
-right by SHIFT places.
+<P>
+SHIFTR(3) returns a value corresponding to I with all of the bits
+shifted right by SHIFT places.
 <P>
 If the absolute value of SHIFT is greater than BIT_SIZE(I), the value is
 undefined.
 <P>
-Bits shifted out from the right end are lost, and bits shifted in from the
-left end are set to 0.
+Bits shifted out from the right end are lost, and bits shifted in from
+the left end are set to 0.
 <P>
 For example, for a 16-bit integer right-shifted five &#46;&#46;&#46;
 <P>
 <PRE>
-          &gt;  |a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p| &lt;- original 16-bit example
-          &gt;            |a|b|c|d|e|f|g|h|i|j|k| &lt;- right-shifted five
-          &gt;  |0|0|0|0|0|f|g|h|i|j|k|l|m|n|o|p| &lt;- left-padded with zeros
+        &gt;  |a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p| &lt;- original 16-bit example
+        &gt;            |a|b|c|d|e|f|g|h|i|j|k| &lt;- right-shifted five
+        &gt;  |0|0|0|0|0|f|g|h|i|j|k|l|m|n|o|p| &lt;- left-padded with zeros
 <P>
 </PRE>
 Note the value of the result is the same as ISHFT (I, <B>-SHIFT</B>).
@@ -145,6 +141,7 @@ Note the value of the result is the same as ISHFT (I, <B>-SHIFT</B>).
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -154,8 +151,8 @@ I : The value to shift
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT : How many bits to shift right. It shall be nonnegative and less
-than or equal to BIT_SIZE(I).
+SHIFT : How many bits to shift right. It shall be nonnegative and
+less than or equal to BIT_SIZE(I).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -164,8 +161,9 @@ than or equal to BIT_SIZE(I).
 
 </A>
 <BLOCKQUOTE>
-The remaining bits shifted right SHIFT positions. Vacated positions on the
-left are filled with zeros.
+<P>
+The remaining bits shifted right SHIFT positions. Vacated positions on
+the left are filled with zeros.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -173,70 +171,71 @@ left are filled with zeros.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_shiftr
-      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      implicit none
-      integer             :: shift
-      integer(kind=int32) :: oval
-      integer(kind=int32) :: ival
-      integer(kind=int32),allocatable :: ivals(:)
-      integer             :: i
+    program demo_shiftr
+    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    implicit none
+    integer             :: shift
+    integer(kind=int32) :: oval
+    integer(kind=int32) :: ival
+    integer(kind=int32),allocatable :: ivals(:)
+    integer             :: i
 <P>
-        print *,&#146; basic usage&#146;
-        ival=100
-        write(*,*)ival, shiftr(100,3)
+      print *,&#146; basic usage&#146;
+      ival=100
+      write(*,*)ival, shiftr(100,3)
 <P>
-        ! elemental (input values may be conformant arrays)
-        print *,&#146; elemental&#146;
-         shift=9
-         ivals=[ &
-         & int(b"01010101010101010101010101010101"), &
-         & int(b"10101010101010101010101010101010"), &
-         & int(b"11111111111111111111111111111111") ]
+      ! elemental (input values may be conformant arrays)
+      print *,&#146; elemental&#146;
+       shift=9
+       ivals=[ &
+       & int(b"01010101010101010101010101010101"), &
+       & int(b"10101010101010101010101010101010"), &
+       & int(b"11111111111111111111111111111111") ]
 <P>
-         write(*,&#146;(/,"SHIFT =  ",i0)&#146;) shift
-         do i=1,size(ivals)
-            ! print initial value as binary and decimal
-            write(*,&#146;(  "I =      ",b32.32," == ",i0)&#146;) ivals(i),ivals(i)
-            ! print shifted value as binary and decimal
-            oval=shiftr(ivals(i),shift)
-            write(*,&#146;(  "RESULT = ",b32.32," == ",i0,/)&#146;) oval,oval
-         enddo
+       write(*,&#146;(/,"SHIFT =  ",i0)&#146;) shift
+       do i=1,size(ivals)
+          ! print initial value as binary and decimal
+          write(*,&#146;(  "I =      ",b32.32," == ",i0)&#146;) ivals(i),ivals(i)
+          ! print shifted value as binary and decimal
+          oval=shiftr(ivals(i),shift)
+          write(*,&#146;(  "RESULT = ",b32.32," == ",i0,/)&#146;) oval,oval
+       enddo
 <P>
-         ! more on elemental
-         ELEM : block
-         integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])
-         write(*,*)"characteristics of the result are the same as input"
-         write(*,&#146;(*(g0,1x))&#146;) &
-           & "kind=",kind(shiftr(arr,3)), "shape=",shape(shiftr(arr,3)), &
-           & "size=",size(shiftr(arr,3)) !, "rank=",rank(shiftr(arr,3))
-         endblock ELEM
+       ! more on elemental
+       ELEM : block
+       integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])
+       write(*,*)"characteristics of the result are the same as input"
+       write(*,&#146;(*(g0,1x))&#146;) &
+         & "kind=",kind(shiftr(arr,3)), "shape=",shape(shiftr(arr,3)), &
+         & "size=",size(shiftr(arr,3)) !, "rank=",rank(shiftr(arr,3))
+       endblock ELEM
 <P>
-      end program demo_shiftr
+    end program demo_shiftr
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        &gt;    basic usage
-        &gt;           100          12
-        &gt;    elemental
-        &gt;
-        &gt;  SHIFT =  9
-        &gt;  I =      01010101010101010101010101010101 == 1431655765
-        &gt;  RESULT = 00000000001010101010101010101010 == 2796202
-        &gt;
-        &gt;  I =      10101010101010101010101010101010 == -1431655766
-        &gt;  RESULT = 00000000010101010101010101010101 == 5592405
-        &gt;
-        &gt;  I =      11111111111111111111111111111111 == -1
-        &gt;  RESULT = 00000000011111111111111111111111 == 8388607
-        &gt;
-        &gt;   characteristics of the result are the same as input
-        &gt;  kind= 1 shape= 2 2 size= 4
+      &gt;    basic usage
+      &gt;           100          12
+      &gt;    elemental
+      &gt;
+      &gt;  SHIFT =  9
+      &gt;  I =      01010101010101010101010101010101 == 1431655765
+      &gt;  RESULT = 00000000001010101010101010101010 == 2796202
+      &gt;
+      &gt;  I =      10101010101010101010101010101010 == -1431655766
+      &gt;  RESULT = 00000000010101010101010101010101 == 5592405
+      &gt;
+      &gt;  I =      11111111111111111111111111111111 == -1
+      &gt;  RESULT = 00000000011111111111111111111111 == 8388607
+      &gt;
+      &gt;   characteristics of the result are the same as input
+      &gt;  kind= 1 shape= 2 2 size= 4
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -246,6 +245,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -254,16 +254,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 SHIFTA(3), SHIFTL(3), ISHFT(3), ISHFTC(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              shiftr(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shiftr (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7b7867be-4b68-4f65-9756-acf4ca1be430 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shiftr (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 64eddd7d-4958-4d73-b67a-0123b1b3f6dc using man macros.</FONT>
 <br><br><center><img src="images/shiftr.3fortran.gif"></center>
 </div>
 </div>

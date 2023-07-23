@@ -376,6 +376,20 @@ contains
   end function verify_short_long_equivalents
 end subroutine getopt_new
 !-----------------------------------------------------------------------------------------------------------------------------------
+pure integer &
+function getopt_argv_len(self,argn) result(length)
+  implicit none
+  type(getopt_type), pointer :: self
+  integer, intent(in) :: argn
+  if (.not. allocated(self%argv)) then
+    length = 0
+  else if ( (argn < 0) .or. (argn > ubound(self%argv,1)) ) then
+    length = 0
+  else
+    length = len(self%argv(argn)%string)
+  end if
+end function getopt_argv_len
+!-----------------------------------------------------------------------------------------------------------------------------------
 ! Public interface procedures:
 !-----------------------------------------------------------------------------------------------------------------------------------
 function getopt_argv(self,argn) result(argv)
@@ -585,20 +599,6 @@ NEXT_ARG: do
   retval = optchar
   return
 end function getopt
-!-----------------------------------------------------------------------------------------------------------------------------------
-pure integer &
-function getopt_argv_len(self,argn) result(length)
-  implicit none
-  type(getopt_type), pointer :: self
-  integer, intent(in) :: argn
-  if (.not. allocated(self%argv)) then
-    length = 0
-  else if ( (argn < 0) .or. (argn > ubound(self%argv,1)) ) then
-    length = 0
-  else
-    length = len(self%argv(argn)%string)
-  end if
-end function getopt_argv_len
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! Private procedures:
 !-----------------------------------------------------------------------------------------------------------------------------------

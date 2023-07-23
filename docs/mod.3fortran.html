@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>mod (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>mod (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>mod(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-mod(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 MOD(3) - [NUMERIC] Remainder function
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ MOD(3) - [NUMERIC] Remainder function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = mod(a, p)
 <P>
 <PRE>
-           elemental type(TYPE(kind=KIND)) function mod(a,p)
+         elemental type(TYPE(kind=KIND)) function mod(a,p)
 <P>
-            type(TYPE(kind=KIND),intent(in) :: a
-            type(TYPE(kind=KIND),intent(in) :: p
+          type(TYPE(kind=KIND)),intent(in) :: a
+          type(TYPE(kind=KIND)),intent(in) :: p
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = mod(a, p)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -110,15 +104,16 @@ The type may be any kind of real or integer.
 
 </A>
 <BLOCKQUOTE>
+<P>
 MOD(3) computes the remainder of the division of A by P.
 <P>
 In mathematics, the remainder is the amount "left over" after performing
-some computation. In arithmetic, the remainder is the integer "left over"
-after dividing one integer by another to produce an integer quotient
-(integer division). In algebra of polynomials, the remainder is the
-polynomial "left over" after dividing one polynomial by another. The modulo
-operation is the operation that produces such a remainder when given a
-dividend and divisor.
+some computation. In arithmetic, the remainder is the integer "left
+over" after dividing one integer by another to produce an integer
+quotient (integer division). In algebra of polynomials, the remainder is
+the polynomial "left over" after dividing one polynomial by another. The
+modulo operation is the operation that produces such a remainder when
+given a dividend and divisor.
 <TABLE cellpadding=3><!-- tsb: In mathematics, the remainder is the amount "left over" after performing
  -->
 <TR></TR><TR></TR>
@@ -135,6 +130,7 @@ https://en.wikipedia.org/wiki/Remainder
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -153,13 +149,14 @@ P : the divisor (not equal to zero).
 
 </A>
 <BLOCKQUOTE>
+<P>
 The return value is the result of A - (INT(A/P) * P).
 <P>
-As can be seen by the formula the sign of P is canceled out. Therefore the
-returned value always has the sign of A.
+As can be seen by the formula the sign of P is canceled out. Therefore
+the returned value always has the sign of A.
 <P>
-Of course, the magnitude of the result will be less than the magnitude of P,
-as the result has been reduced by all multiples of P.
+Of course, the magnitude of the result will be less than the magnitude
+of P, as the result has been reduced by all multiples of P.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -167,75 +164,95 @@ as the result has been reduced by all multiples of P.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_mod
-      implicit none
+    program demo_mod
+    implicit none
 <P>
-         ! basics
-          print *, mod( -17,  3 ), modulo( -17,  3 )
-          print *, mod(  17, -3 ), modulo(  17, -3 )
-          print *, mod(  17,  3 ), modulo(  17,  3 )
-          print *, mod( -17, -3 ), modulo( -17, -3 )
+       ! basics
+        print *, mod( -17,  3 ), modulo( -17,  3 )
+        print *, mod(  17, -3 ), modulo(  17, -3 )
+        print *, mod(  17,  3 ), modulo(  17,  3 )
+        print *, mod( -17, -3 ), modulo( -17, -3 )
 <P>
-          print *, mod(-17.5, 5.2), modulo(-17.5, 5.2)
-          print *, mod( 17.5,-5.2), modulo( 17.5,-5.2)
-          print *, mod( 17.5, 5.2), modulo( 17.5, 5.2)
-          print *, mod(-17.5,-5.2), modulo(-17.5,-5.2)
+        print *, mod(-17.5, 5.2), modulo(-17.5, 5.2)
+        print *, mod( 17.5,-5.2), modulo( 17.5,-5.2)
+        print *, mod( 17.5, 5.2), modulo( 17.5, 5.2)
+        print *, mod(-17.5,-5.2), modulo(-17.5,-5.2)
 <P>
-        ! with a divisor of 1 the fractional part is returned
-          print *, mod(-17.5, 1.0), modulo(-17.5, 1.0)
-          print *, mod( 17.5,-1.0), modulo( 17.5,-1.0)
-          print *, mod( 17.5, 1.0), modulo( 17.5, 1.0)
-          print *, mod(-17.5,-1.0), modulo(-17.5,-1.0)
+      ! with a divisor of 1 the fractional part is returned
+        print *, mod(-17.5, 1.0), modulo(-17.5, 1.0)
+        print *, mod( 17.5,-1.0), modulo( 17.5,-1.0)
+        print *, mod( 17.5, 1.0), modulo( 17.5, 1.0)
+        print *, mod(-17.5,-1.0), modulo(-17.5,-1.0)
 <P>
-      end program demo_mod
+    end program demo_mod
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-                   -2           1
-                    2          -1
-                    2           2
-                   -2          -2
-<P>
+                 -2           1
+                  2          -1
+                  2           2
+                 -2          -2
 </PRE>
-<B>-1.900001</B>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:                  -2           1
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-1.900001</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 3.299999
-<BLOCKQUOTE>
-<P>
-1.900001
+<TABLE width=100% cellpadding=3><!-- tsb: 3.299999
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>1.900001</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 <B>-3.299999</B>
-<P>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>1.900001</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 1.900001
-1.900001
-</BLOCKQUOTE>
-<P>
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-1.900001</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 <B>-1.900001</B>
-<B>-1.900001</B>
-<P>
-<B>-0.5000000</B>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>-0.5000000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 0.5000000
-<BLOCKQUOTE>
-<P>
-0.5000000
+<TABLE width=100% cellpadding=3><!-- tsb: 0.5000000
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>0.5000000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 <B>-0.5000000</B>
-<P>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>0.5000000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 0.5000000
-0.5000000
-</BLOCKQUOTE>
-<P>
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>-0.5000000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 <B>-0.5000000</B>
-<B>-0.5000000</B>
-</BLOCKQUOTE>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 <A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -244,6 +261,7 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -271,13 +289,9 @@ o
 NINT(3) - integer nearest whole number
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 mod(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>mod (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 37ff3c25-3ec1-4f57-b906-f5feaec3262b using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>mod (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1c39316d-5ace-4844-99eb-4c6abb541de2 using man macros.</FONT>
 <br><br><center><img src="images/mod.3fortran.gif"></center>
 </div>
 </div>

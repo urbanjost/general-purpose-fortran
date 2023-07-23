@@ -26,7 +26,6 @@ public  :: dl_slices         ! DL_SLICES(A,INX,INZ,NX,NZ,ALPHA,BETA,XH,YH,ZH,IFL
                              !           YT,NYT,              NMY,NNY,MLY,TSY,NDY,SMY,
                              !           ZT,NZT,ZASTART,ZAEND,NMZ,NNZ,MLZ,TSZ,NDZ,SMZ,
                              !           AMININ,AMAXIN,ICOL)
-public test_suite_m_slices
 !-----------------------------------------------------------------------------------------------------------------------------------
 private :: vxpt3_          ! (X,Y,AVAL,IX,IZ,NX)
 private :: intersect_      ! (FLAG,X,Y,AX1,AY1,AX2,AY2,BX1,BY1,BX2,BY2,A)
@@ -2216,42 +2215,6 @@ end function inbox_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine test_suite_M_slices()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-
-!! setup
-   call test_dl_init()
-   call test_dl_slices()
-   call test_dl_symbol()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_dl_init()
-
-   call unit_check_start('dl_init',msg='')
-   !!call unit_check('dl_init', 0.eq.0, 'checking',100)
-   call unit_check_done('dl_init',msg='')
-end subroutine test_dl_init
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_dl_slices()
-
-   call unit_check_start('dl_slices',msg='')
-   !!call unit_check('dl_slices', 0.eq.0, 'checking',100)
-   call unit_check_done('dl_slices',msg='')
-end subroutine test_dl_slices
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_dl_symbol()
-
-   call unit_check_start('dl_symbol',msg='')
-   !!call unit_check('dl_symbol', 0.eq.0, 'checking',100)
-   call unit_check_done('dl_symbol',msg='')
-end subroutine test_dl_symbol
-!===================================================================================================================================
-end subroutine test_suite_M_slices
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
 end module M_slices
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

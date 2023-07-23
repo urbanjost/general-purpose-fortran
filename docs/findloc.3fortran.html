@@ -50,23 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>findloc (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>findloc (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>findloc(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-findloc(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-FINDLOC(3) - [ARRAY:LOCATION] Location of first element of ARRAY identified
-by MASK along dimension DIM matching a target value
+<P>
+FINDLOC(3) - [ARRAY:LOCATION] Location of first element of ARRAY
+identified by MASK along dimension DIM matching a target value
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -77,20 +69,23 @@ by MASK along dimension DIM matching a target value
 
 </A>
 <BLOCKQUOTE>
-result = findloc (array, value, dim [,mask] [,kind] [,back]) | findloc
-(array, value [,mask] [,kind] [,back])
+<P>
+result = findloc (array, value, dim [,mask] [,kind] [,back]) |
+findloc (array, value [,mask] [,kind] [,back])
+<BLOCKQUOTE>
+<P>
+function findloc (array, value, dim, mask, kind, back)
 <P>
 <PRE>
-    function findloc (array, value, dim, mask, kind, back)
-<P>
-              type TYPE(kind=KIND),intent(in)      :: array(..)
-              type TYPE(kind=KIND),intent(in)      :: value
-              integer(kind=**),intent(in),optional :: dim
-              logical(kind=**),intent(in),optional :: mask(..)
-              integer(kind=**),intent(in),optional :: kind
-              logical(kind=**),intent(in),optional :: back
+          type(TYPE(kind=KIND)),intent(in)     :: array(..)
+          type(TYPE(kind=KIND)),intent(in)     :: value
+          integer(kind=**),intent(in),optional :: dim
+          logical(kind=**),intent(in),optional :: mask(..)
+          integer(kind=**),intent(in),optional :: kind
+          logical(kind=**),intent(in),optional :: back
 <P>
 </PRE>
+</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -98,6 +93,7 @@ result = findloc (array, value, dim [,mask] [,kind] [,back]) | findloc
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -107,14 +103,15 @@ ARRAY is an array of any intrinsic type.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VALUE shall be scalar but in type conformance with ARRAY, as specified
-for the operator == or the operator .EQV..
+VALUE shall be scalar but in type conformance with ARRAY, as
+specified for the operator == or the operator .EQV..
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM an integer corresponding to a dimension of ARRAY. The corresponding
-actual argument shall not be an optional dummy argument.
+DIM an integer corresponding to a dimension of ARRAY. The
+corresponding actual argument shall not be an optional dummy
+argument.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -134,10 +131,11 @@ BACK a logical scalar.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is integer of default kind or kind KIND if the KIND argument
-is present. If DIM does not appear, the result is an array of rank one
-and of size equal to the rank of ARRAY; otherwise, the result is an array
-of the same rank and shape as ARRAY reduced by the dimension DIM.
+the result is integer of default kind or kind KIND if the KIND
+argument is present. If DIM does not appear, the result is an array
+of rank one and of size equal to the rank of ARRAY; otherwise, the
+result is an array of the same rank and shape as ARRAY reduced by
+the dimension DIM.
 </TD></TR>
 <TR></TR></TABLE>NOTE: a kind designated as ** may be any supported kind for the type
 </BLOCKQUOTE>
@@ -147,20 +145,21 @@ of the same rank and shape as ARRAY reduced by the dimension DIM.
 
 </A>
 <BLOCKQUOTE>
-FINDLOC(3) returns the location of the first element of ARRAY identified by
-MASK along dimension DIM having a value equal to VALUE.
+<P>
+FINDLOC(3) returns the location of the first element of ARRAY identified
+by MASK along dimension DIM having a value equal to VALUE.
 <P>
 If both ARRAY and VALUE are of type logical, the comparison is performed
-with the .EQV. operator; otherwise, the comparison is performed with the ==
-operator. If the value of the comparison is .true., that element of ARRAY
-matches VALUE.
+with the .EQV. operator; otherwise, the comparison is performed with the
+== operator. If the value of the comparison is .true., that element of
+ARRAY matches VALUE.
 <P>
-If only one element matches VALUE, that element&#146;s subscripts are returned.
-Otherwise, if more than one element matches VALUE and BACK is absent or
-present with the value .false., the element whose subscripts are returned is
-the first such element, taken in array element order. If BACK is present
-with the value .true., the element whose subscripts are returned is the last
-such element, taken in array element order.
+If only one element matches VALUE, that element&#146;s subscripts are
+returned. Otherwise, if more than one element matches VALUE and BACK is
+absent or present with the value .false., the element whose subscripts
+are returned is the first such element, taken in array element order. If
+BACK is present with the value .true., the element whose subscripts are
+returned is the last such element, taken in array element order.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -168,6 +167,7 @@ such element, taken in array element order.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -182,20 +182,21 @@ VALUE : shall be scalar and in type conformance with ARRAY.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : shall be an integer scalar with a value in the range 1 &lt;= DIM &lt;= n,
-where n is the rank of ARRAY. The corresponding actual argument shall not
-be an optional dummy argument.
+DIM : shall be an integer scalar with a value in the range 1 &lt;= DIM
+&lt;= n, where n is the rank of ARRAY. The corresponding actual
+argument shall not be an optional dummy argument.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : (optional) shall be of type logical and shall be conformable with
-ARRAY.
+MASK : (optional) shall be of type logical and shall be conformable
+with ARRAY.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : (optional) shall be a scalar integer initialization expression.
+KIND : (optional) shall be a scalar integer initialization
+expression.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -209,19 +210,21 @@ BACK : (optional) shall be a logical scalar.
 
 </A>
 <BLOCKQUOTE>
-KIND is present, the kind type parameter is that specified by the value of
-KIND; otherwise the kind type parameter is that of default integer type. If
-DIM does not appear, the result is an array of rank one and of size equal to
-the rank of ARRAY; otherwise, the result is of rank n - 1 and shape
+<P>
+KIND is present, the kind type parameter is that specified by the value
+of KIND; otherwise the kind type parameter is that of default integer
+type. If DIM does not appear, the result is an array of rank one and of
+size equal to the rank of ARRAY; otherwise, the result is of rank n - 1
+and shape
 <P>
 <PRE>
-         [d1, d2, . . ., dDIM-1, dDIM+1, . . ., dn ]
+       [d1, d2, . . ., dDIM-1, dDIM+1, . . ., dn ]
 <P>
 </PRE>
 where
 <P>
 <PRE>
-         [d1, d2, . . ., dn ]
+       [d1, d2, . . ., dn ]
 <P>
 </PRE>
 is the shape of ARRAY.
@@ -232,27 +235,29 @@ is the shape of ARRAY.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-CASE (I): The result of FINDLOC (ARRAY, VALUE) is a rank-one array whose
-element values are the values of the subscripts of an element of ARRAY
-whose value matches VALUE. If there is such a value, the ith subscript
-returned lies in the range 1 to ei, where ei is the extent of the ith
-dimension of ARRAY. If no elements match VALUE or ARRAY has size zero,
-all elements of the result are zero.
+CASE (I): The result of FINDLOC (ARRAY, VALUE) is a rank-one array
+whose element values are the values of the subscripts of an element
+of ARRAY whose value matches VALUE. If there is such a value, the
+ith subscript returned lies in the range 1 to ei, where ei is the
+extent of the ith dimension of ARRAY. If no elements match VALUE or
+ARRAY has size zero, all elements of the result are zero.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-CASE (II): the result of FINDLOC (ARRAY, VALUE, MASK = MASK) is a rank-
-one array whose element values are the values of the subscripts of an
-element of ARRAY, corresponding to a true element of MASK, whose value
-matches VALUE. If there is such a value, the ith subscript returned lies
-in the range 1 to ei, where ei is the extent of the ith dimension of
-ARRAY. If no elements match VALUE, ARRAY has size zero, or every element
-of MASK has the value false, all elements of the result are zero.
+CASE (II): the result of FINDLOC (ARRAY, VALUE, MASK = MASK) is a
+rank-one array whose element values are the values of the subscripts
+of an element of ARRAY, corresponding to a true element of MASK,
+whose value matches VALUE. If there is such a value, the ith
+subscript returned lies in the range 1 to ei, where ei is the extent
+of the ith dimension of ARRAY. If no elements match VALUE, ARRAY has
+size zero, or every element of MASK has the value false, all
+elements of the result are zero.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=7>
@@ -261,169 +266,170 @@ of MASK has the value false, all elements of the result are zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_findloc
-      logical,parameter :: T=.true., F=.false.
-      integer,allocatable :: ibox(:,:)
-      logical,allocatable :: mask(:,:)
-        ! basics
-         ! the first element matching the value is returned AS AN ARRAY
-         call printi(&#146;== 6&#146;,findloc ([2, 6, 4, 6], value = 6))
-         call printi(&#146;== 6&#146;,findloc ([2, 6, 4, 6], value = 6,back=.true.))
-         ! the first element matching the value is returned AS A SCALAR
-         call printi(&#146;== 6&#146;,findloc ([2, 6, 4, 6], value = 6,dim=1))
-         call printi(&#146;== 6&#146;,findloc ([2, 6, 4, 6], value = 6,back=.true.,dim=1))
+    program demo_findloc
+    logical,parameter :: T=.true., F=.false.
+    integer,allocatable :: ibox(:,:)
+    logical,allocatable :: mask(:,:)
+      ! basics
+       ! the first element matching the value is returned AS AN ARRAY
+       call printi(&#146;== 6&#146;,findloc ([2, 6, 4, 6], value = 6))
+       call printi(&#146;== 6&#146;,findloc ([2, 6, 4, 6], value = 6,back=.true.))
+       ! the first element matching the value is returned AS A SCALAR
+       call printi(&#146;== 6&#146;,findloc ([2, 6, 4, 6], value = 6,dim=1))
+       call printi(&#146;== 6&#146;,findloc ([2, 6, 4, 6], value = 6,back=.true.,dim=1))
 <P>
-         ibox=reshape([ 0,-5,  7, 7, &
-                        3, 4, -1, 2, &
-                        1, 5,  6, 7] ,shape=[3,4],order=[2,1])
+       ibox=reshape([ 0,-5,  7, 7, &
+                      3, 4, -1, 2, &
+                      1, 5,  6, 7] ,shape=[3,4],order=[2,1])
 <P>
-         mask=reshape([ T, T, F, T, &
-                        T, T, F, T, &
-                        T, T, F, T] ,shape=[3,4],order=[2,1])
+       mask=reshape([ T, T, F, T, &
+                      T, T, F, T, &
+                      T, T, F, T] ,shape=[3,4],order=[2,1])
 <P>
-         call printi(&#146;array is&#146;, ibox )
-         call printl(&#146;mask  is&#146;, mask )
-         print *, &#146;so for == 7 and back=.false.&#146;
-         call printi(&#146;so for == 7 the address of the element is&#146;, &
-                 & findloc (ibox, 7, mask = mask) )
-         print *, &#146;so for == 7 and back=.true.&#146;
-         call printi(&#146;so for == 7 the address of the element is&#146;, &
-                 & findloc (ibox, 7, mask = mask, back=.true.) )
+       call printi(&#146;array is&#146;, ibox )
+       call printl(&#146;mask  is&#146;, mask )
+       print *, &#146;so for == 7 and back=.false.&#146;
+       call printi(&#146;so for == 7 the address of the element is&#146;, &
+               & findloc (ibox, 7, mask = mask) )
+       print *, &#146;so for == 7 and back=.true.&#146;
+       call printi(&#146;so for == 7 the address of the element is&#146;, &
+               & findloc (ibox, 7, mask = mask, back=.true.) )
 <P>
-         print *,&#146;This is independent of declared lower bounds for the array&#146;
+       print *,&#146;This is independent of declared lower bounds for the array&#146;
 <P>
-         print *, &#146; using dim=N&#146;
-         ibox=reshape([ 1,  2, -9,  &
-                        2,  2,  6 ] ,shape=[2,3],order=[2,1])
+       print *, &#146; using dim=N&#146;
+       ibox=reshape([ 1,  2, -9,  &
+                      2,  2,  6 ] ,shape=[2,3],order=[2,1])
 <P>
-         call printi(&#146;array is&#146;, ibox )
-         ! has the value [2, 1, 0] and
-         call printi(&#146;&#146;,findloc (ibox, value = 2, dim = 1) )
-         ! has the value [2, 1].
-         call printi(&#146;&#146;,findloc (ibox, value = 2, dim = 2) )
-      contains
-      ! GENERIC ROUTINES TO PRINT MATRICES
-      subroutine printl(title,a)
-      implicit none
-      !@(#) print small 2d logical scalar, vector, matrix in row-column format
-      character(len=*),intent(in)  :: title
-      logical,intent(in)           :: a(..)
+       call printi(&#146;array is&#146;, ibox )
+       ! has the value [2, 1, 0] and
+       call printi(&#146;&#146;,findloc (ibox, value = 2, dim = 1) )
+       ! has the value [2, 1].
+       call printi(&#146;&#146;,findloc (ibox, value = 2, dim = 2) )
+    contains
+    ! GENERIC ROUTINES TO PRINT MATRICES
+    subroutine printl(title,a)
+    implicit none
+    !@(#) print small 2d logical scalar, vector, matrix in row-column format
+    character(len=*),intent(in)  :: title
+    logical,intent(in)           :: a(..)
 <P>
-      character(len=*),parameter   :: row=&#146;(" &gt; [ ",*(l1:,","))&#146;
-      character(len=*),parameter   :: all=&#146;(" ",*(g0,1x))&#146;
-      logical,allocatable          :: b(:,:)
-      integer                      :: i
-         write(*,all,advance=&#146;no&#146;)trim(title)
-         ! copy everything to a matrix to keep code simple
-         select rank(a)
-         rank (0); write(*,&#146;(a)&#146;)&#146; (a scalar)&#146;; b=reshape([a],[1,1])
-         rank (1); write(*,&#146;(a)&#146;)&#146; (a vector)&#146;; b=reshape(a,[size(a),1])
-         rank (2); write(*,&#146;(a)&#146;)&#146; (a matrix)&#146;; b=a
-         rank default; stop &#146;*printl* unexpected rank&#146;
-         end select
-         do i=1,size(b,dim=1)
-            write(*,fmt=row,advance=&#146;no&#146;)b(i,:)
-            write(*,&#146;(" ]")&#146;)
-         enddo
-         write(*,all) &#146;&gt;shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
-         write(*,*)
-      end subroutine printl
+    character(len=*),parameter   :: row=&#146;(" &gt; [ ",*(l1:,","))&#146;
+    character(len=*),parameter   :: all=&#146;(" ",*(g0,1x))&#146;
+    logical,allocatable          :: b(:,:)
+    integer                      :: i
+       write(*,all,advance=&#146;no&#146;)trim(title)
+       ! copy everything to a matrix to keep code simple
+       select rank(a)
+       rank (0); write(*,&#146;(a)&#146;)&#146; (a scalar)&#146;; b=reshape([a],[1,1])
+       rank (1); write(*,&#146;(a)&#146;)&#146; (a vector)&#146;; b=reshape(a,[size(a),1])
+       rank (2); write(*,&#146;(a)&#146;)&#146; (a matrix)&#146;; b=a
+       rank default; stop &#146;*printl* unexpected rank&#146;
+       end select
+       do i=1,size(b,dim=1)
+          write(*,fmt=row,advance=&#146;no&#146;)b(i,:)
+          write(*,&#146;(" ]")&#146;)
+       enddo
+       write(*,all) &#146;&gt;shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
+       write(*,*)
+    end subroutine printl
 <P>
-      subroutine printi(title,a)
-      implicit none
-      !@(#) print small 2d integer scalar, vector, matrix in row-column format
-      character(len=*),intent(in)  :: title
-      integer,intent(in)           :: a(..)
-      character(len=*),parameter   :: all=&#146;(" ",*(g0,1x))&#146;
-      character(len=20)            :: row
-      integer,allocatable          :: b(:,:)
-      integer                      :: i
-         write(*,all,advance=&#146;no&#146;)trim(title)
-         ! copy everything to a matrix to keep code simple
-         select rank(a)
-         rank (0); write(*,&#146;(a)&#146;)&#146; (a scalar)&#146;; b=reshape([a],[1,1])
-         rank (1); write(*,&#146;(a)&#146;)&#146; (a vector)&#146;; b=reshape(a,[size(a),1])
-         rank (2); write(*,&#146;(a)&#146;)&#146; (a matrix)&#146;; b=a
-         rank default; stop &#146;*printi* unexpected rank&#146;
-         end select
-         ! find how many characters to use for integers
-         write(row,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(b)))))+2
-         ! use this format to write a row
-         row=&#146;(" &gt; [",*(i&#146;//trim(row)//&#146;:,","))&#146;
-         do i=1,size(b,dim=1)
-            write(*,fmt=row,advance=&#146;no&#146;)b(i,:)
-            write(*,&#146;(" ]")&#146;)
-         enddo
-         write(*,all) &#146;&gt;shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
-         write(*,*)
-      end subroutine printi
-      end program demo_findloc
+    subroutine printi(title,a)
+    implicit none
+    !@(#) print small 2d integer scalar, vector, matrix in row-column format
+    character(len=*),intent(in)  :: title
+    integer,intent(in)           :: a(..)
+    character(len=*),parameter   :: all=&#146;(" ",*(g0,1x))&#146;
+    character(len=20)            :: row
+    integer,allocatable          :: b(:,:)
+    integer                      :: i
+       write(*,all,advance=&#146;no&#146;)trim(title)
+       ! copy everything to a matrix to keep code simple
+       select rank(a)
+       rank (0); write(*,&#146;(a)&#146;)&#146; (a scalar)&#146;; b=reshape([a],[1,1])
+       rank (1); write(*,&#146;(a)&#146;)&#146; (a vector)&#146;; b=reshape(a,[size(a),1])
+       rank (2); write(*,&#146;(a)&#146;)&#146; (a matrix)&#146;; b=a
+       rank default; stop &#146;*printi* unexpected rank&#146;
+       end select
+       ! find how many characters to use for integers
+       write(row,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(b))))))+2
+       ! use this format to write a row
+       row=&#146;(" &gt; [",*(i&#146;//trim(row)//&#146;:,","))&#146;
+       do i=1,size(b,dim=1)
+          write(*,fmt=row,advance=&#146;no&#146;)b(i,:)
+          write(*,&#146;(" ]")&#146;)
+       enddo
+       write(*,all) &#146;&gt;shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
+       write(*,*)
+    end subroutine printi
+    end program demo_findloc
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  == 6  (a vector)
-       &gt;  &gt; [  2 ]
-       &gt;  &gt;shape= 1 ,rank= 1 ,size= 1
-       &gt;
-       &gt;  == 6  (a vector)
-       &gt;  &gt; [  4 ]
-       &gt;  &gt;shape= 1 ,rank= 1 ,size= 1
-       &gt;
-       &gt;  == 6  (a scalar)
-       &gt;  &gt; [  2 ]
-       &gt;  &gt;shape= ,rank= 0 ,size= 1
-       &gt;
-       &gt;  == 6  (a scalar)
-       &gt;  &gt; [  4 ]
-       &gt;  &gt;shape= ,rank= 0 ,size= 1
-       &gt;
-       &gt;  array is  (a matrix)
-       &gt;  &gt; [  0, -5,  7,  7 ]
-       &gt;  &gt; [  3,  4, -1,  2 ]
-       &gt;  &gt; [  1,  5,  6,  7 ]
-       &gt;  &gt;shape= 3 4 ,rank= 2 ,size= 12
-       &gt;
-       &gt;  mask  is  (a matrix)
-       &gt;  &gt; [ T,T,F,T ]
-       &gt;  &gt; [ T,T,F,T ]
-       &gt;  &gt; [ T,T,F,T ]
-       &gt;  &gt;shape= 3 4 ,rank= 2 ,size= 12
-       &gt;
-       &gt;  so for == 7 and back=.false.
-       &gt;  so for == 7 the address of the element is  (a vector)
-       &gt;  &gt; [  1 ]
-       &gt;  &gt; [  4 ]
-       &gt;  &gt;shape= 2 ,rank= 1 ,size= 2
-       &gt;
-       &gt;  so for == 7 and back=.true.
-       &gt;  so for == 7 the address of the element is  (a vector)
-       &gt;  &gt; [  3 ]
-       &gt;  &gt; [  4 ]
-       &gt;  &gt;shape= 2 ,rank= 1 ,size= 2
-       &gt;
-       &gt;  This is independent of declared lower bounds for the array
-       &gt;   using dim=N
-       &gt;  array is  (a matrix)
-       &gt;  &gt; [  1,  2, -9 ]
-       &gt;  &gt; [  2,  2,  6 ]
-       &gt;  &gt;shape= 2 3 ,rank= 2 ,size= 6
-       &gt;
-       &gt;    (a vector)
-       &gt;  &gt; [  2 ]
-       &gt;  &gt; [  1 ]
-       &gt;  &gt; [  0 ]
-       &gt;  &gt;shape= 3 ,rank= 1 ,size= 3
-       &gt;
-       &gt;    (a vector)
-       &gt;  &gt; [  2 ]
-       &gt;  &gt; [  1 ]
-       &gt;  &gt;shape= 2 ,rank= 1 ,size= 2
-       &gt;
+     &gt;  == 6  (a vector)
+     &gt;  &gt; [  2 ]
+     &gt;  &gt;shape= 1 ,rank= 1 ,size= 1
+     &gt;
+     &gt;  == 6  (a vector)
+     &gt;  &gt; [  4 ]
+     &gt;  &gt;shape= 1 ,rank= 1 ,size= 1
+     &gt;
+     &gt;  == 6  (a scalar)
+     &gt;  &gt; [  2 ]
+     &gt;  &gt;shape= ,rank= 0 ,size= 1
+     &gt;
+     &gt;  == 6  (a scalar)
+     &gt;  &gt; [  4 ]
+     &gt;  &gt;shape= ,rank= 0 ,size= 1
+     &gt;
+     &gt;  array is  (a matrix)
+     &gt;  &gt; [  0, -5,  7,  7 ]
+     &gt;  &gt; [  3,  4, -1,  2 ]
+     &gt;  &gt; [  1,  5,  6,  7 ]
+     &gt;  &gt;shape= 3 4 ,rank= 2 ,size= 12
+     &gt;
+     &gt;  mask  is  (a matrix)
+     &gt;  &gt; [ T,T,F,T ]
+     &gt;  &gt; [ T,T,F,T ]
+     &gt;  &gt; [ T,T,F,T ]
+     &gt;  &gt;shape= 3 4 ,rank= 2 ,size= 12
+     &gt;
+     &gt;  so for == 7 and back=.false.
+     &gt;  so for == 7 the address of the element is  (a vector)
+     &gt;  &gt; [  1 ]
+     &gt;  &gt; [  4 ]
+     &gt;  &gt;shape= 2 ,rank= 1 ,size= 2
+     &gt;
+     &gt;  so for == 7 and back=.true.
+     &gt;  so for == 7 the address of the element is  (a vector)
+     &gt;  &gt; [  3 ]
+     &gt;  &gt; [  4 ]
+     &gt;  &gt;shape= 2 ,rank= 1 ,size= 2
+     &gt;
+     &gt;  This is independent of declared lower bounds for the array
+     &gt;   using dim=N
+     &gt;  array is  (a matrix)
+     &gt;  &gt; [  1,  2, -9 ]
+     &gt;  &gt; [  2,  2,  6 ]
+     &gt;  &gt;shape= 2 3 ,rank= 2 ,size= 6
+     &gt;
+     &gt;    (a vector)
+     &gt;  &gt; [  2 ]
+     &gt;  &gt; [  1 ]
+     &gt;  &gt; [  0 ]
+     &gt;  &gt;shape= 3 ,rank= 1 ,size= 3
+     &gt;
+     &gt;    (a vector)
+     &gt;  &gt; [  2 ]
+     &gt;  &gt; [  1 ]
+     &gt;  &gt;shape= 2 ,rank= 1 ,size= 2
+     &gt;
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -433,6 +439,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=9>
@@ -441,6 +448,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -453,13 +461,9 @@ o
 MINLOC(3) - Location of the minimum value within an array
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             findloc(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>findloc (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f59818d7-8ec3-48c0-aff3-97abf19ba615 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>findloc (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5a921d1c-078f-429e-a4d7-b03169a2d9fb using man macros.</FONT>
 <br><br><center><img src="images/findloc.3fortran.gif"></center>
 </div>
 </div>

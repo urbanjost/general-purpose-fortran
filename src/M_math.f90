@@ -257,7 +257,7 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine julfit(x,y,ixn,itype,a,b,r2)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 ! ident_2="@(#) M_math julfit(3f) linear least squares curve fits destroys input arrays"
 integer,intent(in) :: ixn
 real               :: x(ixn)
@@ -1029,7 +1029,7 @@ end subroutine lowest
 !===================================================================================================================================
 SUBROUTINE SPLIFT(X,Y,YP,YPP,N,ierr,a1,b1,an,bn)
 !-----------------------------------------------------------------------------------------------------------------------------------
-use M_journal, only : journal
+use M_framework__journal, only : journal
 ! ident_5="@(#) M_math splift(3f) fits a spline to the n data points given in x and y"
 integer,intent(in)            :: N
 real,intent(in)               :: X(N),Y(N)
@@ -1437,7 +1437,7 @@ END SUBROUTINE linearint
 !!##LICENSE
 !!    Public Domain
 subroutine gcsgau1(n,a,b)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 integer,parameter  :: dp=kind(0.0d0)
 integer,intent(in) :: n
@@ -1579,7 +1579,7 @@ end subroutine gcsgau1
 !!##LICENSE
 !! Public Domain
 subroutine glstsq(ideg,x,y,n0,d)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit doubleprecision(a-h,o-z)
 
 integer             :: ideg       !* ideg is  desired degree of least square fit and test
@@ -1706,7 +1706,7 @@ end subroutine glstsq
 !!##LICENSE
 !!    Public Domain
 subroutine gcsgau2(n,a,b)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit doubleprecision(a-h,o-z)
 integer      :: n
 real         :: a(11,11)
@@ -2374,7 +2374,7 @@ data  co(1,1), co(2,1), co(3,1), co(4,1), co(1,2), co(2,2),   &
 !
 subroutine ju_xermsg (librar, subrou, messg, nerr, level)
 !***PURPOSE  Process error messages for SLATEC and other libraries.
-use m_journal, only : journal
+use M_framework__journal, only : journal
 character(len=*),intent(in)  :: librar
 character(len=*),intent(in)  :: subrou
 character(len=*),intent(in)  :: messg
@@ -2912,7 +2912,7 @@ end subroutine trapezoidal_integral
 !!      >
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine citer(a,r,h,s,c,dadh)
-use m_journal, only : journal
+use M_framework__journal, only : journal
 ! ident_9="@(#) M_math citer(3f) determine various geometric properties of circle segment given radius and area of the segment."
 !
 ! COPYRIGHT (C) John S. Urban, 08/31/1995
@@ -4276,8 +4276,8 @@ integer                         :: ind(1)
 end function closest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_closest()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
    call unit_check_start('closest',msg='')
    !*!call unit_check('closest', 0.eq.0, 'checking',100)
    call unit_check_done('closest',msg='')
@@ -4361,7 +4361,9 @@ end function hypot
 !!
 !!    program demo_extremum
 !!    use M_math, only : extremum
+!!    implicit none
 !!    real,allocatable :: arr(:)
+!!    real :: small, big
 !!    arr=[-10.0,8.8,-5.0,0.0,5.0,10.0,-0.3]
 !!    call extremum(arr,small,big)
 !!    write(*,*)'ARRAY=',arr
@@ -5087,7 +5089,7 @@ end function stddev
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine scale1(xmin0, xmax0, n0, xminp, xmaxp, dist)
 !-----------------------------------------------------------------------------------------------------------------------------------
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 ! ident_22="@(#) M_math scale1(3f) given xmin xmax n find new range xminp xmaxp divisible into approximately n linear intervals of size dist"
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -5254,7 +5256,7 @@ end subroutine scale1
 subroutine scale3(xmin0, xmax0, n0 , xminp, xmaxp, dist)
 !-----------------------------------------------------------------------------------------------------------------------------------
 !-----------------------------------------------------------------------------------------------------------------------------------
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 ! ident_23="@(#) M_math scale3(3f) find nice log range."
 

@@ -1,8 +1,9 @@
       program demo_linestyle
       ! A program showing basic line styles.
       use M_draw
+      implicit none
       character(len=40) :: device
-      integer           :: ios
+      integer           :: ios, idum, i
 
          print*,'Enter output device: '
          read(*,'(a)',iostat=ios)device
@@ -127,7 +128,7 @@
 
             call move(RAD, 0.0, 0.0)
             a=0.0
-            do i10 = 0,2*314,2
+            do i = 0, 2*314, 2
                x = RAD * cos(a)
                z = RAD * sin(a)
                y = AMP * sin(a * 6.0)

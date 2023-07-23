@@ -1,7 +1,7 @@
      program demo_textang
      use :: M_draw
-     use :: M_units, only : cosd, sind
-     integer :: ipaws
+     implicit none
+     integer :: i, ipaws
 
      !! set up drawing environment
      call prefsize(600,600)
@@ -16,10 +16,10 @@
         !! draw radial lines
         call color(D_RED)
         call move2(0.0,0.0)
-        call draw2(100.0*cosd(i*12),100.0*sind(i*12))
+        call draw2(100.0*cosd(i*12.0),100.0*sind(i*12.0))
         !! draw rotated text
         call color(D_WHITE)
-        call move2(30.0*cosd(i*12),30.0*sind(i*12))
+        call move2(30.0*cosd(i*12.0),30.0*sind(i*12.0))
         call textang(i*12.0)
         call drawstr('angled text')
      enddo

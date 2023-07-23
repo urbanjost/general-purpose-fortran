@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>adjustl (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>adjustl (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>adjustl(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-adjustl(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 ADJUSTL(3) - [CHARACTER:WHITESPACE] Left-justified a string
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ ADJUSTL(3) - [CHARACTER:WHITESPACE] Left-justified a string
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = adjustl(string)
 <P>
 <PRE>
-         elemental character(len=len(string),kind=KIND) function adjustl(string)
+       elemental character(len=len(string),kind=KIND) function adjustl(string)
 <P>
-          character(len=*,kind=KIND),intent(in) :: string
+        character(len=*,kind=KIND),intent(in) :: string
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = adjustl(string)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -100,24 +94,19 @@ STRING is a character variable of any supported kind
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The return value is a character variable of the same kind and length as
+The return value is a character variable of the same kind and length
+as STRING
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; STRING</H4>
-</A>
-<BLOCKQUOTE>
-<P>
-</BLOCKQUOTE>
 <A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-ADJUSTL(3) will left-justify a string by removing leading spaces. Spaces are
-inserted at the end of the string as needed.
+<P>
+ADJUSTL(3) will left-justify a string by removing leading spaces. Spaces
+are inserted at the end of the string as needed.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -125,6 +114,7 @@ inserted at the end of the string as needed.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -138,6 +128,7 @@ STRING : the string to left-justify
 
 </A>
 <BLOCKQUOTE>
+<P>
 A copy of STRING where leading spaces are removed and the same number of
 spaces are inserted on the end of STRING.
 </BLOCKQUOTE>
@@ -147,49 +138,50 @@ spaces are inserted on the end of STRING.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_adjustl
-      implicit none
-      character(len=20) :: str = &#146;   sample string&#146;
-      character(len=:),allocatable :: astr
-      integer :: length
+    program demo_adjustl
+    implicit none
+    character(len=20) :: str = &#146;   sample string&#146;
+    character(len=:),allocatable :: astr
+    integer :: length
 <P>
-         ! basic use
-          write(*,&#146;(a,"[",a,"]")&#146;) &#146;original: &#146;,str
-          str=adjustl(str)
-          write(*,&#146;(a,"[",a,"]")&#146;) &#146;adjusted: &#146;,str
+       ! basic use
+        write(*,&#146;(a,"[",a,"]")&#146;) &#146;original: &#146;,str
+        str=adjustl(str)
+        write(*,&#146;(a,"[",a,"]")&#146;) &#146;adjusted: &#146;,str
 <P>
-          ! a fixed-length string can be printed
-          ! trimmed using trim(3f) or len_trim(3f)
-          write(*,&#146;(a,"[",a,"]")&#146;) &#146;trimmed:  &#146;,trim(str)
-          length=len_trim(str)
-          write(*,&#146;(a,"[",a,"]")&#146;) &#146;substring:&#146;,str(:length)
+        ! a fixed-length string can be printed
+        ! trimmed using trim(3f) or len_trim(3f)
+        write(*,&#146;(a,"[",a,"]")&#146;) &#146;trimmed:  &#146;,trim(str)
+        length=len_trim(str)
+        write(*,&#146;(a,"[",a,"]")&#146;) &#146;substring:&#146;,str(:length)
 <P>
-          ! note an allocatable string stays the same length too
-          ! and is not trimmed by just an adjustl(3f) call.
-          astr=&#146;    allocatable string   &#146;
-          write(*,&#146;(a,"[",a,"]")&#146;) &#146;original:&#146;,astr
-          astr = adjustl(astr)
-          write(*,&#146;(a,"[",a,"]")&#146;) &#146;adjusted:&#146;,astr
-          ! trim(3f) can be used to change the length
-          astr = trim(astr)
-          write(*,&#146;(a,"[",a,"]")&#146;) &#146;trimmed: &#146;,astr
+        ! note an allocatable string stays the same length too
+        ! and is not trimmed by just an adjustl(3f) call.
+        astr=&#146;    allocatable string   &#146;
+        write(*,&#146;(a,"[",a,"]")&#146;) &#146;original:&#146;,astr
+        astr = adjustl(astr)
+        write(*,&#146;(a,"[",a,"]")&#146;) &#146;adjusted:&#146;,astr
+        ! trim(3f) can be used to change the length
+        astr = trim(astr)
+        write(*,&#146;(a,"[",a,"]")&#146;) &#146;trimmed: &#146;,astr
 <P>
-      end program demo_adjustl
+    end program demo_adjustl
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         original: [   sample string    ]
-         adjusted: [sample string       ]
-         trimmed:  [sample string]
-         substring:[sample string]
-         original:[    allocatable string   ]
-         adjusted:[allocatable string       ]
-         trimmed: [allocatable string]
+       original: [   sample string    ]
+       adjusted: [sample string       ]
+       trimmed:  [sample string]
+       substring:[sample string]
+       original:[    allocatable string   ]
+       adjusted:[allocatable string       ]
+       trimmed: [allocatable string]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -199,6 +191,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -207,16 +200,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 ADJUSTR(3), TRIM(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             adjustl(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>adjustl (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 00536bb4-11e5-41c4-9776-3d964d0303ec using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>adjustl (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 55e55ec4-6e3f-4f71-bfec-232f2816f8bd using man macros.</FONT>
 <br><br><center><img src="images/adjustl.3fortran.gif"></center>
 </div>
 </div>

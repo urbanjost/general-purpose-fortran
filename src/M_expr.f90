@@ -133,7 +133,7 @@ logical                      :: def_local
       elseif (temp(1:1).ge.'A'.and.temp(1:1).le.'Z'.or.temp(1:1).eq.'_')then ! appears to be variable name not number or logical
         value=table%get(temp)                                                ! find defined parameter in dictionary
         if (value.eq.'')then                                                 ! unknown variable name
-           call oops('*M_expr* ERROR(003) - Undefined variable name:'//trim(expression))
+           call oops('*prep* ERROR(003) - Undefined variable name:'//trim(expression))
         else
            if(def_local)then
               call checkname(expression(:iname))                          ! test for legal variable name
@@ -141,7 +141,7 @@ logical                      :: def_local
            endif
         endif
       else
-         call oops('*M_expr* ERROR(004) - Not logical or integer expression:'//trim(expression))
+         call oops('*prep* ERROR(004) - Not logical or integer expression:'//trim(expression))
       endif
    end select
 
@@ -180,15 +180,15 @@ integer                        :: iostat
       elseif (logical_local)then
          write(temp,'(g0)',iostat=iostat)true_or_false(temp,1,len_trim(temp)) 
          if(iostat.ne.0)then
-            call oops('*M_expr* ERROR(005) - logical expression required:'//trim(expression))
+            call oops('*prep* ERROR(005) - logical expression required:'//trim(expression))
          endif
       elseif (temp(1:1).ge.'A'.and.temp(1:1).le.'Z'.or.temp(1:1).eq.'_')then ! appears to be variable name not number or logical
         temp=table%get(temp)                                                ! find defined parameter in dictionary
         if (temp.eq.'')then                                                 ! unknown variable name
-           call oops('*M_expr* ERROR(001) - Undefined variable name:'//trim(expression))
+           call oops('*prep* ERROR(001) - Undefined variable name:'//trim(expression))
         endif
       else
-         call oops('*M_expr* ERROR(002) - Not logical or integer expression:'//trim(expression))
+         call oops('*prep* ERROR(002) - Not logical or integer expression:'//trim(expression))
       endif
    end select
 
@@ -209,7 +209,7 @@ integer                         :: j
             if (line(i:i).eq.'(') exit
          enddo
          if (i.eq.0) then
-            call oops("*M_expr* ERROR(014) - Constant logical expression required:"//trim(G_source))
+            call oops("*prep* ERROR(014) - Constant logical expression required:"//trim(G_source))
          endif
          call math(line,i+1,index(line,')')-1)
          call doop(line,i+1,index(line,')')-1)
@@ -225,7 +225,7 @@ integer                         :: j
                   if (index('*/+-',line(j:j)).ne.0) exit
                enddo
                !if (j.eq.i-2) then
-               !   call oops("*M_expr* 1**(-1) NOT IMPLEMENTED YET")
+               !   call oops("*prep* 1**(-1) NOT IMPLEMENTED YET")
                !endif
 
                select case (index('*/+-',line(i-1:i-1)))
@@ -249,7 +249,7 @@ integer                         :: j
                if (index('*/+-',line(j:j)).ne.0) exit
             enddo
             !if (j.eq.i-2) then
-            !   !call oops("*M_expr* 1**(-1) Not Implemented Yet")
+            !   !call oops("*prep* 1**(-1) Not Implemented Yet")
             !endif
 
             select case (index('*/+-',line(i-1:i-1)))
@@ -271,7 +271,7 @@ integer                         :: j
       line=nospace(line)
       cycle TILLDONE
    elseif (index(line,'(').ne.0) then
-      call oops('*M_expr* ERROR(015) - Constant logical expression required:'//trim(G_source))
+      call oops('*prep* ERROR(015) - Constant logical expression required:'//trim(G_source))
    endif
    exit
    enddo TILLDONE
@@ -347,16 +347,16 @@ integer                         :: numop
        length=1                                 ! operator length
        IF (NUMOP.EQ.1) length=2
        IF (I.EQ.len_trim(NEWL)) then            ! if operator is at end of string
-          call oops("*M_expr* ERROR(016) - Incomplete statement. Operator (**,/,*,+,-) at string end:"//trim(G_SOURCE))
+          call oops("*prep* ERROR(016) - Incomplete statement. Operator (**,/,*,+,-) at string end:"//trim(G_SOURCE))
           exit OVERALL
        endif
        IF (I.EQ.1.AND.NUMOP.NE.3) then          ! if operator at beginning of string and not +-
-        call oops("*M_expr* ERROR(017) - Syntax error. Operator (**,*,/) not allowed to prefix expression:"//trim(G_SOURCE))
+        call oops("*prep* ERROR(017) - Syntax error. Operator (**,*,/) not allowed to prefix expression:"//trim(G_SOURCE))
           exit OVERALL
        endif
        if (.not.(i.eq.1.and.numop.eq.3)) then   ! if processing +- operators and sign at beginning of string skip this
           if (index('*/+-',newl(i-1:i-1)).ne.0.or.index('*/+-',newl(i+length:i+length)).ne.0) then
-            call oops('*M_expr* ERROR(018) - Syntax error in domath:'//trim(G_source))
+            call oops('*prep* ERROR(018) - Syntax error in domath:'//trim(G_source))
             exit OVERALL
           endif
        endif
@@ -386,7 +386,7 @@ integer                         :: numop
              i1=i1*i2*minus1
           case(2)
              if(i2.eq.0)then
-                call oops('*M_expr* ERROR(019) - Divide by zero:'//trim(G_source))
+                call oops('*prep* ERROR(019) - Divide by zero:'//trim(G_source))
                 exit OVERALL
              endif
              i1=i1/i2*minus1
@@ -403,7 +403,7 @@ integer                         :: numop
                i1=i1-i2*minus1
              endif
           case default
-             call oops('*M_expr* ERROR(020) - Internal program error:'//trim(G_source))
+             call oops('*prep* ERROR(020) - Internal program error:'//trim(G_source))
              exit OVERALL
           end select
        endif
@@ -581,7 +581,7 @@ logical                      :: answer
            case(2); answer=left.and.right
            case(3); answer=left.or.right
            case default
-              call oops('*M_expr* ERROR(300) - Internal program error:'//trim(G_source))
+              call oops('*prep* ERROR(300) - Internal program error:'//trim(G_source))
            end select
 
            temp='.FALSE.'
@@ -648,11 +648,11 @@ integer                                 :: ios               ! error code return
       value=table%get(substring)
 
       if (value.eq.'') then                                  ! if not a defined variable name stop program
-         call oops('*M_expr* ERROR(021) - Undefined variable. Expression='//trim(G_source)//'. Variable='//trim(substring))
+         call oops('*prep* ERROR(021) - Undefined variable. Expression='//trim(G_source)//'. Variable='//trim(substring))
       else
          read(value,'(l4)',iostat=ios) true_or_false         ! try to read a logical from the value for the variable name
          if(ios.ne.0)then                                    ! not successful in reading string as a logical value
-            call oops('*M_expr* ERROR(022) - Constant logical expression required.'//trim(G_source))
+            call oops('*prep* ERROR(022) - Constant logical expression required.'//trim(G_source))
          endif
       endif
 
@@ -676,18 +676,18 @@ integer                       :: ierr
    elseif (verify(line,'0123456789 +-').eq.0) then                  ! assumed a number
       read(line,'(i11)',iostat=ios) get_integer_from_string         ! try to read integer value from input string
       if(ios.ne.0)then                                              ! failed to convert the string to an integer, so stop
-        call oops('*M_expr* ERROR(023) - Must be integer:"'//trim(line)//'" IN '//trim(G_source))
+        call oops('*prep* ERROR(023) - Must be integer:"'//trim(line)//'" IN '//trim(G_source))
       endif
    else                                                             ! input is not a number, assume it represents a variable name
       value=table%get(line)
       if (value.eq.'')then                                          ! if variable name not found in dictionary, stop
-        call oops('*M_expr* ERROR(024) - Undefined variable name:"'//trim(line)//'" IN '//trim(G_source))
+        call oops('*prep* ERROR(024) - Undefined variable name:"'//trim(line)//'" IN '//trim(G_source))
       else
          call expr(value,rendered_value,ierr)                       ! recursive call
          value=trim(rendered_value)
          read(value,'(i11)',iostat=ios) get_integer_from_string     ! read integer value from the value associated with name
          if(ios.ne.0)then                                           ! failed reading integer from value, stop
-           call oops('*M_expr* ERROR(025) - Must be integer:"'//trim(line)//"="//trim(value)//'" IN '//trim(G_source))
+           call oops('*prep* ERROR(025) - Must be integer:"'//trim(line)//"="//trim(value)//'" IN '//trim(G_source))
          endif
       endif
    endif                                                            ! return integer value
@@ -726,16 +726,16 @@ integer                      :: i
 
    if (len(line).eq.0)then
    else if (line(1:1).lt.'A'.or.line(1:1).gt.'Z'.and.line(1:1).ne.'_')then                         ! variable names start with a-z
-    call oops("*M_expr* ERROR(006) - Name does not start with alphameric or '_' (or general syntax error):"//trim(G_source),ierr)
+    call oops("*prep* ERROR(006) - Name does not start with alphameric or '_' (or general syntax error):"//trim(G_source),ierr)
    elseif(len_trim(line).gt.G_var_len)then
-     call oops('*M_expr* ERROR(007) - Variable name exceeds '//v2s(G_var_len)//' characters:'//trim(G_source),ierr)
+     call oops('*prep* ERROR(007) - Variable name exceeds '//v2s(G_var_len)//' characters:'//trim(G_source),ierr)
    endif
 
    do i=2,len_trim(line)                                                 ! name uses $  _ and letters (A-Z) digits (0-9)
       if(line(i:i).ne.'$'.and.line(i:i).ne.'_'.and.     &
       & (line(i:i).lt.'A'.or.line(i:i).gt.'Z').and.     &
       & (line(i:i).lt.'0'.or.line(i:i).gt.'9')) then
-      call oops('*M_expr* ERROR(008) - Variable name contains unallowed character(or general syntax error):'//trim(G_source),ierr)
+      call oops('*prep* ERROR(008) - Variable name contains unallowed character(or general syntax error):'//trim(G_source),ierr)
       endif
    enddo
 
@@ -755,7 +755,7 @@ integer                              :: j
    newl=line(ipos1+7:) ! defined(
 
    if (len_trim(newl).eq.1.or.index(newl,')').eq.0.or. index(newl,')').eq.2)then
-      call oops("*M_expr* ERROR(013) - Incomplete statement."//trim(G_SOURCE))
+      call oops("*prep* ERROR(013) - Incomplete statement."//trim(G_SOURCE))
    endif
 
    value='.true.'
@@ -791,14 +791,14 @@ integer                                :: ios
    temp=line(ipos1:ipos2)                                                   ! place variable name/value substring into TEMP
 
    if (temp(1:1).eq.' ')then                                                ! did not find expected variable name or value
-      call oops('*M_expr* ERROR(009) - Incomplete statement.'//trim(G_SOURCE))
+      call oops('*prep* ERROR(009) - Incomplete statement.'//trim(G_SOURCE))
    endif
 
    if (temp(1:1).ge.'A'.and.temp(1:1).le.'Z'.or.temp(1:1).eq.'_') then      ! appears to be a variable name (not number or logical)
 
      value=table%get(temp)                                                  ! find defined parameter in dictionary
      if (value.eq.'')then                                                   ! unknown variable name
-        call oops('*M_expr* ERROR(010) - Undefined variable name:'//trim(temp)//' in expression '//trim(G_source))
+        call oops('*prep* ERROR(010) - Undefined variable name:'//trim(temp)//' in expression '//trim(G_source))
         do i=1,size(table%key)                                                        ! print variable dictionary
            write(G_iout,'(*(g0,1x))')"!    $DEFINE",trim(table%key(i)),' = ',adjustl(table%value(i)(:table%count(i)) )
         enddo
@@ -814,13 +814,13 @@ integer                                :: ios
      continue                                                               ! failed to read numeric value
      value=temp(:G_var_len)                                                 ! test TEMP as a logical
      if (value.ne.'.FALSE.'.and.value.ne.'.TRUE.')then                      ! if here, value should be a logical
-        call oops('*M_expr* ERROR(011) - Syntax error.'//trim(G_source))
+        call oops('*prep* ERROR(011) - Syntax error.'//trim(G_source))
      endif
                                                                             ! value is ".TRUE." or ".FALSE."
    endif
 
    if(temp(1:1).ge.'A')then
-      call oops('*M_expr* ERROR(012) - Defined value must be an integer or logical constant.'//trim(G_source))
+      call oops('*prep* ERROR(012) - Defined value must be an integer or logical constant.'//trim(G_source))
    endif
 
 end subroutine getval
@@ -835,7 +835,7 @@ integer                      :: i,k
    ! REMOVE VARIABLE IF FOUND IN VARIABLE NAME DICTIONARY
    ! allow basic globbing where * is any string and ? is any character
    if (len_trim(opts).eq.0) then                           ! if no variable name
-      call oops('*M_expr* ERROR(026) - missing targets:'//trim(G_source))
+      call oops('*prep* ERROR(026) - missing targets:'//trim(G_source))
    endif
    call split(opts,names,delimiters=' ;,')
 
@@ -894,7 +894,7 @@ integer,intent(out),optional :: ierr
    if(iwhere.ne.0)then
       read(message(iwhere+6:iwhere+8),'(i3)')G_error
    else
-      write(G_iout,'(a)')'! *M_expr* ERROR(-999) - Message does not contain properly formatted ERROR CODE: '//trim(message)
+      write(G_iout,'(a)')'! *prep* ERROR(-999) - Message does not contain properly formatted ERROR CODE: '//trim(message)
       G_error=-999
    endif
    if(.not.present(ierr))then

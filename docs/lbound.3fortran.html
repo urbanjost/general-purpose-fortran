@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>lbound (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>lbound (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>lbound(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-lbound(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 LBOUND(3) - [ARRAY:INQUIRY] Lower dimension bounds of an array
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ LBOUND(3) - [ARRAY:INQUIRY] Lower dimension bounds of an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = lbound(array [,dim] [,kind] )
 <P>
 <PRE>
-           elemental TYPE(kind=KIND) function lbound(array,dim,kind)
+         elemental TYPE(kind=KIND) function lbound(array,dim,kind)
 <P>
-            TYPE(kind=KIND),intent(in)           :: array(..)
-            integer(kind=**),intent(in),optional :: dim
-            integer(kind=**),intent(in),optional :: kind
+          TYPE(kind=KIND),intent(in)           :: array(..)
+          integer(kind=**),intent(in),optional :: dim
+          integer(kind=**),intent(in),optional :: kind
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,33 +86,35 @@ result = lbound(array [,dim] [,kind] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY shall be assumed-rank or an array, of any type. It cannot be an
-unallocated allocatable array or a pointer that is not associated.
+ARRAY shall be assumed-rank or an array, of any type. It cannot be
+an unallocated allocatable array or a pointer that is not
+associated.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM shall be a scalar integer. The corresponding actual argument shall
-not be an optional dummy argument, a disassociated pointer, or an
-unallocated allocatable.
+DIM shall be a scalar integer. The corresponding actual argument
+shall not be an optional dummy argument, a disassociated pointer, or
+an unallocated allocatable.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND an integer initialization expression indicating the kind parameter
-of the result.
+KIND an integer initialization expression indicating the kind
+parameter of the result.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The return value is of type integer and of kind KIND. If KIND is absent,
-the return value is of default integer kind. The result is scalar if DIM
-is present; otherwise, the result is an array of rank one and size n,
-where n is the rank of ARRAY.
+The return value is of type integer and of kind KIND. If KIND is
+absent, the return value is of default integer kind. The result is
+scalar if DIM is present; otherwise, the result is an array of rank
+one and size n, where n is the rank of ARRAY.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -133,6 +128,7 @@ a kind designated as ** may be any supported kind for the type
 
 </A>
 <BLOCKQUOTE>
+<P>
 RESULT(3) returns the lower bounds of an array, or a single lower bound
 along the DIM dimension.
 </BLOCKQUOTE>
@@ -142,6 +138,7 @@ along the DIM dimension.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -151,14 +148,14 @@ ARRAY : Shall be an array, of any type.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : Shall be a scalar integer. If DIM is absent, the result is an array
-of the upper bounds of ARRAY.
+DIM : Shall be a scalar integer. If DIM is absent, the result is an
+array of the upper bounds of ARRAY.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : An integer initialization expression indicating the kind parameter
-of the result.
+KIND : An integer initialization expression indicating the kind
+parameter of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -167,13 +164,14 @@ of the result.
 
 </A>
 <BLOCKQUOTE>
+<P>
 If DIM is absent, the result is an array of the lower bounds of ARRAY.
 <P>
-If DIM is present, the result is a scalar corresponding to the lower bound
-of the array along that dimension. If ARRAY is an expression rather than a
-whole array or array structure component, or if it has a zero extent along
-the relevant dimension, the lower bound is taken to be
-<TABLE cellpadding=3><!-- tsb: If DIM is present, the result is a scalar corresponding to the lower bound
+If DIM is present, the result is a scalar corresponding to the lower
+bound of the array along that dimension. If ARRAY is an expression
+rather than a whole array or array structure component, or if it has a
+zero extent along the relevant dimension, the lower bound is taken to be
+<TABLE cellpadding=3><!-- tsb: If DIM is present, the result is a scalar corresponding to the lower
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
@@ -183,10 +181,10 @@ the relevant dimension, the lower bound is taken to be
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-      NOTE1
+    NOTE1
 <P>
-      If **array** is assumed-rank and has rank zero, **dim** cannot be
-      present since it cannot satisfy the requirement **1 &lt;= dim &lt;= 0**.
+    If **array** is assumed-rank and has rank zero, **dim** cannot be
+    present since it cannot satisfy the requirement **1 &lt;= dim &lt;= 0**.
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -196,69 +194,70 @@ the relevant dimension, the lower bound is taken to be
 
 </A>
 <BLOCKQUOTE>
+<P>
 Note that in my opinion this function should not be used on assumed-size
-arrays or in any function without an explicit interface. Errors can occur if
-there is no interface defined.
+arrays or in any function without an explicit interface. Errors can
+occur if there is no interface defined.
 <P>
 Sample program
 <P>
 <PRE>
-      ! program demo_lbound
-      module m_bounds
-      implicit none
-       contains
-          subroutine msub(arr)
-             !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array
-             integer,intent(in) :: arr(:)
-             write(*,*)&#146;MSUB: LOWER=&#146;,lbound(arr), &
-             & &#146;UPPER=&#146;,ubound(arr), &
-             & &#146;SIZE=&#146;,size(arr)
-          end subroutine msub
-       end module m_bounds
+    ! program demo_lbound
+    module m_bounds
+    implicit none
+     contains
+        subroutine msub(arr)
+           !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array
+           integer,intent(in) :: arr(:)
+           write(*,*)&#146;MSUB: LOWER=&#146;,lbound(arr), &
+           & &#146;UPPER=&#146;,ubound(arr), &
+           & &#146;SIZE=&#146;,size(arr)
+        end subroutine msub
+     end module m_bounds
 <P>
-       program demo_lbound
-       use m_bounds, only : msub
-       implicit none
-       interface
-          subroutine esub(arr)
-          integer,intent(in) :: arr(:)
-          end subroutine esub
-       end interface
-       integer :: arr(-10:10)
-          write(*,*)&#146;MAIN: LOWER=&#146;,lbound(arr), &
-          & &#146;UPPER=&#146;,ubound(arr), &
-          & &#146;SIZE=&#146;,size(arr)
-          call csub()
-          call msub(arr)
-          call esub(arr)
-       contains
-      subroutine csub
-         write(*,*)&#146;CSUB: LOWER=&#146;,lbound(arr), &
-         & &#146;UPPER=&#146;,ubound(arr), &
-         & &#146;SIZE=&#146;,size(arr)
-      end subroutine csub
-      end
+     program demo_lbound
+     use m_bounds, only : msub
+     implicit none
+     interface
+        subroutine esub(arr)
+        integer,intent(in) :: arr(:)
+        end subroutine esub
+     end interface
+     integer :: arr(-10:10)
+        write(*,*)&#146;MAIN: LOWER=&#146;,lbound(arr), &
+        & &#146;UPPER=&#146;,ubound(arr), &
+        & &#146;SIZE=&#146;,size(arr)
+        call csub()
+        call msub(arr)
+        call esub(arr)
+     contains
+    subroutine csub
+       write(*,*)&#146;CSUB: LOWER=&#146;,lbound(arr), &
+       & &#146;UPPER=&#146;,ubound(arr), &
+       & &#146;SIZE=&#146;,size(arr)
+    end subroutine csub
+    end
 <P>
-       subroutine esub(arr)
-       implicit none
-       integer,intent(in) :: arr(:)
-          ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE
-          ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)
-          write(*,*)&#146;ESUB: LOWER=&#146;,lbound(arr), &
-          & &#146;UPPER=&#146;,ubound(arr), &
-          & &#146;SIZE=&#146;,size(arr)
-       end subroutine esub
+     subroutine esub(arr)
+     implicit none
+     integer,intent(in) :: arr(:)
+        ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE
+        ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)
+        write(*,*)&#146;ESUB: LOWER=&#146;,lbound(arr), &
+        & &#146;UPPER=&#146;,ubound(arr), &
+        & &#146;SIZE=&#146;,size(arr)
+     end subroutine esub
 <P>
-      !end program demo_lbound
+    !end program demo_lbound
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         MAIN: LOWER=         -10 UPPER=          10 SIZE=          21
-         CSUB: LOWER=         -10 UPPER=          10 SIZE=          21
-         MSUB: LOWER=           1 UPPER=          21 SIZE=          21
-         ESUB: LOWER=           1 UPPER=          21 SIZE=          21
+       MAIN: LOWER=         -10 UPPER=          10 SIZE=          21
+       CSUB: LOWER=         -10 UPPER=          10 SIZE=          21
+       MSUB: LOWER=           1 UPPER=          21 SIZE=          21
+       ESUB: LOWER=           1 UPPER=          21 SIZE=          21
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -268,6 +267,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 , with KIND argument - Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -276,6 +276,7 @@ Fortran 95 , with KIND argument - Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 Array inquiry:
 <TABLE cellpadding=3><!-- tsb: Array inquiry:
  -->
@@ -300,7 +301,7 @@ o
 </TD><TD>
 UBOUND(3) - Upper dimension bounds of an array
 </TD></TR>
-<TR></TR></TABLE>CO_UBOUND(3), _LBOUND(3)
+<TR></TR></TABLE>CO_UBOUND(3), CO_LBOUND(3)
 <P>
 State Inquiry:
 <TABLE cellpadding=3><!-- tsb: State Inquiry:
@@ -345,13 +346,9 @@ o
 BTEST(3) - Tests a bit of an integer value.
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              lbound(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lbound (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 91198a83-6f09-4ed1-b5a7-41f5a42bac6a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lbound (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c467fae1-70e7-45fa-a91e-9fd46ae0a82a using man macros.</FONT>
 <br><br><center><img src="images/lbound.3fortran.gif"></center>
 </div>
 </div>

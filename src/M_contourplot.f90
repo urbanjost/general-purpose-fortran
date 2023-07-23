@@ -1,7 +1,4 @@
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-MODULE M_Smooth
+MODULE M_contourplot__Smooth
 
    implicit none
    private
@@ -729,8 +726,8 @@ END Subroutine SVDbackSubstitution
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_smooth
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
    call test_polyx2()
    call test_smoothsurface()
 contains
@@ -751,13 +748,13 @@ end subroutine test_smoothsurface
 !===================================================================================================================================
 end subroutine test_suite_M_smooth
 !===================================================================================================================================
-END Module M_Smooth
+END MODULE M_contourplot__Smooth
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 MODULE M_ContourPlot
 
-   USE M_Smooth
+   USE M_contourplot__Smooth
    IMPLICIT NONE
    PRIVATE
 
@@ -939,7 +936,7 @@ SUBROUTINE ContourLines(x,y,z,ismopt,iexp,jexp,clist,epsilon,ierr,cntcrv)
 
 IMPLICIT NONE
 
-! ident_1="@(#)M_contourplot::contourlines(3f):calculate contour lines from ungridded data f(x,y) and call user-supplied routine with results"
+! ident_1="@(#) M_contourplot contourlines(3f) calculate contour lines from ungridded data f(x y) and call user-supplied routine with results"
 
 REAL,INTENT(IN),DIMENSION(:):: x      ! input list of x values
 REAL,INTENT(IN),DIMENSION(:):: y      ! input list of y values
@@ -1860,8 +1857,8 @@ END Subroutine Cntour
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_contourplot()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
 !! setup
    call test_contourlines()
 !! teardown

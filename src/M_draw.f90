@@ -40,25 +40,24 @@
 !!      * A different (color) PostScript driver.
 !!      * A driver for Microsoft VML (Vector Markup Language)
 !!
-!!    M_draw is intended to produce simple graphics composed of line drawings and
-!!    polygon fills in two and three dimensions. It handles circles, curves,
-!!    arcs, patches, polygons, and software text in a device independent
-!!    fashion. Simple hidden line removal is also available via polygon
-!!    backfacing. Access to hardware text and double buffering of drawings
-!!    depends on the driver.
+!!    M_draw is intended to produce simple graphics composed of line
+!!    drawings and polygon fills in two and three dimensions. It handles
+!!    circles, curves, arcs, patches, polygons, and software text in a device
+!!    independent fashion. Simple hidden line removal is also available via
+!!    polygon backfacing. Access to hardware text and double buffering of
+!!    drawings depends on the driver.
 !!
-!!    M_draw is callable from C and Fortran, and Pascal;
-!!    but M_draw is only supported in Fortran (the C components are being converted
-!!    to Fortran).
+!!    M_draw is callable from C and Fortran, and Pascal; but M_draw is only
+!!    supported in Fortran (the C components are being converted to Fortran).
 !!
 !!    The original VOGLE source's ownership statement
 !!
-!!       This software is public domain and may be used for any purpose commercial
-!!       or otherwise. It is offered without any guarantee as to its suitability
-!!       for any purpose or as to the sanity of its writers. The authors do ask
-!!       that the source is passed on to anyone that requests a copy, and that
-!!       people who get copies don't go round claiming they wrote it. Use at your
-!!       own risk.
+!!       This software is public domain and may be used for any purpose
+!!       commercial or otherwise. It is offered without any guarantee
+!!       as to its suitability for any purpose or as to the sanity of
+!!       its writers. The authors do ask that the source is passed on to
+!!       anyone that requests a copy, and that people who get copies don't
+!!       go round claiming they wrote it. Use at your own risk.
 !!
 !!##LIBRARY FUNCTION DESCRIPTIONS
 !!
@@ -422,7 +421,6 @@
 !!    use M_draw,    only  : D_BLACK,   D_WHITE
 !!    use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!    use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
-!!    use M_units,    only : cosd, sind
 !!    implicit none
 !!    integer  :: ipaws
 !!    real     :: x1, y1
@@ -523,13 +521,12 @@
 !!       contains
 !!
 !!       subroutine target(xc,yc,rc)
-!!       use M_units,    only : cosd, sind
 !!       real     :: xc,yc,rc
 !!       integer  :: i
 !!       real     :: x,y
 !!          do i=0,360,10
-!!             x=rc*cosd(i)
-!!             y=rc*sind(i)
+!!             x=rc*cosd(real(i))
+!!             y=rc*sind(real(i))
 !!             call line(xc,yc,xc+x,yc+y)
 !!          enddo
 !!          do i=1,int(rc),10
@@ -602,8 +599,8 @@
 !!   Sample program:
 !!
 !!      program demo_prefposition
-!!      use M_draw, only    : prefsize, vinit, ortho2, clear, getkey, prefposition
-!!      use M_draw, only    : move2, draw2, vexit, color
+!!      use M_draw, only    : prefsize, vinit, ortho2, clear, getkey
+!!      use M_draw, only    : prefposition, move2, draw2, vexit, color
 !!      use M_draw,    only  : D_BLACK,   D_WHITE
 !!      use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!      use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
@@ -628,7 +625,8 @@
 !!      end program demo_prefposition
 !>
 !!##NAME
-!!    prefsize(3f) - [M_draw:WINDOW_SETUP] Specify preferred width and height of window in physical units
+!!    prefsize(3f) - [M_draw:WINDOW_SETUP] Specify preferred width and
+!!    height of window in physical units
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -915,7 +913,8 @@
 !!       program demo_vinit
 !!       use M_draw
 !!       use ISO_C_BINDING
-!!       integer :: ios
+!!       implicit none
+!!       integer :: ios, idum
 !!       character(len=50) :: device
 !!
 !!       ! read in device name and start graphics mode
@@ -1330,12 +1329,10 @@
 !!   Sample program:
 !!
 !!    program demo_draw2
-!!    use M_draw,    only : prefsize, vinit, ortho2, clear, getkey
-!!    use M_draw,    only : move2, draw2, vexit, color,linewidth
-!!    use M_draw,    only  : D_BLACK,   D_WHITE
-!!    use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
-!!    use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
-!!    use M_units,   only : d2r, polar_to_cartesian
+!!    use M_draw, only: prefsize, vinit, ortho2, clear, getkey
+!!    use M_draw, only: move2, draw2, vexit, color, linewidth
+!!    use M_draw, only: D_BLACK, D_MAGENTA! , &
+!!    !        D_RED, D_GREEN, D_BLUE, D_YELLOW, D_WHITE, D_CYAN
 !!    !
 !!    ! The Archimedean spiral is the locus of points corresponding
 !!    ! to the locations over time of a point moving away from a
@@ -1345,32 +1342,52 @@
 !!    ! Changing the parameter A will turn the spiral,
 !!    ! while B controls the distance between successive turnings.
 !!    !
-!!       implicit none
-!!       integer        :: i
-!!       real           :: x,y,radius,theta
-!!       real,parameter :: rotate=0.0, gap=2.0
-!!       integer        :: ipaws
+!!    implicit none
+!!    integer        :: i
+!!    real           :: x, y, radius, theta
+!!    real, parameter :: rotate = 0.0, gap = 2.0
+!!    integer        :: ipaws
 !!
-!!       call prefsize(400,400)
+!!       call prefsize(400, 400)
 !!       call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
-!!       call ortho2(-150.0,150.0,-150.0,150.0)
+!!       call ortho2(-150.0, 150.0, -150.0, 150.0)
 !!       call color(D_MAGENTA)
 !!       call clear()
-!!       call move2(0.0,0.0)
+!!       call move2(0.0, 0.0)
 !!       call color(D_BLACK)
 !!       call linewidth(40)
-!!       do i=0,360*10,5
-!!          theta=d2r(i)
+!!       do i = 0, 360*10, 5
+!!          theta = d2r(real(i))
 !!          ! equation in polar coordinates
-!!          radius=rotate+gap*theta
+!!          radius = rotate + gap*theta
 !!          ! convert polar coordinates to cartesian
-!!          call polar_to_cartesian(radius,theta,x,y)
+!!          call polar_to_cartesian(radius, theta, x, y)
 !!          ! draw from current position to end of next segment
-!!          call draw2(x,y)
-!!       enddo
-!!       ipaws=getkey()
+!!          call draw2(x, y)
+!!       end do
+!!       ipaws = getkey()
 !!       ! exit graphics mode
 !!       call vexit()
+!!    contains
+!!    !
+!!    elemental real function d2r(degrees)
+!!    real, intent(in) :: degrees
+!!    real, parameter  :: Deg_Per_Rad = 57.2957795130823208767981548
+!!       d2r = degrees/Deg_Per_Rad
+!!    end function d2r
+!!    !
+!!    subroutine polar_to_cartesian(radius, inclination, x, y)
+!!    real, intent(in) :: radius, inclination
+!!    real, intent(out)  :: x, y
+!!       if (radius == 0) then
+!!          x = 0.0
+!!          y = 0.0
+!!       else
+!!          x = radius*cos(inclination)
+!!          y = radius*sin(inclination)
+!!       end if
+!!    end subroutine polar_to_cartesian
+!!    !
 !!    end program demo_draw2
 !>
 !!##NAME
@@ -1403,6 +1420,7 @@
 !!      use M_draw,    only  : D_BLACK,   D_WHITE
 !!      use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!      use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+!!      implicit none
 !!      integer :: ipaws
 !!
 !!      call prefsize(200,200)
@@ -1427,6 +1445,7 @@
 !!      contains
 !!
 !!      subroutine square(side)
+!!      real,intent(in) :: side
 !!      call rdraw2( side,   0.0)
 !!      call rdraw2(  0.0,  side)
 !!      call rdraw2(-side,   0.0)
@@ -1556,6 +1575,7 @@
 !!       use M_draw,    only  : D_BLACK,   D_WHITE
 !!       use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!       use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+!!       implicit none
 !!       integer           :: ios
 !!       character(len=50) :: device
 !!       print*,'Enter output device:'
@@ -1591,8 +1611,8 @@
 !!       use M_draw,    only  : D_BLACK,   D_WHITE
 !!       use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!       use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
-!!
 !!       real parray(3,4)                   ! An array of points for a polygon
+!!       integer :: idum
 !!       data parray/ -8.0, -8.0, 0.0,  &
 !!       & -5.0, -8.0, 0.0,  &
 !!       & -5.0, -5.0, 0.0,  &
@@ -1635,27 +1655,99 @@
 !!
 !!    program demo_polyhatch
 !!    use M_draw
-!!    use M_drawplus, only : spirograph
-!!    use M_draw,    only  : D_BLACK,   D_WHITE
-!!    use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
-!!    use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
-!!    real :: N=11
-!!    call prefsize(600*10/6,200*10/6)
-!!    call vinit(' ')
-!!    call page( -15.0, 15.0, -5.0, 5.0)
-!!    call linewidth(100)
-!!    call color(D_BLACK)
-!!    call clear()
-!!    call color(D_RED)
-!!    call spirograph(-10.0, 0.0, N, 1.0, N, 5.0, 1000, 0.0, 0.0, 0)
-!!    call polyhatch(.true.) ! turn on polygon hatching
-!!    call hatchang(45.0)
-!!    call hatchpitch(0.3)
-!!    call color(D_GREEN)
-!!    call spirograph(10.0, 0.0, N, 1.0, N, 5.0, 1000, 0.0, 0.0, 2)
-!!    call vflush()
-!!    key=getkey()
-!!    call vexit()
+!!    use M_draw, only: D_BLACK, D_WHITE
+!!    use M_draw, only: D_RED, D_GREEN, D_BLUE
+!!    use M_draw, only: D_YELLOW, D_MAGENTA, D_CYAN
+!!    implicit none
+!!    integer :: key
+!!    real :: N = 11.0
+!!       call prefsize(600*10/6, 200*10/6)
+!!       call vinit(' ')
+!!       call page(-15.0, 15.0, -5.0, 5.0)
+!!       call linewidth(100)
+!!       call color(D_BLACK)
+!!       call clear()
+!!       call color(D_RED)
+!!       call spirograph(-10.0, 0.0, N, 1.0, N, 5.0, 1000, 0.0, 0.0, 0)
+!!       call polyhatch(.true.) ! turn on polygon hatching
+!!       call hatchang(45.0)
+!!       call hatchpitch(0.3)
+!!       call color(D_GREEN)
+!!       call spirograph(10.0, 0.0, N, 1.0, N, 5.0, 1000, 0.0, 0.0, 2)
+!!       call vflush()
+!!       key = getkey()
+!!       call vexit()
+!!    contains
+!!    subroutine spirograph(xc,yc,sun,planet0,offset0,rad,ilines,ang,angs,ifill)
+!!    real, parameter :: PI=3.14159265358979323846264338327950288419716939937510
+!!    ! center of curve
+!!    real, intent(in)    :: xc, yc
+!!    ! radii of sun, planet, and planet offset
+!!    real, intent(in)    :: sun, planet0, offset0
+!!    ! radius to fit the shape to (no fit if radius is 0)
+!!    real, intent(in)    :: rad
+!!    ! number of points to sample along curve
+!!    integer, intent(in) :: ilines
+!!    ! angle to rotate the shape by, to orientate it.
+!!    real, intent(in)    :: ang
+!!    ! angle to start sampling points at; ccw is +; 0 is East
+!!    real, intent(in)    :: angs
+!!    ! 1 make a filled polygon, 2 make a hatched polygon
+!!    integer, intent(in) :: ifill
+!!    real                :: ang1, con1, con2, factor, offset, planet
+!!    real                :: r, sunr, u, xpoin, xpoin1, ypoin, ypoin1
+!!    integer             :: i10
+!!       sunr = sun
+!!       offset = offset0
+!!       planet = planet0
+!!       if (ilines  ==  0) return
+!!       if (planet  ==  0.0) return
+!!       if (sunr  ==  0.0) return
+!!       if (rad  /=  0 .and. sunr - planet + offset  /=  0) then
+!!          factor = rad/(sunr - planet + offset)
+!!          sunr = factor*sunr
+!!          planet = factor*planet
+!!          offset = factor*offset
+!!       end if
+!!       u = 0.0 + ang
+!!       con1 = PI*2.*(sunr/planet)/real(ilines)
+!!       con2 = (1.0 - planet/sunr)*u
+!!       xpoin1 = (sunr - planet)*cos(planet*u/sunr) + offset*cos(con2)
+!!       ypoin1 = (sunr - planet)*sin(planet*u/sunr) - offset*sin(con2)
+!!       ang1 = atan2(ypoin1, xpoin1) + angs
+!!       r = sqrt(xpoin1**2 + ypoin1**2)
+!!       xpoin1 = r*cos(ang1) + xc
+!!       ypoin1 = r*sin(ang1) + yc
+!!       select case (ifill)
+!!       case (0)
+!!       case (1)
+!!          call polyfill(.true.)
+!!          call makepoly()
+!!       case (2)
+!!          call polyhatch(.true.)
+!!          call makepoly()
+!!       case (3:)
+!!          call makepoly()
+!!       case default
+!!       end select
+!!       call move2(xpoin1, ypoin1)
+!!       do i10 = 1, ilines
+!!          u = con1*i10 + ang
+!!          con2 = (1.0 - planet/sunr)*u
+!!          if (con2  >=  2**24) con2 = amod(con2, PI)
+!!          xpoin = (sunr - planet)*cos(planet*u/sunr) + offset*cos(con2)
+!!          ypoin = (sunr - planet)*sin(planet*u/sunr) - offset*sin(con2)
+!!          ang1 = atan2(ypoin, xpoin) + angs
+!!          r = sqrt(xpoin**2 + ypoin**2)
+!!          xpoin = r*cos(ang1) + xc
+!!          ypoin = r*sin(ang1) + yc
+!!          call draw2(xpoin, ypoin)
+!!       end do
+!!       if (ifill  >  0) then
+!!          call closepoly()
+!!          call polyfill(.false.)
+!!       end if
+!!    end subroutine spirograph
 !!    end program demo_polyhatch
 
 !>
@@ -1678,39 +1770,63 @@
 !!
 !!   Sample program:
 !!
-!!    program demo_hatchang
-!!    use M_drawplus, only : draw_interpret
-!!    character(len=:),allocatable :: draw_cmds(:)
+!!       program demo_hatchang
+!!       use M_draw
+!!       implicit none
+!!       real :: b
+!!       integer :: idum
+!!          call prefsize(1000,200)
+!!          call vinit(' ')
+!!          b = 0.4
+!!          call page(-25.0 - b, 25.0 + b, -5.0 - b, 5.0 + b)
+!!          call color(0)
+!!          call clear()
+!!          call textsize(0.6, 0.7)
+!!          call font('futura.l')
+!!          call centertext(.true.)
+!!          call leftjustify()
+!!          call linewidth(50)
+!!          call polyhatch(.true.)
+!!          call hatchpitch(1.0/2.0)
+!!          ! draw circles with hatching
+!!          call drawc(ang=  90.1, col=7, x=-20.0, label='90 degrees')
+!!          call drawc(ang=  45.0, col=2, x=-10.0, label='45 degrees')
+!!          call drawc(ang=   0.0, col=6, x=  0.0, label='0 degrees')
+!!          call drawc(ang= -45.0, col=5, x= 10.0, label='-45 degrees')
+!!          call drawc(ang= -90.0, col=4, x= 20.0, label='-90 degrees')
 !!
-!!    DRAW_CMDS=[ CHARACTER(LEN=128) :: &
-!!    'prefsize 1000 200; vinit                                     ',&
-!!    'set b=.4; page -25-b 25+b -5-b 5+b; color 0;clear            ',&
-!!    'textsize .6 .7;font futura.l;centertext .true.               ',&
-!!    'leftjustify; linewidth 50; polyhatch .true.; hatchpitch 1/2  ',&
-!!    '# draw circles with hatching                                 ',&
-!!    'linewidth 90;hatchang  90.1; color  7;  circle X=-20  Y=0  5 ',&
-!!    'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr  90 degrees ',&
-!!    'linewidth 90;hatchang  45  ; color  2;  circle X=-10  Y=0  5 ',&
-!!    'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr  45 degrees ',&
-!!    'linewidth 90;hatchang   0  ; color  6;  circle X=-0   Y=0  5 ',&
-!!    'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr   0 degrees ',&
-!!    'linewidth 90;hatchang -45  ; color  5;  circle X=10   Y=0  5 ',&
-!!    'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr -45 degrees ',&
-!!    'linewidth 90;hatchang -90  ; color  4;  circle X=20   Y=0  5 ',&
-!!    'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr -90 degrees ',&
-!!    'linewidth 130                                                ',&
-!!    'move2 0 0;draw2 -5 0                                         ',&
-!!    'move2 -5 0;draw2 -4.4  0.3                                   ',&
-!!    'move2 -5 0;draw2 -4.4 -0.3                                   ',&
-!!    'rightjustify                                                 ',&
-!!    'linewidth 60                                                 ',&
-!!    'move2 -5 0;drawstr 0 degrees                                 ',&
-!!    'getkey                                                       ',&
-!!    'vexit                                                        ',&
-!!    '']
+!!          call linewidth(130)
+!!          call move2(0.0, 0.0)
+!!          call draw2(-5.0, 0.0)
+!!          call move2(-5.0, 0.0)
+!!          call draw2(-4.4, 0.3)
+!!          call move2(-5.0, 0.0)
+!!          call draw2(-4.4, - 0.3)
+!!          call rightjustify()
+!!          call linewidth(60)
+!!          call move2(-5.0,0.0)
+!!          call drawstr('0 degrees')
+!!          idum = getkey()
+!!          call vexit()
+!!       contains
+!!          subroutine drawc(ang,col,x,label)
+!!          real,intent(in) :: ang, x
+!!          integer,intent(in) :: col
+!!          character(len=*),intent(in) :: label
+!!          real :: y
+!!          y=0.0
+!!          call linewidth(90)
+!!          call hatchang(ang)
+!!          call color(col)
+!!          call circle(X, Y, 5.0)
+!!          y = -4.9
+!!          call move2(X - 4.9, Y)
+!!          call color(7)
+!!          call linewidth(60)
+!!          call drawstr(label)
+!!          end subroutine drawc
 !!
-!!    call draw_interpret(DRAW_CMDS,delimiters=';')
-!!    end program demo_hatchang
+!!       end program demo_hatchang
 !>
 !!##NAME
 !!    hatchpitch(3f) - [M_draw:POLYGONS] Set the distance between hatch lines.
@@ -1729,28 +1845,49 @@
 !!
 !!   Sample program:
 !!
-!!    program demo_hatchpitch
-!!    use M_drawplus, only : draw_interpret
-!!    character(len=:),allocatable :: draw_cmds(:)
+!!       program demo_hatchpitch
+!!       use M_draw
+!!       implicit none
+!!       real :: b
+!!       integer :: idum
 !!
-!!    DRAW_CMDS=[ CHARACTER(LEN=128) :: &
-!!    'prefsize 1000 200; vinit                                                    ',&
-!!    'set b=.1; page -25-b 25+b -5-b 5+b;color 0;clear                            ',&
-!!    'textsize .5 .6;font futura.l; leftjustify                                   ',&
-!!    'circleprecision 3                                                           ',&
-!!    '# draw circles with hatching                                                ',&
-!!    'linewidth 150; polyhatch .true.; hatchang 30                                ',&
-!!    'hatchpitch 1/3 ; color 7; circle X=-20 0 5; move2 X-4.9 -4.9;color 7;drawstr 1/3',&
-!!    'hatchpitch 1/2 ; color 2; circle X=-10 0 5; move2 X-4.9 -4.9;color 7;drawstr 1/2',&
-!!    'hatchpitch  1  ; color 6; circle X=-0  0 5; move2 X-4.9 -4.9;color 7;drawstr 1',&
-!!    'hatchpitch  2  ; color 5; circle X=10  0 5; move2 X-4.9 -4.9;color 7;drawstr 2',&
-!!    'hatchpitch  3  ; color 4; circle X=20  0 5; move2 X-4.9 -4.9;color 7;drawstr 3',&
-!!    'getkey                                                                      ',&
-!!    'vexit                                                                       ',&
-!!    '']
+!!          call prefsize(1000, 200)
+!!          call vinit(' ')
+!!          b = 0.1
+!!          call page(-25.0 - b, 25.0 + b, -5.0 - b, 5.0 + b)
+!!          call color(0)
+!!          call clear()
+!!          call textsize(0.5, 0.6)
+!!          call font('futura.l')
+!!          call leftjustify()
+!!          call circleprecision(3)
+!!          ! draw circles with hatching
+!!          call linewidth(150)
+!!          call polyhatch(.true.)
+!!          call hatchang(30.0)
 !!
-!!    call draw_interpret(DRAW_CMDS,delimiters=';')
-!!    end program demo_hatchpitch
+!!          call try(pitch=1.0/3.0, col=7, X=-20.0, label='1/3')
+!!          call try(pitch=1.0/2.0, col=2, X=-10.0, label='1/2')
+!!          call try(pitch=1.0,     col=6, X= -0.0, label='1')
+!!          call try(pitch=2.0,     col=5, X= 10.0, label='2')
+!!          call try(pitch=3.0,     col=4, X= 20.0, label='3')
+!!          idum = getkey()
+!!          call vexit()
+!!       contains
+!!          subroutine try(pitch, col, x, label)
+!!             real, intent(in) :: pitch
+!!             integer, intent(in) :: col
+!!             real, intent(in) :: x
+!!             character(len=*), intent(in) :: label
+!!             call hatchpitch(pitch)
+!!             call color(col)
+!!             call circle(X, 0.0, 5.0)
+!!             call move2(X - 4.9,-4.9)
+!!             call color(7)
+!!             call drawstr(label)
+!!          end subroutine try
+!!
+!!       end program demo_hatchpitch
 !>
 !!##NAME
 !!    poly2(3f) - [M_draw:POLYGONS] Construct an (x, y) polygon from an array of points
@@ -1768,59 +1905,68 @@
 !!
 !!   Sample program:
 !!
-!!    program demo_poly2
-!!    use M_draw
-!!    integer :: i,j
-!!    integer :: ipaws, icolor
-!!    real    :: xx,yy
-!!       call prefsize(512,512)
-!!       call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
-!!       call ortho2(0.0,256.0,0.0,256.0)
-!!       call linewidth(1)
-!!       call polyfill(.true.)
-!!       ! step thru a series of rectangular cells
-!!       icolor=0
-!!       xx=0.0
-!!       do i=1,16
-!!          yy=0.0
-!!          do j=1,16
-!!             yy=yy+16.0
-!!             icolor=icolor+1
-!!             call setcolor(icolor,xx,yy)
-!!          enddo
-!!          xx=xx+16.0
-!!       enddo
-!!       ipaws=getkey()
-!!       call vexit()
-!!    contains
+!!      program demo_poly2
+!!      use M_draw
+!!      implicit none
+!!      integer :: i,j
+!!      integer :: ipaws, icolor
+!!      real    :: xx,yy
+!!         call prefsize(512,512)
+!!         call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
+!!         call ortho2(0.0,256.0,0.0,256.0)
+!!         call linewidth(1)
+!!         call polyfill(.true.)
+!!         ! step thru a series of rectangular cells
+!!         icolor=0
+!!         xx=0.0
+!!         do i=1,16
+!!            yy=0.0
+!!            do j=1,16
+!!               yy=yy+16.0
+!!               icolor=icolor+1
+!!               call setcolor(icolor,xx,yy)
+!!            enddo
+!!            xx=xx+16.0
+!!         enddo
+!!         ipaws=getkey()
+!!         call vexit()
+!!      contains
 !!
-!!    subroutine setcolor(iset,xx,yy)
-!!    use M_strings, only : v2s
-!!    use M_color,  only : color_name2rgb
-!!    integer,intent(in) :: iset
-!!    real,intent(in)    :: xx,yy
-!!    character(len=80)  :: echoname
-!!    real    :: points(2,100)
-!!    if(iset.gt.255)return
-!!    ! determine coordinates of next square
-!!    points(1:2,1)=[xx,      yy      ]
-!!    points(1:2,2)=[xx,      yy+16.0 ]
-!!    points(1:2,3)=[xx+16.0, yy+16.0 ]
-!!    points(1:2,4)=[xx+16.0, yy      ]
-!!    points(1:2,5)=[xx,      yy      ]
-!!    ! get some nice RGB values to try from named colors known by M_color module
-!!    call color_name2rgb(v2s(icolor),red,green,blue,echoname)
-!!    if(echoname.eq.'Unknown') return
-!!    ! set a color number to the new RGB values
-!!    write(*,*)icolor, nint(red*2.55), nint(green*2.55), nint(blue*2.55),trim(echoname)
-!!    call mapcolor(icolor, nint(red*2.55), nint(green*2.55), nint(blue*2.55))
-!!    ! set to the new color
-!!    call color(icolor)
-!!    ! fill the rectangle in that color
-!!    call poly2(5,points)
-!!    end subroutine setcolor
+!!      subroutine setcolor(iset,xx,yy)
+!!      integer,intent(in) :: iset
+!!      real,intent(in)    :: xx,yy
+!!      real    :: points(2,100)
+!!      integer :: red, green, blue
+!!      if(iset.gt.255)return
+!!      ! determine coordinates of next square
+!!      points(1:2,1)=[xx,      yy      ]
+!!      points(1:2,2)=[xx,      yy+16.0 ]
+!!      points(1:2,3)=[xx+16.0, yy+16.0 ]
+!!      points(1:2,4)=[xx+16.0, yy      ]
+!!      points(1:2,5)=[xx,      yy      ]
+!!      ! get some RGB values to try
+!!      red=irand(0,255)
+!!      green=irand(0,255)
+!!      blue=irand(0,255)
+!!      ! set a color number to the new RGB values
+!!      call mapcolor(icolor, red, green, blue)
+!!      ! set to the new color
+!!      call color(icolor)
+!!      ! fill the rectangle in that color
+!!      call poly2(5,points)
+!!      end subroutine setcolor
 !!
-!!    end program demo_poly2
+!!      function irand(first,last) result(rand_int)
+!!      use, intrinsic :: iso_fortran_env, only : dp=>real64
+!!      integer,intent(in) :: first
+!!      integer,intent(in) :: last
+!!      integer              :: rand_int
+!!      real(kind=dp)        :: rand_val
+!!         call random_number(rand_val)
+!!         rand_int = first + FLOOR((last+1-first)*rand_val)
+!!      end function irand
+!!
+!!      end program demo_poly2
 !>
 !!##NAME
 !!    poly(3f) - [M_draw:POLYGONS] Construct a polygon from an array of points
@@ -1842,6 +1988,7 @@
 !!
 !!    program demo_poly
 !!    use M_draw
+!!    implicit none
 !!    ! Using polygons, hatching, and filling.
 !!    integer           :: ios
 !!    character(len=50) :: device
@@ -1890,6 +2037,7 @@
 !!       call vexit()
 !!    contains
 !!    subroutine drawpoly()
+!!       integer :: idum
 !!       real parray(3,4)                   ! An array of points for a polygon
 !!       data parray/ -8.0, -8.0, 0.0,  &
 !!                  & -5.0, -8.0, 0.0,  &
@@ -1943,16 +2091,22 @@
 !!       call prefsize(wide,tall)
 !!       call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
 !!       call ortho2(0.0, real(wide), 0.0, real(tall) )
-!!       ! call linewidth(3) ! really slows down pbm driver because all lines are polygons
+!!       ! really slows down pbm driver because all lines are polygons
+!!       ! call linewidth(3)
 !!       call color(D_WHITE)
 !!       call clear()
 !!       call color(D_BLACK)
 !!       rows=1
-!!       box_sz=MIN(wide,tall)/rows       ! size of biggest box to use and get specified number of rows
-!!       nrows = tall/box_sz              ! number of rows of objects to draw
-!!       ncols = wide/box_sz              ! number of columns of objects to draw
-!!       xoff = (wide - ncols * box_sz)/2 ! initial x offset to begin row at to center drawings
-!!       yoff = (tall - nrows * box_sz)/2 ! initial x offset to begin column at to center drawings
+!!       ! size of biggest box to use and get specified number of rows
+!!       box_sz=MIN(wide,tall)/rows
+!!       ! number of rows of objects to draw
+!!       nrows = tall/box_sz
+!!       ! number of columns of objects to draw
+!!       ncols = wide/box_sz
+!!       ! initial x offset to begin row at to center drawings
+!!       xoff = (wide - ncols * box_sz)/2
+!!       ! initial x offset to begin column at to center drawings
+!!       yoff = (tall - nrows * box_sz)/2
 !!       sun_radius = 148
 !!       planet_radius = 1
 !!       do ilines = 1, 300
@@ -1979,22 +2133,28 @@
 !!    !
 !!    !  Make shapes using hypocycloidal curves.
 !!    !
-!!    subroutine hypoc(xcenter,ycenter,sunr0,planet0,offset0,radius,ilines,ang,angs,ifill)
+!!    subroutine hypoc(xc,yc,sun,planet0,offset0,radius,ilines,ang,angs,ifill)
 !!    use M_draw
 !!    implicit none
-!!    real,parameter     :: PI= 3.14159265358979323846264338327950288419716939937510
-!!    real,intent(in)    :: xcenter, ycenter      ! center of curve
-!!    real,intent(in)    :: sunr0,planet0,offset0 ! radii of sun, planet, and planet offset
-!!    real,intent(in)    :: radius                ! radius to fit the shape to (no fit if radius is 0)
-!!    integer,intent(in) :: ilines                ! number of points to sample along curve
-!!    real,intent(in)    :: ang                   ! angle to rotate the shape by, to orientate it.
-!!    real,intent(in)    :: angs                  ! angle to start sampling points at; ccw is +; 0 is East
-!!    integer,intent(in) :: ifill                 ! 1 make a filled polygon, 2 make a hatched polygon
+!!    real,parameter  :: PI= 3.14159265358979323846264338327950288419716939937510
+!!    real,intent(in) :: xc, yc      ! center of curve
+!!    ! radii of sun, planet, and planet offset
+!!    real,intent(in) :: sun,planet0,offset0
+!!    real,intent(in)    :: radius
+!!    integer,intent(in) :: ilines
+!!    ! radius to fit the shape to (no fit if radius is 0)
+!!    real,intent(in)    :: ang
+!!    ! number of points to sample along curve
+!!    real,intent(in)    :: angs
+!!    ! angle to rotate the shape by, to orientate it.
+!!    integer,intent(in) :: ifill
+!!    ! angle to start sampling points at; ccw is +; 0 is East
 !!    integer            :: i10
+!!    ! 1 make a filled polygon, 2 make a hatched polygon
 !!    real               :: ang1, con1, con2, factor
 !!    real               :: offset, planet, r, sunr, u
 !!    real               :: xpoin, xpoin1, ypoin, ypoin1
-!!       sunr=sunr0
+!!       sunr=sun
 !!       offset=offset0
 !!       planet=planet0
 !!       if(ilines.eq.0.0) return
@@ -2013,8 +2173,8 @@
 !!       ypoin1=(sunr-planet)*sin(planet*u/sunr)-offset*sin(con2)
 !!       ang1=atan2(ypoin1,xpoin1)+angs
 !!       r=sqrt(xpoin1**2+ypoin1**2)
-!!       xpoin1=r*cos(ang1)+xcenter
-!!       ypoin1=r*sin(ang1)+ycenter
+!!       xpoin1=r*cos(ang1)+xc
+!!       ypoin1=r*sin(ang1)+yc
 !!       select case(ifill)
 !!       case(:0)
 !!       case(1:)
@@ -2029,8 +2189,8 @@
 !!          ypoin=(sunr-planet)*sin(planet*u/sunr)-offset*sin(con2)
 !!          ang1=atan2(ypoin,xpoin)+angs
 !!          r=sqrt(xpoin**2+ypoin**2)
-!!          xpoin=r*cos(ang1)+xcenter
-!!          ypoin=r*sin(ang1)+ycenter
+!!          xpoin=r*cos(ang1)+xc
+!!          ypoin=r*sin(ang1)+yc
 !!          call draw2(xpoin,ypoin)
 !!       enddo
 !!       call draw2(xpoin1,ypoin1)
@@ -2071,11 +2231,13 @@
 !!   Sample program:
 !!
 !!    program demo_backface
-!!    !      demonstrate double buffering and what happens when you hit clipping plane
+!!    ! demonstrate double buffering and what happens
+!!    ! when you hit clipping plane
 !!    !
-!!    !      Specifying an extra argument turns on the filling.
+!!    ! Specifying an extra argument turns on the polygon filling.
 !!    !
 !!    use M_draw
+!!    implicit none
 !!    character(len=30) :: device
 !!    character(len=1)  :: c
 !!    real    r, t, dr, dt
@@ -2313,6 +2475,7 @@
 !!    use M_draw,    only  : D_BLACK,   D_WHITE
 !!    use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!    use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+!!    implicit none
 !!    real    :: b=0.5
 !!    real    :: y1,y2,ym,x1,x2
 !!    real    :: width=50.0/8.0,width2
@@ -2751,8 +2914,9 @@
 !!    !      using curves
 !!    !
 !!    use M_draw
+!!    implicit none
 !!
-!!    integer i
+!!    integer i, idum, ios
 !!    character(len=50) :: buf
 !!    real bezier(4, 4), cardinal(4, 4), bspline(4, 4)
 !!    real geom1(3, 4), geom2(3, 6)
@@ -2992,6 +3156,7 @@
 !!    use M_draw,    only  : D_BLACK,   D_WHITE
 !!    use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!    use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+!!    implicit none
 !!    real    :: left
 !!    real    :: baseline=80.0
 !!    integer :: icolor=1
@@ -3134,8 +3299,8 @@
 !!
 !!    program demo_textang
 !!    use :: M_draw
-!!    use :: M_units, only : cosd, sind
-!!    integer :: ipaws
+!!    implicit none
+!!    integer :: i, ipaws
 !!
 !!    !! set up drawing environment
 !!    call prefsize(600,600)
@@ -3150,10 +3315,10 @@
 !!       !! draw radial lines
 !!       call color(D_RED)
 !!       call move2(0.0,0.0)
-!!       call draw2(100.0*cosd(i*12),100.0*sind(i*12))
+!!       call draw2(100.0*cosd(i*12.0),100.0*sind(i*12.0))
 !!       !! draw rotated text
 !!       call color(D_WHITE)
-!!       call move2(30.0*cosd(i*12),30.0*sind(i*12))
+!!       call move2(30.0*cosd(i*12.0),30.0*sind(i*12.0))
 !!       call textang(i*12.0)
 !!       call drawstr('angled text')
 !!    enddo
@@ -3236,7 +3401,9 @@
 !!
 !!    program demo_centertext
 !!    use :: M_draw
-!!    use :: M_units, only : cosd, sind
+!!    implicit none
+!!    real :: x1, y1, r, ang, xx, yy
+!!    integer :: i, j, ipaws
 !!    !! set up drawing environment
 !!    call prefsize(600,600)
 !!    call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
@@ -3259,7 +3426,7 @@
 !!       call color(D_RED)
 !!       do i=1,80
 !!          call move2(x1,y1)
-!!          call draw2(x1+150.0*cosd(i*12), y1+150.0*sind(i*12))
+!!          call draw2(x1+150.0*cosd(i*12.0), y1+150.0*sind(i*12.0))
 !!       enddo
 !!
 !!       !! draw rotated text
@@ -3351,11 +3518,12 @@
 !!    use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!    use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
 !!    use M_draw
+!!    implicit none
 !!
 !!    character(len=40)   :: str1, str2, str3, str4, fonts(22)
 !!    character(len=100)  :: buf
 !!    character(len=1)    :: c
-!!    integer             :: i
+!!    integer             :: i, ios
 !!    data fonts/ 'astrology', 'cursive',    'futura.l',               &
 !!    &      'futura.m',  'gothic.eng', 'gothic.ger',             &
 !!    &      'gothic.ita','greek',      'japanese',    'markers', &
@@ -3380,7 +3548,7 @@
 !!    call ortho2(-14.0, 14.0, -14.0, 14.0)
 !!    do i = 1, 22
 !!       ! do the title
-!!       call textang(0.0)                 ! reset text angle so title is straight
+!!       call textang(0.0)   ! reset text angle so title is straight
 !!       call color(D_CYAN)
 !!       call font('futura.m')
 !!       write(buf, '(''This is Hershey font '',a)') fonts(i)
@@ -3422,7 +3590,7 @@
 !!       real              :: r
 !!       character(len=*)  :: str
 !!       real              :: i, inc, x, y, a
-!!       integer           :: j
+!!       integer           :: j, i10
 !!       character(len=1)  :: c
 !!       real,parameter    :: pi = 3.1415926535
 !!
@@ -3473,6 +3641,8 @@
 !!
 !!       program demo_drawstr
 !!       use M_draw
+!!       implicit none
+!!       integer :: idum
 !!       call vinit('')
 !!       ! by default the drawing surface is
 !!       ! a square ranging from -1 to 1 in both
@@ -3528,8 +3698,10 @@
 !!    use M_draw,    only  : D_BLACK,   D_WHITE
 !!    use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
 !!    use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+!!    implicit none
 !!    real    :: left
 !!    real    :: baseline
+!!    integer :: ipaws
 !!    integer :: icolor=0
 !!    real    :: texth=10.0
 !!       !! set up drawing surface
@@ -3631,8 +3803,12 @@
 !!        call color(D_GREEN)
 !!        call clear()
 !!        call linewidth(200)
-!!        call color(D_CYAN); call polyfill(.false.); call rect(xmin,ymin,xmax,ymax)
-!!        call color(D_WHITE); call polyfill(.true.);  call rect(xmin,ymin,xmax,ymax)
+!!        call color(D_CYAN)
+!!        call polyfill(.false.)
+!!        call rect(xmin,ymin,xmax,ymax)
+!!        call color(D_WHITE)
+!!        call polyfill(.true.)
+!!        call rect(xmin,ymin,xmax,ymax)
 !!        call color(D_BLACK)
 !!        call boxtext(xmin,ymin,xmax-xmin,ymax-ymin,"This text is in the box")
 !!        idum=getkey()
@@ -3675,7 +3851,8 @@
 !!
 !!        ! from Fortran, use IANY() to OR the array of options, and CHAR()
 !!        ! to convert the integer result to a C_CHAR type. KIND C_CHAR is
-!!        ! defined by loading a the intrinsic module for C bindings ("USE ISO_C_BINDING").
+!!        ! defined by loading the intrinsic module for C bindings
+!!        ! (ie. "USE ISO_C_BINDING").
 !!        ival=iany([D_XCENTERED,D_YCENTERED])
 !!        val=char(ival)
 !!        call textjustify(val)
@@ -3701,15 +3878,24 @@
 !!       call textsize(0.9, 1.4)
 !!       call font("times.rb")
 !!       call linewidth(20)
-!!       call seejustify( "right|top",           iany([d_right,d_top]),           -10.0, -10.0 )
-!!       call seejustify( "right|ycentered",     iany([d_right,d_ycentered]),     -10.0,   0.0 )
-!!       call seejustify( "right|bottom",        iany([d_right,d_bottom]),        -10.0, +10.0 )
-!!       call seejustify( "xcentered|top",       iany([d_xcentered,d_top]),         0.0, -10.0 )
-!!       call seejustify( "xcentered|ycentered", iany([d_xcentered,d_ycentered]),   0.0,   0.0 )
-!!       call seejustify( "xcentered|bottom",    iany([d_xcentered,d_bottom]),      0.0, +10.0 )
-!!       call seejustify( "left|top",            iany([d_left,d_top]),            +10.0, -10.0 )
-!!       call seejustify( "left|ycentered",      iany([d_left,d_ycentered]),      +10.0,   0.0 )
-!!       call seejustify( "left|bottom",         iany([d_left,d_bottom]),         +10.0, +10.0 )
+!!       call seejustify( "right|top",           &
+!!               iany([d_right,d_top]),           -10.0, -10.0 )
+!!       call seejustify( "right|ycentered",     &
+!!               iany([d_right,d_ycentered]),     -10.0,   0.0 )
+!!       call seejustify( "right|bottom",        &
+!!               iany([d_right,d_bottom]),        -10.0, +10.0 )
+!!       call seejustify( "xcentered|top",       &
+!!               iany([d_xcentered,d_top]),         0.0, -10.0 )
+!!       call seejustify( "xcentered|ycentered", &
+!!               iany([d_xcentered,d_ycentered]),   0.0,   0.0 )
+!!       call seejustify( "xcentered|bottom",    &
+!!               iany([d_xcentered,d_bottom]),      0.0, +10.0 )
+!!       call seejustify( "left|top",            &
+!!               iany([d_left,d_top]),            +10.0, -10.0 )
+!!       call seejustify( "left|ycentered",      &
+!!               iany([d_left,d_ycentered]),      +10.0,   0.0 )
+!!       call seejustify( "left|bottom",         &
+!!               iany([d_left,d_bottom]),         +10.0, +10.0 )
 !!       call vexit()
 !!    contains
 !!       subroutine seejustify(string,justify,x,y)
@@ -3720,7 +3906,8 @@
 !!          character(len=*)        :: string
 !!          character(kind=c_char)  :: byte
 !!          call color(D_RED)
-!!          call move2(x-1.0,y); call draw2(x+1.0,y); call move2(x,y-1.0); call draw2(x,y+1.0)
+!!          call move2(x-1.0,y); call draw2(x+1.0,y)
+!!          call move2(x,y-1.0); call draw2(x,y+1.0)
 !!          call circle(x,y,5.0)
 !!          call color(D_BLUE)
 !!          call move2(x,y)
@@ -4061,15 +4248,27 @@
 !!       call linewidth(180)
 !!       call textsize(0.8*scl,1.2*scl)
 !!       call move2( x1+.3,y1+.4)
-!!       call color(D_RED); call textslant(0.0);  call drawstr("textslant(0.0); ")
-!!       call color(D_GREEN); call textslant(-1.0); call drawstr(" textslant(-1.0);")
-!!       call color(D_BLUE); call textslant(1.0);  call drawstr(" textslant(1.0);")
+!!       call color(D_RED)
+!!       call textslant(0.0);  call drawstr("textslant(0.0); ")
+!!       !
+!!       call color(D_GREEN)
+!!       call textslant(-1.0); call drawstr(" textslant(-1.0);")
+!!       !
+!!       call color(D_BLUE)
+!!       call textslant(1.0);  call drawstr(" textslant(1.0);")
+!!       !
 !!       call textsize(0.8*scl,1.2*3*scl)
 !!       call move2(x1+.3,y1+3+.4)
-!!       call color(D_MAGENTA); call textslant(1.0); call drawstr(" textslant(1.0);")
+!!       call color(D_MAGENTA)
+!!       call textslant(1.0); call drawstr(" textslant(1.0);")
+!!       !
 !!       call textsize(0.8*scl,1.2*scl)
-!!       call color(D_CYAN); call textslant(0.3); call drawstr(" textslant(0.3);")
-!!       call color(D_WHITE); call textslant(0.5); call drawstr(" textslant(0.5);")
+!!       call color(D_CYAN)
+!!       call textslant(0.3); call drawstr(" textslant(0.3);")
+!!       !
+!!       call color(D_WHITE)
+!!       call textslant(0.5); call drawstr(" textslant(0.5);")
+!!       !
 !!       call vflush()
 !!       key=getkey()
 !!       call vexit()
@@ -4327,8 +4526,9 @@
 !!     program demo_linestyle
 !!     ! A program showing basic line styles.
 !!     use M_draw
+!!     implicit none
 !!     character(len=40) :: device
-!!     integer           :: ios
+!!     integer           :: ios, idum, i
 !!
 !!        print*,'Enter output device: '
 !!        read(*,'(a)',iostat=ios)device
@@ -4453,7 +4653,7 @@
 !!
 !!           call move(RAD, 0.0, 0.0)
 !!           a=0.0
-!!           do i10 = 0,2*314,2
+!!           do i = 0, 2*314, 2
 !!              x = RAD * cos(a)
 !!              z = RAD * sin(a)
 !!              y = AMP * sin(a * 6.0)
@@ -4540,6 +4740,7 @@
 !!
 !!     program demo_color
 !!     use M_draw
+!!     implicit none
 !!     real    :: b=0.5
 !!     real    :: y1,y2,ym,x1,x2
 !!     real    :: width=50.0/8.0,width2
@@ -4611,157 +4812,220 @@
 !!    !   or only has a small color table (a frame in this program takes
 !!    !   at least SLICES*RINGS colors to produce accurately).
 !!    use M_draw
-!!    use m_color, only : hue
-!!    use M_units, only : cosd, sind
 !!    implicit none
-!!       real                 :: lightstep
-!!       integer              :: ii,iframe
-!!       integer,parameter    :: SLICES=30
-!!       integer,parameter    :: RINGS=  8
-!!       real                 :: LIGHTNESS
-!!       integer,parameter    :: BOX=1200
-!!       integer              :: ipaws
-!!       integer              :: istart, iend
-!!       character(len=20)    :: device
-!!       call prefsize(BOX,BOX)
+!!    real                 :: lightstep
+!!    integer              :: ii, iframe
+!!    integer, parameter    :: SLICES = 30
+!!    integer, parameter    :: RINGS = 8
+!!    real                 :: LIGHTNESS
+!!    integer, parameter    :: BOX = 500
+!!    integer              :: ipaws
+!!    integer              :: istart, iend
+!!    character(len=20)    :: device
+!!       call prefsize(BOX, BOX)
 !!       call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
 !!       call polyfill(.true.)
 !!       call color(D_BLACK)
 !!       call clear()
 !!       call color(D_WHITE)
-!!       call page(-110./2.,85./2.,-110./2.,110./2.)
-!!       LIGHTNESS=100.0
-!!       lightstep=-5
+!!       call page(-110.0/2.0+5, 85.0/2.0+5, -110.0/2.0, 110.0/2.0)
+!!       LIGHTNESS = 100.0
+!!       lightstep = -5
 !!
 !!       call vgetdev(device)
-!!       select case(device)
-!!       case ('p6','p3','ppm') ! just do one wheel
-!!          istart=10
-!!          iend=10
-!!          LIGHTNESS=50.0
+!!       select case (device)
+!!       case ('p6', 'p3', 'ppm') ! just do one wheel
+!!          istart = 10
+!!          iend = 10
+!!          LIGHTNESS = 50.0
 !!       case default           ! do many lightnesses
-!!          istart=1
-!!          iend=19
+!!          istart = 1
+!!          iend = 19
 !!       end select
 !!
-!!       do ii=istart,iend
-!!          iframe=ii
+!!       do ii = istart, iend
+!!          iframe = ii
 !!          call color(D_BLACK)
 !!          call clear()
 !!          call color(D_WHITE)
 !!          call wheel()
-!!          LIGHTNESS=LIGHTNESS+LIGHTSTEP
-!!          ipaws=getkey()
-!!       enddo
+!!          LIGHTNESS = LIGHTNESS + LIGHTSTEP
+!!          ipaws = getkey()
+!!       end do
 !!       call vexit()
 !!    contains
-!!    !=======================================================================--------
+!!    !
 !!    subroutine wheel() ! draw an entire wheel
-!!       character(len=40) :: inline
-!!       real              :: hue_val
-!!       integer           :: ii
+!!    character(len=40) :: inline
+!!    real              :: hue_val
+!!    integer           :: ii
 !!       call textang(0.0)
 !!       call color(D_WHITE)
-!!       call textsize(5.0,6.0)
+!!       call textsize(5.0, 6.0)
 !!       call font('times.r')
-!!       call move2(0.0,103.0/2.0)
+!!       call move2(0.0, 103.0/2.0)
 !!       call centertext(.true.)
 !!       call linewidth(30)
 !!       call drawstr('COLOR WHEEL')
 !!       call linewidth(0)
-!!       call textsize( 2.5,2.5)
+!!       call textsize(2.5, 2.5)
 !!       call font('futura.l')
-!!       call move2(0.0,90.0/2.0)
-!!       write(inline,'("lightness=",f6.2)')LIGHTNESS
+!!       call move2(0.0, 90.0/2.0)
+!!       write (inline, '("lightness=",f6.2)') LIGHTNESS
 !!       call linewidth(30)
 !!       call drawstr(inline)
 !!       call linewidth(0)
-!!       call textsize(1.5,1.5)
-!!       hue_val=0
-!!       do ii=SLICES, 1,-1
+!!       call textsize(1.5, 1.5)
+!!       hue_val = 0
+!!       do ii = SLICES, 1, -1
 !!          call slice(hue_val)
-!!       enddo
+!!       end do
 !!       call centertext(.false.)
 !!    end subroutine wheel
-!!    !=======================================================================--------
+!!    !
 !!    subroutine slice(hue_val) ! draw a slice
-!!       integer           :: buffer
-!!       real              :: hue_val, ang_inc
-!!       character(len=40) :: inline
-!!       real              :: step
-!!       real              :: X1, X2, X3, X4
-!!       real              :: Y1, Y2, Y3, Y4
+!!    integer           :: buffer
+!!    real              :: hue_val, ang_inc
+!!    character(len=40) :: inline
+!!    real              :: step
+!!    real              :: X1, X2, X3, X4
+!!    real              :: Y1, Y2, Y3, Y4
+!!    !
+!!    integer           :: maxcolors, current_color
+!!    integer           :: ir, ig, ib
+!!    real              :: r, g, b
+!!    real              :: saturation
+!!    !
+!!    integer           :: status
+!!    integer           :: icount
+!!    real              :: angle1, angle2
+!!    real              :: radius1, radius2, radius3, radius4
+!!    !
+!!    integer, save      :: color_count = 0
 !!       !
-!!       integer           :: maxcolors, current_color
-!!       integer           :: ir, ig, ib
-!!       real              :: r,g,b
-!!       real              :: saturation
-!!       !
-!!       integer           :: status
-!!       integer           :: icount
-!!       real              :: angle1, angle2
-!!       real              :: radius1, radius2, radius3, radius4
-!!       !
-!!       integer,save      :: color_count=0
-!!       !
-!!       buffer=8
-!!       ANG_INC=360.0/SLICES
-!!       angle1=hue_val-ANG_INC/2
-!!       angle2=angle1+ANG_INC
-!!       saturation=100
-!!       radius1=32
-!!       radius3=radius1+4
-!!       radius4=radius1+7
+!!       buffer = 8
+!!       ANG_INC = 360.0/SLICES
+!!       angle1 = hue_val - ANG_INC/2
+!!       angle2 = angle1 + ANG_INC
+!!       saturation = 100
+!!       radius1 = 32
+!!       radius3 = radius1 + 4
+!!       radius4 = radius1 + 7
 !!       ! draw tic from wheel to start of angle label
 !!       call color(D_WHITE)
 !!       call linewidth(40)
-!!       call move2( radius1*cosd(hue_val), radius1*sind(hue_val) )
-!!       call draw2( radius3*cosd(hue_val), radius3*sind(hue_val) )
+!!       call move2(radius1*cosd(hue_val), radius1*sind(hue_val))
+!!       call draw2(radius3*cosd(hue_val), radius3*sind(hue_val))
 !!       ! draw degree label at tic
 !!       call textang(hue_val)
-!!       call move2( radius4*cosd(hue_val), radius4*sind(hue_val) )
-!!       write(inline,'(i0)')nint(hue_val)
+!!       call move2(radius4*cosd(hue_val), radius4*sind(hue_val))
+!!       write (inline, '(i0)') nint(hue_val)
 !!       call linewidth(20)
 !!       call drawstr(inline)
 !!       call linewidth(0)
-!!       step=radius1/real(RINGS)
-!!       radius2=radius1-step
+!!       step = radius1/real(RINGS)
+!!       radius2 = radius1 - step
 !!       ! draw a chunk in a slice
-!!       MAXCOLORS=(256)-buffer
-!!       do icount=RINGS+1,2,-1
-!!          CURRENT_COLOR=MOD(color_count,MAXCOLORS)+buffer  ! add buffer to leave base colors alone
-!!          color_count=color_count+1
+!!       MAXCOLORS = (256) - buffer
+!!       do icount = RINGS + 1, 2, -1
+!!          ! add buffer to leave base colors alone
+!!          CURRENT_COLOR = MOD(color_count, MAXCOLORS) + buffer
+!!          color_count = color_count + 1
 !!          ! fancy mapcolor
-!!          call hue("hls",hue_val,LIGHTNESS,saturation,"rgb",r,g,b,status)
-!!          ir=int(r*255.0/100.0+0.50)
-!!          ig=int(g*255.0/100.0+0.50)
-!!          ib=int(b*255.0/100.0+0.50)
-!!          call mapcolor(CURRENT_COLOR,ir,ig,ib)
+!!          call hlsrgb(hue_val, LIGHTNESS, saturation, r, g, b, status)
+!!          ir = int(r*255.0/100.0 + 0.50)
+!!          ig = int(g*255.0/100.0 + 0.50)
+!!          ib = int(b*255.0/100.0 + 0.50)
+!!          call mapcolor(CURRENT_COLOR, ir, ig, ib)
 !!          call color(CURRENT_COLOR)
 !!          !
-!!          X1=cosd(angle1)*radius2
-!!          Y1=sind(angle1)*radius2
-!!          X2=cosd(angle1)*radius1
-!!          Y2=sind(angle1)*radius1
+!!          X1 = cosd(angle1)*radius2
+!!          Y1 = sind(angle1)*radius2
+!!          X2 = cosd(angle1)*radius1
+!!          Y2 = sind(angle1)*radius1
 !!          !
-!!          X3=cosd(angle2)*radius2
-!!          Y3=sind(angle2)*radius2
-!!          X4=cosd(angle2)*radius1
-!!          Y4=sind(angle2)*radius1
+!!          X3 = cosd(angle2)*radius2
+!!          Y3 = sind(angle2)*radius2
+!!          X4 = cosd(angle2)*radius1
+!!          Y4 = sind(angle2)*radius1
 !!          !
 !!          call makepoly()
-!!          call move2(X1,Y1)
-!!          call draw2(X2,Y2)
-!!          call draw2(X4,Y4)
-!!          call draw2(X3,Y3)
+!!          call move2(X1, Y1)
+!!          call draw2(X2, Y2)
+!!          call draw2(X4, Y4)
+!!          call draw2(X3, Y3)
 !!          call closepoly()
 !!          !
-!!          saturation=saturation-100.0/RINGS
-!!          radius1=radius2
-!!          radius2=radius1-step
-!!       enddo
-!!       hue_val=hue_val+ANG_INC
+!!          saturation = saturation - 100.0/RINGS
+!!          radius1 = radius2
+!!          radius2 = radius1 - step
+!!       end do
+!!       hue_val = hue_val + ANG_INC
 !!    end subroutine slice
+!!    !
+!!    subroutine hlsrgb(H, L, S, R, G, B, status)
+!!    ! convert HLS(hue,lightness,saturation) values to RGB components
+!!    !     given  : hue as a value of 0 to 360 degrees.
+!!    !     .        lightness and saturation each as a value of 0 to 100.
+!!    !     desired: r, g, and b each as a value of 0 to 100.
+!!    !
+!!    real, intent(in)   :: H, L, S
+!!    real, intent(out)  :: R, G, B
+!!    integer           :: status
+!!    real              :: hue, lightness, saturation
+!!    real              :: clr1, clr2
+!!       ! passively report on bad input values
+!!       if (h < 0.0 .or. h > 360.0) status = 1
+!!       if (l < 0.0 .or. l > 100.0) status = 1
+!!       if (s < 0.0 .or. s > 100.0) status = 1
+!!       hue = H
+!!       lightness = L/100.0
+!!       saturation = S/100.0
+!!       if (saturation == 0.0) then
+!!          R = lightness
+!!          G = lightness
+!!          B = lightness
+!!       end if
+!!       if (lightness <= 0.50) then
+!!          clr2 = lightness*(1.0 + saturation)
+!!       else
+!!          clr2 = lightness + saturation - lightness*saturation
+!!       end if
+!!       clr1 = 2.0*lightness - clr2
+!!       R = rgbval(clr1, clr2, hue + 120.0)*100.0
+!!       G = rgbval(clr1, clr2, hue)*100.0
+!!       B = rgbval(clr1, clr2, hue - 120.0)*100.0
+!!    end subroutine hlsrgb
+!!    real function rgbval(clr1,clr2,h)
+!!    ! rgbval(3fp): ensure a value is in the appropriate range and quadrant
+!!    real    :: clr1,clr2
+!!    real    :: h
+!!    real    :: h2
+!!       h2=h
+!!       do
+!!          if(h2 > 360.0 ) then
+!!             h2=h2-360.0
+!!             cycle
+!!          endif
+!!          exit
+!!       enddo
+!!       do
+!!          if( h2  <  0.0 ) then
+!!             h2=h2+360.0
+!!             cycle
+!!          endif
+!!          exit
+!!       enddo
+!!       if(h2 < 60.0 ) then
+!!          rgbval=clr1+(clr2-clr1)*h2/60.0
+!!       else if(h2 < 180.0) then
+!!          rgbval=clr2
+!!       else if(h2 < 240.0) then
+!!          rgbval=clr1+(clr2-clr1)*(240.0-h2)/60.0
+!!       else
+!!          rgbval=clr1
+!!       endif
+!!    end function rgbval
 !!    end program demo_mapcolor
 !>
 !!##NAME
@@ -4796,6 +5060,8 @@
 !!
 !!      program demo_getkey
 !!      use :: M_draw
+!!      implicit none
+!!      integer :: ichar
 !!      !! set up drawing environment
 !!      call prefsize(600,600)
 !!      call voutput('+')
@@ -4848,7 +5114,8 @@
 !!
 !!    program demo_checkkey
 !!    use :: M_draw
-!!    use :: M_time, only : system_sleep
+!!    implicit none
+!!    integer :: ichar
 !!    !! set up drawing environment
 !!    call prefsize(600,600)
 !!    call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
@@ -4872,7 +5139,6 @@
 !!         call move2(0.0,0.0)
 !!         call drawstr(char(ichar))
 !!      endif
-!!      call system_sleep(0.5)
 !!      if(char(ichar).eq.'q')then
 !!         write(*,*)'press any key to exit'
 !!         ichar=getkey()
@@ -4913,11 +5179,13 @@
 !!
 !!    program demo_getstring
 !!    use M_draw
+!!    implicit none
 !!    ! reading a string from graphic input with getstring(3f)
 !!    character(len=128) :: buf(10)
 !!    character(len=20)  :: dev
 !!    character(len=20)  :: fname
-!!    integer            :: ios
+!!    integer            :: ios, i, n
+!!    real               :: shft, tsize, y
 !!
 !!    print*, 'Enter device:'
 !!    read (*, '(a)',iostat=ios) dev
@@ -5003,6 +5271,9 @@
 !!
 !!       program demo_locator !     track a cube with the locator
 !!       use M_draw
+!!       implicit none
+!!       real :: trans, sc, tdir, scal, x, y
+!!       integer :: idum, nplanes
 !!       parameter(TRANS=20.0, SC=0.1)
 !!       integer, parameter :: FACE=1, FILLED=2, OUTLINE=3
 !!       character(len=10)  :: device
@@ -5198,6 +5469,7 @@
 !!     program demo_slocator
 !!
 !!     use M_draw
+!!    implicit none
 !!
 !!     character(len=20) :: dev
 !!     integer bt
@@ -5327,14 +5599,16 @@
 !!
 !!    program demo_viewport
 !!    !
-!!    ! using non-square viewports, the associated distortion -- and how to fix it
+!!    ! using non-square viewports,
+!!    ! the associated distortion -- and how to fix it
 !!    !
 !!    use M_draw
+!!    implicit none
 !!
 !!    character(len=50)  :: device
 !!    character(len=120) :: buf
 !!    real    xfact, yfact
-!!    integer :: ios
+!!    integer :: ios, idum
 !!
 !!    print*,'Enter output device:'
 !!    read(*,'(a)',iostat=ios)device
@@ -5359,7 +5633,9 @@
 !!    ! Tell them what it is.
 !!    !
 !!    call move2(-1.0, 0.9)
-!!    write(buf,'(''Distorted square (viewport(-1, '', F7.3, '', -1, '', F7.3, ''))'')') xfact, yfact
+!!    write(buf,&
+!!    & '(''Distorted square (viewport(-1, '', F7.3, '', -1, '', F7.3, ''))'')')&
+!!    & xfact, yfact
 !!    call drawstr(buf)
 !!
 !!    idum=getkey()
@@ -5378,7 +5654,9 @@
 !!    ! Tell them what it is.
 !!    !
 !!    call move2(-1.0, -0.9)
-!!    write(buf,'(''Fixed up square with ortho2(-1, '', F7.3, '', -1, '', F7.3, '')'')') xfact, yfact
+!!    write(buf,&
+!!    & '(''Fixed up square with ortho2(-1, '', F7.3, '', -1, '', F7.3, '')'')')&
+!!    & xfact, yfact
 !!    call drawstr(buf)
 !!
 !!    idum=getkey()
@@ -5747,9 +6025,10 @@
 !!    !
 !!    !     Shows various combinations of viewing and projection transformations
 !!    use M_draw
+!!    implicit none
 !!    !
 !!    character(len=50) :: device
-!!    integer :: ios
+!!    integer :: ios, idum
 !!    !
 !!       print*,'Enter output device:'
 !!       read(*,'(a)',iostat=ios)device
@@ -5918,10 +6197,16 @@
 !!
 !!   Sample program:
 !!
-!!    program demo_windows
+!!    program demo_window
 !!    use M_draw
-!!    integer CUBE, TOPLEFT, TOPRIGHT, BOTTOMLEFT, BOTTOMRIGHT
-!!    parameter(CUBE = 1, TOPLEFT = 2, TOPRIGHT = 3, BOTTOMLEFT = 4, BOTTOMRIGHT = 5)
+!!    implicit none
+!!    integer :: idum, ios
+!!    integer,parameter :: &
+!!      CUBE=1,       &
+!!      TOPLEFT=2,    &
+!!      TOPRIGHT=3,   &
+!!      BOTTOMLEFT=4, &
+!!      BOTTOMRIGHT=5
 !!    character(len=20) :: device
 !!    print*,'Enter device name:'
 !!    read(*,'(A)',iostat=ios)device
@@ -6025,7 +6310,7 @@
 !!    call popmatrix
 !!    end subroutine side
 !!    !=====================================================================
-!!    end program demo_windows
+!!    end program demo_window
 !>
 !!##NAME
 !!    pushmatrix(3f) - [M_draw:MATRIX_STACK] Save the current transformation matrix on the matrix stack.
@@ -6098,190 +6383,211 @@
 !!
 !!  Sample program:
 !!
-!!    program demo_lookat
-!!    ! Demonstrate a rotating translating tetrahedron, and doublebuffering
-!!    use M_draw
-!!    use M_time, only : system_sleep
-!!    !
-!!    integer TETRAHEDRON
-!!    parameter (TETRAHEDRON = 1)
-!!    !
-!!    real R, tx, tz, rotval, drotval, zeye
-!!    integer i
-!!    logical back, backdir, fill
-!!    character(len=50) :: device
-!!    integer :: ios
-!!    !
-!!    call prefsize(300, 300)
-!!    !
-!!    print*,'Enter output device:'
-!!    read(*,'(a)',iostat=ios)device
-!!    if(ios.ne.0)device=' '
-!!    !
-!!    back = .true.
-!!    backdir = .true.
-!!    fill = .true.
-!!    !
-!!    call vinit(device)
-!!    !
-!!    ! Make the tetrahedral object
-!!    !
-!!    call maketheobject()
-!!    !
-!!    rotval = 0.0
-!!    drotval = 5.0
-!!    zeye = 5.0
-!!    !
-!!    R = 1.6
-!!    !
-!!    tx = 0.0
-!!    tz = R
-!!    !
-!!    !all polyfill(fill)
-!!    call backface(back)
-!!    call backfacedir(backdir)
-!!    call clipping(.false.)
-!!    !
-!!    ! set up a perspective projection with a field of view of
-!!    ! 40.0 degrees, aspect ratio of 1.0, near clipping plane 0.1,
-!!    ! and the far clipping plane at 1000.0.
-!!    !
-!!    call perspective(40.0, 1.0, 0.001, 15.0)
-!!    call lookat(0.0, 0.0, zeye, 0.0, 0.0, 0.0, 0.0)
-!!    !
-!!    ! Setup drawing into the backbuffer....
-!!    !
-!!    if (backbuffer().lt.0) then
-!!       call vexit()
-!!       write(*,*)'Device can''t support doublebuffering'
-!!       stop
-!!    endif
-!!    !
-!!    ! we loop back here ad-nauseam until someone hits a non-interpreted key
-!!    !
-!!    INFINITE: do
-!!    !
-!!       rotval = 0.0
-!!    !
-!!       do i = 0, int(359.0 / drotval)
-!!    !
-!!          call color(D_BLACK)
-!!          call clear()
-!!    !
-!!    !  Rotate the whole scene...(this accumulates - hence
-!!    !  drotval)
-!!    !
-!!          call rotate(drotval * 0.1, 'x')
-!!          call rotate(drotval * 0.1, 'z')
-!!    !
-!!          call color(D_RED)
-!!          call pushmatrix()
-!!          call polyfill(.false.)
-!!          call rotate(90.0, 'x')
-!!          call circle(0.0, 0.0, R)
-!!          call polyfill(fill)
-!!          call popmatrix()
-!!    !
-!!          call color(D_BLUE)
-!!          call move(0.0, 0.0, 0.0)
-!!          call draw(tx, 0.0, tz)
-!!    !
-!!    ! Remember! The order of the transformations is
-!!    ! the reverse of what is specified here in between
-!!    ! the pushmatrix and the popmatrix. These ones don't
-!!    ! accumulate because of the push and pop.
-!!    !
-!!          call pushmatrix()
-!!             call translate(tx, 0.0, tz)
-!!             call rotate(rotval, 'x')
-!!             call rotate(rotval, 'y')
-!!             call rotate(rotval, 'z')
-!!             call scale(0.4, 0.4, 0.4)
-!!             call callobj(TETRAHEDRON)
-!!          call popmatrix()
-!!    !
-!!          tz = R * cos(rotval * 3.1415926535 / 180)
-!!          tx = R * sin(rotval * 3.1415926535 / 180)
-!!    !
-!!          call swapbuffers()
-!!    !
-!!          select case(char(checkkey()))
-!!          case('f')
-!!                    fill = .not. fill
-!!                    call polyfill(fill)
-!!          case('b')
-!!                    back = .not. back
-!!                    call backface(back)
-!!          case('d')
-!!                    backdir = .not. backdir
-!!                    call backfacedir(backdir)
-!!          case(char(0))
-!!          case default
-!!                    call vexit()
-!!                    stop
-!!           end select
-!!    !
-!!          rotval = rotval + drotval
-!!    !
-!!          call system_sleep(0.05)
-!!    !
-!!    enddo
-!!    !
-!!    enddo INFINITE
-!!    !
-!!    contains
-!!    !
-!!    ! maketheobject
-!!    !
-!!    !       generate a tetrahedron object as a series of move draws
-!!    !
-!!    subroutine maketheobject()
+!!      program demo_lookat
+!!      ! Demonstrate a rotating translating tetrahedron, and doublebuffering
+!!      use M_draw
+!!      implicit none
+!!      !
+!!      integer TETRAHEDRON
+!!      parameter (TETRAHEDRON = 1)
+!!      !
+!!      real R, tx, tz, rotval, drotval, zeye
+!!      integer i
+!!      logical back, backdir, fill
+!!      character(len=50) :: device
+!!      integer :: ios
+!!      !
+!!      call prefsize(300, 300)
+!!      !
+!!      print*,'Enter output device:'
+!!      read(*,'(a)',iostat=ios)device
+!!      if(ios.ne.0)device=' '
+!!      !
+!!      back = .true.
+!!      backdir = .true.
+!!      fill = .true.
+!!      !
+!!      call vinit(device)
+!!      !
+!!      ! Make the tetrahedral object
+!!      !
+!!      call maketheobject()
+!!      !
+!!      rotval = 0.0
+!!      drotval = 5.0
+!!      zeye = 5.0
+!!      !
+!!      R = 1.6
+!!      !
+!!      tx = 0.0
+!!      tz = R
+!!      !
+!!      !all polyfill(fill)
+!!      call backface(back)
+!!      call backfacedir(backdir)
+!!      call clipping(.false.)
+!!      !
+!!      ! set up a perspective projection with a field of view of
+!!      ! 40.0 degrees, aspect ratio of 1.0, near clipping plane 0.1,
+!!      ! and the far clipping plane at 1000.0.
+!!      !
+!!      call perspective(40.0, 1.0, 0.001, 15.0)
+!!      call lookat(0.0, 0.0, zeye, 0.0, 0.0, 0.0, 0.0)
+!!      !
+!!      ! Setup drawing into the backbuffer....
+!!      !
+!!      if (backbuffer().lt.0) then
+!!         call vexit()
+!!         write(*,*)'Device can''t support doublebuffering'
+!!         stop
+!!      endif
+!!      !
+!!      ! we loop back here ad-nauseam until someone hits a non-interpreted key
+!!      !
+!!      INFINITE: do
+!!      !
+!!         rotval = 0.0
+!!      !
+!!         do i = 0, int(359.0 / drotval)
+!!      !
+!!            call color(D_BLACK)
+!!            call clear()
+!!      !
+!!      !  Rotate the whole scene...(this accumulates - hence
+!!      !  drotval)
+!!      !
+!!            call rotate(drotval * 0.1, 'x')
+!!            call rotate(drotval * 0.1, 'z')
+!!      !
+!!            call color(D_RED)
+!!            call pushmatrix()
+!!            call polyfill(.false.)
+!!            call rotate(90.0, 'x')
+!!            call circle(0.0, 0.0, R)
+!!            call polyfill(fill)
+!!            call popmatrix()
+!!      !
+!!            call color(D_BLUE)
+!!            call move(0.0, 0.0, 0.0)
+!!            call draw(tx, 0.0, tz)
+!!      !
+!!      ! Remember! The order of the transformations is
+!!      ! the reverse of what is specified here in between
+!!      ! the pushmatrix and the popmatrix. These ones don't
+!!      ! accumulate because of the push and pop.
+!!      !
+!!            call pushmatrix()
+!!               call translate(tx, 0.0, tz)
+!!               call rotate(rotval, 'x')
+!!               call rotate(rotval, 'y')
+!!               call rotate(rotval, 'z')
+!!               call scale(0.4, 0.4, 0.4)
+!!               call callobj(TETRAHEDRON)
+!!            call popmatrix()
+!!      !
+!!            tz = R * cos(rotval * 3.1415926535 / 180)
+!!            tx = R * sin(rotval * 3.1415926535 / 180)
+!!      !
+!!            call swapbuffers()
+!!      !
+!!            select case(char(checkkey()))
+!!            case('f')
+!!                      fill = .not. fill
+!!                      call polyfill(fill)
+!!            case('b')
+!!                      back = .not. back
+!!                      call backface(back)
+!!            case('d')
+!!                      backdir = .not. backdir
+!!                      call backfacedir(backdir)
+!!            case(char(0))
+!!            case default
+!!                      call vexit()
+!!                      stop
+!!             end select
+!!      !
+!!            rotval = rotval + drotval
+!!      !
+!!            call microsleep(30000)
+!!      !
+!!      enddo
+!!      !
+!!      enddo INFINITE
+!!      !
+!!      contains
+!!      !
+!!      ! maketheobject
+!!      !
+!!      !       generate a tetrahedron object as a series of move draws
+!!      !
+!!      subroutine maketheobject()
 !!
-!!    integer TETRAHEDRON, NSIDES, NFACES, NPNTS
-!!    parameter (TETRAHEDRON = 1, NSIDES = 3, NFACES = 4, NPNTS = 4)
-!!    integer colface(NFACES)
-!!    real pnts(3, NPNTS)
-!!    integer faces(NSIDES, NFACES)
-!!    integer i, j
-!!    real x, y, z
+!!      integer TETRAHEDRON, NSIDES, NFACES, NPNTS
+!!      parameter (TETRAHEDRON = 1, NSIDES = 3, NFACES = 4, NPNTS = 4)
+!!      integer colface(NFACES)
+!!      real pnts(3, NPNTS)
+!!      integer faces(NSIDES, NFACES)
+!!      integer i, j
+!!      real x, y, z
 !!
-!!    data pnts/               &
-!!         &  -0.5, 0.866, -0.667,     &
-!!         &  -0.5, -0.866, -0.667,    &
-!!         &   1.0, 0.0, -0.667,       &
-!!         &   0.0, 0.0, 1.334/
+!!      data pnts/               &
+!!           &  -0.5, 0.866, -0.667,     &
+!!           &  -0.5, -0.866, -0.667,    &
+!!           &   1.0, 0.0, -0.667,       &
+!!           &   0.0, 0.0, 1.334/
 !!
-!!    data colface/D_GREEN, D_YELLOW, D_CYAN, D_MAGENTA/
+!!      data colface/D_GREEN, D_YELLOW, D_CYAN, D_MAGENTA/
 !!
-!!    data faces/   &
-!!         &  3, 2, 1,      &
-!!         &  1, 2, 4,      &
-!!         &  2, 3, 4,      &
-!!         &  3, 1, 4/
+!!      data faces/   &
+!!           &  3, 2, 1,      &
+!!           &  1, 2, 4,      &
+!!           &  2, 3, 4,      &
+!!           &  3, 1, 4/
 !!
-!!    call makeobj(TETRAHEDRON)
+!!      call makeobj(TETRAHEDRON)
 !!
-!!    do i = 1, NFACES
-!!       call makepoly()
-!!       call color(colface(i))
-!!       x = pnts(1, faces(1, i))
-!!       y = pnts(2, faces(1, i))
-!!       z = pnts(3, faces(1, i))
-!!       call move(x, y, z)
-!!       do j = 2, NSIDES
-!!          x = pnts(1, faces(j,i))
-!!          y = pnts(2, faces(j,i))
-!!          z = pnts(3, faces(j,i))
-!!          call draw(x, y, z)
+!!      do i = 1, NFACES
+!!         call makepoly()
+!!         call color(colface(i))
+!!         x = pnts(1, faces(1, i))
+!!         y = pnts(2, faces(1, i))
+!!         z = pnts(3, faces(1, i))
+!!         call move(x, y, z)
+!!         do j = 2, NSIDES
+!!            x = pnts(1, faces(j,i))
+!!            y = pnts(2, faces(j,i))
+!!            z = pnts(3, faces(j,i))
+!!            call draw(x, y, z)
+!!         enddo
+!!         call closepoly()
 !!       enddo
-!!       call closepoly()
-!!     enddo
 !!
-!!     call closeobj()
+!!       call closeobj()
 !!
-!!     end subroutine maketheobject
+!!       end subroutine maketheobject
 !!
-!!    end program demo_lookat
+!!       subroutine microsleep(waittime)
+!!       use,intrinsic       :: iso_c_binding, only: c_int
+!!       integer,intent(in)  :: waittime
+!!       integer(kind=c_int) :: status
+!!
+!!       interface
+!!          function c_usleep(seconds) bind (C,name="usleep")
+!!             import
+!!             ! should be unsigned int (not available in Fortran).
+!!             ! OK until highest bit gets set.
+!!             integer(c_int)       :: c_usleep
+!!             integer(c_int), intent(in), VALUE :: seconds
+!!          end function c_usleep
+!!       end interface
+!!
+!!          if(waittime>0)then
+!!             status=c_usleep(int(waittime,kind=c_int))
+!!          endif
+!!       end subroutine microsleep
+!!
+!!      end program demo_lookat
+!!
 !>
 !!##NAME
 !!    translate(3f) - [M_draw:TRANSFORMATION] Set up a translation.
@@ -6305,13 +6611,14 @@
 !!    !      a demonstration of objects
 !!    !
 !!    use M_draw
+!!    implicit none
 !!
 !!    integer SPHERE
 !!    real RADIUS
 !!    parameter (RADIUS = 10.0)
 !!    parameter(SPHERE = 1)
 !!    character(len=50) :: device
-!!    integer           :: ios
+!!    integer           :: ios, idum
 !!
 !!    print*,'Enter output device:'
 !!    read(*,'(a)',iostat=ios) device
@@ -6401,6 +6708,7 @@
 !!    !
 !!    integer SPHERE
 !!    integer ii
+!!    integer ia
 !!    real i, r, z, a, RADIUS, PI
 !!    parameter (PI = 3.1415926535, RADIUS = 10.0, SPHERE = 1)
 !!
@@ -6456,35 +6764,52 @@
 !!    x  scaling factor to apply in Z direction to current transformation matrix
 !!##EXAMPLE
 !!
+!!
 !!  Sample program
 !!
-!!    program demo_scale
-!!    use M_drawplus, only : draw_interpret
-!!    character(len=:),allocatable :: draw_cmds(:)
-!!    draw_cmds=[ character(len=128) ::                                      &
-!!    '# set up display                                                    ',&
-!!    'prefsize 300 300;prefposition 200 10;vinit X11;                     ',&
-!!    'set SIZE=1.2                                                        ',&
-!!    'color 3;clear;color 2; ortho2 -SIZE SIZE -SIZE SIZE                 ',&
-!!    'set X=-0.75 Y=0.75                                                  ',&
-!!    '# create an object to repeatedly draw                               ',&
-!!    'makeobj 1                                                           ',&
-!!    'polyfill .true.;color 1; rect 0 0 X Y                               ',&
-!!    'polyfill .false.;linewidth 200;color 2 ;rect 0 0 X Y                ',&
-!!    'closeobj                                                            ',&
-!!    '# draw object, rotating coordinate system between instantiations   ' ,&
-!!    'pushmatrix                                                          ',&
-!!    'scale 1.1 2.0                                                       ',&
-!!    'callobj 1                                                           ',&
-!!    'scale 0.5 0.5                                                       ',&
-!!    'callobj 1                                                           ',&
-!!    'circle 0 0 X/3                                                      ',&
-!!    'popmatrix                                                           ',&
-!!    'color 5;circle 0 0 X/3                                              ',&
-!!    'getkey;vexit                                                        ']
-!!    write(*,'(a)')draw_cmds
-!!    call draw_interpret(draw_cmds,delimiters=';')
-!!    end program demo_scale
+!!       program demo_scale
+!!       use M_draw
+!!       implicit none
+!!       real :: size, x, y
+!!       integer :: idum
+!!       ! set up display
+!!          call prefsize(300, 300)
+!!          call prefposition(200, 10)
+!!          call vinit('X11')
+!!          SIZE = 1.2
+!!          X = -0.75
+!!          Y = 0.75
+!!          call color(3)
+!!          call clear()
+!!          call color(2)
+!!          call ortho2(-SIZE, SIZE, -SIZE, SIZE)
+!!       ! create an object to repeatedly draw
+!!          call makeobj(1)
+!!            call polyfill(.true.)
+!!            call color(1)
+!!            call rect(0.0, 0.0, X, Y)
+!!            call polyfill(.false.)
+!!            call linewidth(200)
+!!            call color(2)
+!!            call rect(0.0, 0.0, X, Y)
+!!          call closeobj()
+!!       ! draw object, scaling coordinate system between instantiations
+!!          call pushmatrix()
+!!            call scale(1.1, 2.0, 0.0)
+!!            call callobj(1)
+!!            ! scaling accumulates
+!!            call scale(0.5, 0.5, 0.0)
+!!            call callobj(1)
+!!            ! circles appear as ellipses in this coordinate system
+!!            call circle(0.0, 0.0, X/3.0)
+!!          ! return back to saved coordinate system
+!!          call popmatrix()
+!!          ! now a circle is a circle again
+!!          call color(5)
+!!          call circle(0.0, 0.0, X/3.0)
+!!          idum = getkey()
+!!          call vexit()
+!!       end program demo_scale
 !!
 !!##SEE ALSO
 !!     rotate, translate, pushmatrix, popmatrix
@@ -6514,31 +6839,44 @@
 !!
 !!   Sample usage
 !!
-!!    program demo_rotate
-!!    use M_drawplus, only : draw_interpret
-!!    character(len=:),allocatable :: draw_cmds(:)
-!!    draw_cmds=[ character(len=128) ::                                      &
-!!    '# set up display                                                    ',&
-!!    'prefsize 300 300;prefposition 200 10;vinit X11;                     ',&
-!!    'set SIZE=1.2                                                        ',&
-!!    'color 3;clear;color 2; ortho2 -SIZE SIZE -SIZE SIZE                 ',&
-!!    'set X=-0.75 Y=0.75                                                  ',&
-!!    '# create an object to repeatedly draw                               ',&
-!!    'makeobj 1                                                           ',&
-!!    'polyfill .true.;color 1; rect 0 0 X Y                               ',&
-!!    'polyfill .false.;linewidth 200;color 2 ;rect 0 0 X Y                ',&
-!!    'closeobj                                                            ',&
-!!    '# draw object, rotating coordinate system between instantiations   ' ,&
-!!    'callobj 1                                                           ',&
-!!    'rotate 45 z                                                         ',&
-!!    'callobj 1                                                           ',&
-!!    'rotate 45 z                                                         ',&
-!!    'callobj 1                                                           ',&
-!!    'circle 0 0 X/3                                                      ',&
-!!    'getkey;vexit                                                        ']
-!!    write(*,'(a)')draw_cmds
-!!    call draw_interpret(draw_cmds,delimiters=';')
-!!    end program demo_rotate
+!!       program demo_rotate
+!!       use M_draw
+!!       implicit none
+!!       real :: x, y, size
+!!       integer :: idum
+!!
+!!       ! set up display
+!!          call prefsize(300, 300)
+!!          call prefposition(200, 10)
+!!          call vinit('X11')
+!!
+!!          SIZE = 1.2
+!!          X = -0.75
+!!          Y = 0.75
+!!          call ortho2(-SIZE, SIZE, -SIZE, SIZE)
+!!          call color(3)
+!!          call clear()
+!!       ! create an object to repeatedly draw
+!!          call makeobj(1)
+!!            call polyfill(.true.)
+!!            call color(1)
+!!            call rect(0.0, 0.0, X, Y)
+!!            call polyfill(.false.)
+!!            call linewidth(200)
+!!            call color(2)
+!!            call rect(0.0, 0.0, X, Y)
+!!          call closeobj()
+!!       ! draw object, rotating coordinate system between instantiations
+!!          call callobj(1)
+!!          call rotate(45.0, 'z')
+!!          call callobj(1)
+!!          call rotate(45.0, 'z')
+!!          call callobj(1)
+!!          call circle(0.0, 0.0, X/3)
+!!          idum = getkey()
+!!          call vexit()
+!!
+!!       end program demo_rotate
 !!
 !!##SEE ALSO
 !!     translate, pushmatrix, popmatrix, scale
@@ -7035,16 +7373,26 @@
 !!       call color(34-1)
 !!       call makepoly()
 !!       call pline([ &
-!!       & 387,1887,388,1887,391,1887,396,1888,403,1888,413,1889,427,1890,443,1892,463,1893,484,1895, &
-!!       & 508,1896,535,1898,562,1900,592,1902,622,1904,654,1906,687,1907,722,1909,759,1911,797,1912, &
-!!       & 838,1913,881,1915,927,1916,975,1916,1025,1917,1077,1917,1133,1917,1187,1916,1238,1915,1285,1914, &
-!!       & 1330,1913,1371,1911,1410,1910,1446,1908,1481,1906,1514,1904,1545,1902,1575,1900,1603,1898,1629,1896, &
-!!       & 1653,1894,1674,1892,1692,1891,1707,1890,1719,1889,1727,1888,1733,1887,1736,1887,1737,1887,1738,1888, &
-!!       & 1741,1891,1748,1898,1760,1910,1775,1925,1789,1939,1801,1951,1808,1958,1811,1961,1812,1962,1810,1962, &
-!!       & 1807,1962,1800,1962,1789,1962,1773,1962,1752,1962,1725,1962,1692,1962,1653,1962,1607,1962,1555,1962, &
-!!       & 1498,1962,1434,1962,1366,1962,1294,1962,1218,1962,1141,1962,1062,1962,983,1962,906,1962,830,1962, &
-!!       & 758,1962,690,1962,626,1962,569,1962,517,1962,471,1962,432,1962,399,1962,372,1962,351,1962, &
-!!       & 335,1962,324,1962,317,1962,314,1962,312,1962,313,1961,316,1958,323,1951,335,1939,350,1924, &
+!!       & 387,1887,388,1887,391,1887,396,1888,403,1888,413, &
+!!       & 1889,427,1890,443,1892,463,1893,484,1895, &
+!!       & 508,1896,535,1898,562,1900,592,1902,622,1904,654, &
+!!       & 1906,687,1907,722,1909,759,1911,797,1912, &
+!!       & 838,1913,881,1915,927,1916,975,1916,1025,1917,1077, &
+!!       & 1917,1133,1917,1187,1916,1238,1915,1285,1914, &
+!!       & 1330,1913,1371,1911,1410,1910,1446,1908,1481,1906, &
+!!       & 1514,1904,1545,1902,1575,1900,1603,1898,1629,1896, &
+!!       & 1653,1894,1674,1892,1692,1891,1707,1890,1719,1889, &
+!!       & 1727,1888,1733,1887,1736,1887,1737,1887,1738,1888, &
+!!       & 1741,1891,1748,1898,1760,1910,1775,1925,1789,1939, &
+!!       & 1801,1951,1808,1958,1811,1961,1812,1962,1810,1962, &
+!!       & 1807,1962,1800,1962,1789,1962,1773,1962,1752,1962, &
+!!       & 1725,1962,1692,1962,1653,1962,1607,1962,1555,1962, &
+!!       & 1498,1962,1434,1962,1366,1962,1294,1962,1218,1962, &
+!!       & 1141,1962,1062,1962,983,1962,906,1962,830,1962, &
+!!       & 758,1962,690,1962,626,1962,569,1962,517,1962,471, &
+!!       & 1962,432,1962,399,1962,372,1962,351,1962, &
+!!       & 335,1962,324,1962,317,1962,314,1962,312,1962,313, &
+!!       & 1961,316,1958,323,1951,335,1939,350,1924, &
 !!       & 364,1910,376,1898,383,1891,386,1888,387,1887])
 !!       call closepoly()
 !!
@@ -7054,17 +7402,20 @@
 !!       ! Left Control Keys in QWERTY
 !!       call color(35-1)
 !!       call makepoly()
-!!       call pline([284,387,162,162,387,162,418,237,366,237,396,312,348,312,387,387,284,387])
+!!       call pline([284,387,162,162,387,162,418,237,366, &
+!!               & 237,396,312,348,312,387,387,284,387])
 !!       call closepoly()
 !!
 !!       ! Right Control Keys in QWERTY
 !!       call makepoly()
-!!       call pline([1512,162,1287,162,1287,238,1336,237,1328,312,1362,312,1373,312,1358,387,1451,387,1512,162])
+!!       call pline([1512,162,1287,162,1287,238,1336,237,1328, &
+!!               & 312,1362,312,1373,312,1358,387,1451,387,1512,162])
 !!       call closepoly()
 !!
 !!       ! Numeric Keypad Special Keys -- Just Top?
 !!       call makepoly()
-!!       call pline([1962,162,1893,162,1812,342,1526,342,1511,387,1843,387,1962,162])
+!!       call pline([1962,162,1893,162,1812,342,1526,342,1511,387, &
+!!               & 1843,387,1962,162])
 !!       call closepoly()
 !!
 !!       ! Raised Front of Numeric Keypad
@@ -7126,37 +7477,51 @@
 !!       call color(37-1)
 !!       call makepoly()
 !!       call pline([ &
-!!       & 387,837,388,837,391,837,396,836,403,836,413,835,427,834,443,832,463,831,484,829, &
-!!       & 508,828,535,826,562,824,592,822,622,820,654,818,687,817,722,815,759,813,797,812, &
-!!       & 838,811,881,809,927,808,975,808,1025,807,1077,807,1133,807,1187,808,1238,809,1285,810, &
-!!       & 1330,811,1371,813,1410,814,1446,816,1481,818,1514,820,1545,822,1575,824,1603,826,1629,828, &
-!!       & 1653,830,1674,832,1692,833,1707,834,1719,835,1727,836,1733,837,1736,837,1737,837,1738,836, &
-!!       & 1741,833,1748,826,1760,814,1775,799,1789,785,1801,773,1808,766,1811,763,1812,762,1810,762, &
-!!       & 1807,762,1800,762,1789,762,1773,762,1752,762,1725,762,1692,762,1653,762,1607,762,1555,762, &
-!!       & 1498,762,1434,762,1366,762,1294,762,1218,762,1141,762,1062,762,983,762,906,762,830,762, &
-!!       & 758,762,690,762,626,762,569,762,517,762,471,762,432,762,399,762,372,762,351,762, &
-!!       & 335,762,324,762,317,762,314,762,312,762,313,763,316,766,323,773,335,785,350,800, &
+!!       & 387,837,388,837,391,837,396,836,403,836, &
+!!       & 413,835,427,834,443,832,463,831,484,829, &
+!!       & 508,828,535,826,562,824,592,822,622,820, &
+!!       & 654,818,687,817,722,815,759,813,797,812, &
+!!       & 838,811,881,809,927,808,975,808,1025,807, &
+!!       & 1077,807,1133,807,1187,808,1238,809,1285,810, &
+!!       & 1330,811,1371,813,1410,814,1446,816,1481, &
+!!       & 818,1514,820,1545,822,1575,824,1603,826,1629,828, &
+!!       & 1653,830,1674,832,1692,833,1707,834,1719, &
+!!       & 835,1727,836,1733,837,1736,837,1737,837,1738,836, &
+!!       & 1741,833,1748,826,1760,814,1775,799,1789,785, &
+!!       & 1801,773,1808,766,1811,763,1812,762,1810,762, &
+!!       & 1807,762,1800,762,1789,762,1773,762,1752,762, &
+!!       & 1725,762,1692,762,1653,762,1607,762,1555,762, &
+!!       & 1498,762,1434,762,1366,762,1294,762,1218,762, &
+!!       & 1141,762,1062,762,983,762,906,762,830,762, &
+!!       & 758,762,690,762,626,762,569,762,517,762,471, &
+!!       & 762,432,762,399,762,372,762,351,762, &
+!!       & 335,762,324,762,317,762,314,762,312,762,313, &
+!!       & 763,316,766,323,773,335,785,350,800, &
 !!       & 364,814,376,826,383,833,386,836,387,837])
 !!       call closepoly()
 !!
 !!       ! < of X11
 !!       call color(8-1)
 !!       call makepoly()
-!!       call pline([1034,1233,927,1233,743,1463,987,1769,1034,1769,819,1493,1034,1233])
+!!       call pline([1034,1233,927,1233,743,1463,987, &
+!!               & 1769,1034,1769,819,1493,1034,1233])
 !!       call closepoly()
 !!
 !!       call rasters(5)
-!!       call pline([1034,1233,927,1233,743,1463,987,1769,1034,1769,819,1493,1034,1233])
+!!       call pline([1034,1233,927,1233,743,1463,987, &
+!!               & 1769,1034,1769,819,1493,1034,1233])
 !!       call rasters(1)
 !!
 !!       ! > of X11
 !!       call color(8-1)
 !!       call makepoly()
-!!       call pline( [483,1769,591,1769,774,1540,530,1233,483,1233, 698,1509,483,1769])
+!!       call pline( [483,1769,591,1769,774,1540,530, &
+!!               & 1233,483,1233, 698,1509,483,1769])
 !!       call closepoly()
 !!
 !!       call rasters(5)
-!!       call pline( [483,1769,591,1769,774,1540,530,1233,483,1233,698,1509,483,1769])
+!!       call pline( [483,1769,591,1769,774,1540,530, &
+!!               & 1233,483,1233,698,1509,483,1769])
 !!       call rasters(1)
 !!
 !!       ! End of Picture %
@@ -7190,8 +7555,10 @@
 !!       call call_obj(2222, xs=1.0, ys=1.0, xt=16000.0, yt=11000.0, zr=70.0)
 !!
 !!       ! this does not work as expected
-!!       !call call_obj(2222, xs=2.0,, ys=2.0,, xt=16000.0, yt=13000.0, xr=10.0, yr=10.0 )
-!!       !call call_obj(1111, xs=2.0,, ys=2.0,, xt=16000.0, yt=13000.0, xr=0.10, yr=0.10 )
+!!       !call call_obj(2222, xs=2.0,, ys=2.0,, xt=16000.0, yt=13000.0, &
+!!       ! & xr=10.0, yr=10.0 )
+!!       !call call_obj(1111, xs=2.0,, ys=2.0,, xt=16000.0, yt=13000.0, &
+!!       ! & xr=0.10, yr=0.10 )
 !!
 !!       ! pause
 !!       call vflush()
@@ -7269,6 +7636,8 @@
 !!
 !!    program demo_isobj
 !!    use M_draw
+!!    implicit none
+!!    integer :: idum
 !!       call prefsize(300, 300)
 !!       call prefposition(100, 100)
 !!       call vinit(' ')   ! set up device
@@ -7337,7 +7706,8 @@
 !!    program demo_loadobj
 !!    ! test some object-related procedures
 !!    use M_draw
-!!    integer                      :: env_len
+!!    implicit none
+!!    integer                      :: env_len, idum
 !!    character(len=:),allocatable :: env
 !!       !------------------------------------------------------------
 !!       ! make an object file, which would normally be
@@ -7560,7 +7930,8 @@
 !!    Gets the current screen graphics position in screen coords (-1 to 1)
 !>
 !!##NAME
-!!    example_text_justification(7) - [M_draw:EXAMPLE] example program showing text justification
+!!    example_text_justification(7) - [M_draw:EXAMPLE] example program
+!!    showing text justification
 !!    (LICENSE:PD)
 !!
 !!##DESCRIPTION
@@ -7571,10 +7942,12 @@
 !!
 !!   Sample program:
 !!
-!!    program demo_example_text_justification   !      demonstrate still more features of text
+!!    program demo_example_text_justification
+!!    ! demonstrate still more features of text
 !!    use M_draw
+!!    implicit none
 !!    character(len=20) :: dev
-!!    integer           :: ios
+!!    integer           :: ios, idum
 !!
 !!    write(*,'(a)',advance='no')'Enter device: '
 !!    read(*, '(a)',iostat=ios) dev
@@ -7608,8 +7981,9 @@
 !!    call vexit()
 !!    contains
 !!
-!!    subroutine drawstuff
+!!    subroutine drawstuff()
 !!    use M_draw
+!!    integer :: idum
 !!
 !!    call color(D_BLACK)
 !!    !call polyfill(1)
@@ -7665,6 +8039,8 @@
 !!
 !!    subroutine drawstuff2(ang)
 !!    use M_draw
+!!    real :: ang
+!!    integer :: idum
 !!
 !!    call color(D_BLACK)
 !!    call rect(0.1, 0.1, 0.9, 0.9)
@@ -9863,7 +10239,7 @@ end subroutine boxtext
  end subroutine multmatrix
 !-------------------------------------------------------------------------------
 pure function s2c(string)  RESULT (array)
-character(len=*),parameter      :: ident="@(#)s2c(3fp):copy string(1:Clen(string)) to char array with null terminator"
+! ident_2="@(#) s2c(3fp) copy string(1 Clen(string)) to char array with null terminator"
 character(len=*),intent(in)     :: string
    character(kind=C_CHAR,len=1) :: array(len_trim(string)+1)
    integer                      :: i
@@ -9947,13 +10323,13 @@ end function s2c
 !!          do i=1,int(360/STEP*10)
 !!             idum=backbuffer()
 !!             call clear()
-!!             call invokeobj( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, ANGLE, ANGLE, ANGLE,12345)
+!!             call invokeobj(0.0,0.0,0.0,1.0,1.0,1.0,ANGLE,ANGLE,ANGLE,12345)
 !!             ANGLE=ANGLE+STEP
 !!             call swapbuffers()
 !!          enddo
 !!       else
 !!          ANGLE=45.0
-!!          call invokeobj( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, ANGLE, ANGLE, ANGLE,12345)
+!!          call invokeobj(0.0,0.0,0.0,1.0,1.0,1.0,ANGLE,ANGLE,ANGLE,12345)
 !!          idum=getkey()
 !!       endif
 !!       call vexit()
@@ -9964,7 +10340,7 @@ end function s2c
 !!    Public Domain
 subroutine invokeobj(xt,yt,zt,xs,ys,zs,xr,yr,zr,iobject)
 
-! ident_2="@(#) M_draw invokeobj(3f) invoke object with specified transformation applied and then restored"
+! ident_3="@(#) M_draw invokeobj(3f) invoke object with specified transformation applied and then restored"
 
 real,intent(in)    :: xt,yt,zt  ! linear transforms
 real,intent(in)    :: xs,ys,zs  ! scaling
@@ -10058,7 +10434,7 @@ end subroutine invokeobj
 !!    Public Domain
 subroutine biggest_ortho2(xsmall,xlarge,ysmall,ylarge)
 
-! ident_3="@(#) M_draw page(3f) given a window size find and set to largest accommodating viewport"
+! ident_4="@(#) M_draw page(3f) given a window size find and set to largest accommodating viewport"
 
 real,intent(in)  :: xsmall
 real,intent(in)  :: xlarge
@@ -10248,7 +10624,7 @@ end subroutine page_rri
 !!    Public Domain
 subroutine pop()
 
-! ident_4="@(#) M_draw pop(3f) call popviewport() popmatrix() popattributes()"
+! ident_5="@(#) M_draw pop(3f) call popviewport() popmatrix() popattributes()"
 
    call popviewport()
    call popmatrix()
@@ -10333,7 +10709,7 @@ function str(generic0, generic1, generic2, generic3, generic4, generic5, generic
                   & sep)
 implicit none
 
-! ident_2="@(#)M_msg::str(3fp): writes a message to a string composed of any standard scalar types"
+! ident_2="@(#)M_draw::str(3fp): writes a message to a string composed of any standard scalar types"
 
 class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic4
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
@@ -10422,7 +10798,7 @@ end function str
 !!    Public Domain
 subroutine push()
 
-! ident_5="@(#) M_draw push(3f) call pushattributes() pushmatrix() pushviewport()"
+! ident_6="@(#) M_draw push(3f) call pushattributes() pushmatrix() pushviewport()"
 
    call pushattributes()
    call pushmatrix()

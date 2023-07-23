@@ -12523,6 +12523,8 @@ end subroutine xy_getmark
 !!   Sample program
 !!
 !!    program demo_illusion
+!!    implicit none
+!!    integer :: idum
 !!    use M_draw,      only : vinit, color, clear, backbuffer, getkey, vexit, page
 !!    use M_xyplot,    only : illusion
 !!    call vinit(' ')
@@ -12538,13 +12540,10 @@ end subroutine xy_getmark
 subroutine illusion(top,bottom,left,right) !@(#) draw a simple geometric illusion
 use M_draw
 !use M_xyplot, only : xy_obj12345
-implicit none
-
 character(len=*),intent(in) :: top
 character(len=*),intent(in) :: bottom
 character(len=*),intent(in) :: left
 character(len=*),intent(in) :: right
-
 integer,save                :: iarx(9,16)  ! fill color, number of points
 integer,save                :: iary(9,16)  ! x,y values for making polygons
 integer                     :: i10, i20, i30

@@ -7,14 +7,14 @@
 !
 ! NOTE: Assuming at least an 80x24 character window
 
-module m_simple_key2
+module m_ncurses__simple_key2
    use M_ncurses
+   implicit none
    character(len=8)  :: choices(0:4)=[ "Choice 1", "Choice 2", "Choice 3", "Choice 4", "Exit    "] ! menu choices to display
    integer           :: n_choices                                                                  ! number of choices in menu
 contains
 !-------------------------------------------------------------------------------
 subroutine print_menu(menu_win, highlight)                        ! draw a menu using the list in choices(), highlighting one choice
-   implicit none
    type(C_PTR)         :: menu_win                                ! this is the subwindow to draw in
    integer             :: highlight                               ! this says which choice description to highlight
    integer,save        :: x=2                                     ! x position relative to left edge of subwindow to print choices
@@ -36,10 +36,10 @@ subroutine print_menu(menu_win, highlight)                        ! draw a menu 
    ierr=wrefresh(menu_win)                                            ! post everything to the real screen
 end subroutine print_menu
 !-------------------------------------------------------------------------------
-end module m_simple_key2
+end module m_ncurses__simple_key2
 !-------------------------------------------------------------------------------
 program simple_key
-   use m_simple_key2
+   use m_ncurses__simple_key2
    implicit none
    type (C_PTR)        :: menu_win
    integer             :: highlight = 1
@@ -116,11 +116,14 @@ program simple_key
    ierr=refresh()        ! make sure everything is posted to the real screen
    ierr=getch()          ! Wait for a user keystroke. Some terminal types will restore or clear the screen so a pause is a good idea
    ierr=endwin()         ! exit curses mode
-end program simple_key
-!-------------------------------------------------------------------------------
+
+contains
+
 subroutine numbers()
    use M_ncurses
    character(len=3)   :: label
+   integer :: i
+   integer :: ierr
    do i=0,999   ! label up to 1000 rows of the main screen with a number on the left edge
       write(label,'(i3.3)')i
       ierr=mvaddstr(i, 0, trim(label)//C_NULL_CHAR)
@@ -128,4 +131,6 @@ subroutine numbers()
    enddo
    ierr=refresh()   ! make sure everything is posted to the real screen
 end subroutine numbers
+
+end program simple_key
 !-------------------------------------------------------------------------------

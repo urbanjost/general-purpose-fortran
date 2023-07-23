@@ -17,28 +17,31 @@ SYNOPSIS
    test_suite [-l logfile][-w]|[-h][-v] [*.f90|*.o]
 
 DESCRIPTION
-   Generate and execute a program to call the test_suite_* Fortran procedures
+   Generate and execute a program to call the unit_check_* Fortran procedures
    the script finds, using a small program similiar to
 
       program runtest
       use M_xxxx
-      use M_verify
-      unit_check_command=''
-      unit_check_keep_going=.true.
-      unit_check_level=0
-         call test_suite_M_xxxx()
-      end program runtest
-      ! SAMPLE TEST PROCEDURE
-      !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-      subroutine test_xxx()
-      use M_verify, only : unit_check_start,unit_check, unit_check_msg 
-      use M_verify, only : unit_check_done,unit_check_good,unit_check_bad
-      use M_verify, only : unit_check_level
+      use M_framework, only : unit_check_start,unit_check, unit_check_msg 
+      use M_framework, only : unit_check_end,unit_check_good,unit_check_bad
+      use M_framework, only : unit_check_level, unit_check_flags
       implicit none
+      call unit_check(command='', keep_going=.true. level=0)
+	 call test_xxx()
+	 call test_yyy()
+         call unit_check_stop('xxx')
+      contains
+      subroutine test_xxx()
          call unit_check_start('xxx',msg='')
          !!call unit_check('xxx', 0 .eq. 0, 'checking',100)
-         call unit_check_done('xxx',msg='')
+         call unit_check_end('xxx',msg='')
       end subroutine test_xxx
+      subroutine test_yyy()
+         call unit_check_start('yyy',msg='')
+         !!call unit_check('yyy', 0 .eq. 0, 'checking',100)
+         call unit_check_end('yyy',msg='')
+      end subroutine test_yyy
+      end program runtest
 OPTIONS
 
    -l  logfile
@@ -67,10 +70,7 @@ M_*)
 cat <<EOF
 program runtest
 use $SHORTNAME
-use M_verify
-unit_check_command=''
-unit_check_keep_going=.true.
-unit_check_level=0
+use M_framework
    write(*,*)'STARTED $SUBNAME'
    call ${SUBNAME}
    write(*,*)'COMPLETED $SUBNAME'
@@ -81,10 +81,7 @@ EOF
 *)
 cat <<EOF
 program runtest
-use M_verify
-unit_check_command=''
-unit_check_keep_going=.true.
-unit_check_level=0
+use M_framework
    write(*,*)'STARTED $SUBNAME'
    call ${SUBNAME}
    write(*,*)'COMPLETED $SUBNAME'
@@ -150,12 +147,12 @@ WRITE(){
 cat <<EOF
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_$SUBNAME()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework, only : unit_check_start,unit_check,unit_check_end,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework, only : unit_check_level
 implicit none
    call unit_check_start('$SUBNAME',msg='')
    !!call unit_check('$SUBNAME', 0.eq.0, 'checking',100)
-   call unit_check_done('$SUBNAME',msg='')
+   call unit_check_end('$SUBNAME',msg='')
 end subroutine test_$SUBNAME
 EOF
 }

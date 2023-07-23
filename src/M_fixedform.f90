@@ -16,8 +16,8 @@
 !!
 !!##SYNOPSIS
 !!
-!!    use :: M_fixedform, only : icount_ptr,page_ptr,page_pd,icount_pd
-!!    use :: M_fixedform, only : fixedform ,loaddata
+!!      use :: M_fixedform, only : icount_ptr,page_ptr,page_pd,icount_pd
+!!      use :: M_fixedform, only : fixedform ,loaddata
 !!
 !!##DESCRIPTION
 !!    M_fixedform(3fm) takes a text block as input, and converts it
@@ -199,41 +199,608 @@
 !-----------------------------------------------------------------------------------------------------------------------------------
 module M_fixedform
 ! global data
+use,intrinsic :: iso_fortran_env
 use,intrinsic :: ISO_C_BINDING
+use M_ncurses
+use M_ncurses, only : A_UNDERLINE
+use M_ncurses, only : A_CHARTEXT
+use M_ncurses, only : A_ATTRIBUTES
+use M_ncurses, only : A_HORIZONTAL
+use M_ncurses, only : A_ALTCHARSET
+use M_ncurses, only : A_STANDOUT
+use M_ncurses, only : ACS_BTEE, ACS_DEGREE, ACS_DIAMOND, ACS_HLINE
+use M_ncurses, only : ACS_LLCORNER, ACS_LRCORNER, ACS_ULCORNER, ACS_URCORNER
+use M_ncurses, only : ACS_LTEE, ACS_PLUS, ACS_RTEE, ACS_TTEE, ACS_VLINE
+use M_ncurses, only : C_INT,C_LONG,C_SHORT
+use M_ncurses, only : getmaxyx, getyx, wmove, mvwinch, refresh, wrefresh, move
+use M_ncurses, only : LINES,COLS
+use M_ncurses, only : PAIR_NUMBER  !  PAIR_NUMBER(attrs) is the reverse of COLOR_PAIR(n)
+use M_ncurses, only : stdscr
+use M_ncurses, only : mevent
+use M_ncurses, only : chtype
+use M_ncurses, only : ALL_MOUSE_EVENTS
+use M_ncurses, only : BUTTON1_CLICKED, BUTTON1_DOUBLE_CLICKED, BUTTON1_PRESSED, BUTTON1_RELEASED
+use M_ncurses, only : BUTTON2_CLICKED, BUTTON2_DOUBLE_CLICKED, BUTTON2_PRESSED, BUTTON2_RELEASED
+use M_ncurses, only : BUTTON3_CLICKED, BUTTON3_DOUBLE_CLICKED, BUTTON3_PRESSED, BUTTON3_RELEASED
+use M_ncurses, only : C_NULL_PTR
+!write(19
+use M_ncurses, only : key_a1,        key_a3,      key_b2,       key_backspace, key_beg,    key_break,    key_btab,      key_c1
+use M_ncurses, only : key_c3,        key_cancel,  key_catab,    key_clear,     key_close,  key_command,  key_copy,      key_create
+use M_ncurses, only : key_ctab,      key_dc,      key_dl,       key_down,      key_eic,    key_end,      key_enter,     key_eol
+use M_ncurses, only : key_eos,       key_event,   key_exit,     key_f0,        key_find,   key_help,     key_home,      key_ic
+use M_ncurses, only : key_il,        key_left,    key_ll,       key_mark,      key_max,    key_message,  key_mouse,     key_move
+use M_ncurses, only : key_next,      key_npage,   key_open,     key_options,   key_ppage,  key_previous, key_print,     key_redo
+use M_ncurses, only : key_reference, key_refresh, key_replace,  key_reset,     key_resize, key_restart,  key_resume,    key_right
+use M_ncurses, only : key_save,      key_sbeg,    key_scancel,  key_scommand,  key_scopy,  key_screate,  key_sdc,       key_sdl
+use M_ncurses, only : key_select,    key_send,    key_seol,     key_sexit,     key_sf,     key_sfind,    key_shelp,     key_shome
+use M_ncurses, only : key_sic,       key_sleft,   key_smessage, key_smove,     key_snext,  key_soptions, key_sprevious, key_sprint
+use M_ncurses, only : key_sr,        key_sredo,   key_sreplace, key_sreset,    key_sright, key_srsume,   key_ssave
+use M_ncurses, only : key_ssuspend,  key_stab,    key_sundo,    key_suspend,   key_undo,   key_up
+use M_framework__journal, only : journal
+implicit none
 private
-   integer,parameter :: pg_lines=2000, pg_columns=256          ! upper limits for user input file data
-   character(len=pg_columns)         :: mesg                    ! message to appear in status bar
-   type(C_PTR)                       :: big_pd
-   character(len=pg_columns),target  :: page_pd(pg_lines)=' '  ! array to hold user definition of form
+integer,parameter :: pg_lines=2000, pg_columns=256          ! upper limits for user input file data
+character(len=pg_columns)         :: mesg                    ! message to appear in status bar
+type(C_PTR)                       :: big_pd
+character(len=pg_columns),target  :: page_pd(pg_lines)=' '  ! array to hold user definition of form
 
-   integer(C_INT)                    :: pad_corner_x=0, pad_corner_y=0   ! upper left-hand corner of rectangle displayed in pad
-   integer                           :: displaywidth_pd=0      ! width of section of pad displayed on screen
+integer(C_INT)                    :: pad_corner_x=0, pad_corner_y=0   ! upper left-hand corner of rectangle displayed in pad
+integer                           :: displaywidth_pd=0      ! width of section of pad displayed on screen
 
-   integer,save                      :: button_lines=4         ! number of lines used for buttons and message field
-   integer,save                      :: button_boxes(5,4)
-   logical                           :: G_submitted
-   character(len=:),allocatable      :: G_answers
+integer,save                      :: button_lines=4         ! number of lines used for buttons and message field
+integer,save                      :: button_boxes(5,4)
+logical                           :: G_submitted
+character(len=:),allocatable      :: G_answers
 
-   character(len=pg_columns),pointer :: page_ptr(:)            ! user data to convert from input to window
-   integer,pointer                   :: icount_ptr             ! pointer to line count of data to convert from input to window
-   integer,target                    :: icount_pd              ! number of last line of data used in page_pd(*)
-   integer                           :: longline_pd            ! number of longest line of data used in page_pd(*)
+character(len=pg_columns),pointer :: page_ptr(:)            ! user data to convert from input to window
+integer,pointer                   :: icount_ptr             ! pointer to line count of data to convert from input to window
+integer,target                    :: icount_pd              ! number of last line of data used in page_pd(*)
+integer                           :: longline_pd            ! number of longest line of data used in page_pd(*)
 
-   public icount_ptr
-   public page_ptr
-   public page_pd
-   public icount_pd
-   public longline_pd
-   public fixedform
-   public loaddata
-   public test_suite_M_fixedform
+public icount_ptr
+public page_ptr
+public page_pd
+public icount_pd
+public longline_pd
+public fixedform
+public loaddata
 !-----------------------------------------------------------------------------------------------------------------------------------
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
+public :: nc_errmessage
+public :: nc_printescape
+public :: nc_printhtml
+public :: nc_printunicode
+public :: nc_printplain
+
 contains
-subroutine fixedform(tabs)
-   use M_ncurses, only : getch, newpad, endwin, move
+
+!-----------------------------------------------------------------------------------------------------------------------------------
+!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine nc_errmessage(msg) ! exit screen mode to use WRITE(3f) to print a message and then read a line to create a pause
+   character(len=*),intent(in) :: msg
+   integer                     :: ierr    ! return value for most ncurses(3c) functions
+   integer                     :: ios     ! status return of READ(3f)
+   ierr=def_prog_mode()                   ! Save the tty modes
+   ierr=refresh()
+   ierr=endwin()                          ! End curses mode temporarily
+   write(*,*)msg
+   read(*,'(a)',iostat=ios)
+   ierr=refresh() ! Back to curses. You can once again use the full capabilities of curses; and the screen resumes where it was
+   ierr=flash()
+end subroutine nc_errmessage
+!-----------------------------------------------------------------------------------------------------------------------------------
+!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine nc_printescape(win,filename)
+! @(#) plain text print reading window from ncurses
+!! write as HTML or ANSI escape codes per ansi2html(1) script
+!! maybe look in original page data instead like loaddata(3f)
+!! what about alternate characters like box characters ?
+!! could newterm(3c) be used to set to a file instead of a terminal to capture escape sequences and ensure they are VT102 commands?
+!-----------------------------------------------------------------------------------------------------------------------------------
+   type(C_PTR),intent(in)       :: win          ! window to print
+   character(len=*),intent(in)  :: filename     ! filename to print to
+!-----------------------------------------------------------------------------------------------------------------------------------
+   integer                      :: my,mx        ! size of the specified window
+   integer(C_LONG)              :: ch           ! long character in cell (attributes, color pair, and character)
+   character(len=1)             :: let          ! the character in the cell
+   integer                      :: ilet         ! decimal value of character in the cell
+   integer(C_LONG)              :: attr         ! attributes of the cell
+   integer                      :: ios          ! status from open(3f)
+   character(len=256)           :: msg          ! message from open(3f)
+   integer,save                 :: iout=11      ! unit to open(3f) for writing
+   integer                      :: i,j          ! loop counters
+   integer                      :: ierr
+   integer(C_SHORT)             :: pair         ! color pair used by the cell
+   integer(C_SHORT)             :: rf,gf,bf     ! color components of cell foreground
+   integer(C_SHORT)             :: rb,gb,bb     ! color components of cell background
+   integer(C_SHORT)             :: fg,bg        ! foreground and background color numbers of cell
+   logical                      :: alt, bold, reverse
+!-----------------------------------------------------------------------------------------------------------------------------------
+   OPEN(UNIT=iout,FILE=trim(filename),ACTION='write',ACCESS='stream',FORM='unformatted',IOSTAT=ios,IOMSG=msg,STATUS='unknown')
+   if(ios.ne.0)then
+      call nc_errmessage("failed to open print file "//trim(filename)//':'//trim(msg))
+      return
+   endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+   call getmaxyx(win,my,mx)                     ! size window size as defined (all of it, even if subsection being displayed)
+!-----------------------------------------------------------------------------------------------------------------------------------
+   do i=0,my-1
+      do j=0,mx-1
+         ch=mvwinch(win,i,j)                    ! retrieve cell value
+         ilet=iand(ch,A_CHARTEXT)               ! get decimal letter from cell using bit-mask
+         let=char(ilet)                         ! get character from decimal
+         pair=int(PAIR_NUMBER(ch),C_INT)        ! the color pair used to draw the cell
+         ierr=pair_content(pair,fg,bg)          ! find out how a given color-pair is currently defined
+         ierr=color_content(fg,rf,gf,bf)        ! extract red, green, and blue components in an initialized color
+         ierr=color_content(bg,rb,gb,bb)        ! extract red, green, and blue components in an initialized color
+         attr=iand(ch,A_ATTRIBUTES)             !! the attributes of the cell
+         alt=.false.
+         bold=.false.
+         reverse=.false.
+         if(iand(attr,A_BLINK).eq. A_BLINK)then           !  blink
+         endif
+         if(iand(attr,A_INVIS).eq. A_INVIS)then           !  invisible
+         endif
+         if(iand(attr,A_NORMAL).eq. A_NORMAL)then
+         endif
+         if(iand(attr,A_PROTECT).eq. A_PROTECT)then
+         endif
+         if(iand(attr,A_UNDERLINE).eq. A_UNDERLINE)then
+         endif
+         if(iand(attr,A_DIM).eq.A_DIM)then
+         endif
+         if(iand(attr,A_HORIZONTAL).eq.A_HORIZONTAL)then
+         endif
+         if(iand(attr,A_LEFT).eq.A_LEFT)then
+         endif
+         if(iand(attr,A_LOW).eq.A_LOW)then
+         endif
+         if(iand(attr,A_RIGHT).eq.A_RIGHT)then
+         endif
+         if(iand(attr,A_STANDOUT).eq.A_STANDOUT)then
+         endif
+         if(iand(attr,A_TOP).eq.A_TOP)then
+         endif
+         if(iand(attr,A_VERTICAL).eq.A_VERTICAL)then
+         endif
+         if(iand(attr,A_ALTCHARSET).eq.A_ALTCHARSET)then
+            alt=.true.
+            select case(let)
+            case('l') ! ACS_ULCORNER  upper left corner
+               let='#'
+            case('m') ! ACS_LLCORNER  lower left corner
+               let='#'
+            case('k') ! ACS_URCORNER  upper right corner
+               let='#'
+            case('j') ! ACS_LRCORNER  lower right corner
+               let='#'
+            case('t') ! ACS_LTEE      tee pointing right
+               let='+'
+            case('u') ! ACS_RTEE      tee pointing left
+               let='+'
+            case('v') ! ACS_BTEE      tee pointing up
+               let='+'
+            case('w') ! ACS_TTEE      tee pointing down
+               let='+'
+            case('q') ! ACS_HLINE     horizontal line
+               let='-'
+            case('x') ! ACS_VLINE     vertical line
+               let='|'
+            case('n') ! ACS_PLUS      large plus or crossover
+               let='+'
+            case('`') ! ACS_DIAMOND
+               let='o'
+            end select
+         endif
+         if(iand(attr,A_BOLD).eq.A_BOLD)then
+            bold=.true.
+         endif
+         if(iand(attr,A_REVERSE).eq.A_REVERSE)then
+            reverse=.true.
+         endif
+         write(iout)let                         !! use stream position or buffer lines and print to remove trailing white space
+      enddo
+      write(iout)NEW_LINE('a')
+   enddo
+!-----------------------------------------------------------------------------------------------------------------------------------
+end subroutine nc_printescape
+!-----------------------------------------------------------------------------------------------------------------------------------
+!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine nc_printhtml(win,filename) ! @(#) print ncurses(3c) window as HTML
+!-----------------------------------------------------------------------------------------------------------------------------------
+   type(C_PTR),intent(in)       :: win          ! window to print
+   character(len=*),intent(in)  :: filename     ! filename to print to
+!-----------------------------------------------------------------------------------------------------------------------------------
+   integer                      :: my,mx        ! size of the specified window
+   integer(C_LONG)              :: cell         ! long character in cell (attributes, color pair, and character)
+   character(len=1)             :: let          ! the character in the cell
+   character(len=128)           :: lets         ! the characters that need printed in HTML to represent the cell
+   integer                      :: ilet         ! decimal value of character in the cell
+   integer(C_LONG)              :: attr         ! attributes of the cell
+   integer                      :: ios          ! status from open(3f)
+   character(len=256)           :: msg          ! message from open(3f)
+   integer                      :: iout         ! unit to open(3f) for writing
+   integer                      :: i,j          ! loop counters
+   integer                      :: ierr
+   integer(C_SHORT)             :: pair         ! color pair used by the cell
+   integer(C_SHORT)             :: rf,gf,bf     ! color components of cell foreground
+   integer(C_SHORT)             :: rb,gb,bb     ! color components of cell background
+   integer(C_SHORT)             :: fg,bg        ! foreground and background color numbers of cell
+   logical                      :: span=.false. !! started a span region or not. Might actually use it later
+   character(len=100)           :: colordef
+   character(len=100)           :: class
+   character(len=100)           :: lastclass
+!-----------------------------------------------------------------------------------------------------------------------------------
+   if(filename.ne.'')then
+      iout=11
+      OPEN(UNIT=iout,FILE=trim(filename),ACTION='write',ACCESS='stream',FORM='unformatted',IOSTAT=ios,IOMSG=msg,STATUS='unknown')
+      if(ios.ne.0)then
+         call nc_errmessage("failed to open print file "//trim(filename)//':'//trim(msg))
+         return
+      endif
+   else       !! Actually an error for now:: So far, no way to write a stream to stdout using Fortran
+      iout=6
+   endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+call ln('<html>')
+call ln('<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>')
+call ln('<head>')
+call ln('<title></title>')
+!-----------------------------------------------------------------------------------------------------------------------------------
+call ln('<style type="text/css">')
+call ln('.BO { font-weight:     bold;         }')
+call ln('.U  { text-decoration: underline;    }')
+call ln('.S  { text-decoration: line-through; }')
+call ln('.BL { text-decoration: blink;        }')
+call ln('.I  { font-style:      italic;       }')
+call ln('.N  { font-style:      normal;       }')
+!-----------------------------------------------------------------------------------------------------------------------------------
+call ln('body{ color: #FFFFFF; background-color: #000000; }')
+! write out defined color pairs
+! CSS does not seem to support the idea of reverse video, so make a "PAIRnn" and a "RPAIRnn" for each pair
+!! might be worth it to scan window and only print color definitions that are used
+! always define foreground and background
+
+call ln('.PAIR0{ color: #FFFFFF; background-color: #000000; }')
+call ln('.RPAIR0{ color: #000000; background-color: #FFFFFF; }')
+
+call getcolor(COLORS,COLOR_PAIRS) !! extension to get these set
+COLOR_PAIRS=min(COLOR_PAIRS,4096) !! after last upgrade this starts failing on large values
+
+do pair=0_C_SHORT,COLOR_PAIRS-1_C_SHORT
+   !! even when color not defined did not get an error value back
+   ierr=pair_content(pair,fg,bg)            ! find out how a given color-pair is currently defined
+   ierr=color_content(fg,rf,gf,bf)          ! extract red, green, and blue components in an initialized color
+   ierr=color_content(bg,rb,gb,bb)          ! extract red, green, and blue components in an initialized color
+   if(fg+bg+rf+gf+bf+bg+rb+gb+bb.ne.0_C_SHORT)then     !assumption! assume this means not defined
+      rf=rf*255_C_SHORT/1000_C_SHORT   ! the colors are in the range 0 to 1000 inclusive, want a two-digit hex value
+      gf=gf*255_C_SHORT/1000_C_SHORT
+      bf=bf*255_C_SHORT/1000_C_SHORT
+      rb=rb*255_C_SHORT/1000_C_SHORT
+      gb=gb*255_C_SHORT/1000_C_SHORT
+      bb=bb*255_C_SHORT/1000_C_SHORT
+      write(colordef,'(".PAIR",i0,"{ color: #",z2.2,z2.2,z2.2,"; background-color: #",z2.2,z2.2,z2.2,"; }")')pair,rf,gf,bf,rb,gb,bb
+      write(iout)colordef
+      write(iout)new_line('a')
+      write(colordef,'(".RPAIR",i0,"{ color: #",z2.2,z2.2,z2.2,"; background-color: #",z2.2,z2.2,z2.2,"; }")')pair,rb,gb,bb,rf,gf,bf
+      write(iout)colordef
+      write(iout)new_line('a')
+   endif
+enddo
+call ln('</style>')
+!-----------------------------------------------------------------------------------------------------------------------------------
+call ln('</head>')
+call ln('<body>')
+call ln('<pre>')
+!-----------------------------------------------------------------------------------------------------------------------------------
+   call getmaxyx(win,my,mx)                     ! size window size as defined (all of it, even if subsection being displayed)
+!-----------------------------------------------------------------------------------------------------------------------------------
+   lastclass=''
+   do i=0,my-1
+      do j=0,mx-1
+         class=''
+         cell=mvwinch(win,i,j)                    ! retrieve cell value
+         ilet=iand(cell,A_CHARTEXT)               ! get decimal letter from cell using bit-mask
+         let=char(ilet)                           ! get character from decimal
+         lets=let                                 ! what to print for the character
+         pair=int(PAIR_NUMBER(cell),C_INT)        ! the color pair used to draw the cell
+         attr=iand(cell,A_ATTRIBUTES)             !! the attributes of the cell
+         if(iand(attr,A_BLINK).eq. A_BLINK)          class=trim(class)//' BL'
+         if(iand(attr,A_INVIS).eq. A_INVIS)          class=trim(class)//' IN'
+         if(iand(attr,A_NORMAL).eq. A_NORMAL)        class=class !class=' '
+         if(iand(attr,A_PROTECT).eq. A_PROTECT)      class=trim(class)//' '
+         if(iand(attr,A_UNDERLINE).eq. A_UNDERLINE)  class=trim(class)//' U'
+         if(iand(attr,A_DIM).eq.A_DIM)               class=trim(class)//' '
+         if(iand(attr,A_HORIZONTAL).eq.A_HORIZONTAL) class=trim(class)//' '
+         if(iand(attr,A_LEFT).eq.A_LEFT)             class=trim(class)//' '
+         if(iand(attr,A_LOW).eq.A_LOW)               class=trim(class)//' '
+         if(iand(attr,A_RIGHT).eq.A_RIGHT)           class=trim(class)//' '
+         if(iand(attr,A_STANDOUT).eq.A_STANDOUT)     class=trim(class)//' '
+         if(iand(attr,A_TOP).eq.A_TOP)               class=trim(class)//' '
+         if(iand(attr,A_VERTICAL).eq.A_VERTICAL)     class=trim(class)//' '
+         if(iand(attr,A_BOLD).eq.A_BOLD)             class=trim(class)//' BO'
+         if(iand(attr,A_ITALIC).eq.A_ITALIC)         class=trim(class)//' I'
+!-----------------------------------------------------------------------------------------------------------------------------------
+         ! The Alternate Character Set ( includes lines & boxes)
+         if(iand(attr,A_ALTCHARSET).eq.A_ALTCHARSET)then
+            select case(let)
+            case('l'); lets="&#9484;"   ! ACS_ULCORNER upper left corner        ┌
+            case('m'); lets="&#9492;"   ! ACS_LLCORNER lower left corner        └
+            case('k'); lets="&#9488;"   ! ACS_URCORNER upper right corner       ┐
+            case('j'); lets="&#9496;"   ! ACS_LRCORNER lower right corner       ┘
+            case('t'); lets="&#9500;"   ! ACS_LTEE     tee pointing right       ├
+            case('u'); lets="&#9508;"   ! ACS_RTEE     tee pointing left        ┤
+            case('v'); lets="&#9524;"   ! ACS_BTEE     tee pointing up          ┴
+            case('w'); lets="&#9516;"   ! ACS_TTEE     tee pointing down        ┬
+            case('q'); lets="&#9472;"   ! ACS_HLINE    horizontal line          ─
+            case('x'); lets="&#9474;"   ! ACS_VLINE    vertical line            !
+            case('n'); lets="&#9532;"   ! ACS_PLUS     large plus or crossover  ┼
+            case('o'); lets="&#9146;"   ! ACS_S1       macron, overline, scan line 1 (above) ⎺
+               lets="&macr;"
+               lets="&#9146;"
+            case('s'); lets="&#9149;"   ! ACS_S9       scan line 9 (below)      ⎽
+            case('`'); lets="&#9670;"   ! ACS_DIAMOND  diamond                  ◆
+               lets="&loz;"
+               lets="&diams;"
+            case('a'); lets="&#2591;"   ! ACS_CKBOARD  checker board (stipple)  ▒
+               lets="&#9618;"
+            case('f'); lets="&deg;"     ! ACS_DEGREE   degree symbol            °
+            case('g'); lets="&plusmn;"  ! ACS_PLMINUS  plus/minus               ±
+            case('~'); lets="&bull;"    ! ACS_BULLET   bullet                   · •
+            case(','); lets="&larr;"    ! ACS_LARROW   arrow pointing left      ←
+            case('+'); lets="&rarr;"    ! ACS_RARROW   arrow pointing right     →
+            case('.'); lets="&darr;"    ! ACS_DARROW   arrow pointing down      ↓
+            case('-'); lets="&uarr;"    ! ACS_UARROW   arrow pointing up        ↑
+            case('h'); lets="&#9626;"   ! ACS_BOARD    board of squares         ▚
+            case('i'); lets="&#9227;"   ! ACS_LANTERN  lantern symbol           ␋
+            case('0'); lets="&block;"   ! ACS_BLOCK    solid square block       █
+            case('p'); lets="&#9147;"   ! ACS_S3       scan line 3(at top)      ⎻
+            case('r'); lets="&#9148;"   ! ACS_S7       scan line 7 (at bottom)  ⎼
+            case('y'); lets="&le;"      ! ACS_LEQUAL   less/equal               ≤
+            case('z'); lets="&ge;"      ! ACS_GEQUAL   greater/equal            ≥
+            case('{'); lets="&pi;"      ! ACS_PI       Pi                       π
+            case('|'); lets="&ne;"      ! ACS_NEQUAL   not equal                ≠
+            case('}'); lets="&pound;"   ! ACS_STERLING UK pound sign            £
+            end select
+         else                           ! Regular Characters that are special in HTML
+            select case(let)
+            case('&'); lets='&amp;'     !   &  &#38;  {ampersand}
+            case('<'); lets='&lt;'      !   <  &#60;  {less than}
+            case('>'); lets='&gt;'      !   >  &#62;  {greater than}
+            case('"'); lets='&quot;'    !   "  &#34;  {quotation mark}
+            !case(' '); lets='&nbsp;'   !      &#160; {Non-breaking space}
+            end select
+         endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+         if(iand(attr,A_REVERSE).eq.A_REVERSE)then
+            write(class,'(a," RPAIR",i0)') trim(class),pair
+         else
+            write(class,'(a," PAIR",i0)') trim(class),pair
+         endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+         if(iand(attr,A_STANDOUT).eq.A_STANDOUT)then
+            write(class,'(a," RPAIR",i0)') trim(class),pair
+         else
+            write(class,'(a," PAIR",i0)') trim(class),pair
+         endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+         if(class.ne.lastclass)then
+            if(span)then
+               write(iout)'</span>'
+               span=.false.
+            endif
+            if(class.eq.' ')then
+               write(iout)'<span class="N">'
+            else
+               write(iout)'<span class="'//trim(class)//'">'
+            endif
+            span=.true.
+         endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+         write(iout)lets(:max(1,len_trim(lets))) ! print a space even if string is blank
+         lastclass=class
+      enddo
+      write(iout)NEW_LINE('a')
+   enddo
+!-----------------------------------------------------------------------------------------------------------------------------------
+   if(span)call ln('</span>')
+   call ln('</pre>')
+   call ln('</body>')
+   call ln('</html>')
+   endfile(unit=iout,iostat=ios,iomsg=msg) ! make sure file is truncated or longer old files may leave data in file
+contains
+
+subroutine ln(string)
+implicit none
+character(len=*) :: string
+   write(iout)string
+   write(iout)new_line('a')
+end subroutine ln
+
+end subroutine nc_printhtml
+!-----------------------------------------------------------------------------------------------------------------------------------
+!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine nc_printunicode(win,filename)
+! @(#) plain text print reading window from ncurses
+!! write as HTML or ANSI escape codes per ansi2html(1) script
+!! maybe look in original page data instead like loaddata(3f)
+!! what about alternate characters like box characters ?
+!! could newterm(3c) be used to set to a file instead of a terminal to capture escape sequences and ensure they are VT102 commands?
+!-----------------------------------------------------------------------------------------------------------------------------------
+   type(C_PTR),intent(in)       :: win          ! window to print
+   character(len=*),intent(in)  :: filename     ! filename to print to
+!-----------------------------------------------------------------------------------------------------------------------------------
+   integer                      :: my,mx        ! size of the specified window
+   integer(C_LONG)              :: ch           ! long character in cell (attributes, color pair, and character)
+   character(len=1)             :: let          ! the character in the cell
+   integer                      :: ilet         ! decimal value of character in the cell
+   integer(C_LONG)              :: attr         ! attributes of the cell
+   integer                      :: ios          ! status from open(3f)
+   character(len=256)           :: msg          ! message from open(3f)
+   integer,save                 :: iout=11      ! unit to open(3f) for writing
+   integer                      :: i,j          ! loop counters
+   integer                      :: ierr
+   integer(C_SHORT)             :: pair         ! color pair used by the cell
+   integer(C_SHORT)             :: rf,gf,bf     ! color components of cell foreground
+   integer(C_SHORT)             :: rb,gb,bb     ! color components of cell background
+   integer(C_SHORT)             :: fg,bg        ! foreground and background color numbers of cell
+   logical                      :: alt, bold, reverse
+!-----------------------------------------------------------------------------------------------------------------------------------
+   OPEN(UNIT=iout,FILE=trim(filename),ACTION='write',ACCESS='stream',FORM='unformatted',IOSTAT=ios,IOMSG=msg,STATUS='unknown')
+   if(ios.ne.0)then
+      call nc_errmessage("failed to open print file "//trim(filename)//':'//trim(msg))
+      return
+   endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+   call getmaxyx(win,my,mx)                     ! size window size as defined (all of it, even if subsection being displayed)
+!-----------------------------------------------------------------------------------------------------------------------------------
+   do i=0,my-1
+      do j=0,mx-1
+         ch=mvwinch(win,i,j)                    ! retrieve cell value
+         ilet=iand(ch,A_CHARTEXT)               ! get decimal letter from cell using bit-mask
+         let=char(ilet)                         ! get character from decimal
+         pair=int(PAIR_NUMBER(ch),C_INT)        ! the color pair used to draw the cell
+         ierr=pair_content(pair,fg,bg)          ! find out how a given color-pair is currently defined
+         ierr=color_content(fg,rf,gf,bf)        ! extract red, green, and blue components in an initialized color
+         ierr=color_content(bg,rb,gb,bb)        ! extract red, green, and blue components in an initialized color
+         attr=iand(ch,A_ATTRIBUTES)             !! the attributes of the cell
+         alt=.false.
+         bold=.false.
+         reverse=.false.
+         if(iand(attr,A_BLINK).eq. A_BLINK)then           !  blink
+         endif
+         if(iand(attr,A_INVIS).eq. A_INVIS)then           !  invisible
+         endif
+         if(iand(attr,A_NORMAL).eq. A_NORMAL)then
+         endif
+         if(iand(attr,A_PROTECT).eq. A_PROTECT)then
+         endif
+         if(iand(attr,A_UNDERLINE).eq. A_UNDERLINE)then
+         endif
+         if(iand(attr,A_DIM).eq.A_DIM)then
+         endif
+         if(iand(attr,A_HORIZONTAL).eq.A_HORIZONTAL)then
+         endif
+         if(iand(attr,A_LEFT).eq.A_LEFT)then
+         endif
+         if(iand(attr,A_LOW).eq.A_LOW)then
+         endif
+         if(iand(attr,A_RIGHT).eq.A_RIGHT)then
+         endif
+         if(iand(attr,A_STANDOUT).eq.A_STANDOUT)then
+         endif
+         if(iand(attr,A_TOP).eq.A_TOP)then
+         endif
+         if(iand(attr,A_VERTICAL).eq.A_VERTICAL)then
+         endif
+         if(iand(attr,A_ALTCHARSET).eq.A_ALTCHARSET)then
+            alt=.true.
+            select case(let)
+            case('l') ! ACS_ULCORNER  upper left corner
+               let='#'
+            case('m') ! ACS_LLCORNER  lower left corner
+               let='#'
+            case('k') ! ACS_URCORNER  upper right corner
+               let='#'
+            case('j') ! ACS_LRCORNER  lower right corner
+               let='#'
+            case('t') ! ACS_LTEE      tee pointing right
+               let='+'
+            case('u') ! ACS_RTEE      tee pointing left
+               let='+'
+            case('v') ! ACS_BTEE      tee pointing up
+               let='+'
+            case('w') ! ACS_TTEE      tee pointing down
+               let='+'
+            case('q') ! ACS_HLINE     horizontal line
+               let='-'
+            case('x') ! ACS_VLINE     vertical line
+               let='|'
+            case('n') ! ACS_PLUS      large plus or crossover
+               let='+'
+            case('`') ! ACS_DIAMOND
+               let='o'
+            end select
+         endif
+         if(iand(attr,A_BOLD).eq.A_BOLD)then
+            bold=.true.
+         endif
+         if(iand(attr,A_REVERSE).eq.A_REVERSE)then
+            reverse=.true.
+         endif
+         write(iout)let                         !! use stream position or buffer lines and print to remove trailing white space
+      enddo
+      write(iout)NEW_LINE('a')
+   enddo
+!-----------------------------------------------------------------------------------------------------------------------------------
+end subroutine nc_printunicode
+!-----------------------------------------------------------------------------------------------------------------------------------
+!<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine nc_printplain(win,filename) ! @(#) plain text print reading window from ncurses
+   use M_ncurses
    implicit none
+!-----------------------------------------------------------------------------------------------------------------------------------
+   type(C_PTR),intent(in)       :: win          ! window to print
+   character(len=*),intent(in)  :: filename     ! filename to print to
+!-----------------------------------------------------------------------------------------------------------------------------------
+   integer                      :: my,mx        ! size of the specified window
+   integer(C_LONG)              :: cell         ! cell information (attributes, color pair, and character)
+   character(len=1)             :: let          ! the character in the cell
+   integer(C_LONG)              :: attr         ! attributes of the cell
+   integer                      :: ios          ! status from open(3f)
+   character(len=256)           :: msg          ! message from open(3f)
+   integer,save                 :: iout=11      ! unit to open(3f) for writing
+   integer                      :: i,j          ! loop counters
+!-----------------------------------------------------------------------------------------------------------------------------------
+   OPEN(UNIT=iout,FILE=trim(filename),ACTION='write',ACCESS='stream',FORM='unformatted',IOSTAT=ios,IOMSG=msg,STATUS='unknown')
+   if(ios.ne.0)then
+      call nc_errmessage("failed to open print file "//trim(filename)//':'//trim(msg))
+      return
+   endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+   call getmaxyx(win,my,mx)                     ! window size as defined (all of it, even if subsection being displayed)
+!-----------------------------------------------------------------------------------------------------------------------------------
+   do i=0,my-1                                  ! scan window cell by cell
+      do j=0,mx-1
+         cell=mvwinch(win,i,j)                  ! retrieve cell value
+         let=char(iand(cell,A_CHARTEXT))        ! get letter from cell using bit-mask
+         attr=iand(cell,A_ATTRIBUTES)           ! the attributes of the cell
+         if(iand(attr,A_ALTCHARSET).eq.A_ALTCHARSET)then  ! if an alternate character pick a standard character
+            select case(let)
+            case('l');let='#' ! ACS_ULCORNER  upper left corner
+            case('m');let='#' ! ACS_LLCORNER  lower left corner
+            case('k');let='#' ! ACS_URCORNER  upper right corner
+            case('j');let='#' ! ACS_LRCORNER  lower right corner
+            case('t');let='+' ! ACS_LTEE      tee pointing right
+            case('u');let='+' ! ACS_RTEE      tee pointing left
+            case('v');let='+' ! ACS_BTEE      tee pointing up
+            case('w');let='+' ! ACS_TTEE      tee pointing down
+            case('q');let='-' ! ACS_HLINE     horizontal line
+            case('x');let='|' ! ACS_VLINE     vertical line
+            case('n');let='+' ! ACS_PLUS      large plus or crossover
+            case('`');let='o' ! ACS_DIAMOND
+               ! for the fixedform(1) program change diamond if "selected" so can tell the difference in output
+               if(iand(attr,A_STANDOUT).eq.A_STANDOUT)then  ! using reverse or standout on a diamond to select it as a menu item
+                  let='X'
+               endif
+               if(iand(attr,A_REVERSE).eq.A_REVERSE)then
+                  let='X'
+               endif
+            end select
+         endif
+         write(iout)let          !! use stream position or buffer lines and print to remove trailing white space
+      enddo
+      write(iout)NEW_LINE('a')   ! write system-appropriate end-of-line
+   enddo
+end subroutine nc_printplain
+
+subroutine fixedform(tabs)
    character(len=:),allocatable,optional,intent(out) :: tabs
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer(C_INT)     :: ierr
@@ -270,8 +837,6 @@ end subroutine fixedform
 recursive subroutine process_keypress(ch,pch) ! @(#) take an appropriate action for each keypress
 ! (although the actions taken are application-specific this is a good skeleton for processing keystrokes)
 !  given integer "character" take action
-   use M_ncurses
-   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer(C_INT),intent(in)            :: ch
    integer(C_INT),intent(in),optional   :: pch ! previous key pressed, ignored except in vi(1) mode
@@ -701,7 +1266,6 @@ recursive subroutine process_keypress(ch,pch) ! @(#) take an appropriate action 
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
 subroutine button_action(eek)
-implicit none
 type(MEVENT),optional     :: eek
    select case(ibox)
    case(1) ! help
@@ -760,9 +1324,6 @@ end subroutine process_keypress
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine underline_ends(start_underline,end_underline) ! assuming current position is on an underline, find ends of underlining
 !-----------------------------------------------------------------------------------------------------------------------------------
-   use M_ncurses
-   implicit none
-!-----------------------------------------------------------------------------------------------------------------------------------
    integer(C_INT),intent(out):: start_underline, end_underline
    integer(C_INT)            :: j, py, px, my, mx, hy, hx
    integer                   :: ierr
@@ -801,9 +1362,6 @@ end subroutine underline_ends
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine delete_in_underline
-!-----------------------------------------------------------------------------------------------------------------------------------
-   use M_ncurses
-   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer                   :: py, px, hy, hx, my_dum, mx
    integer                   :: j
@@ -854,9 +1412,6 @@ end subroutine delete_in_underline
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine replace_in_underline
-!-----------------------------------------------------------------------------------------------------------------------------------
-   use M_ncurses
-   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer(C_INT)            :: py, px, hy, hx
    integer                   :: ierr
@@ -917,9 +1472,6 @@ end subroutine replace_in_underline
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine insert_in_underline
-!-----------------------------------------------------------------------------------------------------------------------------------
-   use M_ncurses
-   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer                   :: py, px, hy, hx, my, mx
    integer                   :: ierr
@@ -982,8 +1534,6 @@ end subroutine insert_in_underline
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine home_pad()
-   use M_ncurses
-   implicit none
    integer(C_INT)   :: py, px
    integer          :: ierr
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -997,8 +1547,6 @@ end subroutine home_pad
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine promptfor(prefix,mesg)  ! go to message bar and read string
-   use M_ncurses
-   implicit none
    character(len=*),intent(in) :: prefix
    character(len=*)            :: mesg
    integer(C_INT)              :: iline                                   ! line number to print at
@@ -1028,8 +1576,6 @@ end subroutine promptfor
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine searchfor(win,strin)    ! search for string in window starting at current position
-   use M_ncurses
-   implicit none
    type(C_PTR),intent(in)           :: win                                     ! window to search
    character(len=*)                 :: strin                                   ! string to search for
    character(len=pg_columns),save   :: oldstr=' '                              ! saved string to search for
@@ -1079,8 +1625,6 @@ end subroutine searchfor
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine message(mesg)  ! a message is printed with every key stroke and by explicit calls to this routine
-   use M_ncurses           ! in the fifth line from the bottom, which is considered to be the message bar
-   implicit none
    character(len=*),intent(in) :: mesg
    character(len=256)          :: longmsg
    integer(C_INT)              :: iline ! line number to print at
@@ -1123,8 +1667,6 @@ end subroutine message
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine errmessage(mesg) ! exit screen mode to use WRITE(3f) to print a message and then read a line to create a pause
-   use M_ncurses
-   implicit none
    character(len=*),intent(in) :: mesg
    integer                     :: ierr    ! return value for most ncurses(3c) functions
    integer                     :: ios     ! status return of READ(3f)
@@ -1141,9 +1683,6 @@ end subroutine errmessage
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine my_exit()                           ! temporarily exit to standard mode or terminate program
-   use M_ncurses
-   use, intrinsic :: iso_fortran_env
-   implicit none
    integer          :: ierr                    ! return value for most ncurses(3c) functions
    character(len=1) :: answer                  ! read an answer in line mode to confirm exit
    integer          :: itries                  ! count how many tries at a valid answer
@@ -1215,8 +1754,6 @@ end subroutine my_exit
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine buttons() ! create and show buttons on last five lines of display
-   use M_ncurses
-   implicit none
    character(len=256),target :: buffer(4)
    integer,target            :: icount_buffer=size(buffer)
    integer(C_INT)            :: istart
@@ -1307,8 +1844,6 @@ end subroutine buttons
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine start_screen()                ! set up for using main screen window
-   use M_ncurses
-   implicit none
    integer(kind=chtype) :: ch
    integer              :: ierr
    integer(C_LONG)      :: mouse_mask
@@ -1369,7 +1904,6 @@ end subroutine start_screen
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine loaddata(filename) ! populate the form array definition pointed to by page_ptr(:) by reading in a file defining the form
    !use M_fixedform, only : page_ptr, icount_ptr, longline_pd, pg_lines
-   implicit none
    character(len=*),intent(in)     :: filename   ! name of file to open and read form definition from
    character(len=len(page_ptr(1))) :: buffer     ! a buffer for reading a line from the input file
    integer                         :: ios        ! I/O error status flag returned by READ(3f)
@@ -1402,8 +1936,6 @@ end subroutine loaddata
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine user_to_screen(win)  ! @(#) convert user data to an ncurses(3c) window
-   use M_ncurses
-   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    type(C_PTR)            :: win
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1515,8 +2047,6 @@ end subroutine user_to_screen
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine acs(win,i,j) ! figure out which box character to use
 ! assuming boxes do not touch that are not part of same structure
-   use M_ncurses
-   implicit none
    type(C_PTR),intent(in)    :: win
    integer,intent(in)        :: i,j ! position in user data defining the page (starts at <1,1>)
    integer(C_INT)            :: y,x ! screen coordinates (starts at <0,0>)
@@ -1566,8 +2096,6 @@ end subroutine acs
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine refresh_pd() ! assuming form window big_pd exists redraw it
-   use M_ncurses
-   implicit none
    integer                   :: ierr
    integer(C_INT)            :: ileft
    integer(C_INT)            :: iright
@@ -1586,8 +2114,6 @@ end subroutine refresh_pd
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine cursor2pad(sy,sx,y,x,cell)
 ! @(#) look "under" cursor into pad data and return coordinates and cell data from specified window
-   use M_ncurses
-   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer,intent(in)           :: sy,sx  ! screen coordinates to assume cursor is at
    integer,intent(out)          :: y,x    ! element in page_pd(y)(x:x) character was found at
@@ -1617,8 +2143,6 @@ end subroutine cursor2pad
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine pad2cursor(pad_x,pad_y,screen_y,screen_x)
 ! @(#) if pad coordinates map to a screen area find screen coordinates
-   use M_ncurses
-   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer,intent(in)           :: pad_y,pad_x        ! element coordinates in page_pd(pad_y)(pad_x:pad_x)
    integer,intent(out)          :: screen_y,screen_x  ! screen coordinates to assume cursor is at
@@ -1634,8 +2158,6 @@ end subroutine pad2cursor
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine printit() ! @(#) access program data here so nc_printplain(3f) is generic
-   use M_ncurses
-   implicit none
    character(len=256)           :: ufilename    ! filename to print to
    integer                      :: ierr
 !   ufilename=nc_uniqname("paper.txt",ierr)
@@ -1651,8 +2173,6 @@ end subroutine printit
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine extract_answers_tabs()
-   use M_ncurses
-   implicit none
    integer                   :: i,j,imax,jmax
    logical                   :: inunderline
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1695,8 +2215,6 @@ end subroutine extract_answers_tabs
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine extract_answers_namelist()
-   use M_ncurses
-   implicit none
    integer                   :: i,j,imax,jmax
    logical                   :: inunderline
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1738,8 +2256,6 @@ end subroutine extract_answers_namelist
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine space_bar(mesg) ! @(#) if on a menu button clear any menu buttons connected to it and toggle it
-   use M_ncurses
-   implicit none
    character(len=128)        :: mesg
    integer                   :: i,j
    integer                   :: ierr
@@ -1781,8 +2297,6 @@ subroutine clear_radio(i,j)
    !
    !*! maybe treat similar attributes or color as a structure too instead of just ACS (Alternate Character Set) characters??
    !
-   use M_ncurses
-   implicit none
    integer(C_INT)            :: i,j
    integer(C_INT)            :: imax,jmax
    call getmaxyx(big_pd,imax,jmax)                    ! size window size as defined (all of it, even if subsection being displayed)
@@ -1820,8 +2334,6 @@ recursive subroutine flood_fill(y,x,ymax,xmax)
 ! diamonds (which are used as menu buttons).
 ! The array is the big_pd window.
 !
-   use M_ncurses
-   implicit none
    integer(C_INT)   :: y, x
    integer(C_INT)   :: ymax,xmax
    integer          :: ierr
@@ -1866,8 +2378,6 @@ end subroutine flood_fill
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 recursive subroutine un_flood_fill(y,x,ymax,xmax) ! put back the A_ALTCHARSET ATTRIBUTE and remove A_HORIZONTAL attribute
-   use M_ncurses
-   implicit none
    integer(C_INT)   :: y, x
    integer(C_INT)   :: ymax,xmax
    integer          :: ierr
@@ -1892,12 +2402,6 @@ end subroutine un_flood_fill
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine find_next() ! @(#) from current cursor position jump to next input field in pad
-   use M_ncurses,only:  getmaxyx, getyx, wmove, mvwinch, refresh, wrefresh, move
-   use M_ncurses,only:  A_ATTRIBUTES, A_UNDERLINE, A_ALTCHARSET, A_CHARTEXT
-   use M_ncurses,only:  C_INT,C_LONG,C_SHORT
-   use M_ncurses,only:  LINES,COLS
-   use M_ncurses,only:  stdscr
-   implicit none
    integer(C_INT)            :: ys, xs
    integer(C_INT)            :: ydelta, xdelta
    integer(C_INT)            :: ymax, xmax
@@ -1987,12 +2491,6 @@ end subroutine find_next
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine find_previous() ! @(#) from current cursor position jump to previous input field in pad jsu
-   use M_ncurses,only:  getmaxyx, getyx, wmove, mvwinch, refresh, wrefresh, move
-   use M_ncurses,only:  A_ATTRIBUTES, A_UNDERLINE, A_ALTCHARSET, A_CHARTEXT
-   use M_ncurses,only:  C_INT,C_LONG,C_SHORT
-   use M_ncurses,only:  stdscr
-   use M_ncurses,only:  LINES,COLS
-   implicit none
    integer(C_INT)            :: ys, xs
    integer(C_INT)            :: previous_y, previous_x
    integer(C_INT)            :: ydelta, xdelta
@@ -2072,11 +2570,9 @@ end subroutine find_previous
 subroutine move_pd(y,x,units)  ! relative change of the corner of the pad data being displayed
 ! more current corner <pad_corner_y,pad_corner_x> by <y,x> units
 ! units are L for lines, H for half-pages, P for pages
-   use M_ncurses
    ! pad_corner_[x,y] == current position in stdscr of the corner of data displayed, updated to be the new desired corner of data
    ! longline_pd      == number of longest line of data used in page_pd(*)
    ! displaywidth_pd  == width of section of pad displayed on screen
-   implicit none
    integer,intent(in)            :: y,x
    character(len=1),intent(in)   :: units
    integer                       :: old_pad_corner_y,old_pad_corner_x
@@ -2113,8 +2609,6 @@ end subroutine move_pd
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine redraw()                  ! clear and redraw after verifying (potentially new) page size
-   use M_ncurses
-   implicit none
    integer :: ierr                   ! holds return value of ncurses routines
    integer :: iy,ix                  ! holds cursor position
    call getmaxyx(stdscr,LINES,COLS)  ! make sure screen size variables are updated because they are really C macros, not variables
@@ -2129,16 +2623,12 @@ end subroutine redraw
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine get_cell_components(cell,attr,pair,ich,ch)  ! given a cell value, find attributes, color pair, and character in cell
-   use M_ncurses, only : C_LONG,C_INT,C_SHORT
 !-----------------------------------------------------------------------------------------------------------------------------------
-   use M_ncurses, only : PAIR_NUMBER  !  PAIR_NUMBER(attrs) is the reverse of COLOR_PAIR(n)
                                     ! EXAMPLE:
                                     !    cell=mvwinch(stdscr,sy,sx)
                                     !    n=PAIR_NUMBER(iand(cell,A_ATTRIBUTES))
                                     !*!   works with cell as well as attributes. Just because way cell data is stored,or dependable?
 !-----------------------------------------------------------------------------------------------------------------------------------
-   use M_ncurses, only : A_CHARTEXT,A_ATTRIBUTES
-   implicit none
    integer(C_LONG),intent(in)    :: cell
    integer(C_LONG),intent(out)   :: attr
    integer(C_SHORT),intent(out)  :: pair
@@ -2156,7 +2646,6 @@ end subroutine get_cell_components
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 logical function in(x,y,left,right,bottom,top)
-implicit none
 integer :: x,y
 integer :: left, right, bottom, top
 !  Tests whether a point is inside a particular box.
@@ -2170,8 +2659,6 @@ end function in
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine inbox(x,y,ii)
-use M_ncurses
-implicit none
 integer :: x
 integer :: y
 integer :: ii
@@ -2209,8 +2696,6 @@ subroutine nc_notabs(INSTR,OUTSTR,ILEN)
 ! SEE ALSO:
 !       GNU/Unix commands expand(1) and unexpand(1)
 !
-   use M_journal, only : journal
-   IMPLICIT NONE
    CHARACTER(LEN=*),INTENT(IN)   :: instr     ! input line to scan for tab characters
    CHARACTER(LEN=*),INTENT(OUT)  :: outstr    ! tab-expanded version of INSTR produced
    INTEGER,INTENT(OUT)           :: ilen      ! column position of last character put into output string
@@ -2259,7 +2744,6 @@ function nc_uniqname(name,ierr) !@(#) append a number to the end of the filename
    ! If necessary, increment the number and try again up to the value 9999.
    ! assumes returned value is 256 characters
 !-----------------------------------------------------------------------------------------------------------------------------------
-   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    character(len=*),intent(in) :: name
    integer,intent(out)         :: ierr
@@ -2315,37 +2799,6 @@ end function nc_uniqname
 !-----------------------------------------------------------------------------------------------------------------------------------
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-
 !-----------------------------------------------------------------------------------------------------------------------------------
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_fixedform()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-
-!*! setup
-   call test_fixedform()
-   call test_loaddata()
-!*! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_fixedform()
-
-   call unit_check_start('fixedform',msg='')
-   !*!call unit_check('fixedform', 0.eq.0, 'checking',100)
-   call unit_check_done('fixedform',msg='')
-end subroutine test_fixedform
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_loaddata()
-
-   call unit_check_start('loaddata',msg='')
-   !*!call unit_check('loaddata', 0.eq.0, 'checking',100)
-   call unit_check_done('loaddata',msg='')
-end subroutine test_loaddata
-!===================================================================================================================================
-end subroutine test_suite_M_fixedform
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
 end module M_fixedform
 !-----------------------------------------------------------------------------------------------------------------------------------
 !<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>-

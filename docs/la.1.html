@@ -56,7 +56,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-la(1f) - interpret matrix expressions using a shell-like interface
+playground(1f) - convert Fortran file to an HTML document that uploads
+the code to "Fortran Playground"
 <P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
@@ -64,16 +65,15 @@ la(1f) - interpret matrix expressions using a shell-like interface
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Options</A><BR>
-<A HREF=#4>Author</A><BR>
-<A HREF=#5>Examples</A><BR>
+<A HREF=#4>Examples</A><BR>
 </BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-la [expression(s)] | [ <B>--help</B>| <B>--version</B>]
+playground [ <B>--help</B>| <B>--version</B>] [ <B>--type</B> OUTPUT_TYPE] *.[fF]90
 </BLOCKQUOTE>
 <A name=2>
 
@@ -81,15 +81,15 @@ la [expression(s)] | [ <B>--help</B>| <B>--version</B>]
 
 </A>
 <BLOCKQUOTE>
-la(1) is an interactive computer program that serves as a convenient
-"laboratory" for computations involving matrices. It provides easy
-access to matrix software developed by the LINPACK and EISPACK
-projects. The capabilities range from standard tasks such as solving
-simultaneous linear equations and inverting matrices, through symmetric
-and nonsymmetric eigenvalue problems, to fairly sophisticated matrix
-tools such as the singular value decomposition.
 <P>
-la(1) can stand for Linear Algebra or Los Alamos, but not Los Angelos.
+create an HTML document from Fortran source files that includes a
+click-able download to the "Fortran Playground".
+<P>
+URL encoding, officially known as percent-encoding, is a method to
+encode arbitrary data in a Uniform Resource Identifier (URI) using only
+a limited subset of ASCII characters, replacing them with one or more
+character triplets that consist of the percent character and a two-digit
+hexadecimal value.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -99,6 +99,10 @@ la(1) can stand for Linear Algebra or Los Alamos, but not Los Angelos.
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
+<B></B><B>--type</B> </TD><TD valign=bottom>
+"html", or "md"
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
 <B></B><B>--help</B> </TD><TD valign=bottom>
 display this help and exit
 </TD></TR>
@@ -107,21 +111,11 @@ display this help and exit
 output version information and exit
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>expression(s)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-if expressions are supplied they are evaluated and the
-program terminates.
+<B>filename(s)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Fortran source files
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
-
-     <H3>AUTHOR</H3>
-
-</A>
-<BLOCKQUOTE>
-This is heavily based on a program from the Department of Computer
-Science, University of New Mexico, by Cleve Moler.
-</BLOCKQUOTE>
-<A name=5>
 
      <H3>EXAMPLES</H3>
 
@@ -130,101 +124,36 @@ Science, University of New Mexico, by Cleve Moler.
 Sample commands
 <P>
 <PRE>
-    # Example 1: introductory usage:
-    la
-    a=&lt;1 2 3;5 4 6;7 8 9&gt;
-    b=&lt;5;6;7&gt;
-    a*b
-    b*a
-    det(a)
-    quit
-<P>
-</PRE>
-An explanation of Example 1:
-<P>
-<PRE>
-    &gt; // For this session the &lt;&gt; character is the LA prompt.
-    &gt;  &lt;&gt; A=&lt;1 2 3;5 4 6;7 8 9&gt;            &lt;---  you enter this
-    &gt;  A     =                             &lt;---  LA response
-    &gt;      1.    2.    3.
-    &gt;      5.    4.    6.
-    &gt;      7.    8.    9.
-    &gt;  &lt;&gt; b=&lt;5;6;7&gt;
-    &gt;  b     =
-    &gt;      5.
-    &gt;      6.
-    &gt;      7.
-<P>
-    &gt;  &lt;&gt; A*b             &lt;--- you enter "multiply A and b"
-<P>
-    &gt;  ANS   =            &lt;--- LA response
-    &gt;     38.
-    &gt;     91.
-    &gt;    146.
-<P>
-    &gt;  &lt;&gt; b*A             &lt;---you enter "multiply b and A"
-    &gt;     /--ERROR                         &lt;--- LA response
-    &gt;  INCOMPATIBLE FOR MULTIPLICATION
-<P>
-    &gt;  &lt;&gt; det(A)         &lt;--- Take the determinant of A
-<P>
-    &gt;  ANS   =           &lt;---LA response
-<P>
-    &gt;     18.
-<P>
-    &gt;  &lt;&gt; quit           &lt;--- you quit LA
-<P>
-    &gt;  total flops        34
-    &gt;  ADIOS
-    &gt; // --------------------------------------
-<P>
-</PRE>
-Example 2: Simple looping and conditionals are also available
-<P>
-<PRE>
-    la
-    //Eigenvalue sensitivity example. See section 8 of the Users&#146; Guide.
-    B = &lt;3 0 7; 0 2 0; 0 0 1&gt;
-    L = &lt;1 0 0; 2 1 0; -3 4 1&gt;,  M = L\L&#146;
-    A = M*B/M
-    A = round(A)
-    &lt;X,D&gt; = eig(A)
-    long,  diag(D),  short
-    cond(X)
-    X = X/diag(X(3,:)),  cond(X)
-    Y = inv(X&#146;),  Y&#146;*A*X
-    for j = 1:3, c(j) = norm(Y(:,j))*norm(X(:,j));
-    E = -1.e-6*Y(:,1)*X(:,1)&#146;
-    eig(A + .4*E),  eig(A + .5*E)
-    r = .4;  s = .5;
-    while s-r &gt; 1.e-14, t = (r+s)/2; d = eig(A+t*E); &#46;&#46;&#46;
-      if imag(d(1))=0, r = t; else, s = t;
-    long,  t = r
-    A+t*e,  eig(A+t*E)
-    &lt;X,D&gt; = eig(A+t*E);  X = X/diag(X(3,:))
-    short,  cond(X)
-    // --------------------------------------
-<P>
-</PRE>
-Use the HELP command for further information.
-For example, to enter HELP on the entire manual,
-display directions for using HELP and
-place a User manual in the file "la.userguide.txt",
-enter
-<P>
-<PRE>
-    la
-    &lt;&gt;help manual
-    continue &#46;&#46;&#46;
-    h // show directions for using "help"
-    w la.userguide.txt
-    continue &#46;&#46;&#46;
-    q
-    quit
+   &gt; $  playground hello.f90 &gt; playground.html
+   &gt; &lt;!DOCTYPE html&gt;
+   &gt; &lt;html xmlns="<A HREF="http://www.w3.org/1999/xhtml">http://www.w3.org/1999/xhtml</A>"&gt;
+   &gt; &lt;head&gt;
+   &gt;   &lt;meta name="generator" content="playground" /&gt;
+   &gt;   &lt;title&gt;playground&lt;/title&gt;
+   &gt; &lt;/head&gt;
+   &gt; &lt;body&gt;
+   &gt;
+   &gt;   &lt;a href="https://play.fortran-lang.org/?code=
+   &gt;   program%20hello%5Fworld
+   &gt;   %0A%20%20%20write%28%2A%2C%2A%29%27Hello%20World%21%27
+   &gt;   %0Aend%20program%20hello%5Fworld
+   &gt;   %0A"
+   &gt;   target="_blank" title="Open in Fortran Playground"&gt;
+   &gt;   &lt;img src="https://raw.githubusercontent.com/fortran-lang/
+   &gt;   playground/main/frontend/src/fortran-logo.png"
+   &gt;   alt="Fortran logo" class="align-text-bottom" height="15.5" /&gt; hello
+   &gt;   &lt;/a&gt;
+   &gt;   &lt;xmp&gt;
+   &gt; program hello_world
+   &gt;    write(*,*)&#146;&#146;Hello World!&#146;&#146;
+   &gt; end program hello_world
+   &gt;   &lt;/xmp&gt;
+   &gt; &lt;/body&gt;
+   &gt; &lt;/html&gt;
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>la (1)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c25cbfc7-c476-4f89-8f97-f6373a298e09 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>la (1)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 37fc7e2a-8f12-4796-819f-6998d2b50b8e using man macros.</FONT>
 <br><br><center><img src="images/la.1.gif"></center>
 </div>
 </div>

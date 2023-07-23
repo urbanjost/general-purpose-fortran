@@ -1,3 +1,50 @@
+program cprint
+use M_kracken, only : kracken, igets,  sget, lget, sgets
+use M_strings, only : split, listout
+use M_io, only : read_line
+implicit none
+
+! ident_1="@(#)cprint(1f): filter to print specified columns"
+
+character(len=:),allocatable       :: line
+character(len=:),allocatable       :: delimiters               ! characters used to delimit columns
+character(len=:),allocatable       :: array(:)
+integer,allocatable                :: icols(:)
+character(len=4096),allocatable    :: acols(:)
+integer                            :: icols_expanded(1000)     ! output array
+integer                            :: isize
+integer                            :: i
+integer                            :: inums                    ! size of icols on input, number of icols_expanded numbers on output
+integer                            :: ierr
+logical                            :: verbose
+!-----------------------------------------------------------------------------------------------------------------------------------
+   call kracken('cprint',      &              ! define command options and default values and then process command-line arguments
+   & ' -delimiters  -help .F. -version .F. -verbose .F.')
+   call help_usage(lget('cprint_help'))       ! if -help option is present, display help text and exit
+   call help_version(lget('cprint_version'))  ! if -version option is present, display version text and exit
+   delimiters=sget('cprint_delimiters')       ! get -delimiters values
+   icols=igets('cprint_oo',ierr)
+   inums=size(icols)
+   call listout(icols,icols_expanded,inums,ierr)
+   acols=sgets('cprint_oo')
+   verbose=lget('cprint_verbose')
+   if(verbose)then
+      write(*,'("COLUMNS=",*("[",i0,"]":","))')icols
+   endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+   INFINITE: do while (read_line(line)==0)
+      if(line.ne.'')then
+         call split(line,array,delimiters)             ! split line into columns
+         isize=min(size(array),1000)
+         do i=1,inums
+            if( icols_expanded(i).gt.0 .and. icols_expanded(i).le.isize )then
+               write(*,'(a,1x)',advance='no')trim(array(icols_expanded(i)))
+            endif
+         enddo
+      endif
+      write(*,*)
+   enddo INFINITE
+contains
 subroutine help_usage(l_help)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
@@ -71,51 +118,5 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
-program cprint
-use M_kracken, only : kracken, igets,  sget, lget, sgets
-use M_strings, only : split, listout
-use M_io, only : read_line
-implicit none
-
-! ident_1="@(#)cprint(1f): filter to print specified columns"
-
-character(len=:),allocatable       :: line
-character(len=:),allocatable       :: delimiters               ! characters used to delimit columns
-character(len=:),allocatable       :: array(:)
-integer,allocatable                :: icols(:)
-character(len=4096),allocatable    :: acols(:)
-integer                            :: icols_expanded(1000)     ! output array
-integer                            :: isize
-integer                            :: i
-integer                            :: inums                    ! size of icols on input, number of icols_expanded numbers on output
-integer                            :: ierr
-logical                            :: verbose
-!-----------------------------------------------------------------------------------------------------------------------------------
-   call kracken('cprint',      &              ! define command options and default values and then process command-line arguments
-   & ' -delimiters  -help .F. -version .F. -verbose .F.')
-   call help_usage(lget('cprint_help'))       ! if -help option is present, display help text and exit
-   call help_version(lget('cprint_version'))  ! if -version option is present, display version text and exit
-   delimiters=sget('cprint_delimiters')       ! get -delimiters values
-   icols=igets('cprint_oo',ierr)
-   inums=size(icols)
-   call listout(icols,icols_expanded,inums,ierr)
-   acols=sgets('cprint_oo')
-   verbose=lget('cprint_verbose')
-   if(verbose)then
-      write(*,'("COLUMNS=",*("[",i0,"]":","))')icols
-   endif
-!-----------------------------------------------------------------------------------------------------------------------------------
-   INFINITE: do while (read_line(line)==0)
-      if(line.ne.'')then
-         call split(line,array,delimiters)             ! split line into columns
-         isize=min(size(array),1000)
-         do i=1,inums
-            if( icols_expanded(i).gt.0 .and. icols_expanded(i).le.isize )then
-               write(*,'(a,1x)',advance='no')trim(array(icols_expanded(i)))
-            endif
-         enddo
-      endif
-      write(*,*)
-   enddo INFINITE
 end program
 !===================================================================================================================================

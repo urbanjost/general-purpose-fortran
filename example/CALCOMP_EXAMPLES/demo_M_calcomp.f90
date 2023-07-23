@@ -1,10 +1,14 @@
      program demo_M_calcomp
      use M_calcomp
+     implicit none
      ! 07/30/69
      real              :: x(104), y(104)
      character(len=40) :: msg
      integer,parameter :: kin = 50
      equivalence(x(1),xl),(y(1),yl)
+     real :: a, d, di, dx, dy, f, h, w, rf, rma, rmi, ro, sl, sn
+     real :: th0, thf, tho, xl, yl
+     integer :: i, inc, ipen, ipn, j, j1, j2, nc, npts, nrec, nx, ny
      9007 format(7(1X,F9.3),F7.1)
         call make_c_qa4()   ! create datafile
         f = 1.0

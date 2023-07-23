@@ -2,8 +2,10 @@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 module M_testsuite_M_color
-use M_color, only : rgbmono, hue, closest_color_name, color_name2rgb
-use M_verify, only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start
+use M_framework__verify, only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start
+use M_framework__verify, only : unit_check_level
+use M_color,             only : rgbmono, hue, closest_color_name, color_name2rgb
+implicit none
 contains
 subroutine test_suite_m_color
 call test_hue()                 ! converts a color's components from one color model to another
@@ -31,9 +33,6 @@ end subroutine test_rgbmono
 end subroutine test_suite_m_color
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hue()
-use M_verify, only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start
-use M_verify, only : unit_check_level
-implicit none
 real              :: c, m, y
 real              :: r, g, b
 real              ::    i, q
@@ -105,7 +104,6 @@ call unit_check_done('hue')
 
 contains
 subroutine check_name(modelout,name,rgb,other)
-implicit none
 
 ! given a color convert to MODELOUT and compare to expected values
 
@@ -133,8 +131,7 @@ end subroutine check_name
 end subroutine test_hue
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_closest_color_name()
-use M_verify, only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start
-implicit none
+
 call unit_check_start('closest_color_name')
    !                NAME       RGB(0-255)
    call check_name('black',    [ 0,    0,    0   ])
@@ -162,7 +159,7 @@ call unit_check_done('closest_color_name')
 contains
 subroutine check_name(name,rgb)
 ! given a colorname look up RGB values, compare to expected values, check
-implicit none
+
 character(len=*)   :: name
 integer,intent(in) :: rgb(3)
 real               :: r, g, b
@@ -192,8 +189,7 @@ end subroutine check_name
 end subroutine test_closest_color_name
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_color_name2rgb()
-use M_verify, only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start
-implicit none
+
 call unit_check_start('color_name2rgb')
    !                NAME       RGB(0-255)
    call check_name('black',    [ 0,    0,    0   ])
@@ -220,7 +216,7 @@ call unit_check_done('color_name2rgb')
 contains
 subroutine check_name(name,rgb)
 ! given a colorname look up RGB values, compare to expected values, check
-implicit none
+
 character(len=*)   :: name
 integer,intent(in) :: rgb(3)
 real               :: r,g,b
@@ -253,11 +249,9 @@ end module M_testsuite_M_color
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 program runtest
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
+use M_framework__verify, only : unit_check_level, unit_check_stop
 use M_testsuite_M_color
 implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
    unit_check_level=0
    call test_suite_M_color()
    call unit_check_stop()

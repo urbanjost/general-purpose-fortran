@@ -44,6 +44,7 @@ public separator
 public lookfor
 public which
 public get_env
+public is_hidden_file
 public getname
 
 ! ident_1="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
@@ -238,7 +239,7 @@ logical                     :: create_local
       inquire(file=uniq,exist=around)                 ! see if this filename already exists
       if(.not.around)then                             ! found an unused name
          if(verbose_local)then
-            call journal('c',trim('*uniq* name='//trim(uniq))) ! write out message reporting name used
+            call journal('c','*uniq* name='//trim(uniq)) ! write out message reporting name used
          endif
          if(create_local)then
             open(newunit=iscr,file=uniq,iostat=ios,status='new')
@@ -464,36 +465,6 @@ end subroutine print_inquire
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function separator() result(sep)
-!>
-!!##NAME
-!!    separator(3f) - [M_io:QUERY] try to determine pathname directory separator character
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    function separator() result(sep)
-!!
-!!     character(len=1) :: sep
-!!
-!!##DESCRIPTION
-!!   First testing for the existence of "/.",  then if that fails a list
-!!   of variable names assumed to contain directory paths {PATH|HOME} are
-!!   examined first for a backslash, then a slash. Assuming basically the
-!!   choice is a ULS or MSWindows system, and users can do weird things like
-!!   put a backslash in a ULS path and break it.
-!!
-!!   Therefore can be very system dependent. If the queries fail the
-!!   default returned is "/".
-!!
-!!##EXAMPLE
-!!
-!!   sample usage
-!!
-!!    program demo_separator
-!!    use M_io, only : separator
-!!    implicit none
-!!       write(*,*)'separator=',separator()
-!!    end program demo_separator
 
 ! use the pathname returned as arg0 to determine pathname separator
 implicit none
@@ -2483,19 +2454,20 @@ integer                                  :: lun_local
       lun_local=stdin
    endif
 
-   INFINITE: do                                                      ! read characters from line and append to result
-      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for files
-                                                                     ! other than stdin so system line limit is not limiting
-      if(isize > 0)line_local=line_local//buffer(:isize)            ! append what was read to result
-      if(is_iostat_eor(ier))then                                     ! if hit EOR reading is complete unless backslash ends the line
-         ier=0                                                       ! hitting end of record is not an error for this routine
-         exit INFINITE                                               ! end of reading line
-     elseif(ier /= 0)then                                            ! end of file or error
+   INFINITE: do                                                   ! read characters from line and append to result
+      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no', &
+      & size=isize,iomsg=message) buffer                          ! read next buffer (might use stream I/O for files
+                                                                  ! other than stdin so system line limit is not limiting
+      if(isize > 0)line_local=line_local//buffer(:isize)          ! append what was read to result
+      if(is_iostat_eor(ier))then                                  ! if hit EOR reading is complete unless backslash ends the line
+         ier=0                                                    ! hitting end of record is not an error for this routine
+         exit INFINITE                                            ! end of reading line
+     elseif(ier /= 0)then                                         ! end of file or error
         line=trim(message)
         exit INFINITE
      endif
    enddo INFINITE
-   line=line_local                                                   ! trim line
+   line=line_local                                                ! trim line
    if(present(iostat))iostat=ier
 end function getline
 !===================================================================================================================================
@@ -3228,7 +3200,7 @@ contains
 logical function exists(filename) result(r)
 character(len=*), intent(in) :: filename
     inquire(file=filename, exist=r)
-end function
+end function exists
 end function which
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3355,37 +3327,110 @@ end function lookfor
 !!
 !!##LICENSE
 !!    Public Domain
-function get_env(NAME,DEFAULT) result(VALUE)
+function get_env(NAME, DEFAULT) result(VALUE)
 implicit none
-character(len=*),intent(in)          :: NAME
-character(len=*),intent(in),optional :: DEFAULT
-character(len=:),allocatable         :: VALUE
-integer                              :: howbig
-integer                              :: stat
-integer                              :: length
-   ! get length required to hold value
-   length=0
-   if(NAME /= '')then
-      call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
+character(len=*), intent(in)           :: NAME
+character(len=*), intent(in), optional :: DEFAULT
+character(len=:), allocatable          :: VALUE
+integer                                :: howbig
+integer                                :: stat
+   if (NAME /= '') then
+      call get_environment_variable(NAME, length=howbig, status=stat, trim_name=.true.) ! get length required to hold value
       select case (stat)
-      case (1)
-         !*!print *, NAME, " is not defined in the environment. Strange..."
-         VALUE=''
-      case (2)
-         !*!print *, "This processor doesn't support environment variables. Boooh!"
-         VALUE=''
+      case (1); VALUE = '' ! NAME is not defined in the environment
+      case (2); VALUE = '' ! This processor doesn't support environment variables. Boooh!
       case default
-         ! make string to hold value of sufficient size
-         allocate(character(len=max(howbig,1)) :: VALUE)
-         ! get value
-         call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
-         if(stat /= 0)VALUE=''
+         allocate (character(len=max(howbig, 1)) :: VALUE)                         ! make string to hold value of sufficient size
+         call get_environment_variable(NAME, VALUE, status=stat, trim_name=.true.) ! get value
+         if (stat /= 0) VALUE = ''
       end select
    else
-      VALUE=''
-   endif
-   if(VALUE == ''.and.present(DEFAULT))VALUE=DEFAULT
+      VALUE = ''
+   end if
+   if (VALUE == '' .and. present(DEFAULT)) VALUE = DEFAULT
 end function get_env
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!   is_hidden_file(3f) - [M_io:QUERY]  determine if a pathname points to a
+!!   hidden file, which is defined as a file basename starting with a period.
+!!   (LICENSE:PD)
+!!
+!!##SYNTAX
+!!     impure elemental function is_hidden_file(PATH) result(YESNO)
+!!
+!!      character(len=*),intent(in) :: PATH
+!!      logical                     :: YESNO
+!!
+!!##DESCRIPTION
+!!    Given a pathname determine if it is a hidden file. This is simply
+!!    assumed to be a basename that does not begin with a period and is not
+!!    a single or double period, assumed to represent the current directory
+!!    and parent directory.
+!!
+!!##LIMITATIONS
+!!    Pathnames are not expanded to a canonical form, so if the basename is
+!!    '.' or '..' and those point to a hidden directory name the return
+!!    value will still be .FALSE. . Filenames are assumed to not contain
+!!    leading or trailing spaces.
+!!
+!!##OPTIONS
+!!    PATH     pathname to classify. It need not exist.
+!!
+!!##RETURNS
+!!    YESNO    true if pathname points to a hidden file, otherwise it
+!!             is false.
+!!
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!       program demo_is_hidden_file
+!!       use M_io, only : is_hidden_file, basename
+!!          call showit('.abc')
+!!          call showit('./.')
+!!          call showit('..')
+!!          call showit('...')
+!!          call showit('/abc/def/notes.txt')
+!!          call showit('/abc/def/.hide')
+!!       contains
+!!       subroutine showit(path)
+!!       character(len=*),intent(in) :: path
+!!          write(*,*)is_hidden_file(path), &
+!!           & ' ,path=',path
+!!       end subroutine showit
+!!       end program demo_is_hidden_file
+!!
+!!    Results:
+!!
+!!     >  T  ,path=.abc
+!!     >  F  ,path=./.
+!!     >  F  ,path=..
+!!     >  T  ,path=...
+!!     >  F  ,path=/abc/def/notes.txt
+!!     >  T  ,path=/abc/def/.hide
+!!
+!!##SEE ALSO
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+impure elemental function is_hidden_file(path) result(yesno)
+character(*), intent(in) :: path
+logical :: yesno
+character(len=:), allocatable :: base
+
+   base = basename(path,suffix=char(0))//'  '
+   select case (base)
+   case ('.', '..');  yesno = .false.
+   case default;      yesno = merge(.true., .false., base(1:1) == '.')
+   end select
+
+end function is_hidden_file
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3512,9 +3557,6 @@ end select
    exit
 enddo
 end subroutine get_next_char
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

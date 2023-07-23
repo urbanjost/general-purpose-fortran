@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>popcnt (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>popcnt (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>popcnt(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-popcnt(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 POPCNT(3) - [BIT:COUNT] Number of bits set
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ POPCNT(3) - [BIT:COUNT] Number of bits set
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = popcnt(i)
 <P>
 <PRE>
-           elemental integer function popcnt(i)
+         elemental integer function popcnt(i)
 <P>
-            integer(kind=KIND), intent(in) :: i
+          integer(kind=KIND), intent(in) :: i
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = popcnt(i)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,8 +103,9 @@ The return value is an integer of the default integer kind.
 
 </A>
 <BLOCKQUOTE>
-POPCNT(3) returns the number of bits set to one in the binary representation
-of an integer.
+<P>
+POPCNT(3) returns the number of bits set to one in the binary
+representation of an integer.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -118,6 +113,7 @@ of an integer.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -131,6 +127,7 @@ I : value to count set bits in
 
 </A>
 <BLOCKQUOTE>
+<P>
 The number of bits set to one in I.
 </BLOCKQUOTE>
 <A name=6>
@@ -139,39 +136,41 @@ The number of bits set to one in I.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_popcnt
-      use, intrinsic :: iso_fortran_env, only : integer_kinds, &
-         & int8, int16, int32, int64
-      implicit none
-      character(len=*),parameter :: pretty=&#146;(b64,1x,i0)&#146;
-        ! basic usage
-         print pretty, 127,     popcnt(127)
-         print pretty, int(b"01010"), popcnt(int(b"01010"))
+    program demo_popcnt
+    use, intrinsic :: iso_fortran_env, only : integer_kinds, &
+       & int8, int16, int32, int64
+    implicit none
+    character(len=*),parameter :: pretty=&#146;(b64,1x,i0)&#146;
+      ! basic usage
+       print pretty, 127,     popcnt(127)
+       print pretty, int(b"01010"), popcnt(int(b"01010"))
 <P>
-        ! any kind of an integer can be used
-         print pretty, huge(0_int8),  popcnt(huge(0_int8))
-         print pretty, huge(0_int16), popcnt(huge(0_int16))
-         print pretty, huge(0_int32), popcnt(huge(0_int32))
-         print pretty, huge(0_int64), popcnt(huge(0_int64))
-      end program demo_popcnt
+      ! any kind of an integer can be used
+       print pretty, huge(0_int8),  popcnt(huge(0_int8))
+       print pretty, huge(0_int16), popcnt(huge(0_int16))
+       print pretty, huge(0_int32), popcnt(huge(0_int32))
+       print pretty, huge(0_int64), popcnt(huge(0_int64))
+    end program demo_popcnt
 <P>
 </PRE>
 Results:
 <P>
-Note that on most machines the first bit is the sign bit, and a zero is used
-for positive values; but that this is system-dependent. These are typical
-values, where the huge(3f) function has set all but the first bit to 1.
+Note that on most machines the first bit is the sign bit, and a zero is
+used for positive values; but that this is system-dependent. These are
+typical values, where the huge(3f) function has set all but the first
+bit to 1.
 <P>
 <PRE>
-       &gt;                                                         1111111 7
-       &gt;                                                            1010 2
-       &gt;                                                         1111111 7
-       &gt;                                                 111111111111111 15
-       &gt;                                 1111111111111111111111111111111 31
-       &gt; 111111111111111111111111111111111111111111111111111111111111111 63
+     &gt;                                                         1111111 7
+     &gt;                                                            1010 2
+     &gt;                                                         1111111 7
+     &gt;                                                 111111111111111 15
+     &gt;                                 1111111111111111111111111111111 31
+     &gt; 111111111111111111111111111111111111111111111111111111111111111 63
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -181,6 +180,7 @@ values, where the huge(3f) function has set all but the first bit to 1.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -189,24 +189,22 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
-There are many procedures that operator or query values at the bit level:
+<P>
+There are many procedures that operator or query values at the bit
+level:
 <P>
 POPPAR(3), LEADZ(3), TRAILZ(3) ATOMIC_AND(3), ATOMIC_FETCH_AND(3),
 ATOMIC_FETCH_OR(3), ATOMIC_FETCH_XOR(3), ATOMIC_OR(3), ATOMIC_XOR(3),
-BGE(3), BGE(3), BGT(3), BIT_SIZE(3), BLE(3), BLT(3), BTEST(3), DSHIFTL(3),
+BGE(3), BGT(3), BIT_SIZE(3), BLE(3), BLT(3), BTEST(3), DSHIFTL(3),
 DSHIFTR(3), IALL(3), IAND(3), IANY(3), IBCLR(3), IBITS(3), IBSET(3),
 IEOR(3), IOR(3), IPARITY(3), ISHFTC(3), ISHFT(3), MASKL(3), MASKR(3),
-MERGE_BITS(3), MVBITS(3), MVBITS(3), NOT(3), SHIFTA(3), SHIFTL(3),
-SHIFTR(3), STORAGE_SIZE(3)
+MERGE_BITS(3), MVBITS(3), NOT(3), SHIFTA(3), SHIFTL(3), SHIFTR(3),
+STORAGE_SIZE(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              popcnt(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>popcnt (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c080ad0f-adea-4ab7-96ee-3f7816160b75 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>popcnt (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from def359ce-cbeb-4d7e-92d3-160aee55bd4f using man macros.</FONT>
 <br><br><center><img src="images/popcnt.3fortran.gif"></center>
 </div>
 </div>

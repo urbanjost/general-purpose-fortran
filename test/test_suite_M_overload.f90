@@ -1,8 +1,8 @@
 module M_test_suite_M_overload
 use, intrinsic :: iso_fortran_env, only : integer_kinds, int8, int16, int32, int64
 use, intrinsic :: iso_fortran_env, only : real32, real64, real128
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
+use M_framework__msg
+use M_framework__verify, only : unit_check_level
 use M_overload
 private
 public test_suite_m_overload
@@ -15,9 +15,9 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_overload()
-use M_verify,                 only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify,                 only : unit_check_level
-use M_verify,                 only : almost
+use M_framework__verify,   only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify,   only : unit_check_level
+use M_framework__approx,   only : almost
 !use M_compare_float_numbers, only : operator(.EqualTo.)
 implicit none
 character(len=:),allocatable :: cmd
@@ -34,6 +34,9 @@ character(len=:),allocatable :: cmd
       call test_real_s2v()
       call test_reals_s2v()
       call test_sign()
+      call test_oz()
+      call test_zo()
+      call test_ffmt()
 !$!      call get_command(cmd,realloc=.true.)
 !$!      cmd=cmd//' -x -y "hello there" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 !$!      call execute_command_line(cmd)
@@ -43,6 +46,60 @@ character(len=:),allocatable :: cmd
    endif
 !! teardown
 contains
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_ffmt()
+!use M_overload,              only : operator(==)
+   call unit_check_start('ffmt',' &
+         & -description "convert intrinsic scalar value to a formatted string" &
+         & -section 3  &
+         & -library libGPF  &
+         & -filename `pwd`/M_overload.FF &
+         & -documentation y &
+         & -prep         y &
+         & -ccall        n &
+         & -archive      GPF.a &
+         & ')
+   ! add 0+ to avoid gfortran-11 bug
+   !call unit_check( 'ffmt', 1234.fmt.'"[",i0,"]"' == '[1234]' )
+   !call unit_check( 'ffmt', '1234'.fmt.'"[",i0,"]"' == '[1234]' )
+   call unit_check_done('ffmt', msg='')
+end subroutine test_ffmt
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_oz()
+!use M_overload,              only : operator(==)
+   call unit_check_start('oz',' &
+         & -description "convert logical expression to integer with 1 for TRUE" &
+         & -section 3  &
+         & -library libGPF  &
+         & -filename `pwd`/M_overload.FF &
+         & -documentation y &
+         & -prep         y &
+         & -ccall        n &
+         & -archive      GPF.a &
+         & ')
+   ! add 0+ to avoid gfortran-11 bug
+   call unit_check('oz',oz(10 > 5).eq.1.and.oz( 10 < 5).eq.0)
+   call unit_check('oz',all(oz([10 > 5, 10 < 5, 5 == 5, 5 < 5]) == [1,0,1,0]) , oz(10 > 5)+0,oz(10 < 5)+0,oz(5 == 5)+0,oz(5 < 5)+0 )
+   call unit_check_done('oz',msg='')
+end subroutine test_oz
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_zo()
+!use M_overload,              only : operator(==)
+   call unit_check_start('zo',' &
+         & -description "convert logical expression to integer with 1 for TRUE" &
+         & -section 3  &
+         & -library libGPF  &
+         & -filename `pwd`/M_overload.FF &
+         & -documentation y &
+         &  -prep         y &
+         &  -ccall        n &
+         &  -archive      GPF.a &
+         & ')
+   ! add 0+ to avoid gfortran-11 bug
+   call unit_check('zo',zo(10 > 5).eq.0.and.zo( 10 < 5).eq.1)
+   call unit_check('zo',all(zo([10 > 5, 10 < 5, 5 == 5, 5 < 5]) == [0,1,0,1]), zo(10 > 5)+0,zo(10 < 5)+0,zo(5 == 5)+0, zo(5 < 5)+0 )
+   call unit_check_done('zo',msg='')
+end subroutine test_zo
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sign()
 !use M_overload,              only : operator(==)
@@ -347,13 +404,11 @@ end subroutine test_suite_M_overload
 end module M_test_suite_M_overload
 
 program runtest
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
+use M_framework__msg
+use M_framework__verify, only : unit_check_level, unit_check_stop
 use M_test_suite_M_overload
 implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
    unit_check_level=0
    call test_suite_M_overload()
-   call unit_check_stop()
+   call unit_check_stop('')
 end program runtest

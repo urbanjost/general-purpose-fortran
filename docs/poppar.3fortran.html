@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>poppar (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>poppar (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>poppar(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-poppar(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 POPPAR(3) - [BIT:COUNT] Parity of the number of bits set
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ POPPAR(3) - [BIT:COUNT] Parity of the number of bits set
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = poppar(i)
 <P>
 <PRE>
-           elemental integer function poppar(i)
+         elemental integer function poppar(i)
 <P>
-            integer(kind=KIND), intent(in) :: i
+          integer(kind=KIND), intent(in) :: i
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = poppar(i)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,8 +103,9 @@ the return value is a default kind integer
 
 </A>
 <BLOCKQUOTE>
-POPPAR(3) returns the parity of an integer&#146;s binary representation (i.e.,
-the parity of the number of bits set).
+<P>
+POPPAR(3) returns the parity of an integer&#146;s binary representation
+(i.e., the parity of the number of bits set).
 <P>
 The parity is expressed as
 <TABLE cellpadding=3><!-- tsb: The parity is expressed as
@@ -133,6 +128,7 @@ o
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -146,8 +142,9 @@ I : The value to query for its bit parity
 
 </A>
 <BLOCKQUOTE>
-The return value is equal to 0 if I has an even number of bits set and 1 if
-an odd number of bits are set.
+<P>
+The return value is equal to 0 if I has an even number of bits set and 1
+if an odd number of bits are set.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -155,38 +152,39 @@ an odd number of bits are set.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_poppar
-      use, intrinsic :: iso_fortran_env, only : integer_kinds, &
-         & int8, int16, int32, int64
-      implicit none
-      character(len=*),parameter :: pretty=&#146;(b64,1x,i0)&#146;
-         ! basic usage
-         print pretty, 127,     poppar(127)
-         print pretty, 128,     poppar(128)
-         print pretty, int(b"01010"), poppar(int(b"01010"))
+    program demo_poppar
+    use, intrinsic :: iso_fortran_env, only : integer_kinds, &
+       & int8, int16, int32, int64
+    implicit none
+    character(len=*),parameter :: pretty=&#146;(b64,1x,i0)&#146;
+       ! basic usage
+       print pretty, 127,     poppar(127)
+       print pretty, 128,     poppar(128)
+       print pretty, int(b"01010"), poppar(int(b"01010"))
 <P>
-         ! any kind of an integer can be used
-         print pretty, huge(0_int8),  poppar(huge(0_int8))
-         print pretty, huge(0_int16), poppar(huge(0_int16))
-         print pretty, huge(0_int32), poppar(huge(0_int32))
-         print pretty, huge(0_int64), poppar(huge(0_int64))
-      end program demo_poppar
+       ! any kind of an integer can be used
+       print pretty, huge(0_int8),  poppar(huge(0_int8))
+       print pretty, huge(0_int16), poppar(huge(0_int16))
+       print pretty, huge(0_int32), poppar(huge(0_int32))
+       print pretty, huge(0_int64), poppar(huge(0_int64))
+    end program demo_poppar
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;                                                          1111111 1
-       &gt;                                                         10000000 1
-       &gt;                                                             1010 0
-       &gt;                                  1111111111111111111111111111111 1
-       &gt;                                                          1111111 1
-       &gt;                                                  111111111111111 1
-       &gt;                                  1111111111111111111111111111111 1
-       &gt;  111111111111111111111111111111111111111111111111111111111111111 1
+     &gt;                                                          1111111 1
+     &gt;                                                         10000000 1
+     &gt;                                                             1010 0
+     &gt;                                  1111111111111111111111111111111 1
+     &gt;                                                          1111111 1
+     &gt;                                                  111111111111111 1
+     &gt;                                  1111111111111111111111111111111 1
+     &gt;  111111111111111111111111111111111111111111111111111111111111111 1
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -196,6 +194,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -204,24 +203,22 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
-There are many procedures that operator or query values at the bit level:
+<P>
+There are many procedures that operator or query values at the bit
+level:
 <P>
 POPCNT(3), LEADZ(3), TRAILZ(3) ATOMIC_AND(3), ATOMIC_FETCH_AND(3),
 ATOMIC_FETCH_OR(3), ATOMIC_FETCH_XOR(3), ATOMIC_OR(3), ATOMIC_XOR(3),
-BGE(3), BGE(3), BGT(3), BIT_SIZE(3), BLE(3), BLT(3), BTEST(3), DSHIFTL(3),
+BGE(3), BGT(3), BIT_SIZE(3), BLE(3), BLT(3), BTEST(3), DSHIFTL(3),
 DSHIFTR(3), IALL(3), IAND(3), IANY(3), IBCLR(3), IBITS(3), IBSET(3),
 IEOR(3), IOR(3), IPARITY(3), ISHFTC(3), ISHFT(3), MASKL(3), MASKR(3),
-MERGE_BITS(3), MVBITS(3), MVBITS(3), NOT(3), SHIFTA(3), SHIFTL(3),
-SHIFTR(3), STORAGE_SIZE(3)
+MERGE_BITS(3), MVBITS(3), NOT(3), SHIFTA(3), SHIFTL(3), SHIFTR(3),
+STORAGE_SIZE(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              poppar(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>poppar (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 079e7bfd-c408-491d-9907-4909dba81dc8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>poppar (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cc011e73-8134-46f8-926b-696092040842 using man macros.</FONT>
 <br><br><center><img src="images/poppar.3fortran.gif"></center>
 </div>
 </div>

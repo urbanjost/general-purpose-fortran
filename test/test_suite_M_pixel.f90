@@ -2,17 +2,14 @@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 program runtest
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__msg
+use M_framework__verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
 use M_pixel
 use,intrinsic :: ISO_FORTRAN_ENV, only : int8,int16,int32,int64,real32,real64,real128
 implicit none
 integer(kind=int64) :: answer
 integer(kind=int64) :: expected
-   unit_check_command=''
-   unit_check_keep_going=.true.
    unit_check_level=0
    write(*,*)'CHECK RESULTS HAVE NOT CHANGED'
    call test_suite_M_pixel()
@@ -86,7 +83,8 @@ integer,save                 :: icalled=0
       crc=0_int32
    endif
 
-   a=transfer(anything,a)
+   !a=transfer(anything,a) ! ifort/ifx bug, a should not have to be allocated
+   a=transfer(anything,['A'])
 
    if(icalled.eq.0)then         ! on first call generate table and use table for speed
       INIT_TABLE: block

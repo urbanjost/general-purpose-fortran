@@ -1,7 +1,9 @@
      program demo_strgarr
      use M_kracken, only: sget, kracken, lget
      use M_calculator, only : strgarr
-     real vals(41)
+     implicit none
+     real vals(41), tol, sumup, sumtarget
+     integer :: ifound, ierr, i, ipass, ios
      character(len=80) :: line=' '
      character(len=10) :: delims=' ;'
      !  define command arguments, default values and crack command line

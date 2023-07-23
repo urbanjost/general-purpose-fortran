@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>selected_char_kind (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>selected_char_kind (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>selected_char_kind(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-selected_char_kind(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SELECTED_CHAR_KIND(3) - [KIND] Select character kind such as "Unicode"
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ SELECTED_CHAR_KIND(3) - [KIND] Select character kind such as "Unicode"
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = selected_char_kind(name)
 <P>
 <PRE>
-           integer function selected_char_kind(name)
+         integer function selected_char_kind(name)
 <P>
-            character(len=*),intent(in) :: name
+          character(len=*),intent(in) :: name
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = selected_char_kind(name)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,11 +103,12 @@ the result is a default integer scalar
 
 </A>
 <BLOCKQUOTE>
-SELECTED_CHAR_KIND(3) returns a kind parameter value for the character set
-named NAME.
 <P>
-If a name is not supported, <B>-1</B> is returned. Otherwise the result is a value
-equal to that kind type parameter value.
+SELECTED_CHAR_KIND(3) returns a kind parameter value for the character
+set named NAME.
+<P>
+If a name is not supported, <B>-1</B> is returned. Otherwise the result is a
+value equal to that kind type parameter value.
 <P>
 The list of supported names is processor-dependent except for "DEFAULT".
 <TABLE cellpadding=3><!-- tsb: The list of supported names is processor-dependent except for "DEFAULT".
@@ -122,30 +117,30 @@ The list of supported names is processor-dependent except for "DEFAULT".
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If NAME has the value "DEFAULT", then the result has a value equal to
-that of the kind type parameter of default character. This name is always
-supported.
+If NAME has the value "DEFAULT", then the result has a value equal
+to that of the kind type parameter of default character. This name
+is always supported.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If NAME has the value "ASCII", then the result has a value equal to that
-of the kind type parameter of ASCII character.
+If NAME has the value "ASCII", then the result has a value equal to
+that of the kind type parameter of ASCII character.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If NAME has the value "ISO_10646", then the result has a value equal to
-that of the kind type parameter of the ISO 10646 character kind
+If NAME has the value "ISO_10646", then the result has a value equal
+to that of the kind type parameter of the ISO 10646 character kind
 (corresponding to UCS-4 as specified in ISO/IEC 10646).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 If NAME is a processor-defined name of some other character kind
-supported by the processor, then the result has a value equal to that
-kind type parameter value. Pre-defined names include "ASCII" and
-"ISO_10646".
+supported by the processor, then the result has a value equal to
+that kind type parameter value. Pre-defined names include "ASCII"
+and "ISO_10646".
 </TD></TR>
 <TR></TR></TABLE>The NAME is interpreted without respect to case or trailing blanks.
 </BLOCKQUOTE>
@@ -155,17 +150,19 @@ kind type parameter value. Pre-defined names include "ASCII" and
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-NAME : A name to query the processor-dependent kind value of, and/or to
-determine if supported. NAME, interpreted without respect to case or
-trailing blanks.
+NAME : A name to query the processor-dependent kind value of, and/or
+to determine if supported. NAME, interpreted without respect to case
+or trailing blanks.
 <P>
-Currently, supported character sets include "ASCII" and "DEFAULT" and
-"ISO_10646" (Universal Character Set, UCS-4) which is commonly known as
-"Unicode". Supported names other than "DEFAULT" are processor dependent.
+Currently, supported character sets include "ASCII" and "DEFAULT"
+and "ISO_10646" (Universal Character Set, UCS-4) which is commonly
+known as "Unicode". Supported names other than "DEFAULT" are
+processor dependent.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -174,6 +171,7 @@ Currently, supported character sets include "ASCII" and "DEFAULT" and
 
 </A>
 <BLOCKQUOTE>
+<P>
 </BLOCKQUOTE>
 <A name=6>
 
@@ -181,79 +179,80 @@ Currently, supported character sets include "ASCII" and "DEFAULT" and
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      Linux
-      program demo_selected_char_kind
-      use iso_fortran_env
-      implicit none
+    Linux
+    program demo_selected_char_kind
+    use iso_fortran_env
+    implicit none
 <P>
-      intrinsic date_and_time,selected_char_kind
+    intrinsic date_and_time,selected_char_kind
 <P>
-      ! set some aliases for common character kinds
-      ! as the numbers can vary from platform to platform
+    ! set some aliases for common character kinds
+    ! as the numbers can vary from platform to platform
 <P>
-      integer, parameter :: default = selected_char_kind ("default")
-      integer, parameter :: ascii =   selected_char_kind ("ascii")
-      integer, parameter :: ucs4  =   selected_char_kind (&#146;ISO_10646&#146;)
-      integer, parameter :: utf8  =   selected_char_kind (&#146;utf-8&#146;)
+    integer, parameter :: default = selected_char_kind ("default")
+    integer, parameter :: ascii =   selected_char_kind ("ascii")
+    integer, parameter :: ucs4  =   selected_char_kind (&#146;ISO_10646&#146;)
+    integer, parameter :: utf8  =   selected_char_kind (&#146;utf-8&#146;)
 <P>
-      ! assuming ASCII and UCS4 are supported (ie. not equal to -1)
-      ! define some string variables
-      character(len=26, kind=ascii ) :: alphabet
-      character(len=30, kind=ucs4  ) :: hello_world
-      character(len=30, kind=ucs4  ) :: string
+    ! assuming ASCII and UCS4 are supported (ie. not equal to -1)
+    ! define some string variables
+    character(len=26, kind=ascii ) :: alphabet
+    character(len=30, kind=ucs4  ) :: hello_world
+    character(len=30, kind=ucs4  ) :: string
 <P>
-         write(*,*)&#146;ASCII     &#146;,&
-          & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,ascii /= -1)
-         write(*,*)&#146;ISO_10646 &#146;,&
-          & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,ucs4 /= -1)
-         write(*,*)&#146;UTF-8     &#146;,&
-          & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,utf8 /= -1)
+       write(*,*)&#146;ASCII     &#146;,&
+        & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,ascii /= -1)
+       write(*,*)&#146;ISO_10646 &#146;,&
+        & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,ucs4 /= -1)
+       write(*,*)&#146;UTF-8     &#146;,&
+        & merge(&#146;Supported    &#146;,&#146;Not Supported&#146;,utf8 /= -1)
 <P>
-         if(default.eq.ascii)then
-             write(*,*)&#146;ASCII is the default on this processor&#146;
-         endif
+       if(default.eq.ascii)then
+           write(*,*)&#146;ASCII is the default on this processor&#146;
+       endif
 <P>
-        ! for constants the the kind precedes the value, somewhat like a
-        ! BOZ constant
-         alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"
-         write (*,*) alphabet
+      ! for constants the kind precedes the value, somewhat like a
+      ! BOZ constant
+       alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"
+       write (*,*) alphabet
 <P>
-         hello_world = ucs4_&#146;Hello World and Ni Hao -- &#146; &
-                       // char (int (z&#146;4F60&#146;), ucs4)     &
-                       // char (int (z&#146;597D&#146;), ucs4)
+       hello_world = ucs4_&#146;Hello World and Ni Hao -- &#146; &
+                     // char (int (z&#146;4F60&#146;), ucs4)     &
+                     // char (int (z&#146;597D&#146;), ucs4)
 <P>
-        ! an encoding option is required on OPEN for non-default I/O
-         if(ucs4 /= -1 )then
-            open (output_unit, encoding=&#146;UTF-8&#146;)
-            write (*,*) trim (hello_world)
-         else
-            write (*,*) &#146;cannot use utf-8&#146;
-         endif
+      ! an encoding option is required on OPEN for non-default I/O
+       if(ucs4 /= -1 )then
+          open (output_unit, encoding=&#146;UTF-8&#146;)
+          write (*,*) trim (hello_world)
+       else
+          write (*,*) &#146;cannot use utf-8&#146;
+       endif
 <P>
-         call create_date_string(string)
-         write (*,*) trim (string)
+       call create_date_string(string)
+       write (*,*) trim (string)
 <P>
-      contains
+    contains
 <P>
-      ! The following produces a Japanese date stamp.
-      subroutine create_date_string(string)
-      intrinsic date_and_time,selected_char_kind
-      integer,parameter :: ucs4 = selected_char_kind("ISO_10646")
-      character(len=1,kind=ucs4),parameter :: &
-             nen =   char(int( z&#146;5e74&#146; ),ucs4), & ! year
-             gatsu = char(int( z&#146;6708&#146; ),ucs4), & ! month
-             nichi = char(int( z&#146;65e5&#146; ),ucs4)    ! day
-      character(len= *, kind= ucs4) string
-      integer values(8)
-         call date_and_time(values=values)
-         write(string,101) values(1),nen,values(2),gatsu,values(3),nichi
-       101 format(*(i0,a))
-      end subroutine create_date_string
+    ! The following produces a Japanese date stamp.
+    subroutine create_date_string(string)
+    intrinsic date_and_time,selected_char_kind
+    integer,parameter :: ucs4 = selected_char_kind("ISO_10646")
+    character(len=1,kind=ucs4),parameter :: &
+           nen =   char(int( z&#146;5e74&#146; ),ucs4), & ! year
+           gatsu = char(int( z&#146;6708&#146; ),ucs4), & ! month
+           nichi = char(int( z&#146;65e5&#146; ),ucs4)    ! day
+    character(len= *, kind= ucs4) string
+    integer values(8)
+       call date_and_time(values=values)
+       write(string,101) values(1),nen,values(2),gatsu,values(3),nichi
+     101 format(*(i0,a))
+    end subroutine create_date_string
 <P>
-      end program demo_selected_char_kind
+    end program demo_selected_char_kind
 <P>
 </PRE>
 Results:
@@ -261,13 +260,13 @@ Results:
 The results are very processor-dependent
 <P>
 <PRE>
-       &gt;  ASCII     Supported
-       &gt;  ISO_10646 Supported
-       &gt;  UTF-8     Not Supported
-       &gt;  ASCII is the default on this processor
-       &gt;  abcdefghijklmnopqrstuvwxyz
-       &gt;  Hello World and Ni Hao --
-       &gt;  20221015
+     &gt;  ASCII     Supported
+     &gt;  ISO_10646 Supported
+     &gt;  UTF-8     Not Supported
+     &gt;  ASCII is the default on this processor
+     &gt;  abcdefghijklmnopqrstuvwxyz
+     &gt;  Hello World and Ni Hao -- 你好
+     &gt;  2022年10月15日
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -277,6 +276,7 @@ The results are very processor-dependent
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -285,18 +285,15 @@ Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 SELECTED_INT_KIND(3), SELECTED_REAL_KIND(3)
 <P>
 ACHAR(3), CHAR(3), ICHAR(3), IACHAR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022  selected_char_kind(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>selected_char_kind (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from eb7f0f2e-df65-4917-824b-a81fc34289ee using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>selected_char_kind (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 31655af1-b700-4c8f-b0c9-dc0529d43446 using man macros.</FONT>
 <br><br><center><img src="images/selected_char_kind.3fortran.gif"></center>
 </div>
 </div>

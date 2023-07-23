@@ -1,9 +1,10 @@
-          program demo_continue
-                I=10
-                J=5
-                if(I.lt.5)goto 100
-                J=3
-          100   continue
-                write(*,*)'J=',J
-
-          end program demo_continue
+     program demo_continue
+     implicit none
+     integer :: i,j
+           i=10
+           j=5
+           if(i.lt.5)goto 100
+           j=3
+     100   continue
+           write(*,*)'J=',j
+     end program demo_continue

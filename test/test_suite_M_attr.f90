@@ -1,6 +1,6 @@
 module M_testsuite_M_attr
 use, intrinsic :: iso_fortran_env, only : standard_in=>input_unit, standard_out=>output_unit, std_error=>error_unit
-use M_verify
+use M_framework__verify
 use M_attr
 implicit none
 character(len=*),parameter :: options=' -section 3 -library libGPF -filename `pwd`/m_attr.FF &
@@ -152,11 +152,9 @@ end subroutine test_alert
 end module M_testsuite_M_attr
 
 program runtest
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
+use M_framework__msg
+use M_framework__verify, only : unit_check_level, unit_check_stop
 use M_testsuite_M_attr
-   unit_check_command=''
-   unit_check_keep_going=.true.
    unit_check_level=0
    call test_suite_M_attr()
    call unit_check_stop

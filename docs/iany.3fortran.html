@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iany (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iany (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>iany(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-iany(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 IANY(3) - [BIT:LOGICAL] Bitwise OR of array elements
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ IANY(3) - [BIT:LOGICAL] Bitwise OR of array elements
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = iany(array [,mask]) | iany(array ,dim [,mask])
 <P>
 <PRE>
-           integer(kind=KIND) function iany(array,dim,mask)
+         integer(kind=KIND) function iany(array,dim,mask)
 <P>
-            integer(kind=KIND),intent(in)        :: array(..)
-            integer(kind=**),intent(in),optional :: dim
-            logical(kind=**),intent(in),optional :: mask(..)
+          integer(kind=KIND),intent(in)        :: array(..)
+          integer(kind=**),intent(in),optional :: dim
+          logical(kind=**),intent(in),optional :: mask(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = iany(array [,mask]) | iany(array ,dim [,mask])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -112,9 +106,9 @@ MASK is a logical array that conforms to ARRAY
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The result will by of the same type and kind as ARRAY. It is scalar if
-DIM does not appear or is 1. Otherwise, it is the shape and rank of array
-reduced by the dimension DIM.
+The result will by of the same type and kind as ARRAY. It is scalar
+if DIM does not appear or is 1. Otherwise, it is the shape and rank
+of array reduced by the dimension DIM.
 </TD></TR>
 <TR></TR></TABLE>note a kind designated as ** may be any supported kind for the type
 </BLOCKQUOTE>
@@ -124,8 +118,9 @@ reduced by the dimension DIM.
 
 </A>
 <BLOCKQUOTE>
-IANY(3) reduces with bitwise OR (inclusive OR) the elements of ARRAY along
-dimension DIM if the corresponding element in MASK is .true..
+<P>
+IANY(3) reduces with bitwise OR (inclusive OR) the elements of ARRAY
+along dimension DIM if the corresponding element in MASK is .true..
 </BLOCKQUOTE>
 <A name=4>
 
@@ -133,6 +128,7 @@ dimension DIM if the corresponding element in MASK is .true..
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -142,7 +138,8 @@ ARRAY : an array of elements to selectively OR based on the mask.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : a value in the range from 1 TO N, where N equals the rank of ARRAY.
+DIM : a value in the range from 1 TO N, where N equals the rank of
+ARRAY.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -156,11 +153,13 @@ MASK : a logical scalar; or an array of the same shape as ARRAY.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result is of the same type as ARRAY.
 <P>
-If DIM is absent, a scalar with the bitwise or of all elements in ARRAY is
-returned. Otherwise, an array of rank N-1, where N equals the rank of ARRAY,
-and a shape similar to that of ARRAY with dimension DIM dropped is returned.
+If DIM is absent, a scalar with the bitwise or of all elements in ARRAY
+is returned. Otherwise, an array of rank N-1, where N equals the rank of
+ARRAY, and a shape similar to that of ARRAY with dimension DIM dropped
+is returned.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -168,54 +167,54 @@ and a shape similar to that of ARRAY with dimension DIM dropped is returned.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_iany
-      use, intrinsic :: iso_fortran_env, only : integer_kinds, &
-       & int8, int16, int32, int64
-      implicit none
-      logical,parameter :: T=.true., F=.false.
-      integer(kind=int8) :: a(3)
-         a(1) = int(b&#146;00100100&#146;,int8)
-         a(2) = int(b&#146;01101010&#146;,int8)
-         a(3) = int(b&#146;10101010&#146;,int8)
-         write(*,*)&#146;A=&#146;
-         print &#146;(1x,b8.8)&#146;, a
-         print *
-         write(*,*)&#146;IANY(A)=&#146;
-         print &#146;(1x,b8.8)&#146;, iany(a)
-         print *
-         write(*,*)&#146;IANY(A) with a mask&#146;
-         print &#146;(1x,b8.8)&#146;, iany(a,mask=[T,F,T])
-         print *
-         write(*,*)&#146;should match &#146;
-         print &#146;(1x,b8.8)&#146;, iany([a(1),a(3)])
-         print *
-         write(*,*)&#146;does it?&#146;
-         write(*,*)iany(a,[T,F,T]) == iany([a(1),a(3)])
-      end program demo_iany
+    program demo_iany
+    use, intrinsic :: iso_fortran_env, only : integer_kinds, &
+     & int8, int16, int32, int64
+    implicit none
+    logical,parameter :: T=.true., F=.false.
+    integer(kind=int8) :: a(3)
+       a(1) = int(b&#146;00100100&#146;,int8)
+       a(2) = int(b&#146;01101010&#146;,int8)
+       a(3) = int(b&#146;10101010&#146;,int8)
+       write(*,*)&#146;A=&#146;
+       print &#146;(1x,b8.8)&#146;, a
+       print *
+       write(*,*)&#146;IANY(A)=&#146;
+       print &#146;(1x,b8.8)&#146;, iany(a)
+       print *
+       write(*,*)&#146;IANY(A) with a mask&#146;
+       print &#146;(1x,b8.8)&#146;, iany(a,mask=[T,F,T])
+       print *
+       write(*,*)&#146;should match &#146;
+       print &#146;(1x,b8.8)&#146;, iany([a(1),a(3)])
+       print *
+       write(*,*)&#146;does it?&#146;
+       write(*,*)iany(a,[T,F,T]) == iany([a(1),a(3)])
+    end program demo_iany
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          A=
-          00100100
-          01101010
-          10101010
+        A=
+        00100100
+        01101010
+        10101010
 <P>
-          IANY(A)=
-          11101110
+        IANY(A)=
+        11101110
 <P>
-          IANY(A) with a mask
-          10101110
+        IANY(A) with a mask
+        10101110
 <P>
-          should match
-          10101110
+        should match
+        10101110
 <P>
-          does it?
-<P>
+        does it?
 </PRE>
 </BLOCKQUOTE>
 <A name=>
@@ -223,6 +222,7 @@ Results:
     <H4>&nbsp; &nbsp; T</H4>
 </A>
 <BLOCKQUOTE>
+<P>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -230,6 +230,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -238,16 +239,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 IPARITY(3), IALL(3), IOR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                iany(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iany (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8915c481-000a-47b8-8c3b-f8eedd18074f using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iany (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 55d1f6d5-3561-41ab-b2b8-6c90db680344 using man macros.</FONT>
 <br><br><center><img src="images/iany.3fortran.gif"></center>
 </div>
 </div>

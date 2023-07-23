@@ -31,7 +31,7 @@
 !!    system_isblk, system_ischr, system_isfifo,             &
 !!    system_realpath,                                       &
 !!    system_access,                                         &
-!!    system_utime,                                          &
+!!    system_utime, system_time, system_sleep,               &
 !!    system_system,                                         &
 !!    system_issock, system_perm,                            &
 !!    system_stat_print,                                     &
@@ -119,6 +119,9 @@
 !!                                  matching a wildcard string
 !!
 !!        o  fileglob(3f): Returns list of files using a file globbing pattern
+!!##TIME
+!!        o  system_time(3f): call time(3c)
+!!        o  system_sleep(3f): pause specified amount of time
 !!
 !!##STREAM IO
 !!        o  system_getc(3f): get a character from stdin
@@ -255,7 +258,7 @@ public :: system_alarm
 public :: system_calloc
 public :: system_clock
 public :: system_time
-!public :: system_time
+public :: system_sleep
 !public :: system_qsort
 
 public :: system_realloc
@@ -4580,6 +4583,7 @@ end function system_readenv
 !!       use M_system, only : fileglob
 !!       character(len=255),pointer :: list(:)
 !!       character(len=*) :: string
+!!       integer :: i
 !!       call fileglob(string, list)
 !!       write(*,*)'Files:',size(list)
 !!       write(*,'(a)')(trim(list(i)),i=1,size(list))
@@ -5381,6 +5385,7 @@ integer                      :: lun_local
 character(len=*),parameter   :: dfmt='year-month-dayThour:minute:second'
 integer                      :: ierr
 integer(kind=int64)              :: values(13)
+integer(kind=int64)              :: kludge
 integer(kind=int64) :: &
    Device_ID,           Inode_number,          File_mode,                  Number_of_links,  Owner_uid,         &
    Owner_gid,           Directory_device,      File_size,                  Last_access,      Last_modification, &
@@ -5416,7 +5421,8 @@ EQUIVALENCE                                      &
       write(lun_local, FMT="(1x,A,t10)",advance='no')  system_getpwuid(Owner_uid)
       write(lun_local, FMT="(1x,A,t10)",advance='no')  system_getgrgid(Owner_gid)
       write(lun_local, FMT="(1x,bn,I0,t10)",advance='no') File_size
-      write(lun_local, FMT="(1x,A)",advance='no')      fmtdate(u2d(int(max(Last_access,Last_modification,Last_status_change))),dfmt)
+      kludge=int(max(Last_access,Last_modification,Last_status_change))
+      write(lun_local, FMT="(1x,A)",advance='no')      fmtdate(u2d(kludge),dfmt)
       write(lun_local, FMT="(1x,a)")filename
    endif
 
@@ -5799,6 +5805,135 @@ character(len=256)          :: cmdmsg
    endif
    system_system=cmdstat
 end function system_system
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    system_sleep(3f) - [M_system:C_INTERFACE] call C sleep(3c) or usleep(3c)
+!!    procedure
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    subroutine system_sleep(wait_seconds)
+!!
+!!       type(TYPE),intent(in)  :: wait_seconds
+!!
+!!     where TYPE may be INTEGER, REAL, or DOUBLEPRECISION
+!!
+!!##DESCRIPTION
+!!   The system_sleep(3f) routine uses the intrinsic ISO_C_BINDING
+!!   interface to call the C sleep(3c) procedure or usleep(3c)
+!!   routine.
+!!
+!!##OPTIONS
+!!    wait_seconds  integer,real or doubleprecision number of seconds for
+!!                  process to sleep.
+!!
+!!##EXAMPLE
+!!
+!!    Sample program:
+!!
+!!     program demo_system_sleep
+!!     use M_system, only : system_sleep
+!!     use M_time, only : now
+!!     implicit none
+!!     integer :: i
+!!        !
+!!        write(*,'(a)')"Time before integer call is: ",now()
+!!        call system_sleep(4)
+!!        write(*,'(a)')"Time after  integer call is: ",now()
+!!        !
+!!        write(*,'(a)')"Time before real call is: ",now()
+!!        call system_sleep(4.0)
+!!        write(*,'(a)')"Time after  real call is: ",now()
+!!        !
+!!        write(*,'(a)')"Time before loop is: ",now()
+!!        do i=1,1000
+!!           call system_sleep(4.0/1000.0)
+!!        enddo
+!!        write(*,'(a)')"Time after loop  is: ",now()
+!!        !
+!!     end program demo_system_sleep
+!!
+!!  results
+!!
+!!      Time before integer call is:
+!!      Sunday, July 17th, 2016 2:29:45 AM UTC-0240
+!!      Time after integer call is:
+!!      Sunday, July 17th, 2016 2:29:49 AM UTC-0240
+!!      Time before real call is:
+!!      Sunday, July 17th, 2016 2:29:49 AM UTC-0240
+!!      Time after  real call is:
+!!      Sunday, July 17th, 2016 2:29:53 AM UTC-0240
+!!      Time before loop is:
+!!      Sunday, July 17th, 2016 2:29:53 AM UTC-0240
+!!      Time after loop  is:
+!!      Sunday, July 17th, 2016 2:30:09 AM UTC-0240
+!!
+!!##AUTHOR
+!!    John S. Urban, 2015
+!!
+!!##LICENSE
+!!    Public Domain
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine system_sleep(seconds)
+use,intrinsic                 :: iso_c_binding, only: c_int
+
+! ident_36="@(#) M_system system_sleep(3f) call sleep(3c) or usleep(3c)"
+
+class(*),intent(in)           :: seconds
+integer(kind=c_int)           :: cint
+   select type(seconds)
+   type is (integer);             cint=seconds               ; call call_sleep(cint)
+   type is (real);                cint=nint(seconds*1000000) ; call call_usleep(cint)
+   type is (doubleprecision);     cint=nint(seconds*1000000) ; call call_usleep(cint)
+   end select
+end SUBROUTINE system_sleep
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine call_sleep(wait_seconds)
+use,intrinsic                   :: iso_c_binding, only: c_int
+
+! ident_37="@(#) M_system call_sleep(3fp) call sleep(3c)"
+
+integer(kind=c_int),intent(in)  :: wait_seconds
+integer(kind=c_int)             :: how_long
+interface
+   function c_sleep(seconds) bind (C,name="sleep")
+      import
+      integer(c_int)       :: c_sleep ! should be unsigned int (not available in Fortran). OK until highest bit gets set.
+      integer(c_int), intent(in), VALUE :: seconds
+   end function c_sleep
+end interface
+   if(wait_seconds>0)then
+      how_long=c_sleep(wait_seconds)
+   endif
+end subroutine call_sleep
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine call_usleep(milliseconds)
+
+! ident_38="@(#) M_system call_usleep(3fp) call usleep(3c)"
+
+use,intrinsic                   :: iso_c_binding, only: c_int
+integer(kind=c_int),intent(in)  :: milliseconds
+integer(kind=c_int)             :: status
+interface
+   function c_usleep(mseconds) bind (C,name="usleep")
+      import
+      integer(c_int)       :: c_usleep ! should be unsigned int (not available in Fortran). OK until highest bit gets set.
+      integer(c_int), intent(in), VALUE :: mseconds
+   end function c_usleep
+end interface
+   if(milliseconds>0)then
+      status=c_usleep(milliseconds)
+   endif
+end subroutine call_usleep
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

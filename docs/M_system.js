@@ -52,6 +52,7 @@ append("system_rmdir.3m_system.html");
 append("system_setsid.3m_system.html");
 append("system_setumask.3m_system.html");
 append("system_signal.3m_system.html");
+append("system_sleep.3m_system.html");
 append("system_srand.3m_system.html");
 append("system_stat.3m_system.html");
 append("system_stat_print.3m_system.html");

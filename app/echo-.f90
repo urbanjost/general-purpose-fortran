@@ -68,48 +68,88 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'         echo-(1f) - [FUNIX] display a line of text                                                                             ',&
-'         (LICENSE:PD)                                                                                                           ',&
-'SYNOPSIS                                                                                                                        ',&
-'         echo- [OPTION]... [STRING]...                                                                                          ',&
-'DESCRIPTION                                                                                                                     ',&
-'         Echo the STRING(s) to standard output.                                                                                 ',&
-'OPTIONS                                                                                                                         ',&
-'         -n      do not output the trailing newline                                                                             ',&
-'         -E      write message to stderr instead of stdout                                                                      ',&
-'         -ne     disable interpretation of escape escapes                                                                       ',&
-'         -r [n]  output a string repeatedly until killed if n is blank or                                                       ',&
-'                 n <= 0, else repeat output "n" times. Default value is "1".                                                    ',&
-'         -x      escape character. Default is %                                                                                 ',&
-'         --help  display this help and exit                                                                                     ',&
-'         --version                                                                                                              ',&
-'                output version information and exit                                                                             ',&
-'                                                                                                                                ',&
-'         Escape sequences                                                                                                       ',&
-'                                                                                                                                ',&
-'            %%     escape character           %a     alert (BEL)                                                                ',&
-'            %b     backspace                  %c     suppress further output                                                    ',&
-'            %e     escape                     %E     escape                                                                     ',&
-'            %f     form feed                  %n     new line                                                                   ',&
-'            %r     carriage return            %t     horizontal tab                                                             ',&
-'            %v     vertical tab                                                                                                 ',&
-'            %oNNN  byte with octal value NNN (1 to 3 digits)                                                                    ',&
-'            %dNNN  byte with decimal value NNN (1 to 3 digits)                                                                  ',&
-'            %xHH   byte with hexadecimal value HH (1 to 2 digits)                                                               ',&
-'EXAMPLES                                                                                                                        ',&
-'                                                                                                                                ',&
-'    Example invocations:                                                                                                        ',&
-'                                                                                                                                ',&
-'         echo- Echo this text to stderr -E                                                                                      ',&
-'         echo- y -r             # repeat "y" until interrupted                                                                  ',&
-'         echo- ''''"#"'''' -r 80 -n # create 80-character break line                                                            ',&
-'         echo- %e[2J   # clear screen on vt102-compatible terminal or emulator                                                  ',&
+'NAME                                                                            ',&
+'         echo-(1f) - [FUNIX] display a line of text                             ',&
+'         (LICENSE:PD)                                                           ',&
+'SYNOPSIS                                                                        ',&
+'         echo- [OPTION]... [STRING]...                                          ',&
+'DESCRIPTION                                                                     ',&
+'         Echo the STRING(s) to standard output.                                 ',&
+'OPTIONS                                                                         ',&
+'         -n      do not output the trailing newline                             ',&
+'         -E      write message to stderr instead of stdout                      ',&
+'         -ne     disable interpretation of escape escapes                       ',&
+'         -r [n]  output a string repeatedly until killed if n is blank or       ',&
+'                 n <= 0, else repeat output "n" times. Default value is "1".    ',&
+'         -x      escape character. Default is %                                 ',&
+'         --help  display this help and exit                                     ',&
+'         --version                                                              ',&
+'                output version information and exit                             ',&
+'                                                                                ',&
+'         Escape sequences                                                       ',&
+'                                                                                ',&
+'            %%     escape character           %a     alert (BEL)                ',&
+'            %b     backspace                  %c     suppress further output    ',&
+'            %e     escape                     %E     escape                     ',&
+'            %f     form feed                  %n     new line                   ',&
+'            %r     carriage return            %t     horizontal tab             ',&
+'            %v     vertical tab                                                 ',&
+'            %oNNN  byte with octal value NNN (1 to 3 digits)                    ',&
+'            %dNNN  byte with decimal value NNN (1 to 3 digits)                  ',&
+'            %xHH   byte with hexadecimal value HH (1 to 2 digits)               ',&
+'EXAMPLES                                                                        ',&
+'                                                                                ',&
+'    Example invocations:                                                        ',&
+'                                                                                ',&
+'         echo- Echo this text to stderr -E                                      ',&
+'         echo- y -r             # repeat "y" until interrupted                  ',&
+'         echo- ''''"#"'''' -r 80 -n # create 80-character break line            ',&
+'         echo- %e[2J   # clear screen on vt102-compatible terminal or emulator  ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!          echo-(1f) - [FUNIX] display a line of text
+!!          (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!          echo- [OPTION]... [STRING]...
+!!##DESCRIPTION
+!!          Echo the STRING(s) to standard output.
+!!##OPTIONS
+!!          -n      do not output the trailing newline
+!!          -E      write message to stderr instead of stdout
+!!          -ne     disable interpretation of escape escapes
+!!          -r [n]  output a string repeatedly until killed if n is blank or
+!!                  n <= 0, else repeat output "n" times. Default value is "1".
+!!          -x      escape character. Default is %
+!!          --help  display this help and exit
+!!          --version
+!!                 output version information and exit
+!!
+!!          Escape sequences
+!!
+!!             %%     escape character           %a     alert (BEL)
+!!             %b     backspace                  %c     suppress further output
+!!             %e     escape                     %E     escape
+!!             %f     form feed                  %n     new line
+!!             %r     carriage return            %t     horizontal tab
+!!             %v     vertical tab
+!!             %oNNN  byte with octal value NNN (1 to 3 digits)
+!!             %dNNN  byte with decimal value NNN (1 to 3 digits)
+!!             %xHH   byte with hexadecimal value HH (1 to 2 digits)
+!!##EXAMPLES
+!!
+!!
+!!     Example invocations:
+!!
+!!          echo- Echo this text to stderr -E
+!!          echo- y -r             # repeat "y" until interrupted
+!!          echo- ''"#"'' -r 80 -n # create 80-character break line
+!!          echo- %e[2J   # clear screen on vt102-compatible terminal or emulator
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -129,7 +169,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 12:23:12 UTC-300>',&
+'@(#)COMPILED:       2023-07-22 01:25:25 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

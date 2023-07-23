@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sinh (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sinh (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>sinh(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-sinh(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SINH(3) - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic sine function
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ SINH(3) - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic sine function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = sinh(x)
 <P>
 <PRE>
-           elemental TYPE(kind=KIND) function sinh(x)
+         elemental TYPE(kind=KIND) function sinh(x)
 <P>
-            TYPE(kind=KIND) :: x
+          TYPE(kind=KIND) :: x
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = sinh(x)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -105,7 +99,8 @@ KIND may be any kind supported by the associated type.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The returned value will be of the same type and kind as the argument.
+The returned value will be of the same type and kind as the
+argument.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -114,12 +109,13 @@ The returned value will be of the same type and kind as the argument.
 
 </A>
 <BLOCKQUOTE>
+<P>
 SINH(3) computes the hyperbolic sine of X.
 <P>
 The hyperbolic sine of x is defined mathematically as:
 <P>
 <PRE>
-           sinh(x) = (exp(x) - exp(-x)) / 2.0
+         sinh(x) = (exp(x) - exp(-x)) / 2.0
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -129,6 +125,7 @@ The hyperbolic sine of x is defined mathematically as:
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -142,9 +139,10 @@ X : The value to calculate the hyperbolic sine of
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result has a value equal to a processor-dependent approximation to
-sinh(X). If X is of type complex its imaginary part is regarded as a value
-in radians.
+sinh(X). If X is of type complex its imaginary part is regarded as a
+value in radians.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -152,50 +150,51 @@ in radians.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_sinh
-      use, intrinsic :: iso_fortran_env, only : &
-      & real_kinds, real32, real64, real128
-      implicit none
-      real(kind=real64) :: x = - 1.0_real64
-      real(kind=real64) :: nan, inf
-      character(len=20) :: line
+    program demo_sinh
+    use, intrinsic :: iso_fortran_env, only : &
+    & real_kinds, real32, real64, real128
+    implicit none
+    real(kind=real64) :: x = - 1.0_real64
+    real(kind=real64) :: nan, inf
+    character(len=20) :: line
 <P>
-        ! basics
-         print *, sinh(x)
-         print *, (exp(x)-exp(-x))/2.0
+      ! basics
+       print *, sinh(x)
+       print *, (exp(x)-exp(-x))/2.0
 <P>
-        ! sinh(3) is elemental and can handle an array
-         print *, sinh([x,2.0*x,x/3.0])
+      ! sinh(3) is elemental and can handle an array
+       print *, sinh([x,2.0*x,x/3.0])
 <P>
-         ! a NaN input returns NaN
-         line=&#146;NAN&#146;
-         read(line,*) nan
-         print *, sinh(nan)
+       ! a NaN input returns NaN
+       line=&#146;NAN&#146;
+       read(line,*) nan
+       print *, sinh(nan)
 <P>
-         ! a Inf input returns Inf
-         line=&#146;Infinity&#146;
-         read(line,*) inf
-         print *, sinh(inf)
+       ! a Inf input returns Inf
+       line=&#146;Infinity&#146;
+       read(line,*) inf
+       print *, sinh(inf)
 <P>
-         ! an overflow returns Inf
-         x=huge(0.0d0)
-         print *, sinh(x)
+       ! an overflow returns Inf
+       x=huge(0.0d0)
+       print *, sinh(x)
 <P>
-      end program demo_sinh
+    end program demo_sinh
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        -1.1752011936438014
-        -1.1752011936438014
-        -1.1752011936438014       -3.6268604078470190      -0.33954055725615012
-                             NaN
-                        Infinity
-                        Infinity
+      -1.1752011936438014
+      -1.1752011936438014
+      -1.1752011936438014       -3.6268604078470190      -0.33954055725615012
+                           NaN
+                      Infinity
+                      Infinity
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -205,6 +204,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 , for a complex argument Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -213,6 +213,7 @@ Fortran 95 , for a complex argument Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 ASINH(3)
 </BLOCKQUOTE>
 <A name=9>
@@ -221,6 +222,7 @@ ASINH(3)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -228,13 +230,9 @@ o
 Wikipedia:hyperbolic functions
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                sinh(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sinh (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5ce06a4f-83c9-4edb-9e01-a43b4daf88f7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sinh (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c4b46943-647f-46d3-9207-115e882026bc using man macros.</FONT>
 <br><br><center><img src="images/sinh.3fortran.gif"></center>
 </div>
 </div>

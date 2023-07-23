@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>huge (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>huge (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>huge(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-huge(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 HUGE(3) - [NUMERIC MODEL] Largest number of a type and kind
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ HUGE(3) - [NUMERIC MODEL] Largest number of a type and kind
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = huge(x)
 <P>
 <PRE>
-           TYPE(kind=KIND) function huge(x)
+         TYPE(kind=KIND) function huge(x)
 <P>
-            TYPE(kind=KIND),intent(in) :: x(..)
+          TYPE(kind=KIND),intent(in) :: x(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = huge(x)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,8 +103,9 @@ The result will be a scalar of the same type and kind as the input X
 
 </A>
 <BLOCKQUOTE>
-HUGE(3) returns the largest number that is not an infinity for the kind and
-type of X.
+<P>
+HUGE(3) returns the largest number that is not an overflow for the kind
+and type of X.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -118,13 +113,14 @@ type of X.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-X : X is an arbitrary value which is used merely to determine what kind
-and type of scalar is being queried. It need not be defined, as only its
-characteristics are used.
+X : X is an arbitrary value which is used merely to determine what
+kind and type of scalar is being queried. It need not be defined, as
+only its characteristics are used.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -133,11 +129,13 @@ characteristics are used.
 
 </A>
 <BLOCKQUOTE>
-The result is the largest value supported by the specified type and kind.
 <P>
-Note is is as the same kind as the input to ensure the returned value does
-not overflow. Any assignment of the result to a variable should take this
-into consideration.
+The result is the largest value supported by the specified type and
+kind.
+<P>
+Note the result is as the same kind as the input to ensure the returned
+value does not overflow. Any assignment of the result to a variable
+should take this into consideration.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -145,55 +143,65 @@ into consideration.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_huge
-      implicit none
-      character(len=*),parameter :: f=&#146;(i2,1x,2(i11,1x),f14.0:,1x,l1,1x,a)&#146;
-      integer :: i,j,k,biggest
-      real :: v, w
-         ! basic
-         print *, huge(0), huge(0.0), huge(0.0d0)
-         print *, tiny(0.0), tiny(0.0d0)
+    program demo_huge
+    implicit none
+    character(len=*),parameter :: f=&#146;(i2,1x,2(i11,1x),f14.0:,1x,l1,1x,a)&#146;
+    integer :: i,j,k,biggest
+    real :: v, w
+       ! basic
+       print *, huge(0), huge(0.0), huge(0.0d0)
+       print *, tiny(0.0), tiny(0.0d0)
 <P>
-         ! advanced
-         biggest=huge(0)
-         ! be careful of overflow when using integers in computation
-         do i=1,14
-            j=6**i   ! Danger, Danger
-            w=6**i   ! Danger, Danger
-            v=6.0**i
-            k=v      ! Danger, Danger
-            if(v.gt.biggest)then
-               write(*,f) i, j, k, v, v.eq.w, &#146;wrong j and k and w&#146;
-            else
-               write(*,f) i, j, k, v, v.eq.w
-            endif
-         enddo
-      end program demo_huge
+       sum=0.0d0
+       ! note subtracting one because counter is the end value+1 on exit
+       do i=0,huge(0)-1
+          sum=sum+i
+       enddo
+       write(*,*)&#146;sum=&#146;,sum
+<P>
+       ! advanced
+       biggest=huge(0)
+       ! be careful of overflow when using integers in computation
+       do i=1,14
+          j=6**i   ! Danger, Danger
+          w=6**i   ! Danger, Danger
+          v=6.0**i
+          k=v      ! Danger, Danger
+<P>
+          if(v.gt.biggest)then
+             write(*,f) i, j, k, v, v.eq.w, &#146;wrong j and k and w&#146;
+          else
+             write(*,f) i, j, k, v, v.eq.w
+          endif
+<P>
+       enddo
+    end program demo_huge
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        2147483647  3.4028235E+38  1.797693134862316E+308
-        1.1754944E-38  2.225073858507201E-308
+      2147483647  3.4028235E+38  1.797693134862316E+308
+      1.1754944E-38  2.225073858507201E-308
 <P>
-          1      6           6             6. T
-          2      36          36            36. T
-          3      216         216           216. T
-          4      1296        1296          1296. T
-          5      7776        7776          7776. T
-          6      46656       46656         46656. T
-          7      279936      279936        279936. T
-          8      1679616     1679616       1679616. T
-          9      10077696    10077696      10077696. T
-          10     60466176    60466176      60466176. T
-          11     362797056   362797056     362797056. T
-          12    -2118184960 -2147483648    2176782336. F wrong for j and k and w
-          13     175792128  -2147483648   13060694016. F wrong for j and k and w
-          14     1054752768 -2147483648   78364164096. F wrong for j and k and w
+        1      6           6             6. T
+        2      36          36            36. T
+        3      216         216           216. T
+        4      1296        1296          1296. T
+        5      7776        7776          7776. T
+        6      46656       46656         46656. T
+        7      279936      279936        279936. T
+        8      1679616     1679616       1679616. T
+        9      10077696    10077696      10077696. T
+        10     60466176    60466176      60466176. T
+        11     362797056   362797056     362797056. T
+        12    -2118184960 -2147483648    2176782336. F wrong for j and k and w
+        13     175792128  -2147483648   13060694016. F wrong for j and k and w
+        14     1054752768 -2147483648   78364164096. F wrong for j and k and w
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -203,6 +211,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -211,18 +220,15 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 DIGITS(3), EPSILON(3), EXPONENT(3), FRACTION(3), MAXEXPONENT(3),
-MINEXPONENT(3), NEAREST(3), PRECISION(3), RADIX(3), RANGE(3), RRSPACING(3),
-SCALE(3), SET_EXPONENT(3), SPACING(3), TINY(3)
+MINEXPONENT(3), NEAREST(3), PRECISION(3), RADIX(3), RANGE(3),
+RRSPACING(3), SCALE(3), SET_EXPONENT(3), SPACING(3), TINY(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                huge(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>huge (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 93bef76c-46da-4250-ba3b-1f4055d9cc33 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>huge (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b2240241-b5d8-43f0-ab97-5b9bccc2945e using man macros.</FONT>
 <br><br><center><img src="images/huge.3fortran.gif"></center>
 </div>
 </div>

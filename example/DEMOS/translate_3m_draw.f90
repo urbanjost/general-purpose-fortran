@@ -3,13 +3,14 @@
      !      a demonstration of objects
      !
      use M_draw
+     implicit none
 
      integer SPHERE
      real RADIUS
      parameter (RADIUS = 10.0)
      parameter(SPHERE = 1)
      character(len=50) :: device
-     integer           :: ios
+     integer           :: ios, idum
 
      print*,'Enter output device:'
      read(*,'(a)',iostat=ios) device
@@ -99,6 +100,7 @@
      !
      integer SPHERE
      integer ii
+     integer ia
      real i, r, z, a, RADIUS, PI
      parameter (PI = 3.1415926535, RADIUS = 10.0, SPHERE = 1)
 

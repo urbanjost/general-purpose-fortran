@@ -91,13 +91,15 @@ function zpad(valuein,length) result(strout)
 
 </A>
 <BLOCKQUOTE>
-zpad(3f) crops the input string or integer (which will be converted
-to a string) and then pads it on the left with zeros to at least
-the specified length. If the trimmed input string is longer than the
-requested length the original string is returned trimmed of leading
-and trailing spaces.
+zpad(3f) crops the input string (or integer, which will be converted
+to a string) and then pads it on the left with zeros to the specified
+length.
 <P>
-For strings representing unsigned numbers this is basically an alias for
+Note that if the trimmed input string is already as long or longer
+than the requested length the trimmed original string is returned.
+<P>
+For strings representing unsigned numbers this is basically an
+alias for
 <P>
 <PRE>
        strout=pad(str,length,&#146;0&#146;,clip=.true.,right=.false.)
@@ -111,9 +113,7 @@ such as
 <P>
 </PRE>
 but unlike internal I/O the function call can be used in expressions
-or passed as a procedure argument. If the requested length is exceeded
-the returned string is untruncated but cropped of leading and trailing
-spaces.
+or passed as a procedure argument.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -122,21 +122,19 @@ spaces.
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>str</B> </TD><TD valign=bottom>
-May be a scalor or vector string or integer. The input string
-to return trimmed, but then padded to the specified length
-if shorter than length. If an integer is input it is first
-converted to a string. If the leftmost non-blank character
-is a sign character it is moved to the left-most position
-of the output.
+<TR valign=top><TD colspan=2>
+<B>valuein</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The input value to left-pad. May be a scalar or vector
+string or integer. If the leftmost non-blank character is
+a sign character it is moved to the left-most position of
+the output.
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>length</B> </TD><TD valign=bottom>
 The minimum string length to return. If not present, the
-length of the input parameter STR is used. If the input value
-STR is not a string no zero padding occurs if LENGTH is not
-supplied.
+length of the input parameter VALUEIN is used. If the input
+value VALUEIN is an integer no zero padding occurs if LENGTH
+is not supplied.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -148,9 +146,8 @@ supplied.
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>strout</B> </TD><TD valign=bottom>
-The input string padded to the requested length or the trimmed
-input string if the input string is longer than the requested
-length.
+A trimmed string padded on the left with zeros to
+the requested length
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -165,23 +162,26 @@ Sample Program:
      program demo_zpad
       use M_strings, only : zpad
       implicit none
+      character(len=*),parameter :: boxed=&#146;("[",a,"]",*(g0,1x))&#146;
       integer :: lun, i
-         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;111&#146;, 5)
-         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;123456789&#146;, 5)
-         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;  34567  &#146;, 7)
-         write(*,&#146;("[",a,"]")&#146;) zpad( valuein=42 , length=7)
-         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;  +34567  &#146;, 7)
-         write(*,&#146;("[",a,"]")&#146;) zpad( &#146;  -34567  &#146;, 7)
-         write(*,&#146;("[",a,"]")&#146;) zpad(1234)
-         write(*,&#146;("[",a,"]")&#146;) zpad(-1234)
-         write(*,&#146;("[",a,"]")&#146;) zpad(1234,8)
-         write(*,&#146;("[",a,"]")&#146;) zpad(-1234,8)
-         write(*,&#146;("[",a,"]")&#146;) zpad(&#146;&#146;)
-         write(*,&#146;("[",a,"]")&#146;) zpad(&#146;0&#146;)
-         write(*,&#146;("[",a,"]")&#146;) zpad(&#146;0    &#146;)
-         write(*,&#146;("[",a,"]")&#146;) zpad(&#146;     &#146;)
-         write(*,&#146;("[",a,"]")&#146;) zpad([1,10,100,1000,10000,100000],8)
+         print boxed, zpad( &#146;111&#146;, 5),&#146;basic use&#146;
+         print boxed, zpad( valuein=42 , length=7),&#146;by argument name&#146;
+         print boxed, zpad( &#146;  34567  &#146;, 7),&#146;cropped before padding&#146;
+         print boxed, zpad( &#146;123456789&#146;, 5),&#146;input longer than length&#146;
+         print boxed, zpad( &#146;  +34567  &#146;, 7),&#146;starts with plus sign&#146;
+         print boxed, zpad( &#146;  -34567  &#146;, 7),&#146;starts with minus sign&#146;
+         print boxed, zpad(1234),&#146;some integers instead of strings&#146;
+         print boxed, zpad(-1234)
+         print boxed, zpad(1234,8)
+         print boxed, zpad(-1234,8)
+         print boxed, zpad(&#146;&#146;),&#146;a null gets you nothing&#146;
+         print boxed, zpad(&#146;0&#146;),&#146;but blanks are used for default length&#146;
+         print boxed, zpad(&#146;0    &#146;)
+         print boxed, zpad(&#146;     &#146;)
+         print *, &#146;input value may be an array:&#146;
+         print &#146;("[",a,"]")&#146;, zpad([1,10,100,1000,10000,100000],8)
 <P>
+         ! example usage:
          ! open output_00085.dat
          i=85
          open(newunit=lun,file=&#146;output_&#146;//zpad(i,5)//&#146;.dat&#146;)
@@ -193,26 +193,27 @@ Sample Program:
 Results:
 <P>
 <PRE>
-      [00111]
-      [123456789]
-      [0034567]
-      [0000042]
-      [+0034567]
-      [-0034567]
-      [1234]
-      [-1234]
-      [00001234]
-      [-00001234]
-      []
-      [0]
-      [00000]
-      [00000]
-      [00000001]
-      [00000010]
-      [00000100]
-      [00001000]
-      [00010000]
-      [00100000]
+    &gt; [00111]basic use
+    &gt; [0000042]by argument name
+    &gt; [0034567]cropped before padding
+    &gt; [123456789]input longer than length
+    &gt; [+0034567]starts with plus sign
+    &gt; [-0034567]starts with minus sign
+    &gt; [1234]some integers instead of strings
+    &gt; [-1234]
+    &gt; [00001234]
+    &gt; [-00001234]
+    &gt; []a null gets you nothing
+    &gt; [0]but blanks are used for default length
+    &gt; [00000]
+    &gt; [00000]
+    &gt;  input value may be an array:
+    &gt; [00000001]
+    &gt; [00000010]
+    &gt; [00000100]
+    &gt; [00001000]
+    &gt; [00010000]
+    &gt; [00100000]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -233,7 +234,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>zpad (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 781ee341-4994-48a3-afb4-e2f3554344ef using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>zpad (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e448c973-b428-4113-8cc5-100b5f2a84ff using man macros.</FONT>
 <br><br><center><img src="images/zpad.3m_strings.gif"></center>
 </div>
 </div>

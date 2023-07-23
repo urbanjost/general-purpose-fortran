@@ -2,6 +2,7 @@
      use M_calcomp, only : plots, plot, number, symbol, newpen
      use M_calcomp, only : nframe, factor, rect
      use M_calcomp, only : MOVE, END, DRAW
+     implicit none
      call plots(0.0,10.0,0.0,10.0)
      call draw_car_prices()
      call nframe()
@@ -16,6 +17,8 @@
         character(len=21) :: ichr6
         character(len=19) :: ichr7
         character(len=17) :: ichr8
+        real :: x, y, value, age
+        integer :: i, j, inteq
         ichr6='CAR MODEL AGE (YEARS)'
         ichr7='CAR VALUE (DOLLARS)'
         ichr8='AVERAGE CAR VALUE'

@@ -1,10 +1,12 @@
      program demo_getstring
      use M_draw
+     implicit none
      ! reading a string from graphic input with getstring(3f)
      character(len=128) :: buf(10)
      character(len=20)  :: dev
      character(len=20)  :: fname
-     integer            :: ios
+     integer            :: ios, i, n
+     real               :: shft, tsize, y
 
      print*, 'Enter device:'
      read (*, '(a)',iostat=ios) dev

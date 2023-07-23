@@ -2,7 +2,7 @@
      use M_pixel,    only : prefsize, vinit, ortho2, clear
      use M_pixel,    only : move2, draw2, vexit, color,linewidth
      use M_pixel,    only : P_pixel, P_colormap
-     use M_writegif, only : writegif
+     use M_pixel__writegif, only : writegif
      use M_pixel,    only : d2r, polar_to_cartesian
      !
      ! The Archimedean spiral is the locus of points corresponding
@@ -35,7 +35,7 @@
            call draw2(x,y)
         enddo
         ! write the pixel map array as a GIF image file
-        call writegif('draw2.3m_pixel.gif',P_pixel,P_colormap)
+        call writegif('draw2.3M_pixel.gif',P_pixel,P_colormap)
         ! exit graphics mode
         call vexit()
      end program demo_draw2

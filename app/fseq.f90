@@ -1,132 +1,6 @@
-subroutine help_usage(l_help)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
-help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   fseq(1f) - [M_kracken] print a sequence of numbers, optionally appending file lines.                                         ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'SYNOPSIS                                                                                                                        ',&
-'   fseq [OPTION]...                                                                                                             ',&
-'DESCRIPTION                                                                                                                     ',&
-'  A test program for testing M_kracken(3fm) module. Also useful for experimenting                                               ',&
-'  with Fortran FORMAT statements and observing  round-off issues.                                                               ',&
-'                                                                                                                                ',&
-'  Sort of parts of "cat -n"  and "seq" and "head" mixed together.                                                               ',&
-'  But awk(1) or sed(1) or shells would do it better.                                                                            ',&
-'  Logic has gotten very messy, and has not been made fault tolerant.                                                            ',&
-'                                                                                                                                ',&
-'   Print numbers from START to END, in steps of DELTA.                                                                          ',&
-'       -s START     # start value (defaults to 1)                                                                               ',&
-'       -d DELTA     # increment value (defaults to 1)                                                                           ',&
-'       -e END       # end value (required)                                                                                      ',&
-'       -f FORMAT    # use Fortran floating-point FORMAT                                                                         ',&
-'       -i FORMAT    # use Fortran integer FORMAT (defaults to "i0,/")                                                           ',&
-'       -h           # display this help and exit                                                                                ',&
-'       -v           # output version information and exit                                                                       ',&
-'       -oo          # filename (ignored if active FORMAT is *)                                                                  ',&
-'                    # lines are read from this file and appended to output                                                      ',&
-'                    # lines.                                                                                                    ',&
-'   FIRST, DELTA, and END are interpreted as floating point values when the                                                      ',&
-'   format from -f is used, they are interpreted as integers when -i is used.                                                    ',&
-'   -f FORMAT must be suitable for printing one argument of type "REAL",                                                         ',&
-'   -i FORMAT must be suitable for printing one argument of type "INTEGER".                                                      ',&
-'   If -f is present, -i is ignored.                                                                                             ',&
-'EXAMPLES                                                                                                                        ',&
-'  Sample commands:                                                                                                              ',&
-'                                                                                                                                ',&
-'   fseq -e 20                                                                                                                   ',&
-'   fseq -s 10 -e 100 -d 10 -f "g5.1'''':''''"                                                                                   ',&
-'   # show first 20 lines of file "filename"                                                                                     ',&
-'   fseq filename -e 20 -i "i10,'''':'''',1x"                                                                                    ',&
-'   # show                                                                                                                       ',&
-'   fseq filename -e 1000000000 -i "i0,t5,'''':'''',1x"                                                                          ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-!>
-!!##NAME
-!!    fseq(1f) - [M_kracken] print a sequence of numbers, optionally appending file lines.
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    fseq [OPTION]...
-!!##DESCRIPTION
-!!   A test program for testing M_kracken(3fm) module. Also useful for experimenting
-!!   with Fortran FORMAT statements and observing  round-off issues.
-!!
-!!   Sort of parts of "cat -n"  and "seq" and "head" mixed together.
-!!   But awk(1) or sed(1) or shells would do it better.
-!!   Logic has gotten very messy, and has not been made fault tolerant.
-!!
-!!    Print numbers from START to END, in steps of DELTA.
-!!        -s START     # start value (defaults to 1)
-!!        -d DELTA     # increment value (defaults to 1)
-!!        -e END       # end value (required)
-!!        -f FORMAT    # use Fortran floating-point FORMAT
-!!        -i FORMAT    # use Fortran integer FORMAT (defaults to "i0,/")
-!!        -h           # display this help and exit
-!!        -v           # output version information and exit
-!!        -oo          # filename (ignored if active FORMAT is *)
-!!                     # lines are read from this file and appended to output
-!!                     # lines.
-!!    FIRST, DELTA, and END are interpreted as floating point values when the
-!!    format from -f is used, they are interpreted as integers when -i is used.
-!!    -f FORMAT must be suitable for printing one argument of type "REAL",
-!!    -i FORMAT must be suitable for printing one argument of type "INTEGER".
-!!    If -f is present, -i is ignored.
-!!##EXAMPLES
-!!
-!!   Sample commands:
-!!
-!!    fseq -e 20
-!!    fseq -s 10 -e 100 -d 10 -f "g5.1'':''"
-!!    # show first 20 lines of file "filename"
-!!    fseq filename -e 20 -i "i10,'':'',1x"
-!!    # show
-!!    fseq filename -e 1000000000 -i "i0,t5,'':'',1x"
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
-'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
-'@(#)PROGRAM:        fseq(1f)>',&
-'@(#)DESCRIPTION:    generate a sequence of numbers, optionally concatenated to a file>',&
-'@(#)VERSION:        1.0, 2011-01-30>',&
-'@(#)AUTHOR:         John S. Urban>',&
-'@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
-'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2023-02-12 18:36:37 UTC-300>',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
-!-----------------------------------------------------------------------------------------------------------------------------------
 program fseq
 use m_kracken
+implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    character(len=255)  :: format   ! format statement to write real numbers with
    character(len=255)  :: iformat  ! format statement to write integers with
@@ -134,6 +8,8 @@ use m_kracken
    character(len=1024) :: line     ! assume input file lines fit in this
    logical help                    ! see if -h flag was used
    logical version                 ! see if -v flag was used
+   real :: start, end, delta
+   integer :: iend, i, n2l, iin, istart, ios, idelta, iiend
 !-----------------------------------------------------------------------------------------------------------------------------------
 !  define command and default argument values and read command line arguments
    call kracken('fseq', '-s 1 -d 1 -e 0 -i "i0,/" -f BLANK -help .false. -version .false.')
@@ -233,5 +109,133 @@ use m_kracken
       write(*,*)'-i (integer format) ',iformat(:len_trim(iformat))
 !-----------------------------------------------------------------------------------------------------------------------------------
    endif
+!-----------------------------------------------------------------------------------------------------------------------------------
+contains
+subroutine help_usage(l_help)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
+logical,intent(in)             :: l_help
+character(len=:),allocatable :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_help)then
+help_text=[ CHARACTER(LEN=128) :: &
+'NAME                                                                            ',&
+'   fseq(1f) - [M_kracken] print a sequence of numbers, optionally appending file lines.',&
+'   (LICENSE:PD)                                                                 ',&
+'SYNOPSIS                                                                        ',&
+'   fseq [OPTION]...                                                             ',&
+'DESCRIPTION                                                                     ',&
+'  A test program for testing M_kracken(3fm) module. Also useful for experimenting',&
+'  with Fortran FORMAT statements and observing  round-off issues.               ',&
+'                                                                                ',&
+'  Sort of parts of "cat -n"  and "seq" and "head" mixed together.               ',&
+'  But awk(1) or sed(1) or shells would do it better.                            ',&
+'  Logic has gotten very messy, and has not been made fault tolerant.            ',&
+'                                                                                ',&
+'   Print numbers from START to END, in steps of DELTA.                          ',&
+'       -s START     # start value (defaults to 1)                               ',&
+'       -d DELTA     # increment value (defaults to 1)                           ',&
+'       -e END       # end value (required)                                      ',&
+'       -f FORMAT    # use Fortran floating-point FORMAT                         ',&
+'       -i FORMAT    # use Fortran integer FORMAT (defaults to "i0,/")           ',&
+'       -h           # display this help and exit                                ',&
+'       -v           # output version information and exit                       ',&
+'       -oo          # filename (ignored if active FORMAT is *)                  ',&
+'                    # lines are read from this file and appended to output      ',&
+'                    # lines.                                                    ',&
+'   FIRST, DELTA, and END are interpreted as floating point values when the      ',&
+'   format from -f is used, they are interpreted as integers when -i is used.    ',&
+'   -f FORMAT must be suitable for printing one argument of type "REAL",         ',&
+'   -i FORMAT must be suitable for printing one argument of type "INTEGER".      ',&
+'   If -f is present, -i is ignored.                                             ',&
+'EXAMPLES                                                                        ',&
+'  Sample commands:                                                              ',&
+'                                                                                ',&
+'   fseq -e 20                                                                   ',&
+'   fseq -s 10 -e 100 -d 10 -f "g5.1'''':''''"                                   ',&
+'   # show first 20 lines of file "filename"                                     ',&
+'   fseq filename -e 20 -i "i10,'''':'''',1x"                                    ',&
+'   # show                                                                       ',&
+'   fseq filename -e 1000000000 -i "i0,t5,'''':'''',1x"                          ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
+   stop ! if --help was specified, stop
+endif
+end subroutine help_usage
+!>
+!!##NAME
+!!    fseq(1f) - [M_kracken] print a sequence of numbers, optionally appending file lines.
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    fseq [OPTION]...
+!!##DESCRIPTION
+!!   A test program for testing M_kracken(3fm) module. Also useful for experimenting
+!!   with Fortran FORMAT statements and observing  round-off issues.
+!!
+!!   Sort of parts of "cat -n"  and "seq" and "head" mixed together.
+!!   But awk(1) or sed(1) or shells would do it better.
+!!   Logic has gotten very messy, and has not been made fault tolerant.
+!!
+!!    Print numbers from START to END, in steps of DELTA.
+!!        -s START     # start value (defaults to 1)
+!!        -d DELTA     # increment value (defaults to 1)
+!!        -e END       # end value (required)
+!!        -f FORMAT    # use Fortran floating-point FORMAT
+!!        -i FORMAT    # use Fortran integer FORMAT (defaults to "i0,/")
+!!        -h           # display this help and exit
+!!        -v           # output version information and exit
+!!        -oo          # filename (ignored if active FORMAT is *)
+!!                     # lines are read from this file and appended to output
+!!                     # lines.
+!!    FIRST, DELTA, and END are interpreted as floating point values when the
+!!    format from -f is used, they are interpreted as integers when -i is used.
+!!    -f FORMAT must be suitable for printing one argument of type "REAL",
+!!    -i FORMAT must be suitable for printing one argument of type "INTEGER".
+!!    If -f is present, -i is ignored.
+!!##EXAMPLES
+!!
+!!   Sample commands:
+!!
+!!    fseq -e 20
+!!    fseq -s 10 -e 100 -d 10 -f "g5.1'':''"
+!!    # show first 20 lines of file "filename"
+!!    fseq filename -e 20 -i "i10,'':'',1x"
+!!    # show
+!!    fseq filename -e 1000000000 -i "i0,t5,'':'',1x"
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+subroutine help_version(l_version)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
+logical,intent(in)             :: l_version
+character(len=:),allocatable   :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_version)then
+help_text=[ CHARACTER(LEN=128) :: &
+'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
+'@(#)PROGRAM:        fseq(1f)>',&
+'@(#)DESCRIPTION:    generate a sequence of numbers, optionally concatenated to a file>',&
+'@(#)VERSION:        1.0, 2011-01-30>',&
+'@(#)AUTHOR:         John S. Urban>',&
+'@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
+'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
+'@(#)LICENSE:        Public Domain>',&
+'@(#)COMPILED:       2023-07-22 01:27:26 UTC-240>',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
+endif
+end subroutine help_version
 !-----------------------------------------------------------------------------------------------------------------------------------
 end program fseq

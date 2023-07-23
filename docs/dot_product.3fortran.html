@@ -50,39 +50,32 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>dot_product (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>dot_product (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>dot_product(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-dot_product(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 DOT_PRODUCT(3) - [TRANSFORMATIONAL] Dot product of two vectors
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=9>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = dot_product(vector_a, vector_b)
 <P>
 <PRE>
-           TYPE(kind=KIND) function dot_product(vector_a, vector_b)
+         TYPE(kind=KIND) function dot_product(vector_a, vector_b)
 <P>
-            TYPE(kind=KIND),intent(in) :: vector_a(:)
-            TYPE(kind=KIND),intent(in) :: vector_b(:)
+          TYPE(kind=KIND),intent(in) :: vector_a(:)
+          TYPE(kind=KIND),intent(in) :: vector_b(:)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,27 +85,29 @@ result = dot_product(vector_a, vector_b)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VECTOR_A, VECTOR_B may be any numeric or logical type array of rank one
-of the same size
+VECTOR_A, VECTOR_B may be any numeric or logical type array of rank
+one of the same size
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the two vectors need not be of the same kind, but both must be logical or
-numeric for any given call.
+the two vectors need not be of the same kind, but both must be
+logical or numeric for any given call.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is the same type and kind of the vector that is the higher
-type that the other vector is optionally promoted to if they differ.
+the result is the same type and kind of the vector that is the
+higher type that the other vector is optionally promoted to if they
+differ.
 </TD></TR>
-<TR></TR></TABLE>The two vectors may be either numeric or logical and must be arrays of rank
-one and of equal size.
+<TR></TR></TABLE>The two vectors may be either numeric or logical and must be arrays of
+rank one and of equal size.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -120,88 +115,117 @@ one and of equal size.
 
 </A>
 <BLOCKQUOTE>
+<P>
 DOT_PRODUCT(3) computes the dot product multiplication of two vectors
 VECTOR_A and VECTOR_B.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VECTOR_A : A rank 1 vector of values
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VECTOR_B : The type shall be numeric if VECTOR_A is of numeric type
+or logical if vector_a is of type logical. vector_b shall be a
+rank-one array of the same size as VECTOR_A.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If the arguments are numeric, the return value is a scalar of numeric
+type. If the arguments are logical, the return value is .true. or
+[char46]false..
+<P>
+If the vectors are integer or real, the result is
 <P>
 <PRE>
-      ### **Options**
-<P>
-      - **vector_a**
-        : A rank 1 vector of values
-<P>
-      - **vector_b**
-        : The type shall be numeric if **vector_a** is of numeric type
-        or _logical_ if vector_a is of type _logical_. vector_b shall be a
-        rank-one array of the same size as **vector_a**.
-<P>
-      ### **Result**
-<P>
-      If the arguments are numeric, the return value is a scalar of numeric
-      type.  If the arguments are _logical_, the
-      return value is _.true._ or _.false._.
-<P>
-      If the vectors are _integer_ or _real_, the result is
-      &#145;&#145;&#145;fortran
-           sum(vector_a*vector_b)
+         sum(vector_a*vector_b)
 <P>
 </PRE>
 If the vectors are complex, the result is
 <P>
 <PRE>
-           sum(conjg(vector_a)*vector_b)**
+         sum(conjg(vector_a)*vector_b)**
 <P>
 </PRE>
 If the vectors are logical, the result is
 <P>
 <PRE>
-           any(vector_a .and. vector_b)
+         any(vector_a .and. vector_b)
 <P>
 </PRE>
-### **Examples**
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
 <P>
 <PRE>
-    Sample program:
-<P>
-    &#145;&#145;&#145;fortran program demo_dot_prod implicit none integer, dimension(3) :: a,
-    b a = [ 1, 2, 3 ] b = [ 4, 5, 6 ] print &#146;(3i3)&#146;, a print * print &#146;(3i3)&#146;,
-    b print * print *, dot_product(a,b) end program demo_dot_prod
+    program demo_dot_prod
+    implicit none
+        integer, dimension(3) :: a, b
+        a = [ 1, 2, 3 ]
+        b = [ 4, 5, 6 ]
+        print &#146;(3i3)&#146;, a
+        print *
+        print &#146;(3i3)&#146;, b
+        print *
+        print *, dot_product(a,b)
+    end program demo_dot_prod
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        &gt;  1  2  3
-        &gt;
-        &gt;  4  5  6
-        &gt;
-        &gt;           32
+      &gt;  1  2  3
+      &gt;
+      &gt;  4  5  6
+      &gt;
+      &gt;           32
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=4>
+<A name=7>
 
      <H3>STANDARD</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
-<A name=5>
+<A name=8>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SUM(3), CONJG(3), ANY(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022         dot_product(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dot_product (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 23afe794-45db-4435-8fd6-e400e10f6117 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dot_product (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5fbe2b6d-bb47-4f7c-976e-72ce55f95d19 using man macros.</FONT>
 <br><br><center><img src="images/dot_product.3fortran.gif"></center>
 </div>
 </div>

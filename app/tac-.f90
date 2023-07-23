@@ -73,46 +73,46 @@ subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
 '   tac-(1f) - [FUNIX:FILESYSTEM] reverse or transpose lines in a file',&
-'   (LICENSE:PD)',&
-'',&
-'SYNOPSIS',&
-'  syntax:',&
-'',&
-'   tac- [NAME...] [ --transpose]',&
-'     or',&
-'   tac- -help|-version',&
-'',&
-'DESCRIPTION',&
-'   Read file into memory and then write it out with the lines',&
-'   reversed or transposed.',&
-'',&
-'   If no NAME is specified read data from stdin.',&
-'',&
-'OPTIONS',&
-'  NAME(S)         filenames',&
-'  --transpose,-t  transpose the file instead of reversing it',&
-'  --help          display this help and exit',&
-'  --version       output version information and exit',&
-'',&
-'EXAMPLES',&
-' Typical usage:',&
-'',&
-'  tac myfile.txt',&
-'',&
-'SEE ALSO',&
-'   tac(1), cat(1)',&
+'   (LICENSE:PD)                                                      ',&
+'                                                                     ',&
+'SYNOPSIS                                                             ',&
+'  syntax:                                                            ',&
+'                                                                     ',&
+'   tac- [NAME...] [ --transpose]                                     ',&
+'     or                                                              ',&
+'   tac- -help|-version                                               ',&
+'                                                                     ',&
+'DESCRIPTION                                                          ',&
+'   Read file into memory and then write it out with the lines        ',&
+'   reversed or transposed.                                           ',&
+'                                                                     ',&
+'   If no NAME is specified read data from stdin.                     ',&
+'                                                                     ',&
+'OPTIONS                                                              ',&
+'  NAME(S)         filenames                                          ',&
+'  --transpose,-t  transpose the file instead of reversing it         ',&
+'  --help          display this help and exit                         ',&
+'  --version       output version information and exit                ',&
+'                                                                     ',&
+'EXAMPLES                                                             ',&
+' Typical usage:                                                      ',&
+'                                                                     ',&
+'  tac myfile.txt                                                     ',&
+'                                                                     ',&
+'SEE ALSO                                                             ',&
+'   tac(1), cat(1)                                                    ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&
-'PROGRAM:        tac-(1f)',&
-'DESCRIPTION:    reverse lines in file or transpose file',&
-'VERSION:        1.0.0',&
-'DATE:           2015-06-26',&
-'AUTHOR:         John S. Urban',&
-'REPORTING BUGS: http://www.urbanjost.altervista.org/',&
-'HOME PAGE:      http://www.urbanjost.altervista.org/index.html',&
+'PROGRAM:        tac-(1f)                                            ',&
+'DESCRIPTION:    reverse lines in file or transpose file             ',&
+'VERSION:        1.0.0                                               ',&
+'DATE:           2015-06-26                                          ',&
+'AUTHOR:         John S. Urban                                       ',&
+'REPORTING BUGS: http://www.urbanjost.altervista.org/                ',&
+'HOME PAGE:      http://www.urbanjost.altervista.org/index.html      ',&
 'LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.',&
-'                There is NO WARRANTY, to the extent permitted by law.',&
+'                There is NO WARRANTY, to the extent permitted by law.                            ',&
 '']
 end subroutine setup
 

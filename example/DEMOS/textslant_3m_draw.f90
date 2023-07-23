@@ -14,15 +14,27 @@
         call linewidth(180)
         call textsize(0.8*scl,1.2*scl)
         call move2( x1+.3,y1+.4)
-        call color(D_RED); call textslant(0.0);  call drawstr("textslant(0.0); ")
-        call color(D_GREEN); call textslant(-1.0); call drawstr(" textslant(-1.0);")
-        call color(D_BLUE); call textslant(1.0);  call drawstr(" textslant(1.0);")
+        call color(D_RED)
+        call textslant(0.0);  call drawstr("textslant(0.0); ")
+        !
+        call color(D_GREEN)
+        call textslant(-1.0); call drawstr(" textslant(-1.0);")
+        !
+        call color(D_BLUE)
+        call textslant(1.0);  call drawstr(" textslant(1.0);")
+        !
         call textsize(0.8*scl,1.2*3*scl)
         call move2(x1+.3,y1+3+.4)
-        call color(D_MAGENTA); call textslant(1.0); call drawstr(" textslant(1.0);")
+        call color(D_MAGENTA)
+        call textslant(1.0); call drawstr(" textslant(1.0);")
+        !
         call textsize(0.8*scl,1.2*scl)
-        call color(D_CYAN); call textslant(0.3); call drawstr(" textslant(0.3);")
-        call color(D_WHITE); call textslant(0.5); call drawstr(" textslant(0.5);")
+        call color(D_CYAN)
+        call textslant(0.3); call drawstr(" textslant(0.3);")
+        !
+        call color(D_WHITE)
+        call textslant(0.5); call drawstr(" textslant(0.5);")
+        !
         call vflush()
         key=getkey()
         call vexit()

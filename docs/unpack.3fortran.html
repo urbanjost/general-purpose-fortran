@@ -50,23 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>unpack (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>unpack (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>unpack(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-unpack(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-UNPACK(3) - [ARRAY:CONSTRUCTION] Scatter the elements of a vector into an
-array using a mask
+<P>
+UNPACK(3) - [ARRAY:CONSTRUCTION] Scatter the elements of a vector into
+an array using a mask
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -77,14 +69,15 @@ array using a mask
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = unpack(vector, mask, field)
 <P>
 <PRE>
-           type(TYPE(kind=KIND)) unpack(vector, mask, field)
+         type(TYPE(kind=KIND)) unpack(vector, mask, field)
 <P>
-            type(TYPE(kind=KIND)),intent(in) :: vector(:)
-            logical,intent(in)               :: mask(..)
-            type(TYPE(kind=KIND)),intent(in) :: field(..)
+          type(TYPE(kind=KIND)),intent(in) :: vector(:)
+          logical,intent(in)               :: mask(..)
+          type(TYPE(kind=KIND)),intent(in) :: field(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -94,6 +87,7 @@ result = unpack(vector, mask, field)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -108,14 +102,14 @@ MASK is a logical array
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-FIELD is the same type and type parameters as VECTOR conformable with
-MASK.
+FIELD is the same type and type parameters as VECTOR conformable
+with MASK.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The result is an array of the same type and type parameters as VECTOR and
-the same shape as MASK.
+The result is an array of the same type and type parameters as
+VECTOR and the same shape as MASK.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -124,14 +118,15 @@ the same shape as MASK.
 
 </A>
 <BLOCKQUOTE>
-UNPACK(3) scatters the elements of VECTOR into a copy of an array FIELD of
-any rank using .true. values from MASK in array element order to specify
-placement of the VECTOR values.
 <P>
-So a copy of FIELD is generated with select elements replaced with values
-from VECTOR. This allows for complex replacement patterns that would be
-difficult when using array syntax or multiple assignment statements,
-particularly when the replacements are conditional.
+UNPACK(3) scatters the elements of VECTOR into a copy of an array FIELD
+of any rank using .true. values from MASK in array element order to
+specify placement of the VECTOR values.
+<P>
+So a copy of FIELD is generated with select elements replaced with
+values from VECTOR. This allows for complex replacement patterns that
+would be difficult when using array syntax or multiple assignment
+statements, particularly when the replacements are conditional.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -139,18 +134,19 @@ particularly when the replacements are conditional.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VECTOR : New values to place into specified locations in FIELD. It shall
-have at least as many elements as MASK has .true. values.
+VECTOR : New values to place into specified locations in FIELD. It
+shall have at least as many elements as MASK has .true. values.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : Shall be an array that specifies which values in FIELD are to be
-replaced with values from VECTOR.
+MASK : Shall be an array that specifies which values in FIELD are to
+be replaced with values from VECTOR.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -164,18 +160,14 @@ FIELD : The input array to be altered.
 
 </A>
 <BLOCKQUOTE>
-The element of the result that corresponds to the ith true element of MASK,
-<TABLE cellpadding=3><!-- tsb: The element of the result that corresponds to the ith true element of MASK,
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>in array element order, has the value VECTOR(I) for i = 1, 2, . .</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-[char46], t,
-where t is the number of true values in MASK. Each other element has a value
-equal to *field if *field is scalar or to the corresponding element of
-*field if it is an array.
-</TD></TR>
-<TR></TR></TABLE>The resulting array corresponds to FIELD with .true. elements of MASK
+<P>
+The element of the result that corresponds to the ith true element of
+MASK, in array element order, has the value VECTOR(I) for i = 1, 2, . .
+[char46], t, where t is the number of true values in MASK. Each other element
+has a value equal to *field if *field is scalar or to the corresponding
+element of *field if it is an array.
+<P>
+The resulting array corresponds to FIELD with .true. elements of MASK
 replaced by values from VECTOR in array element order.
 </BLOCKQUOTE>
 <A name=6>
@@ -184,108 +176,116 @@ replaced by values from VECTOR in array element order.
 
 </A>
 <BLOCKQUOTE>
-Particular values may be "scattered" to particular positions in an array by
-using
+<P>
+Particular values may be "scattered" to particular positions in an array
+by using
 <BLOCKQUOTE>
 <P>
 1 0 0
 </BLOCKQUOTE>
-<P>
-If M is the array
-0 1 0 0 0 1
-<BLOCKQUOTE>
-<P>
-V is the array [1, 2, 3], . T .
-<P>
-and Q is the logical mask
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: and Q is the logical mask
+<TABLE cellpadding=3><!-- tsb: 1 0 0
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>T . .</B> </TD><TD valign=bottom>
-[char46] . T where "T" represents true and "." represents false, then
-the result of
+<TR valign=top><TD colspan=2>
+<B>If M is the array</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+0 1 0
+0 0 1
+<P>
+V is the array [1, 2, 3],
+[char46] T .
+<TABLE width=100% cellpadding=3><!-- tsb: V is the array [1, 2, 3],
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>and Q is the logical mask</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+T . .
+[char46] . T
+where "T" represents true and "." represents false, then the result of
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
+<TR><TD colspan=2>
 UNPACK (V, MASK = Q, FIELD = M) has the value
-<BLOCKQUOTE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
 <P>
-1 2 0 1 1 0 0 0 3
-</BLOCKQUOTE>
-<P>
+1 2 0
+1 1 0
+0 0 3
+</TD></TR>
+<TR><TD colspan=2>
 and the result of UNPACK (V, MASK = Q, FIELD = 0) has the value
-<BLOCKQUOTE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
 <P>
-0 2 0 1 0 0 0 0 3
-</BLOCKQUOTE>
-</BLOCKQUOTE>
-<P>
-Sample program:
+0 2 0
+1 0 0
+0 0 3
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR></TR></TABLE>Sample program:
 <P>
 <PRE>
-      program demo_unpack
-      implicit none
-      logical,parameter :: T=.true., F=.false.
+    program demo_unpack
+    implicit none
+    logical,parameter :: T=.true., F=.false.
 <P>
-      integer :: vector(2)  = [1,1]
+    integer :: vector(2)  = [1,1]
 <P>
-      ! mask and field must conform
-      integer,parameter :: r=2, c=2
-      logical :: mask(r,c)  = reshape([ T,F,F,T ],[2,2])
-      integer :: field(r,c) = 0, unity(2,2)
+    ! mask and field must conform
+    integer,parameter :: r=2, c=2
+    logical :: mask(r,c)  = reshape([ T,F,F,T ],[2,2])
+    integer :: field(r,c) = 0, unity(2,2)
 <P>
-         ! basic usage
-         unity = unpack( vector, mask, field )
-         call print_matrix_int(&#146;unity=&#146;, unity)
+       ! basic usage
+       unity = unpack( vector, mask, field )
+       call print_matrix_int(&#146;unity=&#146;, unity)
 <P>
-         ! if FIELD is a scalar it is used to fill all the elements
-         ! not assigned to by the vector and mask.
-         call print_matrix_int(&#146;scalar field&#146;,         &
-         & unpack(                                     &
-         & vector=[ 1, 2, 3, 4 ],                      &
-         & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &
-         & field=0) )
+       ! if FIELD is a scalar it is used to fill all the elements
+       ! not assigned to by the vector and mask.
+       call print_matrix_int(&#146;scalar field&#146;,         &
+       & unpack(                                     &
+       & vector=[ 1, 2, 3, 4 ],                      &
+       & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &
+       & field=0) )
 <P>
-      contains
+    contains
 <P>
-         subroutine print_matrix_int(title,arr)
-         ! convenience routine:
-         ! just prints small integer arrays in row-column format
-         implicit none
-         character(len=*),intent(in)  :: title
-         integer,intent(in)           :: arr(:,:)
-         integer                      :: i
-         character(len=:),allocatable :: biggest
+    subroutine print_matrix_int(title,arr)
+    ! convenience routine:
+    ! just prints small integer arrays in row-column format
+    implicit none
+    character(len=*),intent(in)  :: title
+    integer,intent(in)           :: arr(:,:)
+    integer                      :: i
+    character(len=:),allocatable :: biggest
 <P>
-            write(*,*)trim(title)
-            ! make buffer to write integer into
-            biggest=&#146;           &#146;
-            ! find how many characters to use for integers
-            write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
-            ! use this format to write a row
-            biggest=&#146;("  [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
-            ! print one row of array at a time
-            do i=1,size(arr,dim=1)
-               write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
-               write(*,&#146;(" ]")&#146;)
-            enddo
-         end subroutine print_matrix_int
+       write(*,*)trim(title)
+       ! make buffer to write integer into
+       biggest=&#146;           &#146;
+       ! find how many characters to use for integers
+       write(biggest,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2
+       ! use this format to write a row
+       biggest=&#146;("  [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
+       ! print one row of array at a time
+       do i=1,size(arr,dim=1)
+          write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+          write(*,&#146;(" ]")&#146;)
+       enddo
+    end subroutine print_matrix_int
 <P>
-      end program demo_unpack
+    end program demo_unpack
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         &gt; unity=
-         &gt;  [ 1, 0 ]
-         &gt;  [ 0, 1 ]
-         &gt; scalar field
-         &gt;  [  1,  0,  3 ]
-         &gt;  [  0,  0,  0 ]
-         &gt;  [  2,  0,  4 ]
+       &gt; unity=
+       &gt;  [ 1, 0 ]
+       &gt;  [ 0, 1 ]
+       &gt; scalar field
+       &gt;  [  1,  0,  3 ]
+       &gt;  [  0,  0,  0 ]
+       &gt;  [  2,  0,  4 ]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -295,6 +295,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -303,16 +304,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 MERGE(3), PACK(3), SPREAD(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              unpack(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unpack (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0c99994d-7b70-4b5a-9b96-c52b69291fd9 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unpack (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 36661902-9864-42bc-9ed9-e9430d9163e7 using man macros.</FONT>
 <br><br><center><img src="images/unpack.3fortran.gif"></center>
 </div>
 </div>

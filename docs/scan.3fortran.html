@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>scan (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>scan (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>scan(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-scan(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SCAN(3) - [CHARACTER:SEARCH] Scan a string for the presence of a set of
 characters
 <P>
@@ -77,15 +69,16 @@ characters
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = scan( string, set, [,back] [,kind] )
 <P>
 <PRE>
-           elemental integer(kind=KIND) function scan(string,set,back,kind)
+         elemental integer(kind=KIND) function scan(string,set,back,kind)
 <P>
-            character(len=*,kind=**),intent(in) :: string
-            character(len=*,kind=**),intent(in) :: set
-            logical,intent(in),optional :: back
-            integer,intent(in),optional :: kind
+          character(len=*,kind=**),intent(in) :: string
+          character(len=*,kind=**),intent(in) :: set
+          logical,intent(in),optional :: back
+          integer,intent(in),optional :: kind
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -95,6 +88,7 @@ result = scan( string, set, [,back] [,kind] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -119,8 +113,8 @@ KIND is a scalar integer constant expression
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is an integer with the kind specified by KIND. If KIND is not
-present the result is a default integer.
+the result is an integer with the kind specified by KIND. If KIND is
+not present the result is a default integer.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -129,12 +123,13 @@ present the result is a default integer.
 
 </A>
 <BLOCKQUOTE>
+<P>
 SCAN(3) scans a STRING for any of the characters in a SET of characters.
 <P>
 If BACK is either absent or equals .false., this function returns the
-position of the leftmost character of STRING that is in SET. If BACK equals
-[char46]true., the rightmost position is returned. If no character of SET is found
-in STRING, the result is zero.
+position of the leftmost character of STRING that is in SET. If BACK
+equals .true., the rightmost position is returned. If no character of
+SET is found in STRING, the result is zero.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -142,6 +137,7 @@ in STRING, the result is zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -162,8 +158,8 @@ returned, instead of the leftmost.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : the kind of the returned value is the same as KIND if present.
-Otherwise a default integer kind is returned.
+KIND : the kind of the returned value is the same as KIND if
+present. Otherwise a default integer kind is returned.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -172,16 +168,17 @@ Otherwise a default integer kind is returned.
 
 </A>
 <BLOCKQUOTE>
-If BACK is absent or is present with the value false and if STRING contains
-at least one character that is in SET, the value of the result is the
-position of the leftmost character of STRING that is in SET.
 <P>
-If BACK is present with the value true and if STRING contains at least one
-character that is in SET, the value of the result is the position of the
-rightmost character of STRING that is in SET.
+If BACK is absent or is present with the value false and if STRING
+contains at least one character that is in SET, the value of the result
+is the position of the leftmost character of STRING that is in SET.
 <P>
-The value of the result is zero if no character of STRING is in SET or if
-the length of STRING or SET is zero.
+If BACK is present with the value true and if STRING contains at least
+one character that is in SET, the value of the result is the position of
+the rightmost character of STRING that is in SET.
+<P>
+The value of the result is zero if no character of STRING is in SET or
+if the length of STRING or SET is zero.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -189,23 +186,24 @@ the length of STRING or SET is zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_scan
-      implicit none
-         write(*,*) scan("fortran", "ao")          ! 2, found &#146;o&#146;
-         write(*,*) scan("fortran", "ao", .true.)  ! 6, found &#146;a&#146;
-         write(*,*) scan("fortran", "c++")         ! 0, found none
-      end program demo_scan
+    program demo_scan
+    implicit none
+       write(*,*) scan("fortran", "ao")          ! 2, found &#146;o&#146;
+       write(*,*) scan("fortran", "ao", .true.)  ! 6, found &#146;a&#146;
+       write(*,*) scan("fortran", "c++")         ! 0, found none
+    end program demo_scan
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;            2
-       &gt;            6
-       &gt;            0
+     &gt;            2
+     &gt;            6
+     &gt;            0
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -215,6 +213,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 , with KIND argument - Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -223,15 +222,16 @@ Fortran 95 , with KIND argument - Fortran 2003
 
 </A>
 <BLOCKQUOTE>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+<P>
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ELEMENTAL: ADJUSTL(3), ADJUSTR(3), INDEX(3), SCAN(3), VERIFY(3)
+ELEMENTAL: ADJUSTL(3), ADJUSTR(3), INDEX(3), VERIFY(3)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -239,13 +239,9 @@ o
 NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                scan(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>scan (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a7f76c7a-23c1-4cd3-a13a-06dee807e5dd using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>scan (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 20c99860-0a64-4006-95f6-08b65dd206e3 using man macros.</FONT>
 <br><br><center><img src="images/scan.3fortran.gif"></center>
 </div>
 </div>

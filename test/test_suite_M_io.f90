@@ -2,19 +2,17 @@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 program runtest
-use M_msg
+use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor 
 use M_io
-use :: M_verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
-use :: M_verify, only : unit_check_stop
-use :: M_verify, only : unit_check_level, unit_check_keep_going, unit_check_command
+use M_framework__msg
+use :: M_framework__verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
+use :: M_framework__verify, only : unit_check_stop
+use :: M_framework__verify, only : unit_check_level
 use,intrinsic :: iso_fortran_env, only : stdin_lun  => input_unit
 use,intrinsic :: iso_fortran_env, only : stderr_lun => error_unit
 use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
 
 !! setup
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
 
    call test_dirname()
    call test_get_tmp()
@@ -66,8 +64,6 @@ subroutine test_get_tmp()
 end subroutine test_get_tmp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filename_generator()
-
-integer :: i, bug, ierr, ierr2
 
    call unit_check_start('filename_generator',msg='')
    call unit_check_msg('filename_generator','generate a filename containing a whole number')
@@ -126,7 +122,6 @@ subroutine test_rd()
 end subroutine test_rd
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getline()
-use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor 
 character(len=:),allocatable :: line, last, expected
 integer                      :: lun, ierr, stat, icount
    call unit_check_start('getline',msg='')
@@ -152,7 +147,6 @@ integer                      :: lun, ierr, stat, icount
 end subroutine test_getline
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_line()
-use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor 
 character(len=:),allocatable :: line, last, expected
 integer                      :: lun, ierr, stat, icount
    call unit_check_start('read_line',msg='')
@@ -179,7 +173,7 @@ end subroutine test_read_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_table()
 doubleprecision,allocatable :: array(:,:)
-integer :: i, ierr
+integer :: ierr
 
    call unit_check_start('read_table',msg='')
    ! create test file

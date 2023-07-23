@@ -28,11 +28,11 @@ integer                        :: ierr, inums
       stop
    endif
 !- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-   if (sget('now_uet').ne.' ')then
+   if (sget('now_uet') /= ' ')then
       dat=u2d(dget('now_uet'))                                     ! convert command option to UET number, convert to dat
-   elseif (sget('now_jed').ne.' ')then
+   elseif (sget('now_jed') /= ' ')then
       dat=j2d(dget('now_jed'))                                     ! convert command option to JED number, convert to dat
-   elseif (sget('now_dat').ne.' ')then
+   elseif (sget('now_dat') /= ' ')then
       dat=u2d()                                                    ! initialize DAT with current date and time to get time zone
       dat=[dat(1),1,1,dat(4),0,0,0,0]                              ! default is Jan 1st in current year and timezone 00:00:00
       call string_to_values(sget('now_dat'),size(dat),rdat,inums,' ,:/',ierr) ! convert string to array and overlay default values
@@ -40,12 +40,12 @@ integer                        :: ierr, inums
 
       ! if -date is all integer digits and whitespace and +- and only one - (for UTC value) then use it directly to load a DAT
       !chars=switch(trim(sget('now_dat')))
-      !if( all(isdigit(chars).or.isspace(chars).or.chars.eq.'-'.or.chars.eq.'+' ) .and. count(chars.eq.'-').le.1 )then
+      !if( all(isdigit(chars).or.isspace(chars).or.chars == '-'.or.chars == '+' ) .and. count(chars == '-') <= 1 )then
       !else
       !   write(*,*)'*now* error: invalid characters in -dat input '//trim(sget('now_dat'))
       !endif
 
-   elseif (sget('now_date').ne.' ')then                            ! convert command option to date string and try to guess date
+   elseif (sget('now_date') /= ' ')then                            ! convert command option to date string and try to guess date
       call guessdate(sget('now_date'),dat)
    else                                                            ! create DAT for current time
       dat=u2d()                                                    ! current time
@@ -205,7 +205,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      Copyright (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 18:34:43 UTC-300>',&
+'@(#)COMPILED:       2023-07-22 01:26:20 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

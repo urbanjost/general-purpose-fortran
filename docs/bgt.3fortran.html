@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bgt (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bgt (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>bgt(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-bgt(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 BGT(3) - [BIT:COMPARE] Bitwise greater than
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ BGT(3) - [BIT:COMPARE] Bitwise greater than
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = bgt(i, j)
 <P>
 <PRE>
-            elemental logical function bgt(i, j)
+          elemental logical function bgt(i, j)
 <P>
-             integer(kind=**),intent(in) :: i
-             integer(kind=**),intent(in) :: j
+           integer(kind=**),intent(in) :: i
+           integer(kind=**),intent(in) :: j
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = bgt(i, j)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -108,8 +102,8 @@ o
 </TD><TD>
 a kind designated as ** may be any supported kind for the type The
 integer kind of I and J may not necessarily be the same. kind. In
-addition, values may be a BOZ constant with a value valid for the integer
-kind available with the most bits on the current platform.
+addition, values may be a BOZ constant with a value valid for the
+integer kind available with the most bits on the current platform.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -123,19 +117,17 @@ The return value is of type logical and of the default kind.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>BGT determines whether an integer is bitwise greater than another.</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-Bit-
-level representations of values are platform-dependent.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+BGT determines whether an integer is bitwise greater than another.
+Bit-level representations of values are platform-dependent.
+</BLOCKQUOTE>
 <A name=4>
 
      <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -154,9 +146,10 @@ J : value to compare to I
 
 </A>
 <BLOCKQUOTE>
-The return value is of type logical and of the default kind. The result is
-true if the sequence of bits represented by i is greater than the sequence
-of bits represented by j, otherwise the result is false.
+<P>
+The return value is of type logical and of the default kind. The result
+is true if the sequence of bits represented by i is greater than the
+sequence of bits represented by j, otherwise the result is false.
 <P>
 Bits are compared from right to left.
 </BLOCKQUOTE>
@@ -166,52 +159,53 @@ Bits are compared from right to left.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_bgt
-      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      implicit none
-      integer            :: i
-      integer(kind=int8) :: byte
-        ! Compare some one-byte values to 64.
-         ! Notice that the values are tested as bits not as integers
-         ! so sign bits in the integer are treated just like any other
-         write(*,&#146;(a)&#146;) &#146;we will compare other values to 64&#146;
-         i=64
-         byte=i
-         write(*,&#146;(sp,i0.4,*(1x,1l,1x,b0.8))&#146;)i,bgt(byte,64_int8),byte
+    program demo_bgt
+    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    implicit none
+    integer            :: i
+    integer(kind=int8) :: byte
+      ! Compare some one-byte values to 64.
+       ! Notice that the values are tested as bits not as integers
+       ! so sign bits in the integer are treated just like any other
+       write(*,&#146;(a)&#146;) &#146;we will compare other values to 64&#146;
+       i=64
+       byte=i
+       write(*,&#146;(sp,i0.4,*(1x,1l,1x,b0.8))&#146;)i,bgt(byte,64_int8),byte
 <P>
-         write(*,&#146;(a)&#146;) "comparing at the bit level, not as whole numbers."
-         write(*,&#146;(a)&#146;) "so pay particular attention to the negative"
-         write(*,&#146;(a)&#146;) "values on this two&#146;s complement platform &#46;&#46;&#46;"
-         do i=-128,127,32
-            byte=i
-            write(*,&#146;(sp,i0.4,*(1x,1l,1x,b0.8))&#146;)i,bgt(byte,64_int8),byte
-         enddo
+       write(*,&#146;(a)&#146;) "comparing at the bit level, not as whole numbers."
+       write(*,&#146;(a)&#146;) "so pay particular attention to the negative"
+       write(*,&#146;(a)&#146;) "values on this two&#146;s complement platform &#46;&#46;&#46;"
+       do i=-128,127,32
+          byte=i
+          write(*,&#146;(sp,i0.4,*(1x,1l,1x,b0.8))&#146;)i,bgt(byte,64_int8),byte
+       enddo
 <P>
-         ! see the BGE() description for an extended description
-         ! of related information
+       ! see the BGE() description for an extended description
+       ! of related information
 <P>
-      end program demo_bgt
+    end program demo_bgt
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt; we will compare other values to 64
-       &gt; +0064  F 01000000
-       &gt; comparing at the bit level, not as whole numbers.
-       &gt; so pay particular attention to the negative
-       &gt; values on this two&#146;s complement platform &#46;&#46;&#46;
-       &gt; -0128  T 10000000
-       &gt; -0096  T 10100000
-       &gt; -0064  T 11000000
-       &gt; -0032  T 11100000
-       &gt; +0000  F 00000000
-       &gt; +0032  F 00100000
-       &gt; +0064  F 01000000
-       &gt; +0096  T 01100000
+     &gt; we will compare other values to 64
+     &gt; +0064  F 01000000
+     &gt; comparing at the bit level, not as whole numbers.
+     &gt; so pay particular attention to the negative
+     &gt; values on this two&#146;s complement platform &#46;&#46;&#46;
+     &gt; -0128  T 10000000
+     &gt; -0096  T 10100000
+     &gt; -0064  T 11000000
+     &gt; -0032  T 11100000
+     &gt; +0000  F 00000000
+     &gt; +0032  F 00100000
+     &gt; +0064  F 01000000
+     &gt; +0096  T 01100000
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -221,6 +215,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -229,16 +224,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 BGE(3), BLE(3), BLT(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 bgt(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bgt (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e29f20b2-f7ab-4c4c-ac38-6eab1332ed06 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bgt (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c37c02c3-9c45-4667-9317-f9bf37549f67 using man macros.</FONT>
 <br><br><center><img src="images/bgt.3fortran.gif"></center>
 </div>
 </div>

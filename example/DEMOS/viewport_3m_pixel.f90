@@ -1,6 +1,6 @@
      program demo_viewport
      use :: M_pixel
-     use :: M_writegif, only : writegif
+     use :: M_pixel__writegif, only : writegif
      implicit none
         call prefsize(400, 400) ! set up drawing surface
         call vinit()
@@ -16,8 +16,8 @@
         call viewport( 200.0, 400.0, 200.0, 400.0 ); call draw_circle(4)
         call viewport( 250.0, 350.0, 150.0, 300.0 ); call draw_circle(5)
 
-        call writegif('viewport.3m_pixel.gif',P_pixel,P_colormap)
-        !call execute_command_line('display viewport.3m_pixel.gif')
+        call writegif('viewport.3M_pixel.gif',P_pixel,P_colormap)
+        !call execute_command_line('display viewport.3M_pixel.gif')
         call vexit()
      contains
      subroutine draw_circle(icolor)

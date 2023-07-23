@@ -1,6 +1,7 @@
      program demo_checkkey
      use :: M_draw
-     use :: M_time, only : system_sleep
+     implicit none
+     integer :: ichar
      !! set up drawing environment
      call prefsize(600,600)
      call vinit(' ') ! start graphics using device $M_DRAW_DEVICE
@@ -24,7 +25,6 @@
           call move2(0.0,0.0)
           call drawstr(char(ichar))
        endif
-       call system_sleep(0.5)
        if(char(ichar).eq.'q')then
           write(*,*)'press any key to exit'
           ichar=getkey()

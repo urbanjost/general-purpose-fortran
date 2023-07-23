@@ -12,33 +12,33 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'       today(1f) - [TIME] output current time for uses such as file suffixes.                                                   ',&
-'       (LICENSE:PD)                                                                                                             ',&
-'SYNOPSIS                                                                                                                        ',&
-'       today format|--help|--version|--test                                                                                     ',&
-'DESCRIPTION                                                                                                                     ',&
-'       Outputs the current date using the specified format. Typically used                                                      ',&
-'       to generate a string to be used in building filenames containing                                                         ',&
-'       date information.                                                                                                        ',&
-'OPTIONS                                                                                                                         ',&
-'       format     any allowable format for the fmtdate(3) routine.                                                              ',&
-'                  defaults to "YMD".                                                                                            ',&
-'       --help     display this help and exit                                                                                    ',&
-'       --version  output version information and exit                                                                           ',&
-'       --test     display allowed options for building a format                                                                 ',&
-'EXAMPLE                                                                                                                         ',&
-'       Sample commands:                                                                                                         ',&
-'                                                                                                                                ',&
-'        cp myfile myfile.`today`                                                                                                ',&
-'        find . -ls > MANIFEST.`today epoch`                                                                                     ',&
-'        mkdir `today YMDhms`                                                                                                    ',&
-'        today yearmonthdayhourminutesecond                                                                                      ',&
-'        today --test                          # show formatting options                                                         ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'       today(1f) - [TIME] output current time for uses such as file suffixes.   ',&
+'       (LICENSE:PD)                                                             ',&
+'SYNOPSIS                                                                        ',&
+'       today format|--help|--version|--test                                     ',&
+'DESCRIPTION                                                                     ',&
+'       Outputs the current date using the specified format. Typically used      ',&
+'       to generate a string to be used in building filenames containing         ',&
+'       date information.                                                        ',&
+'OPTIONS                                                                         ',&
+'       format     any allowable format for the fmtdate(3) routine.              ',&
+'                  defaults to "YMD".                                            ',&
+'       --help     display this help and exit                                    ',&
+'       --version  output version information and exit                           ',&
+'       --test     display allowed options for building a format                 ',&
+'EXAMPLE                                                                         ',&
+'       Sample commands:                                                         ',&
+'                                                                                ',&
+'        cp myfile myfile.`today`                                                ',&
+'        find . -ls > MANIFEST.`today epoch`                                     ',&
+'        mkdir `today YMDhms`                                                    ',&
+'        today yearmonthdayhourminutesecond                                      ',&
+'        today --test                          # show formatting options         ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -89,7 +89,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    output current time for uses such as file suffixes.>',&
 '@(#)VERSION:        1.0, 2009>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2023-02-12 18:34:37 UTC-300>',&
+'@(#)COMPILED:       2023-07-22 01:26:18 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -109,7 +109,7 @@ character(len=:),allocatable :: options
       call fmtdate_usage()                                     ! see all formatting options
    else
       options= sget('today_oo')                                ! get -oo STRING
-      if(options.eq.'')then                                    ! if options are blank set a default
+      if(options == '')then                                    ! if options are blank set a default
          write(*,'(a)')now('YMD')                              ! display current date using format from command line
       else
          write(*,'(a)')now(options)                            ! display current date using format from command line

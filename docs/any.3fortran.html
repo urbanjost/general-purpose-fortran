@@ -50,23 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>any (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>any (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>any(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-any(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-ANY(3) - [ARRAY:REDUCTION] Determines if any of the values in the logical
-array are .true.
+<P>
+ANY(3) - [ARRAY:REDUCTION] Determines if any of the values in the
+logical array are .true.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -77,14 +69,15 @@ array are .true.
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = any(mask [,dim])
 <P>
 <PRE>
-           function any(mask, dim)
+         function any(mask, dim)
 <P>
-            logical(kind=KIND),intent(in) :: mask(..)
-            integer,intent(in),optional   :: dim
-            logical(kind=KIND)            :: any(..)
+          logical(kind=KIND),intent(in) :: mask(..)
+          integer,intent(in),optional   :: dim
+          logical(kind=KIND)            :: any(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -94,6 +87,7 @@ result = any(mask [,dim])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -118,6 +112,7 @@ logical scalar.
 
 </A>
 <BLOCKQUOTE>
+<P>
 ANY(3) determines if any of the values in the logical array MASK along
 dimension DIM are .true..
 </BLOCKQUOTE>
@@ -127,12 +122,13 @@ dimension DIM are .true..
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : an array of logical expressions or values to be tested in groups
-or in total for a .true. value.
+MASK : an array of logical expressions or values to be tested in
+groups or in total for a .true. value.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -148,19 +144,20 @@ instead of a scalar answer.
 
 </A>
 <BLOCKQUOTE>
+<P>
 ANY(MASK) returns a scalar value of type logical where the kind type
-parameter is the same as the kind type parameter of MASK. If DIM is present,
-then ANY(MASK, DIM) returns an array with the rank of MASK minus 1. The
-shape is determined from the shape of MASK where the DIM dimension is
-elided.
+parameter is the same as the kind type parameter of MASK. If DIM is
+present, then ANY(MASK, DIM) returns an array with the rank of MASK
+minus 1. The shape is determined from the shape of MASK where the DIM
+dimension is elided.
 <TABLE cellpadding=3><!-- tsb: ANY(MASK) returns a scalar value of type logical where the kind type
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-ANY(MASK) is .true. if any element of MASK is .true.; otherwise, it is
-[char46]false.. It also is .false. if MASK has zero size.
+ANY(MASK) is .true. if any element of MASK is .true.; otherwise, it
+is .false.. It also is .false. if MASK has zero size.
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
@@ -176,98 +173,99 @@ determined by applying ANY(MASK) to the array sections.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_any
-      implicit none
-      logical,parameter :: T=.true., F=.false.
-      integer           :: a(2,3), b(2,3)
-      logical           :: bool
-        ! basic usage
-         bool = any([F,F,T,F])
-         print *,bool
-         bool = any([F,F,F,F])
-         print *,bool
-        ! fill two integer arrays with values for testing
-         a = 1
-         b = 1
-         b(:,2) = 2
-         b(:,3) = 3
-        ! using any(3) with logical expressions you can compare two arrays
-        ! in a myriad of ways
-         ! first, print where elements of b are bigger than in a
-         call printl( &#146;first print b &gt; a             &#146;, b &gt; a         )
-         ! now use any() to test
-         call printl( &#146;any true values?  any(b &gt; a)  &#146;, any(b &gt; a )   )
-         call printl( &#146;again by columns? any(b &gt; a,1)&#146;, any(b &gt; a, 1) )
-         call printl( &#146;again by rows?    any(b &gt; a,2)&#146;, any(b &gt; a, 2) )
-      contains
-      ! CONVENIENCE ROUTINE. this is not specific to ANY()
-      subroutine printl(title,a)
-      use, intrinsic :: iso_fortran_env, only : &
-       & stderr=&gt;ERROR_UNIT,&
-       & stdin=&gt;INPUT_UNIT,&
-       & stdout=&gt;OUTPUT_UNIT
-      implicit none
+    program demo_any
+    implicit none
+    logical,parameter :: T=.true., F=.false.
+    integer           :: a(2,3), b(2,3)
+    logical           :: bool
+      ! basic usage
+       bool = any([F,F,T,F])
+       print *,bool
+       bool = any([F,F,F,F])
+       print *,bool
+      ! fill two integer arrays with values for testing
+       a = 1
+       b = 1
+       b(:,2) = 2
+       b(:,3) = 3
+      ! using any(3) with logical expressions you can compare two arrays
+      ! in a myriad of ways
+       ! first, print where elements of b are bigger than in a
+       call printl( &#146;first print b &gt; a             &#146;, b &gt; a         )
+       ! now use any() to test
+       call printl( &#146;any true values?  any(b &gt; a)  &#146;, any(b &gt; a )   )
+       call printl( &#146;again by columns? any(b &gt; a,1)&#146;, any(b &gt; a, 1) )
+       call printl( &#146;again by rows?    any(b &gt; a,2)&#146;, any(b &gt; a, 2) )
+    contains
+    ! CONVENIENCE ROUTINE. this is not specific to ANY()
+    subroutine printl(title,a)
+    use, intrinsic :: iso_fortran_env, only : &
+     & stderr=&gt;ERROR_UNIT,&
+     & stdin=&gt;INPUT_UNIT,&
+     & stdout=&gt;OUTPUT_UNIT
+    implicit none
 <P>
-      !@(#) print small 2d logical scalar, vector, or matrix
+    !@(#) print small 2d logical scalar, vector, or matrix
 <P>
-      character(len=*),parameter   :: all=&#146;(*(g0,1x))&#146;
-      character(len=*),parameter   :: row=&#146;(" &gt; [ ",*(l1:,","))&#146;
-      character(len=*),intent(in)  :: title
-      logical,intent(in)           :: a(..)
-      integer                      :: i
-         write(*,*)
-         write(*,all,advance=&#146;no&#146;)trim(title),&
-          & &#146; : shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
-         ! get size and shape of input
-         select rank(a)
-         rank (0); write(*,&#146;(a)&#146;)&#146;(a scalar)&#146;
-            write(*,fmt=row,advance=&#146;no&#146;)a
-            write(*,&#146;(" ]")&#146;)
-         rank (1); write(*,&#146;(a)&#146;)&#146;(a vector)&#146;
-            do i=1,size(a)
-               write(*,fmt=row,advance=&#146;no&#146;)a(i)
-               write(*,&#146;(" ]")&#146;)
-            enddo
-         rank (2); write(*,&#146;(a)&#146;)&#146;(a matrix) &#146;
-            do i=1,size(a,dim=1)
-               write(*,fmt=row,advance=&#146;no&#146;)a(i,:)
-               write(*,&#146;(" ]")&#146;)
-            enddo
-         rank default
-            write(stderr,*)&#146;*printl* did not expect rank=&#146;, rank(a), &
-             & &#146;shape=&#146;, shape(a),&#146;size=&#146;,size(a)
-            stop &#146;*printl* unexpected rank&#146;
-         end select
+    character(len=*),parameter   :: all=&#146;(*(g0,1x))&#146;
+    character(len=*),parameter   :: row=&#146;(" &gt; [ ",*(l1:,","))&#146;
+    character(len=*),intent(in)  :: title
+    logical,intent(in)           :: a(..)
+    integer                      :: i
+       write(*,*)
+       write(*,all,advance=&#146;no&#146;)trim(title),&
+        & &#146; : shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
+       ! get size and shape of input
+       select rank(a)
+       rank (0); write(*,&#146;(a)&#146;)&#146;(a scalar)&#146;
+          write(*,fmt=row,advance=&#146;no&#146;)a
+          write(*,&#146;(" ]")&#146;)
+       rank (1); write(*,&#146;(a)&#146;)&#146;(a vector)&#146;
+          do i=1,size(a)
+             write(*,fmt=row,advance=&#146;no&#146;)a(i)
+             write(*,&#146;(" ]")&#146;)
+          enddo
+       rank (2); write(*,&#146;(a)&#146;)&#146;(a matrix) &#146;
+          do i=1,size(a,dim=1)
+             write(*,fmt=row,advance=&#146;no&#146;)a(i,:)
+             write(*,&#146;(" ]")&#146;)
+          enddo
+       rank default
+          write(stderr,*)&#146;*printl* did not expect rank=&#146;, rank(a), &
+           & &#146;shape=&#146;, shape(a),&#146;size=&#146;,size(a)
+          stop &#146;*printl* unexpected rank&#146;
+       end select
 <P>
-      end subroutine printl
+    end subroutine printl
 <P>
-      end program demo_any
+    end program demo_any
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  T
-       &gt;  F
-       &gt;
-       &gt; first print b &gt; a : shape=23,rank=2,size=6(a matrix)
-       &gt;  &gt; [ F,T,T ]
-       &gt;  &gt; [ F,T,T ]
-       &gt;
-       &gt; any true values?  any(b &gt; a) : shape=,rank=0,size=1(a scalar)
-       &gt;  &gt; [ T ]
-       &gt;
-       &gt; again by columns? any(b &gt; a,1) : shape=3,rank=1,size=3(a vector)
-       &gt;  &gt; [ F ]
-       &gt;  &gt; [ T ]
-       &gt;  &gt; [ T ]
-       &gt;
-       &gt; again by rows?    any(b &gt; a,2) : shape=2,rank=1,size=2(a vector)
-       &gt;  &gt; [ T ]
-       &gt;  &gt; [ T ]
+     &gt;  T
+     &gt;  F
+     &gt;
+     &gt; first print b &gt; a : shape=23,rank=2,size=6(a matrix)
+     &gt;  &gt; [ F,T,T ]
+     &gt;  &gt; [ F,T,T ]
+     &gt;
+     &gt; any true values?  any(b &gt; a) : shape=,rank=0,size=1(a scalar)
+     &gt;  &gt; [ T ]
+     &gt;
+     &gt; again by columns? any(b &gt; a,1) : shape=3,rank=1,size=3(a vector)
+     &gt;  &gt; [ F ]
+     &gt;  &gt; [ T ]
+     &gt;  &gt; [ T ]
+     &gt;
+     &gt; again by rows?    any(b &gt; a,2) : shape=2,rank=1,size=2(a vector)
+     &gt;  &gt; [ T ]
+     &gt;  &gt; [ T ]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -277,6 +275,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -285,16 +284,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 ALL(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 any(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>any (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7082ec75-97be-4269-b2be-7e7cc2ad5065 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>any (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 97223791-4590-4ad7-8577-a09b76669099 using man macros.</FONT>
 <br><br><center><img src="images/any.3fortran.gif"></center>
 </div>
 </div>

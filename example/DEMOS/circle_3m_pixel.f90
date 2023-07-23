@@ -1,6 +1,6 @@
      program demo_circle
      use M_pixel
-     use M_writegif, only : writegif
+     use M_pixel__writegif, only : writegif
      implicit none
         !! set up drawing surface
         call prefsize(400,400)
@@ -20,9 +20,9 @@
         call circle( 25.0, 25.0, 20.0)
         call circle( 25.0,-25.0, 20.0)
         !! render the pixel map
-        call writegif('circle.3m_pixel.gif',P_pixel,P_colormap)
+        call writegif('circle.3M_pixel.gif',P_pixel,P_colormap)
         !! display the graphic assuming display(1) is available
-        call execute_command_line('display circle.3m_pixel.gif')
+        call execute_command_line('display circle.3M_pixel.gif')
         !! exit graphics mode
         call vexit()
      end program demo_circle

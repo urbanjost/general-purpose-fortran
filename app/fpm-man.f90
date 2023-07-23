@@ -4,7 +4,7 @@ use M_CLI2,       only : set_args, sget, lget, specified, topics=>unnamed
 use M_match,      only : getpat, match, regex_pattern
 use M_match,      only : YES, ERR
 use M_strings,    only : lower, indent, atleast
-use M_escape,     only : esc
+use M_attr,       only : attr
 implicit none
 type(regex_pattern)          :: p, start_p, end_p
 character(len=:),allocatable :: help_text(:), version_text(:)
@@ -225,21 +225,22 @@ integer :: lead
 logical :: program_text
    program_text=.false.
    newblock= oldblock
+   lead=0
    do j=1,size(oldblock)
       if( index(oldblock(j),'end program demo_') .eq. 0 .and. index(oldblock(j),'program demo_') .ne. 0)then
          program_text=.true.
          lead=indent(oldblock(j))
       endif
       if(program_text .eqv. .true.)then
-        newblock(j)=esc('<E>'//repeat(' ',lead)//'<E><y>'//atleast(oldblock(j)(lead+1:),80-lead) )
+        newblock(j)=attr('<E>'//repeat(' ',lead)//'<E><y>'//atleast(trim(oldblock(j)(lead+1:)),80-lead) )
       elseif(verify(oldblock(j)(1:1), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' ) == 0 .and. &
       & verify(oldblock(j), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ _') == 0 )then
          ilen=len_trim(oldblock(j))
-         newblock(j)=esc('<E><y><bo> '//trim(oldblock(j))//' </bo>'//repeat(' ',max(0,80-ilen-2))//'<reset>')
+         newblock(j)=attr('<E><y><bo> '//trim(oldblock(j))//' </bo>'//repeat(' ',max(0,80-ilen-2))//'<reset>')
        else
           ilen=len_trim(oldblock(j))
           ilen=len_trim(than(oldblock(j)))-ilen
-          newblock(j)=esc('<E><w>'//atleast(than(oldblock(j)),80+ilen)//'<reset>')
+          newblock(j)=attr('<E><w>'//atleast(than(oldblock(j)),80+ilen)//'<reset>')
        endif
       if( index(oldblock(j),'end program demo_') .ne.0)then
          program_text=.false.
@@ -267,56 +268,56 @@ end function than
 subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'help_text=[ CHARACTER(LEN=128) :: &',&
-'NAME',&
+'NAME                               ',&
 '    fman(1f) - [DEVELOPER] output descriptions of Fortran intrinsics',&
-'    (LICENSE:PD)',&
-'',&
-'SYNOPSIS',&
+'    (LICENSE:PD)                                                    ',&
+'                                                                    ',&
+'SYNOPSIS                                                            ',&
 '    fman NAME(s) [[-ignorecase][--regex Regular_Expression]]|[-topic_only]',&
-'                [--color][--demo]',&
-'',&
-'    fman [ --help| --version]',&
-'',&
-'DESCRIPTION',&
-'   fman(1) prints descriptions of Fortran intrinsics as simple flat text.',&
-'',&
+'                [--color][--demo]                                         ',&
+'                                                                          ',&
+'    fman [ --help| --version]                                             ',&
+'                                                                          ',&
+'DESCRIPTION                                                               ',&
+'   fman(1) prints descriptions of Fortran intrinsics as simple flat text. ',&
+'                                                                          ',&
 '   The text is formatted in the txt2man(1) markdown language so one can easily',&
-'   generate man-pages on ULS (Unix-Like Systems).',&
-'',&
-'OPTIONS',&
-'  TOPIC(s)          A list of Fortran intrinsic names or the special names',&
-'                    "toc" and "manual" (which generate a table of contents',&
-'                    and the entire set of documents respecively).',&
-'                    The default is "toc" and to ignore case.',&
-'  --regex,-e        Search all output per the provided Regular Expression.',&
-'                    Output is prefixed with the topic it was found in.',&
-'  --topic_only,-t   Only show topic names. Other switches are ignored.',&
-'  --ignorecase,-i   Ignore case when searching for a Regular Expression.',&
+'   generate man-pages on ULS (Unix-Like Systems).                             ',&
+'                                                                              ',&
+'OPTIONS                                                                       ',&
+'  TOPIC(s)          A list of Fortran intrinsic names or the special names    ',&
+'                    "toc" and "manual" (which generate a table of contents    ',&
+'                    and the entire set of documents respecively).             ',&
+'                    The default is "toc" and to ignore case.                  ',&
+'  --regex,-e        Search all output per the provided Regular Expression.    ',&
+'                    Output is prefixed with the topic it was found in.        ',&
+'  --topic_only,-t   Only show topic names. Other switches are ignored.        ',&
+'  --ignorecase,-i   Ignore case when searching for a Regular Expression.      ',&
 '  --demo,-d         extract first demo program found for a topic (starting with',&
-'                    "program demo_*" and ending with "end program demo_*").',&
-'  --color           Use ANSI in-line escape sequences to display the text in',&
-'                    set colors. Does not work with all terminal emulators or',&
-'                    terminals. Must use the -r switch with less(1) for less(1)',&
-'                    to display colors.',&
-'  --help            Display this help and exit',&
-'  --version         Output version information and exit',&
-'',&
-'EXAMPLES',&
-'  Sample commands',&
-'',&
-'   fman                 # list table of contents',&
-'   fman -e character    # check TOC for string. try "trigo","size","complex"',&
-'   fman tan|less        # display a description of tan(3f)',&
-'',&
-'   fman --regex ''''character'''' # look for string in the TOC ignoring case',&
-'',&
-'   fman manual>fortran.txt    # create a copy of all descriptions',&
-'',&
+'                    "program demo_*" and ending with "end program demo_*").    ',&
+'  --color           Use ANSI in-line escape sequences to display the text in   ',&
+'                    set colors. Does not work with all terminal emulators or   ',&
+'                    terminals. Must use the -r switch with less(1) for less(1) ',&
+'                    to display colors.                                         ',&
+'  --help            Display this help and exit                                 ',&
+'  --version         Output version information and exit                        ',&
+'                                                                               ',&
+'EXAMPLES                                                                       ',&
+'  Sample commands                                                              ',&
+'                                                                               ',&
+'   fman                 # list table of contents                               ',&
+'   fman -e character    # check TOC for string. try "trigo","size","complex"   ',&
+'   fman tan|less        # display a description of tan(3f)                     ',&
+'                                                                               ',&
+'   fman --regex ''''character'''' # look for string in the TOC ignoring case   ',&
+'                                                                               ',&
+'   fman manual>fortran.txt    # create a copy of all descriptions              ',&
+'                                                                               ',&
 '   # list the topic "scan" if found and lines containing "scan" from the entire',&
-'   # manual, prefixing the lines with the section name, while ignoring case.',&
-'   fman -e scan -i manual',&
-'',&
-'   fman -d verify >demo_verify.f90 # get sample program to try VERIFY(3f).',&
+'   # manual, prefixing the lines with the section name, while ignoring case.   ',&
+'   fman -e scan -i manual                                                      ',&
+'                                                                               ',&
+'   fman -d verify >demo_verify.f90 # get sample program to try VERIFY(3f).     ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 '@(#) PRODUCT:         GPF (General Purpose Fortran) utilities and examples    >',&

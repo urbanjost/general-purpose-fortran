@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>minval (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>minval (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>minval(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-minval(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 MINVAL(3) - [ARRAY:REDUCTION] Minimum value of an array
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ MINVAL(3) - [ARRAY:REDUCTION] Minimum value of an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = minval(array, [mask]) | minval(array [,dim] [,mask])
 <P>
 <PRE>
-           NUMERIC function minval(array, dim, mask)
+         NUMERIC function minval(array, dim, mask)
 <P>
-            NUMERIC,intent(in) :: array(..)
-            integer(kind=**),intent(in),optional :: dim
-            logical(kind=**),intent(in),optional :: mask(..)
+          NUMERIC,intent(in) :: array(..)
+          integer(kind=**),intent(in),optional :: dim
+          logical(kind=**),intent(in),optional :: mask(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = minval(array, [mask]) | minval(array [,dim] [,mask])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -111,16 +105,17 @@ NUMERIC is any numeric type and kind.
 
 </A>
 <BLOCKQUOTE>
-MINVAL(3) determines the minimum value of the elements in an array value,
-or, if the DIM argument is supplied, determines the minimum value along each
-row of the array in the DIM direction.
+<P>
+MINVAL(3) determines the minimum value of the elements in an array
+value, or, if the DIM argument is supplied, determines the minimum value
+along each row of the array in the DIM direction.
 <P>
 If MASK is present, only the elements for which MASK is .true. are
 considered.
 <P>
-If the array has zero size, or all of the elements of MASK are .false., then
-the result is HUGE(ARRAY) if ARRAY is numeric, or a string of CHAR(LEN=255)
-characters if ARRAY is of character type.
+If the array has zero size, or all of the elements of MASK are .false.,
+then the result is HUGE(ARRAY) if ARRAY is numeric, or a string of
+CHAR(LEN=255) characters if ARRAY is of character type.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -128,6 +123,7 @@ characters if ARRAY is of character type.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -137,14 +133,15 @@ ARRAY : Shall be an array of type integer, real, or character.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : (Optional) Shall be a scalar of type integer, with a value between
-one and the rank of ARRAY, inclusive. It may not be an optional dummy
-argument.
+DIM : (Optional) Shall be a scalar of type integer, with a value
+between one and the rank of ARRAY, inclusive. It may not be an
+optional dummy argument.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : Shall be an array of type logical, and conformable with ARRAY.
+MASK : Shall be an array of type logical, and conformable with
+ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -153,12 +150,13 @@ MASK : Shall be an array of type logical, and conformable with ARRAY.
 
 </A>
 <BLOCKQUOTE>
+<P>
 If DIM is absent, or if ARRAY has a rank of one, the result is a scalar.
 <P>
-If DIM is present, the result is an array with a rank one less than the rank
-of ARRAY, and a size corresponding to the size of ARRAY with the DIM
-dimension removed. In all cases, the result is of the same type and kind as
-ARRAY.
+If DIM is present, the result is an array with a rank one less than the
+rank of ARRAY, and a size corresponding to the size of ARRAY with the
+DIM dimension removed. In all cases, the result is of the same type and
+kind as ARRAY.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -166,96 +164,97 @@ ARRAY.
 
 </A>
 <BLOCKQUOTE>
+<P>
 sample program:
 <P>
 <PRE>
-      program demo_minval
-      implicit none
-      integer :: i
-      character(len=*),parameter :: g=&#146;(3x,*(g0,1x))&#146;
+    program demo_minval
+    implicit none
+    integer :: i
+    character(len=*),parameter :: g=&#146;(3x,*(g0,1x))&#146;
 <P>
-      integer,save :: ints(3,5)= reshape([&
-             1,  -2,   3,   4,   5,  &
-            10,  20, -30,  40,  50,  &
-            11,  22,  33, -44,  55  &
-      ],shape(ints),order=[2,1])
+    integer,save :: ints(3,5)= reshape([&
+           1,  -2,   3,   4,   5,  &
+          10,  20, -30,  40,  50,  &
+          11,  22,  33, -44,  55  &
+    ],shape(ints),order=[2,1])
 <P>
-      integer,save :: box(3,5,2)
+    integer,save :: box(3,5,2)
 <P>
-         box(:,:,1)=ints
-         box(:,:,2)=-ints
+       box(:,:,1)=ints
+       box(:,:,2)=-ints
 <P>
-         write(*,*)&#146;Given the array&#146;
-         write(*,&#146;(1x,*(g4.4,1x))&#146;) &
-         & (ints(i,:),new_line(&#146;a&#146;),i=1,size(ints,dim=1))
+       write(*,*)&#146;Given the array&#146;
+       write(*,&#146;(1x,*(g4.4,1x))&#146;) &
+       & (ints(i,:),new_line(&#146;a&#146;),i=1,size(ints,dim=1))
 <P>
-         write(*,*)&#146;What is the smallest element in the array?&#146;
-         write(*,g) minval(ints),&#146;at &lt;&#146;,minloc(ints),&#146;&gt;&#146;
+       write(*,*)&#146;What is the smallest element in the array?&#146;
+       write(*,g) minval(ints),&#146;at &lt;&#146;,minloc(ints),&#146;&gt;&#146;
 <P>
-         write(*,*)&#146;What is the smallest element in each column?&#146;
-         write(*,g) minval(ints,dim=1)
+       write(*,*)&#146;What is the smallest element in each column?&#146;
+       write(*,g) minval(ints,dim=1)
 <P>
-         write(*,*)&#146;What is the smallest element in each row?&#146;
-         write(*,g) minval(ints,dim=2)
+       write(*,*)&#146;What is the smallest element in each row?&#146;
+       write(*,g) minval(ints,dim=2)
 <P>
-         ! notice the shape of the output has less columns
-         ! than the input in this case
-         write(*,*)&#146;What is the smallest element in each column,&#146;
-         write(*,*)&#146;considering only those elements that are&#146;
-         write(*,*)&#146;greater than zero?&#146;
-         write(*,g) minval(ints, dim=1, mask = ints &gt; 0)
+       ! notice the shape of the output has less columns
+       ! than the input in this case
+       write(*,*)&#146;What is the smallest element in each column,&#146;
+       write(*,*)&#146;considering only those elements that are&#146;
+       write(*,*)&#146;greater than zero?&#146;
+       write(*,g) minval(ints, dim=1, mask = ints &gt; 0)
 <P>
-         write(*,*)&
-         & &#146;if everything is false a zero-sized array is NOT returned&#146;
-         write(*,*) minval(ints, dim=1, mask = .false.)
-         write(*,*)&#146;even for a zero-sized input&#146;
-         write(*,g) minval([integer ::], dim=1, mask = .false.)
+       write(*,*)&
+       & &#146;if everything is false a zero-sized array is NOT returned&#146;
+       write(*,*) minval(ints, dim=1, mask = .false.)
+       write(*,*)&#146;even for a zero-sized input&#146;
+       write(*,g) minval([integer ::], dim=1, mask = .false.)
 <P>
-         write(*,*)&#146;a scalar answer for everything false is huge()&#146;
-         write(*,g) minval(ints, mask = .false.)
-         write(*,g) minval([integer ::], mask = .false.)
+       write(*,*)&#146;a scalar answer for everything false is huge()&#146;
+       write(*,g) minval(ints, mask = .false.)
+       write(*,g) minval([integer ::], mask = .false.)
 <P>
-         write(*,*)&#146;some calls with three dimensions&#146;
-         write(*,g) minval(box, mask = .true. )
-         write(*,g) minval(box, dim=1, mask = .true. )
+       write(*,*)&#146;some calls with three dimensions&#146;
+       write(*,g) minval(box, mask = .true. )
+       write(*,g) minval(box, dim=1, mask = .true. )
 <P>
-         write(*,g) minval(box, dim=2, mask = .true. )
-         write(*,g) &#146;shape of answer is &#146;, &
-         & shape(minval(box, dim=2, mask = .true. ))
+       write(*,g) minval(box, dim=2, mask = .true. )
+       write(*,g) &#146;shape of answer is &#146;, &
+       & shape(minval(box, dim=2, mask = .true. ))
 <P>
-      end program demo_minval
+    end program demo_minval
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt; Given the array
-       &gt;    1   -2    3    4    5
-       &gt;   10   20  -30   40   50
-       &gt;   11   22   33  -44   55
-       &gt;
-       &gt; What is the smallest element in the array?
-       &gt;   -44 at &lt; 3 4 &gt;
-       &gt; What is the smallest element in each column?
-       &gt;   1 -2 -30 -44 5
-       &gt; What is the smallest element in each row?
-       &gt;   -2 -30 -44
-       &gt; What is the smallest element in each column,
-       &gt; considering only those elements that are
-       &gt; greater than zero?
-       &gt;   1 20 3 4 5
-       &gt; if everything is false a zero-sized array is NOT returned
-       &gt;  2147483647  2147483647  2147483647  2147483647  2147483647
-       &gt; even for a zero-sized input
-       &gt;   2147483647
-       &gt; a scalar answer for everything false is huge()
-       &gt;   2147483647
-       &gt;   2147483647
-       &gt; some calls with three dimensions
-       &gt;   -55
-       &gt;   1 -2 -30 -44 5 -11 -22 -33 -40 -55
-       &gt;   -2 -30 -44 -5 -50 -55
-       &gt;   shape of answer is  3 2
+     &gt; Given the array
+     &gt;    1   -2    3    4    5
+     &gt;   10   20  -30   40   50
+     &gt;   11   22   33  -44   55
+     &gt;
+     &gt; What is the smallest element in the array?
+     &gt;   -44 at &lt; 3 4 &gt;
+     &gt; What is the smallest element in each column?
+     &gt;   1 -2 -30 -44 5
+     &gt; What is the smallest element in each row?
+     &gt;   -2 -30 -44
+     &gt; What is the smallest element in each column,
+     &gt; considering only those elements that are
+     &gt; greater than zero?
+     &gt;   1 20 3 4 5
+     &gt; if everything is false a zero-sized array is NOT returned
+     &gt;  2147483647  2147483647  2147483647  2147483647  2147483647
+     &gt; even for a zero-sized input
+     &gt;   2147483647
+     &gt; a scalar answer for everything false is huge()
+     &gt;   2147483647
+     &gt;   2147483647
+     &gt; some calls with three dimensions
+     &gt;   -55
+     &gt;   1 -2 -30 -44 5 -11 -22 -33 -40 -55
+     &gt;   -2 -30 -44 -5 -50 -55
+     &gt;   shape of answer is  3 2
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -265,6 +264,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -273,16 +273,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 MIN(3), MINLOC(3) MAXLOC(3), MAXVAL(3), MIN(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              minval(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>minval (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d79090a5-b4ba-4310-aa80-a7ba72130148 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>minval (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ae40cf9c-b656-475a-95da-6e0b8c2d6c25 using man macros.</FONT>
 <br><br><center><img src="images/minval.3fortran.gif"></center>
 </div>
 </div>

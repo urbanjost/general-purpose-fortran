@@ -84,6 +84,221 @@ interface elementcopy
    & elementcopy_int64,   elementcopy_int32,  elementcopy_int16,  elementcopy_int8
 end interface elementcopy
 
+INTERFACE
+   SUBROUTINE MATX_WAXPY(N, SR, SI, XR, XI, INCX, YR, YI, INCY)
+      import  int32, real64
+      integer(kind=int32), INTENT(IN) :: N
+      real(kind=real64), INTENT(IN) :: SR
+      real(kind=real64), INTENT(IN) :: SI
+      real(kind=real64), INTENT(IN) :: XR(*)
+      real(kind=real64), INTENT(IN) :: XI(*)
+      integer(kind=int32), INTENT(IN) :: INCX
+      real(kind=real64) :: YR(*)
+      real(kind=real64) :: YI(*)
+      integer(kind=int32), INTENT(IN) :: INCY
+   END SUBROUTINE MATX_WAXPY
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_COMQR3(NM, N, LOW, IGH, ORTR, ORTI, HR, HI, WR, WI, ZR, ZI, IERR, JOB)
+      import  int32, real64
+      integer(kind=int32) :: IGH
+      integer(kind=int32) :: N
+      integer(kind=int32) :: NM
+      integer(kind=int32) :: LOW
+      real(kind=real64) :: ORTR(IGH)
+      real(kind=real64) :: ORTI(IGH)
+      real(kind=real64) :: HR(NM, N)
+      real(kind=real64) :: HI(NM, N)
+      real(kind=real64) :: WR(N)
+      real(kind=real64) :: WI(N)
+      real(kind=real64) :: ZR(NM, N)
+      real(kind=real64) :: ZI(NM, N)
+      integer(kind=int32) :: IERR
+      integer(kind=int32) :: JOB
+   END SUBROUTINE ML_COMQR3
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_CORTH(NM, N, LOW, IGH, AR, AI, ORTR, ORTI)
+      import  int32, real64
+      integer(kind=int32) :: IGH
+      integer(kind=int32) :: N
+      integer(kind=int32) :: NM
+      integer(kind=int32) :: LOW
+      real(kind=real64) :: AR(NM, N)
+      real(kind=real64) :: AI(NM, N)
+      real(kind=real64) :: ORTR(IGH)
+      real(kind=real64) :: ORTI(IGH)
+   END SUBROUTINE ML_CORTH
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_HTRIBK(NM, N, AR, AI, TAU, M, ZR, ZI)
+      import  int32, real64
+      integer(kind=int32) :: M
+      integer(kind=int32) :: N
+      integer(kind=int32) :: NM
+      real(kind=real64) :: AR(NM, N)
+      real(kind=real64) :: AI(NM, N)
+      real(kind=real64) :: TAU(2, N)
+      real(kind=real64) :: ZR(NM, M)
+      real(kind=real64) :: ZI(NM, M)
+   END SUBROUTINE ML_HTRIBK
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_HTRIDI(NM, N, AR, AI, D, E, E2, TAU)
+      import  int32, real64
+      integer(kind=int32) :: N
+      integer(kind=int32) :: NM
+      real(kind=real64) :: AR(NM, N)
+      real(kind=real64) :: AI(NM, N)
+      real(kind=real64) :: D(N)
+      real(kind=real64) :: E(N)
+      real(kind=real64) :: E2(N)
+      real(kind=real64) :: TAU(2, N)
+   END SUBROUTINE ML_HTRIDI
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_IMTQL2(NM, N, D, E, Z, IERR, JOB)
+      import  int32, real64
+      integer(kind=int32) :: N
+      integer(kind=int32) :: NM
+      real(kind=real64) :: D(N)
+      real(kind=real64) :: E(N)
+      real(kind=real64) :: Z(NM, N)
+      integer(kind=int32) :: IERR
+      integer(kind=int32) :: JOB
+   END SUBROUTINE ML_IMTQL2
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_WGECO(AR, AI, LDA, N, IPVT, RCOND, ZR, ZI)
+      import  int32, real64
+      integer(kind=int32) :: LDA
+      real(kind=real64) :: AR(LDA, *)
+      real(kind=real64) :: AI(LDA, *)
+      integer(kind=int32) :: N
+      integer(kind=int32) :: IPVT(*)
+      real(kind=real64) :: RCOND
+      real(kind=real64) :: ZR(*)
+      real(kind=real64) :: ZI(*)
+   END SUBROUTINE ML_WGECO
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_WGEDI(AR, AI, LDA, N, IPVT, DETR, DETI, WORKR, WORKI, JOB)
+      import  int32, real64
+      integer(kind=int32) :: LDA
+      real(kind=real64) :: AR(LDA, *)
+      real(kind=real64) :: AI(LDA, *)
+      integer(kind=int32) :: N
+      integer(kind=int32) :: IPVT(*)
+      real(kind=real64) :: DETR(2)
+      real(kind=real64) :: DETI(2)
+      real(kind=real64) :: WORKR(*)
+      real(kind=real64) :: WORKI(*)
+      integer(kind=int32) :: JOB
+   END SUBROUTINE ML_WGEDI
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_WGEFA(AR, AI, LDA, N, IPVT, INFO)
+      import  int32, real64
+      integer(kind=int32) :: LDA
+      real(kind=real64) :: AR(LDA, *)
+      real(kind=real64) :: AI(LDA, *)
+      integer(kind=int32) :: N
+      integer(kind=int32) :: IPVT(*)
+      integer(kind=int32) :: INFO
+   END SUBROUTINE ML_WGEFA
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_WGESL(AR, AI, LDA, N, IPVT, BR, BI, JOB)
+      import  int32, real64
+      integer(kind=int32) :: LDA
+      real(kind=real64) :: AR(LDA, *)
+      real(kind=real64) :: AI(LDA, *)
+      integer(kind=int32) :: N
+      integer(kind=int32) :: IPVT(*)
+      real(kind=real64) :: BR(*)
+      real(kind=real64) :: BI(*)
+      integer(kind=int32) :: JOB
+   END SUBROUTINE ML_WGESL
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_WQRDC(XR, XI, LDX, N, P, QRAUXR, QRAUXI, JPVT, WORKR, WORKI, JOB)
+      import  int32, real64
+      integer(kind=int32) :: LDX
+      real(kind=real64) :: XR(LDX, *)
+      real(kind=real64) :: XI(LDX, *)
+      integer(kind=int32) :: N
+      integer(kind=int32) :: P
+      real(kind=real64) :: QRAUXR(*)
+      real(kind=real64) :: QRAUXI(*)
+      integer(kind=int32) :: JPVT(*)
+      real(kind=real64) :: WORKR(*)
+      real(kind=real64) :: WORKI(*)
+      integer(kind=int32) :: JOB
+   END SUBROUTINE ML_WQRDC
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_WQRSL(XR, XI, LDX, N, K, QRAUXR, QRAUXI, YR, YI, QYR, QYI, QTYR, QTYI, BR, BI, RSDR, RSDI, XBR, XBI, JOB, INFO)
+      import  int32, real64
+      integer(kind=int32) :: LDX
+      real(kind=real64) :: XR(LDX, *)
+      real(kind=real64) :: XI(LDX, *)
+      integer(kind=int32) :: N
+      integer(kind=int32) :: K
+      real(kind=real64) :: QRAUXR(*)
+      real(kind=real64) :: QRAUXI(*)
+      real(kind=real64) :: YR(*)
+      real(kind=real64) :: YI(*)
+      real(kind=real64) :: QYR(*)
+      real(kind=real64) :: QYI(*)
+      real(kind=real64) :: QTYR(*)
+      real(kind=real64) :: QTYI(*)
+      real(kind=real64) :: BR(*)
+      real(kind=real64) :: BI(*)
+      real(kind=real64) :: RSDR(*)
+      real(kind=real64) :: RSDI(*)
+      real(kind=real64) :: XBR(*)
+      real(kind=real64) :: XBI(*)
+      integer(kind=int32) :: JOB
+      integer(kind=int32) :: INFO
+   END SUBROUTINE ML_WQRSL
+END INTERFACE
+
+INTERFACE
+   SUBROUTINE ML_WSVDC(XR, XI, LDX, N, P, SR, SI, ER, EI, UR, UI, LDU, VR, VI, LDV, WORKR, WORKI, JOB, INFO)
+      import  int32, real64
+      integer(kind=int32) :: LDV
+      integer(kind=int32) :: LDU
+      integer(kind=int32) :: LDX
+      real(kind=real64) :: XR(LDX, *)
+      real(kind=real64) :: XI(LDX, *)
+      integer(kind=int32) :: N
+      integer(kind=int32) :: P
+      real(kind=real64) :: SR(*)
+      real(kind=real64) :: SI(*)
+      real(kind=real64) :: ER(*)
+      real(kind=real64) :: EI(*)
+      real(kind=real64) :: UR(LDU, *)
+      real(kind=real64) :: UI(LDU, *)
+      real(kind=real64) :: VR(LDV, *)
+      real(kind=real64) :: VI(LDV, *)
+      real(kind=real64) :: WORKR(*)
+      real(kind=real64) :: WORKI(*)
+      integer(kind=int32) :: JOB
+      integer(kind=int32) :: INFO
+   END SUBROUTINE ML_WSVDC
+END INTERFACE
+
 contains
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2433,11 +2648,11 @@ end subroutine matX_waxpy
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-      subroutine ml_wgeco(ar,ai,lda,n,ipvt,rcond,zr,zi)
-      use m_la
-      integer lda,n,ipvt(*)
-      doubleprecision ar(lda,*),ai(lda,*),zr(*),zi(*)
-      doubleprecision rcond
+subroutine ml_wgeco(ar,ai,lda,n,ipvt,rcond,zr,zi)
+use m_la
+integer lda,n,ipvt(*)
+doubleprecision ar(lda,*),ai(lda,*),zr(*),zi(*)
+doubleprecision rcond
 !
 !     WGECO FACTORS A DOUBLE-COMPLEX MATRIX BY GAUSSIAN ELIMINATION
 !     AND ESTIMATES THE CONDITION OF THE MATRIX.

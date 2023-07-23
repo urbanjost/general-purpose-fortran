@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>conjg (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>conjg (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>conjg(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-conjg(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 CONJG(3) - [NUMERIC] Complex conjugate of a complex value
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ CONJG(3) - [NUMERIC] Complex conjugate of a complex value
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = conjg(z)
 <P>
 <PRE>
-           elemental complex(kind=KIND) function conjg(z)
+         elemental complex(kind=KIND) function conjg(z)
 <P>
-            complex(kind=**),intent(in) :: z
+          complex(kind=**),intent(in) :: z
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = conjg(z)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,16 +103,18 @@ The returned value has the same complex type as the input.
 
 </A>
 <BLOCKQUOTE>
+<P>
 CONJG(3) returns the complex conjugate of the complex value Z.
 <P>
 That is, If Z is the complex value (X, Y) then the result is (X, <B>-Y</B>).
 <P>
-In mathematics, the complex conjugate of a complex number is a value whose
-real and imaginary part are equal parts are equal in magnitude to each other
-but the Y value has opposite sign.
+In mathematics, the complex conjugate of a complex number is a value
+whose real and imaginary part are equal parts are equal in magnitude to
+each other but the Y value has opposite sign.
 <P>
-For matrices of complex numbers, CONJG(ARRAY) represents the element-by-
-element conjugation of ARRAY; not the conjugate transpose of the ARRAY .
+For matrices of complex numbers, CONJG(ARRAY) represents the
+element-by-element conjugation of ARRAY; not the conjugate transpose of
+the ARRAY .
 </BLOCKQUOTE>
 <A name=4>
 
@@ -126,6 +122,7 @@ element conjugation of ARRAY; not the conjugate transpose of the ARRAY .
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -139,8 +136,9 @@ Z : The value to create the conjugate of.
 
 </A>
 <BLOCKQUOTE>
-Returns a value equal to the input value except the sign of the imaginary
-component is the opposite of the input value.
+<P>
+Returns a value equal to the input value except the sign of the
+imaginary component is the opposite of the input value.
 <P>
 That is, if Z has the value (X,Y), the result has the value (X, <B>-Y</B>).
 </BLOCKQUOTE>
@@ -150,60 +148,61 @@ That is, if Z has the value (X,Y), the result has the value (X, <B>-Y</B>).
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_conjg
-      use, intrinsic :: iso_fortran_env, only : real_kinds, &
-      & real32, real64, real128
-      implicit none
-      complex :: z = (2.0, 3.0)
-      complex(kind=real64) :: dz = (   &
-         &  1.2345678901234567_real64, -1.2345678901234567_real64)
-      complex :: arr(3,3)
-      integer :: i
-         ! basics
-          ! notice the sine of the imaginary component changes
-          print *, z, conjg(z)
+    program demo_conjg
+    use, intrinsic :: iso_fortran_env, only : real_kinds, &
+    & real32, real64, real128
+    implicit none
+    complex :: z = (2.0, 3.0)
+    complex(kind=real64) :: dz = (   &
+       &  1.2345678901234567_real64, -1.2345678901234567_real64)
+    complex :: arr(3,3)
+    integer :: i
+       ! basics
+        ! notice the sine of the imaginary component changes
+        print *, z, conjg(z)
 <P>
-          ! any complex kind is supported. z is of default kind but
-          ! dz is kind=real64.
-          print *, dz
-          dz = conjg(dz)
-          print *, dz
-          print *
+        ! any complex kind is supported. z is of default kind but
+        ! dz is kind=real64.
+        print *, dz
+        dz = conjg(dz)
+        print *, dz
+        print *
 <P>
-          ! the function is elemental so it can take arrays
-          arr(1,:)=[(-1.0, 2.0),( 3.0, 4.0),( 5.0,-6.0)]
-          arr(2,:)=[( 7.0,-8.0),( 8.0, 9.0),( 9.0, 9.0)]
-          arr(3,:)=[( 1.0, 9.0),( 2.0, 0.0),(-3.0,-7.0)]
+        ! the function is elemental so it can take arrays
+        arr(1,:)=[(-1.0, 2.0),( 3.0, 4.0),( 5.0,-6.0)]
+        arr(2,:)=[( 7.0,-8.0),( 8.0, 9.0),( 9.0, 9.0)]
+        arr(3,:)=[( 1.0, 9.0),( 2.0, 0.0),(-3.0,-7.0)]
 <P>
-          write(*,*)&#146;original&#146;
-          write(*,&#146;(3("(",g8.2,",",g8.2,")",1x))&#146;)(arr(i,:),i=1,3)
-          arr = conjg(arr)
-          write(*,*)&#146;conjugate&#146;
-          write(*,&#146;(3("(",g8.2,",",g8.2,")",1x))&#146;)(arr(i,:),i=1,3)
+        write(*,*)&#146;original&#146;
+        write(*,&#146;(3("(",g8.2,",",g8.2,")",1x))&#146;)(arr(i,:),i=1,3)
+        arr = conjg(arr)
+        write(*,*)&#146;conjugate&#146;
+        write(*,&#146;(3("(",g8.2,",",g8.2,")",1x))&#146;)(arr(i,:),i=1,3)
 <P>
-      end program demo_conjg
+    end program demo_conjg
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  (2.000000,3.000000) (2.000000,-3.000000)
-       &gt;
-       &gt;  (1.23456789012346,-1.23456789012346)
-       &gt;  (1.23456789012346,1.23456789012346)
-       &gt;
-       &gt;  original
-       &gt; (-1.0    , 2.0    ) ( 3.0    , 4.0    ) ( 5.0    ,-6.0    )
-       &gt; ( 7.0    ,-8.0    ) ( 8.0    , 9.0    ) ( 9.0    , 9.0    )
-       &gt; ( 1.0    , 9.0    ) ( 2.0    , 0.0    ) (-3.0    ,-7.0    )
-       &gt;
-       &gt;  conjugate
-       &gt; (-1.0    ,-2.0    ) ( 3.0    ,-4.0    ) ( 5.0    , 6.0    )
-       &gt; ( 7.0    , 8.0    ) ( 8.0    ,-9.0    ) ( 9.0    ,-9.0    )
-       &gt; ( 1.0    ,-9.0    ) ( 2.0    , 0.0    ) (-3.0    , 7.0    )
+     &gt;  (2.000000,3.000000) (2.000000,-3.000000)
+     &gt;
+     &gt;  (1.23456789012346,-1.23456789012346)
+     &gt;  (1.23456789012346,1.23456789012346)
+     &gt;
+     &gt;  original
+     &gt; (-1.0    , 2.0    ) ( 3.0    , 4.0    ) ( 5.0    ,-6.0    )
+     &gt; ( 7.0    ,-8.0    ) ( 8.0    , 9.0    ) ( 9.0    , 9.0    )
+     &gt; ( 1.0    , 9.0    ) ( 2.0    , 0.0    ) (-3.0    ,-7.0    )
+     &gt;
+     &gt;  conjugate
+     &gt; (-1.0    ,-2.0    ) ( 3.0    ,-4.0    ) ( 5.0    , 6.0    )
+     &gt; ( 7.0    , 8.0    ) ( 8.0    ,-9.0    ) ( 9.0    ,-9.0    )
+     &gt; ( 1.0    ,-9.0    ) ( 2.0    , 0.0    ) (-3.0    , 7.0    )
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -213,6 +212,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -221,6 +221,7 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -241,20 +242,16 @@ REAL(3) - Convert to real type
 that take or produce complex values in addition to algebraic and logical
 expressions:
 <P>
-ABS(3), ACOSH(3), ACOS(3), ASINH(3), ASIN(3), ATAN2(3), ATANH(3), ATAN(3),
-COSH(3), COS(3), CO_SUM(3), DBLE(3), DOT_PRODUCT(3), EXP(3), INT(3),
-IS_CONTIGUOUS(3), KIND(3), LOG(3), MATMUL(3), PRECISION(3), PRODUCT(3),
-RANGE(3), RANK(3), SINH(3), SIN(3), SQRT(3), STORAGE_SIZE(3), SUM(3),
-TANH(3), TAN(3), UNPACK(3),
+ABS(3), ACOSH(3), ACOS(3), ASINH(3), ASIN(3), ATAN2(3), ATANH(3),
+ATAN(3), COSH(3), COS(3), CO_SUM(3), DBLE(3), DOT_PRODUCT(3), EXP(3),
+INT(3), IS_CONTIGUOUS(3), KIND(3), LOG(3), MATMUL(3), PRECISION(3),
+PRODUCT(3), RANGE(3), RANK(3), SINH(3), SIN(3), SQRT(3),
+STORAGE_SIZE(3), SUM(3), TANH(3), TAN(3), UNPACK(3),
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               conjg(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>conjg (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 204042cf-86c1-4298-a5a6-50773cf17fbc using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>conjg (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1e125123-c5e2-4c41-88b1-f5221cf6a29a using man macros.</FONT>
 <br><br><center><img src="images/conjg.3fortran.gif"></center>
 </div>
 </div>

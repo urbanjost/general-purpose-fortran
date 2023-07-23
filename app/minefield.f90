@@ -49,45 +49,45 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   minefield(1f) - [M_draw] minefield game                                                                                      ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   minefield [[ -r rows] [ -c columns]] |[ --help --version ]                                                                   ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   minefield(1f) is a minefield sweeper game. The game tests many M_DRAW(3fm)                                                   ',&
-'   functions.                                                                                                                   ',&
-'                                                                                                                                ',&
-'   The object of the game is to mark all the mines with mouse 2 and expose                                                      ',&
-'   all the squares that are not mines with mouse 1 as quickly as possible.                                                      ',&
-'   The number in a square indicates how many mines are adjacent to it.                                                          ',&
-'                                                                                                                                ',&
-'   The game can go up to 99 rows or columns.                                                                                    ',&
-'                                                                                                                                ',&
-'   MOUSE 1   Use mouse 1 to expose a square                                                                                     ',&
-'   MOUSE 2   Use mouse 2 to mark a mine                                                                                         ',&
-'   MOUSE 3   Use mouse 3 to take a mine marker back off                                                                         ',&
-'                                                                                                                                ',&
-'   To cheat use mouse 2 and 3 together to expose all squares that have                                                          ',&
-'   no mines adjacent to them. Use mouse 1, 2 and 3 to expose unexposed                                                          ',&
-'   squares with no risk of a bomb going off, use mouse 1 and 3 to solve                                                         ',&
-'   all unexposed squares.                                                                                                       ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   -r          number of rows                                                                                                   ',&
-'   -c          number of columns                                                                                                ',&
-'   -switch     switch mouse 2 and mouse 3 buttons; typically for                                                                ',&
-'               two-button mouses                                                                                                ',&
-'   -x          width of window in rasters. Defaults to 800                                                                      ',&
-'   -y          height of window in rasters. Defaults to 500                                                                     ',&
-'   --help      display help text and exit                                                                                       ',&
-'   --version   display version text and exit                                                                                    ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   minefield(1f) - [M_draw] minefield game                                      ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   minefield [[ -r rows] [ -c columns]] |[ --help --version ]                   ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   minefield(1f) is a minefield sweeper game. The game tests many M_DRAW(3fm)   ',&
+'   functions.                                                                   ',&
+'                                                                                ',&
+'   The object of the game is to mark all the mines with mouse 2 and expose      ',&
+'   all the squares that are not mines with mouse 1 as quickly as possible.      ',&
+'   The number in a square indicates how many mines are adjacent to it.          ',&
+'                                                                                ',&
+'   The game can go up to 99 rows or columns.                                    ',&
+'                                                                                ',&
+'   MOUSE 1   Use mouse 1 to expose a square                                     ',&
+'   MOUSE 2   Use mouse 2 to mark a mine                                         ',&
+'   MOUSE 3   Use mouse 3 to take a mine marker back off                         ',&
+'                                                                                ',&
+'   To cheat use mouse 2 and 3 together to expose all squares that have          ',&
+'   no mines adjacent to them. Use mouse 1, 2 and 3 to expose unexposed          ',&
+'   squares with no risk of a bomb going off, use mouse 1 and 3 to solve         ',&
+'   all unexposed squares.                                                       ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'   -r          number of rows                                                   ',&
+'   -c          number of columns                                                ',&
+'   -switch     switch mouse 2 and mouse 3 buttons; typically for                ',&
+'               two-button mouses                                                ',&
+'   -x          width of window in rasters. Defaults to 800                      ',&
+'   -y          height of window in rasters. Defaults to 500                     ',&
+'   --help      display help text and exit                                       ',&
+'   --version   display version text and exit                                    ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -149,7 +149,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    minefield game>',&
 '@(#)VERSION:        4.0, 20180616>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2023-02-12 18:39:58 UTC-300>',&
+'@(#)COMPILED:       2023-07-22 01:28:25 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -340,7 +340,7 @@ integer :: icolor
                call rect(xmin,ymin,xmax,ymax)
             endif
             ! unexposed pieces and mistakenly marked bombs
-         elseif(all.eqv..true.)then   ! end of game, expose all pieces
+         elseif(all)then   ! end of game, expose all pieces
             call color(7)
             call polyfill(.true.)
             call rect(xmin,ymin,xmax,ymax)
@@ -584,14 +584,14 @@ real               :: fval
       do j=1,icols
          if(switch(i,j).neqv..false.)then
             isum=0
-            if(switch(i-1,j-1).eqv..false.)isum=isum+1
-            if(switch(i+1,j+1).eqv..false.)isum=isum+1
-            if(switch(i-1,j+1).eqv..false.)isum=isum+1
-            if(switch(i+1,j-1).eqv..false.)isum=isum+1
-            if(switch(i-1,j+0).eqv..false.)isum=isum+1
-            if(switch(i+1,j+0).eqv..false.)isum=isum+1
-            if(switch(i-0,j+1).eqv..false.)isum=isum+1
-            if(switch(i-0,j-1).eqv..false.)isum=isum+1
+            if( .not.switch(i-1,j-1) )isum=isum+1
+            if( .not.switch(i+1,j+1) )isum=isum+1
+            if( .not.switch(i-1,j+1) )isum=isum+1
+            if( .not.switch(i+1,j-1) )isum=isum+1
+            if( .not.switch(i-1,j+0) )isum=isum+1
+            if( .not.switch(i+1,j+0) )isum=isum+1
+            if( .not.switch(i-0,j+1) )isum=isum+1
+            if( .not.switch(i-0,j-1) )isum=isum+1
             storage(i,j)=-(isum+1)  ! values of -1 to -9 for 0 to 8 adjacent bombs
          else
             storage(i,j)=-10  ! bomb value

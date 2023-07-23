@@ -1,6 +1,6 @@
      program demo_poly2
      use M_pixel
-     use M_writegif, only : writegif
+     use M_pixel__writegif, only : writegif
      implicit none
      integer :: i, j, icolor
      real    :: xx, yy
@@ -20,7 +20,7 @@
            enddo
            xx=xx+16.0
         enddo
-        call writegif('poly2.3m_pixel.gif',P_pixel,P_colormap)
+        call writegif('poly2.3M_pixel.gif',P_pixel,P_colormap)
         call vexit()
      contains
 

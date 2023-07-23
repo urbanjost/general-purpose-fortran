@@ -152,8 +152,8 @@ subroutine chktab (zstr, lstr)
 !  Verify and possibly update current TAB expansion plan
 character (len=*), intent (inout) :: zstr  ! The string
 integer, intent (inout)           :: lstr  ! its trimmed length
-integer :: lfil
 integer :: lexp
+integer :: istr
 ! __________________________________________________________________________________________________________________________________
 !
    lexp = lstr
@@ -188,9 +188,11 @@ integer :: lexp
    enddo body
    mlins = max (lexp, mlins)
 contains
-subroutine expand
+
+subroutine expand()
 integer :: iexp
 integer :: iwrk
+integer :: lfil
 !
 !  Expand each TAB on to next tab mark
 !
@@ -251,6 +253,7 @@ integer                           :: iexp
 integer                           :: istr
 integer                           :: iwrk
 integer                           :: lexp
+integer                           :: lfil
 ! __________________________________________________________________________________________________________________________________
 !
 character (len=linem) :: zlinw  ! work string
@@ -1629,79 +1632,79 @@ subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
 '   f90split(1f) - [DEVELOPER] split Fortran source file into individual',&
-'   files at module or procedure boundaries.',&
-'   (LICENSE:PD)',&
-'',&
-'SYNOPSIS',&
+'   files at module or procedure boundaries.                            ',&
+'   (LICENSE:PD)                                                        ',&
+'                                                                       ',&
+'SYNOPSIS                                                               ',&
 '   f90split [-fcase NAME] [-odir DIRECTORY] largefile(s) [ > list_file ] |',&
-'   [ --help| --version]',&
-'',&
-'DESCRIPTION',&
-'   f90split(1) is a utility which splits free source form Fortran code',&
-'   into multiple files, one module or procedure per file. Note that',&
-'   contained procedures are stored within their parent procedure.',&
-'',&
-'   Each output file contains a single program unit named after the unit,',&
-'   unless that filename exists.',&
-'',&
-'   If the initial output file name exists a file will be created named',&
-'   main0001.f90-main9999.f90, or bdta0001.f90-bdta9999.f90. If a file',&
-'   with that name already exists, it is put in dupl0001.f90-dupl9999.f90.',&
-'',&
-'   f90split(1) also lists on stdout the USE and INCLUDE dependencies',&
-'',&
-'   f90split(1) is not aware of preprocessor directives.',&
-'',&
-'OPTIONS',&
-'    largfile(s)  list of input files. Defaults to stdin.',&
-'',&
-'    --fcase      case mode for generated filenames',&
-'',&
-'                   leave  use procedure name case as-is',&
-'                   lower  generate all-lowercase filenames',&
-'                   upper  generate all-uppercase filenames',&
-'',&
-'    --odir     output directory. Defaults to current directory.',&
-'',&
-'    --help     display this help and exit',&
-'    --version  output version information and exit',&
-'',&
-'LICENSE',&
-'   All rights to this code are waived, so that it may be freely',&
-'   distributed as public domain software subject to the condition that',&
-'   these 6 lines are verbatim reproduced.',&
-'',&
-'   Originally written by Michel Olagnon, from Ifremer, France, who would',&
-'   be pleased to receive your comments and corrections.',&
-'',&
-'AUTHOR',&
-'   + M. Olagnon (Michel.Olagnon@ifremer.fr)',&
-'',&
-'   Improved by',&
-'',&
-'   + Phil Garnatz, Cray Research Inc. for makefile generation',&
-'   + John S. Urban, added CLI',&
-'',&
-'EXAMPLES',&
-'   Sample commands',&
-'',&
-'       f90split  < myprogram.f90',&
-'',&
-'SEE ALSO',&
-'    fsplit(1)',&
+'   [ --help| --version]                                                   ',&
+'                                                                          ',&
+'DESCRIPTION                                                               ',&
+'   f90split(1) is a utility which splits free source form Fortran code    ',&
+'   into multiple files, one module or procedure per file. Note that       ',&
+'   contained procedures are stored within their parent procedure.         ',&
+'                                                                          ',&
+'   Each output file contains a single program unit named after the unit,  ',&
+'   unless that filename exists.                                           ',&
+'                                                                          ',&
+'   If the initial output file name exists a file will be created named    ',&
+'   main0001.f90-main9999.f90, or bdta0001.f90-bdta9999.f90. If a file     ',&
+'   with that name already exists, it is put in dupl0001.f90-dupl9999.f90. ',&
+'                                                                          ',&
+'   f90split(1) also lists on stdout the USE and INCLUDE dependencies      ',&
+'                                                                          ',&
+'   f90split(1) is not aware of preprocessor directives.                   ',&
+'                                                                          ',&
+'OPTIONS                                                                   ',&
+'    largfile(s)  list of input files. Defaults to stdin.                  ',&
+'                                                                          ',&
+'    --fcase      case mode for generated filenames                        ',&
+'                                                                          ',&
+'                   leave  use procedure name case as-is                   ',&
+'                   lower  generate all-lowercase filenames                ',&
+'                   upper  generate all-uppercase filenames                ',&
+'                                                                          ',&
+'    --odir     output directory. Defaults to current directory.           ',&
+'                                                                          ',&
+'    --help     display this help and exit                                 ',&
+'    --version  output version information and exit                        ',&
+'                                                                          ',&
+'LICENSE                                                                   ',&
+'   All rights to this code are waived, so that it may be freely           ',&
+'   distributed as public domain software subject to the condition that    ',&
+'   these 6 lines are verbatim reproduced.                                 ',&
+'                                                                          ',&
+'   Originally written by Michel Olagnon, from Ifremer, France, who would  ',&
+'   be pleased to receive your comments and corrections.                   ',&
+'                                                                          ',&
+'AUTHOR                                                                    ',&
+'   + M. Olagnon (Michel.Olagnon@ifremer.fr)                               ',&
+'                                                                          ',&
+'   Improved by                                                            ',&
+'                                                                          ',&
+'   + Phil Garnatz, Cray Research Inc. for makefile generation             ',&
+'   + John S. Urban, added CLI                                             ',&
+'                                                                          ',&
+'EXAMPLES                                                                  ',&
+'   Sample commands                                                        ',&
+'                                                                          ',&
+'       f90split  < myprogram.f90                                          ',&
+'                                                                          ',&
+'SEE ALSO                                                                  ',&
+'    fsplit(1)                                                             ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&
-'PROGRAM:        f90split(1)',&
+'PROGRAM:        f90split(1)                                         ',&
 'DESCRIPTION:    fsplit a Fortran 90 source file into component files',&
-'VERSION:        1.1.0  1998-10-24',&
-'AUTHOR:         Michel Olagnon, Phil Garnatz',&
+'VERSION:        1.1.0  1998-10-24                                   ',&
+'AUTHOR:         Michel Olagnon, Phil Garnatz                        ',&
 'VERSION:        2.0.0 2019-09-10, CLI and minor modifications to integrate into GPF',&
-'AUTHOR:         John S. Urban',&
-'VERSION:        2.0.1 2022-06-25, added --odir option',&
-'AUTHOR:         John S. Urban',&
-'VERSION:        2.1.1 2022-06-26, allow ABSTRACT in front of INTERFACE',&
-'AUTHOR:         John S. Urban',&
+'AUTHOR:         John S. Urban                                                      ',&
+'VERSION:        2.0.1 2022-06-25, added --odir option                              ',&
+'AUTHOR:         John S. Urban                                                      ',&
+'VERSION:        2.1.1 2022-06-26, allow ABSTRACT in front of INTERFACE             ',&
+'AUTHOR:         John S. Urban                                                      ',&
 '']
 end subroutine setup
 end program f90split

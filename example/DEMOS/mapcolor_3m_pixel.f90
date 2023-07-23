@@ -1,9 +1,9 @@
      program demo_mapcolor
      use M_pixel
-     use m_pixel, only: hue
-     use M_writegif, only : writegif
+     use M_pixel, only: hue
+     use M_pixel__writegif, only : writegif
      use M_pixel,    only : cosd, sind
-     use M_writegif_animated, only : write_animated_gif
+     use M_pixel__writegif_animated, only : write_animated_gif
      implicit none
      character(len=4096)  :: filename
      real                 :: lightstep
@@ -32,7 +32,7 @@
            movie(ii,:,:)=P_pixel
            LIGHTNESS=LIGHTNESS+LIGHTSTEP
         enddo
-        call write_animated_gif('mapcolor.3m_pixel.gif',movie,P_colormap,delay=40)
+        call write_animated_gif('mapcolor.3M_pixel.gif',movie,P_colormap,delay=40)
         call vexit()
      contains
      subroutine wheel() ! draw an entire wheel

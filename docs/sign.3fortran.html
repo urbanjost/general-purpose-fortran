@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sign (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sign (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>sign(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-sign(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SIGN(3) - [NUMERIC] Sign copying function
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ SIGN(3) - [NUMERIC] Sign copying function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = sign(a, b)
 <P>
 <PRE>
-           elemental type(TYPE(kind=KIND))function sign(a, b)
+         elemental type(TYPE(kind=KIND))function sign(a, b)
 <P>
-            type(TYPE(kind=KIND)),intent(in) :: a, b
+          type(TYPE(kind=KIND)),intent(in) :: a, b
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = sign(a, b)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -114,11 +108,12 @@ the characteristics of the result are the same as A.
 
 </A>
 <BLOCKQUOTE>
+<P>
 SIGN(3) returns a value with the magnitude of a but with the sign of b.
 <P>
-For processors that distinguish between positive and negative zeros sign()
-may be used to distinguish between real values 0.0 and <B>-0.0.</B> SIGN (1.0,
-<B>-0.0</B>) will return <B>-1.0</B> when a negative zero is distinguishable.
+For processors that distinguish between positive and negative zeros
+sign() may be used to distinguish between real values 0.0 and <B>-0.0</B>. SIGN
+(1.0, <B>-0.0</B>) will return <B>-1.0</B> when a negative zero is distinguishable.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -126,6 +121,7 @@ may be used to distinguish between real values 0.0 and <B>-0.0.</B> SIGN (1.0,
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -144,6 +140,7 @@ B : The value whose sign will be returned.
 
 </A>
 <BLOCKQUOTE>
+<P>
 a value with the magnitude of A with the sign of B. That is,
 <TABLE cellpadding=3><!-- tsb: a value with the magnitude of A with the sign of B. That is,
  -->
@@ -161,8 +158,8 @@ else if b &lt; 0 it is <B>-abs</B>(a).
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-if b is real and the processor distinguishes between <B>-0.0</B> and 0.0 then
-the result is <B>-abs</B>(a)
+if b is real and the processor distinguishes between <B>-0.0</B> and 0.0
+then the result is <B>-abs</B>(a)
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -171,43 +168,51 @@ the result is <B>-abs</B>(a)
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_sign
-      implicit none
-        ! basics
-         print *,  sign( -12,  1 )
-         print *,  sign( -12,  0 )
-         print *,  sign( -12, -1 )
-         print *,  sign(  12,  1 )
-         print *,  sign(  12,  0 )
-         print *,  sign(  12, -1 )
+    program demo_sign
+    implicit none
+      ! basics
+       print *,  sign( -12,  1 )
+       print *,  sign( -12,  0 )
+       print *,  sign( -12, -1 )
+       print *,  sign(  12,  1 )
+       print *,  sign(  12,  0 )
+       print *,  sign(  12, -1 )
 <P>
-         if(sign(1.0,-0.0)== -1.0)then
-            print *, &#146;this processor distinguishes +0 from -0&#146;
-         else
-            print *, &#146;this processor does not distinguish +0 from -0&#146;
-         endif
+       if(sign(1.0,-0.0)== -1.0)then
+          print *, &#146;this processor distinguishes +0 from -0&#146;
+       else
+          print *, &#146;this processor does not distinguish +0 from -0&#146;
+       endif
 <P>
-         print *,  &#146;elemental&#146;, sign( -12.0, [1.0, 0.0, -1.0] )
+       print *,  &#146;elemental&#146;, sign( -12.0, [1.0, 0.0, -1.0] )
 <P>
-      end program demo_sign
+    end program demo_sign
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-                   12
-                   12
+                 12
+                 12
 </PRE>
-<B>-12</B> 12 12 <B>-12</B> this processor does not distinguish +0 from <B>-0</B>
-<P>
-<PRE>
-    elemental
-      12.00000       12.00000      -12.00000
-<P>
-</PRE>
+<B>-12</B>
+12
+12
+<B>-12</B>
+this processor does not distinguish +0 from <B>-0</B>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:                  12
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>elemental</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+12.00000       12.00000      <B>-12.00000</B>
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -215,6 +220,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -223,16 +229,13 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 ABS(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                sign(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sign (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 97b2ac77-3b47-43d6-b15b-31bd729e0a07 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sign (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 33d4e979-2078-4242-9613-4aeb90f7750a using man macros.</FONT>
 <br><br><center><img src="images/sign.3fortran.gif"></center>
 </div>
 </div>

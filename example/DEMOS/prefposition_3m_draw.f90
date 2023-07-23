@@ -1,6 +1,6 @@
        program demo_prefposition
-       use M_draw, only    : prefsize, vinit, ortho2, clear, getkey, prefposition
-       use M_draw, only    : move2, draw2, vexit, color
+       use M_draw, only    : prefsize, vinit, ortho2, clear, getkey
+       use M_draw, only    : prefposition, move2, draw2, vexit, color
        use M_draw,    only  : D_BLACK,   D_WHITE
        use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
        use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN

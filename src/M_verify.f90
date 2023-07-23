@@ -54,7 +54,7 @@
 !!    unit_check_level       An integer that can be used to specify
 !!                           different debug levels
 !!    unit_check_command     name of command to execute. Defaults to the name
-!!                           "goodbad".
+!!                           "".
 !!    UNIT TESTS
 !!    unit_check_start(3f)   start tests of a procedure and optionally call
 !!
@@ -243,7 +243,7 @@ character(len=20),save,public :: unit_check_prefix=''
 
 logical,save,public :: unit_check_keep_going=.false.  ! logical variable that can be used to turn off program termination on errors.
 integer,save,public :: unit_check_level=0             ! a level that can be used to select different debug levels
-character(len=4096),public ::  unit_check_command='goodbad'  ! name of command to execute. Defaults to the name "goodbad".
+character(len=4096),public ::  unit_check_command=''  ! name of command to execute. Defaults to the name "goodbad".
 public no_news_is_good_news
 
 integer,parameter,public   :: realtime=kind(0.0d0)            ! type for julian days
@@ -605,7 +605,7 @@ end subroutine fstop
 !!
 !!    !!use M_verify, only: unit_check_keep_going         ! default is unit_check_keep_going=.false.
 !!    !!use M_verify, only: debug              ! default is .false.
-!!    !!use M_verify, only: unit_check_command ! default is unit_check_command='goodbad'
+!!    !!use M_verify, only: unit_check_command ! default is unit_check_command=''; was 'goodbad'
 !!
 !!    implicit none
 !!    integer :: i

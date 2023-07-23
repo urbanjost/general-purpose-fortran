@@ -1,21 +1,16 @@
-module M_test_suite_M_anything
+program M_test_suite_M_anything
 use, intrinsic :: ISO_FORTRAN_ENV, only : INT8, INT16, INT32, INT64       !  1           2           4           8
 use, intrinsic :: ISO_FORTRAN_ENV, only : REAL32, REAL64, REAL128         !  4           8          10
-use M_msg
-use M_verify,   only : unit_check_command, unit_check_keep_going, unit_check_level
 use M_anything, only : anyinteger_to_string, anyscalar_to_int64
 use M_anything, only : anyscalar_to_real, anyscalar_to_double, anyscalar_to_real128
 use M_anything, only : anything_to_bytes, bytes_to_anything
 use M_anything, only : empty, assignment(=)
-private
-public test_suite_M_anything
-contains
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine test_suite_M_anything()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__msg
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_stop
+use M_framework__verify, only : unit_check_level
+implicit none
+   unit_check_level=0
 !! setup
    call test_anyscalar_to_int64()
    call test_anyinteger_to_string()
@@ -25,6 +20,7 @@ use M_verify, only : unit_check_level
 
    call test_empty()
 !!teardown
+   call unit_check_stop()
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_anyscalar_to_int64()
@@ -184,26 +180,7 @@ integer k
       call unit_check('empty',size(strs).eq.answer,'size is',answer)
    endif 
 end subroutine check_strs
-!-----------------------------------------------------------------------------------------------------------------------------------
-end subroutine test_suite_M_anything
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-end module M_test_suite_M_anything
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
-program runtest
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
-use M_test_suite_M_anything
-implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
-   call test_suite_M_anything()
-   call unit_check_stop()
-end program runtest
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
+end program M_test_suite_M_anything

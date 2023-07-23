@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>atomic_ref (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>atomic_ref (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>atomic_ref(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-atomic_ref(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 ATOMIC_REF(3) - [ATOMIC] Obtaining the value of a variable atomically
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ ATOMIC_REF(3) - [ATOMIC] Obtaining the value of a variable atomically
 
 </A>
 <BLOCKQUOTE>
+<P>
 call atomic_ref(value, atom [,stat] )
 <P>
 <PRE>
-           subroutine atomic_ref(value,atom,stat)
+         subroutine atomic_ref(value,atom,stat)
 <P>
-            integer(atomic_int_kind),intent(in) :: value
-            integer(atomic_int_kind)            :: atom[*]
-            integer,intent(out),intent(out)     :: stat
+          integer(atomic_int_kind),intent(in) :: value
+          integer(atomic_int_kind)            :: atom[*]
+          integer,intent(out),intent(out)     :: stat
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,18 +86,20 @@ call atomic_ref(value, atom [,stat] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ATOM is a scalar coarray or coindexed variable of either integer type
-with atomic_int_kind kind or logical type with atomic_logical_kind kind.
+ATOM is a scalar coarray or coindexed variable of either integer
+type with atomic_int_kind kind or logical type with
+atomic_logical_kind kind.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VALUE is a scalar of the same type as ATOM. If the kind is different, the
-value is converted to the kind of ATOM.
+VALUE is a scalar of the same type as ATOM. If the kind is
+different, the value is converted to the kind of ATOM.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -118,12 +113,14 @@ STAT is a Scalar default-kind integer variable.
 
 </A>
 <BLOCKQUOTE>
-ATOMIC_REF(3) atomically assigns the value of the variable ATOM to VALUE.
-When STAT is present and the invocation was successful, it is assigned the
-value 0. If it is present and the invocation has failed, it is assigned a
-positive value; in particular, for a coindexed ATOM, if the remote image has
-stopped, it is assigned the value of iso_fortran_env&#146;s STAT_STOPPED_IMAGE
-and if the remote image has failed, the value STAT_FAILED_IMAGE.
+<P>
+ATOMIC_REF(3) atomically assigns the value of the variable ATOM to
+VALUE. When STAT is present and the invocation was successful, it is
+assigned the value 0. If it is present and the invocation has failed, it
+is assigned a positive value; in particular, for a coindexed ATOM, if
+the remote image has stopped, it is assigned the value of
+iso_fortran_env&#146;s STAT_STOPPED_IMAGE and if the remote image has failed,
+the value STAT_FAILED_IMAGE.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -131,18 +128,20 @@ and if the remote image has failed, the value STAT_FAILED_IMAGE.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VALUE : Scalar of the same type as ATOM. If the kind is different, the
-value is converted to the kind of ATOM.
+VALUE : Scalar of the same type as ATOM. If the kind is different,
+the value is converted to the kind of ATOM.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ATOM : Scalar coarray or coindexed variable of either integer type with
-atomic_int_kind kind or logical type with atomic_logical_kind kind.
+ATOM : Scalar coarray or coindexed variable of either integer type
+with atomic_int_kind kind or logical type with atomic_logical_kind
+kind.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -156,19 +155,20 @@ STAT : (optional) Scalar default-kind integer variable.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_atomic_ref
-      use iso_fortran_env
-      implicit none
-      logical(atomic_logical_kind) :: atom[*]
-      logical :: val
-         call atomic_ref( val, atom[1] )
-         if (val) then
-            print *, "Obtained"
-         endif
-      end program demo_atomic_ref
+    program demo_atomic_ref
+    use iso_fortran_env
+    implicit none
+    logical(atomic_logical_kind) :: atom[*]
+    logical :: val
+       call atomic_ref( val, atom[1] )
+       if (val) then
+          print *, "Obtained"
+       endif
+    end program demo_atomic_ref
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -178,6 +178,7 @@ Sample program:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008 ; with STAT, TS 18508
 </BLOCKQUOTE>
 <A name=7>
@@ -186,6 +187,7 @@ Fortran 2008 ; with STAT, TS 18508
 
 </A>
 <BLOCKQUOTE>
+<P>
 ATOMIC_DEFINE(3), ATOMIC_CAS(3), ISO_FORTRAN_ENV(3),
 <P>
 ATOMIC_FETCH_ADD(3), ATOMIC_FETCH_AND(3),
@@ -193,13 +195,9 @@ ATOMIC_FETCH_ADD(3), ATOMIC_FETCH_AND(3),
 ATOMIC_FETCH_OR(3), ATOMIC_FETCH_XOR(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022          atomic_ref(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atomic_ref (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b9e30dee-9b29-48b4-acbd-3dc9077abee1 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atomic_ref (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e44e8303-b628-4b07-968f-6f1adfbe977f using man macros.</FONT>
 <br><br><center><img src="images/atomic_ref.3fortran.gif"></center>
 </div>
 </div>

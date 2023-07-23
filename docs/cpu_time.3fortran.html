@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cpu_time (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cpu_time (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>cpu_time(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-cpu_time(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 CPU_TIME(3) - [SYSTEM:TIME] Return CPU processor time used in seconds
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ CPU_TIME(3) - [SYSTEM:TIME] Return CPU processor time used in seconds
 
 </A>
 <BLOCKQUOTE>
+<P>
 call cpu_time(time)
 <P>
 <PRE>
-            subroutine cpu_time(time)
+          subroutine cpu_time(time)
 <P>
-             real,intent(out) :: time
+           real,intent(out) :: time
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ call cpu_time(time)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -104,39 +98,35 @@ TIME is a real of any kind
 
 </A>
 <BLOCKQUOTE>
+<P>
 CPU_TIME(3) returns a real value representing the elapsed CPU time in
-seconds. This is useful for testing segments of code to determine execution
-time.
+seconds. This is useful for testing segments of code to determine
+execution time.
 <P>
 If no time source is available, TIME is set to a negative value.
 <P>
-The exact definition of time is left imprecise because of the variability in
-what different processors are able to provide.
+The exact definition of time is left imprecise because of the
+variability in what different processors are able to provide.
 <P>
-Note that TIME may contain a system dependent, arbitrary offset and may not
-<TABLE cellpadding=3><!-- tsb: Note that TIME may contain a system dependent, arbitrary offset and may not
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>start with 0.0. For CPU_TIME(3) the absolute value is meaningless.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Only
-differences between subsequent calls, as shown in the example below, should
-be used.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+Note that TIME may contain a system dependent, arbitrary offset and may
+not start with 0.0. For CPU_TIME(3) the absolute value is meaningless.
+Only differences between subsequent calls, as shown in the example
+below, should be used.
+</BLOCKQUOTE>
 <A name=4>
 
      <H3>PARALLEL PROCESSING</H3>
 
 </A>
 <BLOCKQUOTE>
-Whether the value assigned is an approximation to the amount of time used by
-the invoking image, or the amount of time used by the whole program, is
-processor dependent.
 <P>
-A processor for which a single result is inadequate (for example, a parallel
-processor) might choose to provide an additional version for which TIME is
-an array.
+Whether the value assigned is an approximation to the amount of time
+used by the invoking image, or the amount of time used by the whole
+program, is processor dependent.
+<P>
+A processor for which a single result is inadequate (for example, a
+parallel processor) might choose to provide an additional version for
+which TIME is an array.
 </BLOCKQUOTE>
 <A name=5>
 
@@ -144,13 +134,14 @@ an array.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-TIME : is assigned a processor-dependent approximation to the processor
-time in seconds. If the processor cannot return a meaningful time, a
-processor-dependent negative value is returned.
+TIME : is assigned a processor-dependent approximation to the
+processor time in seconds. If the processor cannot return a
+meaningful time, a processor-dependent negative value is returned.
 <P>
 : The start time is left imprecise because the purpose is to time
 sections of code, as in the example. This might or might not include
@@ -163,46 +154,47 @@ system overhead time.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_cpu_time
-      use, intrinsic :: iso_fortran_env, only : real_kinds,real32,real64,real128
-      implicit none
-      real :: start, finish
-      real(kind=real64) :: startd, finishd
-         !
-         call cpu_time(start)
-         call cpu_time(startd)
-         ! put code to time here
-         call cpu_time(finish)
-         call cpu_time(finishd)
-         !
-        ! writes processor time taken by the piece of code.
+    program demo_cpu_time
+    use, intrinsic :: iso_fortran_env, only : real_kinds,real32,real64,real128
+    implicit none
+    real :: start, finish
+    real(kind=real64) :: startd, finishd
+       !
+       call cpu_time(start)
+       call cpu_time(startd)
+       ! put code to time here
+       call cpu_time(finish)
+       call cpu_time(finishd)
+       !
+      ! writes processor time taken by the piece of code.
 <P>
-        ! the accuracy of the clock and whether it includes system time
-        ! as well as user time is processor dependent. Accuracy up to
-        ! milliseconds is common but not guaranteed, and may be much
-        ! higher or lower
-         print &#146;("Processor Time = ",f6.3," seconds.")&#146;,finish-start
+      ! the accuracy of the clock and whether it includes system time
+      ! as well as user time is processor dependent. Accuracy up to
+      ! milliseconds is common but not guaranteed, and may be much
+      ! higher or lower
+       print &#146;("Processor Time = ",f6.3," seconds.")&#146;,finish-start
 <P>
-         ! see your specific compiler documentation for how to measure
-         ! parallel jobs and for the precision of the time returned
-         print &#146;("Processor Time = ",g0," seconds.")&#146;,finish-start
-         print &#146;("Processor Time = ",g0," seconds.")&#146;,finishd-startd
-      end program demo_cpu_time
+       ! see your specific compiler documentation for how to measure
+       ! parallel jobs and for the precision of the time returned
+       print &#146;("Processor Time = ",g0," seconds.")&#146;,finish-start
+       print &#146;("Processor Time = ",g0," seconds.")&#146;,finishd-startd
+    end program demo_cpu_time
 <P>
 </PRE>
 Results:
 <P>
-The precision of the result, some aspects of what is returned, and what if
-any options there are for parallel applications may very from system to
-system. See compiler-specific for details.
+The precision of the result, some aspects of what is returned, and what
+if any options there are for parallel applications may very from system
+to system. See compiler-specific for details.
 <P>
 <PRE>
-         Processor Time =  0.000 seconds.
-         Processor Time = .4000030E-05 seconds.
-         Processor Time = .2000000000000265E-05 seconds.
+       Processor Time =  0.000 seconds.
+       Processor Time = .4000030E-05 seconds.
+       Processor Time = .2000000000000265E-05 seconds.
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -212,6 +204,7 @@ system. See compiler-specific for details.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -220,16 +213,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 SYSTEM_CLOCK(3), DATE_AND_TIME(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022            cpu_time(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cpu_time (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7b2d3e4f-bd51-4982-a0dd-9399be2406ea using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cpu_time (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c63b245d-b177-4e2b-a650-60f58262aa94 using man macros.</FONT>
 <br><br><center><img src="images/cpu_time.3fortran.gif"></center>
 </div>
 </div>

@@ -3,7 +3,7 @@
        use M_pixel, only: move2, rmove2, rdraw2, vexit
        use M_pixel, only: linewidth
        use M_pixel, only: P_pixel, P_colormap
-       use M_writegif, only : writegif
+       use M_pixel__writegif, only : writegif
        implicit none
        integer :: i
           call prefsize(500,500)
@@ -15,7 +15,7 @@
              call rmove2(10.0, 0.0)
              call rdraw2( 0.0,10.0)
           enddo
-          call writegif('rmove2.3m_pixel.gif',P_pixel,P_colormap)
-          call  execute_command_line('display rmove2.3m_pixel.gif')
+          call writegif('rmove2.3M_pixel.gif',P_pixel,P_colormap)
+          call  execute_command_line('display rmove2.3M_pixel.gif')
           call vexit()
        end program demo_rmove2

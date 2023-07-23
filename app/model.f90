@@ -8,20 +8,20 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   model(1f) - [FORTRAN:iso_fortran_env] fortran numeric model information                                                      ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   model                                                                                                                        ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   The following routines are called for various types:                                                                         ',&
-'                                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   model(1f) - [FORTRAN:iso_fortran_env] fortran numeric model information      ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   model                                                                        ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   The following routines are called for various types:                         ',&
+'                                                                                ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop

@@ -15,37 +15,37 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!  overloads on LOGICAL values
+!!  overloads on operators
 !!
+!!    use M_overload, only : operator(==), operator(/=)
 !!    ! use == like .eqv.; ie. logical==logical
-!!    use M_overload, only : operator(==)
 !!    ! use /= like .neqv.; ie. logical/=logical
-!!    use M_overload, only : operator(/=)
+!!
+!!    use M_overload, only : operator(//)
+!!    ! convert intrinsics to strings and contatenate
 !!
 !!  overloads on INTRINSICS to take strings, logicals, and metamorphic numeric intrinsic values
 !!
-!!   use M_overload, only : int, real, dble
-!!   ! int('string')   int(logical)   int(class(*))
-!!   ! real('string')  real(logical)  real(class(*))
-!!   ! dble('string')  dble(logical)  dble(class(*))
+!!    use M_overload, only : int, real, dble
+!!    ! int('string')   int(logical)   int(class(*))
+!!    ! real('string')  real(logical)  real(class(*))
+!!    ! dble('string')  dble(logical)  dble(class(*))
 !!
-!!  overloads on operators
+!!    use M_overload, only : sign
+!!    ! When sign(3f) is given a single value, call sign(1,value); ie.  sign(value)
+!!    use M_overload, only : merge
+!!    ! Allow strings of different length in MERGE
 !!
-!!   use M_overload, only : operator(==)
-!!   ! INTRINSIC // INTRINSIC // INTRINSIC ...
+!!  other operators
 !!
-!!   ! When sign(3f) is given a single value, call sign(1,value); ie.  sign(value)
-!!   use M_overload, only : sign
+!!    ! convert an intrinsic value to a CHARACTER variable
+!!
+!!  Related functions
+!!
+!!    ! logical functions that return integer values
+!!    use M_overload, only : oz, zo, lt, le, eq, ne, gt, ge
 !!
 !!
-!!  Allow strings of different length in MERGE
-!!
-!!   use M_overload, only : merge
-!!   ! str=merge('one','three',i.eq.10)
-!!
-!!##OTHER OPERATORS
-!!
-!!    intrinsic_value .fmt. ''   convert an intrinsic value to a CHARACTER variable
 !!
 !!##DESCRIPTION
 !!
@@ -110,109 +110,57 @@
 !!    use M_overload, only : sign
 !!    ! allow strings of different length on merge
 !!    use M_overload, only : merge
+!!    ! convert logical expressions to integer
+!!    use M_overload, only : oz, zo, lt, le, eq, ne, gt, ge
 !!    implicit none
 !!    character(len=:),allocatable :: cmd
 !!    character(len=*), parameter :: gen='(*("[",g0,"]":,","))'
 !!
+!!      ! merge() with different string lengths expanded to longest
 !!      write(*,gen)merge('a','bbbbb',1.eq.1)
 !!      write(*,gen)merge('a','bbbbb',1.eq.2)
 !!      write(*,gen)merge(['a','b'],['bbbbb','ccccc'],1.eq.2)
 !!
+!!      ! int() can take strings representing a number as input'
 !!      if(int('1234')               .eq.1234) &
 !!       & write(*,*)'int("STRING") works '
+!!      ! as can real() and dble()
 !!      if(abs(real('1234.56789') - 1234.56789).lt.2*epsilon(0.0)) &
 !!       & write(*,*)'real("STRING") works '
 !!      if(abs(dble('1234.5678901234567')- 1234.5678901234567d0).lt.epsilon(0.0d0)) &
 !!       & write(*,*)'dble("STRING") works '
 !!
+!!      ! and logical values can be treated numerically
 !!      write(*,*) merge('int works for .FALSE.','int fails for .FALSE.',int(.FALSE.).ne.0)
 !!      write(*,*) merge('int works for .TRUE.','int fails for .TRUE.',int(.TRUE.).eq.0)
+!!      write(*,*) sum(int([.true.,.false.,.true.]))
 !!
+!!      ! and == and /= work for logical expressions
 !!      if (.true. == .true. ) &
 !!      & write(*,*)'== works like .eqv. for LOGICAL values'
 !!      if (.true. /= .false. ) &
 !!      & write(*,*)'/= works like .neqv. for LOGICAL values'
 !!
+!!      ! // will allow any intrinsic type and convert it to a string
 !!      write(*,*)' The value is '//10//' which is less than '//20.2
 !!
 !!
+!!      ! logical values as numeric values
+!!      write(*,*) sum([int(.false.),int(.false.)])
+!!      write(*,*) int([.false.,.true.,.false.])
+!!      write(*,*) sum(int([.false.,.true.,.false.]))
+!!
+!!
+!!      ! and sign() assumes the second argument is 1
 !!      write(*,*) merge('sign works','sign fails',&
 !!       & sign(10_int8).eq.1 &
 !!       & .and. sign(-10_int8).eq.-1 )
-!!      write(*,*) merge('sign works','sign fails',&
-!!       & sign(10_int16).eq.1 &
-!!       & .and. sign(-10_int16).eq.-1 )
-!!      write(*,*) merge('sign works','sign fails',&
-!!       & sign(10_int32).eq.1 &
-!!       & .and. sign(-10_int32).eq.-1 )
-!!      write(*,*) merge('sign works','sign fails',&
-!!       & sign(10_int64).eq.1 &
-!!       & .and. sign(-10_int64).eq.-1 )
-!!      write(*,*) merge('sign works','sign fails',&
-!!       & sign(10.0_real32).eq.1.0 &
-!!       & .and. sign(-10.0_real32).eq.-1.0 )
-!!      write(*,*) merge('sign works','sign fails',&
-!!       & sign(10.0_real64).eq.1.0 &
-!!       & .and. sign(-10.0_real64).eq.-1.0 )
-!!      write(*,*) merge('sign works','sign fails',&
-!!       & sign(10.0_real128).eq.1.0&
-!!       & .and. sign(-10.0_real128).eq.-1.0 )
+!!
 !!    contains
 !!
 !!    end program demo_M_overload
 !!
 !!  Results:
-!!     >  [a    ]
-!!     >  [bbbbb]
-!!     >  [bbbbb],[ccccc]
-!!     >  int("STRING") works
-!!     >  real("STRING") works
-!!     >  dble("STRING") works
-!!     >  == works like .eqv. for LOGICAL values
-!!     >  /= works like .neqv. for LOGICAL values
-!!     >          444         555
-!!     >    444.444000       555.554993
-!!     >    444.44400000000002        555.55500000000006
-!!     >    555.44399999999996        666.66600000000005        777.77700000000004
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  int("STRING") works
-!!     >  real("STRING") works
-!!     >  dble("STRING") works
-!!     >  == works like .eqv. for LOGICAL values
-!!     >  /= works like .neqv. for LOGICAL values
-!!     >          444         555
-!!     >    444.444000       555.554993
-!!     >    444.44400000000002        555.55500000000006
-!!     >    555.44399999999996        666.66600000000005        777.77700000000004
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     >  sign works
-!!     > 57 xx -x -y hello there xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-!!     > 0 0 [xx]
-!!     > 1 0 [-x]
-!!     > 2 0 [-y]
-!!     > 3 0 [hello there]
-!!     > 4 0 [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]
-!!     > 0 0 [xx        ]
-!!     > 1 0 [-x        ]
-!!     > 2 0 [-y        ]
-!!     > 3 -1 [hello ther]
-!!     > 4 -1 [xxxxxxxxxx]
-!!     > 0 0 [xx                  ]
-!!     > 1 0 [-x                  ]
-!!     > 2 0 [-y                  ]
-!!     > 3 0 [hello there         ]
-!!     > 4 -1 [xxxxxxxxxxxxxxxxxxxx]
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -223,15 +171,12 @@ use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real
 implicit none
 ! ident_1="@(#) M_overload(3fm) overloads of standard operators and intrinsic procedures"
 private
+public lt, le, eq, ne, ge, gt, oz, zo
 public boolean_equal, boolean_notequal      !
 public operator(==)
 public operator(/=)
 public operator(//)
 public operator(.fmt.)
-public int, real, dble                      ! extend intrinsics to accept CHARACTER values
-public sign
-public adjustl, adjustr
-public merge
 interface operator ( .fmt. )
    module procedure ffmt
 end interface operator ( .fmt. )
@@ -274,7 +219,89 @@ interface adjustl; module procedure adjustl_atleast;      end interface
 interface adjustr; module procedure adjustr_atleast;      end interface
 
 
-interface merge; module procedure strmerge;      end interface
+interface merge
+   module procedure strmerge
+end interface
+!-----------------------------------------------------------------------------------------------------------------------------------
+! this allwos you to rename intrinsics, overload them,
+intrinsic :: abs,                   achar,                     acos,              acosh,             adjustl
+public    :: abs,                   achar,                     acos,              acosh,             adjustl
+intrinsic :: adjustr,               aimag,                     aint,              all,               allocated
+public    :: adjustr,               aimag,                     aint,              all,               allocated
+intrinsic :: anint,                 any,                       asin,              asinh,             associated
+public    :: anint,                 any,                       asin,              asinh,             associated
+intrinsic :: atan,                  atan2,                     atanh,             atomic_add,        atomic_and
+public    :: atan,                  atan2,                     atanh,             atomic_add,        atomic_and
+intrinsic :: atomic_cas,            atomic_define,             atomic_fetch_add,  atomic_fetch_and,  atomic_fetch_or
+public    :: atomic_cas,            atomic_define,             atomic_fetch_add,  atomic_fetch_and,  atomic_fetch_or
+intrinsic :: atomic_fetch_xor,      atomic_or,                 atomic_ref,        atomic_xor,        bessel_j0
+public    :: atomic_fetch_xor,      atomic_or,                 atomic_ref,        atomic_xor,        bessel_j0
+intrinsic :: bessel_j1,             bessel_jn,                 bessel_y0,         bessel_y1,         bessel_yn
+public    :: bessel_j1,             bessel_jn,                 bessel_y0,         bessel_y1,         bessel_yn
+intrinsic :: bge,                   bgt,                       bit_size,          ble,               blt
+public    :: bge,                   bgt,                       bit_size,          ble,               blt
+intrinsic :: btest,                 ceiling,                   char,              cmplx,             command_argument_count
+public    :: btest,                 ceiling,                   char,              cmplx,             command_argument_count
+intrinsic :: conjg,                 cos,                       cosh,              count,             cpu_time
+public    :: conjg,                 cos,                       cosh,              count,             cpu_time
+intrinsic :: cshift,                date_and_time,             dble,              digits,            dim
+public    :: cshift,                date_and_time,             dble,              digits,            dim
+intrinsic :: dot_product,           dprod,                     dshiftl,           dshiftr,           eoshift
+public    :: dot_product,           dprod,                     dshiftl,           dshiftr,           eoshift
+intrinsic :: epsilon,               erf,                       erfc,              erfc_scaled,       event_query
+public    :: epsilon,               erf,                       erfc,              erfc_scaled,       event_query
+intrinsic :: execute_command_line,  exp,                       exponent,          extends_type_of,   findloc
+public    :: execute_command_line,  exp,                       exponent,          extends_type_of,   findloc
+intrinsic :: float,                 floor,                     fraction,          gamma,             get_command
+public    :: float,                 floor,                     fraction,          gamma,             get_command
+intrinsic :: get_command_argument,  get_environment_variable,  huge,              hypot,             iachar
+public    :: get_command_argument,  get_environment_variable,  huge,              hypot,             iachar
+intrinsic :: iall,                  iand,                      iany,              ibclr,             ibits
+public    :: iall,                  iand,                      iany,              ibclr,             ibits
+intrinsic :: ibset,                 ichar,                     ieor,              image_index,       index
+public    :: ibset,                 ichar,                     ieor,              image_index,       index
+intrinsic :: int,                   ior,                       iparity,           is_contiguous,     ishft
+public    :: int,                   ior,                       iparity,           is_contiguous,     ishft
+intrinsic :: ishftc,                is_iostat_end,             is_iostat_eor,     kind,              lbound
+public    :: ishftc,                is_iostat_end,             is_iostat_eor,     kind,              lbound
+intrinsic :: leadz,                 len,                       len_trim,          lge,               lgt
+public    :: leadz,                 len,                       len_trim,          lge,               lgt
+intrinsic :: lle,                   llt,                       log,               log10,             log_gamma
+public    :: lle,                   llt,                       log,               log10,             log_gamma
+intrinsic :: logical,               maskl,                     maskr,             matmul,            max
+public    :: logical,               maskl,                     maskr,             matmul,            max
+intrinsic :: maxexponent,           maxloc,                    maxval,                               merge_bits
+public    :: maxexponent,           maxloc,                    maxval,                               merge_bits
+!intrinsic ::                                                                      merge ! ifort 2023 bug
+public    ::                                                                      merge
+intrinsic :: min,                   minexponent,               minloc,            minval,            mod
+public    :: min,                   minexponent,               minloc,            minval,            mod
+intrinsic :: modulo,                move_alloc,                mvbits,            nearest,           new_line
+public    :: modulo,                move_alloc,                mvbits,            nearest,           new_line
+intrinsic :: nint,                  norm2,                     not,               null,              num_images
+public    :: nint,                  norm2,                     not,               null,              num_images
+intrinsic :: pack,                  parity,                    popcnt,            poppar,            precision
+public    :: pack,                  parity,                    popcnt,            poppar,            precision
+intrinsic :: present,               product,                   radix,             random_number,     random_seed
+public    :: present,               product,                   radix,             random_number,     random_seed
+intrinsic :: range,                 rank,                      real,              repeat,            reshape
+public    :: range,                 rank,                      real,              repeat,            reshape
+intrinsic :: rrspacing,             same_type_as,              scale,             scan,              selected_char_kind
+public    :: rrspacing,             same_type_as,              scale,             scan,              selected_char_kind
+intrinsic :: selected_int_kind,     selected_real_kind,        set_exponent,      shape,             shifta
+public    :: selected_int_kind,     selected_real_kind,        set_exponent,      shape,             shifta
+intrinsic :: shiftl,                shiftr,                                       sin,               sinh
+public    :: shiftl,                shiftr,                    sign,              sin,               sinh
+!intrinsic ::                                                   sign ! ifort 2023 bug
+intrinsic :: size,                  sngl,                      spacing,           spread,            sqrt
+public    :: size,                  sngl,                      spacing,           spread,            sqrt
+intrinsic :: storage_size,          sum,                       system_clock,      tan,               tanh
+public    :: storage_size,          sum,                       system_clock,      tan,               tanh
+intrinsic :: this_image,            tiny,                      trailz,            transfer,          transpose
+public    :: this_image,            tiny,                      trailz,            transfer,          transpose
+intrinsic :: trim,                  ubound,                    unpack,            verify
+public    :: trim,                  ubound,                    unpack,            verify
+!-----------------------------------------------------------------------------------------------------------------------------------
 contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 function g_g(value1,value2) result (string)
@@ -339,69 +366,63 @@ character(len=max(length,len(trim(line)))) :: strout
    strout=adjustr(strout)
 end function adjustr_atleast
 !-----------------------------------------------------------------------------------------------------------------------------------
+
 elemental function sign_real128(value)
 real(kind=real128),intent(in) :: value
 real(kind=real128)            :: sign_real128
+intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
    sign_real128=sign(1.0_real128,value)
 end function sign_real128
-
 elemental function sign_real64(value)
 real(kind=real64),intent(in) :: value
 real(kind=real64)            :: sign_real64
+intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
    sign_real64=sign(1.0_real64,value)
 end function sign_real64
-
 elemental function sign_real32(value)
 real(kind=real32),intent(in) :: value
 real(kind=real32)            :: sign_real32
+intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
    sign_real32=sign(1.0_real32,value)
 end function sign_real32
 
 elemental function sign_int64(value)
 integer(kind=int64),intent(in) :: value
 integer(kind=int64)            :: sign_int64
+intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
    sign_int64=sign(1_int64,value)
 end function sign_int64
-
 elemental function sign_int32(value)
 integer(kind=int32),intent(in) :: value
 integer(kind=int32)            :: sign_int32
+intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
    sign_int32=sign(1_int32,value)
 end function sign_int32
-
 elemental function sign_int16(value)
 integer(kind=int16),intent(in) :: value
 integer(kind=int16)            :: sign_int16
+intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
    sign_int16=sign(1_int16,value)
 end function sign_int16
-
 elemental function sign_int8(value)
 integer(kind=int8),intent(in) :: value
 integer(kind=int8)            :: sign_int8
+intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
    sign_int8=sign(1_int8,value)
 end function sign_int8
+
 !-----------------------------------------------------------------------------------------------------------------------------------
 logical function boolean_equal(logical_val1,logical_val2)
-logical, intent (in) :: logical_val1
-logical, intent (in) :: logical_val2
+logical, intent (in) :: logical_val1, logical_val2
 
-   if (logical_val1 .eqv. logical_val2 )then
-     boolean_equal=.true.
-   else
-     boolean_equal=.false.
-   endif
+   boolean_equal = logical_val1 .eqv. logical_val2
 
 end function boolean_equal
 !-----------------------------------------------------------------------------------------------------------------------------------
 logical function boolean_notequal(logical_val1,logical_val2)
-logical, intent (in) :: logical_val1
-logical, intent (in) :: logical_val2
+logical, intent (in) :: logical_val1, logical_val2
 
-   if (logical_val1 .eqv. logical_val2 )then
-     boolean_notequal=.false.
-   else
-     boolean_notequal=.true.
-   endif
+   boolean_notequal = logical_val1 .neqv. logical_val2
 
 end function boolean_notequal
 !===================================================================================================================================
@@ -414,18 +435,21 @@ end function dble_s2v
 !-----------------------------------------------------------------------------------------------------------------------------------
 real function real_s2v(chars)
 character(len=*),intent(in) :: chars
+intrinsic :: real ! make it clear just need to call the intrinsic, not the overloaded function
    real_s2v=real(s2v(chars))
 end function real_s2v
 !-----------------------------------------------------------------------------------------------------------------------------------
 integer function int_s2v(chars)
 character(len=*),intent(in) :: chars
+intrinsic :: int ! make it clear just need to call the intrinsic, not the overloaded function
    int_s2v=int(s2v(chars))
 end function int_s2v
 !-----------------------------------------------------------------------------------------------------------------------------------
 function ints_s2v(chars)
 integer,allocatable         :: ints_s2v(:)
 character(len=*),intent(in) :: chars(:)
-   integer                  :: i,isize
+integer                     :: i,isize
+intrinsic :: size ! make it clear just need to call the intrinsic, not an overloaded function
    isize=size(chars)
    allocate(ints_s2v(isize))
    do i=1,isize
@@ -436,7 +460,8 @@ end function ints_s2v
 function reals_s2v(chars)
 real,allocatable            :: reals_s2v(:)
 character(len=*),intent(in) :: chars(:)
-   integer                  :: i,isize
+integer                     :: i,isize
+intrinsic :: size ! make it clear just need to call the intrinsic, not an overloaded function
    isize=size(chars)
    allocate(reals_s2v(isize))
    do i=1,isize
@@ -447,7 +472,8 @@ end function reals_s2v
 function dbles_s2v(chars)
 doubleprecision,allocatable :: dbles_s2v(:)
 character(len=*),intent(in) :: chars(:)
-   integer                  :: i,isize
+integer                     :: i,isize
+intrinsic :: size ! make it clear just need to call the intrinsic, not an overloaded function
    isize=size(chars)
    allocate(dbles_s2v(isize))
    do i=1,isize
@@ -603,7 +629,7 @@ use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 intrinsic dble
 
-! ident_6="@(#) M_anything anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision"
+! ident_6="@(#) M_overload anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision"
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out
@@ -615,21 +641,16 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
-   Type is (real(kind=real128))
+   type is (real(kind=real128))
       !!if(valuein.gt.big)then
       !!   write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
       !!endif
       d_out=dble(valuein)
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
-   !type is (real(kind=real128))
-   !   if(valuein.gt.big)then
-   !      write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
-   !   endif
-   !   d_out=dble(valuein)
    class default
      d_out=0.0d0
-     !!stop '*M_anything::anyscalar_to_double: unknown type'
+     !!stop '*M_overload::anyscalar_to_double: unknown type'
    end select
 end function anyscalar_to_double
 !===================================================================================================================================
@@ -638,7 +659,7 @@ use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 intrinsic int
 
-! ident_7="@(#) M_anything anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer"
+! ident_7="@(#) M_overload anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer"
 
 class(*),intent(in)    :: valuein
    integer(kind=int64) :: ii38
@@ -670,7 +691,7 @@ use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 implicit none
 intrinsic real
 
-! ident_8="@(#) M_anything anyscalar_to_real(3f) convert integer or real parameter of any kind to real"
+! ident_8="@(#) M_overload anyscalar_to_real(3f) convert integer or real parameter of any kind to real"
 
 class(*),intent(in) :: valuein
 real                :: r_out
@@ -693,9 +714,150 @@ real,parameter      :: big=huge(0.0)
       r_out=real(valuein)
    type is (logical);              r_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));     read(valuein,*) r_out
-   !type is (real(kind=real128));  r_out=real(valuein)
    end select
 end function anyscalar_to_real
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!>
+!!##NAME
+!!    M_overload(3fm) - [M_overload::LOGICAL] returns One if expression is TRUE, else returns Zero.
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!
+!!    pure elemental integer function oz(expr)
+!!
+!!     logical,intent(in) :: expr
+!!
+!!##DESCRIPTION
+!!
+!!    Returns an integer given a logical expression.
+!!
+!!##OPTIONS
+!!    expr  A logical expression
+!!
+!!##RETURNS
+!!
+!!    The result is a default INTEGER value of 1 if the expression is TRUE,
+!!    and a 0 otherwise.
+!!
+!!##EXAMPLES
+!!
+!!  Sample usage:
+!!
+!!    program demo_oz
+!!    use M_overload, only: oz, zo, lt, le, eq, ne, gt, ge
+!!    implicit none
+!!       write (*, *) 'is 10 < 20 ?', oz(10 < 20)
+!!       write (*, *) 'elemental', oz([2 > 1, 3 == 4, 10 < 5, 100 > 50])
+!!       if (sum(oz([2 > 1, 3 == 4, 10 < 5, 100 > 50])) >= 2) then
+!!          write (*, *) 'two or more are true'
+!!       endif
+!!    end program demo_oz
+!!
+!!  Results:
+!!
+!!     > is 10 < 20 ? 1
+!!     > elemental 1 0 0 1
+!!     > two or more are true
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+pure elemental integer function oz(expr)
+! ident_9="@(#) M_strings oz(3f) logical to integer TRUE results in 1 FALSE results in 0"
+logical, intent(in) :: expr
+   oz = merge(1, 0, expr) ! One and Zero
+end function oz
+
+!>
+!!##NAME
+!!    M_overload(3fm) - [M_overload::LOGICAL] returns Zero if expression is FALSE, else returns One.
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!
+!!    pure elemental integer function zo(expr)
+!!
+!!     logical,intent(in) :: expr
+!!
+!!##DESCRIPTION
+!!
+!!    Returns an integer given a logical expression.
+!!
+!!##OPTIONS
+!!    expr  A logical expression
+!!
+!!##RETURNS
+!!
+!!    The result is a default INTEGER value of 0 if the expression is TRUE,
+!!    and a 1 otherwise.
+!!
+!!##EXAMPLES
+!!
+!!  Sample usage:
+!!
+!!    program demo_zo
+!!    use M_overload, only: zo, zo, lt, le, eq, ne, gt, ge
+!!    implicit none
+!!    write (*, *) zo(10 < 20)
+!!    if (sum(zo([1 > 2, 3 == 4, 10 < 5, 100 > 50])) > 2) then
+!!       write (*, *) 'two or more are not true'
+!!    endif
+!!    end program demo_zo
+!!
+!!  Results:
+!!
+!!    >           0
+!!    >  two or more are not true
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+pure elemental integer function zo(expr)
+! ident_10="@(#) M_strings zo(3f) logical to integer TRUE results in 0 FALSE results in 1"
+logical, intent(in) :: expr
+   zo = merge(0, 1, expr) ! Zero and One
+end function zo
+
+pure elemental integer function ge(ia,ib)
+! ident_11="@(#) M_strings ge(3f) logical to integer TRUE results in 0 FALSE results in 1"
+integer,intent(in)  :: ia, ib
+   ge = merge(1, 0, ia .ge. ib )
+end function ge
+
+pure elemental integer function le(ia,ib)
+! ident_12="@(#) M_strings le(3f) logical to integer TRUE results in 0 FALSE results in 1"
+integer,intent(in)  :: ia, ib
+   le = merge(1, 0, ia .le. ib )
+end function le
+
+pure elemental integer function eq(ia,ib)
+! ident_13="@(#) M_strings eq(3f) logical to integer TRUE results in 0 FALSE results in 1"
+integer,intent(in)  :: ia, ib
+   eq = merge(1, 0, ia .eq. ib )
+end function eq
+
+pure elemental integer function lt(ia,ib)
+! ident_14="@(#) M_strings lt(3f) logical to integer TRUE results in 0 FALSE results in 1"
+integer,intent(in)  :: ia, ib
+   lt = merge(1, 0, ia .lt. ib )
+end function lt
+
+pure elemental integer function gt(ia,ib)
+! ident_15="@(#) M_strings gt(3f) logical to integer TRUE results in 0 FALSE results in 1"
+integer,intent(in)  :: ia, ib
+   gt = merge(1, 0, ia .lt. ib )
+end function gt
+
+pure elemental integer function ne(ia,ib)
+! ident_16="@(#) M_strings ne(3f) logical to integer TRUE results in 0 FALSE results in 1"
+integer,intent(in)  :: ia, ib
+   ne = merge(1, 0, ia .lt. ib )
+end function ne
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

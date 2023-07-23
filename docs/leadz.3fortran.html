@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>leadz (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>leadz (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>leadz(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-leadz(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 LEADZ(3) - [BIT:COUNT] Number of leading zero bits of an integer
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ LEADZ(3) - [BIT:COUNT] Number of leading zero bits of an integer
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = leadz(i)
 <P>
 <PRE>
-           elemental integer function leadz(i)
+         elemental integer function leadz(i)
 <P>
-            integer(kind=**),intent(in) :: i
+          integer(kind=**),intent(in) :: i
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = leadz(i)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,6 +103,7 @@ the return value is a default integer type.
 
 </A>
 <BLOCKQUOTE>
+<P>
 LEADZ(3) returns the number of leading zero bits of an integer.
 </BLOCKQUOTE>
 <A name=4>
@@ -117,6 +112,7 @@ LEADZ(3) returns the number of leading zero bits of an integer.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -130,12 +126,14 @@ I : integer to count the leading zero bits of.
 
 </A>
 <BLOCKQUOTE>
-The number of leading zero bits, taking into account the kind of the input
-value. If all the bits of I are zero, the result value is BIT_SIZE(I).
 <P>
-The result may also be thought of as BIT_SIZE(I)<B>-1-K</B> where K is the position
-of the leftmost 1 bit in the input I. Positions are from 0 to bit-size(),
-with 0 at the right-most bit.
+The number of leading zero bits, taking into account the kind of the
+input value. If all the bits of I are zero, the result value is
+BIT_SIZE(I).
+<P>
+The result may also be thought of as BIT_SIZE(I)<B>-1-K</B> where K is the
+position of the leftmost 1 bit in the input I. Positions are from 0 to
+bit-size(), with 0 at the right-most bit.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -143,43 +141,44 @@ with 0 at the right-most bit.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_leadz
-      implicit none
-      integer :: value, i
-      character(len=80) :: f
+    program demo_leadz
+    implicit none
+    integer :: value, i
+    character(len=80) :: f
 <P>
-        ! make a format statement for writing a value as a bit string
-        write(f,&#146;("(b",i0,".",i0,")")&#146;)bit_size(value),bit_size(value)
+      ! make a format statement for writing a value as a bit string
+      write(f,&#146;("(b",i0,".",i0,")")&#146;)bit_size(value),bit_size(value)
 <P>
-        ! show output for various integer values
-        value=0
-        do i=-150, 150, 50
-           value=i
-           write (*,&#146;("LEADING ZERO BITS=",i3)&#146;,advance=&#146;no&#146;) leadz(value)
-           write (*,&#146;(" OF VALUE ")&#146;,advance=&#146;no&#146;)
-           write(*,f,advance=&#146;no&#146;) value
-           write(*,&#146;(*(1x,g0))&#146;) "AKA",value
-        enddo
-        ! Notes:
-        ! for two&#146;s-complements programming environments a negative non-zero
-        ! integer value will always start with a 1 and a positive value with 0
-        ! as the first bit is the sign bit. Such platforms are very common.
-      end program demo_leadz
+      ! show output for various integer values
+      value=0
+      do i=-150, 150, 50
+         value=i
+         write (*,&#146;("LEADING ZERO BITS=",i3)&#146;,advance=&#146;no&#146;) leadz(value)
+         write (*,&#146;(" OF VALUE ")&#146;,advance=&#146;no&#146;)
+         write(*,f,advance=&#146;no&#146;) value
+         write(*,&#146;(*(1x,g0))&#146;) "AKA",value
+      enddo
+      ! Notes:
+      ! for two&#146;s-complements programming environments a negative non-zero
+      ! integer value will always start with a 1 and a positive value with 0
+      ! as the first bit is the sign bit. Such platforms are very common.
+    end program demo_leadz
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111101101010 AKA -150
-        LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111110011100 AKA -100
-        LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111111001110 AKA -50
-        LEADING ZERO BITS= 32 OF VALUE 00000000000000000000000000000000 AKA 0
-        LEADING ZERO BITS= 26 OF VALUE 00000000000000000000000000110010 AKA 50
-        LEADING ZERO BITS= 25 OF VALUE 00000000000000000000000001100100 AKA 100
-        LEADING ZERO BITS= 24 OF VALUE 00000000000000000000000010010110 AKA 150
+      LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111101101010 AKA -150
+      LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111110011100 AKA -100
+      LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111111001110 AKA -50
+      LEADING ZERO BITS= 32 OF VALUE 00000000000000000000000000000000 AKA 0
+      LEADING ZERO BITS= 26 OF VALUE 00000000000000000000000000110010 AKA 50
+      LEADING ZERO BITS= 25 OF VALUE 00000000000000000000000001100100 AKA 100
+      LEADING ZERO BITS= 24 OF VALUE 00000000000000000000000010010110 AKA 150
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -189,6 +188,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -197,16 +197,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 BIT_SIZE(3), POPCNT(3), POPPAR(3), TRAILZ(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               leadz(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>leadz (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5d1427b9-931f-44b5-a672-a5dd5f8f1b1d using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>leadz (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 51b27f40-4d23-4377-a7b1-06e2bfd2190d using man macros.</FONT>
 <br><br><center><img src="images/leadz.3fortran.gif"></center>
 </div>
 </div>

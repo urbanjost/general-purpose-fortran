@@ -2,7 +2,7 @@
      use M_kracken, only: kracken, dgets
      implicit none
      doubleprecision,allocatable  :: vals(:)
-     integer              :: i
+     integer :: i
      ! define command arguments and parse user command
      call kracken('demo','-nums 1 2 3 1000 100,000 11.11111 77.77777 -77.7777' )
      vals=dgets('demo_nums') ! get any values specified for -nums

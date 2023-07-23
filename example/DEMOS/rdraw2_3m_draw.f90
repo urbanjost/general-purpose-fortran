@@ -4,6 +4,7 @@
        use M_draw,    only  : D_BLACK,   D_WHITE
        use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
        use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+       implicit none
        integer :: ipaws
 
        call prefsize(200,200)
@@ -28,6 +29,7 @@
        contains
 
        subroutine square(side)
+       real,intent(in) :: side
        call rdraw2( side,   0.0)
        call rdraw2(  0.0,  side)
        call rdraw2(-side,   0.0)

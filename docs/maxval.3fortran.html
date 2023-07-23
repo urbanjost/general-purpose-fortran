@@ -50,23 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>maxval (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>maxval (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>maxval(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-maxval(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-MAXVAL(3) - [ARRAY:REDUCTION] Determines the maximum value in an array or
-row
+<P>
+MAXVAL(3) - [ARRAY:REDUCTION] Determines the maximum value in an array
+or row
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -77,14 +69,15 @@ row
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = maxval(array [,mask]) | maxval(array [,dim] [,mask])
 <P>
 <PRE>
-           NUMERIC function maxval(array ,dim, mask)
+         NUMERIC function maxval(array ,dim, mask)
 <P>
-            NUMERIC,intent(in) :: array(..)
-            integer(kind=**),intent(in),optional :: dim
-            logical(kind=**),intent(in),optional :: mask(..)
+          NUMERIC,intent(in) :: array(..)
+          integer(kind=**),intent(in),optional :: dim
+          logical(kind=**),intent(in),optional :: mask(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -94,6 +87,7 @@ result = maxval(array [,mask]) | maxval(array [,dim] [,mask])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -112,13 +106,14 @@ NUMERIC designates any numeric type and kind.
 
 </A>
 <BLOCKQUOTE>
-MAXVAL(3) determines the maximum value of the elements in an array value,
-or, if the DIM argument is supplied, determines the maximum value along each
-row of the array in the DIM direction. If MASK is present, only the elements
-for which MASK is .true. are considered. If the array has zero size, or all
-of the elements of MASK are .false., then the result is the most negative
-number of the type and kind of ARRAY if ARRAY is numeric, or a string of
-nulls if ARRAY is of character type.
+<P>
+MAXVAL(3) determines the maximum value of the elements in an array
+value, or, if the DIM argument is supplied, determines the maximum value
+along each row of the array in the DIM direction. If MASK is present,
+only the elements for which MASK is .true. are considered. If the array
+has zero size, or all of the elements of MASK are .false., then the
+result is the most negative number of the type and kind of ARRAY if
+ARRAY is numeric, or a string of nulls if ARRAY is of character type.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -126,6 +121,7 @@ nulls if ARRAY is of character type.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -135,15 +131,15 @@ ARRAY : Shall be an array of type integer, real, or character.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : (Optional) Shall be a scalar of type integer, with a value between
-one and the rank of ARRAY, inclusive. It may not be an optional dummy
-argument.
+DIM : (Optional) Shall be a scalar of type integer, with a value
+between one and the rank of ARRAY, inclusive. It may not be an
+optional dummy argument.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : (Optional) Shall be an array of type logical, and conformable with
-ARRAY.
+MASK : (Optional) Shall be an array of type logical, and conformable
+with ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -152,47 +148,46 @@ ARRAY.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>If DIM is absent, or if ARRAY has a rank of one, the result is a scalar.</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-If
-DIM is present, the result is an array with a rank one less than the rank of
-ARRAY, and a size corresponding to the size of ARRAY with the DIM dimension
-removed. In all cases, the result is of the same type and kind as ARRAY.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+If DIM is absent, or if ARRAY has a rank of one, the result is a scalar.
+If DIM is present, the result is an array with a rank one less than the
+rank of ARRAY, and a size corresponding to the size of ARRAY with the
+DIM dimension removed. In all cases, the result is of the same type and
+kind as ARRAY.
+</BLOCKQUOTE>
 <A name=6>
 
      <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 sample program:
 <P>
 <PRE>
-      program demo_maxval
-      implicit none
-      integer,save :: ints(3,5)= reshape([&
-         1,  2,  3,  4,  5, &
-        10, 20, 30, 40, 50, &
-        11, 22, 33, 44, 55  &
-      ],shape(ints),order=[2,1])
+    program demo_maxval
+    implicit none
+    integer,save :: ints(3,5)= reshape([&
+       1,  2,  3,  4,  5, &
+      10, 20, 30, 40, 50, &
+      11, 22, 33, 44, 55  &
+    ],shape(ints),order=[2,1])
 <P>
-         write(*,*) maxval(ints)
-         write(*,*) maxval(ints,dim=1)
-         write(*,*) maxval(ints,dim=2)
-         ! find biggest number less than 30 with mask
-         write(*,*) maxval(ints,mask=ints.lt.30)
-      end program demo_maxval
+       write(*,*) maxval(ints)
+       write(*,*) maxval(ints,dim=1)
+       write(*,*) maxval(ints,dim=2)
+       ! find biggest number less than 30 with mask
+       write(*,*) maxval(ints,mask=ints.lt.30)
+    end program demo_maxval
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  55
-       &gt;  11     22     33     44     55
-       &gt;   5     50     55
-       &gt;  22
+     &gt;  55
+     &gt;  11     22     33     44     55
+     &gt;   5     50     55
+     &gt;  22
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -202,6 +197,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -210,16 +206,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 MAXLOC(3), MINLOC(3), MINVAL(3), MAX(3), MIN(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022              maxval(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maxval (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bff33adb-06a8-4713-9009-394e0bd08eb5 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maxval (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f14e7e63-5c96-4e17-b7ba-90f8cde2e998 using man macros.</FONT>
 <br><br><center><img src="images/maxval.3fortran.gif"></center>
 </div>
 </div>

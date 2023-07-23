@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sqrt (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sqrt (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>sqrt(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-sqrt(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SQRT(3) - [MATHEMATICS] Square-root function
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ SQRT(3) - [MATHEMATICS] Square-root function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = sqrt(x)
 <P>
 <PRE>
-           elemental TYPE(kind=KIND) function sqrt(x)
+         elemental TYPE(kind=KIND) function sqrt(x)
 <P>
-            TYPE(kind=KIND),intent(in) :: x
+          TYPE(kind=KIND),intent(in) :: x
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = sqrt(x)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -114,23 +108,25 @@ the result has the same characteristics as X.
 
 </A>
 <BLOCKQUOTE>
+<P>
 SQRT(3) computes the principal square root of X.
 <P>
-The number whose square root is being considered is known as the radicand.
+The number whose square root is being considered is known as the
+radicand.
 <P>
-In mathematics, a square root of a radicand X is a number Y such that Y*Y =
-X.
+In mathematics, a square root of a radicand X is a number Y such that
+Y*Y = X.
 <P>
 Every nonnegative radicand X has two square roots of the same unique
 magnitude, one positive and one negative. The nonnegative square root is
 called the principal square root.
 <P>
-The principal square root of 9 is 3, for example, even though (<B>-3</B>)*(<B>-3</B>) is
-also 9.
+The principal square root of 9 is 3, for example, even though (<B>-3</B>)*(<B>-3</B>)
+is also 9.
 <P>
 Square roots of negative numbers are a special case of complex numbers,
-where with COMPLEX input the components of the radicand need not be positive
-in order to have a valid square root.
+where with COMPLEX input the components of the radicand need not be
+positive in order to have a valid square root.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -138,12 +134,13 @@ in order to have a valid square root.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-X : The radicand to find the principal square root of. If X is real its
-value must be greater than or equal to zero.
+X : The radicand to find the principal square root of. If X is real
+its value must be greater than or equal to zero.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -152,12 +149,13 @@ value must be greater than or equal to zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The principal square root of X is returned.
 <P>
 For a complex result the real part is greater than or equal to zero.
 <P>
-When the real part of the result is zero, the imaginary part has the same
-sign as the imaginary part of X.
+When the real part of the result is zero, the imaginary part has the
+same sign as the imaginary part of X.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -165,44 +163,45 @@ sign as the imaginary part of X.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_sqrt
-      use, intrinsic :: iso_fortran_env, only : real_kinds, &
-       & real32, real64, real128
-      implicit none
-      real(kind=real64) :: x, x2
-      complex :: z, z2
+    program demo_sqrt
+    use, intrinsic :: iso_fortran_env, only : real_kinds, &
+     & real32, real64, real128
+    implicit none
+    real(kind=real64) :: x, x2
+    complex :: z, z2
 <P>
-        ! basics
-         x = 2.0_real64
-         ! complex
-         z = (1.0, 2.0)
-         write(*,*)&#146;input values &#146;,x,z
+      ! basics
+       x = 2.0_real64
+       ! complex
+       z = (1.0, 2.0)
+       write(*,*)&#146;input values &#146;,x,z
 <P>
-         x2 = sqrt(x)
-         z2 = sqrt(z)
-         write(*,*)&#146;output values &#146;,x2,z2
+       x2 = sqrt(x)
+       z2 = sqrt(z)
+       write(*,*)&#146;output values &#146;,x2,z2
 <P>
-        ! elemental
-        write(*,*)&#146;elemental&#146;,sqrt([64.0,121.0,30.0])
+      ! elemental
+      write(*,*)&#146;elemental&#146;,sqrt([64.0,121.0,30.0])
 <P>
-        ! alternatives
-         x2 = x**0.5
-         z2 = z**0.5
-         write(*,*)&#146;alternatively&#146;,x2,z2
+      ! alternatives
+       x2 = x**0.5
+       z2 = z**0.5
+       write(*,*)&#146;alternatively&#146;,x2,z2
 <P>
-      end program demo_sqrt
+    end program demo_sqrt
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          input values    2.00000000000000      (1.000000,2.000000)
-          output values    1.41421356237310      (1.272020,0.7861513)
-          elemental   8.000000       11.00000       5.477226
-          alternatively   1.41421356237310      (1.272020,0.7861513)
+        input values    2.00000000000000      (1.000000,2.000000)
+        output values    1.41421356237310      (1.272020,0.7861513)
+        elemental   8.000000       11.00000       5.477226
+        alternatively   1.41421356237310      (1.272020,0.7861513)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -212,6 +211,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -220,16 +220,13 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 EXP(3), LOG(3), LOG10(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                sqrt(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sqrt (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 69a096f5-4be6-4c95-b307-344206d8515f using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sqrt (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dcb72e8c-036f-4c6f-be31-353eaebeec86 using man macros.</FONT>
 <br><br><center><img src="images/sqrt.3fortran.gif"></center>
 </div>
 </div>

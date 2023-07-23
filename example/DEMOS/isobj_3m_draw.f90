@@ -1,5 +1,7 @@
      program demo_isobj
      use M_draw
+     implicit none
+     integer :: idum
         call prefsize(300, 300)
         call prefposition(100, 100)
         call vinit(' ')   ! set up device

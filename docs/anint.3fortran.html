@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>anint (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>anint (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>anint(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-anint(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 ANINT(3) - [NUMERIC] Real nearest whole number
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ ANINT(3) - [NUMERIC] Real nearest whole number
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = anint(a [,kind])
 <P>
 <PRE>
-           elemental real(kind=KIND) function anint(x,KIND)
+         elemental real(kind=KIND) function anint(x,KIND)
 <P>
-            real(kind=**),intent(in)   :: x
-            integer,intent(in),optional :: KIND
+          real(kind=**),intent(in)   :: x
+          integer,intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = anint(a [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -106,8 +100,8 @@ KIND is a scalar integer constant expression.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is type real. The kind of the result is the same as X unless
-specified by KIND.
+the result is type real. The kind of the result is the same as X
+unless specified by KIND.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -116,11 +110,12 @@ specified by KIND.
 
 </A>
 <BLOCKQUOTE>
+<P>
 ANINT(3) rounds its argument to the nearest whole number.
 <P>
-Unlike NINT(3) which returns an integer the full range or real values can be
-returned (integer types typically have a smaller range of values than real
-types).
+Unlike NINT(3) which returns an integer the full range or real values
+can be returned (integer types typically have a smaller range of values
+than real types).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -128,6 +123,7 @@ types).
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -137,7 +133,8 @@ A : the value to round
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : specifies the kind of the result. The default is the kind of A.
+KIND : specifies the kind of the result. The default is the kind of
+A.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -146,11 +143,17 @@ KIND : specifies the kind of the result. The default is the kind of A.
 
 </A>
 <BLOCKQUOTE>
-The return value is the whole number nearest A.
+<P>
+The return value is the real whole number nearest A.
 <P>
 If A is greater than zero, ANINT(A)(3) returns AINT(A + 0.5).
 <P>
-If A is less than or equal to zero then it returns AINT(A - 0.5).
+If A is less than or equal to zero then it returns AINT(A - 0.5), except
+AINT specifies that for |A| &lt; 1 the result is zero (0).
+<P>
+It is processor-dependent whether anint(a) returns negative zero when
+<B>-0.5</B> &lt; a &lt;= <B>-0.0</B>. Compiler switches are often available which enable or
+disable support of negative zero.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -158,56 +161,63 @@ If A is less than or equal to zero then it returns AINT(A - 0.5).
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_anint
-      use, intrinsic :: iso_fortran_env, only : real32, real64, real128
-      implicit none
-      real,allocatable :: arr(:)
+    program demo_anint
+    use, intrinsic :: iso_fortran_env, only : real32, real64, real128
+    implicit none
+    real,allocatable :: arr(:)
 <P>
-        ! basics
-         print *, &#146;ANINT (2.783) has the value 3.0 =&gt;&#146;, anint(2.783)
-         print *, &#146;ANINT (-2.783) has the value -3.0 =&gt;&#146;, anint(-2.783)
+      ! basics
+       print *, &#146;ANINT (2.783) has the value 3.0 =&gt;&#146;, anint(2.783)
+       print *, &#146;ANINT (-2.783) has the value -3.0 =&gt;&#146;, anint(-2.783)
 <P>
-         print *, &#146;by default the kind of the output is the kind of the input&#146;
-         print *, anint(1234567890.1234567890e0)
-         print *, anint(1234567890.1234567890d0)
+       print *, &#146;by default the kind of the output is the kind of the input&#146;
+       print *, anint(1234567890.1234567890e0)
+       print *, anint(1234567890.1234567890d0)
 <P>
-         print *, &#146;sometimes specifying the result kind is useful when passing&#146;
-         print *, &#146;results as an argument, for example.&#146;
-         print *, &#146;do you know why the results are different?&#146;
-         print *, anint(1234567890.1234567890,kind=real64)
-         print *, anint(1234567890.1234567890d0,kind=real64)
+       print *, &#146;sometimes specifying the result kind is useful when passing&#146;
+       print *, &#146;results as an argument, for example.&#146;
+       print *, &#146;do you know why the results are different?&#146;
+       print *, anint(1234567890.1234567890,kind=real64)
+       print *, anint(1234567890.1234567890d0,kind=real64)
 <P>
-        ! elemental
-         print *, &#146;numbers on a cusp are always the most troublesome&#146;
-         print *, anint([ -2.7, -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, 0.0 ])
+      ! elemental
+       print *, &#146;numbers on a cusp are always the most troublesome&#146;
+       print *, anint([ -2.7, -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, 0.0 ])
 <P>
-         arr=[ 0.0, 0.5, 1.0, 1.5, 2.0, 2.2, 2.5, 2.7 ]
-         print *, anint(arr)
+       print *, &#146;negative zero is processor dependent&#146;
+       arr=[ 0.0, 0.1, 0.5, 1.0, 1.5, 2.0, 2.2, 2.5, 2.7 ]
+       print *, anint(arr)
+       arr=[ -0.0, -0.1, -0.5, -1.0, -1.5, -2.0, -2.2, -2.5, -2.7 ]
+       print *, anint(arr)
 <P>
-      end program demo_anint
+    end program demo_anint
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          ANINT (2.783) has the value 3.0 =&gt;   3.000000
-          ANINT (-2.783) has the value -3.0 =&gt;  -3.000000
-          by default the kind of the output is the kind of the input
-           1.2345679E+09
-            1234567890.00000
-          sometimes specifying the result kind is useful when passing
-          results as an argument, for example.
-          do you know why the results are different?
-            1234567936.00000
-            1234567890.00000
-          numbers on a cusp are always the most troublesome
-           -3.000000      -3.000000    -2.000000      -2.000000    -2.000000
-           -1.000000      -1.000000    0.0000000E+00
-           0.0000000E+00   1.000000     1.000000       2.000000     2.000000
-            2.000000       3.000000     3.000000
+     &gt;  ANINT (2.783) has the value 3.0 =&gt;   3.000000
+     &gt;  ANINT (-2.783) has the value -3.0 =&gt;  -3.000000
+     &gt;  by default the kind of the output is the kind of the input
+     &gt;   1.2345679E+09
+     &gt;    1234567890.00000
+     &gt;  sometimes specifying the result kind is useful when passing
+     &gt;  results as an argument, for example.
+     &gt;  do you know why the results are different?
+     &gt;    1234567936.00000
+     &gt;    1234567890.00000
+     &gt;  numbers on a cusp are always the most troublesome
+     &gt;   -3.000000      -3.000000      -2.000000      -2.000000      -2.000000
+     &gt;   -1.000000      -1.000000      0.0000000E+00
+     &gt;  negative zero is processor dependent
+     &gt;   0.0000000E+00  0.0000000E+00   1.000000       1.000000       2.000000
+     &gt;    2.000000       2.000000       3.000000       3.000000
+     &gt;   0.0000000E+00  0.0000000E+00  -1.000000      -1.000000      -2.000000
+     &gt;   -2.000000      -2.000000      -3.000000      -3.000000
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -217,6 +227,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -225,16 +236,13 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 AINT(3), INT(3), NINT(3), SELECTED_INT_KIND(3), CEILING(3), FLOOR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               anint(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>anint (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 53b9f94f-e5a1-46dd-855f-8da2c6e5f5f7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>anint (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 09285955-e3b6-4cd6-8e66-9e092b7792d0 using man macros.</FONT>
 <br><br><center><img src="images/anint.3fortran.gif"></center>
 </div>
 </div>

@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>atan (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>atan (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>atan(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-atan(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 ATAN(3) - [MATHEMATICS:TRIGONOMETRIC] Arctangent AKA inverse tangent
 function
 <P>
@@ -77,13 +69,14 @@ function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = atan([x) | atan(y, x)
 <P>
 <PRE>
-           elemental TYPE(kind=KIND) function atan(y,x)
+         elemental TYPE(kind=KIND) function atan(y,x)
 <P>
-            TYPE(kind=KIND),intent(in) :: x
-            TYPE(kind=**),intent(in),optional :: y
+          TYPE(kind=KIND),intent(in) :: x
+          TYPE(kind=**),intent(in),optional :: y
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,11 +86,13 @@ result = atan([x) | atan(y, x)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If Y is present X and Y must both be real. Otherwise, X may be complex.
+If Y is present X and Y must both be real. Otherwise, X may be
+complex.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -116,6 +111,7 @@ The returned value is of the same type and kind as X.
 
 </A>
 <BLOCKQUOTE>
+<P>
 ATAN(3) computes the arctangent of X.
 </BLOCKQUOTE>
 <A name=4>
@@ -124,17 +120,18 @@ ATAN(3) computes the arctangent of X.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-X : The value to compute the arctangent of. if Y is present, X shall be
-real.
+X : The value to compute the arctangent of. if Y is present, X shall
+be real.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Y : Shall be of the same type and kind as X. If X is zero, Y must not be
+Y : is of the same type and kind as X. If X is zero, Y must not be
 zero.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -144,10 +141,11 @@ zero.
 
 </A>
 <BLOCKQUOTE>
-The returned value is of the same type and kind as X. If Y is present, the
-result is identical to ATAN2(Y,X). Otherwise, it is the arc tangent of X,
-where the real part of the result is in radians and lies in the range <B>-PI</B>/2
-&lt;= ATAN(X) &lt;= PI/2
+<P>
+The returned value is of the same type and kind as X. If Y is present,
+the result is identical to ATAN2(Y,X). Otherwise, it is the arc tangent
+of X, where the real part of the result is in radians and lies in the
+range <B>-PI</B>/2 &lt;= ATAN(X) &lt;= PI/2
 </BLOCKQUOTE>
 <A name=6>
 
@@ -155,36 +153,37 @@ where the real part of the result is in radians and lies in the range <B>-PI</B>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_atan
-      use, intrinsic :: iso_fortran_env, only : real_kinds, &
-       & real32, real64, real128
-      implicit none
-      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
-      real(kind=real64),parameter :: &
-       Deg_Per_Rad = 57.2957795130823208767981548_real64
-      real(kind=real64) :: x
-          x=2.866_real64
-          print all, atan(x)
+    program demo_atan
+    use, intrinsic :: iso_fortran_env, only : real_kinds, &
+     & real32, real64, real128
+    implicit none
+    character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+    real(kind=real64),parameter :: &
+     Deg_Per_Rad = 57.2957795130823208767981548_real64
+    real(kind=real64) :: x
+        x=2.866_real64
+        print all, atan(x)
 <P>
-          print all, atan( 2.0d0, 2.0d0),atan( 2.0d0, 2.0d0)*Deg_Per_Rad
-          print all, atan( 2.0d0,-2.0d0),atan( 2.0d0,-2.0d0)*Deg_Per_Rad
-          print all, atan(-2.0d0, 2.0d0),atan(-2.0d0, 2.0d0)*Deg_Per_Rad
-          print all, atan(-2.0d0,-2.0d0),atan(-2.0d0,-2.0d0)*Deg_Per_Rad
+        print all, atan( 2.0d0, 2.0d0),atan( 2.0d0, 2.0d0)*Deg_Per_Rad
+        print all, atan( 2.0d0,-2.0d0),atan( 2.0d0,-2.0d0)*Deg_Per_Rad
+        print all, atan(-2.0d0, 2.0d0),atan(-2.0d0, 2.0d0)*Deg_Per_Rad
+        print all, atan(-2.0d0,-2.0d0),atan(-2.0d0,-2.0d0)*Deg_Per_Rad
 <P>
-      end program demo_atan
+    end program demo_atan
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         1.235085437457879
-         .7853981633974483 45.00000000000000
-         2.356194490192345 135.0000000000000
-         -.7853981633974483 -45.00000000000000
-         -2.356194490192345 -135.0000000000000
+       1.235085437457879
+       .7853981633974483 45.00000000000000
+       2.356194490192345 135.0000000000000
+       -.7853981633974483 -45.00000000000000
+       -2.356194490192345 -135.0000000000000
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -194,6 +193,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77 for a complex argument; and for two arguments Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -202,6 +202,7 @@ FORTRAN 77 for a complex argument; and for two arguments Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 ATAN2(3), TAN(3)
 </BLOCKQUOTE>
 <A name=9>
@@ -210,6 +211,7 @@ ATAN2(3), TAN(3)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -217,13 +219,9 @@ o
 wikipedia: inverse trigonometric functions
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                atan(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 160a0e54-ba6c-4a56-882a-a31415de9ea8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6ad41951-eea3-4589-8f7c-65e437f592b5 using man macros.</FONT>
 <br><br><center><img src="images/atan.3fortran.gif"></center>
 </div>
 </div>

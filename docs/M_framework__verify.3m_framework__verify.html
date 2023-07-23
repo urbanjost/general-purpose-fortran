@@ -1,0 +1,341 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>M_framework__verify (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+M_framework__verify(3f) - [M_framework__verify::INTRO] unit test framework
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Quote</A><BR>
+<A HREF=#3>Description</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#4>Procedures</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Module procedures
+<P>
+<PRE>
+   use M_framework, only : unit_test, unit_test_start,    &
+                           unit_test_end, unit_test_stop, &
+                           unit_test_msg, unit_test_mode, &
+                           unit_test_system,              &
+                           unit_test_expected
+</PRE>
+Module values
+<P>
+<PRE>
+   use M_framework, only : unit_test_level, unit_test_flags
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>QUOTE</H3>
+
+</A>
+<BLOCKQUOTE>
+Do not let your victories go to your head, nor let your failures go
+to your heart.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The M_framework(3f) module is a collection of Fortran routines for
+supporting code development by providing logging, error processing,
+debugging, comparison and unit testing procedures.
+<P>
+The M_framework__verify(3f) module specifically brings together a
+few procedures for creating unit testing. It &#46;&#46;&#46;
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The M_framework__verify(3f) module specifically brings together a
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+allows for a user-defined command to be called to collect results or
+produce mail alerts, or other custom bookkeeping operations.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+supports easily composing a message from up to twenty scalar
+intrinsic values and different strings
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+allows stopping on failure or continuing
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+provides for a non-zero exit code if any tests fail
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+is designed for with integration with the fpm
+(Fortran Package Manager) "test" subcommand.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+If default modes need changed it can be done via the unit_test_mode(3f)
+procedure or as command line options.
+<P>
+messages by default are writting to stderr, but may be written to any
+list of LUNs of preassigned or open files.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SET MODES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Some of the most common options are
+<P>
+<PRE>
+      call unit_test_mode(command,keep_going,level,luns=[K,L,M,N,&#46;&#46;&#46;])
+<P>
+       keep_going  logical variable that can be used to turn on or off
+                   program termination on errors.
+       luns        array of Fortran LUNs to write messages to
+       level       An integer that can be used to specify
+                   different debug levels
+       command     name of optional command to execute for a start,
+                   check, or finish.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; PROCEDURES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The unit test procedures are
+<P>
+<PRE>
+      unit_test_start()     start tests of a procedure
+      unit_test()           report if expression is false or true
+                             and if .false. stop program when keep_going=.false.
+      unit_test_end()       ends test of a procedure
+      unit_test_msg()       write message
+      unit_test_stop()      stop program with exit value of 0 if no failures
+                             else with an exit value of 1
+      unit_test_system()    execute system command, recursively if requested.
+<P>
+</PRE>
+The unit test short-cut procedures are
+<P>
+<PRE>
+      unit_test_expected()  report if two values are equal
+<P>
+</PRE>
+For custom unit testing reports, a command can be given that will be
+passed information on the command line in NAMELIST format.
+<BLOCKQUOTE>
+<P>
+This command is generally a script that makes entries for each unit,
+perhaps in an SQLite data file for example.
+<P>
+It might also send an email if a test fails in batch environments.
+<P>
+It could also convert the information to CSV for use in spreadsheets,
+or generate an HTML report, for example.
+<P>
+A sample command written in the bash(1) shell and using the sqlite3(1)
+command should be included in this distribution as an example.
+<P>
+The flexibility introduced by calling an external script or program
+is that the command can be changed as desired without changing the
+test programs.
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; RELATED FUNCTIONS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The routines in M_framework__verify(3f) are often combined with other
+small modules such as Comparisons of real values can be done with a
+tolerance with M_Compare_Float_Numbers(3f) and M_framework__approx(3f).
+M_hashkeys(3f) routines and various math and statistical routines can
+be helpful to quickly create unit tests.
+<P>
+The intrinsics ANY(3f) and ALL(3f) are particularly useful in calls
+to unit_test(3f).
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+    !! program demo_M_framework__verify
+    module M_framework__verify_demo
+    private
+    public one ! some regular routine
+    public two ! some regular routine
+    contains
+<P>
+    subroutine one(array)
+    integer,intent(out),allocatable :: array(:)
+       array=[21,51,14,45]
+    end subroutine one
+<P>
+    subroutine two(array)
+    integer,intent(inout),allocatable :: array(:)
+       array=2*array
+    end subroutine two
+<P>
+    end module M_framework__verify_demo
+<P>
+    program demo_M_framework__verify
+    use M_framework, only: unit_test_start, unit_test,   &
+        & unit_test_end, unit_test_msg, unit_test_stop, &
+        & unit_test_system, unit_test_mode
+    use M_framework__verify_demo,   only: one, two
+    ! set-up
+    call unit_test_mode(command=&#146;&#146;,flags=[0],keep_going=.true.)
+    ! call a test procedure for each routine to test
+       call test_one()
+       call test_two()
+    ! tear-down
+    call unit_test_stop()
+    contains
+<P>
+    subroutine test_one()
+    integer,allocatable :: results(:)
+    integer,parameter   :: expected(*)=[21,51,14,45]
+    call unit_test_start(&#146;one&#146;)
+    call one(results)
+    call unit_test(&#146;one&#146;,all(expected&gt;0), &
+       & &#146;testing if everyone greater than zero&#146;)
+    call unit_test(&#146;one&#146;,all(expected==results), &
+       & &#146;testing if all values are expected&#146;)
+    call unit_test_end(&#146;one&#146;,&#146;checks on "one" ended&#146;)
+    end subroutine test_one
+<P>
+    subroutine test_two
+    integer,allocatable :: results(:)
+    integer,parameter   :: expected(*)=[2,20,200]
+    results=[1,10,100]
+    call two(results)
+    call unit_test_start(&#146;two&#146;,&#146;check procedure "two" &#146;)
+    call unit_test(&#146;two&#146;, all(expected == results) .and. &
+       & all(expected &gt; 0) .and. maxval(expected) &lt;201,msg=&#146;long expression&#146;)
+    call unit_test_end(&#146;two&#146;,&#146;checks on "two" ended&#146;)
+    end subroutine test_two
+<P>
+    end program demo_M_framework__verify
+<P>
+</PRE>
+Expected output:
+<P>
+<PRE>
+   check_start: one   START   :
+   check:       one   SUCCESS : testing if everyone greater than zero
+   check:       one   SUCCESS : testing if all values are expected
+   check_end:   one   PASSED  : GOOD:  2 BAD:  0 DURATION:00000001
+   check_start: two   START   :
+   check:       two   SUCCESS : long expression
+   check_end:   two   PASSED  : GOOD:   1 BAD:  0 DURATION:00000000
+   check_stop:  TALLY PASSED  : GOOD:    3 BAD:  0 DURATION:00000001
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__verify (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c590b93d-a966-431b-bdf8-b8e490bd90cb using man macros.</FONT>
+<br><br><center><img src="images/M_framework__verify.3m_framework__verify.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

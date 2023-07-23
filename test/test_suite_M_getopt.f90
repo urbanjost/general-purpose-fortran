@@ -1,14 +1,10 @@
 program test_suite_M_getopt
 use, intrinsic :: iso_fortran_env, only : ERROR_UNIT
-use :: M_verify,   only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start, unit_check_level
-use :: M_verify,   only : unit_check_command, unit_check_keep_going, unit_check_level
-use :: M_verify,   only : unit_check_stop
+use :: M_framework__verify, only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start
+use :: M_framework__verify, only : unit_check_stop
 use :: M_args
 implicit none
 integer,parameter :: HT=9
-unit_check_command=''
-unit_check_keep_going=.true.
-unit_check_level=0
 call unit_check_start('M_args')
 !! setup
    call test_getopt()

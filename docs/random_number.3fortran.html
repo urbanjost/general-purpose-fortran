@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>random_number (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>random_number (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>random_number(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-random_number(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 RANDOM_NUMBER(3) - [MATHEMATICS:RANDOM] Pseudo-random number
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ RANDOM_NUMBER(3) - [MATHEMATICS:RANDOM] Pseudo-random number
 
 </A>
 <BLOCKQUOTE>
+<P>
 call random_number(harvest)
 <P>
 <PRE>
-           subroutine random_number(harvest)
+         subroutine random_number(harvest)
 <P>
-            real,intent(out) :: harvest(..)
+          real,intent(out) :: harvest(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ call random_number(harvest)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -104,23 +98,18 @@ HARVEST and the result are default real variables
 
 </A>
 <BLOCKQUOTE>
-RANDOM_NUMBER(3) returns a single pseudorandom number or an array of
-pseudorandom numbers from the uniform distribution over the range 0 &lt;= x &lt;
-<TABLE cellpadding=3><!-- tsb: RANDOM_NUMBER(3) returns a single pseudorandom number or an array of
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
 <P>
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+RANDOM_NUMBER(3) returns a single pseudorandom number or an array of
+pseudorandom numbers from the uniform distribution over the range 0 &lt;= x
+&lt; 1.
+</BLOCKQUOTE>
 <A name=4>
 
      <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -134,56 +123,65 @@ HARVEST : Shall be a scalar or an array of type real.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_random_number
-      use, intrinsic :: iso_fortran_env, only : dp=&gt;real64
-      implicit none
-      integer, allocatable :: seed(:)
-      integer              :: n
-      integer              :: first,last
-      integer              :: i
-      integer              :: rand_int
-      integer,allocatable  :: count(:)
-      real(kind=dp)        :: rand_val
-         call random_seed(size = n)
-         allocate(seed(n))
-         call random_seed(get=seed)
-         first=1
-         last=10
-         allocate(count(last-first+1))
-         ! To have a discrete uniform distribution on the integers
-         ! [first, first+1, &#46;&#46;&#46;, last-1, last] carve the continuous
-         ! distribution up into last+1-first equal sized chunks,
-         ! mapping each chunk to an integer.
-         !
-         ! One way is:
-         !   call random_number(rand_val)
-         ! choose one from last-first+1 integers
-         !   rand_int = first + FLOOR((last+1-first)*rand_val)
-            count=0
-            ! generate a lot of random integers from 1 to 10 and count them.
-            ! with a large number of values you should get about the same
-            ! number of each value
-            do i=1,100000000
-               call random_number(rand_val)
-               rand_int=first+floor((last+1-first)*rand_val)
-               if(rand_int.ge.first.and.rand_int.le.last)then
-                  count(rand_int)=count(rand_int)+1
-               else
-                  write(*,*)rand_int,&#146; is out of range&#146;
-               endif
-            enddo
-            write(*,&#146;(i0,1x,i0)&#146;)(i,count(i),i=1,size(count))
-      end program demo_random_number
+    program demo_random_number
+    use, intrinsic :: iso_fortran_env, only : dp=&gt;real64
+    implicit none
+    integer, allocatable :: seed(:)
+    integer              :: n
+    integer              :: first,last
+    integer              :: i
+    integer              :: rand_int
+    integer,allocatable  :: count(:)
+    real(kind=dp)        :: rand_val
+       call random_seed(size = n)
+       allocate(seed(n))
+       call random_seed(get=seed)
+       first=1
+       last=10
+       allocate(count(last-first+1))
+       ! To have a discrete uniform distribution on the integers
+       ! [first, first+1, &#46;&#46;&#46;, last-1, last] carve the continuous
+       ! distribution up into last+1-first equal sized chunks,
+       ! mapping each chunk to an integer.
+       !
+       ! One way is:
+       !   call random_number(rand_val)
+       ! choose one from last-first+1 integers
+       !   rand_int = first + FLOOR((last+1-first)*rand_val)
+          count=0
+          ! generate a lot of random integers from 1 to 10 and count them.
+          ! with a large number of values you should get about the same
+          ! number of each value
+          do i=1,100000000
+             call random_number(rand_val)
+             rand_int=first+floor((last+1-first)*rand_val)
+             if(rand_int.ge.first.and.rand_int.le.last)then
+                count(rand_int)=count(rand_int)+1
+             else
+                write(*,*)rand_int,&#146; is out of range&#146;
+             endif
+          enddo
+          write(*,&#146;(i0,1x,i0)&#146;)(i,count(i),i=1,size(count))
+    end program demo_random_number
 <P>
 </PRE>
 Results:
 <BLOCKQUOTE>
 <P>
-1 10003588 2 10000104 3 10000169 4 9997996 5 9995349 6 10001304 7 10001909
-8 9999133 9 10000252 10 10000196
+1 10003588
+2 10000104
+3 10000169
+4 9997996
+5 9995349
+6 10001304
+7 10001909
+8 9999133
+9 10000252
+10 10000196
 </BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=6>
@@ -192,6 +190,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=7>
@@ -200,16 +199,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 RANDOM_SEED(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022       random_number(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>random_number (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5887d69e-194a-48fc-ac19-ff2121ad46a6 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>random_number (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fe8df526-cdcc-4785-b448-846e787f81fd using man macros.</FONT>
 <br><br><center><img src="images/random_number.3fortran.gif"></center>
 </div>
 </div>

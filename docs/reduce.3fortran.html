@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>reduce (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>reduce (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>reduce(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-reduce(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 REDUCE(3) - [TRANSFORMATIONAL] General reduction of an array
 <P>
 </BLOCKQUOTE>
@@ -76,27 +68,28 @@ REDUCE(3) - [TRANSFORMATIONAL] General reduction of an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 There are two forms to this function:
 <P>
 <PRE>
-         result = reduce(array, operation [,mask]  [,identity]  [,ordered] )
+       result = reduce(array, operation [,mask]  [,identity]  [,ordered] )
 <P>
 </PRE>
 or
 <P>
 <PRE>
-         result = reduce (array, operation, dim  &
-         & [,mask] [,identity] [,ordered] )
+       result = reduce (array, operation, dim  &
+       & [,mask] [,identity] [,ordered] )
 <P>
-          type(TYPE(kind=KIND)) function reduce &
-          & (array, operation, dim, mask, identity, ordered )
+        type(TYPE(kind=KIND)) function reduce &
+        & (array, operation, dim, mask, identity, ordered )
 <P>
-           type(TYPE(kind=KIND)),intent(in) :: array
-           pure function                  :: operation
-           integer,intent(in),optional    :: dim
-           logical,optional               :: mask
-           type(TYPE),intent(in),optional :: identity
-           logical,intent(in),optional    :: ordered
+         type(TYPE(kind=KIND)),intent(in) :: array
+         pure function                  :: operation
+         integer,intent(in),optional    :: dim
+         logical,optional               :: mask
+         type(TYPE),intent(in),optional :: identity
+         logical,intent(in),optional    :: ordered
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -106,6 +99,7 @@ or
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -122,14 +116,15 @@ OPERATION is a pure function with exactly two arguments
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-each argument is scalar, non-allocatable, a nonpointer, nonpolymorphic
-and nonoptional with the same type and kind as array.
+each argument is scalar, non-allocatable, a nonpointer,
+nonpolymorphic and nonoptional with the same type and kind as
+array.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-if one argument has the asynchronous, target, or value attribute so
-shall the other.
+if one argument has the asynchronous, target, or value attribute
+so shall the other.
 </TD></TR>
 <TR></TR></TABLE><!-- .IP \(bu 3 -->
 </TD></TR>
@@ -165,20 +160,23 @@ the result is of the same type and type parameters as ARRAY.
 
 </A>
 <BLOCKQUOTE>
-REDUCE(3) reduces a list of conditionally selected values from an array to a
-single value by iteratively applying a binary function.
+<P>
+REDUCE(3) reduces a list of conditionally selected values from an array
+to a single value by iteratively applying a binary function.
 <P>
 Common in functional programming, a REDUCE function applies a binary
-operator (a pure function with two arguments) to all elements cumulatively.
+operator (a pure function with two arguments) to all elements
+cumulatively.
 <P>
 REDUCE is a "higher-order" function; ie. it is a function that receives
 other functions as arguments.
 <P>
 The REDUCE function receives a binary operator (a function with two
-arguments, just like the basic arithmetic operators). It is first applied to
-two unused values in the list to generate an accumulator value which is
-subsequently used as the first argument to the function as the function is
-recursively applied to all the remaining selected values in the input array.
+arguments, just like the basic arithmetic operators). It is first
+applied to two unused values in the list to generate an accumulator
+value which is subsequently used as the first argument to the function
+as the function is recursively applied to all the remaining selected
+values in the input array.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -186,6 +184,7 @@ recursively applied to all the remaining selected values in the input array.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -195,14 +194,14 @@ ARRAY : An array of any type and allowed rank to select values from.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-OPERATION : shall be a pure function with exactly two arguments; each
-argument shall be a scalar, nonallocatable, nonpointer, nonpolymorphic,
-nonoptional dummy data object with the same type and type parameters as
-ARRAY. If one argument has the ASYNCHRONOUS, TARGET, or VALUE attribute,
-the other shall have that attribute. Its result shall be a nonpolymorphic
-scalar and have the same type and type parameters as ARRAY. OPERATION
-should implement a mathematically associative operation. It need not be
-commutative.
+OPERATION : shall be a pure function with exactly two arguments;
+each argument shall be a scalar, nonallocatable, nonpointer,
+nonpolymorphic, nonoptional dummy data object with the same type and
+type parameters as ARRAY. If one argument has the ASYNCHRONOUS,
+TARGET, or VALUE attribute, the other shall have that attribute. Its
+result shall be a nonpolymorphic scalar and have the same type and
+type parameters as ARRAY. OPERATION should implement a
+mathematically associative operation. It need not be commutative.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -210,23 +209,25 @@ commutative.
     <H4>&nbsp; &nbsp; NOTE</H4>
 </A>
 <BLOCKQUOTE>
-If OPERATION is not computationally associative, REDUCE without
-ORDERED=.TRUE. with the same argument values might not always produce the
-same result, as the processor can apply the associative law to the
-evaluation.
 <P>
-Many operations that mathematically are associative are not when applied to
-floating-point numbers. The order you sum values in may affect the result,
-for example.
-<TABLE cellpadding=3><!-- tsb: Many operations that mathematically are associative are not when applied to
+If OPERATION is not computationally associative, REDUCE without
+ORDERED=.TRUE. with the same argument values might not always
+produce the same result, as the processor can apply the associative
+law to the evaluation.
+<P>
+Many operations that mathematically are associative are not when
+applied to floating-point numbers. The order you sum values in may
+affect the result, for example.
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Many operations that mathematically are associative are not when
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : An integer scalar with a value in the range 1&lt;= DIM &lt;= n, where n
-is the rank of ARRAY.
-<TABLE width=100% cellpadding=3><!-- tsb: DIM : An integer scalar with a value in the range 1&lt;= DIM &lt;= n, where n
+DIM : An integer scalar with a value in the range 1&lt;= DIM &lt;= n,
+where n is the rank of ARRAY.
+<TABLE width=100% cellpadding=3><!-- tsb: DIM : An integer scalar with a value in the range 1&lt;= DIM &lt;= n,
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -235,9 +236,9 @@ o
 MASK : (optional) shall be of type logical and shall be conformable
 with ARRAY.
 <P>
-When present only those elements of ARRAY are passed to OPERATION for
-which the corresponding elements of MASK are true, as if *array was
-filtered with PACK(3).
+When present only those elements of ARRAY are passed to OPERATION
+for which the corresponding elements of MASK are true, as if *array
+was filtered with PACK(3).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -251,27 +252,27 @@ initiated.
 o
 </TD><TD>
 ORDERED : shall be a logical scalar. If ORDERED is present with the
-value .true., the calls to the OPERATOR function begins with the first
-two elements of ARRAY and the process continues in row-column order
-until the sequence has only one element which is the value of the
-reduction. Otherwise, the compiler is free to assume that the
+value .true., the calls to the OPERATOR function begins with the
+first two elements of ARRAY and the process continues in row-column
+order until the sequence has only one element which is the value of
+the reduction. Otherwise, the compiler is free to assume that the
 operation is commutative and may evaluate the reduction in the most
 optimal way.
 </TD></TR>
 <TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=5>
+<TR></TR></TABLE><A name=5>
 
      <H3>RESULT</H3>
 
 </A>
 <BLOCKQUOTE>
-The result is of the same type and type parameters as ARRAY. It is scalar if
-DIM does not appear.
 <P>
-If DIM is present, it indicates the one dimension along which to perform the
-reduction, and the resultant array has a rank reduced by one relative to the
-input array.
+The result is of the same type and type parameters as ARRAY. It is
+scalar if DIM does not appear.
+<P>
+If DIM is present, it indicates the one dimension along which to perform
+the reduction, and the resultant array has a rank reduced by one
+relative to the input array.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -279,73 +280,74 @@ input array.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The following examples all use the function MY_MULT, which returns the
 product of its two real arguments.
 <P>
 <PRE>
-         program demo_reduce
-         implicit none
-         character(len=*),parameter :: f=&#146;("[",*(g0,",",1x),"]")&#146;
-         integer,allocatable :: arr(:), b(:,:)
+       program demo_reduce
+       implicit none
+       character(len=*),parameter :: f=&#146;("[",*(g0,",",1x),"]")&#146;
+       integer,allocatable :: arr(:), b(:,:)
 <P>
-         ! Basic usage:
-            ! the product of the elements of an array
-            arr=[1, 2, 3, 4 ]
-            write(*,*) arr
-            write(*,*) &#146;product=&#146;, reduce(arr, my_mult)
-            write(*,*) &#146;sum=&#146;, reduce(arr, my_sum)
+       ! Basic usage:
+          ! the product of the elements of an array
+          arr=[1, 2, 3, 4 ]
+          write(*,*) arr
+          write(*,*) &#146;product=&#146;, reduce(arr, my_mult)
+          write(*,*) &#146;sum=&#146;, reduce(arr, my_sum)
 <P>
-         ! Examples of masking:
-            ! the product of only the positive elements of an array
-            arr=[1, -1, 2, -2, 3, -3 ]
-            write(*,*)&#146;positive value product=&#146;,reduce(arr, my_mult, mask=arr&gt;0)
-         ! sum values ignoring negative values
-            write(*,*)&#146;sum positive values=&#146;,reduce(arr, my_sum, mask=arr&gt;0)
+       ! Examples of masking:
+          ! the product of only the positive elements of an array
+          arr=[1, -1, 2, -2, 3, -3 ]
+          write(*,*)&#146;positive value product=&#146;,reduce(arr, my_mult, mask=arr&gt;0)
+       ! sum values ignoring negative values
+          write(*,*)&#146;sum positive values=&#146;,reduce(arr, my_sum, mask=arr&gt;0)
 <P>
-         ! a single-valued array returns the single value as the
-         ! calls to the operator stop when only one element remains
-            arr=[ 1234 ]
-            write(*,*)&#146;single value sum&#146;,reduce(arr, my_sum )
-            write(*,*)&#146;single value product&#146;,reduce(arr, my_mult )
+       ! a single-valued array returns the single value as the
+       ! calls to the operator stop when only one element remains
+          arr=[ 1234 ]
+          write(*,*)&#146;single value sum&#146;,reduce(arr, my_sum )
+          write(*,*)&#146;single value product&#146;,reduce(arr, my_mult )
 <P>
-         ! Example of operations along a dimension:
-         !  If B is the array   1 3 5
-         !                      2 4 6
-            b=reshape([1,2,3,4,5,6],[2,3])
-            write(*,f) REDUCE(B, MY_MULT),&#146;should be [720]&#146;
-            write(*,f) REDUCE(B, MY_MULT, DIM=1),&#146;should be [2,12,30]&#146;
-            write(*,f) REDUCE(B, MY_MULT, DIM=2),&#146;should be [15, 48]&#146;
+       ! Example of operations along a dimension:
+       !  If B is the array   1 3 5
+       !                      2 4 6
+          b=reshape([1,2,3,4,5,6],[2,3])
+          write(*,f) REDUCE(B, MY_MULT),&#146;should be [720]&#146;
+          write(*,f) REDUCE(B, MY_MULT, DIM=1),&#146;should be [2,12,30]&#146;
+          write(*,f) REDUCE(B, MY_MULT, DIM=2),&#146;should be [15, 48]&#146;
 <P>
-         contains
+       contains
 <P>
-         pure function my_mult(a,b) result(c)
-         integer,intent(in) :: a, b
-         integer            :: c
-            c=a*b
-         end function my_mult
+       pure function my_mult(a,b) result(c)
+       integer,intent(in) :: a, b
+       integer            :: c
+          c=a*b
+       end function my_mult
 <P>
-         pure function my_sum(a,b) result(c)
-         integer,intent(in) :: a, b
-         integer            :: c
-            c=a+b
-         end function my_sum
+       pure function my_sum(a,b) result(c)
+       integer,intent(in) :: a, b
+       integer            :: c
+          c=a+b
+       end function my_sum
 <P>
-         end program demo_reduce
+       end program demo_reduce
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-           &gt;  1 2 3 4
-           &gt;  product= 24
-           &gt;  sum=     10
-           &gt;  positive value sum= 6
-           &gt;  sum positive values= 6
-           &gt;  single value sum     1234
-           &gt;  single value product 1234
-           &gt; [720, should be [720],
-           &gt; [2, 12, 30, should be [2,12,30],
-           &gt; [15, 48, should be [15, 48],
+         &gt;  1 2 3 4
+         &gt;  product= 24
+         &gt;  sum=     10
+         &gt;  positive value sum= 6
+         &gt;  sum positive values= 6
+         &gt;  single value sum     1234
+         &gt;  single value product 1234
+         &gt; [720, should be [720],
+         &gt; [2, 12, 30, should be [2,12,30],
+         &gt; [15, 48, should be [15, 48],
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -355,6 +357,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2018
 </BLOCKQUOTE>
 <A name=8>
@@ -363,6 +366,7 @@ Fortran 2018
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -376,6 +380,7 @@ co_reduce(3)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -383,13 +388,9 @@ o
 associative:wikipedia
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              reduce(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>reduce (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e3de04b6-e9a3-4968-b1e5-18f2fc38b2f9 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>reduce (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from af054db2-a49b-40d0-9b82-383f89e150fc using man macros.</FONT>
 <br><br><center><img src="images/reduce.3fortran.gif"></center>
 </div>
 </div>

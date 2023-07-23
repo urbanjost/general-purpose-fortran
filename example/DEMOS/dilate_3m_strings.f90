@@ -1,8 +1,6 @@
      program demo_dilate
 
-     !  test filter to remove tabs and trailing white space from input
-     !  on files up to 1024 characters wide
-     use M_strings, only : dilate
+     use M_strings, only : dilate, visible
      implicit none
      character(len=:),allocatable :: in
      integer                      :: i
@@ -11,5 +9,6 @@
         do i=1,len(in)
            if(in(i:i) == ' ')in(i:i)=char(9)
         enddo
-        write(*,'(a)')in,dilate(in)
+        write(*,'("[",a,"]")')visible(in)
+        write(*,'("[",a,"]")')visible(dilate(in))
      end program demo_dilate

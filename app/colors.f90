@@ -1,146 +1,8 @@
-subroutine help_usage(l_help)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
-help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   colors(1f) - [CONVERT] list colors and their values using common color models                                                ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   colors [color_name | R G B | model_name_A V1 V2 V3 model_name_B ]                                                            ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   Display colors using common color models; or convert color values                                                            ',&
-'   to a different color model                                                                                                   ',&
-'                                                                                                                                ',&
-'    # list known color names and their RGB values                                                                               ',&
-'    colors                                                                                                                      ',&
-'    # show values for a known named color                                                                                       ',&
-'    colors COLOR_NAME                                                                                                           ',&
-'    # find closest named color                                                                                                  ',&
-'    colors R G B                                                                                                                ',&
-'    #convert color between models                                                                                               ',&
-'    colors INPUT_MODEL_NAME VALUE1 VALUE2 VALUE3 OUTPUT_MODEL_NAME                                                              ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'    Model Names(case sensitive):                                                                                                ',&
-'                                                                                                                                ',&
-'    rgb   color TV monitors (RGB values in range 0 to 100)                                                                      ',&
-'    hls   Hue (0 to 360 degrees), Lightness (0 to 100), Saturation (0 to 100)                                                   ',&
-'    cmy   Cyan, Magenta, Yellow : pigment-based printing devices                                                                ',&
-'          ( values in range 0 to 100 )                                                                                          ',&
-'    hsv   Hue (0 to 360 degrees), Saturation (0 to 100), Value (0 to 100)                                                       ',&
-'    yiq   Broadcast TV color system (y ranges from 0 to 100,                                                                    ',&
-'          i ranges from -60 to 60, q ranges from -52 to 52)                                                                     ',&
-'                                                                                                                                ',&
-'    --help      display this help and exit                                                                                      ',&
-'                                                                                                                                ',&
-'    --version   output version information and exit                                                                             ',&
-'                                                                                                                                ',&
-'EXAMPLE                                                                                                                         ',&
-'    Common forms of use:                                                                                                        ',&
-'                                                                                                                                ',&
-'     # list named colors                                                                                                        ',&
-'     colors                                                                                                                     ',&
-'     # convert RGB values to HLS value                                                                                          ',&
-'     colors rgb 0 100 0 hls                                                                                                     ',&
-'     # display RGB values for named color                                                                                       ',&
-'     colors green                                                                                                               ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-!>
-!!##NAME
-!!    colors(1f) - [CONVERT] list colors and their values using common color models
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    colors [color_name | R G B | model_name_A V1 V2 V3 model_name_B ]
-!!
-!!##DESCRIPTION
-!!    Display colors using common color models; or convert color values
-!!    to a different color model
-!!
-!!     # list known color names and their RGB values
-!!     colors
-!!     # show values for a known named color
-!!     colors COLOR_NAME
-!!     # find closest named color
-!!     colors R G B
-!!     #convert color between models
-!!     colors INPUT_MODEL_NAME VALUE1 VALUE2 VALUE3 OUTPUT_MODEL_NAME
-!!
-!!##OPTIONS
-!!     Model Names(case sensitive):
-!!
-!!     rgb   color TV monitors (RGB values in range 0 to 100)
-!!     hls   Hue (0 to 360 degrees), Lightness (0 to 100), Saturation (0 to 100)
-!!     cmy   Cyan, Magenta, Yellow : pigment-based printing devices
-!!           ( values in range 0 to 100 )
-!!     hsv   Hue (0 to 360 degrees), Saturation (0 to 100), Value (0 to 100)
-!!     yiq   Broadcast TV color system (y ranges from 0 to 100,
-!!           i ranges from -60 to 60, q ranges from -52 to 52)
-!!
-!!     --help      display this help and exit
-!!
-!!     --version   output version information and exit
-!!
-!!##EXAMPLE
-!!
-!!     Common forms of use:
-!!
-!!      # list named colors
-!!      colors
-!!      # convert RGB values to HLS value
-!!      colors rgb 0 100 0 hls
-!!      # display RGB values for named color
-!!      colors green
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
-'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
-'@(#)PROGRAM:        colors(1f)>',&
-'@(#)DESCRIPTION:    display color names and values>',&
-'@(#)VERSION:        1.0 20151015>',&
-'@(#)AUTHOR:         John S. Urban>',&
-'@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
-'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2023-02-12 18:36:25 UTC-300>',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
 program colors
-use m_color, only : hue, color_name2rgb , closest_color_name
-use M_kracken, only: kracken, sget, IPvalue, lget, rget
-use M_strings, only: split,s2v,v2s
-use M_verify,   only: stderr
+use m_color,     only: hue, color_name2rgb , closest_color_name
+use M_kracken,   only: kracken, sget, IPvalue, lget, rget
+use M_strings,   only: split,s2v,v2s
+use M_framework, only: stderr
 implicit none
 character(len=*),parameter    :: ident="@(#)ccall_M_color(3f): call HUE(3f) by providing parameters on command line"
 character(len=IPvalue)        :: list
@@ -217,4 +79,155 @@ character(len=*),parameter    :: fmt='(a,3(i3,"%",1x),"#",3(z2.2),1x,3(i3,1x))'
       call stderr('*M_strings*:error: unsupported number of parameters provided: '//v2s(size(token)))
       stop 1
    endif
+contains
+subroutine help_usage(l_help)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
+logical,intent(in)             :: l_help
+character(len=:),allocatable :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_help)then
+help_text=[ CHARACTER(LEN=128) :: &
+'NAME                                                                            ',&
+'   colors(1f) - [CONVERT] list colors and their values using common color models',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   colors [color_name | R G B | model_name_A V1 V2 V3 model_name_B ]            ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   colors(1) performs conversions between color                                 ',&
+'   models, describes the RGB values that correspond to common color             ',&
+'   names, finds the color name closest to a given set of RGB values,            ',&
+'   and lists the supported color names.                                         ',&
+'                                                                                ',&
+'                                                                                ',&
+'   Display colors using common color models; or convert color values            ',&
+'   to a different color model                                                   ',&
+'                                                                                ',&
+'    # list known color names and their RGB values                               ',&
+'    colors                                                                      ',&
+'    # show values for a known named color                                       ',&
+'    colors COLOR_NAME                                                           ',&
+'    # find closest named color                                                  ',&
+'    colors R G B                                                                ',&
+'    #convert color between models                                               ',&
+'    colors INPUT_MODEL_NAME VALUE1 VALUE2 VALUE3 OUTPUT_MODEL_NAME              ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'    Model Names(case sensitive):                                                ',&
+'                                                                                ',&
+'    rgb   color TV monitors (RGB values in range 0 to 100)                      ',&
+'    hls   Hue (0 to 360 degrees), Lightness (0 to 100), Saturation (0 to 100)   ',&
+'    cmy   Cyan, Magenta, Yellow : pigment-based printing devices                ',&
+'          ( values in range 0 to 100 )                                          ',&
+'    hsv   Hue (0 to 360 degrees), Saturation (0 to 100), Value (0 to 100)       ',&
+'    yiq   Broadcast TV color system (y ranges from 0 to 100,                    ',&
+'          i ranges from -60 to 60, q ranges from -52 to 52)                     ',&
+'                                                                                ',&
+'    --help      display this help and exit                                      ',&
+'                                                                                ',&
+'    --version   output version information and exit                             ',&
+'                                                                                ',&
+'EXAMPLE                                                                         ',&
+'    Common forms of use:                                                        ',&
+'                                                                                ',&
+'     # list named colors                                                        ',&
+'     colors                                                                     ',&
+'     # convert RGB values to HLS value                                          ',&
+'     colors rgb 0 100 0 hls                                                     ',&
+'     # display RGB values for named color                                       ',&
+'     colors green                                                               ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
+   stop ! if --help was specified, stop
+endif
+end subroutine help_usage
+!>
+!!##NAME
+!!    colors(1f) - [CONVERT] list colors and their values using common color models
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    colors [color_name | R G B | model_name_A V1 V2 V3 model_name_B ]
+!!
+!!##DESCRIPTION
+!!    colors(1) performs conversions between color
+!!    models, describes the RGB values that correspond to common color
+!!    names, finds the color name closest to a given set of RGB values,
+!!    and lists the supported color names.
+!!
+!!
+!!    Display colors using common color models; or convert color values
+!!    to a different color model
+!!
+!!     # list known color names and their RGB values
+!!     colors
+!!     # show values for a known named color
+!!     colors COLOR_NAME
+!!     # find closest named color
+!!     colors R G B
+!!     #convert color between models
+!!     colors INPUT_MODEL_NAME VALUE1 VALUE2 VALUE3 OUTPUT_MODEL_NAME
+!!
+!!##OPTIONS
+!!     Model Names(case sensitive):
+!!
+!!     rgb   color TV monitors (RGB values in range 0 to 100)
+!!     hls   Hue (0 to 360 degrees), Lightness (0 to 100), Saturation (0 to 100)
+!!     cmy   Cyan, Magenta, Yellow : pigment-based printing devices
+!!           ( values in range 0 to 100 )
+!!     hsv   Hue (0 to 360 degrees), Saturation (0 to 100), Value (0 to 100)
+!!     yiq   Broadcast TV color system (y ranges from 0 to 100,
+!!           i ranges from -60 to 60, q ranges from -52 to 52)
+!!
+!!     --help      display this help and exit
+!!
+!!     --version   output version information and exit
+!!
+!!##EXAMPLE
+!!
+!!     Common forms of use:
+!!
+!!      # list named colors
+!!      colors
+!!      # convert RGB values to HLS value
+!!      colors rgb 0 100 0 hls
+!!      # display RGB values for named color
+!!      colors green
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+subroutine help_version(l_version)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
+logical,intent(in)             :: l_version
+character(len=:),allocatable   :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_version)then
+help_text=[ CHARACTER(LEN=128) :: &
+'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
+'@(#)PROGRAM:        colors(1f)>',&
+'@(#)DESCRIPTION:    display color names and values>',&
+'@(#)VERSION:        1.0 20151015>',&
+'@(#)AUTHOR:         John S. Urban>',&
+'@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
+'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
+'@(#)LICENSE:        Public Domain>',&
+'@(#)COMPILED:       2023-07-22 01:27:19 UTC-240>',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
+endif
+end subroutine help_version
 end program colors

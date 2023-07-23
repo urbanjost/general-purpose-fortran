@@ -50,23 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>extends_type_of (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>extends_type_of (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>extends_type_of(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-extends_type_of(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-EXTENDS_TYPE_OF(3) - [STATE:INQUIRY] Determine if the dynamic type of A is
-an extension of the dynamic type of MOLD.
+<P>
+EXTENDS_TYPE_OF(3) - [STATE:INQUIRY] Determine if the dynamic type of A
+is an extension of the dynamic type of MOLD.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -77,13 +69,14 @@ an extension of the dynamic type of MOLD.
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = extends_type_of(a, mold)
 <P>
 <PRE>
-           logical extends_type_of(a, mold)
+         logical extends_type_of(a, mold)
 <P>
-            type(TYPE(kind=KIND),intent(in) :: a
-            type(TYPE(kind=KIND),intent(in) :: mold
+          type(TYPE(kind=KIND)),intent(in) :: a
+          type(TYPE(kind=KIND)),intent(in) :: mold
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,11 +86,12 @@ result = extends_type_of(a, mold)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <B>-A</B> shall be an object or pointer to an extensible declared type, or
-unlimited polymorphic. If it is a polymorphic pointer, it shall not have an
-undefined association status. <B>-MOLE</B> shall be an object or pointer to an
-extensible declared type or unlimited polymorphic. If it is a polymorphic
-pointer, it shall not have an undefined association status.
+unlimited polymorphic. If it is a polymorphic pointer, it shall not have
+an undefined association status. <B>-MOLE</B> shall be an object or pointer to
+an extensible declared type or unlimited polymorphic. If it is a
+polymorphic pointer, it shall not have an undefined association status.
 <TABLE cellpadding=3><!-- tsb: <B>-A</B> shall be an object or pointer to an extensible declared type, or
  -->
 <TR></TR><TR></TR>
@@ -113,6 +107,7 @@ the result is a scalar default logical type.
 
 </A>
 <BLOCKQUOTE>
+<P>
 EXTENDS_TYPE_OF(3) is .true. if and only if the dynamic type of A is or
 could be (for unlimited polymorphic) an extension of the dynamic type of
 MOLD.
@@ -124,9 +119,9 @@ variable is its declared type.
 <P>
 NOTE2
 <P>
-The test performed by EXTENDS_TYPE_OF is not the same as the test performed
-by the type guard CLASS IS. The test performed by EXTENDS_TYPE_OF does not
-consider kind type parameters.
+The test performed by EXTENDS_TYPE_OF is not the same as the test
+performed by the type guard CLASS IS. The test performed by
+EXTENDS_TYPE_OF does not consider kind type parameters.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -134,20 +129,21 @@ consider kind type parameters.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A : be an object of extensible declared type or unlimited polymorphic. If
-it is a polymorphic pointer, it shall not have an undefined association
-status.
+A : be an object of extensible declared type or unlimited
+polymorphic. If it is a polymorphic pointer, it shall not have an
+undefined association status.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MOLD : be an object of extensible declared type or unlimited polymorphic.
-If it is a polymorphic pointer, it shall not have an undefined
-association status.
+MOLD : be an object of extensible declared type or unlimited
+polymorphic. If it is a polymorphic pointer, it shall not have an
+undefined association status.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -156,17 +152,18 @@ association status.
 
 </A>
 <BLOCKQUOTE>
-If MOLD is unlimited polymorphic and is either a disassociated pointer or
-unallocated allocatable variable, the result is true.
+<P>
+If MOLD is unlimited polymorphic and is either a disassociated pointer
+or unallocated allocatable variable, the result is true.
 <P>
 Otherwise if A is unlimited polymorphic and is either a disassociated
 pointer or unallocated allocatable variable, the result is false.
 <P>
 Otherwise the result is true if and only if the dynamic type of A
 <P>
-if the dynamic type of A or MOLD is extensible, the result is true if and
-only if the dynamic type of A is an extension type of the dynamic type of
-MOLD; otherwise the result is processor dependent.
+if the dynamic type of A or MOLD is extensible, the result is true if
+and only if the dynamic type of A is an extension type of the dynamic
+type of MOLD; otherwise the result is processor dependent.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -174,101 +171,102 @@ MOLD; otherwise the result is processor dependent.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-        ! program demo_extends_type_of
-        module M_demo_extends_type_of
-        implicit none
-        private
+      ! program demo_extends_type_of
+      module M_demo_extends_type_of
+      implicit none
+      private
 <P>
-        type nothing
-        end type nothing
+      type nothing
+      end type nothing
 <P>
-        type, extends(nothing) :: dot
-          real :: x=0
-          real :: y=0
-        end type dot
+      type, extends(nothing) :: dot
+        real :: x=0
+        real :: y=0
+      end type dot
 <P>
-        type, extends(dot) :: point
-          real :: z=0
-        end type point
+      type, extends(dot) :: point
+        real :: z=0
+      end type point
 <P>
-        type something_else
-        end type something_else
+      type something_else
+      end type something_else
 <P>
-        public :: nothing
-        public :: dot
-        public :: point
-        public :: something_else
+      public :: nothing
+      public :: dot
+      public :: point
+      public :: something_else
 <P>
-        end module M_demo_extends_type_of
+      end module M_demo_extends_type_of
 <P>
-        program demo_extends_type_of
-        use M_demo_extends_type_of, only : nothing, dot, point, something_else
-        implicit none
-        type(nothing) :: grandpa
-        type(dot) :: dad
-        type(point) :: me
-        type(something_else) :: alien
+      program demo_extends_type_of
+      use M_demo_extends_type_of, only : nothing, dot, point, something_else
+      implicit none
+      type(nothing) :: grandpa
+      type(dot) :: dad
+      type(point) :: me
+      type(something_else) :: alien
 <P>
-         write(*,*)&#146;these should all be true&#146;
-         write(*,*)extends_type_of(me,grandpa),&#146;I am descended from Grandpa&#146;
-         write(*,*)extends_type_of(dad,grandpa),&#146;Dad is descended from Grandpa&#146;
-         write(*,*)extends_type_of(me,dad),&#146;Dad is my ancestor&#146;
+       write(*,*)&#146;these should all be true&#146;
+       write(*,*)extends_type_of(me,grandpa),&#146;I am descended from Grandpa&#146;
+       write(*,*)extends_type_of(dad,grandpa),&#146;Dad is descended from Grandpa&#146;
+       write(*,*)extends_type_of(me,dad),&#146;Dad is my ancestor&#146;
 <P>
-         write(*,*)&#146;is an object an extension of itself?&#146;
-         write(*,*)extends_type_of(grandpa,grandpa) ,&#146;self-propagating!&#146;
-         write(*,*)extends_type_of(dad,dad) ,&#146;clone!&#146;
+       write(*,*)&#146;is an object an extension of itself?&#146;
+       write(*,*)extends_type_of(grandpa,grandpa) ,&#146;self-propagating!&#146;
+       write(*,*)extends_type_of(dad,dad) ,&#146;clone!&#146;
 <P>
-         write(*,*)&#146; you did not father your grandfather&#146;
-         write(*,*)extends_type_of(grandpa,dad),&#146;no paradox here&#146;
+       write(*,*)&#146; you did not father your grandfather&#146;
+       write(*,*)extends_type_of(grandpa,dad),&#146;no paradox here&#146;
 <P>
-         write(*,*)extends_type_of(dad,me),&#146;no paradox here&#146;
-         write(*,*)extends_type_of(grandpa,me),&#146;no relation whatsoever&#146;
-         write(*,*)extends_type_of(grandpa,alien),&#146;no relation&#146;
-         write(*,*)extends_type_of(me,alien),&#146;not what everyone thinks&#146;
+       write(*,*)extends_type_of(dad,me),&#146;no paradox here&#146;
+       write(*,*)extends_type_of(grandpa,me),&#146;no relation whatsoever&#146;
+       write(*,*)extends_type_of(grandpa,alien),&#146;no relation&#146;
+       write(*,*)extends_type_of(me,alien),&#146;not what everyone thinks&#146;
 <P>
-         call pointers()
-         contains
+       call pointers()
+       contains
 <P>
-         subroutine pointers()
-         ! Given the declarations and assignments
-         type t1
-         real c
-         end type
-         type, extends(t1) :: t2
-         end type
-         class(t1), pointer :: p, q
-            allocate (p)
-            allocate (t2 :: q)
-            ! the result of EXTENDS_TYPE_OF (P, Q) will be false, and the result
-            ! of EXTENDS_TYPE_OF (Q, P) will be true.
-            write(*,*)&#146;(P,Q)&#146;,extends_type_of(p,q),"mind your P&#146;s and Q&#146;s"
-            write(*,*)&#146;(Q,P)&#146;,extends_type_of(q,p)
-         end subroutine pointers
+       subroutine pointers()
+       ! Given the declarations and assignments
+       type t1
+       real c
+       end type
+       type, extends(t1) :: t2
+       end type
+       class(t1), pointer :: p, q
+          allocate (p)
+          allocate (t2 :: q)
+          ! the result of EXTENDS_TYPE_OF (P, Q) will be false, and the result
+          ! of EXTENDS_TYPE_OF (Q, P) will be true.
+          write(*,*)&#146;(P,Q)&#146;,extends_type_of(p,q),"mind your P&#146;s and Q&#146;s"
+          write(*,*)&#146;(Q,P)&#146;,extends_type_of(q,p)
+       end subroutine pointers
 <P>
-        end program demo_extends_type_of
+      end program demo_extends_type_of
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          these should all be true
-          T I am descended from Grandpa
-          T Dad is descended from Grandpa
-          T Dad is my ancestor
-          is an object an extension of itself?
-          T self-propagating!
-          T clone!
-           you did not father your grandfather
-          F no paradox here
-          F no paradox here
-          F no relation whatsoever
-          F no relation
-          F not what everyone thinks
-          (P,Q) F mind your P&#146;s and Q&#146;s
-          (Q,P) T
+        these should all be true
+        T I am descended from Grandpa
+        T Dad is descended from Grandpa
+        T Dad is my ancestor
+        is an object an extension of itself?
+        T self-propagating!
+        T clone!
+         you did not father your grandfather
+        F no paradox here
+        F no paradox here
+        F no relation whatsoever
+        F no relation
+        F not what everyone thinks
+        (P,Q) F mind your P&#146;s and Q&#146;s
+        (Q,P) T
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -278,6 +276,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -286,16 +285,13 @@ Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 SAME_TYPE_AS(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022     extends_type_of(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>extends_type_of (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 26b3dbd4-7a94-46bb-b77c-c3b2639bb0ac using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>extends_type_of (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6a250498-59aa-4de3-bd74-186d982cffc7 using man macros.</FONT>
 <br><br><center><img src="images/extends_type_of.3fortran.gif"></center>
 </div>
 </div>

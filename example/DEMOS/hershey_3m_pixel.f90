@@ -1,6 +1,6 @@
      program demo_hershey
      use M_pixel
-     use M_writegif_animated, only : write_animated_gif
+     use M_pixel__writegif_animated, only : write_animated_gif
      implicit none
      integer,parameter :: isize=600
      integer,parameter :: topsym=432
@@ -44,7 +44,7 @@
         enddo
         call vexit()
         !! write to file and display with display(1)
-        call write_animated_gif('hershey.3m_pixel.gif',&
+        call write_animated_gif('hershey.3M_pixel.gif',&
         & movie,P_colormap,delay=40)
-        !call execute_command_line('display hershey.3m_pixel.gif')
+        !call execute_command_line('display hershey.3M_pixel.gif')
      end program demo_hershey

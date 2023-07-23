@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>blt (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>blt (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>blt(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-blt(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 BLT(3) - [BIT:COMPARE] Bitwise less than
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ BLT(3) - [BIT:COMPARE] Bitwise less than
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = blt(i,j)
 <P>
 <PRE>
-           elemental logical function blt(i, j)
+         elemental logical function blt(i, j)
 <P>
-            integer(kind=**),intent(in) :: i
-            integer(kind=**),intent(in) :: j
+          integer(kind=**),intent(in) :: i
+          integer(kind=**),intent(in) :: j
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = blt(i,j)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -101,16 +95,16 @@ I is an integer of any kind or a BOZ-literal-constant
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-J is an integer of any kind or a BOZ-literal-constant, not necessarily
-the same as I.
+J is an integer of any kind or a BOZ-literal-constant, not
+necessarily the same as I.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 the result is of default logical kind
 </TD></TR>
-<TR></TR></TABLE>BOZ constants must have a value valid for the integer kind available with
-the most bits on the current platform.
+<TR></TR></TABLE>BOZ constants must have a value valid for the integer kind available
+with the most bits on the current platform.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -118,6 +112,7 @@ the most bits on the current platform.
 
 </A>
 <BLOCKQUOTE>
+<P>
 BLT(3) determines whether an integer is bitwise less than another.
 </BLOCKQUOTE>
 <A name=4>
@@ -126,6 +121,7 @@ BLT(3) determines whether an integer is bitwise less than another.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -144,6 +140,7 @@ J : Shall be of integer type or a BOZ constant.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The return value is of type logical and of the default kind.
 </BLOCKQUOTE>
 <A name=6>
@@ -152,41 +149,42 @@ The return value is of type logical and of the default kind.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_blt
-      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      implicit none
-      integer            :: i
-      integer(kind=int8) :: byte
-        ! Compare some one-byte values to 64.
-         ! Notice that the values are tested as bits not as integers
-         ! so sign bits in the integer are treated just like any other
-         do i=-128,127,32
-            byte=i
-            write(*,&#146;(sp,i0.4,*(1x,1l,1x,b0.8))&#146;)i,blt(byte,64_int8),byte
-         enddo
-        ! BOZ literals
-         write(*,*)blt(z&#146;1000&#146;, z&#146;101011010&#146;)
-         ! see the BGE() description for an extended description
-         ! of related information
+    program demo_blt
+    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    implicit none
+    integer            :: i
+    integer(kind=int8) :: byte
+      ! Compare some one-byte values to 64.
+       ! Notice that the values are tested as bits not as integers
+       ! so sign bits in the integer are treated just like any other
+       do i=-128,127,32
+          byte=i
+          write(*,&#146;(sp,i0.4,*(1x,1l,1x,b0.8))&#146;)i,blt(byte,64_int8),byte
+       enddo
+      ! BOZ literals
+       write(*,*)blt(z&#146;1000&#146;, z&#146;101011010&#146;)
+       ! see the BGE() description for an extended description
+       ! of related information
 <P>
-      end program demo_blt
+    end program demo_blt
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         &gt; -0128  F 10000000
-         &gt; -0096  F 10100000
-         &gt; -0064  F 11000000
-         &gt; -0032  F 11100000
-         &gt; +0000  T 00000000
-         &gt; +0032  T 00100000
-         &gt; +0064  F 01000000
-         &gt; +0096  F 01100000
-         &gt; T
+       &gt; -0128  F 10000000
+       &gt; -0096  F 10100000
+       &gt; -0064  F 11000000
+       &gt; -0032  F 11100000
+       &gt; +0000  T 00000000
+       &gt; +0032  T 00100000
+       &gt; +0064  F 01000000
+       &gt; +0096  F 01100000
+       &gt; T
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -196,6 +194,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -204,16 +203,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 BGE(3), BGT(3), BLE(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 blt(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>blt (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cf0e6d17-5722-4b1c-8b94-5f79f1ad8310 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>blt (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ecf6cac9-2f0f-44cb-a4c3-c3d01833a919 using man macros.</FONT>
 <br><br><center><img src="images/blt.3fortran.gif"></center>
 </div>
 </div>

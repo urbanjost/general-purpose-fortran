@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>compiler_options (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>compiler_options (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>compiler_options(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-compiler_options(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 COMPILER_OPTIONS(3) - [COMPILER:INQUIRY] Options passed to the compiler
 <P>
 </BLOCKQUOTE>
@@ -76,10 +68,11 @@ COMPILER_OPTIONS(3) - [COMPILER:INQUIRY] Options passed to the compiler
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = compiler_options()
 <P>
 <PRE>
-           character(len=:) function compiler_options()
+         character(len=:) function compiler_options()
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -89,12 +82,13 @@ result = compiler_options()
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the return value is a default-kind character variable with system-
-dependent length.
+the return value is a default-kind character variable with
+system-dependent length.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -103,7 +97,9 @@ dependent length.
 
 </A>
 <BLOCKQUOTE>
-COMPILER_OPTIONS(3) returns a string with the options used for compiling.
+<P>
+COMPILER_OPTIONS(3) returns a string with the options used for
+compiling.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -111,6 +107,7 @@ COMPILER_OPTIONS(3) returns a string with the options used for compiling.
 
 </A>
 <BLOCKQUOTE>
+<P>
 None.
 </BLOCKQUOTE>
 <A name=5>
@@ -119,8 +116,9 @@ None.
 
 </A>
 <BLOCKQUOTE>
-The result contains the compiler flags used to compile the file containing
-the COMPILER_OPTIONS(3) call.
+<P>
+The result contains the compiler flags used to compile the file
+containing the COMPILER_OPTIONS(3) call.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -128,45 +126,46 @@ the COMPILER_OPTIONS(3) call.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_compiler_version
-      use, intrinsic :: iso_fortran_env, only : compiler_version
-      use, intrinsic :: iso_fortran_env, only : compiler_options
-      implicit none
-         print &#146;(4a)&#146;, &
-            &#146;This file was compiled by &#146;, &
-            compiler_version(),           &
-            &#146; using the options &#146;,        &
-            compiler_options()
-      end program demo_compiler_version
+    program demo_compiler_version
+    use, intrinsic :: iso_fortran_env, only : compiler_version
+    use, intrinsic :: iso_fortran_env, only : compiler_options
+    implicit none
+       print &#146;(4a)&#146;, &
+          &#146;This file was compiled by &#146;, &
+          compiler_version(),           &
+          &#146; using the options &#146;,        &
+          compiler_options()
+    end program demo_compiler_version
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-      This file was compiled by GCC version 10.3.0 using
-      the options -I build/gfortran_2A42023B310FA28D
-      -mtune=generic -march=x86-64 -auxbase-strip
-      build/gfortran_2A42023B310FA28D/compiler_options/app_main.f90.o
-      -g -Wall -Wextra -Wimplicit-interface -fPIC -fmax-errors=1
-      -fcheck=bounds -fcheck=array-temps -fbacktrace
-      -fcoarray=single -J build/gfortran_2A42023B310FA28D
-      -fpre-include=/usr/include/finclude/math-vector-fortran.h
+    This file was compiled by GCC version 10.3.0 using
+    the options -I build/gfortran_2A42023B310FA28D
+    -mtune=generic -march=x86-64 -auxbase-strip
+    build/gfortran_2A42023B310FA28D/compiler_options/app_main.f90.o
+    -g -Wall -Wextra -Wimplicit-interface -fPIC -fmax-errors=1
+    -fcheck=bounds -fcheck=array-temps -fbacktrace
+    -fcoarray=single -J build/gfortran_2A42023B310FA28D
+    -fpre-include=/usr/include/finclude/math-vector-fortran.h
 <P>
-      This file was compiled by nvfortran 21.5-0 LLVM
-      using the options app/main.f90 -c -Minform=inform
-      -Mbackslash -Mbounds -Mchkptr -Mchkstk -traceback -module
-      build/nvfortran_78229DCE997517A4 -Ibuild/nvfortran_78229DCE997517A4 -o
-      build/nvfortran_78229DCE997517A4/compiler_options/app_main.f90.o
+    This file was compiled by nvfortran 21.5-0 LLVM
+    using the options app/main.f90 -c -Minform=inform
+    -Mbackslash -Mbounds -Mchkptr -Mchkstk -traceback -module
+    build/nvfortran_78229DCE997517A4 -Ibuild/nvfortran_78229DCE997517A4 -o
+    build/nvfortran_78229DCE997517A4/compiler_options/app_main.f90.o
 <P>
-      This file was compiled by Intel(R) Fortran Intel(R) 64 Compiler Classic
-      for applications running on Intel(R) 64, Version 2021.3.0 Build
-      20210609_000000 using the options -Ibuild/ifort_5C58216731706F11
-      -c -warn all -check all -error-limit 1 -O0 -g -assume
-      byterecl -traceback -module build/ifort_5C58216731706F11 -o
-      build/ifort_5C58216731706F11/compiler_options/app_main.f90.o
+    This file was compiled by Intel(R) Fortran Intel(R) 64 Compiler Classic
+    for applications running on Intel(R) 64, Version 2021.3.0 Build
+    20210609_000000 using the options -Ibuild/ifort_5C58216731706F11
+    -c -warn all -check all -error-limit 1 -O0 -g -assume
+    byterecl -traceback -module build/ifort_5C58216731706F11 -o
+    build/ifort_5C58216731706F11/compiler_options/app_main.f90.o
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -176,6 +175,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -184,16 +184,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 COMPILER_VERSION(3), ISO_FORTRAN_ENV(7)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022    compiler_options(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>compiler_options (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from caf043a8-ff93-4ca1-8c0e-ba2f9bdef76e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>compiler_options (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ac9bc130-face-4148-b8a8-2b6cfac1e47d using man macros.</FONT>
 <br><br><center><img src="images/compiler_options.3fortran.gif"></center>
 </div>
 </div>

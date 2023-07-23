@@ -54,8 +54,10 @@ contains
 !!      program demo_strgar3
 !!      use M_hybrid,     only : strgar3
 !!      use M_calculator, only : rnum0
+!!      implicit none
 !!      character(len=90) :: string
 !!      real              :: values(10,4)
+!!      integer           :: ios, inums, ierr
 !!      do
 !!         values(:,:)=-123
 !!         write(*,*)'*strgar3* Enter string like 10:1 20 30 40:50'
@@ -93,7 +95,7 @@ subroutine strgar3(line,iread,default,numbrs,inums,delims,delimc,ierr)
 !  delimiters. no checking for more than can fit in numbrs.
 !  quits if encounters any errors in read.
 
-   use M_journal,    only : journal
+   use M_framework__journal,    only : journal
    use M_calculator, only : iclen_calc
    use M_calculator, only : expression
    implicit none
@@ -351,7 +353,7 @@ function fetch(dicname)
 use M_kracken,         only : sget
 use M_calculator,      only : iclen_calc
 use M_calculator,      only : expression
-use M_journal,         only : journal
+use M_framework__journal,         only : journal
 implicit none
 
 ! ident_1="@(#) M_xyplot fetch(3f) call sget(3f) (and calculator if fetched string starts with $ or double-quote)"
@@ -385,8 +387,8 @@ end function fetch
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_hybrid()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
 implicit none
 !! setup
    call test_errc()

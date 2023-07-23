@@ -1,5 +1,6 @@
      program demo_line
      use M_calcomp
+     implicit none
      call plots(0.0,30.0,0.0,30.0)
      call drawplot(0) ! solid line
      call plot( 0.0,15.0,-MOVE)
@@ -9,10 +10,15 @@
      call plot(0.0,0.0,999)
      contains
      subroutine drawplot(linetype)
+     implicit none
+     integer :: linetype
+     real :: deltax
      character(len=28) :: ichr1
      character(len=26) :: ichr2
      character(len=10) :: lbcd1,lbcd2
+     real :: xarray, yarray
      dimension xarray(62),yarray(62)
+     integer :: inteq, j
      ichr1='PLOTTED ON A CALCOMP PLOTTER'
      ichr2='USING  Y = X -0.7*X +0.1*X'
      lbcd1='X-ABSCISSA'

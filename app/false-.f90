@@ -1,82 +1,7 @@
-subroutine help_usage(l_help)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
-help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'       false-(1f) - [FUNIX] do nothing, unsuccessfully                                                                          ',&
-'       (LICENSE:PD)                                                                                                             ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'       false- value [ --verbose][ --help| --version]                                                                            ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'       Exit with a status code indicating failure.                                                                              ',&
-'OPTIONS                                                                                                                         ',&
-'       number     optional number of 1 to 32, which                                                                             ',&
-'                  will be used to generate the exit                                                                             ',&
-'                  status code if supported.                                                                                     ',&
-'       --help     display this help and exit                                                                                    ',&
-'       --version  output version information and exit                                                                           ',&
-'       --verbose  display ASCII graphic of cockroach                                                                            ',&
-'                                                                                                                                ',&
-'EXAMPLE                                                                                                                         ',&
-'      Bash example:                                                                                                             ',&
-'                                                                                                                                ',&
-'         false- || echo Should print this                                                                                       ',&
-'                                                                                                                                ',&
-'         if false-                                                                                                              ',&
-'         then                                                                                                                   ',&
-'            echo command got zero exit $?                                                                                       ',&
-'         else                                                                                                                   ',&
-'            echo command got non-zero exit $?                                                                                   ',&
-'         fi                                                                                                                     ',&
-'                                                                                                                                ',&
-'      Expected output::                                                                                                         ',&
-'                                                                                                                                ',&
-'         ERROR STOP                                                                                                             ',&
-'         Should print this                                                                                                      ',&
-'         ERROR STOP                                                                                                             ',&
-'         command got non-zero exit 1                                                                                            ',&
-'                                                                                                                                ',&
-'SEE ALSO                                                                                                                        ',&
-'       _true(1f)                                                                                                                ',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
-'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
-'@(#)PROGRAM:        false-(1f)>',&
-'@(#)DESCRIPTION:    do nothing, unsuccessfully>',&
-'@(#)VERSION:        1.0, 20170125>',&
-'@(#)AUTHOR:         John S. Urban>',&
-'@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2023-02-12 12:22:40 UTC-300>',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
 program false
 use M_kracken,       only : kracken, lget, iget
 use M_messages,      only : junroach
-use M_verify,         only : fstop
+use M_framework,         only : fstop
 use iso_fortran_env, only : ERROR_UNIT        ! access computing environment
 implicit none
 integer :: ios, istop
@@ -99,5 +24,121 @@ case default
    close(ERROR_UNIT,iostat=ios) ! try to stop default message
    stop 1
 end select
-
+contains
+subroutine help_usage(l_help)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
+logical,intent(in)             :: l_help
+character(len=:),allocatable :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_help)then
+help_text=[ CHARACTER(LEN=128) :: &
+'NAME                                                                            ',&
+'       false-(1f) - [FUNIX] do nothing, unsuccessfully                          ',&
+'       (LICENSE:PD)                                                             ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'       false- value [ --verbose][ --help| --version]                            ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'       Exit with a status code indicating failure.                              ',&
+'OPTIONS                                                                         ',&
+'       number     optional number of 1 to 32, which                             ',&
+'                  will be used to generate the exit                             ',&
+'                  status code if supported.                                     ',&
+'       --help     display this help and exit                                    ',&
+'       --version  output version information and exit                           ',&
+'       --verbose  display ASCII graphic of cockroach                            ',&
+'                                                                                ',&
+'EXAMPLE                                                                         ',&
+'      Bash example:                                                             ',&
+'                                                                                ',&
+'         false- || echo Should print this                                       ',&
+'                                                                                ',&
+'         if false-                                                              ',&
+'         then                                                                   ',&
+'            echo command got zero exit $?                                       ',&
+'         else                                                                   ',&
+'            echo command got non-zero exit $?                                   ',&
+'         fi                                                                     ',&
+'                                                                                ',&
+'      Expected output::                                                         ',&
+'                                                                                ',&
+'         ERROR STOP                                                             ',&
+'         Should print this                                                      ',&
+'         ERROR STOP                                                             ',&
+'         command got non-zero exit 1                                            ',&
+'                                                                                ',&
+'SEE ALSO                                                                        ',&
+'    true-(1f)                                                                   ',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
+   stop ! if --help was specified, stop
+endif
+end subroutine help_usage
+!>
+!!##NAME
+!!        false-(1f) - [FUNIX] do nothing, unsuccessfully
+!!        (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!        false- value [ --verbose][ --help| --version]
+!!
+!!##DESCRIPTION
+!!        Exit with a status code indicating failure.
+!!##OPTIONS
+!!        number     optional number of 1 to 32, which
+!!                   will be used to generate the exit
+!!                   status code if supported.
+!!        --help     display this help and exit
+!!        --version  output version information and exit
+!!        --verbose  display ASCII graphic of cockroach
+!!
+!!##EXAMPLE
+!!
+!!       Bash example:
+!!
+!!          false- || echo Should print this
+!!
+!!          if false-
+!!          then
+!!             echo command got zero exit $?
+!!          else
+!!             echo command got non-zero exit $?
+!!          fi
+!!
+!!       Expected output::
+!!
+!!          ERROR STOP
+!!          Should print this
+!!          ERROR STOP
+!!          command got non-zero exit 1
+!!
+!!##SEE ALSO
+!!     true-(1f)
+subroutine help_version(l_version)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
+logical,intent(in)             :: l_version
+character(len=:),allocatable   :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_version)then
+help_text=[ CHARACTER(LEN=128) :: &
+'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
+'@(#)PROGRAM:        false-(1f)>',&
+'@(#)DESCRIPTION:    do nothing, unsuccessfully>',&
+'@(#)VERSION:        1.0, 20170125>',&
+'@(#)AUTHOR:         John S. Urban>',&
+'@(#)LICENSE:        Public Domain>',&
+'@(#)COMPILED:       2023-07-22 01:25:14 UTC-240>',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
+endif
+end subroutine help_version
 end program false

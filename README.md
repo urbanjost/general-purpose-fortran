@@ -406,6 +406,8 @@ fpm ( as described at [Fortran Package Manager](https://github.com/fortran-lang/
      git clone https://github.com/urbanjost/general-purpose-fortran.git
      cd general-purpose-fortran
      fpm test  # build and then run unit tests
+     # do it again with a different compiler 
+     fpm build --compiler ifort --c-compiler gcc --flag -coarray
 ```
 
 or just list it as a dependency in your fpm.toml project file.

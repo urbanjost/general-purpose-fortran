@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>trim (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>trim (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>trim(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-trim(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 TRIM(3) - [CHARACTER:WHITESPACE] Remove trailing blank characters from a
 string
 <P>
@@ -77,12 +69,13 @@ string
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = trim(string)
 <P>
 <PRE>
-           character(len=:,kind=KIND) function trim(string)
+         character(len=:,kind=KIND) function trim(string)
 <P>
-            character(len=*,kind=KIND),intent(in) :: string
+          character(len=*,kind=KIND),intent(in) :: string
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = trim(string)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -110,6 +104,7 @@ The result has the same type and kind as the input argument STRING.
 
 </A>
 <BLOCKQUOTE>
+<P>
 TRIM(3) removes trailing blank characters from a string.
 </BLOCKQUOTE>
 <A name=4>
@@ -118,6 +113,7 @@ TRIM(3) removes trailing blank characters from a string.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -131,10 +127,11 @@ STRING : A string to trim
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result is the same as STRING except trailing blanks are removed.
 <P>
-If STRING is composed entirely of blanks or has zero length, the result has
-zero length.
+If STRING is composed entirely of blanks or has zero length, the result
+has zero length.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -142,54 +139,55 @@ zero length.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_trim
-      implicit none
-      character(len=:), allocatable :: str, strs(:)
-      character(len=*),parameter :: brackets=&#146;( *("[",a,"]":,1x) )&#146;
-      integer :: i
+    program demo_trim
+    implicit none
+    character(len=:), allocatable :: str, strs(:)
+    character(len=*),parameter :: brackets=&#146;( *("[",a,"]":,1x) )&#146;
+    integer :: i
 <P>
-         str=&#146;   trailing    &#146;
-         print brackets, str,trim(str) ! trims it
+       str=&#146;   trailing    &#146;
+       print brackets, str,trim(str) ! trims it
 <P>
-         str=&#146;   leading&#146;
-         print brackets, str,trim(str) ! no effect
+       str=&#146;   leading&#146;
+       print brackets, str,trim(str) ! no effect
 <P>
-         str=&#146;            &#146;
-         print brackets, str,trim(str) ! becomes zero length
-         print *,  len(str), len(trim(&#146;               &#146;))
+       str=&#146;            &#146;
+       print brackets, str,trim(str) ! becomes zero length
+       print *,  len(str), len(trim(&#146;               &#146;))
 <P>
-        ! array elements are all the same length, so you often
-        ! want to print them
-         strs=[character(len=10) :: "Z"," a b c","ABC",""]
+      ! array elements are all the same length, so you often
+      ! want to print them
+       strs=[character(len=10) :: "Z"," a b c","ABC",""]
 <P>
-         write(*,*)&#146;untrimmed:&#146;
-         ! everything prints as ten characters; nice for neat columns
-         print brackets, (strs(i), i=1,size(strs))
-         print brackets, (strs(i), i=size(strs),1,-1)
-         write(*,*)&#146;trimmed:&#146;
-         ! everything prints trimmed
-         print brackets, (trim(strs(i)), i=1,size(strs))
-         print brackets, (trim(strs(i)), i=size(strs),1,-1)
+       write(*,*)&#146;untrimmed:&#146;
+       ! everything prints as ten characters; nice for neat columns
+       print brackets, (strs(i), i=1,size(strs))
+       print brackets, (strs(i), i=size(strs),1,-1)
+       write(*,*)&#146;trimmed:&#146;
+       ! everything prints trimmed
+       print brackets, (trim(strs(i)), i=1,size(strs))
+       print brackets, (trim(strs(i)), i=size(strs),1,-1)
 <P>
-      end program demo_trim
+    end program demo_trim
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          &gt; [   trailing    ] [   trailing]
-          &gt; [   leading] [   leading]
-          &gt; [            ] []
-          &gt;           12           0
-          &gt;  untrimmed:
-          &gt; [Z         ] [ a b c    ] [ABC       ] [          ]
-          &gt; [          ] [ABC       ] [ a b c    ] [Z         ]
-          &gt;  trimmed:
-          &gt; [Z] [ a b c] [ABC] []
-          &gt; [] [ABC] [ a b c] [Z]
+        &gt; [   trailing    ] [   trailing]
+        &gt; [   leading] [   leading]
+        &gt; [            ] []
+        &gt;           12           0
+        &gt;  untrimmed:
+        &gt; [Z         ] [ a b c    ] [ABC       ] [          ]
+        &gt; [          ] [ABC       ] [ a b c    ] [Z         ]
+        &gt;  trimmed:
+        &gt; [Z] [ a b c] [ABC] []
+        &gt; [] [ABC] [ a b c] [Z]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -199,6 +197,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -207,9 +206,10 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+<P>
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -223,13 +223,9 @@ o
 NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                trim(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>trim (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 83ef1a60-ef91-4fd8-b73c-cce23121c09a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>trim (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c7d2e9c7-1a4c-4d9d-bbbb-e1809adedefc using man macros.</FONT>
 <br><br><center><img src="images/trim.3fortran.gif"></center>
 </div>
 </div>

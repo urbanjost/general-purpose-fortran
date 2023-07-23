@@ -4,12 +4,14 @@ program fviews
 !(LICENSE:PD)
 
    use M_draw
+   implicit none
 
-   integer,parameter :: BLACK=0, GREEN=2, RED=1, MAGENTA=5, YELLOW=3
+   integer, parameter :: BLACK = 0, GREEN = 2, RED = 1, MAGENTA = 5, YELLOW = 3
+   integer :: idum
    character(len=50) :: device
 
-   print*,'Enter output device:'
-   read(*,'(a)') device
+   print *, 'Enter output device:'
+   read (*, '(a)') device
 
    call vinit(device)
 
@@ -55,7 +57,7 @@ program fviews
    call move2(-4.5, -4.5)
    call drawstr('perspective/lookat')
 
-   idum=getkey()
+   idum = getkey()
 
 !
 ! window can also be used to give a perspective projection. Its
@@ -78,10 +80,10 @@ program fviews
    call drawtetra
 
    call textsize(0.6, 0.9)
-   call move2(-4.5,-4.5)
+   call move2(-4.5, -4.5)
    call drawstr('window/lookat')
 
-   idum=getkey()
+   idum = getkey()
 
 !
 ! set up our original perspective projection again.
@@ -104,11 +106,11 @@ program fviews
 
    call drawtetra
 
-   call move2(-4.5,-4.5)
+   call move2(-4.5, -4.5)
    call textsize(0.6, 0.9)
    call drawstr('perspective/polarview')
 
-   idum=getkey()
+   idum = getkey()
 
 !
 ! once more with window for comparison
@@ -124,49 +126,50 @@ program fviews
 
    call drawtetra
 
-   call move2(-4.5,-4.5)
+   call move2(-4.5, -4.5)
    call textsize(0.6, 0.9)
    call drawstr('window/polarview')
 
-   idum=getkey()
+   idum = getkey()
 
    call vexit
 
-end program fviews
-
+contains
 !
 ! drawtetra
 !
 ! generate a tetrahedron as a series of move draws
 !
 !
-subroutine drawtetra
+   subroutine drawtetra
 
-   use M_draw
+      use M_draw
 
-   integer,parameter :: WHITE = 7
+      integer, parameter :: WHITE = 7
 
-   call move(-0.5,  0.866, -0.5)
-   call draw(-0.5, -0.866, -0.5)
-   call draw( 1.0,  0.0,   -0.5)
-   call draw(-0.5,  0.866, -0.5)
-   call draw( 0.0,  0.0,    1.5)
-   call draw(-0.5, -0.866, -0.5)
-   call move( 1.0,  0.0,   -0.5)
-   call draw( 0.0,  0.0,    1.5)
+      call move(-0.5, 0.866, -0.5)
+      call draw(-0.5, -0.866, -0.5)
+      call draw(1.0, 0.0, -0.5)
+      call draw(-0.5, 0.866, -0.5)
+      call draw(0.0, 0.0, 1.5)
+      call draw(-0.5, -0.866, -0.5)
+      call move(1.0, 0.0, -0.5)
+      call draw(0.0, 0.0, 1.5)
 
 !
 !    Label the vertices.
 !
-   call color(WHITE)
-   call textsize(0.3, 0.5)
-   call move(-0.5,  0.866, -0.5)
-   call drawchar('a')
-   call move(-0.5, -0.866, -0.5)
-   call drawchar('b')
-   call move( 1.0,  0.0,   -0.5)
-   call drawchar('c')
-   call move( 0.0,  0.0,    1.5)
-   call drawchar('d')
+      call color(WHITE)
+      call textsize(0.3, 0.5)
+      call move(-0.5, 0.866, -0.5)
+      call drawchar('a')
+      call move(-0.5, -0.866, -0.5)
+      call drawchar('b')
+      call move(1.0, 0.0, -0.5)
+      call drawchar('c')
+      call move(0.0, 0.0, 1.5)
+      call drawchar('d')
 
-end subroutine drawtetra
+   end subroutine drawtetra
+end program fviews
+

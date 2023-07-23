@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>spread (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>spread (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>spread(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-spread(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SPREAD(3) - [ARRAY:CONSTRUCTION] Add a dimension and replicate data
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ SPREAD(3) - [ARRAY:CONSTRUCTION] Add a dimension and replicate data
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = spread(source, dim, ncopies)
 <P>
 <PRE>
-           TYPE(kind=KIND) function spread(source, dim, ncopies)
+         TYPE(kind=KIND) function spread(source, dim, ncopies)
 <P>
-            TYPE(kind=KIND)             :: source(..)
-            integer(kind=**),intent(in) :: dim
-            integer(kind=**),intent(in) :: ncopies
+          TYPE(kind=KIND)             :: source(..)
+          integer(kind=**),intent(in) :: dim
+          integer(kind=**),intent(in) :: ncopies
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,11 +86,13 @@ result = spread(source, dim, ncopies)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SOURCE is a scalar or array of any type.
+SOURCE is a scalar or array of any type and a rank less than
+fifteen.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -116,14 +111,15 @@ NCOPIES is an integer scalar
 
 </A>
 <BLOCKQUOTE>
+<P>
 SPREAD(3) replicates a SOURCE array along a specified dimension DIM. The
 copy is repeated NCOPIES times.
 <P>
 So to add additional rows to a matrix DIM=1 would be used, but to add
 additional rows DIM=2 would be used, for example.
 <P>
-If SOURCE is scalar, the size of the resulting vector is NCOPIES and each
-element of the result has a value equal to SOURCE.
+If SOURCE is scalar, the size of the resulting vector is NCOPIES and
+each element of the result has a value equal to SOURCE.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -131,24 +127,19 @@ element of the result has a value equal to SOURCE.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-SOURCE : a scalar or array of any type and a rank less than fifteen.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-DIM
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-      : The additional dimension value in the range from 1 to N+1, where N
-      equals the rank of SOURCE.
 <P>
-</PRE>
 <TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SOURCE : the input data to duplicate
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM : The additional dimension value in the range from 1 to N+1,
+where N equals the rank of SOURCE.
+</TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -161,8 +152,9 @@ NCOPIES : the number of copies of the original data to generate
 
 </A>
 <BLOCKQUOTE>
-The result is an array of the same type as SOURCE and has rank N+1 where N
-equals the rank of SOURCE.
+<P>
+The result is an array of the same type as SOURCE and has rank N+1 where
+N equals the rank of SOURCE.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -170,129 +162,128 @@ equals the rank of SOURCE.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_spread
-      implicit none
+    program demo_spread
+    implicit none
 <P>
-      integer a1(4,3), a2(3,4), v(4), s
+    integer a1(4,3), a2(3,4), v(4), s
 <P>
-         write(*,&#146;(a)&#146; ) &
-         &#146;TEST SPREAD(3)                                      &#146;, &
-         &#146;  SPREAD(3) is a FORTRAN90 function which replicates&#146;, &
-         &#146;  an array by adding a dimension.                   &#146;, &
-         &#146; &#146;
+       write(*,&#146;(a)&#146; ) &
+       &#146;TEST SPREAD(3)                                      &#146;, &
+       &#146;  SPREAD(3) is a FORTRAN90 function which replicates&#146;, &
+       &#146;  an array by adding a dimension.                   &#146;, &
+       &#146; &#146;
 <P>
-         s = 99
-         call printi(&#146;suppose we have a scalar S&#146;,s)
+       s = 99
+       call printi(&#146;suppose we have a scalar S&#146;,s)
 <P>
-         write(*,*) &#146;to add a new dimension (1) of extent 4 call&#146;
-         call printi(&#146;spread( s, dim=1, ncopies=4 )&#146;,spread ( s, 1, 4 ))
+       write(*,*) &#146;to add a new dimension (1) of extent 4 call&#146;
+       call printi(&#146;spread( s, dim=1, ncopies=4 )&#146;,spread ( s, 1, 4 ))
 <P>
-         v = [ 1, 2, 3, 4 ]
-         call printi(&#146; first we will set V to&#146;,v)
+       v = [ 1, 2, 3, 4 ]
+       call printi(&#146; first we will set V to&#146;,v)
 <P>
-         write(*,&#146;(a)&#146;)&#146; and then do "spread ( v, dim=2, ncopies=3 )"&#146;
-         a1 = spread ( v, dim=2, ncopies=3 )
-         call printi(&#146;this adds a new dimension (2) of extent 3&#146;,a1)
+       write(*,&#146;(a)&#146;)&#146; and then do "spread ( v, dim=2, ncopies=3 )"&#146;
+       a1 = spread ( v, dim=2, ncopies=3 )
+       call printi(&#146;uses v as a column and makes 3 columns&#146;,a1)
 <P>
-         a2 = spread ( v, 1, 3 )
-         call printi(&#146; spread(v,1,3) adds a new dimension (1) of extent 3&#146;,a2)
-         ! add more
-         a2 = spread ( v, 1, 3 )
-         call printi(&#146; spread(v,1,3) adds a new dimension (1) of extent 3&#146;,a2)
+       a2 = spread ( v, 1, 3 )
+       call printi(&#146; spread(v,1,3) uses v as a row and makes 3 rows&#146;,a2)
 <P>
-      contains
-      ! CONVENIENCE ROUTINE; NOT DIRECTLY CONNECTED TO SPREAD(3)
-      subroutine printi(title,a)
-      use, intrinsic :: iso_fortran_env, only : stderr=&gt;ERROR_UNIT,&
-       & stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
-      implicit none
+    contains
+    ! CONVENIENCE ROUTINE; NOT DIRECTLY CONNECTED TO SPREAD(3)
+    subroutine printi(title,a)
+    use, intrinsic :: iso_fortran_env, only : stderr=&gt;ERROR_UNIT,&
+     & stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
+    implicit none
 <P>
-      !@(#) print small 2d integer scalar, vector, matrix in row-column format
+    !@(#) print small 2d integer scalar, vector, matrix in row-column format
 <P>
-      character(len=*),parameter   :: all=&#146;(" ",*(g0,1x))&#146;
-      character(len=*),intent(in)  :: title
-      character(len=20)            :: row
-      integer,intent(in)           :: a(..)
-      integer                      :: i
+    character(len=*),parameter   :: all=&#146;(" ",*(g0,1x))&#146;
+    character(len=*),intent(in)  :: title
+    character(len=20)            :: row
+    integer,intent(in)           :: a(..)
+    integer                      :: i
 <P>
-         write(*,all,advance=&#146;no&#146;)trim(title)
-         ! select rank of input
-         select rank(a)
-         rank (0); write(*,&#146;(a)&#146;)&#146; (a scalar)&#146;
-            write(*,&#146;(" &gt; [ ",i0," ]")&#146;)a
-         rank (1); write(*,&#146;(a)&#146;)&#146; (a vector)&#146;
-            ! find how many characters to use for integers
-            write(row,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(a)))))+2
-            ! use this format to write a row
-            row=&#146;(" &gt; [",*(i&#146;//trim(row)//&#146;:,","))&#146;
-            do i=1,size(a)
-               write(*,fmt=row,advance=&#146;no&#146;)a(i)
-               write(*,&#146;(" ]")&#146;)
-            enddo
-         rank (2); write(*,&#146;(a)&#146;)&#146; (a matrix) &#146;
-            ! find how many characters to use for integers
-            write(row,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(a)))))+2
-            ! use this format to write a row
-            row=&#146;(" &gt; [",*(i&#146;//trim(row)//&#146;:,","))&#146;
-            do i=1,size(a,dim=1)
-               write(*,fmt=row,advance=&#146;no&#146;)a(i,:)
-               write(*,&#146;(" ]")&#146;)
-            enddo
-         rank default
-            write(stderr,*)&#146;*printi* did not expect rank=&#146;, rank(a), &
-             & &#146;shape=&#146;, shape(a),&#146;size=&#146;,size(a)
-            stop &#146;*printi* unexpected rank&#146;
-         end select
-         write(*,all) &#146;&gt;shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
-         write(*,*)
+       write(*,all,advance=&#146;no&#146;)trim(title)
+       ! select rank of input
+       select rank(a)
+       rank (0); write(*,&#146;(a)&#146;)&#146; (a scalar)&#146;
+          write(*,&#146;(" &gt; [ ",i0," ]")&#146;)a
+       rank (1); write(*,&#146;(a)&#146;)&#146; (a vector)&#146;
+          ! find how many characters to use for integers
+          write(row,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(a))))))+2
+          ! use this format to write a row
+          row=&#146;(" &gt; [",*(i&#146;//trim(row)//&#146;:,","))&#146;
+          do i=1,size(a)
+             write(*,fmt=row,advance=&#146;no&#146;)a(i)
+             write(*,&#146;(" ]")&#146;)
+          enddo
+       rank (2); write(*,&#146;(a)&#146;)&#146; (a matrix) &#146;
+          ! find how many characters to use for integers
+          write(row,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(a))))))+2
+          ! use this format to write a row
+          row=&#146;(" &gt; [",*(i&#146;//trim(row)//&#146;:,","))&#146;
+          do i=1,size(a,dim=1)
+             write(*,fmt=row,advance=&#146;no&#146;)a(i,:)
+             write(*,&#146;(" ]")&#146;)
+          enddo
+       rank default
+          write(stderr,*)&#146;*printi* did not expect rank=&#146;, rank(a), &
+           & &#146;shape=&#146;, shape(a),&#146;size=&#146;,size(a)
+          stop &#146;*printi* unexpected rank&#146;
+       end select
+       write(*,all) &#146;&gt;shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
+       write(*,*)
 <P>
-      end subroutine printi
+    end subroutine printi
 <P>
-      end program demo_spread
+    end program demo_spread
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         TEST SPREAD(3)
-           SPREAD(3) is a FORTRAN90 function which replicates
-           an array by adding a dimension.
-<P>
-          suppose we have a scalar S  (a scalar)
-          &gt; [ 99 ]
-          &gt;shape= ,rank= 0 ,size= 1
-<P>
-          to add a new dimension (1) of extent 4 call
-          spread( s, dim=1, ncopies=4 )  (a vector)
-          &gt; [  99 ]
-          &gt; [  99 ]
-          &gt; [  99 ]
-          &gt; [  99 ]
-          &gt;shape= 4 ,rank= 1 ,size= 4
-<P>
-           first we will set V to  (a vector)
-          &gt; [  1 ]
-          &gt; [  2 ]
-          &gt; [  3 ]
-          &gt; [  4 ]
-          &gt;shape= 4 ,rank= 1 ,size= 4
-<P>
-          and then do "spread ( v, dim=2, ncopies=3 )"
-          this adds a new dimension (2) of extent 3  (a matrix)
-          &gt; [  1,  1,  1 ]
-          &gt; [  2,  2,  2 ]
-          &gt; [  3,  3,  3 ]
-          &gt; [  4,  4,  4 ]
-          &gt;shape= 4 3 ,rank= 2 ,size= 12
-<P>
-           spread(v,dim=1,ncopies=3) adds a new dimension (1) (a matrix)
-          &gt; [  1,  2,  3,  4 ]
-          &gt; [  1,  2,  3,  4 ]
-          &gt; [  1,  2,  3,  4 ]
-          &gt;shape= 3 4 ,rank= 2 ,size= 12
+     &gt; TEST SPREAD(3)                                     
+     &gt;   SPREAD(3) is a FORTRAN90 function which replicates
+     &gt;   an array by adding a dimension.                  
+     &gt; 
+     &gt;  suppose we have a scalar S  (a scalar)
+     &gt;  &gt; [ 99 ]
+     &gt;  &gt;shape= ,rank= 0 ,size= 1
+     &gt;
+     &gt;  to add a new dimension (1) of extent 4 call
+     &gt;  spread( s, dim=1, ncopies=4 )  (a vector)
+     &gt;  &gt; [  99 ]
+     &gt;  &gt; [  99 ]
+     &gt;  &gt; [  99 ]
+     &gt;  &gt; [   0 ]
+     &gt;  &gt;shape= 4 ,rank= 1 ,size= 4
+     &gt;
+     &gt;   first we will set V to  (a vector)
+     &gt;  &gt; [  1 ]
+     &gt;  &gt; [  2 ]
+     &gt;  &gt; [  3 ]
+     &gt;  &gt; [  4 ]
+     &gt;  &gt;shape= 4 ,rank= 1 ,size= 4
+     &gt;
+     &gt;  and then do "spread ( v, dim=2, ncopies=3 )"
+     &gt;  uses v as a column and makes 3 columns  (a matrix)
+     &gt;  &gt; [  1,  1,  1 ]
+     &gt;  &gt; [  2,  2,  2 ]
+     &gt;  &gt; [  3,  3,  3 ]
+     &gt;  &gt; [  4,  4,  4 ]
+     &gt;  &gt;shape= 4 3 ,rank= 2 ,size= 12
+     &gt;
+     &gt;   spread(v,1,3) uses v as a row and makes 3 rows  (a matrix)
+     &gt;  &gt; [  1,  2,  3,  4 ]
+     &gt;  &gt; [  1,  2,  3,  4 ]
+     &gt;  &gt; [  1,  2,  3,  4 ]
+     &gt;  &gt;shape= 3 4 ,rank= 2 ,size= 12
+     &gt;
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -302,6 +293,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -310,16 +302,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 MERGE(3), PACK(3), UNPACK(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              spread(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>spread (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from de7edf6d-6672-4029-bde4-a0608da3f668 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>spread (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 88ec8ebc-8e29-4fba-a10a-8db321986524 using man macros.</FONT>
 <br><br><center><img src="images/spread.3fortran.gif"></center>
 </div>
 </div>

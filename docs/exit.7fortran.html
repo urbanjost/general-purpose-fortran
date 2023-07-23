@@ -1,8 +1,54 @@
-<HTML><HEAD>
-<TITLE>exit.7fortran.txt</TITLE>
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
 <BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
 <CENTER>
-<H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>EXIT (7)</NOBR><HR></H1>
+<H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>exit (7)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -10,18 +56,18 @@
 
 </A>
 <BLOCKQUOTE>
-   EXIT(7f) - [FORTRAN:EXECUTION CONTROL] statement (LICENSE:PD)
+EXIT(7f) - [FORTRAN:EXECUTION CONTROL] statement (LICENSE:PD)
+<P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-   EXIT [construct-name]
-<P>
+EXIT [construct-name]
 </BLOCKQUOTE>
 <A name=2>
 
@@ -29,32 +75,25 @@
 
 </A>
 <BLOCKQUOTE>
-<PRE>
-  The EXIT statement provides one way of terminating a loop, or completing
-  execution of another construct.
+The EXIT statement provides a way of terminating a loop. It can also
+complete execution of other constructs.
 <P>
-  If a construct-name appears, the EXIT statement shall be within that
-  construct; otherwise, it shall be within the range of at least one
-  do-construct.
+An EXIT statement cannot occur within or refer to a DO CONCURRENT
+construct even if it refers to another construct.
 <P>
-  An EXIT statement belongs to a particular construct. If a construct
-  name appears, the EXIT statement belongs
-  to that construct; otherwise, it belongs to the innermost DO construct
-  in which it appears.
+If a construct-name appears, the EXIT statement must be within that
+construct; otherwise, it has to be within the range of at least one
+do-construct.
 <P>
-  An exit-stmt shall not belong to a DO CONCURRENT construct,
-  nor shall it appear within the range
-  of a DO CONCURRENT construct if it belongs to a construct
-  that contains that DO CONCURRENT construct.
+An EXIT statement belongs to a particular construct. If a construct
+name appears, the EXIT statement belongs to that construct; otherwise,
+it belongs to the innermost DO construct in which it appears.
 <P>
-  When an EXIT statement that belongs to a DO construct is executed,
-  it terminates the loop and
-  any active loops contained within the terminated loop. When an
-  EXIT statement that belongs to a non-DO construct is executed, it
-  terminates any active loops contained within that construct, and
-  completes execution of that construct.
-</PRE>
-<P>
+When an EXIT statement that belongs to a DO construct is executed,
+it terminates the loop and any active loops contained within the
+terminated loop. When an EXIT statement that belongs to a non-DO
+construct is executed, it terminates any active loops contained within
+that construct, and completes execution of that construct.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -62,38 +101,69 @@
 
 </A>
 <BLOCKQUOTE>
+Samples:
 <P>
 <PRE>
-  Samples:
-<P>
-   do i=1,10
-      if(i.eq.4)exit ! exit loop
-   enddo
-<P>
-   do i=1,10
-      do j=100,200
-         if(j.eq.150)exit ! exit inner loop "j"
+   program demo_exit
+   implicit none
+   integer :: i, j
+   logical :: big
+      ! EXIT a simple loop
+      do i=1, 10
+         if(i .eq. 4) exit ! exit loop
       enddo
-   enddo
+      write(*,*)&#146;I=&#146;,i
 <P>
-   OUTER: do i=1,10
-      INNER: do j=100,200
-         if(j.eq.150)exit OUTER ! exit named loop
-      enddo INNER
-   enddo OUTER
-<P>
-   MYBLOCK: block
-      big=.false.
-      do i=1,100
-        if(i=40)then
-          exit MYBLOCK
-        endif
+      ! EXIT only exits an innermost loop
+      do i=1,10
+         do j=100, 200
+            if(j .eq. 150) exit ! exit inner loop "j" but not "i"
+         enddo
       enddo
-      big=.true.
-   endblock MYBLOCK
+      write(*,*)&#146;I=&#146;,i,&#146; J=&#146;,j
+<P>
+      ! EXIT an outermost loop from inner loop by using a construct name
+      OUTER: do i=1,10
+         INNER: do j=100, 200
+            if(j .eq. 150) exit OUTER ! exit named loop "i"
+         enddo INNER
+      enddo OUTER
+      write(*,*)&#146;I=&#146;,i,&#146; J=&#146;,j
+<P>
+      ! EXIT a BLOCK not just a DO loop
+      MYBLOCK: block
+         big = .false.
+         do i = 1, 100
+           if( i==40 )then
+             exit MYBLOCK
+           endif
+         enddo
+         big = .true.
+      endblock MYBLOCK
+      write(*,*)&#146;I=&#146;,i,&#146; BIG=&#146;,big
+   end program demo_exit
+<P>
 </PRE>
+Results:
 <P>
+<PRE>
+    I=           4
+    I=          11  J=         150
+    I=           1  J=         150
+    I=          40  BIG= F
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+    <H4>&nbsp; &nbsp; JSU</H4>
+</A>
+<BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Fortran</I></TD> <TD width=33% align=center>EXIT (7)</TD> <TD align=right width=33%><I>January 2017</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from exit.7fortran.txt using man macros.</FONT>
-</BODY></HTML>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>exit (7)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0d093a5c-b637-4d1c-9e8a-1300b5973635 using man macros.</FONT>
+<br><br><center><img src="images/exit.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

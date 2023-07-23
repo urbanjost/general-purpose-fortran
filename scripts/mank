@@ -9,6 +9,7 @@ export LESS_TERMCAP_se=$(printf '\e[0m')     # leave standout mode
 export LESS_TERMCAP_so=$(printf '\e[01;33m') # enter standout mode - yellow
 export LESS_TERMCAP_ue=$(printf '\e[0m')     # leave underline mode
 export LESS_TERMCAP_us=$(printf '\e[04;36m') # enter underline mode - cyan
+export MANWIDTH=512
 
 if [ "$*" = '' ]
 then
@@ -45,12 +46,13 @@ EOF
 else
    if [ "$*" = ALL ]
    then
+      export MANWIDTH=512
       export MANWIDTH=${MANWIDTH:-512}
       set . $( man -k .|cprint 1|xargs)
    fi
    if [ -t 1 ]
    then
-      export MANWIDTH=${MANWIDTH:-80}
+      export MANWIDTH=80
       export MANPATH_OVERRIDE="$MANPATH"
       manvi $@
    else

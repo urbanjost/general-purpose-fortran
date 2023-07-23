@@ -1,46 +1,46 @@
-        ! program demo_ubound
-        module m2_bounds
-        implicit none
+      ! program demo_ubound
+      module m2_bounds
+      implicit none
 
-        contains
+      contains
 
-        subroutine msub(arr)
-        !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array
-        integer,intent(in) :: arr(:)
-           write(*,*)'MSUB: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
-           & 'SIZE=',size(arr)
-        end subroutine msub
+      subroutine msub(arr)
+      !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array
+      integer,intent(in) :: arr(:)
+         write(*,*)'MSUB: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
+         & 'SIZE=',size(arr)
+      end subroutine msub
 
-        end module m2_bounds
-        !
-        program demo_ubound
-        use m2_bounds, only : msub
-        implicit none
-        interface
-           subroutine esub(arr)
-           integer,intent(in) :: arr(:)
-           end subroutine esub
-        end interface
-        integer :: arr(-10:10)
-           write(*,*)'MAIN: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
-           & 'SIZE=',size(arr)
-           call csub()
-           call msub(arr)
-           call esub(arr)
-        contains
-        subroutine csub
-           write(*,*)'CSUB: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
-           & 'SIZE=',size(arr)
-        end subroutine csub
+      end module m2_bounds
+      !
+      program demo_ubound
+      use m2_bounds, only : msub
+      implicit none
+      interface
+         subroutine esub(arr)
+         integer,intent(in) :: arr(:)
+         end subroutine esub
+      end interface
+      integer :: arr(-10:10)
+         write(*,*)'MAIN: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
+         & 'SIZE=',size(arr)
+         call csub()
+         call msub(arr)
+         call esub(arr)
+      contains
+      subroutine csub
+         write(*,*)'CSUB: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
+         & 'SIZE=',size(arr)
+      end subroutine csub
 
-        end
+      end
 
-        subroutine esub(arr)
-        implicit none
-        integer,intent(in) :: arr(:)
-           ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE
-           ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)
-           write(*,*)'ESUB: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
-           & 'SIZE=',size(arr)
-        end subroutine esub
-        !end program demo_ubound
+      subroutine esub(arr)
+      implicit none
+      integer,intent(in) :: arr(:)
+         ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE
+         ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)
+         write(*,*)'ESUB: LOWER=',lbound(arr),'UPPER=',ubound(arr), &
+         & 'SIZE=',size(arr)
+      end subroutine esub
+      !end program demo_ubound

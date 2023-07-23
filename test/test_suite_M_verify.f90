@@ -3,8 +3,6 @@ use M_msg
 use M_verify
 use M_journal
    unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
    call test_accdig()         ! compare two real numbers only up to a specified number of digits
    call test_almost()         ! function compares two numbers only up to a specified number of digits
    call test_dp_accdig()      ! compare two double numbers only up to a specified number of digits

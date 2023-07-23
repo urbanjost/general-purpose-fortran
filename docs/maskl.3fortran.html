@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>maskl (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>maskl (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>maskl(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-maskl(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 MASKL(3) - [BIT:SET] Generates a left justified mask
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ MASKL(3) - [BIT:SET] Generates a left justified mask
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = maskl( i [,kind] )
 <P>
 <PRE>
-           elemental integer(kind=KIND) function maskl(i,KIND)
+         elemental integer(kind=KIND) function maskl(i,KIND)
 <P>
-            integer(kind=**),intent(in) :: i
-            integer(kind=**),intent(in),optional :: KIND
+          integer(kind=**),intent(in) :: i
+          integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = maskl( i [,kind] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -106,14 +100,14 @@ I is an integer
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND Shall be a scalar constant expression of type integer whose value is
-a supported integer kind.
+KIND Shall be a scalar constant expression of type integer whose
+value is a supported integer kind.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The result is an integer of the same kind as I unless KIND is present,
-which is then used to specify the kind of the result.
+The result is an integer of the same kind as I unless KIND is
+present, which is then used to specify the kind of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -122,6 +116,7 @@ which is then used to specify the kind of the result.
 
 </A>
 <BLOCKQUOTE>
+<P>
 MASKL(3) has its leftmost I bits set to 1, and the remaining bits set to
 <TABLE cellpadding=3><!-- tsb: MASKL(3) has its leftmost I bits set to 1, and the remaining bits set to
  -->
@@ -138,19 +133,21 @@ MASKL(3) has its leftmost I bits set to 1, and the remaining bits set to
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-I : the number of left-most bits to set in the integer result. It must be
-from 0 to the number of bits for the kind of the result. The default kind
-of the result is the same as I unless the result size is specified by
-KIND. That is, these Fortran statements must be .true. :
+I : the number of left-most bits to set in the integer result. It
+must be from 0 to the number of bits for the kind of the result. The
+default kind of the result is the same as I unless the result size
+is specified by KIND. That is, these Fortran statements must be
+[char46]true. :
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-         i &gt;= 0 .and. i &lt; bitsize(i) ! if KIND is not specified
-         i &gt;= 0 .and. i &lt; bitsize(0_KIND) ! if KIND is specified
+       i &gt;= 0 .and. i &lt; bitsize(i) ! if KIND is not specified
+       i &gt;= 0 .and. i &lt; bitsize(0_KIND) ! if KIND is specified
 <P>
 </PRE>
 <TABLE cellpadding=3>
@@ -166,8 +163,9 @@ KIND : designates the kind of the integer result.
 
 </A>
 <BLOCKQUOTE>
-The leftmost I bits of the output integer are set to 1 and the other bits
-are set to 0.
+<P>
+The leftmost I bits of the output integer are set to 1 and the other
+bits are set to 0.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -175,34 +173,35 @@ are set to 0.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_maskl
-      implicit none
-      integer :: i
-        ! basics
-         i=3
-         write(*,&#146;(i0,1x,b0)&#146;) i, maskl(i)
+    program demo_maskl
+    implicit none
+    integer :: i
+      ! basics
+       i=3
+       write(*,&#146;(i0,1x,b0)&#146;) i, maskl(i)
 <P>
-        ! elemental
-         write(*,&#146;(*(i11,1x,b0.32,1x,/))&#146;) maskl([(i,i,i=0,bit_size(0),4)])
-      end program demo_maskl
+      ! elemental
+       write(*,&#146;(*(i11,1x,b0.32,1x,/))&#146;) maskl([(i,i,i=0,bit_size(0),4)])
+    end program demo_maskl
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt; 3 11100000000000000000000000000000
-       &gt;           0 00000000000000000000000000000000
-       &gt;  -268435456 11110000000000000000000000000000
-       &gt;   -16777216 11111111000000000000000000000000
-       &gt;    -1048576 11111111111100000000000000000000
-       &gt;      -65536 11111111111111110000000000000000
-       &gt;       -4096 11111111111111111111000000000000
-       &gt;        -256 11111111111111111111111100000000
-       &gt;         -16 11111111111111111111111111110000
-       &gt;          -1 11111111111111111111111111111111
+     &gt; 3 11100000000000000000000000000000
+     &gt;           0 00000000000000000000000000000000
+     &gt;  -268435456 11110000000000000000000000000000
+     &gt;   -16777216 11111111000000000000000000000000
+     &gt;    -1048576 11111111111100000000000000000000
+     &gt;      -65536 11111111111111110000000000000000
+     &gt;       -4096 11111111111111111111000000000000
+     &gt;        -256 11111111111111111111111100000000
+     &gt;         -16 11111111111111111111111111110000
+     &gt;          -1 11111111111111111111111111111111
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -212,6 +211,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -220,16 +220,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 MASKR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               maskl(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maskl (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 81ae68f4-cec3-40ba-9cb6-4eeabd648373 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maskl (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1978f28c-d4fd-4c45-991c-2e4a9b8f2126 using man macros.</FONT>
 <br><br><center><img src="images/maskl.3fortran.gif"></center>
 </div>
 </div>

@@ -45,12 +45,17 @@ module M_constants
 !!      "euler"
 !!      "gamma"          The Euler-Mascheroni constant is often denoted by
 !!                       a lower-case Gamma.
-!!      "golden_ratio"
+!!      "golden_ratio"   In mathematics, two quantities are in the golden
+!!                       ratio if their ratio is the same as the ratio of
+!!                       their sum to the larger of the two quantities. so
+!!                       for a > b > 0, (a + b)/ a = a/b where the Greek
+!!                       letter phi often denotes the golden ratio.
 !!
 !!      "pi"             The ratio of the circumference of a circle to the
 !!                       diameter of the circle
 !!
 !!  PHYSICAL CONSTANTS
+!!
 !!
 !!      "deg_per_rad"
 !!      "rad_per_deg"
@@ -73,7 +78,7 @@ module M_constants
 !!     real,parameter :: e=uc%sp%e ! universal constant, single-precision, e
 !!     character(len=*),parameter :: all=f%all
 !!
-!!     ! use just use it
+!!     ! just use it
 !!     print f%all, 'gamma=',uc%qp%gamma    ! universal constant, quad-precision, gamma
 !!     print all, 'e=',e
 !!

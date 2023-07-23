@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>shape (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>shape (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>shape(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-shape(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SHAPE(3) - [ARRAY:INQUIRY] Determine the shape of an array or scalar
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ SHAPE(3) - [ARRAY:INQUIRY] Determine the shape of an array or scalar
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = shape( source [,kind] )
 <P>
 <PRE>
-         integer(kind=KIND) function shape( source, KIND )
+       integer(kind=KIND) function shape( source, KIND )
 <P>
-          type(TYPE(kind=**)),intent(in)       :: source(..)
-          integer(kind=**),intent(in),optional :: KIND
+        type(TYPE(kind=**)),intent(in)       :: source(..)
+        integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = shape( source [,kind] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -101,9 +95,9 @@ a kind designated as ** may be any supported kind for the type
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SOURCE is an array or scalar of any type. If SOURCE is a pointer it must
-be associated and allocatable arrays must be allocated. It shall not be
-an assumed-size array.
+SOURCE is an array or scalar of any type. If SOURCE is a pointer it
+must be associated and allocatable arrays must be allocated. It
+shall not be an assumed-size array.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -113,9 +107,9 @@ KIND is a constant integer initialization expression.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is an integer array of rank one with size equal to the rank of
-SOURCE of the kind specified by KIND if KIND is present, otherwise it has
-the default integer kind.
+the result is an integer array of rank one with size equal to the
+rank of SOURCE of the kind specified by KIND if KIND is present,
+otherwise it has the default integer kind.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -124,6 +118,7 @@ the default integer kind.
 
 </A>
 <BLOCKQUOTE>
+<P>
 SHAPE(3) queries the shape of an array.
 </BLOCKQUOTE>
 <A name=4>
@@ -132,12 +127,13 @@ SHAPE(3) queries the shape of an array.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SOURCE : an array or scalar of any type. If SOURCE is a pointer it must
-be associated and allocatable arrays must be allocated.
+SOURCE : an array or scalar of any type. If SOURCE is a pointer it
+must be associated and allocatable arrays must be allocated.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -151,10 +147,12 @@ KIND : indicates the kind parameter of the result.
 
 </A>
 <BLOCKQUOTE>
-An integer array of rank one with as many elements as SOURCE has dimensions.
 <P>
-The elements of the resulting array correspond to the extent of SOURCE along
-the respective dimensions.
+An integer array of rank one with as many elements as SOURCE has
+dimensions.
+<P>
+The elements of the resulting array correspond to the extent of SOURCE
+along the respective dimensions.
 <P>
 If SOURCE is a scalar, the result is an empty array (a rank-one array of
 size zero).
@@ -165,29 +163,30 @@ size zero).
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_shape
-      implicit none
-      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
-      integer, dimension(-1:1, -1:2) :: a
-         print all, &#146;shape of array=&#146;,shape(a)
-         print all, &#146;shape of constant=&#146;,shape(42)
-         print all, &#146;size of shape of constant=&#146;,size(shape(42))
-         print all, &#146;ubound of array=&#146;,ubound(a)
-         print all, &#146;lbound of array=&#146;,lbound(a)
-      end program demo_shape
+    program demo_shape
+    implicit none
+    character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+    integer, dimension(-1:1, -1:2) :: a
+       print all, &#146;shape of array=&#146;,shape(a)
+       print all, &#146;shape of constant=&#146;,shape(42)
+       print all, &#146;size of shape of constant=&#146;,size(shape(42))
+       print all, &#146;ubound of array=&#146;,ubound(a)
+       print all, &#146;lbound of array=&#146;,lbound(a)
+    end program demo_shape
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         shape of array= 3 4
-         shape of constant=
-         size of shape of constant= 0
-         ubound of array= 1 2
-         lbound of array= -1 -1
+       shape of array= 3 4
+       shape of constant=
+       size of shape of constant= 0
+       ubound of array= 1 2
+       lbound of array= -1 -1
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -197,6 +196,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 ; with KIND argument Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -205,6 +205,7 @@ Fortran 95 ; with KIND argument Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 Array inquiry:
 <TABLE cellpadding=3><!-- tsb: Array inquiry:
  -->
@@ -272,13 +273,9 @@ o
 BTEST(3) - Tests a bit of an integer value.
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               shape(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shape (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 873043bd-d955-4e70-97ec-df2f2e03091e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shape (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0dbbbd3b-e954-4e3a-88ad-5a353b747150 using man macros.</FONT>
 <br><br><center><img src="images/shape.3fortran.gif"></center>
 </div>
 </div>

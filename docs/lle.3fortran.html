@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>lle (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>lle (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>lle(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-lle(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 LLE(3) - [CHARACTER:COMPARE] ASCII Lexical less than or equal
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ LLE(3) - [CHARACTER:COMPARE] ASCII Lexical less than or equal
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = lle(string_a, stringb)
 <P>
 <PRE>
-            elemental logical function lle(string_a, string_b)
+          elemental logical function lle(string_a, string_b)
 <P>
-             character(len=*),intent(in) :: string_a
-             character(len=*),intent(in) :: string_b
+           character(len=*),intent(in) :: string_a
+           character(len=*),intent(in) :: string_b
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,16 +85,17 @@ result = lle(string_a, stringb)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-**string_a** is default _character_ or an ASCII character.
+STRING_A is default character or an ASCII character.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-**string_b** is the same type and kind as **string_a**
+STRING_B is the same type and kind as STRING_A
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -115,20 +109,22 @@ the result is a default logical
 
 </A>
 <BLOCKQUOTE>
-LLE(3) determines whether one string is lexically less than or equal to
-another string, where the two strings are interpreted as containing ASCII
-character codes.
 <P>
-If STRING_A and STRING_B are not the same length, the shorter is compared as
-if spaces were appended to it to form a value that has the same length as
-the longer.
+LLE(3) determines whether one string is lexically less than or equal to
+another string, where the two strings are interpreted as containing
+ASCII character codes.
+<P>
+If STRING_A and STRING_B are not the same length, the shorter is
+compared as if spaces were appended to it to form a value that has the
+same length as the longer.
 <P>
 Leading spaces are significant.
 <P>
-In general, the lexical comparison intrinsics LGE, LGT, LLE, and LLT differ
-from the corresponding intrinsic operators .ge., .gt., .le., and .lt., in
-that the latter use the processor&#146;s character ordering (which is not ASCII
-on some targets), whereas LLE(3) always uses the ASCII ordering.
+In general, the lexical comparison intrinsics LGE, LGT, LLE, and LLT
+differ from the corresponding intrinsic operators .ge., .gt., .le., and
+[char46]lt., in that the latter use the processor&#146;s character ordering (which
+is not ASCII on some targets), whereas LLE(3) always uses the ASCII
+ordering.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -136,6 +132,7 @@ on some targets), whereas LLE(3) always uses the ASCII ordering.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -154,17 +151,18 @@ STRING_B : string to compare to STRING_A
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-RESULT Returns .true. if STRING_A &lt;= STRING_B, and .false. otherwise,
-based on the ASCII collating sequence.
+RESULT Returns .true. if STRING_A &lt;= STRING_B, and .false.
+otherwise, based on the ASCII collating sequence.
 <P>
 If both input arguments are null strings, .true. is always returned.
 <P>
-If either string contains a character not in the ASCII character set, the
-result is processor dependent.
+If either string contains a character not in the ASCII character
+set, the result is processor dependent.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -173,65 +171,66 @@ result is processor dependent.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_lle
-      implicit none
-      integer :: i
-         print *,&#146;the ASCII collating sequence for printable characters&#146;
-         write(*,&#146;(1x,19a)&#146;)(char(i),i=32,126)
-        ! basics
+    program demo_lle
+    implicit none
+    integer :: i
+       print *,&#146;the ASCII collating sequence for printable characters&#146;
+       write(*,&#146;(1x,19a)&#146;)(char(i),i=32,126)
+      ! basics
 <P>
-         print *,&#146;case matters&#146;
-         write(*,*) lle(&#146;abc&#146;,&#146;ABC&#146;)          ! F lowercase is &gt; uppercase
+       print *,&#146;case matters&#146;
+       write(*,*) lle(&#146;abc&#146;,&#146;ABC&#146;)       ! F lowercase is &gt; uppercase
 <P>
-         print *,&#146;a space is the lowest printable character&#146;
-         write(*,*) lle(&#146;abcd&#146;,&#146;abc&#146;)         ! F  d &gt; space
-         write(*,*) lle(&#146;abc&#146;,&#146;abcd&#146;)         ! T  space &lt; d
+       print *,&#146;a space is the lowest printable character&#146;
+       write(*,*) lle(&#146;abcd&#146;,&#146;abc&#146;)      ! F  d &gt; space
+       write(*,*) lle(&#146;abc&#146;,&#146;abcd&#146;)      ! T  space &lt; d
 <P>
-         print *,&#146;leading spaces matter, trailing spaces do not&#146;
-         write(*,*) lle(&#146;abc&#146;,&#146;abc  &#146;)        ! T trailing spaces
-         write(*,*) lle(&#146;abc&#146;,&#146; abc&#146;)         ! F leading spaces are significant
+       print *,&#146;leading spaces matter, trailing spaces do not&#146;
+       write(*,*) lle(&#146;abc&#146;,&#146;abc  &#146;)     ! T trailing spaces
+       write(*,*) lle(&#146;abc&#146;,&#146; abc&#146;)      ! F leading spaces are significant
 <P>
-         print *,&#146;even null strings are padded and compared&#146;
-         ! If both strings are of zero length the result is true.
-         write(*,*) lle(&#146;&#146;,&#146;&#146;)                ! T
-         write(*,*) lle(&#146;&#146;,&#146;a&#146;)               ! T the null string is padded
-         write(*,*) lle(&#146;a&#146;,&#146;&#146;)               ! F
-         print *,&#146;elemental&#146;
-         write(*,*) lle(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;])  ! [T,F] scalar and array
-         write(*,*) lle([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;) ! [F,T]
-         ! per the rules for elemental procedures arrays must be the same size
-         write(*,*) lle([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T,T] both arrays
-      end program demo_lle
+       print *,&#146;even null strings are padded and compared&#146;
+       ! If both strings are of zero length the result is true.
+       write(*,*) lle(&#146;&#146;,&#146;&#146;)             ! T
+       write(*,*) lle(&#146;&#146;,&#146;a&#146;)            ! T the null string is padded
+       write(*,*) lle(&#146;a&#146;,&#146;&#146;)            ! F
+       print *,&#146;elemental&#146;
+       write(*,*) lle(&#146;abc&#146;,[&#146;abc&#146;,&#146;123&#146;])  ! [T,F] scalar and array
+       write(*,*) lle([&#146;cba&#146;, &#146;123&#146;],&#146;abc&#146;) ! [F,T]
+       ! per the rules for elemental procedures arrays must be the same size
+       write(*,*) lle([&#146;abc&#146;,&#146;123&#146;],[&#146;cba&#146;,&#146;123&#146;]) ! [T,T] both arrays
+    end program demo_lle
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  the ASCII collating sequence for printable characters
-       &gt;   !"#$%&&#146;()*+,-./012
-       &gt;  3456789:;&lt;=&gt;?@ABCDE
-       &gt;  FGHIJKLMNOPQRSTUVWX
-       &gt;  YZ[\]^_&#145;abcdefghijk
-       &gt;  lmnopqrstuvwxyz{|}~
-       &gt;  case matters
-       &gt;  F
-       &gt;  a space is the lowest printable character
-       &gt;  F
-       &gt;  T
-       &gt;  leading spaces matter, trailing spaces do not
-       &gt;  T
-       &gt;  F
-       &gt;  even null strings are padded and compared
-       &gt;  T
-       &gt;  T
-       &gt;  F
-       &gt;  elemental
-       &gt;  T F
-       &gt;  F T
-       &gt;  T T
+     &gt;  the ASCII collating sequence for printable characters
+     &gt;   !"#$%&&#146;()*+,-./012
+     &gt;  3456789:;&lt;=&gt;?@ABCDE
+     &gt;  FGHIJKLMNOPQRSTUVWX
+     &gt;  YZ[\]^_&#145;abcdefghijk
+     &gt;  lmnopqrstuvwxyz{|}~
+     &gt;  case matters
+     &gt;  F
+     &gt;  a space is the lowest printable character
+     &gt;  F
+     &gt;  T
+     &gt;  leading spaces matter, trailing spaces do not
+     &gt;  T
+     &gt;  F
+     &gt;  even null strings are padded and compared
+     &gt;  T
+     &gt;  T
+     &gt;  F
+     &gt;  elemental
+     &gt;  T F
+     &gt;  F T
+     &gt;  T T
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -241,6 +240,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -249,11 +249,12 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 LGE(3), LGT(3), LLT(3)
 <P>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -271,13 +272,9 @@ o
 NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 lle(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lle (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7a328a88-674d-4676-b7d1-dc3abb506599 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lle (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bfa79fe5-f34e-4176-bef2-f163fc0fb6c2 using man macros.</FONT>
 <br><br><center><img src="images/lle.3fortran.gif"></center>
 </div>
 </div>

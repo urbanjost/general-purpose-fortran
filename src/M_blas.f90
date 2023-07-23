@@ -22417,12 +22417,12 @@ end subroutine
 !!            triangular part of a symmetric band matrix from conventional
 !!            full matrix storage to band storage:
 !!
-!!                  DO 20, J = 1, N
-!!                     M = K + 1 - J
-!!                     DO 10, I = MAX( 1, J - K ), J
-!!                        A( M + I, J ) = matrix( I, J )
-!!               10    CONTINUE
-!!               20 CONTINUE
+!!               >    DO 20, J = 1, N
+!!               >       M = K + 1 - J
+!!               >       DO 10, I = MAX( 1, J - K ), J
+!!               >          A( M + I, J ) = matrix( I, J )
+!!               > 10    CONTINUE
+!!               > 20 CONTINUE
 !!
 !!            Before entry with UPLO = 'L' or 'l', the leading ( k + 1 )
 !!            by n part of the array A must contain the lower triangular
@@ -22435,12 +22435,12 @@ end subroutine
 !!            triangular part of a symmetric band matrix from conventional
 !!            full matrix storage to band storage:
 !!
-!!                  DO 20, J = 1, N
-!!                     M = 1 - J
-!!                     DO 10, I = J, MIN( N, J + K )
-!!                        A( M + I, J ) = matrix( I, J )
-!!               10    CONTINUE
-!!               20 CONTINUE
+!!               >    DO 20, J = 1, N
+!!               >       M = 1 - J
+!!               >       DO 10, I = J, MIN( N, J + K )
+!!               >          A( M + I, J ) = matrix( I, J )
+!!               > 10    CONTINUE
+!!               > 20 CONTINUE
 !!
 !!   LDA
 !!

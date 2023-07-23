@@ -1,0 +1,263 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>M_framework__journal (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+M_framework__journal(3fm) - [M_framework__journal::INTRO] write
+program messages to stdout and/or
+a log file
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Examples</A><BR>
+<A HREF=#4>Author</A><BR>
+<A HREF=#5>License</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+use, M_framework__journal , only : journal
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+For interactive programs in particular it is useful if all messages
+go thru the JOURNAL(3f) routine. This makes it easy to write messages
+to a log file as well as standard output; to toggle time prefixes
+on and off; to turn on and off debug-mode messages; control output
+paging and create replayable input journals.
+<P>
+The primary use of JOURNAL(3f) is to create journal files for
+interactive programs that can be replayed and/or be used to verify
+program executions. Typically, you would echo what the user typed to
+the trail file as-is, and write output you write to stdout as comments
+to the trail file so that the trail file can easily be read back in
+(by ignoring comments). So usually things that are read from user
+input are using output with WHERE=&#146;T&#146; and output that usually goes
+to stdout is written with WHERE=&#146;SC&#146; in the JOURNAL(3f) call.
+<P>
+<PRE>
+    &gt;      :
+    &gt;      :
+    &gt; character(len=256) userline, output
+    &gt; call journal(&#146;O&#146;,&#146;my_trail_file&#146;)  ! open trail file
+    &gt;      :
+    &gt;      :
+    &gt; do
+    &gt;    read(*,&#146;(a)&#146;,iostat=ios) userline  ! read user input
+    &gt;    if(ios /= 0)exit
+    &gt;    ! echo user input to trail file
+    &gt;    call journal(&#146;T&#146;,userline)
+    &gt;    ! assume user input causes values i1, i2, and i3 to be calculated
+    &gt;    write(output,&#146;(i0,1x,i0,1x)&#146;)i1,i2,i3 ! build an output line
+    &gt;    ! write output to stdout and as comment to trail file
+    &gt;    call journal(output)
+    &gt;    !or you can specify the WHERE parameter and up to ten scalar values
+    &gt;    call journal(&#146;SC&#146;,&#146;i1=&#146;,i1,&#146;i2=&#146;,i2,&#146;i3=&#146;,i3)
+    &gt; enddo
+<P>
+</PRE>
+In this example an output line was built with an internal write; but
+calls to journal(3f) with numeric values with and without advancing
+I/O turned on are often used for simpler output:
+<P>
+<PRE>
+      I=10
+      R=20.3
+      ! write to stdout and trail file without advancing I/O
+      call journal(&#146;+SC&#146;,&#146;I=&#146;,i)
+      call journal(&#146;SC&#146;,&#146;AND R=&#146;,r)
+<P>
+</PRE>
+writes to the trail file are ignored unless a trail file was opened
+with
+<P>
+<PRE>
+      CALL JOURNAL(&#146;O&#146;,filename)
+<P>
+<P>
+</PRE>
+So that routines that do their output via JOURNAL(3f) can be used with
+and without programs generating trail files. That is, destinations
+<P>
+With no parameters, the trail file is flushed.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The man(1) page for journal(3f) describes all the options for the
+<TABLE cellpadding=3><!-- tsb: The man(1) page for journal(3f) describes all the options for the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>WHERE field.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+In addition to being used to generate a journal,
+the routine can be used for producing optional debug messages and
+timing information.
+</TD></TR>
+<TR></TR></TABLE>Sample program for debug messages:
+<P>
+<PRE>
+     program demo_journal
+     !! showing creating debug messages
+     use M_framework__journal, only : journal
+     implicit none
+     !! produces no output because trail is not on
+     call journal(&#146;D&#146;,&#146;*demo* DEBUG MESSAGE 001 IGNORED&#146;)
+     !! turn on debug messages
+     call journal(&#146;&gt;&#146;,&#146;debug on&#146;)
+     !! produces output on stdout because debug mode
+     !! is on but no named trail file
+     call journal(&#146;D&#146;,&#146;*demo* DEBUG MESSAGE 002 ON STDOUT&#146;)
+     !! open trail file
+     call journal(&#146;O&#146;,&#146;mytrail.txt&#146;)
+     !! debug messages now go to the trail file
+     call journal(&#146;D&#146;,&#146;*demo* DEBUG MESSAGE 003 TO TRAIL&#146;)
+     !! close trail file so messages go to stdout again
+     call journal(&#146;O&#146;,&#146;&#146;)
+     !! debug on stdout now
+     call journal(&#146;D&#146;,&#146;*demo* DEBUG MESSAGE 004 TO STDOUT&#146;)
+     call journal(&#146;&lt;&#146;,&#146;debug off&#146;)
+     !! back to no output from the next message
+     call journal(&#146;D&#146;,&#146;*demo* DEBUG MESSAGE 005 IGNORED&#146;)
+     end program demo_journal
+<P>
+</PRE>
+Sample program for trail messages with optional timing information:
+<P>
+<PRE>
+     program testit
+     use M_framework__journal,only : journal
+     implicit none
+     call journal(&#146;a single string A -should be on S&#146;)
+<P>
+     ! add time prefix to output
+     call journal(&#146;%&#146;,&#146;%Y-%M-%DT%h:%m:%s.%x%u:%b&#146;)
+     call journal(&#146;a single string B -should be on S with prefix&#146;)
+     call journal(&#146;%&#146;,&#146;CPU_TIME: %c:CALLS: %C: %b&#146;)  ! change time prefix
+     call journal(&#146;a single string B-1 -should be on S with prefix&#146;)
+     call journal(&#146;a single string B-2 -should be on S with prefix&#146;)
+     call journal(&#146;a single string B-3 -should be on S with prefix&#146;)
+     !  Other useful time formats:
+     !     %E -- Unix Epoch time
+     !     %e -- integer value of Unix Epoch time
+     !     %C -- number of times this format is used
+     !     %c -- CPU_time(3f) output
+     !     %S -- seconds since last use of this format
+     !     %k -- CPU time in seconds from system_clock
+     call journal(&#146;%&#146;,&#146;&#146;) ! turn off time prefix
+     !
+     call journal(&#146;a single string C -should be on S&#146;)
+     !
+     call journal(&#146;O&#146;,&#146;aaa.out&#146;) ! turn on trail file
+     call journal(&#146;a single string D -should be on SC&#146;)
+     call journal(&#146;a single string E -should be on SC&#146;)
+     call journal(&#146;a single string F -should be on SC&#146;)
+     call journal(&#146;O&#146;,&#146;&#146;) ! turn off trail file
+     !
+     call journal(&#146;a single string G -should be on S&#146;)
+     call journal(&#146;a single string H -should be on S&#146;)
+     call journal(&#146;a single string I -should be on S&#146;)
+<P>
+     ! build one line of output with intrinsic scalar values added
+     call journal(&#146;+sc&#146;,&#146;APPEND:&#146;)
+     call journal(&#146;+sc&#146;,&#146; integer&#146;,         1234)
+     call journal(&#146;+sc&#146;,&#146; and real&#146;,        1234.5678)
+     call journal(&#146;+sc&#146;,&#146; and double&#146;,1234567890.123456d0)
+     call journal(&#146;+sc&#146;,&#146; and logical&#146;,    .true.)
+     call journal(&#146;sc&#146;,&#146;&#146;)
+     !
+     end program testit
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__journal (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cf763d3a-65c9-46e3-91ad-cdcab54bea36 using man macros.</FONT>
+<br><br><center><img src="images/M_framework__journal.3m_framework__journal.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

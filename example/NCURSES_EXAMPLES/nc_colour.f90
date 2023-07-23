@@ -12,6 +12,7 @@ program nc_colors
 !---------------------------------------------
 use M_ncurses
 integer :: i
+integer :: ierr
 
 type color 
   integer(C_SHORT)  :: code

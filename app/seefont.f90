@@ -40,36 +40,36 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   seefont(1) - [M_drawplus] show sample of font                                                                                ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'SYNOPSIS                                                                                                                        ',&
-'   seefont [fontname[ -x window_width][ -y window_height][ -w linewidth]|[ --help| --version]                                   ',&
-'DESCRIPTION                                                                                                                     ',&
-'   seefont(1) displays fonts                                                                                                    ',&
-'OPTIONS                                                                                                                         ',&
-'    fontname   fontname to display. Defaults to interactive mode, where "n" means "next",                                       ',&
-'               "p" for "previous", and "q" for quit.                                                                            ',&
-'    -x         display surface width in device units (typically rasters)                                                        ',&
-'    -y         display surface height in device units (typically rasters)                                                       ',&
-'    -w         linewidth (default is 20) in terms of 1/10000 of display width                                                   ',&
-'    --help     display this help and exit                                                                                       ',&
-'    --version  output version information and exit                                                                              ',&
-'EXAMPLES                                                                                                                        ',&
-'  Typical usage:                                                                                                                ',&
-'                                                                                                                                ',&
-'    # use current output device (typically X11 Windows)                                                                         ',&
-'    seefont                                                                                                                     ',&
-'                                                                                                                                ',&
-'    # display a specific font                                                                                                   ',&
-'    seefont cursive                                                                                                             ',&
-'                                                                                                                                ',&
-'    # make an Adobe PDF file showing samples of each font                                                                       ',&
-'    env M_DRAW_DEVICE=pdf seefont -x 3000 -y 3000 >seefont.pdf                                                                  ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   seefont(1) - [M_drawplus] show sample of font                                ',&
+'   (LICENSE:PD)                                                                 ',&
+'SYNOPSIS                                                                        ',&
+'   seefont [fontname[ -x window_width][ -y window_height][ -w linewidth]|[ --help| --version]',&
+'DESCRIPTION                                                                     ',&
+'   seefont(1) displays fonts                                                    ',&
+'OPTIONS                                                                         ',&
+'    fontname   fontname to display. Defaults to interactive mode, where "n" means "next",',&
+'               "p" for "previous", and "q" for quit.                            ',&
+'    -x         display surface width in device units (typically rasters)        ',&
+'    -y         display surface height in device units (typically rasters)       ',&
+'    -w         linewidth (default is 20) in terms of 1/10000 of display width   ',&
+'    --help     display this help and exit                                       ',&
+'    --version  output version information and exit                              ',&
+'EXAMPLES                                                                        ',&
+'  Typical usage:                                                                ',&
+'                                                                                ',&
+'    # use current output device (typically X11 Windows)                         ',&
+'    seefont                                                                     ',&
+'                                                                                ',&
+'    # display a specific font                                                   ',&
+'    seefont cursive                                                             ',&
+'                                                                                ',&
+'    # make an Adobe PDF file showing samples of each font                       ',&
+'    env M_DRAW_DEVICE=pdf seefont -x 3000 -y 3000 >seefont.pdf                  ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -127,7 +127,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20181109>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2023-02-12 18:39:48 UTC-300>',&
+'@(#)COMPILED:       2023-07-22 01:28:24 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -62,8 +62,8 @@ private
    public mo2d           !(month_name) result (DAT)           ! given month name and year return date array for 1st day of month
 ! ASTROLOGICAL
    public easter         !(year,dat)                          ! calculate month and day Easter falls on for given year
-   public moon_fullness  !(datin) result(FULLNESS)            ! percentage of moon phase from new to full
-   public phase_of_moon  !(datin) result(PHASE)               ! return name for phase of moon for given date
+   public moon_fullness  !(dat) result(FULLNESS)              ! percentage of moon phase from new to full
+   public phase_of_moon  !(dat) result(PHASE)                 ! return name for phase of moon for given date
 !x! public ephemeris      !(dat,planet,DD,DM,DC,AH,AM)         ! ephemeris position of planets for adjusting an equatorial telescope
 ! READING DATES
    public guessdate      !(anot,dat)                          ! Converts a date string to a date array, in various formats
@@ -96,7 +96,7 @@ real(kind=realtime),public,parameter :: dt_week=dt_day*7.0_dp ! one week in seco
 !!##NAME
 !!    date_to_julian(3f) - [M_time:JULIAN] converts DAT date-time array to
 !!    Julian Date
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -153,7 +153,7 @@ real(kind=realtime),public,parameter :: dt_week=dt_day*7.0_dp ! one week in seco
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine date_to_julian(dat,julian,ierr)
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
@@ -215,7 +215,7 @@ end subroutine date_to_julian
 !!##NAME
 !!    julian_to_date(3f) - [M_time:JULIAN] converts a JED(Julian Ephemeris
 !!    Date) to a DAT date-time array.
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -277,7 +277,7 @@ end subroutine date_to_julian
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine julian_to_date(julian,dat,ierr)
 
 ! ident_3="@(#) M_time julian_to_date(3f) Converts Julian Date to DAT date-time array"
@@ -359,7 +359,7 @@ end subroutine julian_to_date
 !!##NAME
 !!    date_to_unix(3f) - [M_time:UNIX_EPOCH] converts DAT date-time array to Unix
 !!    Epoch Time
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -411,7 +411,7 @@ end subroutine julian_to_date
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine date_to_unix(dat,unixtime,ierr)
 
 ! ident_4="@(#) M_time date_to_unix(3f) Convert DAT date-time array to Unix Epoch Time"
@@ -442,7 +442,7 @@ end subroutine date_to_unix
 !!    unix_to_date(3f) - [M_time:UNIX_EPOCH] converts Unix Epoch Time to
 !!    DAT date-time
 !!    array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -508,7 +508,7 @@ end subroutine date_to_unix
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine unix_to_date(unixtime,dat,ierr)
 
 ! ident_5="@(#) M_time unix_to_date(3f) Converts Unix Time to DAT date-time array"
@@ -544,7 +544,7 @@ end subroutine unix_to_date
 !>
 !!##NAME
 !!    d2o(3f) - [M_time:ORDINAL_DAY] converts DAT date-time array to Ordinal day
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -611,7 +611,7 @@ end subroutine unix_to_date
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function d2o(dat) result (ordinal)
 
 ! ident_6="@(#) M_time d2o(3f) Converts DAT date-time array to Ordinal day"
@@ -645,7 +645,7 @@ end function d2o
 !>
 !!##NAME
 !!    ordinal_seconds(3f) - [M_time:ORDINAL_DAY] seconds since beginning of year
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
 !!    function ordinal_seconds()
@@ -679,7 +679,7 @@ end function d2o
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 integer function ordinal_seconds()
 
 ! ident_7="@(#) M_time ordinal_seconds(3f) seconds since beginning of year"
@@ -699,7 +699,7 @@ end function ordinal_seconds
 !!##NAME
 !!    ordinal_to_date(3f) - [M_time:ORDINAL_DAY] when given a valid year and
 !!    day of the year returns the DAT array for the date
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
 !!      subroutine ordinal_to_date(yyyy, ddd, dat)
@@ -760,7 +760,7 @@ end subroutine ordinal_to_date
 !>
 !!##NAME
 !!    o2d(3f) - [M_time:ORDINAL_DAY] converts Ordinal day to DAT date-time array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -818,16 +818,16 @@ end subroutine ordinal_to_date
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function o2d(ordinal,year) result (dat)
 
 ! ident_9="@(#) M_time o2d(3f) Converts ordinal day to DAT date-time array"
 
-integer                    :: dat(8)                  ! date time array similar to that returned by DATE_AND_TIME
-integer,intent(in)         :: ordinal                 ! the returned number of days
-integer,optional           :: year
-real(kind=realtime)        :: unixtime                ! Unix time (seconds)
-integer                    :: ierr                    ! return 0 on success, otherwise 1 from date_to_unix(3f)
+integer                     :: dat(8)                 ! date time array similar to that returned by DATE_AND_TIME
+integer,intent(in)          :: ordinal                ! the returned number of days
+integer,intent(in),optional :: year
+real(kind=realtime)         :: unixtime               ! Unix time (seconds)
+integer                     :: ierr                   ! return 0 on success, otherwise 1 from date_to_unix(3f)
    if(present(year))then
       dat=[year,1,ordinal,get_timezone(),0,0,0,0]     ! initialize DAT with parameters and set timezone, set HH:MM:SS.XX to zero
    else
@@ -849,7 +849,7 @@ end function o2d
 !!##NAME
 !!    v2mo(3f) - [M_time:MONTH_NAME] returns the month name of a Common
 !!    month number
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -899,7 +899,7 @@ end function o2d
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function v2mo(imonth) result(month_name)
 
 ! ident_10="@(#) M_time v2mo(3f) returns the month name of a Common month number"
@@ -924,7 +924,7 @@ end function v2mo
 !!##NAME
 !!    mo2d(3f) - [M_time:MONTH_NAME] given month name return DAT date-time
 !!    array for beginning of that month in specified year
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -967,7 +967,7 @@ end function v2mo
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function mo2d(month_name,year) result (dat)
 
 ! ident_11="@(#) M_time mo2d(3f) month name to DAT date-time array for 1st of that month in specified year"
@@ -997,7 +997,7 @@ end function mo2d
 !!##NAME
 !!    mo2v(3f) - [M_time:MONTH_NAME] given month name return month number
 !!    (1-12) of that month
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -1045,7 +1045,7 @@ end function mo2d
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 elemental function mo2v(month_name) result(imonth)
 
 ! ident_12="@(#) M_time mo2v(3f) given month name return month number (1-12) of that month"
@@ -1086,7 +1086,7 @@ end function mo2v
 !!##NAME
 !!    now(3f) - [M_time:DATE_PRINTING] return string representing current
 !!    time given format
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -1134,7 +1134,7 @@ end function mo2v
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function now(format)
 
 ! ident_13="@(#) M_time now(3f) return string representing current time given format"
@@ -1158,7 +1158,7 @@ end function now
 !!##NAME
 !!    fmtdate(3f) - [M_time:DATE_PRINTING] given DAT date-time array return
 !!    date as string using specified format
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -1217,7 +1217,7 @@ end function now
 !!    John S. Urban, 2015-12-19
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function fmtdate(values,format) RESULT (timestr)
 
 ! ident_14="@(#) M_time fmtdate(3f) given DAT date-time array return date as string using format"
@@ -1486,7 +1486,7 @@ end function fmtdate
 !!##NAME
 !!    fmtdate_usage(3f) - [M_time:DATE_PRINTING] display macros recognized
 !!    by fmtdate(3f) and now(3f)
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -1635,7 +1635,7 @@ end function fmtdate
 !!    John S. Urban, 2015-10-24
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine fmtdate_usage(indent)
 
 ! ident_15="@(#) M_time fmtdate_usage(3f) display macros recognized by fmtdate(3f)"
@@ -1773,7 +1773,7 @@ end subroutine fmtdate_usage
 !>
 !!##NAME
 !!    guessdate(3f) - [M_time:READING_DATES] reads in a date, in various formats
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -1799,7 +1799,8 @@ end subroutine fmtdate_usage
 !!   ISO_C_BINDING interface.
 !!
 !!##OPTIONS
-!!    anot  A string assumed to represent a date including a year, month and day.
+!!    anot  A string assumed to represent a date including a year, month
+!!          and day.
 !!
 !!    dat   Integer array holding a "DAT" array, similar in structure
 !!          to the array returned by the intrinsic DATE_AND_TIME(3f):
@@ -1853,7 +1854,7 @@ end subroutine fmtdate_usage
 !!     FOR  4th of Jul 2004   GOT Sunday, July 4th, 2004 12:00:00 AM
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine guessdate(datestring,dat,ier)
 
 ! ident_16="@(#) M_time guessdate(3f) Guess format of a date string to create a DAT date-time array"
@@ -1865,7 +1866,6 @@ subroutine guessdate(datestring,dat,ier)
 ! values READ(3f) and parse them directly instead of using this procedure, even though it does a good job with common USA formats.
 !
 !x! REDO more rigorously with regular expressions and recognize standard formats directly
-
 
 ! NOTE : Main constraint is that day is input BEFORE year unless use YYYY-MM-DD and a : implies HH:MM:SS, no timezone names
 !        Not rigorous. Gets most common formats but can easily make errors in all but simple unambiguous common date formats
@@ -1963,7 +1963,6 @@ integer                           :: loops
    call substitute(datestring_local,'OCT',' OCT ')
    call substitute(datestring_local,'NOV',' NOV ')
    call substitute(datestring_local,'DEC',' DEC ')
-
 
    ! assume T[0=9] is from yyyyy-mm-ddThh:mm:ss.xx ISO-8601 format (or SEPTnn,OCTnn AUGUSTnn, where space was added or name changed)
    call substitute(datestring_local,'T0',' 0')
@@ -2129,7 +2128,7 @@ end subroutine guessdate
 !!##NAME
 !!    dow(3f) - [M_time:DAY_OF_WEEK] given a date-time array DAT return
 !!    the day of the week
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2192,7 +2191,7 @@ end subroutine guessdate
 !!    John S. Urban, 2015-12-19
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine dow(values, weekday, day, ierr)
 
 ! ident_17="@(#) M_time dow(3f) Given DAT date-time array return the day of the week"
@@ -2255,7 +2254,7 @@ end subroutine dow
 !!##NAME
 !!    d2w(3f) - [M_time:WEEK_OF_YEAR] calculate iso-8601 Week-numbering
 !!    year date yyyy-Www-d given DAT date-time array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2367,7 +2366,7 @@ end subroutine dow
 !!    John S. Urban, 2015-12-19
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine d2w(dat,iso_year,iso_week,iso_weekday,iso_name)
 
 ! ident_18="@(#) M_time d2w(3f) DAT date-time array to iso-8601 Week-numbering year date yyyy-Www-d"
@@ -2418,7 +2417,7 @@ end subroutine d2w
 !!##NAME
 !!    w2d(3f) - [M_time:WEEK_OF_YEAR] calculate DAT date-time array from iso-8601
 !!    Week-numbering year date yyyy-Www-d
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2583,7 +2582,7 @@ end subroutine d2w
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine w2d(iso_year,iso_week,iso_weekday,dat)
 
@@ -2609,7 +2608,7 @@ end subroutine w2d
 !!##NAME
 !!    box_month(3f) - [M_time:DATE_PRINTING] create specified month in a
 !!    character array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2662,7 +2661,7 @@ end subroutine w2d
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine box_month(dat,calen)
 
 ! ident_20="@(#) M_time box_month(3f) generate month specified by DAT date-time array in character array"
@@ -2706,7 +2705,7 @@ end subroutine box_month
 !>
 !!##NAME
 !!    d2j(3f) - [M_time:JULIAN] given DAT date-time array returns Julian Date
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2751,7 +2750,7 @@ end subroutine box_month
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function d2j(dat) result (julian)
 
 ! ident_21="@(#) M_time d2j(3f) Given DAT date-time array returns Julian Date"
@@ -2776,7 +2775,7 @@ end function d2j
 !!##NAME
 !!    j2d(3f) - [M_time:JULIAN] given a JED (Julian Ephemeris Date) returns a
 !!    date-time array DAT.
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2828,7 +2827,7 @@ end function d2j
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function j2d(julian) result (dat)
 
 ! ident_22="@(#) M_time j2d(3f) Given Julian Date returns DAT date-time array"
@@ -2845,7 +2844,7 @@ end function j2d
 !!##NAME
 !!    d2u(3f) - [M_time:UNIX_EPOCH] given DAT date-time array returns Unix
 !!    Epoch Time (UET starts at 0000 on 1 Jan. 1970, UTC)
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2895,7 +2894,7 @@ end function j2d
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function d2u(dat) result (unixtime)
 
 ! ident_23="@(#) M_time d2u(3f) Given DAT date-time array returns Unix Epoch time"
@@ -2918,7 +2917,7 @@ end function d2u
 !!##NAME
 !!    u2d(3f) - [M_time:UNIX_EPOCH] given Unix Epoch Time returns DAT
 !!    date-time array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2977,7 +2976,7 @@ end function d2u
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function u2d(unixtime) result (dat)
 
 ! ident_24="@(#) M_time u2d(3f) Given Unix Epoch Time returns DAT date-time array"
@@ -3021,7 +3020,7 @@ end function get_timezone
 !!##NAME
 !!    sec2days(3f) - [M_time:DURATION] convert seconds to string of form
 !!    dd-hh:mm:ss
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -3090,7 +3089,7 @@ end function get_timezone
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function sec2days(seconds,crop) result(dhms)
 use, intrinsic :: iso_fortran_env, only : int64
 
@@ -3223,18 +3222,18 @@ end function sec2days
 !!##NAME
 !!    days2sec(3f) - [M_time:DURATION] convert string of form
 !!    [[-]dd-]hh:mm:ss.nn to seconds
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function days2sec(str) result(time)
+!!    elemental impure function days2sec(str) result(time)
 !!
 !!     character(len=*),intent(in)       :: str
 !!     real(kind=realtime)               :: time
 !!
 !!##DESCRIPTION
 !!   Given a string representing a duration of the form
-!!   "[-][[[dd-]hh:]mm:]ss"  or [NNd][NNh][NNm[]NNs][NNw]
+!!   [-][[[dd-]hh:]mm:]ss or [NNd][NNh][NNm[]NNs][NNw]
 !!   return a value representing seconds.
 !!
 !!   If "dd-" is present, units for the numbers are assumed to
@@ -3255,7 +3254,6 @@ end function sec2days
 !!   A decimal fraction is supported on the seconds (Actually,
 !!   any of the numeric values may represent positive floating
 !!   point numbers). Spaces are ignored.
-!!
 !!
 !!   Simple numeric values may also be used with unit suffixes; where
 !!   s,m,h, or d represents seconds, minutes, hours or days and w
@@ -3320,8 +3318,8 @@ end function sec2days
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function days2sec(str) result(time)
+!!    MIT
+elemental impure function days2sec(str) result(time)
 
 ! ident_26="@(#) M_time days2sec(3f) convert string [[-]dd-]hh mm ss.nn to seconds or string IId JJh KKm LLs to seconds"
 
@@ -3430,12 +3428,12 @@ end function days2sec
 !!##NAME
 !!     phase_of_moon(3f) - [M_time:ASTROLOGICAL] return name for phase of
 !!     moon for given date
-!!     (LICENSE:PD)
+!!     (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!   function phase_of_moon(datin)
+!!   function phase_of_moon(dat)
 !!
-!!    integer,intent(in)            :: datin(8)
+!!    integer,intent(in)            :: dat(8)
 !!    character(len=:),allocatable  :: phase_of_moon
 !!
 !!##DESCRIPTION
@@ -3499,12 +3497,12 @@ end function days2sec
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function phase_of_moon(datin)
+!!    MIT
+function phase_of_moon(dat)
 
 ! ident_27="@(#) M_time phase_of_moon(3f) return name for phase of moon for given date"
 
-integer,intent(in)            :: datin(8)
+integer,intent(in)            :: dat(8)
 character(len=:),allocatable  :: phase_of_moon
 
 real(kind=realtime),parameter :: syndonic_month=29.530588853_realtime ! average period of a lunar cycle, or days per lunation
@@ -3517,7 +3515,7 @@ real(kind=realtime),parameter :: phase_length=syndonic_month/8_realtime  ! days 
 integer                       :: phase
 real(kind=realtime)           :: days
 
-days= d2j(datin)-d2j(reference)                               ! days between reference date and input date
+days= d2j(dat)-d2j(reference)                               ! days between reference date and input date
 days = mod(days + phase_length/2.0_dp, syndonic_month)        ! modulo calculation of which phase rounding up
 if(days<0)days=days+syndonic_month                         ! correct for days before reference date
 phase = int( days * ( size(phase_names) / syndonic_month ))+1 ! index into phase names
@@ -3531,12 +3529,12 @@ end function phase_of_moon
 !!##NAME
 !!     moon_fullness(3f) - [M_time:ASTROLOGICAL] return percentage of moon phase
 !!     from new to full
-!!     (LICENSE:PD)
+!!     (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!   function moon_fullness(datin)
+!!   function moon_fullness(dat)
 !!
-!!    integer,intent(in)            :: datin(8)
+!!    integer,intent(in)            :: dat(8)
 !!    integer                       :: moon_fullness
 !!
 !!##DESCRIPTION
@@ -3551,12 +3549,12 @@ end function phase_of_moon
 !!
 !!##OPTIONS
 !!
-!!  datin      DAT Date array describing input date
+!!    dat    DAT Date array describing input date
 !!
 !!##RESULTS
 !!
-!!     moon_fullness  0 is a new or dark moon, 100 is a full moon, + for waxing
-!!                    and - for waning.
+!!    moon_fullness  0 is a new or dark moon, 100 is a full moon, + for waxing
+!!                   and - for waning.
 !!
 !!##EXAMPLES
 !!
@@ -3591,19 +3589,19 @@ end function phase_of_moon
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function moon_fullness(datin)
+!!    MIT
+function moon_fullness(dat)
 
 ! ident_28="@(#) M_time moon_fullness(3f) return percentage of moon phase from new to full"
 
-integer,intent(in)            :: datin(8)
+integer,intent(in)            :: dat(8)
 integer                       :: moon_fullness
 
 real(kind=realtime),parameter :: syndonic_month=29.530588853_realtime  ! average period of a lunar cycle, or days per lunation
 integer,parameter             :: reference(*)= [2000,1,6,0,18,14,0,0]  ! new moon of January 2000 was January 6, 18:14 UTC.
 real(kind=realtime)           :: days_into_cycle
 
-days_into_cycle = mod(d2j(datin)-d2j(reference) , syndonic_month)      ! number of days into lunar cycle
+days_into_cycle = mod(d2j(dat)-d2j(reference) , syndonic_month)      ! number of days into lunar cycle
 if(days_into_cycle<0)days_into_cycle=days_into_cycle+syndonic_month ! correct for input date being before reference date
 
 if(days_into_cycle<=syndonic_month/2.0_realtime)then                 ! if waxing from new to full report as 0% to 100%
@@ -3619,7 +3617,7 @@ end function moon_fullness
 !>
 !!##NAME
 !!    easter(3f) - [M_time:ASTROLOGICAL] calculate date for Easter given a year
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -3736,7 +3734,7 @@ end subroutine Easter
 !!##NAME
 !!    system_sleep(3f) - [M_time:C_INTERFACE] call C sleep(3c) or usleep(3c)
 !!    procedure
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
 !!    subroutine system_sleep(wait_seconds)
@@ -3765,17 +3763,17 @@ end subroutine Easter
 !!        !
 !!        write(*,'(a)')"Time before integer call is: ",now()
 !!        call system_sleep(4)
-!!        write(*,'(a)')"Time after  integer call is: ",now()
+!!        write(*,'(a)')"Time after integer call is: ",now()
 !!        !
 !!        write(*,'(a)')"Time before real call is: ",now()
 !!        call system_sleep(4.0)
-!!        write(*,'(a)')"Time after  real call is: ",now()
+!!        write(*,'(a)')"Time after real call is: ",now()
 !!        !
 !!        write(*,'(a)')"Time before loop is: ",now()
 !!        do i=1,1000
 !!           call system_sleep(4.0/1000.0)
 !!        enddo
-!!        write(*,'(a)')"Time after loop  is: ",now()
+!!        write(*,'(a)')"Time after loop is: ",now()
 !!        !
 !!     end program demo_system_sleep
 !!
@@ -3787,18 +3785,18 @@ end subroutine Easter
 !!      Sunday, July 17th, 2016 2:29:49 AM UTC-0240
 !!      Time before real call is:
 !!      Sunday, July 17th, 2016 2:29:49 AM UTC-0240
-!!      Time after  real call is:
+!!      Time after real call is:
 !!      Sunday, July 17th, 2016 2:29:53 AM UTC-0240
 !!      Time before loop is:
 !!      Sunday, July 17th, 2016 2:29:53 AM UTC-0240
-!!      Time after loop  is:
+!!      Time after loop is:
 !!      Sunday, July 17th, 2016 2:30:09 AM UTC-0240
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3839,33 +3837,33 @@ end subroutine call_sleep
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine call_usleep(wait_seconds)
-use,intrinsic                   :: iso_c_binding, only: c_int
+subroutine call_usleep(milliseconds)
 
 ! ident_32="@(#) M_time call_usleep(3fp) call usleep(3c)"
 
-integer(kind=c_int),intent(in)  :: wait_seconds
-integer(kind=c_int)             :: how_long
+use,intrinsic                   :: iso_c_binding, only: c_int
+integer(kind=c_int),intent(in)  :: milliseconds
+integer(kind=c_int)             :: status
 interface
-   function c_usleep(seconds) bind (C,name="usleep")
+   function c_usleep(mseconds) bind (C,name="usleep")
       import
       integer(c_int)       :: c_usleep ! should be unsigned int (not available in Fortran). OK until highest bit gets set.
-      integer(c_int), intent(in), VALUE :: seconds
+      integer(c_int), intent(in), VALUE :: mseconds
    end function c_usleep
 end interface
-   if(wait_seconds>0)then
-      how_long=c_usleep(wait_seconds)
+   if(milliseconds>0)then
+      status=c_usleep(milliseconds)
    endif
 end subroutine call_usleep
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-function getnow() result(values)
+function getnow() result(dat)
 
 ! ident_33="@(#) M_time getnow(3f) get DAT for current time or value of SOURCE_DATE_EPOCH"
 
-integer :: values(8)
-   call date_and_time(values=values)
+integer :: dat(8)
+   call date_and_time(values=dat)
 end function getnow
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

@@ -11,7 +11,9 @@
         !
         ! The case of long keywords are ignored.
         ! Values and short names remain case-sensitive
-        call set_mode('ignorecase')
+        call set_mode('ignorelongcase')
+        ! The case of short and long keywords are ignored
+        call set_mode('ignoreallcase')
         !
         ! short single-character boolean keys may be bundled
         ! but it is required that a single dash is used for
@@ -20,6 +22,7 @@
         !
         call set_args(' --switch_X:X F --switch-Y:Y F --ox:O F -t F -x F -o F')
         !
+        ! show the results
         print all,'--switch_X or -X ... ',lget('switch_X')
         print all,'--switch_Y or -Y ... ',lget('switch_Y')
         print all,'--ox or -O       ... ',lget('ox')

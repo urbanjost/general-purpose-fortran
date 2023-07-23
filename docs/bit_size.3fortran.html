@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bit_size (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bit_size (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>bit_size(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-bit_size(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 BIT_SIZE(3) - [BIT:INQUIRY] Bit size inquiry function
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ BIT_SIZE(3) - [BIT:INQUIRY] Bit size inquiry function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = bit_size(i)
 <P>
 <PRE>
-           integer(kind=KIND) function bit_size(i)
+         integer(kind=KIND) function bit_size(i)
 <P>
-            integer(kind=KIND),intent(in) :: i(..)
+          integer(kind=KIND),intent(in) :: i(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = bit_size(i)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -100,8 +94,8 @@ I shall be of type integer. It may be a scalar or an array.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the value of KIND is any valid value for an integer kind parameter on the
-processor.
+the value of KIND is any valid value for an integer kind parameter
+on the processor.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -115,6 +109,7 @@ the return value is a scalar of the same kind as the input value.
 
 </A>
 <BLOCKQUOTE>
+<P>
 BIT_SIZE(3) returns the number of bits (integer precision plus sign bit)
 represented by the type of the integer I.
 </BLOCKQUOTE>
@@ -124,14 +119,15 @@ represented by the type of the integer I.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-I : An integer value of any kind whose size in bits is to be determined.
-Because only the type of the argument is examined, the argument need not
-be defined; I can be a scalar or an array, but a scalar representing just
-a single element is always returned.
+I : An integer value of any kind whose size in bits is to be
+determined. Because only the type of the argument is examined, the
+argument need not be defined; I can be a scalar or an array, but a
+scalar representing just a single element is always returned.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -140,51 +136,49 @@ a single element is always returned.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>The number of bits used to represent a value of the type and kind of i.</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-The
-result is a integer scalar of the same kind as i.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The number of bits used to represent a value of the type and kind of i.
+The result is a integer scalar of the same kind as i.
+</BLOCKQUOTE>
 <A name=6>
 
      <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_bit_size
-      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      use,intrinsic :: iso_fortran_env, only : integer_kinds
-      implicit none
-      character(len=*),parameter   :: fmt=&
-      & &#146;(a,": bit size is ",i3," which is kind=",i3," on this platform")&#146;
+    program demo_bit_size
+    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    use,intrinsic :: iso_fortran_env, only : integer_kinds
+    implicit none
+    character(len=*),parameter   :: fmt=&
+    & &#146;(a,": bit size is ",i3," which is kind=",i3," on this platform")&#146;
 <P>
-          ! default integer bit size on this platform
-          write(*,fmt) "default", bit_size(0), kind(0)
+        ! default integer bit size on this platform
+        write(*,fmt) "default", bit_size(0), kind(0)
 <P>
-          write(*,fmt) "int8   ", bit_size(0_int8),   kind(0_int8)
-          write(*,fmt) "int16  ", bit_size(0_int16),  kind(0_int16)
-          write(*,fmt) "int32  ", bit_size(0_int32),  kind(0_int32)
-          write(*,fmt) "int64  ", bit_size(0_int64),  kind(0_int64)
+        write(*,fmt) "int8   ", bit_size(0_int8),   kind(0_int8)
+        write(*,fmt) "int16  ", bit_size(0_int16),  kind(0_int16)
+        write(*,fmt) "int32  ", bit_size(0_int32),  kind(0_int32)
+        write(*,fmt) "int64  ", bit_size(0_int64),  kind(0_int64)
 <P>
-          write(*,&#146;(a,*(i0:,", "))&#146;) "The available kinds are ",integer_kinds
+        write(*,&#146;(a,*(i0:,", "))&#146;) "The available kinds are ",integer_kinds
 <P>
-      end program demo_bit_size
+    end program demo_bit_size
 <P>
 </PRE>
 Typical Results:
 <P>
 <PRE>
-          default: bit size is  32 which is kind=  4 on this platform
-          int8   : bit size is   8 which is kind=  1 on this platform
-          int16  : bit size is  16 which is kind=  2 on this platform
-          int32  : bit size is  32 which is kind=  4 on this platform
-          int64  : bit size is  64 which is kind=  8 on this platform
-          The available kinds are 1, 2, 4, 8, 16
+        default: bit size is  32 which is kind=  4 on this platform
+        int8   : bit size is   8 which is kind=  1 on this platform
+        int16  : bit size is  16 which is kind=  2 on this platform
+        int32  : bit size is  32 which is kind=  4 on this platform
+        int64  : bit size is  64 which is kind=  8 on this platform
+        The available kinds are 1, 2, 4, 8, 16
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -194,6 +188,7 @@ Typical Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -202,16 +197,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 ****(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022            bit_size(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bit_size (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4582d65d-b7d0-464d-8d3a-6bdba4c695a2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bit_size (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8f1138b4-537b-4c92-8aac-438d7af63ccc using man macros.</FONT>
 <br><br><center><img src="images/bit_size.3fortran.gif"></center>
 </div>
 </div>

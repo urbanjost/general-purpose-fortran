@@ -107,11 +107,11 @@ if ( test $# -eq 0 )
 then
    # 
    case "`uname -s`" in
-   *CYGWIN*)man -k '.' > $SCRATCH.man;;
-   *CYGWIN*)man -k '\('|col -b > $SCRATCH.man;;
-   *)man -k ' ' > $SCRATCH.man;;
-   *)man -k '.' > $SCRATCH.man;;
-   *)man -k '\('|col -b > $SCRATCH.man;;
+   *CYGWIN*)env MANWIDTH=256 man -k '.' > $SCRATCH.man;;
+   *CYGWIN*)env MANWIDTH=256 man -k '\('|col -b > $SCRATCH.man;;
+   *)env MANWIDTH=256 man -k ' ' > $SCRATCH.man;;
+   *)env MANWIDTH=256 man -k '.' > $SCRATCH.man;;
+   *)env MANWIDTH=256 man -k '\('|col -b > $SCRATCH.man;;
    esac
 elif [ "$*" = '--help' ]
 then
@@ -156,7 +156,7 @@ else
    *)
    if [ "$#" -gt 1 ]
    then
-      man -k $*
+      env MANWIDTH=256 man -k $*
       man $* </dev/null|col -b |grep -v '^No manual entry for '|expand|cat -s> $SCRATCH.man
    else
       # generate flat text copy of manpages in scratch file

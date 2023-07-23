@@ -201,17 +201,21 @@ case('1','abs')
 
 textblock=[character(len=256) :: &
 '', &
-'abs(3fortran)                                                    abs(3fortran)', &
+'abs(3fortran)                                                   abs(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ABS(3) - [NUMERIC] Absolute value', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = abs(a)', &
 '', &
-'           elemental TYPE(kind=KIND) function abs(a)', &
+'          elemental TYPE(kind=KIND) function abs(a)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: a', &
+'           TYPE(kind=KIND),intent(in) :: a', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A may be any real, integer, or complex value.', &
@@ -242,7 +246,7 @@ textblock=[character(len=256) :: &
 '  If A is complex with value (X, Y), the result is a real equal to a', &
 '  processor-dependent approximation to', &
 '', &
-'              sqrt(x**2 + y**2)', &
+'             sqrt(x**2 + y**2)', &
 '', &
 '  computed without undue overflow or underflow (that means the computation of', &
 '  the result can overflow the allowed magnitude of the real value returned,', &
@@ -261,66 +265,67 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer,parameter :: dp=kind(0.0d0)', &
 '', &
-'      integer           :: i = -1', &
-'      real              :: x = -1.0', &
-'      complex           :: z = (-3.0,-4.0)', &
-'      doubleprecision   :: rr = -45.78_dp', &
+'      integer          :: i = -1', &
+'      real             :: x = -1.0', &
+'      complex          :: z = (-3.0,-4.0)', &
+'      doubleprecision  :: rr = -45.78_dp', &
 '', &
 '      character(len=*),parameter :: &', &
-'         ! some formats', &
-'         frmt  =  ''(1x,a15,1x," In: ",g0,            T51," Out: ",g0)'', &', &
-'         frmtc = ''(1x,a15,1x," In: (",g0,",",g0,")",T51," Out: ",g0)'',  &', &
-'         g     = ''(*(g0,1x))''', &
+'        ! some formats', &
+'        frmt  =  ''(1x,a15,1x," In: ",g0,           T51," Out: ",g0)'', &', &
+'        frmtc = ''(1x,a15,1x," In: (",g0,",",g0,")",T51," Out: ",g0)'',        &', &
+'        g     = ''(*(g0,1x))''', &
 '', &
-'        ! basic usage', &
-'          ! any integer, real, or complex type', &
-'          write(*, frmt)  ''integer         '',  i, abs(i)', &
-'          write(*, frmt)  ''real            '',  x, abs(x)', &
-'          write(*, frmt)  ''doubleprecision '', rr, abs(rr)', &
-'          write(*, frmtc) ''complex         '',  z, abs(z)', &
+'       ! basic usage', &
+'         ! any integer, real, or complex type', &
+'         write(*, frmt)  ''integer        '',  i, abs(i)', &
+'         write(*, frmt)  ''real           '',  x, abs(x)', &
+'         write(*, frmt)  ''doubleprecision '', rr, abs(rr)', &
+'         write(*, frmtc) ''complex        '',  z, abs(z)', &
 '', &
-'        ! You can take the absolute value of any value whose positive value', &
-'        ! is representable with the same type and kind.', &
-'          write(*, *) ''abs range test : '', abs(huge(0)), abs(-huge(0))', &
-'          write(*, *) ''abs range test : '', abs(huge(0.0)), abs(-huge(0.0))', &
-'          write(*, *) ''abs range test : '', abs(tiny(0.0)), abs(-tiny(0.0))', &
-'          ! A dusty corner is that abs(-huge(0)-1) of an integer would be', &
-'          ! a representable negative value on most machines but result in a', &
-'          ! positive value out of range.', &
+'       ! You can take the absolute value of any value whose positive value', &
+'       ! is representable with the same type and kind.', &
+'         write(*, *) ''abs range test : '', abs(huge(0)), abs(-huge(0))', &
+'         write(*, *) ''abs range test : '', abs(huge(0.0)), abs(-huge(0.0))', &
+'         write(*, *) ''abs range test : '', abs(tiny(0.0)), abs(-tiny(0.0))', &
+'         ! A dusty corner is that abs(-huge(0)-1) of an integer would be', &
+'         ! a representable negative value on most machines but result in a', &
+'         ! positive value out of range.', &
 '', &
-'        ! elemental', &
-'          write(*, g) '' abs is elemental:'', abs([20,  0,  -1,  -3,  100])', &
+'       ! elemental', &
+'         write(*, g) '' abs is elemental:'', abs([20,  0,  -1,  -3,  100])', &
 '', &
-'        ! COMPLEX input produces REAL output', &
-'          write(*, g)'' complex input produces real output'', &', &
-'          & abs(cmplx(30.0_dp,40.0_dp,kind=dp))', &
-'          ! dusty corner: "kind=dp" is required or the value returned by', &
-'          ! CMPLX() is a default real instead of double precision', &
+'       ! COMPLEX input produces REAL output', &
+'         write(*, g)'' complex input produces real output'', &', &
+'         & abs(cmplx(30.0_dp,40.0_dp,kind=dp))', &
+'         ! dusty corner: "kind=dp" is required or the value returned by', &
+'         ! CMPLX() is a default real instead of double precision', &
 '', &
-'        ! the returned value for complex input can be thought of as the', &
-'        ! distance from the origin <0,0>', &
-'          write(*, g) '' distance of ('', z, '') from zero is'', abs( z )', &
-'          write(*, g) '' so beware of overflow with complex values''', &
-'          write(*, g) abs(cmplx( huge(0.0), huge(0.0) ))', &
-'          write(*, g) '' because the biggest default real is'',huge(0.0)', &
+'       ! the returned value for complex input can be thought of as the', &
+'       ! distance from the origin <0,0>', &
+'         write(*, g) '' distance of ('', z, '') from zero is'', abs( z )', &
+'         write(*, g) '' so beware of overflow with complex values''', &
+'         !write(*, g) abs(cmplx( huge(0.0), huge(0.0) ))', &
+'         write(*, g) '' because the biggest default real is'',huge(0.0)', &
 '', &
 '      end program demo_abs', &
 '', &
 '  Results:', &
 '', &
-'          integer          In: -1                     Out: 1', &
-'          real             In: -1.000000              Out: 1.000000', &
-'          doubleprecision  In: -45.78000000000000     Out: 45.78000000000000', &
-'          complex          In: (-3.000000,-4.000000)  Out: 5.000000', &
-'          abs range test :   2147483647  2147483647', &
-'          abs range test :   3.4028235E+38  3.4028235E+38', &
-'          abs range test :   1.1754944E-38  1.1754944E-38', &
-'          abs is elemental: 20 0 1 3 100', &
-'          complex input produces real output 50.00000000000000', &
-'          distance of ( -3.000000 -4.000000 ) from zero is 5.000000', &
-'          so beware of overflow with complex values', &
-'          Inf', &
-'          because the biggest default real is .3402823E+39', &
+'         integer          In: -1                     Out: 1', &
+'         real             In: -1.000000              Out: 1.000000', &
+'         doubleprecision  In: -45.78000000000000     Out: 45.78000000000000', &
+'         complex          In: (-3.000000,-4.000000)  Out: 5.000000', &
+'         abs range test :   2147483647  2147483647', &
+'         abs range test :   3.4028235E+38  3.4028235E+38', &
+'         abs range test :   1.1754944E-38  1.1754944E-38', &
+'         abs is elemental: 20 0 1 3 100', &
+'         complex input produces real output 50.00000000000000', &
+'         distance of ( -3.000000 -4.000000 ) from zero is 5.000000', &
+'         so beware of overflow with complex values', &
+'         Inf', &
+'         because the biggest default real is .3402823E+39', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -330,7 +335,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  abs(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   abs(3fortran)', &
 '']
 
 shortname="abs"
@@ -341,19 +348,23 @@ case('2','achar')
 
 textblock=[character(len=256) :: &
 '', &
-'achar(3fortran)                                                achar(3fortran)', &
+'achar(3fortran)                                               achar(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ACHAR(3) - [CHARACTER:CONVERSION] Returns a character in a specified', &
 '  position in the ASCII collating sequence', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = achar(i [,kind])', &
 '', &
-'           elemental character(len=1,kind=KIND) function achar(i,KIND)', &
+'          elemental character(len=1,kind=KIND) function achar(i,KIND)', &
 '', &
-'            integer(kind=**),intent(in) :: i', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           integer(kind=**),intent(in) :: i', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -369,7 +380,7 @@ textblock=[character(len=256) :: &
 '  to control terminal attributes, as it makes it easy to print unprintable', &
 '  characters such as escape and tab. For example:', &
 '', &
-'         write(*,''(*(a))'')achar(27),''[2J''', &
+'        write(*,''(*(a))'')achar(27),''[2J''', &
 '', &
 '  will clear the screen on an ANSI-compatible terminal display,', &
 '', &
@@ -395,6 +406,7 @@ textblock=[character(len=256) :: &
 '      |120  x |121  y |122  z |123  { |124  | |125  } |126  ~ |127 del|', &
 '      *-------*-------*-------*-------*-------*-------*-------*-------*', &
 '', &
+'', &
 'OPTIONS', &
 '  o  I : the integer value to convert to an ASCII character, in the range 0 to', &
 '     127. : ACHAR(3) shall have the value C for any character C capable of', &
@@ -416,16 +428,16 @@ textblock=[character(len=256) :: &
 '      use,intrinsic::iso_fortran_env,only:int8,int16,int32,int64', &
 '      implicit none', &
 '      integer :: i', &
-'         i=65', &
-'         write(*,''("decimal     =",i0)'')i', &
-'         write(*,''("character   =",a1)'')achar(i)', &
-'         write(*,''("binary      =",b0)'')achar(i)', &
-'         write(*,''("octal       =",o0)'')achar(i)', &
-'         write(*,''("hexadecimal =",z0)'')achar(i)', &
+'        i=65', &
+'        write(*,''("decimal    =",i0)'')i', &
+'        write(*,''("character  =",a1)'')achar(i)', &
+'        write(*,''("binary     =",b0)'')achar(i)', &
+'        write(*,''("octal      =",o0)'')achar(i)', &
+'        write(*,''("hexadecimal =",z0)'')achar(i)', &
 '', &
-'         write(*,''(8(i3,1x,a,1x),/)'')(i,achar(i), i=32,126)', &
+'        write(*,''(8(i3,1x,a,1x),/)'')(i,achar(i), i=32,126)', &
 '', &
-'         write(*,''(a)'')upper(''Mixed Case'')', &
+'        write(*,''(a)'')upper(''Mixed Case'')', &
 '      contains', &
 '      ! a classic use of achar(3) is to convert the case of a string', &
 '', &
@@ -434,56 +446,56 @@ textblock=[character(len=256) :: &
 '      !$@(#) upper(3f): function to return a trimmed uppercase-only string', &
 '      !', &
 '      ! input string to convert to all uppercase', &
-'      character(*), intent(in)      :: str', &
+'      character(*), intent(in)     :: str', &
 '      ! output string that contains no miniscule letters', &
-'      character(len(str))           :: string', &
-'      integer                       :: i, iend', &
-'      integer,parameter             :: toupper = iachar(''A'')-iachar(''a'')', &
-'         iend=len_trim(str)', &
-'         ! initialize output string to trimmed input string', &
-'         string = str(:iend)', &
-'         ! process each letter in the string', &
-'         do concurrent (i = 1:iend)', &
-'             select case (str(i:i))', &
-'             ! located miniscule letter', &
-'             case (''a'':''z'')', &
-'                ! change miniscule to majuscule letter', &
-'                string(i:i) = achar(iachar(str(i:i))+toupper)', &
-'             end select', &
-'         enddo', &
+'      character(len(str))          :: string', &
+'      integer                      :: i, iend', &
+'      integer,parameter            :: toupper = iachar(''A'')-iachar(''a'')', &
+'        iend=len_trim(str)', &
+'        ! initialize output string to trimmed input string', &
+'        string = str(:iend)', &
+'        ! process each letter in the string', &
+'        do concurrent (i = 1:iend)', &
+'            select case (str(i:i))', &
+'            ! located miniscule letter', &
+'            case (''a'':''z'')', &
+'               ! change miniscule to majuscule letter', &
+'               string(i:i) = achar(iachar(str(i:i))+toupper)', &
+'            end select', &
+'        enddo', &
 '      end function upper', &
 '      end program demo_achar', &
 '', &
 '  Results:', &
 '', &
-'         decimal     =65', &
-'         character   =A', &
-'         binary      =1000001', &
-'         octal       =101', &
-'         hexadecimal =41', &
-'          32    33 !  34 "  35 #  36 $  37 %  38 &  39 ''', &
+'        decimal     =65', &
+'        character   =A', &
+'        binary      =1000001', &
+'        octal       =101', &
+'        hexadecimal =41', &
+'         32    33 !  34 "  35 #  36 $  37 %  38 &  39 ''', &
 '', &
-'          40 (  41 )  42 *  43 +  44 ,  45 -  46 .  47 /', &
+'         40 (  41 )  42 *  43 +  44 ,  45 -  46 .  47 /', &
 '', &
-'          48 0  49 1  50 2  51 3  52 4  53 5  54 6  55 7', &
+'         48 0  49 1  50 2  51 3  52 4  53 5  54 6  55 7', &
 '', &
-'          56 8  57 9  58 :  59 ;  60 <  61 =  62 >  63 ?', &
+'         56 8  57 9  58 :  59 ;  60 <  61 =  62 >  63 ?', &
 '', &
-'          64 @  65 A  66 B  67 C  68 D  69 E  70 F  71 G', &
+'         64 @  65 A  66 B  67 C  68 D  69 E  70 F  71 G', &
 '', &
-'          72 H  73 I  74 J  75 K  76 L  77 M  78 N  79 O', &
+'         72 H  73 I  74 J  75 K  76 L  77 M  78 N  79 O', &
 '', &
-'          80 P  81 Q  82 R  83 S  84 T  85 U  86 V  87 W', &
+'         80 P  81 Q  82 R  83 S  84 T  85 U  86 V  87 W', &
 '', &
-'          88 X  89 Y  90 Z  91 [  92 \  93 ]  94 ^  95 _', &
+'         88 X  89 Y  90 Z  91 [  92 \  93 ]  94 ^  95 _', &
 '', &
-'          96 `  97 a  98 b  99 c 100 d 101 e 102 f 103 g', &
+'         96 `  97 a  98 b  99 c 100 d 101 e 102 f 103 g', &
 '', &
-'         104 h 105 i 106 j 107 k 108 l 109 m 110 n 111 o', &
+'        104 h 105 i 106 j 107 k 108 l 109 m 110 n 111 o', &
 '', &
-'         112 p 113 q 114 r 115 s 116 t 117 u 118 v 119 w', &
+'        112 p 113 q 114 r 115 s 116 t 117 u 118 v 119 w', &
 '', &
-'         120 x 121 y 122 z 123 { 124 | 125 } 126 ~', &
+'        120 x 121 y 122 z 123 { 124 | 125 } 126 ~', &
 '', &
 '   MIXED CASE', &
 'STANDARD', &
@@ -499,7 +511,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                achar(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 achar(3fortran)', &
 '']
 
 shortname="achar"
@@ -510,17 +524,21 @@ case('3','acos')
 
 textblock=[character(len=256) :: &
 '', &
-'acos(3fortran)                                                  acos(3fortran)', &
+'acos(3fortran)                                                 acos(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ACOS(3) - [MATHEMATICS:TRIGONOMETRIC] Arccosine (inverse cosine) function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = acos(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function acos(x)', &
+'          elemental TYPE(kind=KIND) function acos(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  TYPE may be real or complex', &
@@ -549,23 +567,23 @@ textblock=[character(len=256) :: &
 '      character(len=*),parameter :: all=''(*(g0,1x))''', &
 '      real(kind=real64) :: x , d2r', &
 '', &
-'         ! basics', &
-'          x = 0.866_real64', &
-'          print all,''acos('',x,'') is '', acos(x)', &
+'        ! basics', &
+'         x = 0.866_real64', &
+'         print all,''acos('',x,'') is '', acos(x)', &
 '', &
-'         ! acos(-1) should be PI', &
-'          print all,''for reference &', &
-'          &PI ~= 3.14159265358979323846264338327950288419716939937510''', &
-'          write(*,*) acos(-1.0_real64)', &
-'          d2r=acos(-1.0_real64)/180.0_real64', &
-'          print all,''90 degrees is '', d2r*90.0_real64, '' radians''', &
-'         ! elemental', &
-'          print all,''elemental'',acos([-1.0,-0.5,0.0,0.50,1.0])', &
-'         ! complex', &
-'          print *,''complex'',acos( (-1.0,  0.0) )', &
-'          print *,''complex'',acos( (-1.0, -1.0) )', &
-'          print *,''complex'',acos( ( 0.0, -0.0) )', &
-'          print *,''complex'',acos( ( 1.0,  0.0) )', &
+'        ! acos(-1) should be PI', &
+'         print all,''for reference &', &
+'         &PI ~= 3.14159265358979323846264338327950288419716939937510''', &
+'         write(*,*) acos(-1.0_real64)', &
+'         d2r=acos(-1.0_real64)/180.0_real64', &
+'         print all,''90 degrees is '', d2r*90.0_real64, '' radians''', &
+'        ! elemental', &
+'         print all,''elemental'',acos([-1.0,-0.5,0.0,0.50,1.0])', &
+'        ! complex', &
+'         print *,''complex'',acos( (-1.0,  0.0) )', &
+'         print *,''complex'',acos( (-1.0, -1.0) )', &
+'         print *,''complex'',acos( ( 0.0, -0.0) )', &
+'         print *,''complex'',acos( ( 1.0,  0.0) )', &
 '', &
 '      end program demo_acos', &
 '', &
@@ -573,13 +591,14 @@ textblock=[character(len=256) :: &
 '', &
 '       acos( 0.86599999999999999 ) is  0.52364958093182890', &
 '       for reference PI ~= 3.14159265358979323846264338327950288419716939937510', &
-'          3.1415926535897931', &
+'         3.1415926535897931', &
 '       90 degrees is  1.5707963267948966  radians', &
 '       elemental 3.14159274 2.09439516 1.57079637 1.04719758 0.00000000', &
-'        complex            (3.14159274,-0.00000000)', &
-'        complex             (2.23703575,1.06127501)', &
-'        complex             (1.57079637,0.00000000)', &
-'        complex            (0.00000000,-0.00000000)', &
+'       complex            (3.14159274,-0.00000000)', &
+'       complex             (2.23703575,1.06127501)', &
+'       complex             (1.57079637,0.00000000)', &
+'       complex            (0.00000000,-0.00000000)', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77 ; for a complex argument - Fortran 2008', &
@@ -592,7 +611,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 acos(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  acos(3fortran)', &
 '']
 
 shortname="acos"
@@ -603,17 +624,21 @@ case('4','acosh')
 
 textblock=[character(len=256) :: &
 '', &
-'acosh(3fortran)                                                acosh(3fortran)', &
+'acosh(3fortran)                                               acosh(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ACOSH(3) - [MATHEMATICS:TRIGONOMETRIC] Inverse hyperbolic cosine function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = acosh(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function acosh(x)', &
+'          elemental TYPE(kind=KIND) function acosh(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  TYPE may be real or complex', &
@@ -626,7 +651,8 @@ textblock=[character(len=256) :: &
 '  ACOSH(3) computes the inverse hyperbolic cosine of X in radians.', &
 '', &
 'OPTIONS', &
-'  o  X : The value to compute the hyperbolic cosine of', &
+'  o  X : The value to compute the hyperbolic cosine of. A real value should be', &
+'     >= 1 or the result with be a Nan.', &
 '', &
 'RESULT', &
 '  The result has a value equal to a processor-dependent approximation to the', &
@@ -644,12 +670,16 @@ textblock=[character(len=256) :: &
 '      use,intrinsic :: iso_fortran_env, only : dp=>real64,sp=>real32', &
 '      implicit none', &
 '      real(kind=dp), dimension(3) :: x = [ 1.0d0, 2.0d0, 3.0d0 ]', &
-'         write (*,*) acosh(x)', &
+'        if(any(x).lt.1)then', &
+'           write (*,*) '' warning: values < 1 are present''', &
+'        endif', &
+'        write (*,*) acosh(x)', &
 '      end program demo_acosh', &
 '', &
 '  Results:', &
 '', &
-'       0.000000000000000E+000   1.31695789692482        1.76274717403909', &
+'       0.000000000000000E+000  1.31695789692482        1.76274717403909', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -662,7 +692,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                acosh(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 acosh(3fortran)', &
 '']
 
 shortname="acosh"
@@ -673,17 +705,21 @@ case('5','adjustl')
 
 textblock=[character(len=256) :: &
 '', &
-'adjustl(3fortran)                                            adjustl(3fortran)', &
+'adjustl(3fortran)                                           adjustl(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ADJUSTL(3) - [CHARACTER:WHITESPACE] Left-justified a string', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = adjustl(string)', &
 '', &
-'         elemental character(len=len(string),kind=KIND) function adjustl(string)', &
+'        elemental character(len=len(string),kind=KIND) function adjustl(string)', &
 '', &
-'          character(len=*,kind=KIND),intent(in) :: string', &
+'         character(len=*,kind=KIND),intent(in) :: string', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING is a character variable of any supported kind', &
@@ -711,38 +747,39 @@ textblock=[character(len=256) :: &
 '      character(len=:),allocatable :: astr', &
 '      integer :: length', &
 '', &
-'         ! basic use', &
-'          write(*,''(a,"[",a,"]")'') ''original: '',str', &
-'          str=adjustl(str)', &
-'          write(*,''(a,"[",a,"]")'') ''adjusted: '',str', &
+'        ! basic use', &
+'         write(*,''(a,"[",a,"]")'') ''original: '',str', &
+'         str=adjustl(str)', &
+'         write(*,''(a,"[",a,"]")'') ''adjusted: '',str', &
 '', &
-'          ! a fixed-length string can be printed', &
-'          ! trimmed using trim(3f) or len_trim(3f)', &
-'          write(*,''(a,"[",a,"]")'') ''trimmed:  '',trim(str)', &
-'          length=len_trim(str)', &
-'          write(*,''(a,"[",a,"]")'') ''substring:'',str(:length)', &
+'         ! a fixed-length string can be printed', &
+'         ! trimmed using trim(3f) or len_trim(3f)', &
+'         write(*,''(a,"[",a,"]")'') ''trimmed:  '',trim(str)', &
+'         length=len_trim(str)', &
+'         write(*,''(a,"[",a,"]")'') ''substring:'',str(:length)', &
 '', &
-'          ! note an allocatable string stays the same length too', &
-'          ! and is not trimmed by just an adjustl(3f) call.', &
-'          astr=''    allocatable string   ''', &
-'          write(*,''(a,"[",a,"]")'') ''original:'',astr', &
-'          astr = adjustl(astr)', &
-'          write(*,''(a,"[",a,"]")'') ''adjusted:'',astr', &
-'          ! trim(3f) can be used to change the length', &
-'          astr = trim(astr)', &
-'          write(*,''(a,"[",a,"]")'') ''trimmed: '',astr', &
+'         ! note an allocatable string stays the same length too', &
+'         ! and is not trimmed by just an adjustl(3f) call.', &
+'         astr=''    allocatable string  ''', &
+'         write(*,''(a,"[",a,"]")'') ''original:'',astr', &
+'         astr = adjustl(astr)', &
+'         write(*,''(a,"[",a,"]")'') ''adjusted:'',astr', &
+'         ! trim(3f) can be used to change the length', &
+'         astr = trim(astr)', &
+'         write(*,''(a,"[",a,"]")'') ''trimmed: '',astr', &
 '', &
 '      end program demo_adjustl', &
 '', &
 '  Results:', &
 '', &
-'         original: [   sample string    ]', &
-'         adjusted: [sample string       ]', &
-'         trimmed:  [sample string]', &
-'         substring:[sample string]', &
-'         original:[    allocatable string   ]', &
-'         adjusted:[allocatable string       ]', &
-'         trimmed: [allocatable string]', &
+'        original: [   sample string    ]', &
+'        adjusted: [sample string       ]', &
+'        trimmed:  [sample string]', &
+'        substring:[sample string]', &
+'        original:[    allocatable string   ]', &
+'        adjusted:[allocatable string       ]', &
+'        trimmed: [allocatable string]', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -752,7 +789,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              adjustl(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               adjustl(3fortran)', &
 '']
 
 shortname="adjustl"
@@ -763,17 +802,21 @@ case('6','adjustr')
 
 textblock=[character(len=256) :: &
 '', &
-'adjustr(3fortran)                                            adjustr(3fortran)', &
+'adjustr(3fortran)                                           adjustr(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ADJUSTR(3) - [CHARACTER:WHITESPACE] Right-justify a string', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = adjustr(string)', &
 '', &
-'         elemental character(len=len(string),kind=KIND) function adjustr(string)', &
+'        elemental character(len=len(string),kind=KIND) function adjustr(string)', &
 '', &
-'          character(len=*,kind=KIND),intent(in) :: string', &
+'         character(len=*,kind=KIND),intent(in) :: string', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING is a character variable', &
@@ -798,37 +841,38 @@ textblock=[character(len=256) :: &
 '      program demo_adjustr', &
 '      implicit none', &
 '      character(len=20) :: str', &
-'         ! print a short number line', &
-'         write(*,''(a)'')repeat(''1234567890'',2)', &
+'        ! print a short number line', &
+'        write(*,''(a)'')repeat(''1234567890'',2)', &
 '', &
-'        ! basic usage', &
-'         str = ''  sample string ''', &
-'         write(*,''(a)'') str', &
-'         str = adjustr(str)', &
-'         write(*,''(a)'') str', &
+'       ! basic usage', &
+'        str = ''  sample string ''', &
+'        write(*,''(a)'') str', &
+'        str = adjustr(str)', &
+'        write(*,''(a)'') str', &
 '', &
-'         !', &
-'         ! elemental', &
-'         !', &
-'         write(*,''(a)'')repeat(''1234567890'',5)', &
-'         write(*,''(a)'')adjustr([character(len=50) :: &', &
-'         ''  first           '', &', &
-'         ''     second       '', &', &
-'         ''         third    '' ])', &
-'         write(*,''(a)'')repeat(''1234567890'',5)', &
+'        !', &
+'        ! elemental', &
+'        !', &
+'        write(*,''(a)'')repeat(''1234567890'',5)', &
+'        write(*,''(a)'')adjustr([character(len=50) :: &', &
+'        ''  first          '', &', &
+'        ''     second      '', &', &
+'        ''        third    '' ])', &
+'        write(*,''(a)'')repeat(''1234567890'',5)', &
 '', &
 '      end program demo_adjustr', &
 '', &
 '  Results:', &
 '', &
-'         12345678901234567890', &
-'           sample string', &
-'                sample string', &
-'         12345678901234567890123456789012345678901234567890', &
-'                                                      first', &
-'                                                     second', &
-'                                                      third', &
-'         12345678901234567890123456789012345678901234567890', &
+'        12345678901234567890', &
+'          sample string', &
+'               sample string', &
+'        12345678901234567890123456789012345678901234567890', &
+'                                                     first', &
+'                                                    second', &
+'                                                     third', &
+'        12345678901234567890123456789012345678901234567890', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -838,7 +882,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              adjustr(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               adjustr(3fortran)', &
 '']
 
 shortname="adjustr"
@@ -849,17 +895,21 @@ case('7','aimag')
 
 textblock=[character(len=256) :: &
 '', &
-'aimag(3fortran)                                                aimag(3fortran)', &
+'aimag(3fortran)                                               aimag(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  AIMAG(3) - [TYPE:NUMERIC] Imaginary part of complex number', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = aimag(z)', &
 '', &
-'           elemental complex(kind=KIND) function aimag(z)', &
+'          elemental complex(kind=KIND) function aimag(z)', &
 '', &
-'            complex(kind=KIND),intent(in) :: z', &
+'           complex(kind=KIND),intent(in) :: z', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  The type of the argument Z shall be complex and any supported complex', &
@@ -892,23 +942,23 @@ textblock=[character(len=256) :: &
 '       & real32, real64, real128', &
 '      implicit none', &
 '      character(len=*),parameter :: g=''(*(1x,g0))''', &
-'      complex              :: z4', &
+'      complex             :: z4', &
 '      complex(kind=real64) :: z8', &
-'         ! basics', &
-'          z4 = cmplx(1.e0, 2.e0)', &
-'          print *, ''value='',z4', &
-'          print g, ''imaginary part='',aimag(z4),''or'', z4%im', &
+'        ! basics', &
+'         z4 = cmplx(1.e0, 2.e0)', &
+'         print *, ''value='',z4', &
+'         print g, ''imaginary part='',aimag(z4),''or'', z4%im', &
 '', &
-'          ! other kinds other than the default may be supported', &
-'          z8 = cmplx(3.e0_real64, 4.e0_real64,kind=real64)', &
-'          print *, ''value='',z8', &
-'          print g, ''imaginary part='',aimag(z8),''or'', z8%im', &
+'         ! other kinds other than the default may be supported', &
+'         z8 = cmplx(3.e0_real64, 4.e0_real64,kind=real64)', &
+'         print *, ''value='',z8', &
+'         print g, ''imaginary part='',aimag(z8),''or'', z8%im', &
 '', &
-'          ! an elemental function can be passed an array', &
-'          print *', &
-'          print *, [z4,z4/2.0,z4+z4,z4**3]', &
-'          print *', &
-'          print *, aimag([z4,z4/2.0,z4+z4,z4**3])', &
+'         ! an elemental function can be passed an array', &
+'         print *', &
+'         print *, [z4,z4/2.0,z4+z4,z4**3]', &
+'         print *', &
+'         print *, aimag([z4,z4/2.0,z4+z4,z4**3])', &
 '', &
 '      end program demo_aimag', &
 '', &
@@ -922,7 +972,8 @@ textblock=[character(len=256) :: &
 '       (1.00000000,2.00000000) (0.500000000,1.00000000) (2.00000000,4.00000000)', &
 '       (-11.0000000,-2.00000000)', &
 '', &
-'         2.00000000       1.00000000       4.00000000      -2.00000000', &
+'        2.00000000       1.00000000       4.00000000      -2.00000000', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -946,7 +997,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                aimag(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 aimag(3fortran)', &
 '']
 
 shortname="aimag"
@@ -957,18 +1010,22 @@ case('8','aint')
 
 textblock=[character(len=256) :: &
 '', &
-'aint(3fortran)                                                  aint(3fortran)', &
+'aint(3fortran)                                                 aint(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  AINT(3) - [NUMERIC] Truncate toward zero to a whole number', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = aint(x [,kind])', &
 '', &
-'           elemental real(kind=KIND) function iaint(x,KIND)', &
+'          elemental real(kind=KIND) function iaint(x,KIND)', &
 '', &
-'            real(kind=**),intent(in)   :: x', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           real(kind=**),intent(in)   :: x', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -1002,34 +1059,35 @@ textblock=[character(len=256) :: &
 '      use, intrinsic :: iso_fortran_env, only : sp=>real32, dp=>real64', &
 '      implicit none', &
 '      real(kind=dp) :: x8', &
-'         print *,''basics:''', &
-'         print *,'' just chops off the fractional part''', &
-'         print *,  aint(-2.999), aint(-2.1111)', &
-'         print *,'' if |x| < 1 a positive zero is returned''', &
-'         print *,  aint(-0.999), aint( 0.9999)', &
-'         print *,'' input may be of any real kind''', &
-'         x8 = 4.3210_dp', &
-'         print *, aint(-x8), aint(x8)', &
-'         print *,''elemental:''', &
-'         print *,aint([ &', &
-'          &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &', &
-'          &  0.0,   &', &
-'          &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])', &
+'        print *,''basics:''', &
+'        print *,'' just chops off the fractional part''', &
+'        print *,  aint(-2.999), aint(-2.1111)', &
+'        print *,'' if |x| < 1 a positive zero is returned''', &
+'        print *,  aint(-0.999), aint( 0.9999)', &
+'        print *,'' input may be of any real kind''', &
+'        x8 = 4.3210_dp', &
+'        print *, aint(-x8), aint(x8)', &
+'        print *,''elemental:''', &
+'        print *,aint([ &', &
+'         &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &', &
+'         &  0.0,   &', &
+'         &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])', &
 '      end program demo_aint', &
 '', &
 '  Results:', &
 '', &
 '       basics:', &
-'        just chops off the fractional part', &
-'        -2.000000      -2.000000', &
-'        if |x| < 1 a positive zero is returned', &
-'        0.0000000E+00  0.0000000E+00', &
-'        input may be of any real kind', &
-'        -4.00000000000000        4.00000000000000', &
+'       just chops off the fractional part', &
+'       -2.000000      -2.000000', &
+'       if |x| < 1 a positive zero is returned', &
+'       0.0000000E+00  0.0000000E+00', &
+'       input may be of any real kind', &
+'       -4.00000000000000        4.00000000000000', &
 '       elemental:', &
-'        -2.000000      -2.000000      -2.000000      -2.000000      -1.000000', &
-'        -1.000000      0.0000000E+00  0.0000000E+00  0.0000000E+00   1.000000', &
-'         1.000000       2.000000       2.000000       2.000000       2.000000', &
+'       -2.000000      -2.000000      -2.000000      -2.000000      -1.000000', &
+'       -1.000000      0.0000000E+00  0.0000000E+00  0.0000000E+00   1.000000', &
+'        1.000000       2.000000       2.000000       2.000000       2.000000', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -1039,7 +1097,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 aint(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  aint(3fortran)', &
 '']
 
 shortname="aint"
@@ -1050,19 +1110,23 @@ case('9','all')
 
 textblock=[character(len=256) :: &
 '', &
-'all(3fortran)                                                    all(3fortran)', &
+'all(3fortran)                                                   all(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ALL(3) - [ARRAY:REDUCTION] Determines if all the values are true', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = all(mask [,dim])', &
 '', &
-'           function all(mask ,dim)', &
+'          function all(mask ,dim)', &
 '', &
-'            logical(kind=KIND),intent(in) :: mask(..)', &
-'            integer,intent(in),optional   :: dim', &
-'            logical(kind=KIND)            :: all(..)', &
+'           logical(kind=KIND),intent(in) :: mask(..)', &
+'           integer,intent(in),optional   :: dim', &
+'           logical(kind=KIND)            :: all(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  MASK is a logical array', &
@@ -1113,24 +1177,26 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      logical,parameter :: T=.true., F=.false.', &
 '      logical bool', &
-'        ! basic usage', &
-'         ! is everything true?', &
-'         bool = all([ T,T,T ])', &
-'         bool = all([ T,F,T ])', &
-'         print *, bool', &
 '', &
-'        ! by a dimension', &
-'         ARRAYS: block', &
-'         integer :: a(2,3), b(2,3)', &
-'          ! set everything to one except one value in b', &
-'          a = 1', &
-'          b = 1', &
-'          b(2,2) = 2', &
-'          ! now compare those two arrays', &
-'          print *,''entire array :'', all(a ==  b )', &
-'          print *,''compare columns:'', all(a ==  b, dim=1)', &
-'          print *,''compare rows:'', all(a ==  b, dim=2)', &
-'        end block ARRAYS', &
+'       ! basic usage', &
+'        ! is everything true?', &
+'        bool = all([ T,T,T ])', &
+'        print *, ''are all values true?'', bool', &
+'        bool = all([ T,F,T ])', &
+'        print *, ''are all values true now?'', bool', &
+'', &
+'       ! compare matrices, even by a dimension', &
+'        ARRAYS: block', &
+'        integer :: a(2,3), b(2,3)', &
+'         ! set everything to one except one value in b', &
+'         a = 1', &
+'         b = 1', &
+'         b(2,2) = 2', &
+'         ! now compare those two arrays', &
+'         print *,''entire array :'', all(a ==  b )', &
+'         print *,''compare columns:'', all(a ==        b, dim=1)', &
+'         print *,''compare rows:'', all(a ==  b, dim=2)', &
+'       end block ARRAYS', &
 '', &
 '      end program demo_all', &
 '', &
@@ -1142,6 +1208,7 @@ textblock=[character(len=256) :: &
 '       >  compare columns: T F T', &
 '       >  compare rows: T F', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
@@ -1150,7 +1217,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  all(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   all(3fortran)', &
 '']
 
 shortname="all"
@@ -1161,18 +1230,22 @@ case('10','allocated')
 
 textblock=[character(len=256) :: &
 '', &
-'allocated(3fortran)                                        allocated(3fortran)', &
+'allocated(3fortran)                                       allocated(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ALLOCATED(3) - [ARRAY:INQUIRY] Allocation status of an allocatable entity', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = allocated(array|scalar)', &
 '', &
-'           logical function allocated(array,scalar)', &
+'          logical function allocated(array,scalar)', &
 '', &
-'            type(TYPE(kind=**)),allocatable,optional :: array(..)', &
-'            type(TYPE(kind=**)),allocatable,optional :: scalar', &
+'           type(TYPE(kind=**)),allocatable,optional :: array(..)', &
+'           type(TYPE(kind=**)),allocatable,optional :: scalar', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -1204,35 +1277,35 @@ textblock=[character(len=256) :: &
 '      real(kind=sp), allocatable :: x(:)', &
 '      character(len=256) :: message', &
 '      integer :: istat', &
-'        ! basics', &
-'         if( allocated(x)) then', &
-'             write(*,*)''do things if allocated''', &
-'         else', &
-'             write(*,*)''do things if not allocated''', &
-'         endif', &
+'       ! basics', &
+'        if( allocated(x)) then', &
+'            write(*,*)''do things if allocated''', &
+'        else', &
+'            write(*,*)''do things if not allocated''', &
+'        endif', &
 '', &
-'         ! if already allocated, deallocate', &
-'         if ( allocated(x) ) deallocate(x,STAT=istat, ERRMSG=message )', &
-'         if(istat.ne.0)then', &
-'            write(*,*)trim(message)', &
-'            stop', &
-'         endif', &
+'        ! if already allocated, deallocate', &
+'        if ( allocated(x) ) deallocate(x,STAT=istat, ERRMSG=message )', &
+'        if(istat.ne.0)then', &
+'           write(*,*)trim(message)', &
+'           stop', &
+'        endif', &
 '', &
-'         ! only if not allocated, allocate', &
-'         if ( .not. allocated(x) ) allocate(x(20))', &
+'        ! only if not allocated, allocate', &
+'        if ( .not. allocated(x) ) allocate(x(20))', &
 '', &
-'        ! allocation and intent(out)', &
-'         call intentout(x)', &
-'         write(*,*)''note it is deallocated!'',allocated(x)', &
+'       ! allocation and intent(out)', &
+'        call intentout(x)', &
+'        write(*,*)''note it is deallocated!'',allocated(x)', &
 '', &
-'         contains', &
+'        contains', &
 '', &
-'         subroutine intentout(arr)', &
-'         ! note that if arr has intent(out) and is allocatable,', &
-'         ! arr is deallocated on entry', &
-'         real(kind=sp),intent(out),allocatable :: arr(:)', &
-'             write(*,*)''note it was allocated in calling program'',allocated(arr)', &
-'         end subroutine intentout', &
+'        subroutine intentout(arr)', &
+'        ! note that if arr has intent(out) and is allocatable,', &
+'        ! arr is deallocated on entry', &
+'        real(kind=sp),intent(out),allocatable :: arr(:)', &
+'            write(*,*)''note it was allocated in calling program'',allocated(arr)', &
+'        end subroutine intentout', &
 '', &
 '      end program demo_allocated', &
 '', &
@@ -1242,6 +1315,7 @@ textblock=[character(len=256) :: &
 '       >  note it was allocated in calling program F', &
 '       >  note it is deallocated! F', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95. allocatable scalar entities were added in Fortran 2003.', &
 '', &
@@ -1250,7 +1324,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023            allocated(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             allocated(3fortran)', &
 '']
 
 shortname="allocated"
@@ -1261,18 +1337,22 @@ case('11','anint')
 
 textblock=[character(len=256) :: &
 '', &
-'anint(3fortran)                                                anint(3fortran)', &
+'anint(3fortran)                                               anint(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ANINT(3) - [NUMERIC] Real nearest whole number', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = anint(a [,kind])', &
 '', &
-'           elemental real(kind=KIND) function anint(x,KIND)', &
+'          elemental real(kind=KIND) function anint(x,KIND)', &
 '', &
-'            real(kind=**),intent(in)   :: x', &
-'            integer,intent(in),optional :: KIND', &
+'           real(kind=**),intent(in)   :: x', &
+'           integer,intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A is type real of any kind', &
@@ -1314,36 +1394,36 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real,allocatable :: arr(:)', &
 '', &
-'        ! basics', &
-'         print *, ''ANINT (2.783) has the value 3.0 =>'', anint(2.783)', &
-'         print *, ''ANINT (-2.783) has the value -3.0 =>'', anint(-2.783)', &
+'       ! basics', &
+'        print *, ''ANINT (2.783) has the value 3.0 =>'', anint(2.783)', &
+'        print *, ''ANINT (-2.783) has the value -3.0 =>'', anint(-2.783)', &
 '', &
-'         print *, ''by default the kind of the output is the kind of the input''', &
-'         print *, anint(1234567890.1234567890e0)', &
-'         print *, anint(1234567890.1234567890d0)', &
+'        print *, ''by default the kind of the output is the kind of the input''', &
+'        print *, anint(1234567890.1234567890e0)', &
+'        print *, anint(1234567890.1234567890d0)', &
 '', &
-'         print *, ''sometimes specifying the result kind is useful when passing''', &
-'         print *, ''results as an argument, for example.''', &
-'         print *, ''do you know why the results are different?''', &
-'         print *, anint(1234567890.1234567890,kind=real64)', &
-'         print *, anint(1234567890.1234567890d0,kind=real64)', &
+'        print *, ''sometimes specifying the result kind is useful when passing''', &
+'        print *, ''results as an argument, for example.''', &
+'        print *, ''do you know why the results are different?''', &
+'        print *, anint(1234567890.1234567890,kind=real64)', &
+'        print *, anint(1234567890.1234567890d0,kind=real64)', &
 '', &
-'        ! elemental', &
-'         print *, ''numbers on a cusp are always the most troublesome''', &
-'         print *, anint([ -2.7, -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, 0.0 ])', &
+'       ! elemental', &
+'        print *, ''numbers on a cusp are always the most troublesome''', &
+'        print *, anint([ -2.7, -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, 0.0 ])', &
 '', &
-'         print *, ''negative zero is processor dependent''', &
-'         arr=[ 0.0, 0.1, 0.5, 1.0, 1.5, 2.0, 2.2, 2.5, 2.7 ]', &
-'         print *, anint(arr)', &
-'         arr=[ -0.0, -0.1, -0.5, -1.0, -1.5, -2.0, -2.2, -2.5, -2.7 ]', &
-'         print *, anint(arr)', &
+'        print *, ''negative zero is processor dependent''', &
+'        arr=[ 0.0, 0.1, 0.5, 1.0, 1.5, 2.0, 2.2, 2.5, 2.7 ]', &
+'        print *, anint(arr)', &
+'        arr=[ -0.0, -0.1, -0.5, -1.0, -1.5, -2.0, -2.2, -2.5, -2.7 ]', &
+'        print *, anint(arr)', &
 '', &
 '      end program demo_anint', &
 '', &
 '  Results:', &
 '', &
 '       >  ANINT (2.783) has the value 3.0 =>   3.000000', &
-'       >  ANINT (-2.783) has the value -3.0 =>  -3.000000', &
+'       >  ANINT (-2.783) has the value -3.0 => -3.000000', &
 '       >  by default the kind of the output is the kind of the input', &
 '       >   1.2345679E+09', &
 '       >    1234567890.00000', &
@@ -1353,13 +1433,14 @@ textblock=[character(len=256) :: &
 '       >    1234567936.00000', &
 '       >    1234567890.00000', &
 '       >  numbers on a cusp are always the most troublesome', &
-'       >   -3.000000      -3.000000      -2.000000      -2.000000      -2.000000', &
-'       >   -1.000000      -1.000000      0.0000000E+00', &
+'       >   -3.000000     -3.000000      -2.000000      -2.000000      -2.000000', &
+'       >   -1.000000     -1.000000      0.0000000E+00', &
 '       >  negative zero is processor dependent', &
-'       >   0.0000000E+00  0.0000000E+00   1.000000       1.000000       2.000000', &
-'       >    2.000000       2.000000       3.000000       3.000000', &
-'       >   0.0000000E+00  0.0000000E+00  -1.000000      -1.000000      -2.000000', &
-'       >   -2.000000      -2.000000      -3.000000      -3.000000', &
+'       >   0.0000000E+00  0.0000000E+00   1.000000      1.000000       2.000000', &
+'       >    2.000000      2.000000       3.000000       3.000000', &
+'       >   0.0000000E+00  0.0000000E+00  -1.000000     -1.000000      -2.000000', &
+'       >   -2.000000     -2.000000      -3.000000      -3.000000', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -1369,7 +1450,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                anint(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 anint(3fortran)', &
 '']
 
 shortname="anint"
@@ -1380,20 +1463,24 @@ case('12','any')
 
 textblock=[character(len=256) :: &
 '', &
-'any(3fortran)                                                    any(3fortran)', &
+'any(3fortran)                                                   any(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ANY(3) - [ARRAY:REDUCTION] Determines if any of the values in the logical', &
 '  array are .true.', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = any(mask [,dim])', &
 '', &
-'           function any(mask, dim)', &
+'          function any(mask, dim)', &
 '', &
-'            logical(kind=KIND),intent(in) :: mask(..)', &
-'            integer,intent(in),optional   :: dim', &
-'            logical(kind=KIND)            :: any(..)', &
+'           logical(kind=KIND),intent(in) :: mask(..)', &
+'           integer,intent(in),optional   :: dim', &
+'           logical(kind=KIND)            :: any(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  MASK is a logical array', &
@@ -1435,26 +1522,26 @@ textblock=[character(len=256) :: &
 '      program demo_any', &
 '      implicit none', &
 '      logical,parameter :: T=.true., F=.false.', &
-'      integer           :: a(2,3), b(2,3)', &
-'      logical           :: bool', &
-'        ! basic usage', &
-'         bool = any([F,F,T,F])', &
-'         print *,bool', &
-'         bool = any([F,F,F,F])', &
-'         print *,bool', &
-'        ! fill two integer arrays with values for testing', &
-'         a = 1', &
-'         b = 1', &
-'         b(:,2) = 2', &
-'         b(:,3) = 3', &
-'        ! using any(3) with logical expressions you can compare two arrays', &
-'        ! in a myriad of ways', &
-'         ! first, print where elements of b are bigger than in a', &
-'         call printl( ''first print b > a             '', b > a         )', &
-'         ! now use any() to test', &
-'         call printl( ''any true values?  any(b > a)  '', any(b > a )   )', &
-'         call printl( ''again by columns? any(b > a,1)'', any(b > a, 1) )', &
-'         call printl( ''again by rows?    any(b > a,2)'', any(b > a, 2) )', &
+'      integer          :: a(2,3), b(2,3)', &
+'      logical          :: bool', &
+'       ! basic usage', &
+'        bool = any([F,F,T,F])', &
+'        print *,bool', &
+'        bool = any([F,F,F,F])', &
+'        print *,bool', &
+'       ! fill two integer arrays with values for testing', &
+'        a = 1', &
+'        b = 1', &
+'        b(:,2) = 2', &
+'        b(:,3) = 3', &
+'       ! using any(3) with logical expressions you can compare two arrays', &
+'       ! in a myriad of ways', &
+'        ! first, print where elements of b are bigger than in a', &
+'        call printl( ''first print b > a            '', b > a        )', &
+'        ! now use any() to test', &
+'        call printl( ''any true values?  any(b > a)  '', any(b > a )   )', &
+'        call printl( ''again by columns? any(b > a,1)'', any(b > a, 1) )', &
+'        call printl( ''again by rows?   any(b > a,2)'', any(b > a, 2) )', &
 '      contains', &
 '      ! CONVENIENCE ROUTINE. this is not specific to ANY()', &
 '      subroutine printl(title,a)', &
@@ -1469,31 +1556,31 @@ textblock=[character(len=256) :: &
 '      character(len=*),parameter   :: all=''(*(g0,1x))''', &
 '      character(len=*),parameter   :: row=''(" > [ ",*(l1:,","))''', &
 '      character(len=*),intent(in)  :: title', &
-'      logical,intent(in)           :: a(..)', &
-'      integer                      :: i', &
-'         write(*,*)', &
-'         write(*,all,advance=''no'')trim(title),&', &
-'          & '' : shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
-'         ! get size and shape of input', &
-'         select rank(a)', &
-'         rank (0); write(*,''(a)'')''(a scalar)''', &
-'            write(*,fmt=row,advance=''no'')a', &
-'            write(*,''(" ]")'')', &
-'         rank (1); write(*,''(a)'')''(a vector)''', &
-'            do i=1,size(a)', &
-'               write(*,fmt=row,advance=''no'')a(i)', &
-'               write(*,''(" ]")'')', &
-'            enddo', &
-'         rank (2); write(*,''(a)'')''(a matrix) ''', &
-'            do i=1,size(a,dim=1)', &
-'               write(*,fmt=row,advance=''no'')a(i,:)', &
-'               write(*,''(" ]")'')', &
-'            enddo', &
-'         rank default', &
-'            write(stderr,*)''*printl* did not expect rank='', rank(a), &', &
-'             & ''shape='', shape(a),''size='',size(a)', &
-'            stop ''*printl* unexpected rank''', &
-'         end select', &
+'      logical,intent(in)          :: a(..)', &
+'      integer                     :: i', &
+'        write(*,*)', &
+'        write(*,all,advance=''no'')trim(title),&', &
+'         & '' : shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
+'        ! get size and shape of input', &
+'        select rank(a)', &
+'        rank (0); write(*,''(a)'')''(a scalar)''', &
+'           write(*,fmt=row,advance=''no'')a', &
+'           write(*,''(" ]")'')', &
+'        rank (1); write(*,''(a)'')''(a vector)''', &
+'           do i=1,size(a)', &
+'              write(*,fmt=row,advance=''no'')a(i)', &
+'              write(*,''(" ]")'')', &
+'           enddo', &
+'        rank (2); write(*,''(a)'')''(a matrix) ''', &
+'           do i=1,size(a,dim=1)', &
+'              write(*,fmt=row,advance=''no'')a(i,:)', &
+'              write(*,''(" ]")'')', &
+'           enddo', &
+'        rank default', &
+'           write(stderr,*)''*printl* did not expect rank='', rank(a), &', &
+'            & ''shape='', shape(a),''size='',size(a)', &
+'           stop ''*printl* unexpected rank''', &
+'        end select', &
 '', &
 '      end subroutine printl', &
 '', &
@@ -1520,6 +1607,7 @@ textblock=[character(len=256) :: &
 '       >  > [ T ]', &
 '       >  > [ T ]', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
@@ -1528,7 +1616,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  any(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   any(3fortran)', &
 '']
 
 shortname="any"
@@ -1539,17 +1629,21 @@ case('13','asin')
 
 textblock=[character(len=256) :: &
 '', &
-'asin(3fortran)                                                  asin(3fortran)', &
+'asin(3fortran)                                                 asin(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ASIN(3) - [MATHEMATICS:TRIGONOMETRIC] Arcsine function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = asin(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function asin(x)', &
+'          elemental TYPE(kind=KIND) function asin(x)', &
 '', &
-'            TYPE(kind=KIND) :: x', &
+'           TYPE(kind=KIND) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  TYPE may be real or complex', &
@@ -1576,12 +1670,13 @@ textblock=[character(len=256) :: &
 '     If X is real the result is real and it is expressed in radians and lies', &
 '     in the range', &
 '', &
-'                 PI/2 <= ASIN (X) <= PI/2.', &
+'                PI/2 <= ASIN (X) <= PI/2.', &
 '', &
 '     If the argument (and therefore the result) is imaginary the real part of', &
 '     the result is in radians and lies in the range', &
 '', &
-'             -PI/2 <= real(asin(x)) <= PI/2', &
+'            -PI/2 <= real(asin(x)) <= PI/2', &
+'', &
 '', &
 'EXAMPLES', &
 '  The arcsine will allow you to find the measure of a right angle when you', &
@@ -1600,26 +1695,26 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      ! value to convert degrees to radians', &
 '      real(kind=dp),parameter :: D2R=acos(-1.0_dp)/180.0_dp', &
-'      real(kind=dp)           :: angle, rise, run', &
+'      real(kind=dp)          :: angle, rise, run', &
 '      character(len=*),parameter :: all=''(*(g0,1x))''', &
-'        ! given sine(theta) = 1.25 miles/50 miles (opposite/hypotenuse)', &
-'        ! then taking the arcsine of both sides of the equality yields', &
-'        ! theta = arcsine(1.25 miles/50 miles) ie. arcsine(opposite/hypotenuse)', &
-'        rise=1.250_dp', &
-'        run=50.00_dp', &
-'        angle = asin(rise/run)', &
-'        print all, ''angle of incline(radians) = '', angle', &
-'        angle = angle/D2R', &
-'        print all, ''angle of incline(degrees) = '', angle', &
+'       ! given sine(theta) = 1.25 miles/50 miles (opposite/hypotenuse)', &
+'       ! then taking the arcsine of both sides of the equality yields', &
+'       ! theta = arcsine(1.25 miles/50 miles) ie. arcsine(opposite/hypotenuse)', &
+'       rise=1.250_dp', &
+'       run=50.00_dp', &
+'       angle = asin(rise/run)', &
+'       print all, ''angle of incline(radians) = '', angle', &
+'       angle = angle/D2R', &
+'       print all, ''angle of incline(degrees) = '', angle', &
 '', &
-'        print all, ''percent grade='',rise/run*100.0_dp', &
+'       print all, ''percent grade='',rise/run*100.0_dp', &
 '      end program demo_asin', &
 '', &
 '  Results:', &
 '', &
-'          angle of incline(radians) =    2.5002604899361139E-002', &
-'          angle of incline(degrees) =    1.4325437375665075', &
-'          percent grade=   2.5000000000000000', &
+'         angle of incline(radians) =    2.5002604899361139E-002', &
+'         angle of incline(degrees) =    1.4325437375665075', &
+'         percent grade=   2.5000000000000000', &
 '', &
 '  The percentage grade is the slope, written as a percent. To calculate the', &
 '  slope you divide the rise by the run. In the example the rise is 1.25 mile', &
@@ -1643,7 +1738,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 asin(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  asin(3fortran)', &
 '']
 
 shortname="asin"
@@ -1654,17 +1751,21 @@ case('14','asinh')
 
 textblock=[character(len=256) :: &
 '', &
-'asinh(3fortran)                                                asinh(3fortran)', &
+'asinh(3fortran)                                               asinh(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ASINH(3) - [MATHEMATICS:TRIGONOMETRIC] Inverse hyperbolic sine function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = asinh(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function asinh(x)', &
+'          elemental TYPE(kind=KIND) function asinh(x)', &
 '', &
-'            TYPE(kind=KIND) :: x', &
+'           TYPE(kind=KIND) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be any real or complex type', &
@@ -1695,14 +1796,15 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real(kind=dp), dimension(3) :: x = [ -1.0d0, 0.0d0, 1.0d0 ]', &
 '', &
-'         ! elemental', &
-'          write (*,*) asinh(x)', &
+'        ! elemental', &
+'         write (*,*) asinh(x)', &
 '', &
 '      end program demo_asinh', &
 '', &
 '  Results:', &
 '', &
-'        -0.88137358701954305  0.0000000000000000  0.88137358701954305', &
+'       -0.88137358701954305  0.0000000000000000  0.88137358701954305', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -1715,7 +1817,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                asinh(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 asinh(3fortran)', &
 '']
 
 shortname="asinh"
@@ -1726,19 +1830,23 @@ case('15','associated')
 
 textblock=[character(len=256) :: &
 '', &
-'associated(3fortran)                                      associated(3fortran)', &
+'associated(3fortran)                                     associated(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ASSOCIATED(3) - [STATE:INQUIRY] Association status of a pointer or', &
 '  pointer/target pair', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = associated(pointer [,target])', &
 '', &
-'           logical function associated(pointer,target)', &
+'          logical function associated(pointer,target)', &
 '', &
-'            type(TYPE(kind=KIND),pointer :: pointer', &
-'            type(TYPE(kind=KIND),pointer,optional :: target', &
+'           type(TYPE(kind=KIND)),pointer :: pointer', &
+'           type(TYPE(kind=KIND)),pointer,optional :: target', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  POINTER shall have the pointer attribute and it can be any type or may be', &
@@ -1811,12 +1919,13 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real, target  :: tgt(2) = [1., 2.]', &
 '      real, pointer :: ptr(:)', &
-'         ptr => tgt', &
-'         if (associated(ptr)     .eqv. .false.) &', &
-'         & stop ''POINTER NOT ASSOCIATED''', &
-'         if (associated(ptr,tgt) .eqv. .false.) &', &
-'         & stop ''POINTER NOT ASSOCIATED TO TARGET''', &
+'        ptr => tgt', &
+'        if (associated(ptr)     .eqv. .false.) &', &
+'        & stop ''POINTER NOT ASSOCIATED''', &
+'        if (associated(ptr,tgt) .eqv. .false.) &', &
+'        & stop ''POINTER NOT ASSOCIATED TO TARGET''', &
 '      end program demo_associated', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -1826,7 +1935,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023           associated(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            associated(3fortran)', &
 '']
 
 shortname="associated"
@@ -1837,18 +1948,22 @@ case('16','atan2')
 
 textblock=[character(len=256) :: &
 '', &
-'atan2(3fortran)                                                atan2(3fortran)', &
+'atan2(3fortran)                                               atan2(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATAN2(3) - [MATHEMATICS:TRIGONOMETRIC] Arctangent (inverse tangent) function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = atan2(y, x)', &
 '', &
-'           elemental real(kind=KIND) function atan2(y, x)', &
+'          elemental real(kind=KIND) function atan2(y, x)', &
 '', &
-'            real,kind=KIND) :: atan2', &
-'            real,kind=KIND),intent(in) :: y, x', &
+'           real,kind=KIND) :: atan2', &
+'           real,kind=KIND),intent(in) :: y, x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X and Y must be reals of the same kind.', &
@@ -1889,23 +2004,24 @@ textblock=[character(len=256) :: &
 '', &
 '  Range of returned values by quadrant:', &
 '', &
-'      >                   +PI/2', &
-'      >                     |', &
-'      >                     |', &
-'      >     PI/2 < z < PI   |   0 > z < PI/2', &
-'      >                     |', &
+'      >                  +PI/2', &
+'      >                    |', &
+'      >                    |', &
+'      >     PI/2 < z < PI   |  0 > z < PI/2', &
+'      >                    |', &
 '      >   +-PI -------------+---------------- +-0', &
-'      >                     |', &
-'      >     PI/2 < -z < PI  |   0 < -z < PI/2', &
-'      >                     |', &
-'      >                     |', &
-'      >                   -PI/2', &
+'      >                    |', &
+'      >     PI/2 < -z < PI  |  0 < -z < PI/2', &
+'      >                    |', &
+'      >                    |', &
+'      >                  -PI/2', &
 '      >', &
-'           NOTES:', &
+'          NOTES:', &
 '', &
-'           If the processor distinguishes -0 and +0 then the sign of the', &
-'           returned value is that of Y when Y is zero, else when Y is zero', &
-'           the returned value is always positive.', &
+'          If the processor distinguishes -0 and +0 then the sign of the', &
+'          returned value is that of Y when Y is zero, else when Y is zero', &
+'          the returned value is always positive.', &
+'', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
@@ -1915,44 +2031,44 @@ textblock=[character(len=256) :: &
 '      complex :: c', &
 '       !', &
 '       ! basic usage', &
-'        ! ATAN2 (1.5574077, 1.0) has the value 1.0 (approximately).', &
-'        z=atan2(1.5574077, 1.0)', &
-'        write(*,*) ''radians='',z,''degrees='',r2d(z)', &
+'       ! ATAN2 (1.5574077, 1.0) has the value 1.0 (approximately).', &
+'       z=atan2(1.5574077, 1.0)', &
+'       write(*,*) ''radians='',z,''degrees='',r2d(z)', &
 '       !', &
 '       ! elemental arrays', &
-'        write(*,*)''elemental'',atan2( [10.0, 20.0], [30.0,40.0] )', &
+'       write(*,*)''elemental'',atan2( [10.0, 20.0], [30.0,40.0] )', &
 '       !', &
 '       ! elemental arrays and scalars', &
-'        write(*,*)''elemental'',atan2( [10.0, 20.0], 50.0 )', &
+'       write(*,*)''elemental'',atan2( [10.0, 20.0], 50.0 )', &
 '       !', &
 '       ! break complex values into real and imaginary components', &
 '       ! (note TAN2() can take a complex type value )', &
-'        c=(0.0,1.0)', &
-'        write(*,*)''complex'',c,atan2( x=c%re, y=c%im )', &
+'       c=(0.0,1.0)', &
+'       write(*,*)''complex'',c,atan2( x=c%re, y=c%im )', &
 '       !', &
 '       ! extended sample converting cartesian coordinates to polar', &
-'        COMPLEX_VALS: block', &
-'        real                :: ang, radius', &
-'        complex,allocatable :: vals(:)', &
+'       COMPLEX_VALS: block', &
+'       real                :: ang, radius', &
+'       complex,allocatable :: vals(:)', &
 '       !', &
-'        vals=[ &', &
-'          ( 1.0, 0.0 ), & ! 0', &
-'          ( 1.0, 1.0 ), & ! 45', &
-'          ( 0.0, 1.0 ), & ! 90', &
-'          (-1.0, 1.0 ), & ! 135', &
-'          (-1.0, 0.0 ), & ! 180', &
-'          (-1.0,-1.0 ), & ! 225', &
-'          ( 0.0,-1.0 )]   ! 270', &
-'        do i=1,size(vals)', &
-'           call cartesian_to_polar(vals(i)%re, vals(i)%im, radius,ang)', &
-'           write(*,101)vals(i),ang,r2d(ang),radius', &
-'        enddo', &
-'        101 format(             &', &
-'        & ''X= '',f5.2,           &', &
-'        & '' Y= '',f5.2,          &', &
-'        & '' ANGLE= '',g0,        &', &
-'        & T38,''DEGREES= '',g0.4, &', &
-'        & T54,''DISTANCE='',g0)', &
+'       vals=[ &', &
+'         ( 1.0, 0.0 ), & ! 0', &
+'         ( 1.0, 1.0 ), & ! 45', &
+'         ( 0.0, 1.0 ), & ! 90', &
+'         (-1.0, 1.0 ), & ! 135', &
+'         (-1.0, 0.0 ), & ! 180', &
+'         (-1.0,-1.0 ), & ! 225', &
+'         ( 0.0,-1.0 )]   ! 270', &
+'       do i=1,size(vals)', &
+'          call cartesian_to_polar(vals(i)%re, vals(i)%im, radius,ang)', &
+'          write(*,101)vals(i),ang,r2d(ang),radius', &
+'       enddo', &
+'       101 format(             &', &
+'       & ''X= '',f5.2,         &', &
+'       & '' Y= '',f5.2,                &', &
+'       & '' ANGLE= '',g0,      &', &
+'       & T38,''DEGREES= '',g0.4, &', &
+'       & T54,''DISTANCE='',g0)', &
 '       endblock COMPLEX_VALS', &
 '      !', &
 '      contains', &
@@ -1960,8 +2076,8 @@ textblock=[character(len=256) :: &
 '      elemental real function r2d(radians)', &
 '      ! input radians to convert to degrees', &
 '      doubleprecision,parameter :: DEGREE=0.017453292519943d0 ! radians', &
-'      real,intent(in)           :: radians', &
-'         r2d=radians / DEGREE ! do the conversion', &
+'      real,intent(in)          :: radians', &
+'        r2d=radians / DEGREE ! do the conversion', &
 '      end function r2d', &
 '      !', &
 '      subroutine cartesian_to_polar(x,y,radius,inclination)', &
@@ -1969,22 +2085,22 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real,intent(in)  :: x,y', &
 '      real,intent(out) :: radius,inclination', &
-'         radius=sqrt(x**2+y**2)', &
-'         if(radius.eq.0)then', &
-'            inclination=0.0', &
-'         else', &
-'            inclination=atan2(y,x)', &
-'            if(inclination < 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)', &
-'         endif', &
+'        radius=sqrt(x**2+y**2)', &
+'        if(radius.eq.0)then', &
+'           inclination=0.0', &
+'        else', &
+'           inclination=atan2(y,x)', &
+'           if(inclination < 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)', &
+'        endif', &
 '      end subroutine cartesian_to_polar', &
 '      !', &
 '      end program demo_atan2', &
 '', &
 '  Results:', &
 '', &
-'       >  radians=   1.000000     degrees=   57.29578', &
-'       >  elemental  0.3217506      0.4636476', &
-'       >  elemental  0.1973956      0.3805064', &
+'       >  radians=   1.000000    degrees=   57.29578', &
+'       >  elemental  0.3217506     0.4636476', &
+'       >  elemental  0.1973956     0.3805064', &
 '       >  complex (0.0000000E+00,1.000000)   1.570796', &
 '       > X=  1.00 Y=  0.00 ANGLE= .000000     DEGREES= .000   DISTANCE=1.000000', &
 '       > X=  1.00 Y=  1.00 ANGLE= .7853982    DEGREES= 45.00  DISTANCE=1.414214', &
@@ -1993,6 +2109,7 @@ textblock=[character(len=256) :: &
 '       > X= -1.00 Y=  0.00 ANGLE= 3.141593    DEGREES= 180.0  DISTANCE=1.000000', &
 '       > X= -1.00 Y= -1.00 ANGLE= 3.926991    DEGREES= 225.0  DISTANCE=1.414214', &
 '       > X=  0.00 Y= -1.00 ANGLE= 4.712389    DEGREES= 270.0  DISTANCE=1.000000', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -2004,7 +2121,9 @@ textblock=[character(len=256) :: &
 '  o  arctan:wikipedia fortran-lang intrinsic descriptions (license: MIT)', &
 '     @urbanjost', &
 '', &
-'                               January 21, 2023                atan2(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 atan2(3fortran)', &
 '']
 
 shortname="atan2"
@@ -2015,19 +2134,23 @@ case('17','atan')
 
 textblock=[character(len=256) :: &
 '', &
-'atan(3fortran)                                                  atan(3fortran)', &
+'atan(3fortran)                                                 atan(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATAN(3) - [MATHEMATICS:TRIGONOMETRIC] Arctangent AKA inverse tangent', &
 '  function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = atan([x) | atan(y, x)', &
 '', &
-'           elemental TYPE(kind=KIND) function atan(y,x)', &
+'          elemental TYPE(kind=KIND) function atan(y,x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
-'            TYPE(kind=**),intent(in),optional :: y', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=**),intent(in),optional :: y', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  If Y is present X and Y must both be real. Otherwise, X may be complex.', &
@@ -2062,23 +2185,24 @@ textblock=[character(len=256) :: &
 '      real(kind=real64),parameter :: &', &
 '       Deg_Per_Rad = 57.2957795130823208767981548_real64', &
 '      real(kind=real64) :: x', &
-'          x=2.866_real64', &
-'          print all, atan(x)', &
+'         x=2.866_real64', &
+'         print all, atan(x)', &
 '', &
-'          print all, atan( 2.0d0, 2.0d0),atan( 2.0d0, 2.0d0)*Deg_Per_Rad', &
-'          print all, atan( 2.0d0,-2.0d0),atan( 2.0d0,-2.0d0)*Deg_Per_Rad', &
-'          print all, atan(-2.0d0, 2.0d0),atan(-2.0d0, 2.0d0)*Deg_Per_Rad', &
-'          print all, atan(-2.0d0,-2.0d0),atan(-2.0d0,-2.0d0)*Deg_Per_Rad', &
+'         print all, atan( 2.0d0, 2.0d0),atan( 2.0d0, 2.0d0)*Deg_Per_Rad', &
+'         print all, atan( 2.0d0,-2.0d0),atan( 2.0d0,-2.0d0)*Deg_Per_Rad', &
+'         print all, atan(-2.0d0, 2.0d0),atan(-2.0d0, 2.0d0)*Deg_Per_Rad', &
+'         print all, atan(-2.0d0,-2.0d0),atan(-2.0d0,-2.0d0)*Deg_Per_Rad', &
 '', &
 '      end program demo_atan', &
 '', &
 '  Results:', &
 '', &
-'         1.235085437457879', &
-'         .7853981633974483 45.00000000000000', &
-'         2.356194490192345 135.0000000000000', &
-'         -.7853981633974483 -45.00000000000000', &
-'         -2.356194490192345 -135.0000000000000', &
+'        1.235085437457879', &
+'        .7853981633974483 45.00000000000000', &
+'        2.356194490192345 135.0000000000000', &
+'        -.7853981633974483 -45.00000000000000', &
+'        -2.356194490192345 -135.0000000000000', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77 for a complex argument; and for two arguments Fortran 2008', &
@@ -2091,7 +2215,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 atan(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  atan(3fortran)', &
 '']
 
 shortname="atan"
@@ -2102,17 +2228,21 @@ case('18','atanh')
 
 textblock=[character(len=256) :: &
 '', &
-'atanh(3fortran)                                                atanh(3fortran)', &
+'atanh(3fortran)                                               atanh(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATANH(3) - [MATHEMATICS:TRIGONOMETRIC] Inverse hyperbolic tangent function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = atanh(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function atanh(x)', &
+'          elemental TYPE(kind=KIND) function atanh(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be real or complex of any associated type', &
@@ -2129,7 +2259,8 @@ textblock=[character(len=256) :: &
 '  The return value has same type and kind as X. If X is complex, the imaginary', &
 '  part of the result is in radians and lies between', &
 '', &
-'             **-PI/2 <= aimag(atanh(x)) <= PI/2**', &
+'            **-PI/2 <= aimag(atanh(x)) <= PI/2**', &
+'', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
@@ -2138,13 +2269,14 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real, dimension(3) :: x = [ -1.0, 0.0, 1.0 ]', &
 '', &
-'         write (*,*) atanh(x)', &
+'        write (*,*) atanh(x)', &
 '', &
 '      end program demo_atanh', &
 '', &
 '  Results:', &
 '', &
 '       >       -Infinity  0.0000000E+00       Infinity', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -2157,7 +2289,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                atanh(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 atanh(3fortran)', &
 '']
 
 shortname="atanh"
@@ -2168,19 +2302,23 @@ case('19','atomic_add')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_add(3fortran)                                      atomic_add(3fortran)', &
+'atomic_add(3fortran)                                     atomic_add(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_ADD(3) - [ATOMIC] Atomic ADD operation', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_add (atom, value [,stat] )', &
 '', &
-'           subroutine atomic_add(atom,value,stat)', &
+'          subroutine atomic_add(atom,value,stat)', &
 '', &
-'            integer(atomic_int_kind)            :: atom[*]', &
-'            integer(atomic_int_kind),intent(in) :: value', &
-'            integer,intent(out),intent(out)     :: stat', &
+'           integer(atomic_int_kind)            :: atom[*]', &
+'           integer(atomic_int_kind),intent(in) :: value', &
+'           integer,intent(out),intent(out)     :: stat', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ATOM is a scalar coarray or coindexed variable of integer type with', &
@@ -2192,7 +2330,7 @@ textblock=[character(len=256) :: &
 '  o  STAT is a Scalar default-kind integer variable.', &
 '', &
 'DESCRIPTION', &
-'  ATOMIC_ADD(3) atomically adds the value of VAR to the variable ATOM.  When', &
+'  ATOMIC_ADD(3) atomically adds the value of VAR to the variable ATOM. When', &
 '  STAT is present and the invocation was successful, it is assigned the value', &
 '  0. If it is present and the invocation has failed, it is assigned a positive', &
 '  value; in particular, for a coindexed ATOM, if the remote image has stopped,', &
@@ -2215,8 +2353,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*]', &
-'         call atomic_add (atom[1], this_image())', &
+'        call atomic_add (atom[1], this_image())', &
 '      end program demo_atomic_add', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2227,7 +2366,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023           atomic_add(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            atomic_add(3fortran)', &
 '']
 
 shortname="atomic_add"
@@ -2238,19 +2379,23 @@ case('20','atomic_and')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_and(3fortran)                                      atomic_and(3fortran)', &
+'atomic_and(3fortran)                                     atomic_and(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_AND(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise AND operation', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_and(atom, value [,stat])', &
 '', &
-'           subroutine atomic_and(atom,value,stat)', &
+'          subroutine atomic_and(atom,value,stat)', &
 '', &
-'            integer(atomic_int_kind)            :: atom[*]', &
-'            integer(atomic_int_kind),intent(in) :: value', &
-'            integer,intent(out),intent(out)     :: stat', &
+'           integer(atomic_int_kind)            :: atom[*]', &
+'           integer(atomic_int_kind),intent(in) :: value', &
+'           integer,intent(out),intent(out)     :: stat', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ATOM is a scalar coarray or coindexed variable of integer type with', &
@@ -2286,8 +2431,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*]', &
-'         call atomic_and(atom[1], int(b''10100011101''))', &
+'        call atomic_and(atom[1], int(b''10100011101''))', &
 '      end program demo_atomic_and', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2298,7 +2444,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023           atomic_and(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            atomic_and(3fortran)', &
 '']
 
 shortname="atomic_and"
@@ -2309,15 +2457,19 @@ case('21','atomic_cas')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_cas(3fortran)                                      atomic_cas(3fortran)', &
+'atomic_cas(3fortran)                                     atomic_cas(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_CAS(3) - [ATOMIC] Atomic compare and swap', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_cas (atom, old, compare, new [,stat] )', &
 '', &
-'           subroutine atomic_cas (atom, old, compare, new, stat)', &
+'          subroutine atomic_cas (atom, old, compare, new, stat)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
@@ -2350,8 +2502,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      logical(atomic_logical_kind) :: atom[*], prev', &
-'         call atomic_cas(atom[1], prev, .false., .true.)', &
+'        call atomic_cas(atom[1], prev, .false., .true.)', &
 '      end program demo_atomic_cas', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2361,7 +2514,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023           atomic_cas(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            atomic_cas(3fortran)', &
 '']
 
 shortname="atomic_cas"
@@ -2372,19 +2527,23 @@ case('22','atomic_define')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_define(3fortran)                                atomic_define(3fortran)', &
+'atomic_define(3fortran)                               atomic_define(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_DEFINE(3) - [ATOMIC] Setting a variable atomically', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_define (atom, value [,stat] )', &
 '', &
-'           subroutine atomic_define(atom, value, stat)', &
+'          subroutine atomic_define(atom, value, stat)', &
 '', &
-'            TYPE(kind=atomic_KIND_kind) :: atom[*]', &
-'            TYPE(kind=KIND) :: value', &
-'            integer,intent(out),optional :: stat', &
+'           TYPE(kind=atomic_KIND_kind) :: atom[*]', &
+'           TYPE(kind=KIND) :: value', &
+'           integer,intent(out),optional :: stat', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ATOM : Scalar coarray or coindexed variable of either integer type with', &
@@ -2418,8 +2577,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*]', &
-'          call atomic_define(atom[1], this_image())', &
+'         call atomic_define(atom[1], this_image())', &
 '      end program demo_atomic_define', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008 ; with STAT, TS 18508', &
@@ -2430,7 +2590,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023        atomic_define(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023         atomic_define(3fortran)', &
 '']
 
 shortname="atomic_define"
@@ -2441,15 +2603,19 @@ case('23','atomic_fetch_add')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_fetch_add(3fortran)                          atomic_fetch_add(3fortran)', &
+'atomic_fetch_add(3fortran)                         atomic_fetch_add(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_FETCH_ADD(3) - [ATOMIC] Atomic ADD operation with prior fetch', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_fetch_add(atom, value, old [,stat] )', &
 '', &
-'           subroutine atomic_fetch_add(atom, value, old, stat)', &
+'          subroutine atomic_fetch_add(atom, value, old, stat)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
@@ -2479,8 +2645,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*], old', &
-'         call atomic_add(atom[1], this_image(), old)', &
+'        call atomic_add(atom[1], this_image(), old)', &
 '      end program demo_atomic_fetch_add', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2494,7 +2661,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023     atomic_fetch_add(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023      atomic_fetch_add(3fortran)', &
 '']
 
 shortname="atomic_fetch_add"
@@ -2505,16 +2674,20 @@ case('24','atomic_fetch_and')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_fetch_and(3fortran)                          atomic_fetch_and(3fortran)', &
+'atomic_fetch_and(3fortran)                         atomic_fetch_and(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_FETCH_AND(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise AND operation', &
 '  with prior fetch', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_fetch_and(atom, value, old [,stat] )', &
 '', &
-'           subroutine atomic_fetch_and(atom, value, old, stat)', &
+'          subroutine atomic_fetch_and(atom, value, old, stat)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
@@ -2544,8 +2717,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*], old', &
-'         call atomic_fetch_and (atom[1], int(b''10100011101''), old)', &
+'        call atomic_fetch_and (atom[1], int(b''10100011101''), old)', &
 '      end program demo_atomic_fetch_and', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2559,7 +2733,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023     atomic_fetch_and(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023      atomic_fetch_and(3fortran)', &
 '']
 
 shortname="atomic_fetch_and"
@@ -2570,16 +2746,20 @@ case('25','atomic_fetch_or')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_fetch_or(3fortran)                            atomic_fetch_or(3fortran)', &
+'atomic_fetch_or(3fortran)                           atomic_fetch_or(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_FETCH_OR(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation', &
 '  with prior fetch', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_fetch_or(atom, value, old [,stat] )', &
 '', &
-'           subroutine atomic_fetch_or(atom, value, old, stat)', &
+'          subroutine atomic_fetch_or(atom, value, old, stat)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
@@ -2609,8 +2789,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*], old', &
-'         call atomic_fetch_or(atom[1], int(b''10100011101''), old)', &
+'        call atomic_fetch_or(atom[1], int(b''10100011101''), old)', &
 '      end program demo_atomic_fetch_or', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2624,7 +2805,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023      atomic_fetch_or(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023       atomic_fetch_or(3fortran)', &
 '']
 
 shortname="atomic_fetch_or"
@@ -2635,16 +2818,20 @@ case('26','atomic_fetch_xor')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_fetch_xor(3fortran)                          atomic_fetch_xor(3fortran)', &
+'atomic_fetch_xor(3fortran)                         atomic_fetch_xor(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_FETCH_XOR(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise XOR operation', &
 '  with prior fetch', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_fetch_xor (atom, value, old [,stat] )', &
 '', &
-'           subroutine atomic_fetch_xor (atom, value, old, stat)', &
+'          subroutine atomic_fetch_xor (atom, value, old, stat)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
@@ -2674,8 +2861,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*], old', &
-'         call atomic_fetch_xor (atom[1], int(b''10100011101''), old)', &
+'        call atomic_fetch_xor (atom[1], int(b''10100011101''), old)', &
 '      end program demo_atomic_fetch_xor', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2689,7 +2877,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023     atomic_fetch_xor(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023      atomic_fetch_xor(3fortran)', &
 '']
 
 shortname="atomic_fetch_xor"
@@ -2700,19 +2890,23 @@ case('27','atomic_or')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_or(3fortran)                                        atomic_or(3fortran)', &
+'atomic_or(3fortran)                                       atomic_or(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_OR(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_or(atom, value [,stat] )', &
 '', &
-'           subroutine atomic_or(atom,value,stat)', &
+'          subroutine atomic_or(atom,value,stat)', &
 '', &
-'            integer(atomic_int_kind)            :: atom[*]', &
-'            integer(atomic_int_kind),intent(in) :: value', &
-'            integer,intent(out),intent(out)     :: stat', &
+'           integer(atomic_int_kind)            :: atom[*]', &
+'           integer(atomic_int_kind),intent(in) :: value', &
+'           integer,intent(out),intent(out)     :: stat', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ATOM is a scalar coarray or coindexed variable of integer type with', &
@@ -2748,8 +2942,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*]', &
-'         call atomic_or(atom[1], int(b''10100011101''))', &
+'        call atomic_or(atom[1], int(b''10100011101''))', &
 '      end program demo_atomic_or', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2763,7 +2958,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            atomic_or(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             atomic_or(3fortran)', &
 '']
 
 shortname="atomic_or"
@@ -2774,19 +2971,23 @@ case('28','atomic_ref')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_ref(3fortran)                                      atomic_ref(3fortran)', &
+'atomic_ref(3fortran)                                     atomic_ref(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_REF(3) - [ATOMIC] Obtaining the value of a variable atomically', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_ref(value, atom [,stat] )', &
 '', &
-'           subroutine atomic_ref(value,atom,stat)', &
+'          subroutine atomic_ref(value,atom,stat)', &
 '', &
-'            integer(atomic_int_kind),intent(in) :: value', &
-'            integer(atomic_int_kind)            :: atom[*]', &
-'            integer,intent(out),intent(out)     :: stat', &
+'           integer(atomic_int_kind),intent(in) :: value', &
+'           integer(atomic_int_kind)            :: atom[*]', &
+'           integer,intent(out),intent(out)     :: stat', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ATOM is a scalar coarray or coindexed variable of either integer type', &
@@ -2822,11 +3023,12 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      logical(atomic_logical_kind) :: atom[*]', &
 '      logical :: val', &
-'         call atomic_ref( val, atom[1] )', &
-'         if (val) then', &
-'            print *, "Obtained"', &
-'         endif', &
+'        call atomic_ref( val, atom[1] )', &
+'        if (val) then', &
+'           print *, "Obtained"', &
+'        endif', &
 '      end program demo_atomic_ref', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008 ; with STAT, TS 18508', &
@@ -2840,7 +3042,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023           atomic_ref(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            atomic_ref(3fortran)', &
 '']
 
 shortname="atomic_ref"
@@ -2851,19 +3055,23 @@ case('29','atomic_xor')
 
 textblock=[character(len=256) :: &
 '', &
-'atomic_xor(3fortran)                                      atomic_xor(3fortran)', &
+'atomic_xor(3fortran)                                     atomic_xor(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ATOMIC_XOR(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call atomic_xor(atom, value [,stat] )', &
 '', &
-'           subroutine atomic_xor(atom,value,stat)', &
+'          subroutine atomic_xor(atom,value,stat)', &
 '', &
-'            integer(atomic_int_kind)            :: atom[*]', &
-'            integer(atomic_int_kind),intent(in) :: value', &
-'            integer,intent(out),intent(out)     :: stat', &
+'           integer(atomic_int_kind)            :: atom[*]', &
+'           integer(atomic_int_kind),intent(in) :: value', &
+'           integer,intent(out),intent(out)     :: stat', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ATOM is a scalar coarray or coindexed variable of integer type with', &
@@ -2900,8 +3108,9 @@ textblock=[character(len=256) :: &
 '      use iso_fortran_env', &
 '      implicit none', &
 '      integer(atomic_int_kind) :: atom[*]', &
-'         call atomic_xor(atom[1], int(b''10100011101''))', &
+'        call atomic_xor(atom[1], int(b''10100011101''))', &
 '      end program demo_atomic_xor', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -2912,7 +3121,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023           atomic_xor(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            atomic_xor(3fortran)', &
 '']
 
 shortname="atomic_xor"
@@ -2923,17 +3134,21 @@ case('30','bessel_j0')
 
 textblock=[character(len=256) :: &
 '', &
-'bessel_j0(3fortran)                                        bessel_j0(3fortran)', &
+'bessel_j0(3fortran)                                       bessel_j0(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BESSEL_J0(3) - [MATHEMATICS] Bessel function of the first kind of order 0', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bessel_j0(x)', &
 '', &
-'           elemental real(kind=KIND) function bessel_j0(x)', &
+'          elemental real(kind=KIND) function bessel_j0(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  KIND may be any KIND supported by the real type.', &
@@ -2956,16 +3171,17 @@ textblock=[character(len=256) :: &
 '      program demo_bessel_j0', &
 '      use, intrinsic :: iso_fortran_env, only : real_kinds, &', &
 '      & real32, real64, real128', &
-'         implicit none', &
-'         real(kind=real64) :: x', &
-'         x = 0.0_real64', &
-'         x = bessel_j0(x)', &
-'         write(*,*)x', &
+'        implicit none', &
+'        real(kind=real64) :: x', &
+'        x = 0.0_real64', &
+'        x = bessel_j0(x)', &
+'        write(*,*)x', &
 '      end program demo_bessel_j0', &
 '', &
 '  Results:', &
 '', &
-'            1.0000000000000000', &
+'           1.0000000000000000', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -2975,7 +3191,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            bessel_j0(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             bessel_j0(3fortran)', &
 '']
 
 shortname="bessel_j0"
@@ -2986,17 +3204,21 @@ case('31','bessel_j1')
 
 textblock=[character(len=256) :: &
 '', &
-'bessel_j1(3fortran)                                        bessel_j1(3fortran)', &
+'bessel_j1(3fortran)                                       bessel_j1(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BESSEL_J1(3) - [MATHEMATICS] Bessel function of the first kind of order 1', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bessel_j1(x)', &
 '', &
-'           elemental real(kind=KIND) function bessel_j1(x)', &
+'          elemental real(kind=KIND) function bessel_j1(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  KIND may be any supported real KIND.', &
@@ -3021,13 +3243,14 @@ textblock=[character(len=256) :: &
 '       & real32, real64, real128', &
 '      implicit none', &
 '      real(kind=real64) :: x = 1.0_real64', &
-'         x = bessel_j1(x)', &
-'         write(*,*)x', &
+'        x = bessel_j1(x)', &
+'        write(*,*)x', &
 '      end program demo_bessel_j1', &
 '', &
 '  Results:', &
 '', &
-'           0.44005058574493350', &
+'          0.44005058574493350', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3037,7 +3260,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            bessel_j1(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             bessel_j1(3fortran)', &
 '']
 
 shortname="bessel_j1"
@@ -3048,40 +3273,45 @@ case('32','bessel_jn')
 
 textblock=[character(len=256) :: &
 '', &
-'bessel_jn(3fortran)                                        bessel_jn(3fortran)', &
+'bessel_jn(3fortran)                                       bessel_jn(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BESSEL_JN(3) - [MATHEMATICS] Bessel function of the first kind', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bessel_jn(n, x)', &
 '', &
-'           elemental real(kind=KIND) function bessel_jn(n,x)', &
+'          elemental real(kind=KIND) function bessel_jn(n,x)', &
 '', &
-'            integer(kind=**),intent(in) :: n', &
-'            real(kind=KIND),intent(in) :: x', &
+'           integer(kind=**),intent(in) :: n', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 '  o  KIND may be any valid value for type real', &
 '', &
-'     o  X is real', &
+'     o X is real', &
 '', &
-'     o  The return value has the same type and kind as X.', &
+'     o The return value has the same type and kind as X.', &
 '', &
-'             result = bessel_jn(n1, n2, x)', &
+'            result = bessel_jn(n1, n2, x)', &
 '', &
-'              real(kind=KIND) function bessel_jn(n1, n2, ,x)', &
+'             real(kind=KIND) function bessel_jn(n1, n2, ,x)', &
 '', &
-'              integer(kind=**),intent(in) :: n1', &
-'              integer(kind=**),intent(in) :: n2', &
-'              real(kind=KIND),intent(in) :: x', &
+'             integer(kind=**),intent(in) :: n1', &
+'             integer(kind=**),intent(in) :: n2', &
+'             real(kind=KIND),intent(in) :: x', &
 '', &
-'     o  N1 is integer', &
 '', &
-'     o  N2 is integer', &
+'     o N1 is integer', &
 '', &
-'     o  X is real', &
+'     o N2 is integer', &
 '', &
-'     o  The return value has the same type and kind as X.', &
+'     o X is real', &
+'', &
+'     o The return value has the same type and kind as X.', &
 '', &
 'DESCRIPTION', &
 '  BESSEL_JN( N, X ) computes the Bessel function of the first kind of order N', &
@@ -3114,16 +3344,17 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_bessel_jn', &
 '      use, intrinsic :: iso_fortran_env, only : real_kinds, &', &
-'         & real32, real64, real128', &
+'        & real32, real64, real128', &
 '      implicit none', &
 '      real(kind=real64) :: x = 1.0_real64', &
-'          x = bessel_jn(5,x)', &
-'          write(*,*)x', &
+'         x = bessel_jn(5,x)', &
+'         write(*,*)x', &
 '      end program demo_bessel_jn', &
 '', &
 '  Results:', &
 '', &
-'            2.4975773021123450E-004', &
+'           2.4975773021123450E-004', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3133,7 +3364,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            bessel_jn(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             bessel_jn(3fortran)', &
 '']
 
 shortname="bessel_jn"
@@ -3144,17 +3377,21 @@ case('33','bessel_y0')
 
 textblock=[character(len=256) :: &
 '', &
-'bessel_y0(3fortran)                                        bessel_y0(3fortran)', &
+'bessel_y0(3fortran)                                       bessel_y0(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BESSEL_Y0(3) - [MATHEMATICS] Bessel function of the second kind of order 0', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bessel_y0(x)', &
 '', &
-'           elemental real(kind=KIND) function bessel_y0(x)', &
+'          elemental real(kind=KIND) function bessel_y0(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  KIND may be any supported real KIND.', &
@@ -3178,14 +3415,15 @@ textblock=[character(len=256) :: &
 '      use, intrinsic :: iso_fortran_env, only : real_kinds, &', &
 '      & real32, real64, real128', &
 '      implicit none', &
-'        real(kind=real64) :: x = 0.0_real64', &
-'        x = bessel_y0(x)', &
-'        write(*,*)x', &
+'       real(kind=real64) :: x = 0.0_real64', &
+'       x = bessel_y0(x)', &
+'       write(*,*)x', &
 '      end program demo_bessel_y0', &
 '', &
 '  Results:', &
 '', &
-'                          -Infinity', &
+'                         -Infinity', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3195,7 +3433,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            bessel_y0(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             bessel_y0(3fortran)', &
 '']
 
 shortname="bessel_y0"
@@ -3206,17 +3446,21 @@ case('34','bessel_y1')
 
 textblock=[character(len=256) :: &
 '', &
-'bessel_y1(3fortran)                                        bessel_y1(3fortran)', &
+'bessel_y1(3fortran)                                       bessel_y1(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BESSEL_Y1(3) - [MATHEMATICS] Bessel function of the second kind of order 1', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bessel_y1(x)', &
 '', &
-'           elemental real(kind=KIND) function bessel_y1(x)', &
+'          elemental real(kind=KIND) function bessel_y1(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  KIND may be any supported real KIND.', &
@@ -3240,13 +3484,14 @@ textblock=[character(len=256) :: &
 '      use, intrinsic :: iso_fortran_env, only : real_kinds, &', &
 '      & real32, real64, real128', &
 '      implicit none', &
-'        real(kind=real64) :: x = 1.0_real64', &
-'        write(*,*)x, bessel_y1(x)', &
+'       real(kind=real64) :: x = 1.0_real64', &
+'       write(*,*)x, bessel_y1(x)', &
 '      end program demo_bessel_y1', &
 '', &
 '  Results:', &
 '', &
-'       >    1.00000000000000      -0.781212821300289', &
+'       >    1.00000000000000     -0.781212821300289', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3256,7 +3501,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            bessel_y1(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             bessel_y1(3fortran)', &
 '']
 
 shortname="bessel_y1"
@@ -3267,18 +3514,22 @@ case('35','bessel_yn')
 
 textblock=[character(len=256) :: &
 '', &
-'bessel_yn(3fortran)                                        bessel_yn(3fortran)', &
+'bessel_yn(3fortran)                                       bessel_yn(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BESSEL_YN(3) - [MATHEMATICS] Bessel function of the second kind', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bessel_yn(n, x)', &
 '', &
-'           elemental real(kind=KIND) function bessel_yn(n,x)', &
+'          elemental real(kind=KIND) function bessel_yn(n,x)', &
 '', &
-'            integer(kind=**),intent(in) :: n', &
-'            real(kind=KIND),intent(in) :: x', &
+'           integer(kind=**),intent(in) :: n', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  N is integer', &
@@ -3287,13 +3538,14 @@ textblock=[character(len=256) :: &
 '', &
 '  o  The return value has the same type and kind as X.', &
 '', &
-'          result = bessel_yn(n1, n2, x)', &
+'         result = bessel_yn(n1, n2, x)', &
 '', &
-'           real(kind=KIND) function bessel_yn(n1, n2, ,x)', &
+'          real(kind=KIND) function bessel_yn(n1, n2, ,x)', &
 '', &
-'            integer(kind=**),intent(in) :: n1', &
-'            integer(kind=**),intent(in) :: n2', &
-'            real(kind=KIND),intent(in) :: x', &
+'           integer(kind=**),intent(in) :: n1', &
+'           integer(kind=**),intent(in) :: n2', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 '  o  N1 is integer', &
 '', &
@@ -3337,12 +3589,13 @@ textblock=[character(len=256) :: &
 '      & real32, real64, real128', &
 '      implicit none', &
 '      real(kind=real64) :: x = 1.0_real64', &
-'        write(*,*) x,bessel_yn(5,x)', &
+'       write(*,*) x,bessel_yn(5,x)', &
 '      end program demo_bessel_yn', &
 '', &
 '  Results:', &
 '', &
-'            1.0000000000000000       -260.40586662581222', &
+'           1.0000000000000000       -260.40586662581222', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3352,7 +3605,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            bessel_yn(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             bessel_yn(3fortran)', &
 '']
 
 shortname="bessel_yn"
@@ -3363,18 +3618,22 @@ case('36','bge')
 
 textblock=[character(len=256) :: &
 '', &
-'bge(3fortran)                                                    bge(3fortran)', &
+'bge(3fortran)                                                   bge(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BGE(3) - [BIT:COMPARE] Bitwise greater than or equal to', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bge(i,j)', &
 '', &
-'            elemental logical function bge(i, j)', &
+'           elemental logical function bge(i, j)', &
 '', &
-'             integer(kind=**),intent(in) :: i', &
-'             integer(kind=**),intent(in) :: j', &
+'            integer(kind=**),intent(in) :: i', &
+'            integer(kind=**),intent(in) :: j', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -3429,49 +3688,49 @@ textblock=[character(len=256) :: &
 '      program demo_bge', &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
-'      integer            :: i', &
+'      integer           :: i', &
 '      integer(kind=int8) :: byte', &
 '      integer(kind=int8),allocatable :: arr1(:), arr2(:)', &
 '', &
-'        ! BASIC USAGE', &
-'         write(*,*)''bge(-127,127)='',bge( -127, 127 )', &
-'         ! on (very common) "two''s complement" machines that are', &
-'         ! little-endian -127 will be greater than 127', &
+'       ! BASIC USAGE', &
+'        write(*,*)''bge(-127,127)='',bge( -127, 127 )', &
+'        ! on (very common) "two''s complement" machines that are', &
+'        ! little-endian -127 will be greater than 127', &
 '', &
-'         ! BOZ constants', &
-'         ! BOZ constants are subject to truncation, so make sure', &
-'         ! your values are valid for the integer kind being compared to', &
-'         write(*,*)''bge(b"0001",2)='',bge( b"1", 2)', &
+'        ! BOZ constants', &
+'        ! BOZ constants are subject to truncation, so make sure', &
+'        ! your values are valid for the integer kind being compared to', &
+'        write(*,*)''bge(b"0001",2)='',bge( b"1", 2)', &
 '', &
-'        ! ELEMENTAL', &
-'         ! an array and scalar', &
-'         write(*, *)''compare array of values [-128, -0, +0, 127] to 127''', &
-'         write(*, *)bge(int([-128, -0, +0, 127], kind=int8), 127_int8)', &
+'       ! ELEMENTAL', &
+'        ! an array and scalar', &
+'        write(*, *)''compare array of values [-128, -0, +0, 127] to 127''', &
+'        write(*, *)bge(int([-128, -0, +0, 127], kind=int8), 127_int8)', &
 '', &
-'         ! two arrays', &
-'         write(*, *)''compare two arrays''', &
-'         arr1=int( [ -127, -0, +0,  127], kind=int8 )', &
-'         arr2=int( [  127,  0,  0, -127], kind=int8 )', &
-'         write(*,*)''arr1='',arr1', &
-'         write(*,*)''arr2='',arr2', &
-'         write(*, *)''bge(arr1,arr2)='',bge( arr1, arr2 )', &
+'        ! two arrays', &
+'        write(*, *)''compare two arrays''', &
+'        arr1=int( [ -127, -0, +0,  127], kind=int8 )', &
+'        arr2=int( [  127,  0,  0, -127], kind=int8 )', &
+'        write(*,*)''arr1='',arr1', &
+'        write(*,*)''arr2='',arr2', &
+'        write(*, *)''bge(arr1,arr2)='',bge( arr1, arr2 )', &
 '', &
-'        ! SHOW TESTS AND BITS', &
-'         ! actually looking at the bit patterns should clarify what affect', &
-'         ! signs have ...', &
-'         write(*,*)''Compare some one-byte values to 64.''', &
-'         write(*,*)''Notice that the values are tested as bits not as integers''', &
-'         write(*,*)''so the results are as if values are unsigned integers.''', &
-'         do i=-128,127,32', &
-'            byte=i', &
-'            write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,bge(byte,64_int8),byte', &
-'         enddo', &
+'       ! SHOW TESTS AND BITS', &
+'        ! actually looking at the bit patterns should clarify what affect', &
+'        ! signs have ...', &
+'        write(*,*)''Compare some one-byte values to 64.''', &
+'        write(*,*)''Notice that the values are tested as bits not as integers''', &
+'        write(*,*)''so the results are as if values are unsigned integers.''', &
+'        do i=-128,127,32', &
+'           byte=i', &
+'           write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,bge(byte,64_int8),byte', &
+'        enddo', &
 '', &
-'        ! SIGNED ZERO', &
-'         ! are +0 and -0 the same on your platform? When comparing at the', &
-'         ! bit level this is important', &
-'         write(*,''("plus zero=",b0)'')  +0', &
-'         write(*,''("minus zero=",b0)'') -0', &
+'       ! SIGNED ZERO', &
+'        ! are +0 and -0 the same on your platform? When comparing at the', &
+'        ! bit level this is important', &
+'        write(*,''("plus zero=",b0)'')  +0', &
+'        write(*,''("minus zero=",b0)'') -0', &
 '', &
 '      end program demo_bge', &
 '', &
@@ -3480,27 +3739,28 @@ textblock=[character(len=256) :: &
 '  How an integer value is represented at the bit level can vary. These are', &
 '  just the values expected on Today''s most common platforms ...', &
 '', &
-'          > bge(-127,127)= T', &
-'          > bge(b"0001",2)= F', &
-'          > compare array of values [-128, -0, +0, 127] to 127', &
-'          > T F F T', &
-'          > compare two arrays', &
-'          > arr1= -127    0    0  127', &
-'          > arr2=  127    0    0 -127', &
-'          > bge(arr1,arr2)= T T T F', &
-'          > Compare some one-byte values to 64.', &
-'          > Notice that the values are tested as bits not as integers', &
-'          > so the results are as if values are unsigned integers.', &
-'          > -0128  T 10000000', &
-'          > -0096  T 10100000', &
-'          > -0064  T 11000000', &
-'          > -0032  T 11100000', &
-'          > +0000  F 00000000', &
-'          > +0032  F 00100000', &
-'          > +0064  T 01000000', &
-'          > +0096  T 01100000', &
-'          > plus zero=0', &
-'          > minus zero=0', &
+'         > bge(-127,127)= T', &
+'         > bge(b"0001",2)= F', &
+'         > compare array of values [-128, -0, +0, 127] to 127', &
+'         > T F F T', &
+'         > compare two arrays', &
+'         > arr1= -127    0    0  127', &
+'         > arr2=  127    0    0 -127', &
+'         > bge(arr1,arr2)= T T T F', &
+'         > Compare some one-byte values to 64.', &
+'         > Notice that the values are tested as bits not as integers', &
+'         > so the results are as if values are unsigned integers.', &
+'         > -0128  T 10000000', &
+'         > -0096  T 10100000', &
+'         > -0064  T 11000000', &
+'         > -0032  T 11100000', &
+'         > +0000  F 00000000', &
+'         > +0032  F 00100000', &
+'         > +0064  T 01000000', &
+'         > +0096  T 01100000', &
+'         > plus zero=0', &
+'         > minus zero=0', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3510,7 +3770,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  bge(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   bge(3fortran)', &
 '']
 
 shortname="bge"
@@ -3521,18 +3783,22 @@ case('37','bgt')
 
 textblock=[character(len=256) :: &
 '', &
-'bgt(3fortran)                                                    bgt(3fortran)', &
+'bgt(3fortran)                                                   bgt(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BGT(3) - [BIT:COMPARE] Bitwise greater than', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bgt(i, j)', &
 '', &
-'            elemental logical function bgt(i, j)', &
+'           elemental logical function bgt(i, j)', &
 '', &
-'             integer(kind=**),intent(in) :: i', &
-'             integer(kind=**),intent(in) :: j', &
+'            integer(kind=**),intent(in) :: i', &
+'            integer(kind=**),intent(in) :: j', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I is an integer or a boz-literal-constant.', &
@@ -3568,44 +3834,45 @@ textblock=[character(len=256) :: &
 '      program demo_bgt', &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
-'      integer            :: i', &
+'      integer           :: i', &
 '      integer(kind=int8) :: byte', &
-'        ! Compare some one-byte values to 64.', &
-'         ! Notice that the values are tested as bits not as integers', &
-'         ! so sign bits in the integer are treated just like any other', &
-'         write(*,''(a)'') ''we will compare other values to 64''', &
-'         i=64', &
-'         byte=i', &
-'         write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,bgt(byte,64_int8),byte', &
+'       ! Compare some one-byte values to 64.', &
+'        ! Notice that the values are tested as bits not as integers', &
+'        ! so sign bits in the integer are treated just like any other', &
+'        write(*,''(a)'') ''we will compare other values to 64''', &
+'        i=64', &
+'        byte=i', &
+'        write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,bgt(byte,64_int8),byte', &
 '', &
-'         write(*,''(a)'') "comparing at the bit level, not as whole numbers."', &
-'         write(*,''(a)'') "so pay particular attention to the negative"', &
-'         write(*,''(a)'') "values on this two''s complement platform ..."', &
-'         do i=-128,127,32', &
-'            byte=i', &
-'            write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,bgt(byte,64_int8),byte', &
-'         enddo', &
+'        write(*,''(a)'') "comparing at the bit level, not as whole numbers."', &
+'        write(*,''(a)'') "so pay particular attention to the negative"', &
+'        write(*,''(a)'') "values on this two''s complement platform ..."', &
+'        do i=-128,127,32', &
+'           byte=i', &
+'           write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,bgt(byte,64_int8),byte', &
+'        enddo', &
 '', &
-'         ! see the BGE() description for an extended description', &
-'         ! of related information', &
+'        ! see the BGE() description for an extended description', &
+'        ! of related information', &
 '', &
 '      end program demo_bgt', &
 '', &
 '  Results:', &
 '', &
 '       > we will compare other values to 64', &
-'       > +0064  F 01000000', &
+'       > +0064 F 01000000', &
 '       > comparing at the bit level, not as whole numbers.', &
 '       > so pay particular attention to the negative', &
 '       > values on this two''s complement platform ...', &
-'       > -0128  T 10000000', &
-'       > -0096  T 10100000', &
-'       > -0064  T 11000000', &
-'       > -0032  T 11100000', &
-'       > +0000  F 00000000', &
-'       > +0032  F 00100000', &
-'       > +0064  F 01000000', &
-'       > +0096  T 01100000', &
+'       > -0128 T 10000000', &
+'       > -0096 T 10100000', &
+'       > -0064 T 11000000', &
+'       > -0032 T 11100000', &
+'       > +0000 F 00000000', &
+'       > +0032 F 00100000', &
+'       > +0064 F 01000000', &
+'       > +0096 T 01100000', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3615,7 +3882,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  bgt(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   bgt(3fortran)', &
 '']
 
 shortname="bgt"
@@ -3626,17 +3895,21 @@ case('38','bit_size')
 
 textblock=[character(len=256) :: &
 '', &
-'bit_size(3fortran)                                          bit_size(3fortran)', &
+'bit_size(3fortran)                                         bit_size(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BIT_SIZE(3) - [BIT:INQUIRY] Bit size inquiry function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = bit_size(i)', &
 '', &
-'           integer(kind=KIND) function bit_size(i)', &
+'          integer(kind=KIND) function bit_size(i)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i(..)', &
+'           integer(kind=KIND),intent(in) :: i(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I shall be of type integer. It may be a scalar or an array.', &
@@ -3670,26 +3943,27 @@ textblock=[character(len=256) :: &
 '      character(len=*),parameter   :: fmt=&', &
 '      & ''(a,": bit size is ",i3," which is kind=",i3," on this platform")''', &
 '', &
-'          ! default integer bit size on this platform', &
-'          write(*,fmt) "default", bit_size(0), kind(0)', &
+'         ! default integer bit size on this platform', &
+'         write(*,fmt) "default", bit_size(0), kind(0)', &
 '', &
-'          write(*,fmt) "int8   ", bit_size(0_int8),   kind(0_int8)', &
-'          write(*,fmt) "int16  ", bit_size(0_int16),  kind(0_int16)', &
-'          write(*,fmt) "int32  ", bit_size(0_int32),  kind(0_int32)', &
-'          write(*,fmt) "int64  ", bit_size(0_int64),  kind(0_int64)', &
+'         write(*,fmt) "int8   ", bit_size(0_int8),   kind(0_int8)', &
+'         write(*,fmt) "int16  ", bit_size(0_int16),  kind(0_int16)', &
+'         write(*,fmt) "int32  ", bit_size(0_int32),  kind(0_int32)', &
+'         write(*,fmt) "int64  ", bit_size(0_int64),  kind(0_int64)', &
 '', &
-'          write(*,''(a,*(i0:,", "))'') "The available kinds are ",integer_kinds', &
+'         write(*,''(a,*(i0:,", "))'') "The available kinds are ",integer_kinds', &
 '', &
 '      end program demo_bit_size', &
 '', &
 '  Typical Results:', &
 '', &
-'          default: bit size is  32 which is kind=  4 on this platform', &
-'          int8   : bit size is   8 which is kind=  1 on this platform', &
-'          int16  : bit size is  16 which is kind=  2 on this platform', &
-'          int32  : bit size is  32 which is kind=  4 on this platform', &
-'          int64  : bit size is  64 which is kind=  8 on this platform', &
-'          The available kinds are 1, 2, 4, 8, 16', &
+'         default: bit size is  32 which is kind=  4 on this platform', &
+'         int8   : bit size is   8 which is kind=  1 on this platform', &
+'         int16  : bit size is  16 which is kind=  2 on this platform', &
+'         int32  : bit size is  32 which is kind=  4 on this platform', &
+'         int64  : bit size is  64 which is kind=  8 on this platform', &
+'         The available kinds are 1, 2, 4, 8, 16', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -3699,7 +3973,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023             bit_size(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              bit_size(3fortran)', &
 '']
 
 shortname="bit_size"
@@ -3710,18 +3986,22 @@ case('39','ble')
 
 textblock=[character(len=256) :: &
 '', &
-'ble(3fortran)                                                    ble(3fortran)', &
+'ble(3fortran)                                                   ble(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BLE(3) - [BIT:COMPARE] Bitwise less than or equal to', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ble(i,j)', &
 '', &
-'           elemental logical function ble(i, j)', &
+'          elemental logical function ble(i, j)', &
 '', &
-'            integer(kind=**),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: j', &
+'           integer(kind=**),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: j', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I and J may be of any supported integer kind, not necessarily the same.', &
@@ -3750,40 +4030,41 @@ textblock=[character(len=256) :: &
 '      program demo_ble', &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
-'      integer            :: i', &
+'      integer           :: i', &
 '      integer(kind=int8) :: byte', &
-'        ! Compare some one-byte values to 64.', &
-'         ! Notice that the values are tested as bits not as integers', &
-'         ! so sign bits in the integer are treated just like any other', &
-'         do i=-128,127,32', &
-'            byte=i', &
-'            write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,ble(byte,64_int8),byte', &
-'            write(*,''(sp,i0.4,*(4x,b0.8))'')64_int8,64_int8', &
-'         enddo', &
+'       ! Compare some one-byte values to 64.', &
+'        ! Notice that the values are tested as bits not as integers', &
+'        ! so sign bits in the integer are treated just like any other', &
+'        do i=-128,127,32', &
+'           byte=i', &
+'           write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,ble(byte,64_int8),byte', &
+'           write(*,''(sp,i0.4,*(4x,b0.8))'')64_int8,64_int8', &
+'        enddo', &
 '', &
-'         ! see the BGE() description for an extended description', &
-'         ! of related information', &
+'        ! see the BGE() description for an extended description', &
+'        ! of related information', &
 '', &
 '      end program demo_ble', &
 '', &
 '  Results:', &
 '', &
-'         -0128  F 10000000', &
-'         +0064    01000000', &
-'         -0096  F 10100000', &
-'         +0064    01000000', &
-'         -0064  F 11000000', &
-'         +0064    01000000', &
-'         -0032  F 11100000', &
-'         +0064    01000000', &
-'         +0000  T 00000000', &
-'         +0064    01000000', &
-'         +0032  T 00100000', &
-'         +0064    01000000', &
-'         +0064  T 01000000', &
-'         +0064    01000000', &
-'         +0096  F 01100000', &
-'         +0064    01000000', &
+'        -0128  F 10000000', &
+'        +0064    01000000', &
+'        -0096  F 10100000', &
+'        +0064    01000000', &
+'        -0064  F 11000000', &
+'        +0064    01000000', &
+'        -0032  F 11100000', &
+'        +0064    01000000', &
+'        +0000  T 00000000', &
+'        +0064    01000000', &
+'        +0032  T 00100000', &
+'        +0064    01000000', &
+'        +0064  T 01000000', &
+'        +0064    01000000', &
+'        +0096  F 01100000', &
+'        +0064    01000000', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3793,7 +4074,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  ble(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   ble(3fortran)', &
 '']
 
 shortname="ble"
@@ -3804,18 +4087,22 @@ case('40','blt')
 
 textblock=[character(len=256) :: &
 '', &
-'blt(3fortran)                                                    blt(3fortran)', &
+'blt(3fortran)                                                   blt(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BLT(3) - [BIT:COMPARE] Bitwise less than', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = blt(i,j)', &
 '', &
-'           elemental logical function blt(i, j)', &
+'          elemental logical function blt(i, j)', &
 '', &
-'            integer(kind=**),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: j', &
+'           integer(kind=**),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: j', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I is an integer of any kind or a BOZ-literal-constant', &
@@ -3845,33 +4132,34 @@ textblock=[character(len=256) :: &
 '      program demo_blt', &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
-'      integer            :: i', &
+'      integer           :: i', &
 '      integer(kind=int8) :: byte', &
-'        ! Compare some one-byte values to 64.', &
-'         ! Notice that the values are tested as bits not as integers', &
-'         ! so sign bits in the integer are treated just like any other', &
-'         do i=-128,127,32', &
-'            byte=i', &
-'            write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,blt(byte,64_int8),byte', &
-'         enddo', &
-'        ! BOZ literals', &
-'         write(*,*)blt(z''1000'', z''101011010'')', &
-'         ! see the BGE() description for an extended description', &
-'         ! of related information', &
+'       ! Compare some one-byte values to 64.', &
+'        ! Notice that the values are tested as bits not as integers', &
+'        ! so sign bits in the integer are treated just like any other', &
+'        do i=-128,127,32', &
+'           byte=i', &
+'           write(*,''(sp,i0.4,*(1x,1l,1x,b0.8))'')i,blt(byte,64_int8),byte', &
+'        enddo', &
+'       ! BOZ literals', &
+'        write(*,*)blt(z''1000'', z''101011010'')', &
+'        ! see the BGE() description for an extended description', &
+'        ! of related information', &
 '', &
 '      end program demo_blt', &
 '', &
 '  Results:', &
 '', &
-'         > -0128  F 10000000', &
-'         > -0096  F 10100000', &
-'         > -0064  F 11000000', &
-'         > -0032  F 11100000', &
-'         > +0000  T 00000000', &
-'         > +0032  T 00100000', &
-'         > +0064  F 01000000', &
-'         > +0096  F 01100000', &
-'         > T', &
+'        > -0128  F 10000000', &
+'        > -0096  F 10100000', &
+'        > -0064  F 11000000', &
+'        > -0032  F 11100000', &
+'        > +0000  T 00000000', &
+'        > +0032  T 00100000', &
+'        > +0064  F 01000000', &
+'        > +0096  F 01100000', &
+'        > T', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -3881,7 +4169,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  blt(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   blt(3fortran)', &
 '']
 
 shortname="blt"
@@ -3892,18 +4182,22 @@ case('41','btest')
 
 textblock=[character(len=256) :: &
 '', &
-'btest(3fortran)                                                btest(3fortran)', &
+'btest(3fortran)                                               btest(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  BTEST(3) - [BIT:INQUIRY] Tests a bit of an integer value.', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = btest(i,pos)', &
 '', &
-'           elemental logical function btest(i,pos)', &
+'          elemental logical function btest(i,pos)', &
 '', &
-'            integer(kind=**),intent(in)  :: i', &
-'            integer(kind=**),intent(in)  :: pos', &
+'           integer(kind=**),intent(in)  :: i', &
+'           integer(kind=**),intent(in)  :: pos', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I is an integer of any kind', &
@@ -3939,81 +4233,83 @@ textblock=[character(len=256) :: &
 '      logical :: bool', &
 '      character(len=*),parameter :: g=''(*(g0))''', &
 '', &
-'           i = 32768 + 1024 + 64', &
-'          write(*,''(a,i0,"=>",b32.32,/)'')''Looking at the integer: '',i', &
+'          i = 32768 + 1024 + 64', &
+'         write(*,''(a,i0,"=>",b32.32,/)'')''Looking at the integer: '',i', &
 '', &
-'          ! looking one bit at a time from LOW BIT TO HIGH BIT', &
-'          write(*,g)''from bit 0 to bit '',bit_size(i),''==>''', &
-'          do pos=0,bit_size(i)-1', &
-'              bool = btest(i, pos)', &
-'              write(*,''(l1)'',advance=''no'')bool', &
-'          enddo', &
-'          write(*,*)', &
+'         ! looking one bit at a time from LOW BIT TO HIGH BIT', &
+'         write(*,g)''from bit 0 to bit '',bit_size(i),''==>''', &
+'         do pos=0,bit_size(i)-1', &
+'             bool = btest(i, pos)', &
+'             write(*,''(l1)'',advance=''no'')bool', &
+'         enddo', &
+'         write(*,*)', &
 '', &
-'          ! a binary format the hard way.', &
-'          ! Note going from bit_size(i) to zero.', &
-'          write(*,*)', &
-'          write(*,g)''so for '',i,'' with a bit size of '',bit_size(i)', &
-'          write(*,''(b32.32)'')i', &
-'          write(*,g)merge(''^'',''_'',[(btest(i,j),j=bit_size(i)-1,0,-1)])', &
-'          write(*,*)', &
-'          write(*,g)''and for '',-i,'' with a bit size of '',bit_size(i)', &
-'          write(*,''(b32.32)'')-i', &
-'          write(*,g)merge(''^'',''_'',[(btest(-i,j),j=bit_size(i)-1,0,-1)])', &
+'         ! a binary format the hard way.', &
+'         ! Note going from bit_size(i) to zero.', &
+'         write(*,*)', &
+'         write(*,g)''so for '',i,'' with a bit size of '',bit_size(i)', &
+'         write(*,''(b32.32)'')i', &
+'         write(*,g)merge(''^'',''_'',[(btest(i,j),j=bit_size(i)-1,0,-1)])', &
+'         write(*,*)', &
+'         write(*,g)''and for '',-i,'' with a bit size of '',bit_size(i)', &
+'         write(*,''(b32.32)'')-i', &
+'         write(*,g)merge(''^'',''_'',[(btest(-i,j),j=bit_size(i)-1,0,-1)])', &
 '', &
-'          ! elemental:', &
-'          !', &
-'          a(1,:)=[ 1, 2 ]', &
-'          a(2,:)=[ 3, 4 ]', &
-'          write(*,*)', &
-'          write(*,''(a,/,*(i2,1x,i2,/))'')''given the array a ...'',a', &
-'          ! the second bit of all the values in a', &
-'          write(*,''(a,/,*(l2,1x,l2,/))'')''the value of btest (a, 2)'',btest(a,2)', &
-'          ! bits 1,2,3,4 of the value 2', &
-'          write(*,''(a,/,*(l2,1x,l2,/))'')''the value of btest (2, a)'',btest(2,a)', &
+'         ! elemental:', &
+'         !', &
+'         a(1,:)=[ 1, 2 ]', &
+'         a(2,:)=[ 3, 4 ]', &
+'         write(*,*)', &
+'         write(*,''(a,/,*(i2,1x,i2,/))'')''given the array a ...'',a', &
+'         ! the second bit of all the values in a', &
+'         write(*,''(a,/,*(l2,1x,l2,/))'')''the value of btest (a, 2)'',btest(a,2)', &
+'         ! bits 1,2,3,4 of the value 2', &
+'         write(*,''(a,/,*(l2,1x,l2,/))'')''the value of btest (2, a)'',btest(2,a)', &
 '      end program demo_btest', &
 '', &
 '  Results:', &
 '', &
-'        > Looking at the integer: 33856=>11111111111111110111101111000000', &
-'        >', &
-'        > 00000000000000001000010001000000', &
-'        > 11111111111111110111101111000000', &
-'        > 1000010001000000', &
-'        > 11111111111111110111101111000000', &
-'        > from bit 0 to bit 32==>', &
-'        > FFFFFFTFFFTFFFFTFFFFFFFFFFFFFFFF', &
-'        >', &
-'        > so for 33856 with a bit size of 32', &
-'        > 00000000000000001000010001000000', &
-'        > ________________^____^___^______', &
-'        >', &
-'        > and for -33856 with a bit size of 32', &
-'        > 11111111111111110111101111000000', &
-'        > ^^^^^^^^^^^^^^^^_^^^^_^^^^______', &
-'        >', &
-'        > given the array a ...', &
-'        >  1  3', &
-'        >  2  4', &
-'        >', &
-'        > the value of btest (a, 2)', &
-'        >  F  F', &
-'        >  F  T', &
-'        >', &
-'        > the value of btest (2, a)', &
-'        >  T  F', &
-'        >  F  F', &
+'       > Looking at the integer: 33856=>11111111111111110111101111000000', &
+'       >', &
+'       > 00000000000000001000010001000000', &
+'       > 11111111111111110111101111000000', &
+'       > 1000010001000000', &
+'       > 11111111111111110111101111000000', &
+'       > from bit 0 to bit 32==>', &
+'       > FFFFFFTFFFTFFFFTFFFFFFFFFFFFFFFF', &
+'       >', &
+'       > so for 33856 with a bit size of 32', &
+'       > 00000000000000001000010001000000', &
+'       > ________________^____^___^______', &
+'       >', &
+'       > and for -33856 with a bit size of 32', &
+'       > 11111111111111110111101111000000', &
+'       > ^^^^^^^^^^^^^^^^_^^^^_^^^^______', &
+'       >', &
+'       > given the array a ...', &
+'       >  1  3', &
+'       >  2  4', &
+'       >', &
+'       > the value of btest (a, 2)', &
+'       >  F  F', &
+'       >  F  T', &
+'       >', &
+'       > the value of btest (2, a)', &
+'       >  T  F', &
+'       >  F  F', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  IEOR(3), IBCLR(3), NOT(3), IBCLR(3), IBITS(3), IBSET(3), IAND(3), IOR(3),', &
-'  IEOR(3), MVBITS(3)', &
+'  IAND(3), IBCLR(3), IBITS(3), IBSET(3), IEOR(3), IOR(3), MVBITS(3), NOT(3)', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                btest(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 btest(3fortran)', &
 '']
 
 shortname="btest"
@@ -4024,18 +4320,22 @@ case('42','c_associated')
 
 textblock=[character(len=256) :: &
 '', &
-'c_associated(3fortran)                                  c_associated(3fortran)', &
+'c_associated(3fortran)                                 c_associated(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  C_ASSOCIATED(3) - [ISO_C_BINDING] Status of a C pointer', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = c_associated(c_prt_1, [c_ptr_2] )', &
 '', &
-'           logical function c_associated(c_prt_1, cptr_2)', &
+'          logical function c_associated(c_prt_1, cptr_2)', &
 '', &
-'            TYPE,intent(in) ::c_ptr_1', &
-'            TYPE,intent(in),optional ::c_ptr_2', &
+'           TYPE,intent(in) ::c_ptr_1', &
+'           TYPE,intent(in),optional ::c_ptr_2', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  C_PTR_1 is a scalar of the type c_ptr or c_funptr.', &
@@ -4070,11 +4370,12 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real, pointer :: a', &
 '      type(c_ptr) :: b', &
-'         if(c_associated(b, c_loc(a))) &', &
-'            stop ''b and a do not point to same target''', &
+'        if(c_associated(b, c_loc(a))) &', &
+'           stop ''b and a do not point to same target''', &
 '      end subroutine association_test', &
 '', &
 '      end program demo_c_associated', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -4084,7 +4385,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023         c_associated(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023          c_associated(3fortran)', &
 '']
 
 shortname="c_associated"
@@ -4095,18 +4398,22 @@ case('43','ceiling')
 
 textblock=[character(len=256) :: &
 '', &
-'ceiling(3fortran)                                            ceiling(3fortran)', &
+'ceiling(3fortran)                                           ceiling(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CEILING(3) - [NUMERIC] Integer ceiling function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ceiling(a [,kind])', &
 '', &
-'           elemental integer(KIND) function ceiling(a,KIND)', &
+'          elemental integer(KIND) function ceiling(a,KIND)', &
 '', &
-'            real(kind=**),intent(in)  :: a', &
-'            integer,intent(in),optional :: KIND', &
+'           real(kind=**),intent(in)  :: a', &
+'           integer,intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ** a is of type real', &
@@ -4142,40 +4449,41 @@ textblock=[character(len=256) :: &
 '      program demo_ceiling', &
 '      implicit none', &
 '      ! just a convenient format for a list of integers', &
-'      character(len=*),parameter :: ints=''(*("   > ",5(i0:,",",1x),/))''', &
+'      character(len=*),parameter :: ints=''(*("         > ",5(i0:,",",1x),/))''', &
 '      real :: x', &
 '      real :: y', &
-'        ! basic usage', &
-'         x = 63.29', &
-'         y = -63.59', &
-'         print ints, ceiling(x)', &
-'         print ints, ceiling(y)', &
-'         ! note the result was the next integer larger to the right', &
+'       ! basic usage', &
+'        x = 63.29', &
+'        y = -63.59', &
+'        print ints, ceiling(x)', &
+'        print ints, ceiling(y)', &
+'        ! note the result was the next integer larger to the right', &
 '', &
-'        ! real values equal to whole numbers', &
-'         x = 63.0', &
-'         y = -63.0', &
-'         print ints, ceiling(x)', &
-'         print ints, ceiling(y)', &
+'       ! real values equal to whole numbers', &
+'        x = 63.0', &
+'        y = -63.0', &
+'        print ints, ceiling(x)', &
+'        print ints, ceiling(y)', &
 '', &
-'        ! elemental (so an array argument is allowed)', &
-'         print ints , &', &
-'         & ceiling([ &', &
-'         &  -2.7,  -2.5, -2.2, -2.0, -1.5, &', &
-'         &  -1.0,  -0.5,  0.0, +0.5, +1.0, &', &
-'         &  +1.5,  +2.0, +2.2, +2.5, +2.7  ])', &
+'       ! elemental (so an array argument is allowed)', &
+'        print ints , &', &
+'        & ceiling([ &', &
+'        &  -2.7,  -2.5, -2.2, -2.0, -1.5, &', &
+'        &  -1.0,  -0.5,  0.0, +0.5, +1.0, &', &
+'        &  +1.5,  +2.0, +2.2, +2.5, +2.7  ])', &
 '', &
 '      end program demo_ceiling', &
 '', &
 '  Results:', &
 '', &
-'         > 64', &
-'         > -63', &
-'         > 63', &
-'         > -63', &
-'         > -2, -2, -2, -2, -1,', &
-'         > -1, 0, 0, 1, 1,', &
-'         > 2, 2, 3, 3, 3', &
+'        > 64', &
+'        > -63', &
+'        > 63', &
+'        > -63', &
+'        > -2, -2, -2, -2, -1,', &
+'        > -1, 0, 0, 1, 1,', &
+'        > 2, 2, 3, 3, 3', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -4187,7 +4495,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              ceiling(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               ceiling(3fortran)', &
 '']
 
 shortname="ceiling"
@@ -4198,19 +4508,23 @@ case('44','c_f_pointer')
 
 textblock=[character(len=256) :: &
 '', &
-'c_f_pointer(3fortran)                                    c_f_pointer(3fortran)', &
+'c_f_pointer(3fortran)                                   c_f_pointer(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  C_F_POINTER(3) - [ISO_C_BINDING] Convert C into Fortran pointer', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call c_f_pointer(cptr, fptr [,shape] )', &
 '', &
-'           subroutine c_f_pointer(cptr, fptr ,shape )', &
+'          subroutine c_f_pointer(cptr, fptr ,shape )', &
 '', &
-'            type(c_ptr),intent(in) :: cprt', &
-'            type(TYPE),pointer,intent(out) :: fprt', &
-'            integer,intent(in),optional :: shape(:)', &
+'           type(c_ptr),intent(in) :: cprt', &
+'           type(TYPE),pointer,intent(out) :: fprt', &
+'           integer,intent(in),optional :: shape(:)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  The Fortran pointer FPRT must be interoperable with CPTR', &
@@ -4237,16 +4551,17 @@ textblock=[character(len=256) :: &
 '      use iso_c_binding', &
 '      implicit none', &
 '      interface', &
-'         subroutine my_routine(p) bind(c,name=''myC_func'')', &
-'            import :: c_ptr', &
-'            type(c_ptr), intent(out) :: p', &
-'         end subroutine', &
+'        subroutine my_routine(p) bind(c,name=''myC_func'')', &
+'           import :: c_ptr', &
+'           type(c_ptr), intent(out) :: p', &
+'        end subroutine', &
 '      end interface', &
 '      type(c_ptr) :: cptr', &
 '      real,pointer :: a(:)', &
-'         call my_routine(cptr)', &
-'         call c_f_pointer(cptr, a, [12])', &
+'        call my_routine(cptr)', &
+'        call c_f_pointer(cptr, a, [12])', &
 '      end program demo_c_f_pointer', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -4256,7 +4571,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023          c_f_pointer(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           c_f_pointer(3fortran)', &
 '']
 
 shortname="c_f_pointer"
@@ -4267,19 +4584,23 @@ case('45','c_f_procpointer')
 
 textblock=[character(len=256) :: &
 '', &
-'c_f_procpointer(3fortran)                            c_f_procpointer(3fortran)', &
+'c_f_procpointer(3fortran)                           c_f_procpointer(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  C_F_PROCPOINTER(3) - [ISO_C_BINDING] Convert C into Fortran procedure', &
 '  pointer', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call c_f_procpointer(cptr, fptr)', &
 '', &
-'           subroutine c_f_procpointer(cptr, fptr )', &
+'          subroutine c_f_procpointer(cptr, fptr )', &
 '', &
-'            type(c_funptr),intent(in) :: cprt', &
-'            type(TYPE),pointer,intent(out) :: fprt', &
+'           type(c_funptr),intent(in) :: cprt', &
+'           type(TYPE),pointer,intent(out) :: fprt', &
+'', &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
@@ -4298,23 +4619,24 @@ textblock=[character(len=256) :: &
 '      use iso_c_binding', &
 '      implicit none', &
 '      abstract interface', &
-'         function func(a)', &
-'         import :: c_float', &
-'         real(c_float), intent(in) :: a', &
-'         real(c_float) :: func', &
-'         end function', &
+'        function func(a)', &
+'        import :: c_float', &
+'        real(c_float), intent(in) :: a', &
+'        real(c_float) :: func', &
+'        end function', &
 '      end interface', &
 '      interface', &
-'         function getIterFunc() bind(c,name="getIterFunc")', &
-'         import :: c_funptr', &
-'         type(c_funptr) :: getIterFunc', &
-'         end function', &
+'        function getIterFunc() bind(c,name="getIterFunc")', &
+'        import :: c_funptr', &
+'        type(c_funptr) :: getIterFunc', &
+'        end function', &
 '      end interface', &
 '      type(c_funptr) :: cfunptr', &
 '      procedure(func), pointer :: myFunc', &
-'         cfunptr = getIterFunc()', &
-'         call c_f_procpointer(cfunptr, myFunc)', &
+'        cfunptr = getIterFunc()', &
+'        call c_f_procpointer(cfunptr, myFunc)', &
 '      end program demo_c_f_procpointer', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -4324,7 +4646,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023      c_f_procpointer(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023       c_f_procpointer(3fortran)', &
 '']
 
 shortname="c_f_procpointer"
@@ -4335,10 +4659,13 @@ case('46','c_funloc')
 
 textblock=[character(len=256) :: &
 '', &
-'c_funloc(3fortran)                                          c_funloc(3fortran)', &
+'c_funloc(3fortran)                                         c_funloc(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  C_FUNLOC(3) - [ISO_C_BINDING] Obtain the C address of a procedure', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = c_funloc(x)', &
@@ -4364,7 +4691,7 @@ textblock=[character(len=256) :: &
 '      contains', &
 '      subroutine sub(a) bind(c)', &
 '      real(c_float) :: a', &
-'         a = sqrt(a)+5.0', &
+'        a = sqrt(a)+5.0', &
 '      end subroutine sub', &
 '      end module x', &
 '      !', &
@@ -4373,14 +4700,15 @@ textblock=[character(len=256) :: &
 '      use x', &
 '      implicit none', &
 '      interface', &
-'         subroutine my_routine(p) bind(c,name=''myC_func'')', &
-'           import :: c_funptr', &
-'           type(c_funptr), intent(in) :: p', &
-'         end subroutine', &
+'        subroutine my_routine(p) bind(c,name=''myC_func'')', &
+'          import :: c_funptr', &
+'          type(c_funptr), intent(in) :: p', &
+'        end subroutine', &
 '      end interface', &
-'         call my_routine(c_funloc(sub))', &
+'        call my_routine(c_funloc(sub))', &
 '      !', &
 '      end program demo_c_funloc', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -4392,7 +4720,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023             c_funloc(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              c_funloc(3fortran)', &
 '']
 
 shortname="c_funloc"
@@ -4403,18 +4733,22 @@ case('47','char')
 
 textblock=[character(len=256) :: &
 '', &
-'char(3fortran)                                                  char(3fortran)', &
+'char(3fortran)                                                 char(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CHAR(3) - [CHARACTER] Generate a character from a code value', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = char(i [,kind])', &
 '', &
-'           elemental character(kind=KIND) function char(i,KIND)', &
+'          elemental character(kind=KIND) function char(i,KIND)', &
 '', &
-'            integer(kind=**),intent(in) :: i', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           integer(kind=**),intent(in) :: i', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -4460,41 +4794,41 @@ textblock=[character(len=256) :: &
 '      integer, parameter :: ascii =  selected_char_kind ("ascii")', &
 '      character(len=1, kind=ascii ) :: c', &
 '      integer :: i', &
-'        ! basic', &
-'         i=74', &
-'         c=char(i)', &
-'         write(*,*)''ASCII character '',i,''is '',c', &
-'        !', &
-'         print *, ''a selection of ASCII characters (shows hex if not printable)''', &
-'         do i=0,127,10', &
-'            c = char(i,kind=ascii)', &
-'            select case(i)', &
-'            case(32:126)', &
-'               write(*,''(i3,1x,a)'')i,c', &
-'            case(0:31,127)', &
-'               ! print hexadecimal value for unprintable characters', &
-'               write(*,''(i3,1x,z2.2)'')i,c', &
-'            case default', &
-'               write(*,''(i3,1x,a,1x,a)'')i,c,''non-standard ASCII''', &
-'            end select', &
-'         enddo', &
+'       ! basic', &
+'        i=74', &
+'        c=char(i)', &
+'        write(*,*)''ASCII character '',i,''is '',c', &
+'       !', &
+'        print *, ''a selection of ASCII characters (shows hex if not printable)''', &
+'        do i=0,127,10', &
+'           c = char(i,kind=ascii)', &
+'           select case(i)', &
+'           case(32:126)', &
+'              write(*,''(i3,1x,a)'')i,c', &
+'           case(0:31,127)', &
+'              ! print hexadecimal value for unprintable characters', &
+'              write(*,''(i3,1x,z2.2)'')i,c', &
+'           case default', &
+'              write(*,''(i3,1x,a,1x,a)'')i,c,''non-standard ASCII''', &
+'           end select', &
+'        enddo', &
 '', &
 '      end program demo_char', &
 '', &
 '  Results:', &
 '', &
-'          ASCII character           74 is J', &
-'          a selection of ASCII characters (shows hex if not printable)', &
-'           0 00', &
-'          10 0A', &
-'          20 14', &
-'          30 1E', &
-'          40 (', &
-'          50 2', &
-'          60 <', &
-'          70 F', &
-'          80 P', &
-'          90 Z', &
+'         ASCII character           74 is J', &
+'         a selection of ASCII characters (shows hex if not printable)', &
+'          0 00', &
+'         10 0A', &
+'         20 14', &
+'         30 1E', &
+'         40 (', &
+'         50 2', &
+'         60 <', &
+'         70 F', &
+'         80 P', &
+'         90 Z', &
 '  100 d 110 n 120 x', &
 '', &
 'STANDARD', &
@@ -4512,7 +4846,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 char(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  char(3fortran)', &
 '']
 
 shortname="char"
@@ -4523,10 +4859,13 @@ case('48','c_loc')
 
 textblock=[character(len=256) :: &
 '', &
-'c_loc(3fortran)                                                c_loc(3fortran)', &
+'c_loc(3fortran)                                               c_loc(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  C_LOC(3) - [ISO_C_BINDING] Obtain the C address of an object', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = c_loc(x)', &
@@ -4548,14 +4887,15 @@ textblock=[character(len=256) :: &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
-'         subroutine association_test(a,b)', &
-'         use iso_c_binding, only: c_associated, c_loc, c_ptr', &
-'         implicit none', &
-'         real, pointer :: a', &
-'         type(c_ptr) :: b', &
-'           if(c_associated(b, c_loc(a))) &', &
-'              stop ''b and a do not point to same target''', &
-'         end subroutine association_test', &
+'        subroutine association_test(a,b)', &
+'        use iso_c_binding, only: c_associated, c_loc, c_ptr', &
+'        implicit none', &
+'        real, pointer :: a', &
+'        type(c_ptr) :: b', &
+'          if(c_associated(b, c_loc(a))) &', &
+'             stop ''b and a do not point to same target''', &
+'        end subroutine association_test', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -4567,7 +4907,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023                c_loc(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 c_loc(3fortran)', &
 '']
 
 shortname="c_loc"
@@ -4578,19 +4920,23 @@ case('49','cmplx')
 
 textblock=[character(len=256) :: &
 '', &
-'cmplx(3fortran)                                                cmplx(3fortran)', &
+'cmplx(3fortran)                                               cmplx(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CMPLX(3) - [TYPE:NUMERIC] Conversion to a complex type', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = cmplx(x [,kind]) | cmplx(x [,y] [,kind])', &
 '', &
-'           elemental complex(kind=KIND) function cmplx( x, y, kind )', &
+'          elemental complex(kind=KIND) function cmplx( x, y, kind )', &
 '', &
-'            type(TYPE(kind=**)),intent(in)          :: x', &
-'            type(TYPE(kind=**)),intent(in),optional :: y', &
-'            integer(kind=**),intent(in),optional    :: KIND', &
+'           type(TYPE(kind=**)),intent(in)          :: x', &
+'           type(TYPE(kind=**)),intent(in),optional :: y', &
+'           integer(kind=**),intent(in),optional    :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be integer, real, or complex.', &
@@ -4616,37 +4962,37 @@ textblock=[character(len=256) :: &
 '  Even though constants can be used to define a complex variable using syntax', &
 '  like', &
 '', &
-'            z = (1.23456789, 9.87654321)', &
+'           z = (1.23456789, 9.87654321)', &
 '', &
 '  this will not work for variables. So you cannot enter', &
 '', &
-'            z = (a, b)  ! NO ! (unless a and b are constants, not variables)', &
+'           z = (a, b)  ! NO ! (unless a and b are constants, not variables)', &
 '', &
 '  so to construct a complex value using non-complex values you must use the', &
 '  CMPLX(3) function:', &
 '', &
-'            z = cmplx(a, b)', &
+'           z = cmplx(a, b)', &
 '', &
 '  or assign values separately to the imaginary and real components using the', &
 '  %IM and %RE designators:', &
 '', &
-'            z%re = a', &
-'            z%im = b', &
+'           z%re = a', &
+'           z%im = b', &
 '', &
 '  If X is complex Y is not allowed and CMPLX essentially returns the input', &
 '  value except for an optional change of kind, which can be useful when', &
 '  passing a value to a procedure that requires the arguments to have a', &
 '  different kind (and does not return an altered value):', &
 '', &
-'            call something(cmplx(z,kind=real64))', &
+'           call something(cmplx(z,kind=real64))', &
 '', &
 '  would pass a copy of a value with kind=real64 even if z had a different kind', &
 '', &
 '  but otherwise is equivalent to a simple assign. So if z1 and z2 were', &
 '  complex:', &
 '', &
-'            z2 = z1        ! equivalent statements', &
-'            z2 = cmplx(z1)', &
+'           z2 = z1        ! equivalent statements', &
+'           z2 = cmplx(z1)', &
 '', &
 '  If X is not complex X is only used to define the real component of the', &
 '  result but Y is still optional -- the imaginary part of the result will just', &
@@ -4671,15 +5017,15 @@ textblock=[character(len=256) :: &
 '', &
 '  This means CMPLX(D1,D2), where D1 and D2 are doubleprecision, is treated as:', &
 '', &
-'            cmplx(sngl(d1), sngl(d2))', &
+'           cmplx(sngl(d1), sngl(d2))', &
 '', &
 '  which looses precision.', &
 '', &
 '  So Fortran 90 extends the CMPLX(3) intrinsic by adding an extra argument', &
 '  used to specify the desired kind of the complex result.', &
 '', &
-'            integer,parameter :: dp=kind(0.0d0)', &
-'            complex(kind=dp) :: z8', &
+'           integer,parameter :: dp=kind(0.0d0)', &
+'           complex(kind=dp) :: z8', &
 '  ! wrong ways to specify constant values ! note this was stored with default', &
 '  real precision !  z8 = cmplx(1.2345678901234567d0, 1.2345678901234567d0)', &
 '  print *, ''NO, Z8='',z8,real(z8),aimag(z8)', &
@@ -4693,9 +5039,9 @@ textblock=[character(len=256) :: &
 '  where real and imaginary parts of a complex entity can be accessed', &
 '  independently:', &
 '', &
-'      value%RE     ! %RE specifies the real part', &
+'      value%RE    ! %RE specifies the real part', &
 '      or', &
-'      value%IM     ! %IM specifies the imaginary part', &
+'      value%IM    ! %IM specifies the imaginary part', &
 '', &
 '  Where the designator value is of course of complex type.', &
 '', &
@@ -4705,10 +5051,10 @@ textblock=[character(len=256) :: &
 '', &
 '  The following are examples of complex part designators:', &
 '', &
-'             impedance%re           !-- Same value as real(impedance)', &
-'             fft%im                 !-- Same value as AIMAG(fft)', &
-'             x%im = 0.0             !-- Sets the imaginary part of x to zero', &
-'             x(1:2)%re=[10,20]      !-- even if x is an array', &
+'            impedance%re           !-- Same value as real(impedance)', &
+'            fft%im                 !-- Same value as AIMAG(fft)', &
+'            x%im = 0.0             !-- Sets the imaginary part of x to zero', &
+'            x(1:2)%re=[10,20]      !-- even if x is an array', &
 '', &
 '  NOTE for I/O', &
 '', &
@@ -4727,7 +5073,7 @@ textblock=[character(len=256) :: &
 '     If X is complex, the result is the same as if the real part of the input', &
 '     was passed as X and the imaginary part as Y.', &
 '', &
-'              result = CMPLX (REAL (X), AIMAG (X), KIND).', &
+'             result = CMPLX (REAL (X), AIMAG (X), KIND).', &
 '', &
 '     That is, a complex X value is copied to the result value with a possible', &
 '     change of kind.', &
@@ -4757,58 +5103,59 @@ textblock=[character(len=256) :: &
 '      program demo_aimag', &
 '      implicit none', &
 '      integer,parameter :: dp=kind(0.0d0)', &
-'      real(kind=dp)     :: precise', &
-'      complex(kind=dp)  :: z8', &
-'      complex           :: z4, zthree(3)', &
-'         precise=1.2345678901234567d0', &
+'      real(kind=dp)    :: precise', &
+'      complex(kind=dp) :: z8', &
+'      complex          :: z4, zthree(3)', &
+'        precise=1.2345678901234567d0', &
 '', &
-'        ! basic', &
-'         z4 = cmplx(-3)', &
-'         print *, ''Z4='',z4', &
-'         z4 = cmplx(1.23456789, 1.23456789)', &
-'         print *, ''Z4='',z4', &
-'         ! with a format treat a complex as two real values', &
-'         print ''(1x,g0,1x,g0,1x,g0)'',''Z4='',z4', &
+'       ! basic', &
+'        z4 = cmplx(-3)', &
+'        print *, ''Z4='',z4', &
+'        z4 = cmplx(1.23456789, 1.23456789)', &
+'        print *, ''Z4='',z4', &
+'        ! with a format treat a complex as two real values', &
+'        print ''(1x,g0,1x,g0,1x,g0)'',''Z4='',z4', &
 '', &
-'        ! working with higher precision values', &
-'         ! using kind=dp makes it keep DOUBLEPRECISION precision', &
-'         ! otherwise the result would be of default kind', &
-'         z8 = cmplx(precise, -precise )', &
-'         print *, ''lost precision Z8='',z8', &
-'         z8 = cmplx(precise, -precise ,kind=dp)', &
-'         print *, ''kept precision Z8='',z8', &
+'       ! working with higher precision values', &
+'        ! using kind=dp makes it keep DOUBLEPRECISION precision', &
+'        ! otherwise the result would be of default kind', &
+'        z8 = cmplx(precise, -precise )', &
+'        print *, ''lost precision Z8='',z8', &
+'        z8 = cmplx(precise, -precise ,kind=dp)', &
+'        print *, ''kept precision Z8='',z8', &
 '', &
-'        ! assignment of constant values does not require cmplx(3)00', &
-'         ! The following is intuitive and works without calling cmplx(3)', &
-'         ! but does not work for variables just constants', &
-'         z8 = (1.1111111111111111d0, 2.2222222222222222d0 )', &
-'         print *, ''Z8 defined with constants='',z8', &
+'       ! assignment of constant values does not require cmplx(3)00', &
+'        ! The following is intuitive and works without calling cmplx(3)', &
+'        ! but does not work for variables just constants', &
+'        z8 = (1.1111111111111111d0, 2.2222222222222222d0 )', &
+'        print *, ''Z8 defined with constants='',z8', &
 '', &
-'        ! what happens when you assign a complex to a real?', &
-'         precise=z8', &
-'         print *, ''LHS='',precise,''RHS='',z8', &
+'       ! what happens when you assign a complex to a real?', &
+'        precise=z8', &
+'        print *, ''LHS='',precise,''RHS='',z8', &
 '', &
-'        ! elemental', &
-'         zthree=cmplx([10,20,30],-1)', &
-'         print *, ''zthree='',zthree', &
+'       ! elemental', &
+'        zthree=cmplx([10,20,30],-1)', &
+'        print *, ''zthree='',zthree', &
 '', &
-'        ! descriptors are an alternative', &
-'         zthree(1:2)%re=[100,200]', &
-'         print *, ''zthree='',zthree', &
+'       ! descriptors are an alternative', &
+'        zthree(1:2)%re=[100,200]', &
+'        print *, ''zthree='',zthree', &
 '', &
 '      end program demo_aimag', &
 '', &
 '  Results:', &
 '', &
-'          Z4= (-3.000000,0.0000000E+00)', &
-'          Z4= (1.234568,1.234568)', &
-'          Z4= 1.234568 1.234568', &
-'          lost precision Z8= (1.23456788063049,-1.23456788063049)', &
-'          kept precision Z8= (1.23456789012346,-1.23456789012346)', &
-'          Z8 defined with constants= (1.11111111111111,2.22222222222222)', &
-'          LHS=   1.11111111111111      RHS= (1.11111111111111,2.22222222222222)', &
-'          zthree= (10.00000,-1.000000) (20.00000,-1.000000) (30.00000,-1.000000)', &
-'          zthree= (100.0000,-1.000000) (200.0000,-1.000000) (30.00000,-1.000000)', &
+'         Z4= (-3.000000,0.0000000E+00)', &
+'         Z4= (1.234568,1.234568)', &
+'         Z4= 1.234568 1.234568', &
+'         lost precision Z8= (1.23456788063049,-1.23456788063049)', &
+'         kept precision Z8= (1.23456789012346,-1.23456789012346)', &
+'         Z8 defined with constants= (1.11111111111111,2.22222222222222)', &
+'         LHS=   1.11111111111111      RHS= (1.11111111111111,2.22222222222222)', &
+'         zthree= (10.00000,-1.000000) (20.00000,-1.000000) (30.00000,-1.000000)', &
+'         zthree= (100.0000,-1.000000) (200.0000,-1.000000) (30.00000,-1.000000)', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77, KIND added in Fortran 90.', &
@@ -4832,7 +5179,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                cmplx(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 cmplx(3fortran)', &
 '']
 
 shortname="cmplx"
@@ -4843,11 +5192,14 @@ case('50','co_broadcast')
 
 textblock=[character(len=256) :: &
 '', &
-'co_broadcast(3fortran)                                  co_broadcast(3fortran)', &
+'co_broadcast(3fortran)                                 co_broadcast(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CO_BROADCAST(3) - [COLLECTIVE] Copy a value to all images the current set of', &
 '  images', &
+'', &
 '', &
 'SYNOPSIS', &
 '  call co_broadcast(a, source_image [,stat] [,errmsg] )', &
@@ -4879,12 +5231,13 @@ textblock=[character(len=256) :: &
 '      program demo_co_broadcast', &
 '      implicit none', &
 '      integer :: val(3)', &
-'         if (this_image() == 1) then', &
-'            val = [1, 5, 3]', &
-'         endif', &
-'         call co_broadcast (val, source_image=1)', &
-'         print *, this_image(), ":", val', &
+'        if (this_image() == 1) then', &
+'           val = [1, 5, 3]', &
+'        endif', &
+'        call co_broadcast (val, source_image=1)', &
+'        print *, this_image(), ":", val', &
 '      end program demo_co_broadcast', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran xx', &
@@ -4894,7 +5247,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023         co_broadcast(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023          co_broadcast(3fortran)', &
 '']
 
 shortname="co_broadcast"
@@ -4941,7 +5296,7 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            co_lbound(3fortran)', &
+'                               February 18, 2023           co_lbound(3fortran)', &
 '']
 
 shortname="co_lbound"
@@ -4952,10 +5307,13 @@ case('52','co_max')
 
 textblock=[character(len=256) :: &
 '', &
-'co_max(3fortran)                                              co_max(3fortran)', &
+'co_max(3fortran)                                             co_max(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CO_MAX(3) - [COLLECTIVE] Maximal value on the current set of images', &
+'', &
 '', &
 'SYNOPSIS', &
 '  call co_max(a, result_image [,stat] [,errmsg] )', &
@@ -4989,16 +5347,17 @@ textblock=[character(len=256) :: &
 '      program demo_co_max', &
 '      implicit none', &
 '      integer :: val', &
-'         val = this_image()', &
-'         call co_max(val, result_image=1)', &
-'         if (this_image() == 1) then', &
-'           write(*,*) "Maximal value", val  ! prints num_images()', &
-'         endif', &
+'        val = this_image()', &
+'        call co_max(val, result_image=1)', &
+'        if (this_image() == 1) then', &
+'          write(*,*) "Maximal value", val  ! prints num_images()', &
+'        endif', &
 '      end program demo_co_max', &
 '', &
 '  Results:', &
 '', &
-'          Maximal value           2', &
+'         Maximal value           2', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -5008,7 +5367,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023               co_max(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                co_max(3fortran)', &
 '']
 
 shortname="co_max"
@@ -5019,10 +5380,13 @@ case('53','co_min')
 
 textblock=[character(len=256) :: &
 '', &
-'co_min(3fortran)                                              co_min(3fortran)', &
+'co_min(3fortran)                                             co_min(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CO_MIN(3) - [COLLECTIVE] Minimal value on the current set of images', &
+'', &
 '', &
 'SYNOPSIS', &
 '  call co_min(a, result_image [,stat] [,errmsg] )', &
@@ -5056,12 +5420,13 @@ textblock=[character(len=256) :: &
 '      program demo_co_min', &
 '      implicit none', &
 '      integer :: val', &
-'         val = this_image()', &
-'         call co_min(val, result_image=1)', &
-'         if (this_image() == 1) then', &
-'           write(*,*) "Minimal value", val  ! prints 1', &
-'         endif', &
+'        val = this_image()', &
+'        call co_min(val, result_image=1)', &
+'        if (this_image() == 1) then', &
+'          write(*,*) "Minimal value", val  ! prints 1', &
+'        endif', &
 '      end program demo_co_min', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -5071,7 +5436,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023               co_min(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                co_min(3fortran)', &
 '']
 
 shortname="co_min"
@@ -5082,16 +5449,20 @@ case('54','command_argument_count')
 
 textblock=[character(len=256) :: &
 '', &
-'command_argument_count(3fortran)              command_argument_count(3fortran)', &
+'command_argument_count(3fortran)             command_argument_count(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  COMMAND_ARGUMENT_COUNT(3) - [SYSTEM:COMMAND LINE] Get number of command line', &
 '  arguments', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = command_argument_count()', &
 '', &
-'           integer function command_argument_count()', &
+'          integer function command_argument_count()', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  the result is of default integer scalar.', &
@@ -5119,20 +5490,21 @@ textblock=[character(len=256) :: &
 '      program demo_command_argument_count', &
 '      implicit none', &
 '      integer :: count', &
-'         count = command_argument_count()', &
-'         print *, count', &
+'        count = command_argument_count()', &
+'        print *, count', &
 '      end program demo_command_argument_count', &
 '', &
 '  Sample output:', &
 '', &
-'         # the command verb does not count', &
-'         ./test_command_argument_count', &
-'             0', &
-'         # quoted strings may count as one argument', &
-'         ./test_command_argument_count count arguments', &
-'             2', &
-'         ./test_command_argument_count ''count arguments''', &
-'             1', &
+'        # the command verb does not count', &
+'        ./test_command_argument_count', &
+'            0', &
+'        # quoted strings may count as one argument', &
+'        ./test_command_argument_count count arguments', &
+'            2', &
+'        ./test_command_argument_count ''count arguments''', &
+'            1', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -5142,7 +5514,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 202command_argument_count(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023command_argument_count(3fortran)', &
 '']
 
 shortname="command_argument_count"
@@ -5153,15 +5527,19 @@ case('55','compiler_options')
 
 textblock=[character(len=256) :: &
 '', &
-'compiler_options(3fortran)                          compiler_options(3fortran)', &
+'compiler_options(3fortran)                         compiler_options(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  COMPILER_OPTIONS(3) - [COMPILER:INQUIRY] Options passed to the compiler', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = compiler_options()', &
 '', &
-'           character(len=:) function compiler_options()', &
+'          character(len=:) function compiler_options()', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  the return value is a default-kind character variable with system-', &
@@ -5184,11 +5562,11 @@ textblock=[character(len=256) :: &
 '      use, intrinsic :: iso_fortran_env, only : compiler_version', &
 '      use, intrinsic :: iso_fortran_env, only : compiler_options', &
 '      implicit none', &
-'         print ''(4a)'', &', &
-'            ''This file was compiled by '', &', &
-'            compiler_version(),           &', &
-'            '' using the options '',        &', &
-'            compiler_options()', &
+'        print ''(4a)'', &', &
+'           ''This file was compiled by '', &', &
+'           compiler_version(),           &', &
+'           '' using the options '',      &', &
+'           compiler_options()', &
 '      end program demo_compiler_version', &
 '', &
 '  Results:', &
@@ -5215,6 +5593,7 @@ textblock=[character(len=256) :: &
 '      byterecl -traceback -module build/ifort_5C58216731706F11 -o', &
 '      build/ifort_5C58216731706F11/compiler_options/app_main.f90.o', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 2008', &
 '', &
@@ -5223,7 +5602,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023     compiler_options(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023      compiler_options(3fortran)', &
 '']
 
 shortname="compiler_options"
@@ -5234,15 +5615,19 @@ case('56','compiler_version')
 
 textblock=[character(len=256) :: &
 '', &
-'compiler_version(3fortran)                          compiler_version(3fortran)', &
+'compiler_version(3fortran)                         compiler_version(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  COMPILER_VERSION(3) - [COMPILER:INQUIRY] Compiler version string', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = compiler_version()', &
 '', &
-'           character(len=:) function compiler_version()', &
+'          character(len=:) function compiler_version()', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  The return value is a default-kind scalar character with system-dependent', &
@@ -5265,9 +5650,9 @@ textblock=[character(len=256) :: &
 '      program demo_compiler_version', &
 '      use, intrinsic :: iso_fortran_env, only : compiler_version', &
 '      implicit none', &
-'         print ''(2a)'', &', &
-'            ''This file was compiled by '', &', &
-'            compiler_version()', &
+'        print ''(2a)'', &', &
+'           ''This file was compiled by '', &', &
+'           compiler_version()', &
 '      end program demo_compiler_version', &
 '', &
 '  Results:', &
@@ -5280,6 +5665,7 @@ textblock=[character(len=256) :: &
 '', &
 '      This file was compiled by nvfortran 21.5-0 LLVM', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 2008', &
 '', &
@@ -5288,7 +5674,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023     compiler_version(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023      compiler_version(3fortran)', &
 '']
 
 shortname="compiler_version"
@@ -5299,17 +5687,21 @@ case('57','conjg')
 
 textblock=[character(len=256) :: &
 '', &
-'conjg(3fortran)                                                conjg(3fortran)', &
+'conjg(3fortran)                                               conjg(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CONJG(3) - [NUMERIC] Complex conjugate of a complex value', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = conjg(z)', &
 '', &
-'           elemental complex(kind=KIND) function conjg(z)', &
+'          elemental complex(kind=KIND) function conjg(z)', &
 '', &
-'            complex(kind=**),intent(in) :: z', &
+'           complex(kind=**),intent(in) :: z', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  Z is a complex value of any valid kind.', &
@@ -5346,30 +5738,30 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      complex :: z = (2.0, 3.0)', &
 '      complex(kind=real64) :: dz = (   &', &
-'         &  1.2345678901234567_real64, -1.2345678901234567_real64)', &
+'        &  1.2345678901234567_real64, -1.2345678901234567_real64)', &
 '      complex :: arr(3,3)', &
 '      integer :: i', &
-'         ! basics', &
-'          ! notice the sine of the imaginary component changes', &
-'          print *, z, conjg(z)', &
+'        ! basics', &
+'         ! notice the sine of the imaginary component changes', &
+'         print *, z, conjg(z)', &
 '', &
-'          ! any complex kind is supported. z is of default kind but', &
-'          ! dz is kind=real64.', &
-'          print *, dz', &
-'          dz = conjg(dz)', &
-'          print *, dz', &
-'          print *', &
+'         ! any complex kind is supported. z is of default kind but', &
+'         ! dz is kind=real64.', &
+'         print *, dz', &
+'         dz = conjg(dz)', &
+'         print *, dz', &
+'         print *', &
 '', &
-'          ! the function is elemental so it can take arrays', &
-'          arr(1,:)=[(-1.0, 2.0),( 3.0, 4.0),( 5.0,-6.0)]', &
-'          arr(2,:)=[( 7.0,-8.0),( 8.0, 9.0),( 9.0, 9.0)]', &
-'          arr(3,:)=[( 1.0, 9.0),( 2.0, 0.0),(-3.0,-7.0)]', &
+'         ! the function is elemental so it can take arrays', &
+'         arr(1,:)=[(-1.0, 2.0),( 3.0, 4.0),( 5.0,-6.0)]', &
+'         arr(2,:)=[( 7.0,-8.0),( 8.0, 9.0),( 9.0, 9.0)]', &
+'         arr(3,:)=[( 1.0, 9.0),( 2.0, 0.0),(-3.0,-7.0)]', &
 '', &
-'          write(*,*)''original''', &
-'          write(*,''(3("(",g8.2,",",g8.2,")",1x))'')(arr(i,:),i=1,3)', &
-'          arr = conjg(arr)', &
-'          write(*,*)''conjugate''', &
-'          write(*,''(3("(",g8.2,",",g8.2,")",1x))'')(arr(i,:),i=1,3)', &
+'         write(*,*)''original''', &
+'         write(*,''(3("(",g8.2,",",g8.2,")",1x))'')(arr(i,:),i=1,3)', &
+'         arr = conjg(arr)', &
+'         write(*,*)''conjugate''', &
+'         write(*,''(3("(",g8.2,",",g8.2,")",1x))'')(arr(i,:),i=1,3)', &
 '', &
 '      end program demo_conjg', &
 '', &
@@ -5381,14 +5773,15 @@ textblock=[character(len=256) :: &
 '       >  (1.23456789012346,1.23456789012346)', &
 '       >', &
 '       >  original', &
-'       > (-1.0    , 2.0    ) ( 3.0    , 4.0    ) ( 5.0    ,-6.0    )', &
-'       > ( 7.0    ,-8.0    ) ( 8.0    , 9.0    ) ( 9.0    , 9.0    )', &
-'       > ( 1.0    , 9.0    ) ( 2.0    , 0.0    ) (-3.0    ,-7.0    )', &
+'       > (-1.0   , 2.0    ) ( 3.0    , 4.0    ) ( 5.0    ,-6.0    )', &
+'       > ( 7.0   ,-8.0    ) ( 8.0    , 9.0    ) ( 9.0    , 9.0    )', &
+'       > ( 1.0   , 9.0    ) ( 2.0    , 0.0    ) (-3.0    ,-7.0    )', &
 '       >', &
 '       >  conjugate', &
-'       > (-1.0    ,-2.0    ) ( 3.0    ,-4.0    ) ( 5.0    , 6.0    )', &
-'       > ( 7.0    , 8.0    ) ( 8.0    ,-9.0    ) ( 9.0    ,-9.0    )', &
-'       > ( 1.0    ,-9.0    ) ( 2.0    , 0.0    ) (-3.0    , 7.0    )', &
+'       > (-1.0   ,-2.0    ) ( 3.0    ,-4.0    ) ( 5.0    , 6.0    )', &
+'       > ( 7.0   , 8.0    ) ( 8.0    ,-9.0    ) ( 9.0    ,-9.0    )', &
+'       > ( 1.0   ,-9.0    ) ( 2.0    , 0.0    ) (-3.0    , 7.0    )', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -5412,7 +5805,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                conjg(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 conjg(3fortran)', &
 '']
 
 shortname="conjg"
@@ -5423,10 +5818,13 @@ case('58','co_reduce')
 
 textblock=[character(len=256) :: &
 '', &
-'co_reduce(3fortran)                                        co_reduce(3fortran)', &
+'co_reduce(3fortran)                                       co_reduce(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CO_REDUCE(3) - [COLLECTIVE] Reduction of values on the current set of images', &
+'', &
 '', &
 'SYNOPSIS', &
 '  call co_reduce(a, operation, result_image [,stat] [,errmsg] )', &
@@ -5466,6 +5864,7 @@ textblock=[character(len=256) :: &
 '      the same the same value on all images and refer to an image of the', &
 '      current team.', &
 '', &
+'', &
 '  o  STAT : (optional) a scalar integer variable', &
 '', &
 '  o  ERRMSG : (optional) a scalar character variable', &
@@ -5477,21 +5876,22 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer :: val', &
 '', &
-'         val = this_image()', &
-'         call co_reduce(val, myprod, 1)', &
-'         if (this_image() == 1) then', &
-'            write(*,*) "Product value", val  ! prints num_images() factorial', &
-'         endif', &
+'        val = this_image()', &
+'        call co_reduce(val, myprod, 1)', &
+'        if (this_image() == 1) then', &
+'           write(*,*) "Product value", val  ! prints num_images() factorial', &
+'        endif', &
 '', &
 '      contains', &
 '', &
 '      pure function myprod(a, b)', &
-'         integer, value :: a, b', &
-'         integer :: myprod', &
-'         myprod = a * b', &
+'        integer, value :: a, b', &
+'        integer :: myprod', &
+'        myprod = a * b', &
 '      end function myprod', &
 '', &
 '      end program demo_co_reduce', &
+'', &
 '', &
 'NOTE', &
 '  While the rules permit in principle an intrinsic function, none of the', &
@@ -5507,7 +5907,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            co_reduce(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             co_reduce(3fortran)', &
 '']
 
 shortname="co_reduce"
@@ -5518,17 +5920,21 @@ case('59','cos')
 
 textblock=[character(len=256) :: &
 '', &
-'cos(3fortran)                                                    cos(3fortran)', &
+'cos(3fortran)                                                   cos(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  COS(3) - [MATHEMATICS:TRIGONOMETRIC] Cosine function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = cos(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function cos(x)', &
+'          elemental TYPE(kind=KIND) function cos(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is of type real or complex of any valid kind.', &
@@ -5563,25 +5969,26 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      character(len=*),parameter :: g2=''(a,t20,g0)''', &
 '      doubleprecision,parameter :: PI=atan(1.0d0)*4.0d0', &
-'         write(*,g2)''COS(0.0)='',cos(0.0)', &
-'         write(*,g2)''COS(PI)='',cos(PI)', &
-'         write(*,g2)''COS(PI/2.0d0)='',cos(PI/2.0d0),''EPSILON='',epsilon(PI)', &
-'         write(*,g2)''COS(2*PI)='',cos(2*PI)', &
-'         write(*,g2)''COS(-2*PI)='',cos(-2*PI)', &
-'         write(*,g2)''COS(-2000*PI)='',cos(-2000*PI)', &
-'         write(*,g2)''COS(3000*PI)='',cos(3000*PI)', &
+'        write(*,g2)''COS(0.0)='',cos(0.0)', &
+'        write(*,g2)''COS(PI)='',cos(PI)', &
+'        write(*,g2)''COS(PI/2.0d0)='',cos(PI/2.0d0),''EPSILON='',epsilon(PI)', &
+'        write(*,g2)''COS(2*PI)='',cos(2*PI)', &
+'        write(*,g2)''COS(-2*PI)='',cos(-2*PI)', &
+'        write(*,g2)''COS(-2000*PI)='',cos(-2000*PI)', &
+'        write(*,g2)''COS(3000*PI)='',cos(3000*PI)', &
 '      end program demo_cos', &
 '', &
 '  Results:', &
 '', &
-'       > COS(0.0)=          1.000000', &
-'       > COS(PI)=           -1.000000000000000', &
+'       > COS(0.0)=         1.000000', &
+'       > COS(PI)=          -1.000000000000000', &
 '       > COS(PI/2.0d0)=     .6123233995736766E-16', &
-'       > EPSILON=           .2220446049250313E-15', &
-'       > COS(2*PI)=         1.000000000000000', &
-'       > COS(-2*PI)=        1.000000000000000', &
+'       > EPSILON=          .2220446049250313E-15', &
+'       > COS(2*PI)=        1.000000000000000', &
+'       > COS(-2*PI)=       1.000000000000000', &
 '       > COS(-2000*PI)=     1.000000000000000', &
-'       > COS(3000*PI)=      1.000000000000000', &
+'       > COS(3000*PI)=     1.000000000000000', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -5594,7 +6001,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023                  cos(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   cos(3fortran)', &
 '']
 
 shortname="cos"
@@ -5605,17 +6014,21 @@ case('60','cosh')
 
 textblock=[character(len=256) :: &
 '', &
-'cosh(3fortran)                                                  cosh(3fortran)', &
+'cosh(3fortran)                                                 cosh(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  COSH(3) - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic cosine function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = cosh(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function cosh(x)', &
+'          elemental TYPE(kind=KIND) function cosh(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  TYPE may be real or complex of any kind.', &
@@ -5644,12 +6057,13 @@ textblock=[character(len=256) :: &
 '       & real_kinds, real32, real64, real128', &
 '      implicit none', &
 '      real(kind=real64) :: x = 1.0_real64', &
-'          write(*,*)''X='',x,''COSH(X=)'',cosh(x)', &
+'         write(*,*)''X='',x,''COSH(X=)'',cosh(x)', &
 '      end program demo_cosh', &
 '', &
 '  Results:', &
 '', &
-'       >  X=   1.00000000000000      COSH(X=)   1.54308063481524', &
+'       >  X=   1.00000000000000      COSH(X=)  1.54308063481524', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77 , for a complex argument - Fortran 2008', &
@@ -5662,7 +6076,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023                 cosh(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  cosh(3fortran)', &
 '']
 
 shortname="cosh"
@@ -5673,10 +6089,13 @@ case('61','co_sum')
 
 textblock=[character(len=256) :: &
 '', &
-'co_sum(3fortran)                                              co_sum(3fortran)', &
+'co_sum(3fortran)                                             co_sum(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CO_SUM(3) - [COLLECTIVE] Sum of values on the current set of images', &
+'', &
 '', &
 'SYNOPSIS', &
 '  call co_sum(a, result_image [,stat] [,errmsg] )', &
@@ -5713,17 +6132,18 @@ textblock=[character(len=256) :: &
 '      program demo_co_sum', &
 '      implicit none', &
 '      integer :: val', &
-'         val = this_image()', &
-'         call co_sum(val, result_image=1)', &
-'         if (this_image() == 1) then', &
-'            ! prints (n**2 + n)/2, with n = num_images()', &
-'            write(*,*) "The sum is ", val', &
-'         endif', &
+'        val = this_image()', &
+'        call co_sum(val, result_image=1)', &
+'        if (this_image() == 1) then', &
+'           ! prints (n**2 + n)/2, with n = num_images()', &
+'           write(*,*) "The sum is ", val', &
+'        endif', &
 '      end program demo_co_sum', &
 '', &
 '  Results:', &
 '', &
-'          The sum is            1', &
+'         The sum is            1', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -5733,7 +6153,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023               co_sum(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                co_sum(3fortran)', &
 '']
 
 shortname="co_sum"
@@ -5780,7 +6202,7 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            co_ubound(3fortran)', &
+'                               February 18, 2023           co_ubound(3fortran)', &
 '']
 
 shortname="co_ubound"
@@ -5791,19 +6213,23 @@ case('63','count')
 
 textblock=[character(len=256) :: &
 '', &
-'count(3fortran)                                                count(3fortran)', &
+'count(3fortran)                                               count(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  COUNT(3) - [ARRAY:REDUCTION] Count true values in an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = count(mask [,dim] [,kind] )', &
 '', &
-'           integer(kind=KIND) function count(mask, dim, KIND )', &
+'          integer(kind=KIND) function count(mask, dim, KIND )', &
 '', &
-'            logical(kind=**),intent(in) :: mask(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           logical(kind=**),intent(in) :: mask(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -5851,106 +6277,106 @@ textblock=[character(len=256) :: &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
-'         program demo_count', &
-'         implicit none', &
-'         character(len=*),parameter :: ints=''(*(i2,1x))''', &
-'         ! two arrays and a mask all with the same shape', &
-'         integer, dimension(2,3) :: a, b', &
-'         logical, dimension(2,3) :: mymask', &
-'         integer :: i', &
-'         integer :: c(2,3,4)', &
+'      program demo_count', &
+'      implicit none', &
+'      character(len=*),parameter :: ints=''(*(i2,1x))''', &
+'      ! two arrays and a mask all with the same shape', &
+'      integer, dimension(2,3) :: a, b', &
+'      logical, dimension(2,3) :: mymask', &
+'      integer :: i', &
+'      integer :: c(2,3,4)', &
 '', &
-'         print *,''the numeric arrays we will compare''', &
-'         a = reshape( [ 1, 2, 3, 4, 5, 6 ], [ 2, 3 ])', &
-'         b = reshape( [ 0, 7, 3, 4, 5, 8 ], [ 2, 3 ])', &
-'         c = reshape( [( i,i=1,24)], [ 2, 3 ,4])', &
-'         print ''(3i3)'', a(1,:)', &
-'         print ''(3i3)'', a(2,:)', &
-'         print *', &
-'         print ''(3i3)'', b(1,:)', &
-'         print ''(3i3)'', b(2,:)', &
-'         !', &
-'         ! basic calls', &
-'         print *, ''count a few basic things creating a mask from an expression''', &
-'         print *, ''count a>b'',count(a>b)', &
-'         print *, ''count b<a'',count(a<b)', &
-'         print *, ''count b==a'',count(a==b)', &
-'         print *, ''check sum = '',count(a>b) + &', &
-'                               & count(a<b) + &', &
-'                               & count(a==b).eq.size(a)', &
-'         !', &
-'         ! The common usage is just getting a count, but if you want', &
-'         ! to specify the DIM argument and get back reduced arrays', &
-'         ! of counts this is easier to visualize if we look at a mask.', &
-'         print *, ''make a mask identifying unequal elements ...''', &
-'         mymask = a.ne.b', &
-'         print *, ''the mask generated from a.ne.b''', &
-'         print ''(3l3)'', mymask(1,:)', &
-'         print ''(3l3)'', mymask(2,:)', &
-'         !', &
-'         print *,''count total and along rows and columns ...''', &
-'         !', &
-'         print ''(a)'', ''number of elements not equal''', &
-'         print ''(a)'', ''(ie. total true elements in the mask)''', &
-'         print ''(3i3)'', count(mymask)', &
-'         !', &
-'         print ''(a)'', ''count of elements not equal in each column''', &
-'         print ''(a)'', ''(ie. total true elements in each column)''', &
-'         print ''(3i3)'', count(mymask, dim=1)', &
-'         !', &
-'         print ''(a)'', ''count of elements not equal in each row''', &
-'         print ''(a)'', ''(ie. total true elements in each row)''', &
-'         print ''(3i3)'', count(mymask, dim=2)', &
-'         !', &
-'         ! working with rank=3 ...', &
-'         print *, ''lets try this with c(2,3,4)''', &
-'         print *,''  taking the result of the modulo   ''', &
-'         print *,''   z=1      z=2      z=3      z=4   ''', &
-'         print *,''  1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |''', &
-'         print *,''  2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |''', &
-'         print *,''                                    ''', &
-'         print *,''  would result in the mask ..       ''', &
-'         print *,''  F F T || F F F || F T F || F F F |''', &
-'         print *,''  F F F || F T F || F F F || T F F |''', &
-'         print *,''                                    ''', &
-'         print *,'' the total number of .true.values is''', &
-'         print ints, count(modulo(c,5).eq.0)', &
-'         call printi(''counting up along a row and removing rows'',&', &
-'         count(modulo(c,5).eq.0,dim=1))', &
-'         call printi(''counting up along a column and removing columns'',&', &
-'         count(modulo(c,5).eq.0,dim=2))', &
-'         call printi(''counting up along a depth and removing depths'',&', &
-'         count(modulo(c,5).eq.0,dim=3))', &
-'         !', &
-'         contains', &
-'         !', &
-'         ! CONVENIENCE ROUTINE FOR PRINTING SMALL INTEGER MATRICES', &
-'         subroutine printi(title,arr)', &
-'         implicit none', &
-'         !', &
-'         !@(#) print small 2d integer arrays in row-column format', &
-'         !', &
-'         character(len=*),parameter :: all=''(*(g0,1x))'' ! a handy format', &
-'         character(len=*),intent(in)  :: title', &
-'         integer,intent(in)           :: arr(:,:)', &
-'         integer                      :: i', &
-'         character(len=:),allocatable :: biggest', &
-'            !', &
-'            print all', &
-'            print all, trim(title),'':('',shape(arr),'')''  ! print title', &
-'            biggest=''           ''  ! make buffer to write integer into', &
-'            ! find how many characters to use for integers', &
-'            write(biggest,''(i0)'')ceiling(log10(real(maxval(abs(arr)))))+2', &
-'            ! use this format to write a row', &
-'            biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
-'            ! print one row of array at a time', &
-'            do i=1,size(arr,dim=1)', &
-'               write(*,fmt=biggest,advance=''no'')arr(i,:)', &
-'               write(*,''(" ]")'')', &
-'            enddo', &
-'            !', &
-'         end subroutine printi', &
-'         end program demo_count', &
+'      print *,''the numeric arrays we will compare''', &
+'      a = reshape( [ 1, 2, 3, 4, 5, 6 ], [ 2, 3 ])', &
+'      b = reshape( [ 0, 7, 3, 4, 5, 8 ], [ 2, 3 ])', &
+'      c = reshape( [( i,i=1,24)], [ 2, 3 ,4])', &
+'      print ''(3i3)'', a(1,:)', &
+'      print ''(3i3)'', a(2,:)', &
+'      print *', &
+'      print ''(3i3)'', b(1,:)', &
+'      print ''(3i3)'', b(2,:)', &
+'      !', &
+'      ! basic calls', &
+'      print *, ''count a few basic things creating a mask from an expression''', &
+'      print *, ''count a>b'',count(a>b)', &
+'      print *, ''count b<a'',count(a<b)', &
+'      print *, ''count b==a'',count(a==b)', &
+'      print *, ''check sum = '',count(a>b) + &', &
+'                           & count(a<b) + &', &
+'                           & count(a==b).eq.size(a)', &
+'      !', &
+'      ! The common usage is just getting a count, but if you want', &
+'      ! to specify the DIM argument and get back reduced arrays', &
+'      ! of counts this is easier to visualize if we look at a mask.', &
+'      print *, ''make a mask identifying unequal elements ...''', &
+'      mymask = a.ne.b', &
+'      print *, ''the mask generated from a.ne.b''', &
+'      print ''(3l3)'', mymask(1,:)', &
+'      print ''(3l3)'', mymask(2,:)', &
+'      !', &
+'      print *,''count total and along rows and columns ...''', &
+'      !', &
+'      print ''(a)'', ''number of elements not equal''', &
+'      print ''(a)'', ''(ie. total true elements in the mask)''', &
+'      print ''(3i3)'', count(mymask)', &
+'      !', &
+'      print ''(a)'', ''count of elements not equal in each column''', &
+'      print ''(a)'', ''(ie. total true elements in each column)''', &
+'      print ''(3i3)'', count(mymask, dim=1)', &
+'      !', &
+'      print ''(a)'', ''count of elements not equal in each row''', &
+'      print ''(a)'', ''(ie. total true elements in each row)''', &
+'      print ''(3i3)'', count(mymask, dim=2)', &
+'      !', &
+'      ! working with rank=3 ...', &
+'      print *, ''lets try this with c(2,3,4)''', &
+'      print *,''  taking the result of the modulo   ''', &
+'      print *,''   z=1    z=2      z=3      z=4   ''', &
+'      print *,''  1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |''', &
+'      print *,''  2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |''', &
+'      print *,''                                  ''', &
+'      print *,''  would result in the mask ..     ''', &
+'      print *,''  F F T || F F F || F T F || F F F |''', &
+'      print *,''  F F F || F T F || F F F || T F F |''', &
+'      print *,''                                  ''', &
+'      print *,'' the total number of .true.values is''', &
+'      print ints, count(modulo(c,5).eq.0)', &
+'      call printi(''counting up along a row and removing rows'',&', &
+'      count(modulo(c,5).eq.0,dim=1))', &
+'      call printi(''counting up along a column and removing columns'',&', &
+'      count(modulo(c,5).eq.0,dim=2))', &
+'      call printi(''counting up along a depth and removing depths'',&', &
+'      count(modulo(c,5).eq.0,dim=3))', &
+'      !', &
+'      contains', &
+'      !', &
+'      ! CONVENIENCE ROUTINE FOR PRINTING SMALL INTEGER MATRICES', &
+'      subroutine printi(title,arr)', &
+'      implicit none', &
+'      !', &
+'      !@(#) print small 2d integer arrays in row-column format', &
+'      !', &
+'      character(len=*),parameter :: all=''(*(g0,1x))'' ! a handy format', &
+'      character(len=*),intent(in)  :: title', &
+'      integer,intent(in)          :: arr(:,:)', &
+'      integer                     :: i', &
+'      character(len=:),allocatable :: biggest', &
+'        !', &
+'        print all', &
+'        print all, trim(title),'':('',shape(arr),'')''  ! print title', &
+'        biggest=''          '' ! make buffer to write integer into', &
+'        ! find how many characters to use for integers', &
+'        write(biggest,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2', &
+'        ! use this format to write a row', &
+'        biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
+'        ! print one row of array at a time', &
+'        do i=1,size(arr,dim=1)', &
+'           write(*,fmt=biggest,advance=''no'')arr(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
+'        !', &
+'      end subroutine printi', &
+'      end program demo_count', &
 '', &
 '  Results:', &
 '', &
@@ -5961,10 +6387,10 @@ textblock=[character(len=256) :: &
 '       >    0  3  5', &
 '       >    7  4  8', &
 '       >   count a few basic things creating a mask from an expression', &
-'       >   count a>b           1', &
-'       >   count b<a           2', &
-'       >   count b==a           3', &
-'       >   check sum =  T', &
+'       >   count a>b          1', &
+'       >   count b<a          2', &
+'       >   count b==a          3', &
+'       >   check sum = T', &
 '       >   make a mask identifying unequal elements ...', &
 '       >   the mask generated from a.ne.b', &
 '       >    T  F  F', &
@@ -5981,7 +6407,7 @@ textblock=[character(len=256) :: &
 '       >    1  2', &
 '       >   lets try this with c(2,3,4)', &
 '       >     taking the result of the modulo', &
-'       >      z=1      z=2      z=3      z=4', &
+'       >      z=1      z=2     z=3      z=4', &
 '       >     1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |', &
 '       >     2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |', &
 '       >', &
@@ -6005,6 +6431,7 @@ textblock=[character(len=256) :: &
 '       >   > [ 0, 1, 1 ]', &
 '       >   > [ 1, 1, 0 ]', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95 , with KIND argument - Fortran 2003', &
 '', &
@@ -6013,7 +6440,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                count(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 count(3fortran)', &
 '']
 
 shortname="count"
@@ -6024,17 +6453,21 @@ case('64','cpu_time')
 
 textblock=[character(len=256) :: &
 '', &
-'cpu_time(3fortran)                                          cpu_time(3fortran)', &
+'cpu_time(3fortran)                                         cpu_time(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CPU_TIME(3) - [SYSTEM:TIME] Return CPU processor time used in seconds', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call cpu_time(time)', &
 '', &
-'            subroutine cpu_time(time)', &
+'           subroutine cpu_time(time)', &
 '', &
-'             real,intent(out) :: time', &
+'            real,intent(out) :: time', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  TIME is a real of any kind', &
@@ -6080,25 +6513,25 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real :: start, finish', &
 '      real(kind=real64) :: startd, finishd', &
-'         !', &
-'         call cpu_time(start)', &
-'         call cpu_time(startd)', &
-'         ! put code to time here', &
-'         call cpu_time(finish)', &
-'         call cpu_time(finishd)', &
-'         !', &
-'        ! writes processor time taken by the piece of code.', &
+'        !', &
+'        call cpu_time(start)', &
+'        call cpu_time(startd)', &
+'        ! put code to time here', &
+'        call cpu_time(finish)', &
+'        call cpu_time(finishd)', &
+'        !', &
+'       ! writes processor time taken by the piece of code.', &
 '', &
-'        ! the accuracy of the clock and whether it includes system time', &
-'        ! as well as user time is processor dependent. Accuracy up to', &
-'        ! milliseconds is common but not guaranteed, and may be much', &
-'        ! higher or lower', &
-'         print ''("Processor Time = ",f6.3," seconds.")'',finish-start', &
+'       ! the accuracy of the clock and whether it includes system time', &
+'       ! as well as user time is processor dependent. Accuracy up to', &
+'       ! milliseconds is common but not guaranteed, and may be much', &
+'       ! higher or lower', &
+'        print ''("Processor Time = ",f6.3," seconds.")'',finish-start', &
 '', &
-'         ! see your specific compiler documentation for how to measure', &
-'         ! parallel jobs and for the precision of the time returned', &
-'         print ''("Processor Time = ",g0," seconds.")'',finish-start', &
-'         print ''("Processor Time = ",g0," seconds.")'',finishd-startd', &
+'        ! see your specific compiler documentation for how to measure', &
+'        ! parallel jobs and for the precision of the time returned', &
+'        print ''("Processor Time = ",g0," seconds.")'',finish-start', &
+'        print ''("Processor Time = ",g0," seconds.")'',finishd-startd', &
 '      end program demo_cpu_time', &
 '', &
 '  Results:', &
@@ -6107,9 +6540,10 @@ textblock=[character(len=256) :: &
 '  any options there are for parallel applications may very from system to', &
 '  system. See compiler-specific for details.', &
 '', &
-'         Processor Time =  0.000 seconds.', &
-'         Processor Time = .4000030E-05 seconds.', &
-'         Processor Time = .2000000000000265E-05 seconds.', &
+'        Processor Time =  0.000 seconds.', &
+'        Processor Time = .4000030E-05 seconds.', &
+'        Processor Time = .2000000000000265E-05 seconds.', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -6119,7 +6553,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023             cpu_time(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              cpu_time(3fortran)', &
 '']
 
 shortname="cpu_time"
@@ -6130,19 +6566,23 @@ case('65','cshift')
 
 textblock=[character(len=256) :: &
 '', &
-'cshift(3fortran)                                              cshift(3fortran)', &
+'cshift(3fortran)                                             cshift(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  CSHIFT(3) - [TRANSFORMATIONAL] Circular shift elements of an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = cshift(array, shift [,dim])', &
 '', &
-'          type(TYPE, kind=KIND) function cshift(array, shift, dim )', &
+'         type(TYPE(kind=KIND)) function cshift(array, shift, dim )', &
 '', &
-'           type(TYPE,kind=KIND),intent(in) :: array(..)', &
-'           integer(kind=**),intent(in)  :: shift', &
-'           integer(kind=**),intent(in)  :: dim', &
+'          type(TYPE(kind=KIND)),intent(in) :: array(..)', &
+'          integer(kind=**),intent(in)  :: shift', &
+'          integer(kind=**),intent(in)  :: dim', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY may be any type and rank', &
@@ -6193,26 +6633,26 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer, dimension(5)   :: i1,i2,i3', &
 '      integer, dimension(3,4) :: a, b', &
-'         !basics', &
-'          i1=[10,20,30,40,50]', &
-'          print *,''start with:''', &
-'          print ''(1x,5i3)'', i1', &
-'          print *,''shift -2''', &
-'          print ''(1x,5i3)'', cshift(i1,-2)', &
-'          print *,''shift +2''', &
-'          print ''(1x,5i3)'', cshift(i1,+2)', &
+'        !basics', &
+'         i1=[10,20,30,40,50]', &
+'         print *,''start with:''', &
+'         print ''(1x,5i3)'', i1', &
+'         print *,''shift -2''', &
+'         print ''(1x,5i3)'', cshift(i1,-2)', &
+'         print *,''shift +2''', &
+'         print ''(1x,5i3)'', cshift(i1,+2)', &
 '', &
-'          print *,''start with a matrix''', &
-'          a = reshape( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ], [ 3, 4 ])', &
-'          print ''(4i3)'', a(1,:)', &
-'          print ''(4i3)'', a(2,:)', &
-'          print ''(4i3)'', a(3,:)', &
-'          print *,''matrix shifted along rows, each by its own amount [-1,0,1]''', &
-'          b = cshift(a, SHIFT=[1, 0, -1], DIM=2)', &
-'          print *', &
-'          print ''(4i3)'', b(1,:)', &
-'          print ''(4i3)'', b(2,:)', &
-'          print ''(4i3)'', b(3,:)', &
+'         print *,''start with a matrix''', &
+'         a = reshape( [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ], [ 3, 4 ])', &
+'         print ''(4i3)'', a(1,:)', &
+'         print ''(4i3)'', a(2,:)', &
+'         print ''(4i3)'', a(3,:)', &
+'         print *,''matrix shifted along rows, each by its own amount [-1,0,1]''', &
+'         b = cshift(a, SHIFT=[1, 0, -1], DIM=2)', &
+'         print *', &
+'         print ''(4i3)'', b(1,:)', &
+'         print ''(4i3)'', b(2,:)', &
+'         print ''(4i3)'', b(3,:)', &
 '      end program demo_cshift', &
 '', &
 '  Results:', &
@@ -6233,6 +6673,7 @@ textblock=[character(len=256) :: &
 '       >   2  5  8 11', &
 '       >  12  3  6  9', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
@@ -6250,7 +6691,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023               cshift(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                cshift(3fortran)', &
 '']
 
 shortname="cshift"
@@ -6261,10 +6704,13 @@ case('66','c_sizeof')
 
 textblock=[character(len=256) :: &
 '', &
-'c_sizeof(3fortran)                                          c_sizeof(3fortran)', &
+'c_sizeof(3fortran)                                         c_sizeof(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  C_SIZEOF(3) - [ISO_C_BINDING] Size in bytes of an expression', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = c_sizeof(x)', &
@@ -6292,7 +6738,7 @@ textblock=[character(len=256) :: &
 '      use iso_c_binding', &
 '      implicit none', &
 '      real(c_float) :: r, s(5)', &
-'         print *, (c_sizeof(s)/c_sizeof(r) == 5)', &
+'        print *, (c_sizeof(s)/c_sizeof(r) == 5)', &
 '      end program demo_c_sizeof', &
 '', &
 '  Results:', &
@@ -6309,7 +6755,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023             c_sizeof(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              c_sizeof(3fortran)', &
 '']
 
 shortname="c_sizeof"
@@ -6320,20 +6768,24 @@ case('67','date_and_time')
 
 textblock=[character(len=256) :: &
 '', &
-'date_and_time(3fortran)                                date_and_time(3fortran)', &
+'date_and_time(3fortran)                               date_and_time(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  DATE_AND_TIME(3) - [SYSTEM:TIME] Gets current date time', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call date_and_time( [date] [,time] [,zone] [,values] )', &
 '', &
-'           subroutine date_and_time(date, time, zone, values)', &
+'          subroutine date_and_time(date, time, zone, values)', &
 '', &
-'            character(len=8),intent(out),optional :: date', &
-'            character(len=10),intent(out),optional :: time', &
-'            character(len=5),intent(out),optional :: zone', &
-'            integer,intent(out),optional :: values(8)', &
+'           character(len=8),intent(out),optional :: date', &
+'           character(len=10),intent(out),optional :: time', &
+'           character(len=5),intent(out),optional :: zone', &
+'           integer,intent(out),optional :: values(8)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  *date is a default character scalar', &
@@ -6362,9 +6814,9 @@ textblock=[character(len=256) :: &
 '  o  DATE : A character string of default kind of the form CCYYMMDD, of length', &
 '     8 or larger, where', &
 '', &
-'          + CCYY is the year in the Gregorian calendar', &
-'          + MM is the month within the year', &
-'          + DD is the day within the month.', &
+'         + CCYY is the year in the Gregorian calendar', &
+'         + MM is the month within the year', &
+'         + DD is the day within the month.', &
 '', &
 '  The characters of this value are all decimal digits.', &
 '', &
@@ -6373,11 +6825,11 @@ textblock=[character(len=256) :: &
 '  o  TIME : A character string of default kind of the form HHMMSS.SSS, of', &
 '     length 10 or larger, where', &
 '', &
-'     o  hh is the hour of the day,', &
+'     o hh is the hour of the day,', &
 '', &
-'     o  mm is the minutes of the hour,', &
+'     o mm is the minutes of the hour,', &
 '', &
-'     o  and ss.sss is the seconds and milliseconds of the minute.', &
+'     o and ss.sss is the seconds and milliseconds of the minute.', &
 '', &
 '     Except for the decimal point, the characters of this value shall all be', &
 '     decimal digits.', &
@@ -6387,8 +6839,8 @@ textblock=[character(len=256) :: &
 '  o  ZONE : A string of the form (+-)HHMM, of length 5 or larger, representing', &
 '     the difference with respect to Coordinated Universal Time (UTC), where', &
 '', &
-'     o  hh and mm are the time difference with respect to Coordinated', &
-'        Universal Time (UTC) in hours and minutes, respectively.', &
+'     o hh and mm are the time difference with respect to Coordinated', &
+'       Universal Time (UTC) in hours and minutes, respectively.', &
 '', &
 '     The characters of this value following the sign character are all decimal', &
 '     digits.', &
@@ -6398,22 +6850,22 @@ textblock=[character(len=256) :: &
 '  o  VALUES : An array of at least eight elements. If there is no data', &
 '     available for a value it is set to -HUGE(VALUES). Otherwise, it contains:', &
 '', &
-'     o  VALUES(1) : The year, including the century.', &
+'     o VALUES(1) : The year, including the century.', &
 '', &
-'     o  VALUES(2) : The month of the year', &
+'     o VALUES(2) : The month of the year', &
 '', &
-'     o  VALUES(3) : The day of the month', &
+'     o VALUES(3) : The day of the month', &
 '', &
-'     o  VALUES(4) : Time difference in minutes between the reported time and', &
-'        UTC time.', &
+'     o VALUES(4) : Time difference in minutes between the reported time and', &
+'       UTC time.', &
 '', &
-'     o  VALUES(5) : The hour of the day, in the range 0 to 23.', &
+'     o VALUES(5) : The hour of the day, in the range 0 to 23.', &
 '', &
-'     o  VALUES(6) : The minutes of the hour, in the range 0 to 59', &
+'     o VALUES(6) : The minutes of the hour, in the range 0 to 59', &
 '', &
-'     o  VALUES(7) : The seconds of the minute, in the range 0 to 60', &
+'     o VALUES(7) : The seconds of the minute, in the range 0 to 60', &
 '', &
-'     o  VALUES(8) : The milliseconds of the second, in the range 0 to 999.', &
+'     o VALUES(8) : The milliseconds of the second, in the range 0 to 999.', &
 '', &
 '  The date, clock, and time zone information might be available on some images', &
 '  and not others. If the date, clock, or time zone information is available on', &
@@ -6425,27 +6877,27 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_date_and_time', &
 '      implicit none', &
-'      character(len=8)     :: date', &
+'      character(len=8)    :: date', &
 '      character(len=10)    :: time', &
-'      character(len=5)     :: zone', &
+'      character(len=5)    :: zone', &
 '      integer,dimension(8) :: values', &
 '', &
-'          call date_and_time(date,time,zone,values)', &
+'         call date_and_time(date,time,zone,values)', &
 '', &
-'          ! using keyword arguments', &
-'          call date_and_time(DATE=date,TIME=time,ZONE=zone)', &
-'          print ''(*(g0))'',''DATE="'',date,''" TIME="'',time,''" ZONE="'',zone,''"''', &
+'         ! using keyword arguments', &
+'         call date_and_time(DATE=date,TIME=time,ZONE=zone)', &
+'         print ''(*(g0))'',''DATE="'',date,''" TIME="'',time,''" ZONE="'',zone,''"''', &
 '', &
-'          call date_and_time(VALUES=values)', &
-'          write(*,''(i5,a)'') &', &
-'           & values(1),'' - The year'', &', &
-'           & values(2),'' - The month'', &', &
-'           & values(3),'' - The day of the month'', &', &
-'           & values(4),'' - Time difference with UTC in minutes'', &', &
-'           & values(5),'' - The hour of the day'', &', &
-'           & values(6),'' - The minutes of the hour'', &', &
-'           & values(7),'' - The seconds of the minute'', &', &
-'           & values(8),'' - The milliseconds of the second''', &
+'         call date_and_time(VALUES=values)', &
+'         write(*,''(i5,a)'') &', &
+'          & values(1),'' - The year'', &', &
+'          & values(2),'' - The month'', &', &
+'          & values(3),'' - The day of the month'', &', &
+'          & values(4),'' - Time difference with UTC in minutes'', &', &
+'          & values(5),'' - The hour of the day'', &', &
+'          & values(6),'' - The minutes of the hour'', &', &
+'          & values(7),'' - The seconds of the minute'', &', &
+'          & values(8),'' - The milliseconds of the second''', &
 '      end program demo_date_and_time', &
 '', &
 '  Results:', &
@@ -6459,6 +6911,7 @@ textblock=[character(len=256) :: &
 '       >    57 - The minutes of the hour', &
 '       >    38 - The seconds of the minute', &
 '       >   779 - The milliseconds of the second', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -6477,7 +6930,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023        date_and_time(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023         date_and_time(3fortran)', &
 '']
 
 shortname="date_and_time"
@@ -6488,18 +6943,22 @@ case('68','dble')
 
 textblock=[character(len=256) :: &
 '', &
-'dble(3fortran)                                                  dble(3fortran)', &
+'dble(3fortran)                                                 dble(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  DBLE(3) - [TYPE:NUMERIC] Converstion to double precision real', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = dble(a)', &
 '', &
-'           elemental doubleprecision function dble(a)', &
+'          elemental doubleprecision function dble(a)', &
 '', &
-'            doubleprecision :: dble', &
-'            TYPE(kind=KIND),intent(in) :: a', &
+'           doubleprecision :: dble', &
+'           TYPE(kind=KIND),intent(in) :: a', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A my be integer, real, complex, or a BOZ-literal-constant', &
@@ -6524,12 +6983,13 @@ textblock=[character(len=256) :: &
 '      real:: x = 2.18', &
 '      integer :: i = 5', &
 '      complex :: z = (2.3,1.14)', &
-'         print *, dble(x), dble(i), dble(z)', &
+'        print *, dble(x), dble(i), dble(z)', &
 '      end program demo_dble', &
 '', &
 '  Results:', &
 '', &
-'        2.1800000667572021  5.0000000000000000   2.2999999523162842', &
+'       2.1800000667572021  5.0000000000000000   2.2999999523162842', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -6549,7 +7009,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 dble(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  dble(3fortran)', &
 '']
 
 shortname="dble"
@@ -6560,17 +7022,21 @@ case('69','digits')
 
 textblock=[character(len=256) :: &
 '', &
-'digits(3fortran)                                              digits(3fortran)', &
+'digits(3fortran)                                             digits(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  DIGITS(3) - [NUMERIC MODEL] Significant digits in the numeric model', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = digits(x)', &
 '', &
-'           integer function digits(x)', &
+'          integer function digits(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x(..)', &
+'           TYPE(kind=KIND),intent(in) :: x(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X an integer or real scalar or array', &
@@ -6596,16 +7062,17 @@ textblock=[character(len=256) :: &
 '      integer :: i = 12345', &
 '      real :: x = 3.143', &
 '      doubleprecision :: y = 2.33d0', &
-'         print *,''default integer:'', digits(i)', &
-'         print *,''default real:   '', digits(x)', &
-'         print *,''default doubleprecision:'', digits(y)', &
+'        print *,''default integer:'', digits(i)', &
+'        print *,''default real:   '', digits(x)', &
+'        print *,''default doubleprecision:'', digits(y)', &
 '      end program demo_digits', &
 '', &
 '  Results:', &
 '', &
-'       >  default integer:          31', &
-'       >  default real:             24', &
-'       >  default doubleprecision:          53', &
+'       >  default integer:         31', &
+'       >  default real:            24', &
+'       >  default doubleprecision:         53', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -6617,7 +7084,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               digits(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                digits(3fortran)', &
 '']
 
 shortname="digits"
@@ -6628,17 +7097,21 @@ case('70','dim')
 
 textblock=[character(len=256) :: &
 '', &
-'dim(3fortran)                                                    dim(3fortran)', &
+'dim(3fortran)                                                   dim(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  DIM(3) - [NUMERIC] Positive difference of X - Y', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = dim(x, y)', &
 '', &
-'           elemental TYPE(kind=KIND) function dim(x, y )', &
+'          elemental TYPE(kind=KIND) function dim(x, y )', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x, y', &
+'           TYPE(kind=KIND),intent(in) :: x, y', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X and Y may be any real or integer but of the same type and kind', &
@@ -6650,7 +7123,8 @@ textblock=[character(len=256) :: &
 '  difference X - Y if the result is positive; otherwise it returns zero.  It', &
 '  is equivalent to', &
 '', &
-'        max(0,x-y)', &
+'       max(0,x-y)', &
+'', &
 '', &
 'OPTIONS', &
 '  o  X : the subtrahend, ie. the number being subtracted from.', &
@@ -6666,29 +7140,30 @@ textblock=[character(len=256) :: &
 '      program demo_dim', &
 '      use, intrinsic :: iso_fortran_env, only : real64', &
 '      implicit none', &
-'      integer           :: i', &
+'      integer          :: i', &
 '      real(kind=real64) :: x', &
 '', &
-'         ! basic usage', &
-'          i = dim(4, 15)', &
-'          x = dim(4.321_real64, 1.111_real64)', &
-'          print *, i', &
-'          print *, x', &
+'        ! basic usage', &
+'         i = dim(4, 15)', &
+'         x = dim(4.321_real64, 1.111_real64)', &
+'         print *, i', &
+'         print *, x', &
 '', &
-'         ! elemental', &
-'          print *, dim([1,2,3],2)', &
-'          print *, dim([1,2,3],[3,2,1])', &
-'          print *, dim(-10,[0,-10,-20])', &
+'        ! elemental', &
+'         print *, dim([1,2,3],2)', &
+'         print *, dim([1,2,3],[3,2,1])', &
+'         print *, dim(-10,[0,-10,-20])', &
 '', &
 '      end program demo_dim', &
 '', &
 '  Results:', &
 '', &
-'       >            0', &
+'       >           0', &
 '       >    3.21000000000000', &
-'       >            0           0           1', &
-'       >            0           0           2', &
-'       >            0           0          10', &
+'       >           0           0           1', &
+'       >           0           0           2', &
+'       >           0           0          10', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -6698,7 +7173,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  dim(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   dim(3fortran)', &
 '']
 
 shortname="dim"
@@ -6709,18 +7186,22 @@ case('71','dot_product')
 
 textblock=[character(len=256) :: &
 '', &
-'dot_product(3fortran)                                    dot_product(3fortran)', &
+'dot_product(3fortran)                                   dot_product(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  DOT_PRODUCT(3) - [TRANSFORMATIONAL] Dot product of two vectors', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = dot_product(vector_a, vector_b)', &
 '', &
-'           TYPE(kind=KIND) function dot_product(vector_a, vector_b)', &
+'          TYPE(kind=KIND) function dot_product(vector_a, vector_b)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: vector_a(:)', &
-'            TYPE(kind=KIND),intent(in) :: vector_b(:)', &
+'           TYPE(kind=KIND),intent(in) :: vector_a(:)', &
+'           TYPE(kind=KIND),intent(in) :: vector_b(:)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  VECTOR_A, VECTOR_B may be any numeric or logical type array of rank one', &
@@ -6752,38 +7233,40 @@ textblock=[character(len=256) :: &
 '', &
 '  If the vectors are integer or real, the result is', &
 '', &
-'           sum(vector_a*vector_b)', &
+'          sum(vector_a*vector_b)', &
 '', &
 '  If the vectors are complex, the result is', &
 '', &
-'           sum(conjg(vector_a)*vector_b)**', &
+'          sum(conjg(vector_a)*vector_b)**', &
 '', &
 '  If the vectors are logical, the result is', &
 '', &
-'           any(vector_a .and. vector_b)', &
+'          any(vector_a .and. vector_b)', &
+'', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
 '      program demo_dot_prod', &
 '      implicit none', &
-'          integer, dimension(3) :: a, b', &
-'          a = [ 1, 2, 3 ]', &
-'          b = [ 4, 5, 6 ]', &
-'          print ''(3i3)'', a', &
-'          print *', &
-'          print ''(3i3)'', b', &
-'          print *', &
-'          print *, dot_product(a,b)', &
+'         integer, dimension(3) :: a, b', &
+'         a = [ 1, 2, 3 ]', &
+'         b = [ 4, 5, 6 ]', &
+'         print ''(3i3)'', a', &
+'         print *', &
+'         print ''(3i3)'', b', &
+'         print *', &
+'         print *, dot_product(a,b)', &
 '      end program demo_dot_prod', &
 '', &
 '  Results:', &
 '', &
-'        >  1  2  3', &
-'        >', &
-'        >  4  5  6', &
-'        >', &
-'        >           32', &
+'       >  1  2  3', &
+'       >', &
+'       >  4  5  6', &
+'       >', &
+'       >           32', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -6793,7 +7276,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023          dot_product(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           dot_product(3fortran)', &
 '']
 
 shortname="dot_product"
@@ -6804,19 +7289,23 @@ case('72','dprod')
 
 textblock=[character(len=256) :: &
 '', &
-'dprod(3fortran)                                                dprod(3fortran)', &
+'dprod(3fortran)                                               dprod(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  DPROD(3) - [NUMERIC] Double precision real product', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = dprod(x,y)', &
 '', &
-'           elemental function dprod(x,y)', &
+'          elemental function dprod(x,y)', &
 '', &
-'            real,intent(in) :: x', &
-'            real,intent(in) :: y', &
-'            doubleprecision :: dprod', &
+'           real,intent(in) :: x', &
+'           real,intent(in) :: y', &
+'           doubleprecision :: dprod', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is a default real.', &
@@ -6860,22 +7349,22 @@ textblock=[character(len=256) :: &
 '      doubleprecision :: xx', &
 '      real(kind=dp)   :: dd', &
 '', &
-'         print *,''algebraically 5.2 x 2.3 is exactly 11.96''', &
-'         print *,''as floating point values results may differ slightly:''', &
-'         ! basic usage', &
-'         dd = dprod(x,y)', &
-'         print *, ''compare dprod(xy)='',dd, &', &
-'         & ''to x*y='',x*y, &', &
-'         & ''to dble(x)*dble(y)='',dble(x)*dble(y)', &
+'        print *,''algebraically 5.2 x 2.3 is exactly 11.96''', &
+'        print *,''as floating point values results may differ slightly:''', &
+'        ! basic usage', &
+'        dd = dprod(x,y)', &
+'        print *, ''compare dprod(xy)='',dd, &', &
+'        & ''to x*y='',x*y, &', &
+'        & ''to dble(x)*dble(y)='',dble(x)*dble(y)', &
 '', &
-'         print *,''test if an expected result is produced''', &
-'         xx=-6.0d0', &
-'         write(*,*)DPROD(-3.0, 2.0),xx', &
-'         write(*,*)merge(''PASSED'',''FAILED'',DPROD(-3.0, 2.0) == xx)', &
+'        print *,''test if an expected result is produced''', &
+'        xx=-6.0d0', &
+'        write(*,*)DPROD(-3.0, 2.0),xx', &
+'        write(*,*)merge(''PASSED'',''FAILED'',DPROD(-3.0, 2.0) == xx)', &
 '', &
-'         print *,''elemental''', &
-'         print *, dprod( [2.3,3.4,4.5], 10.0 )', &
-'         print *, dprod( [2.3,3.4,4.5], [9.8,7.6,5.4] )', &
+'        print *,''elemental''', &
+'        print *, dprod( [2.3,3.4,4.5], 10.0 )', &
+'        print *, dprod( [2.3,3.4,4.5], [9.8,7.6,5.4] )', &
 '', &
 '      end program demo_dprod', &
 '', &
@@ -6884,13 +7373,14 @@ textblock=[character(len=256) :: &
 '       >  algebraically 5.2 x 2.3 is exactly 11.96', &
 '       >  as floating point values results may differ slightly:', &
 '       >  compare dprod(xy)=   11.9599993133545      to x*y=   11.96000', &
-'       >  to dble(x)*dble(y)=   11.9599993133545', &
+'       >  to dble(x)*dble(y)=  11.9599993133545', &
 '       >  test if an expected result is produced', &
-'       >   -6.00000000000000       -6.00000000000000', &
+'       >   -6.00000000000000      -6.00000000000000', &
 '       >  PASSED', &
 '       >  elemental', &
-'       >    22.9999995231628     34.0000009536743     45.0000000000000', &
-'       >    22.5399999713898     25.8400004005432     24.3000004291534', &
+'       >    22.9999995231628    34.0000009536743     45.0000000000000', &
+'       >    22.5399999713898    25.8400004005432     24.3000004291534', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -6900,7 +7390,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                dprod(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 dprod(3fortran)', &
 '']
 
 shortname="dprod"
@@ -6911,19 +7403,23 @@ case('73','dshiftl')
 
 textblock=[character(len=256) :: &
 '', &
-'dshiftl(3fortran)                                            dshiftl(3fortran)', &
+'dshiftl(3fortran)                                           dshiftl(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  DSHIFTL(3) - [BIT:COPY] Combined left shift of the bits of two integers', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = dshiftl(i, j, shift)', &
 '', &
-'           elemental integer(kind=KIND) function dshiftl(i, j, shift)', &
+'          elemental integer(kind=KIND) function dshiftl(i, j, shift)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=KIND),intent(in) :: j', &
-'            integer(kind=**),intent(in) :: shift', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=KIND),intent(in) :: j', &
+'           integer(kind=**),intent(in) :: shift', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  the kind of I, J, and the return value are the same. An exception is that', &
@@ -6947,26 +7443,28 @@ textblock=[character(len=256) :: &
 '', &
 '  For example, for two 16-bit values if SHIFT=6', &
 '', &
-'            SHIFT=6', &
-'            I =             1111111111111111', &
-'            J =             0000000000000000', &
-'            COMBINED        11111111111111110000000000000000', &
-'            DROP LEFT BITS  11111111110000000000000000', &
-'            KEEP LEFT 16    1111111111000000', &
+'           SHIFT=6', &
+'           I =             1111111111111111', &
+'           J =             0000000000000000', &
+'           COMBINED        11111111111111110000000000000000', &
+'           DROP LEFT BITS  11111111110000000000000000', &
+'           KEEP LEFT 16    1111111111000000', &
+'', &
 '', &
 'NOTE', &
 '  This is equivalent to', &
 '', &
-'           ior( shiftl(i, shift), shiftr(j, bit_size(j) - shift) )', &
+'          ior( shiftl(i, shift), shiftr(j, bit_size(j) - shift) )', &
 '', &
 '  Also note that using this last representation of the operation is can be', &
 '  derived that when both I and J have the same value as in', &
 '', &
-'            dshiftl(i, i, shift)', &
+'           dshiftl(i, i, shift)', &
 '', &
 '  the result has the same value as a circular shift:', &
 '', &
-'            ishftc(i, shift)', &
+'           ishftc(i, shift)', &
+'', &
 '', &
 'OPTIONS', &
 '  o  I : used to define the left pattern of bits in the combined pattern', &
@@ -6988,51 +7486,53 @@ textblock=[character(len=256) :: &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
 '      integer(kind=int32) :: i, j', &
-'      integer             :: shift', &
+'      integer            :: shift', &
 '', &
-'        ! basic usage', &
-'         write(*,*) dshiftl (1, 2**30, 2) ! int32 values on little-endian => 5', &
+'       ! basic usage', &
+'        write(*,*) dshiftl (1, 2**30, 2) ! int32 values on little-endian => 5', &
 '', &
-'        ! print some simple calls as binary to better visual the results', &
-'         i=-1', &
-'         j=0', &
-'         shift=5', &
-'         call printit()', &
+'       ! print some simple calls as binary to better visual the results', &
+'        i=-1', &
+'        j=0', &
+'        shift=5', &
+'        call printit()', &
 '', &
-'         ! the leftmost SHIFT bits of J are copied to the rightmost result bits', &
-'         j=int(b"11111000000000000000000000000000")', &
-'         ! and the other bits are the rightmost bits of I', &
-'         i=int(b"00000000000000000000000000000000")', &
-'         call printit()', &
+'        ! the leftmost SHIFT bits of J are copied to the rightmost result bits', &
+'        j=int(b"11111000000000000000000000000000")', &
+'        ! and the other bits are the rightmost bits of I', &
+'        i=int(b"00000000000000000000000000000000")', &
+'        call printit()', &
 '', &
-'         j=int(b"11111000000000000000000000000000")', &
-'         i=int(b"00000111111111111111111111111111")', &
-'         ! result should be all 1s', &
-'         call printit()', &
+'        j=int(b"11111000000000000000000000000000")', &
+'        i=int(b"00000111111111111111111111111111")', &
+'        ! result should be all 1s', &
+'        call printit()', &
 '', &
 '      contains', &
 '      subroutine printit()', &
-'         ! print i,j,shift and then i,j, and the result as binary values', &
-'          write(*,''(*(g0))'')''I='',i,'' J='',j,'' SHIFT='',shift', &
-'          write(*,''(b32.32)'') i,j, dshiftl (i, j, shift)', &
+'        ! print i,j,shift and then i,j, and the result as binary values', &
+'         write(*,''(*(g0))'')''I='',i,'' J='',j,'' SHIFT='',shift', &
+'         write(*,''(b32.32)'') i,j, dshiftl (i, j, shift)', &
 '      end subroutine printit', &
 '', &
 '      end program demo_dshiftl', &
 '', &
 '  Results:', &
 '', &
-'         > I=-1 J=0 SHIFT=5', &
-'         > 11111111111111111111111111111111', &
-'         > 00000000000000000000000000000000', &
-'         > 11111111111111111111111111100000', &
-'         > I=0 J=-134217728 SHIFT=5', &
-'         > 00000000000000000000000000000000', &
-'         > 11111000000000000000000000000000', &
-'         > 00000000000000000000000000011111', &
-'         > I=134217727 J=-134217728 SHIFT=5', &
-'         > 00000111111111111111111111111111', &
-'         > 11111000000000000000000000000000', &
-'         > 11111111111111111111111111111111', &
+'       >           5', &
+'       > I=-1 J=0 SHIFT=5', &
+'       > 11111111111111111111111111111111', &
+'       > 00000000000000000000000000000000', &
+'       > 11111111111111111111111111100000', &
+'       > I=0 J=-134217728 SHIFT=5', &
+'       > 00000000000000000000000000000000', &
+'       > 11111000000000000000000000000000', &
+'       > 00000000000000000000000000011111', &
+'       > I=134217727 J=-134217728 SHIFT=5', &
+'       > 00000111111111111111111111111111', &
+'       > 11111000000000000000000000000000', &
+'       > 11111111111111111111111111111111', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -7042,7 +7542,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              dshiftl(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               dshiftl(3fortran)', &
 '']
 
 shortname="dshiftl"
@@ -7053,19 +7555,23 @@ case('74','dshiftr')
 
 textblock=[character(len=256) :: &
 '', &
-'dshiftr(3fortran)                                            dshiftr(3fortran)', &
+'dshiftr(3fortran)                                           dshiftr(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  DSHIFTR(3) - [BIT:COPY] Combined right shift of the bits of two integers', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = dshiftr(i, j, shift)', &
 '', &
-'           elemental integer(kind=KIND) function dshiftr(i, j, shift)', &
+'          elemental integer(kind=KIND) function dshiftr(i, j, shift)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=KIND),intent(in) :: j', &
-'            integer(kind=**),intent(in) :: shift', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=KIND),intent(in) :: j', &
+'           integer(kind=**),intent(in) :: shift', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any kind value for the integer type', &
@@ -7089,33 +7595,35 @@ textblock=[character(len=256) :: &
 '', &
 '  Given two 16-bit values labeled alphabetically ...', &
 '', &
-'         i=ABCDEFGHIJKLMNOP', &
-'         j=abcdefghijklmnop', &
+'        i=ABCDEFGHIJKLMNOP', &
+'        j=abcdefghijklmnop', &
 '', &
 '  Append them together', &
 '', &
-'         ABCDEFGHIJKLMNOPabcdefghijklmnop', &
+'        ABCDEFGHIJKLMNOPabcdefghijklmnop', &
 '', &
 '  Shift them N=6 bits to the right dropping off bits', &
 '', &
-'               ABCDEFGHIJKLMNOPabcdefghij', &
+'              ABCDEFGHIJKLMNOPabcdefghij', &
 '', &
 '  Keep the 16 right-most bits', &
 '', &
-'                         KLMNOPabcdefghij', &
+'                        KLMNOPabcdefghij', &
+'', &
 '', &
 'NOTE', &
 '  DSHIFR(I,J,SHIFT) is equivalent to', &
 '', &
-'           ior(shiftl (i, bit_size(i) - shift), shiftr(j, shift) )', &
+'          ior(shiftl (i, bit_size(i) - shift), shiftr(j, shift) )', &
 '', &
 '  it can also be seen that if I and J have the same value', &
 '', &
-'           dshiftr( i, i, shift )', &
+'          dshiftr( i, i, shift )', &
 '', &
 '  this has the same result as a negative circular shift', &
 '', &
-'           ishftc( i,   -shift ).', &
+'          ishftc( i,   -shift ).', &
+'', &
 '', &
 'OPTIONS', &
 '  o  I : left value of the pair of values to be combine-shifted right', &
@@ -7138,33 +7646,33 @@ textblock=[character(len=256) :: &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
 '      integer(kind=int32) :: i, j', &
-'      integer             :: shift', &
+'      integer            :: shift', &
 '', &
-'        ! basic usage', &
-'         write(*,*) dshiftr (1, 2**30, 2)', &
+'       ! basic usage', &
+'        write(*,*) dshiftr (1, 2**30, 2)', &
 '', &
-'        ! print some calls as binary to better visualize the results', &
-'         i=-1', &
-'         j=0', &
-'         shift=5', &
+'       ! print some calls as binary to better visualize the results', &
+'        i=-1', &
+'        j=0', &
+'        shift=5', &
 '', &
-'         ! print values', &
-'          write(*,''(*(g0))'')''I='',i,'' J='',j,'' SHIFT='',shift', &
-'          write(*,''(b32.32)'') i,j, dshiftr (i, j, shift)', &
+'        ! print values', &
+'         write(*,''(*(g0))'')''I='',i,'' J='',j,'' SHIFT='',shift', &
+'         write(*,''(b32.32)'') i,j, dshiftr (i, j, shift)', &
 '', &
-'        ! visualizing a "combined right shift" ...', &
-'         i=int(b"00000000000000000000000000011111")', &
-'         j=int(b"11111111111111111111111111100000")', &
-'         ! appended together ( i//j )', &
-'         ! 0000000000000000000000000001111111111111111111111111111111100000', &
-'         ! shifted right SHIFT values dropping off shifted values', &
-'         !      00000000000000000000000000011111111111111111111111111111111', &
-'         ! keep enough rightmost bits to fill the kind', &
-'         !                                 11111111111111111111111111111111', &
-'         ! so the result should be all 1s bits ...', &
+'       ! visualizing a "combined right shift" ...', &
+'        i=int(b"00000000000000000000000000011111")', &
+'        j=int(b"11111111111111111111111111100000")', &
+'        ! appended together ( i//j )', &
+'        ! 0000000000000000000000000001111111111111111111111111111111100000', &
+'        ! shifted right SHIFT values dropping off shifted values', &
+'        !      00000000000000000000000000011111111111111111111111111111111', &
+'        ! keep enough rightmost bits to fill the kind', &
+'        !                                 11111111111111111111111111111111', &
+'        ! so the result should be all 1s bits ...', &
 '', &
-'          write(*,''(*(g0))'')''I='',i,'' J='',j,'' SHIFT='',shift', &
-'          write(*,''(b32.32)'') i,j, dshiftr (i, j, shift)', &
+'         write(*,''(*(g0))'')''I='',i,'' J='',j,'' SHIFT='',shift', &
+'         write(*,''(b32.32)'') i,j, dshiftr (i, j, shift)', &
 '', &
 '      end program demo_dshiftr', &
 '', &
@@ -7180,6 +7688,7 @@ textblock=[character(len=256) :: &
 '       >  11111111111111111111111111100000', &
 '       >  11111111111111111111111111111111', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 2008', &
 '', &
@@ -7188,7 +7697,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              dshiftr(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               dshiftr(3fortran)', &
 '']
 
 shortname="dshiftr"
@@ -7199,20 +7710,24 @@ case('75','eoshift')
 
 textblock=[character(len=256) :: &
 '', &
-'eoshift(3fortran)                                            eoshift(3fortran)', &
+'eoshift(3fortran)                                           eoshift(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  EOSHIFT(3) - [TRANSFORMATIONAL] End-off shift of elements of an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = eoshift( array, shift [,boundary] [,dim] )', &
 '', &
-'         type(TYPE(kind=KIND)) function eoshift(array,shift,boundary,dim)', &
+'        type(TYPE(kind=KIND)) function eoshift(array,shift,boundary,dim)', &
 '', &
-'          type(TYPE(kind=KIND)),intent(in) :: array(..)', &
-'          integer(kind=**),intent(in)      :: shift(..)', &
-'          type(TYPE(kind=KIND)),intent(in) :: boundary(..)', &
-'          integer(kind=**),intent(in)      :: dim', &
+'         type(TYPE(kind=KIND)),intent(in) :: array(..)', &
+'         integer(kind=**),intent(in)      :: shift(..)', &
+'         type(TYPE(kind=KIND)),intent(in) :: boundary(..)', &
+'         integer(kind=**),intent(in)      :: dim', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY an array of any type', &
@@ -7256,11 +7771,11 @@ textblock=[character(len=256) :: &
 '     If BOUNDARY is not present then the following are copied in depending on', &
 '     the type of ARRAY.', &
 '', &
-'          Array Type    | Boundary Value', &
-'          -----------------------------------------------------', &
-'          Numeric       | 0, 0.0, or (0.0, 0.0) of the type and kind of "array"', &
-'          Logical       | .false.', &
-'          Character(len)|  LEN blanks', &
+'         Array Type    | Boundary Value', &
+'         -----------------------------------------------------', &
+'         Numeric       | 0, 0.0, or (0.0, 0.0) of the type and kind of "array"', &
+'         Logical       | .false.', &
+'         Character(len)|  LEN blanks', &
 '', &
 '  These are the only types for which BOUNDARY may not be present. For these', &
 '  types the kind is converted as neccessary to the kind of ARRAY.', &
@@ -7285,26 +7800,27 @@ textblock=[character(len=256) :: &
 '      integer, dimension(3,3) :: a', &
 '      integer :: i', &
 '', &
-'          a = reshape( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], [ 3, 3 ])', &
-'          print ''(3i3)'', (a(i,:),i=1,3)', &
+'         a = reshape( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], [ 3, 3 ])', &
+'         print ''(3i3)'', (a(i,:),i=1,3)', &
 '', &
-'          print *', &
+'         print *', &
 '', &
-'          ! shift it', &
-'          a = eoshift(a, SHIFT=[1, 2, 1], BOUNDARY=-5, DIM=2)', &
-'          print ''(3i3)'', (a(i,:),i=1,3)', &
+'         ! shift it', &
+'         a = eoshift(a, SHIFT=[1, 2, 1], BOUNDARY=-5, DIM=2)', &
+'         print ''(3i3)'', (a(i,:),i=1,3)', &
 '', &
 '      end program demo_eoshift', &
 '', &
 '  Results:', &
 '', &
-'        >  1  4  7', &
-'        >  2  5  8', &
-'        >  3  6  9', &
-'        >', &
-'        >  4  7 -5', &
-'        >  8 -5 -5', &
-'        >  6  9 -5', &
+'       >  1  4  7', &
+'       >  2  5  8', &
+'       >  3  6  9', &
+'       >', &
+'       >  4  7 -5', &
+'       >  8 -5 -5', &
+'       >  6  9 -5', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -7314,7 +7830,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              eoshift(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               eoshift(3fortran)', &
 '']
 
 shortname="eoshift"
@@ -7325,17 +7843,21 @@ case('76','epsilon')
 
 textblock=[character(len=256) :: &
 '', &
-'epsilon(3fortran)                                            epsilon(3fortran)', &
+'epsilon(3fortran)                                           epsilon(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  EPSILON(3) - [NUMERIC MODEL] Epsilon function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = epsilon(x)', &
 '', &
-'           real(kind=kind(x)) function epsilon(x)', &
+'          real(kind=kind(x)) function epsilon(x)', &
 '', &
-'            real(kind=kind(x),intent(in)   :: x(..)', &
+'           real(kind=kind(x),intent(in)   :: x(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X shall be of type real. It may be a scalar or an array.', &
@@ -7347,7 +7869,7 @@ textblock=[character(len=256) :: &
 '  negligible number relative to 1 such that 1+ LITTLE_NUMBER is not equal to', &
 '  1; or more precisely', &
 '', &
-'         real( 1.0, kind(x)) + epsilon(x) /=  real( 1.0, kind(x))', &
+'        real( 1.0, kind(x)) + epsilon(x) /=  real( 1.0, kind(x))', &
 '', &
 '  It may be thought of as the distance from 1.0 to the next largest floating', &
 '  point number.', &
@@ -7374,55 +7896,55 @@ textblock=[character(len=256) :: &
 '      real(kind=sp) :: x = 3.143', &
 '      real(kind=dp) :: y = 2.33d0', &
 '', &
-'         ! so if x is of type real32, epsilon(x) has the value 2**-23', &
-'         print *, epsilon(x)', &
-'         ! note just the type and kind of x matter, not the value', &
-'         print *, epsilon(huge(x))', &
-'         print *, epsilon(tiny(x))', &
+'        ! so if x is of type real32, epsilon(x) has the value 2**-23', &
+'        print *, epsilon(x)', &
+'        ! note just the type and kind of x matter, not the value', &
+'        print *, epsilon(huge(x))', &
+'        print *, epsilon(tiny(x))', &
 '', &
-'         ! the value changes with the kind of the real value though', &
-'         print *, epsilon(y)', &
+'        ! the value changes with the kind of the real value though', &
+'        print *, epsilon(y)', &
 '', &
-'         ! adding and subtracting epsilon(x) changes x', &
-'         write(*,*)x == x + epsilon(x)', &
-'         write(*,*)x == x - epsilon(x)', &
+'        ! adding and subtracting epsilon(x) changes x', &
+'        write(*,*)x == x + epsilon(x)', &
+'        write(*,*)x == x - epsilon(x)', &
 '', &
-'         ! these next two comparisons will be .true. !', &
-'         write(*,*)x == x + epsilon(x) * 0.999999', &
-'         write(*,*)x == x - epsilon(x) * 0.999999', &
+'        ! these next two comparisons will be .true. !', &
+'        write(*,*)x == x + epsilon(x) * 0.999999', &
+'        write(*,*)x == x - epsilon(x) * 0.999999', &
 '', &
-'         ! you can calculate epsilon(1.0d0)', &
-'         write(*,*)my_dp_eps()', &
+'        ! you can calculate epsilon(1.0d0)', &
+'        write(*,*)my_dp_eps()', &
 '', &
 '      contains', &
 '', &
-'         function my_dp_eps()', &
-'         ! calculate the epsilon value of a machine the hard way', &
-'         real(kind=dp) :: t', &
-'         real(kind=dp) :: my_dp_eps', &
+'        function my_dp_eps()', &
+'        ! calculate the epsilon value of a machine the hard way', &
+'        real(kind=dp) :: t', &
+'        real(kind=dp) :: my_dp_eps', &
 '', &
-'            ! starting with a value of 1, keep dividing the value', &
-'            ! by 2 until no change is detected. Note that with', &
-'            ! infinite precision this would be an infinite loop,', &
-'            ! but floating point values in Fortran have a defined', &
-'            ! and limited precision.', &
-'            my_dp_eps = 1.0d0', &
-'            SET_ST: do', &
-'               my_dp_eps = my_dp_eps/2.0d0', &
-'               t = 1.0d0 + my_dp_eps', &
-'               if (t <= 1.0d0) exit', &
-'            enddo SET_ST', &
-'            my_dp_eps = 2.0d0*my_dp_eps', &
+'           ! starting with a value of 1, keep dividing the value', &
+'           ! by 2 until no change is detected. Note that with', &
+'           ! infinite precision this would be an infinite loop,', &
+'           ! but floating point values in Fortran have a defined', &
+'           ! and limited precision.', &
+'           my_dp_eps = 1.0d0', &
+'           SET_ST: do', &
+'              my_dp_eps = my_dp_eps/2.0d0', &
+'              t = 1.0d0 + my_dp_eps', &
+'              if (t <= 1.0d0) exit', &
+'           enddo SET_ST', &
+'           my_dp_eps = 2.0d0*my_dp_eps', &
 '', &
-'         end function my_dp_eps', &
+'        end function my_dp_eps', &
 '      end program demo_epsilon', &
 '', &
 '  Results:', &
 '', &
-'        1.1920929E-07', &
-'        1.1920929E-07', &
-'        1.1920929E-07', &
-'        2.220446049250313E-016', &
+'       1.1920929E-07', &
+'       1.1920929E-07', &
+'       1.1920929E-07', &
+'       2.220446049250313E-016', &
 '', &
 '   F', &
 '   F', &
@@ -7440,7 +7962,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              epsilon(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               epsilon(3fortran)', &
 '']
 
 shortname="epsilon"
@@ -7451,17 +7975,21 @@ case('77','erf')
 
 textblock=[character(len=256) :: &
 '', &
-'erf(3fortran)                                                    erf(3fortran)', &
+'erf(3fortran)                                                   erf(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ERF(3) - [MATHEMATICS] Error function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = erf(x)', &
 '', &
-'           elemental real(kind=KIND) function erf(x)', &
+'          elemental real(kind=KIND) function erf(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is of type real', &
@@ -7488,12 +8016,13 @@ textblock=[character(len=256) :: &
 '       & real32, real64, real128', &
 '      implicit none', &
 '      real(kind=real64) :: x = 0.17_real64', &
-'          write(*,*)x, erf(x)', &
+'         write(*,*)x, erf(x)', &
 '      end program demo_erf', &
 '', &
 '  Results:', &
 '', &
-'           0.17000000000000001       0.18999246120180879', &
+'          0.17000000000000001       0.18999246120180879', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -7506,7 +8035,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023                  erf(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   erf(3fortran)', &
 '']
 
 shortname="erf"
@@ -7517,17 +8048,21 @@ case('78','erfc')
 
 textblock=[character(len=256) :: &
 '', &
-'erfc(3fortran)                                                  erfc(3fortran)', &
+'erfc(3fortran)                                                 erfc(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ERFC(3) - [MATHEMATICS] Complementary error function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = erfc(x)', &
 '', &
-'           elemental real(kind=KIND) function erfc(x)', &
+'          elemental real(kind=KIND) function erfc(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is of type real and any valid kind', &
@@ -7567,14 +8102,15 @@ textblock=[character(len=256) :: &
 '       & real_kinds, real32, real64, real128', &
 '      implicit none', &
 '      real(kind=real64) :: x = 0.17_real64', &
-'         write(*,''(*(g0))'')''X='',x, '' ERFC(X)='',erfc(x)', &
-'         write(*,''(*(g0))'')''equivalently 1-ERF(X)='',1-erf(x)', &
+'        write(*,''(*(g0))'')''X='',x, '' ERFC(X)='',erfc(x)', &
+'        write(*,''(*(g0))'')''equivalently 1-ERF(X)='',1-erf(x)', &
 '      end program demo_erfc', &
 '', &
 '  Results:', &
 '', &
 '       > X=.1700000000000000 ERFC(X)=.8100075387981912', &
 '       > equivalently 1-ERF(X)=.8100075387981912', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -7587,7 +8123,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 erfc(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  erfc(3fortran)', &
 '']
 
 shortname="erfc"
@@ -7598,17 +8136,21 @@ case('79','erfc_scaled')
 
 textblock=[character(len=256) :: &
 '', &
-'erfc_scaled(3fortran)                                    erfc_scaled(3fortran)', &
+'erfc_scaled(3fortran)                                   erfc_scaled(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ERFC_SCALED(3) - [MATHEMATICS] Scaled complementary error function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = erfc_scaled(x)', &
 '', &
-'           elemental real(kind=KIND) function erfc_scaled(x)', &
+'          elemental real(kind=KIND) function erfc_scaled(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is of type real of any valid kind', &
@@ -7646,13 +8188,14 @@ textblock=[character(len=256) :: &
 '      program demo_erfc_scaled', &
 '      implicit none', &
 '      real(kind(0.0d0)) :: x = 0.17d0', &
-'         x = erfc_scaled(x)', &
-'         print *, x', &
+'        x = erfc_scaled(x)', &
+'        print *, x', &
 '      end program demo_erfc_scaled', &
 '', &
 '  Results:', &
 '', &
 '       >   0.833758302149981', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -7662,7 +8205,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023          erfc_scaled(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           erfc_scaled(3fortran)', &
 '']
 
 shortname="erfc_scaled"
@@ -7673,10 +8218,13 @@ case('80','event_query')
 
 textblock=[character(len=256) :: &
 '', &
-'event_query(3fortran)                                    event_query(3fortran)', &
+'event_query(3fortran)                                   event_query(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  EVENT_QUERY(3) - [COLLECTIVE] Query whether a coarray event has occurred', &
+'', &
 '', &
 'SYNOPSIS', &
 '  call event_query(event, count [,stat] )', &
@@ -7706,13 +8254,14 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      type(event_type) :: event_value_has_been_set[*]', &
 '      integer :: cnt', &
-'         if (this_image() == 1) then', &
-'            call event_query(event_value_has_been_set, cnt)', &
-'            if (cnt > 0) write(*,*) "Value has been set"', &
-'         elseif (this_image() == 2) then', &
-'            event post(event_value_has_been_set[1])', &
-'         endif', &
+'        if (this_image() == 1) then', &
+'           call event_query(event_value_has_been_set, cnt)', &
+'           if (cnt > 0) write(*,*) "Value has been set"', &
+'        elseif (this_image() == 2) then', &
+'           event post(event_value_has_been_set[1])', &
+'        endif', &
 '      end program demo_event_query', &
+'', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -7722,7 +8271,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023          event_query(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           event_query(3fortran)', &
 '']
 
 shortname="event_query"
@@ -7733,22 +8284,26 @@ case('81','execute_command_line')
 
 textblock=[character(len=256) :: &
 '', &
-'execute_command_line(3fortran)                  execute_command_line(3fortran)', &
+'execute_command_line(3fortran)                 execute_command_line(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  EXECUTE_COMMAND_LINE(3) - [SYSTEM:PROCESSES] Execute a shell command', &
+'', &
 '', &
 'SYNOPSIS', &
 '  call execute_command_line( & & command [,wait] [,exitstat] [,cmdstat]', &
 '  [,cmdmsg] )', &
 '', &
-'           subroutine execute_command_line(command,wait,exitstat,cmdstat,cmdmsg)', &
+'          subroutine execute_command_line(command,wait,exitstat,cmdstat,cmdmsg)', &
 '', &
-'            character(len=*),intent(in)             :: command', &
-'            logical,intent(in),optional             :: wait', &
-'            integer,intent(inout),optional          :: exitstat', &
-'            integer,intent(inout),optional          :: cmdstat', &
-'            character(len=*),intent(inout),optional :: cmdmsg', &
+'           character(len=*),intent(in)             :: command', &
+'           logical,intent(in),optional             :: wait', &
+'           integer,intent(inout),optional          :: exitstat', &
+'           integer,intent(inout),optional          :: cmdstat', &
+'           character(len=*),intent(inout),optional :: cmdmsg', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  COMMAND is a default character scalar', &
@@ -7790,6 +8345,15 @@ textblock=[character(len=256) :: &
 '  be ignored, and the SIGCHLD will be blocked. As such, if the parent process', &
 '  is terminated, the child process might not be terminated alongside.', &
 '', &
+'  One of the most common causes of errors is that the program requested is not', &
+'  in the search path. You should make sure that the program to be executed is', &
+'  installed on your system and that it is in the system''s path when the', &
+'  program calls it. You can check if it is installed by running it from the', &
+'  command prompt. If it runs successfully from the command prompt, it means', &
+'  that it is installed, and so you should next check that it is in the search', &
+'  path when the program executes (usually this means checking the environment', &
+'  variable PATH).', &
+'', &
 'OPTIONS', &
 '  o  COMMAND : the command line to be executed. The interpretation is', &
 '     programming-environment dependent.', &
@@ -7823,14 +8387,15 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_exec', &
 '      implicit none', &
-'         integer :: i', &
+'        integer :: i', &
 '', &
-'         call execute_command_line("external_prog.exe", exitstat=i)', &
-'         print *, "Exit status of external_prog.exe was ", i', &
+'        call execute_command_line("external_prog.exe", exitstat=i)', &
+'        print *, "Exit status of external_prog.exe was ", i', &
 '', &
-'         call execute_command_line("reindex_files.exe", wait=.false.)', &
-'         print *, "Now reindexing files in the background"', &
+'        call execute_command_line("reindex_files.exe", wait=.false.)', &
+'        print *, "Now reindexing files in the background"', &
 '      end program demo_exec', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -7840,7 +8405,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023 execute_command_line(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023  execute_command_line(3fortran)', &
 '']
 
 shortname="execute_command_line"
@@ -7851,17 +8418,21 @@ case('82','exp')
 
 textblock=[character(len=256) :: &
 '', &
-'exp(3fortran)                                                    exp(3fortran)', &
+'exp(3fortran)                                                   exp(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  EXP(3) - [MATHEMATICS] Base-e exponential function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = exp(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function exp(x)', &
+'          elemental TYPE(kind=KIND) function exp(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be real or complex of any kind.', &
@@ -7877,11 +8448,11 @@ textblock=[character(len=256) :: &
 '  If X is of type complex, its imaginary part is regarded as a value in', &
 '  radians such that if (see Euler''s formula):', &
 '', &
-'          cx=(re,im)', &
+'         cx=(re,im)', &
 '', &
 '  then', &
 '', &
-'          exp(cx) = exp(re) * cmplx(cos(im),sin(im),kind=kind(cx))', &
+'         exp(cx) = exp(re) * cmplx(cos(im),sin(im),kind=kind(cx))', &
 '', &
 '  Since EXP(3) is the inverse function of LOG(3) the maximum valid magnitude', &
 '  of the real component of X is LOG(HUGE(X)).', &
@@ -7903,39 +8474,40 @@ textblock=[character(len=256) :: &
 '      real :: x, re, im', &
 '      complex :: cx', &
 '', &
-'         x = 1.0', &
-'         write(*,*)"Euler''s constant is approximately",exp(x)', &
+'        x = 1.0', &
+'        write(*,*)"Euler''s constant is approximately",exp(x)', &
 '', &
-'         !! complex values', &
-'         ! given', &
-'         re=3.0', &
-'         im=4.0', &
-'         cx=cmplx(re,im)', &
+'        !! complex values', &
+'        ! given', &
+'        re=3.0', &
+'        im=4.0', &
+'        cx=cmplx(re,im)', &
 '', &
-'         ! complex results from complex arguments are Related to Euler''s formula', &
-'         write(*,*)''given the complex value '',cx', &
-'         write(*,*)''exp(x) is'',exp(cx)', &
-'         write(*,*)''is the same as'',exp(re)*cmplx(cos(im),sin(im),kind=kind(cx))', &
+'        ! complex results from complex arguments are Related to Euler''s formula', &
+'        write(*,*)''given the complex value '',cx', &
+'        write(*,*)''exp(x) is'',exp(cx)', &
+'        write(*,*)''is the same as'',exp(re)*cmplx(cos(im),sin(im),kind=kind(cx))', &
 '', &
-'         ! exp(3) is the inverse function of log(3) so', &
-'         ! the real component of the input must be less than or equal to', &
-'         write(*,*)''maximum real component'',log(huge(0.0))', &
-'         ! or for double precision', &
-'         write(*,*)''maximum doubleprecision component'',log(huge(0.0d0))', &
+'        ! exp(3) is the inverse function of log(3) so', &
+'        ! the real component of the input must be less than or equal to', &
+'        write(*,*)''maximum real component'',log(huge(0.0))', &
+'        ! or for double precision', &
+'        write(*,*)''maximum doubleprecision component'',log(huge(0.0d0))', &
 '', &
-'         ! but since the imaginary component is passed to the cos(3) and sin(3)', &
-'         ! functions the imaginary component can be any real value', &
+'        ! but since the imaginary component is passed to the cos(3) and sin(3)', &
+'        ! functions the imaginary component can be any real value', &
 '', &
 '      end program demo_exp', &
 '', &
 '  Results:', &
 '', &
 '       Euler''s constant is approximately   2.718282', &
-'       given the complex value  (3.000000,4.000000)', &
+'       given the complex value (3.000000,4.000000)', &
 '       exp(x) is (-13.12878,-15.20078)', &
 '       is the same as (-13.12878,-15.20078)', &
-'       maximum real component   88.72284', &
+'       maximum real component  88.72284', &
 '       maximum doubleprecision component   709.782712893384', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -7950,7 +8522,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  exp(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   exp(3fortran)', &
 '']
 
 shortname="exp"
@@ -7961,17 +8535,21 @@ case('83','exponent')
 
 textblock=[character(len=256) :: &
 '', &
-'exponent(3fortran)                                          exponent(3fortran)', &
+'exponent(3fortran)                                         exponent(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  EXPONENT(3) - [MODEL_COMPONENTS] Exponent of floating-point number', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = exponent(x)', &
 '', &
-'           elemental integer function exponent(x)', &
+'          elemental integer function exponent(x)', &
 '', &
-'            real(kind=**),intent(in) :: x', &
+'           real(kind=**),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X shall be of type real of any valid kind', &
@@ -7999,20 +8577,21 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real :: x = 1.0', &
 '      integer :: i', &
-'         i = exponent(x)', &
-'         print *, i', &
-'         print *, exponent(0.0)', &
-'         print *, exponent([10.0,100.0,1000.0,-10000.0])', &
-'         print *, 2**[10.0,100.0,1000.0,-10000.0]', &
-'         print *, exponent(huge(0.0))', &
-'         print *, exponent(tiny(0.0))', &
+'        i = exponent(x)', &
+'        print *, i', &
+'        print *, exponent(0.0)', &
+'        print *, exponent([10.0,100.0,1000.0,-10000.0])', &
+'        print *, 2**[10.0,100.0,1000.0,-10000.0]', &
+'        print *, exponent(huge(0.0))', &
+'        print *, exponent(tiny(0.0))', &
 '      end program demo_exponent', &
 '', &
 '  Results:', &
 '', &
-'       >            4           7          10          14', &
-'       >          128', &
-'       >         -125', &
+'       >           4           7          10          14', &
+'       >         128', &
+'       >        -125', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -8024,7 +8603,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023             exponent(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              exponent(3fortran)', &
 '']
 
 shortname="exponent"
@@ -8035,19 +8616,23 @@ case('84','extends_type_of')
 
 textblock=[character(len=256) :: &
 '', &
-'extends_type_of(3fortran)                            extends_type_of(3fortran)', &
+'extends_type_of(3fortran)                           extends_type_of(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  EXTENDS_TYPE_OF(3) - [STATE:INQUIRY] Determine if the dynamic type of A is', &
 '  an extension of the dynamic type of MOLD.', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = extends_type_of(a, mold)', &
 '', &
-'           logical extends_type_of(a, mold)', &
+'          logical extends_type_of(a, mold)', &
 '', &
-'            type(TYPE(kind=KIND),intent(in) :: a', &
-'            type(TYPE(kind=KIND),intent(in) :: mold', &
+'           type(TYPE(kind=KIND)),intent(in) :: a', &
+'           type(TYPE(kind=KIND)),intent(in) :: mold', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  -A shall be an object or pointer to an extensible declared type, or', &
@@ -8099,96 +8684,97 @@ textblock=[character(len=256) :: &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
-'        ! program demo_extends_type_of', &
-'        module M_demo_extends_type_of', &
-'        implicit none', &
-'        private', &
+'       ! program demo_extends_type_of', &
+'       module M_demo_extends_type_of', &
+'       implicit none', &
+'       private', &
 '', &
-'        type nothing', &
-'        end type nothing', &
+'       type nothing', &
+'       end type nothing', &
 '', &
-'        type, extends(nothing) :: dot', &
-'          real :: x=0', &
-'          real :: y=0', &
-'        end type dot', &
+'       type, extends(nothing) :: dot', &
+'         real :: x=0', &
+'         real :: y=0', &
+'       end type dot', &
 '', &
-'        type, extends(dot) :: point', &
-'          real :: z=0', &
-'        end type point', &
+'       type, extends(dot) :: point', &
+'         real :: z=0', &
+'       end type point', &
 '', &
-'        type something_else', &
-'        end type something_else', &
+'       type something_else', &
+'       end type something_else', &
 '', &
-'        public :: nothing', &
-'        public :: dot', &
-'        public :: point', &
-'        public :: something_else', &
+'       public :: nothing', &
+'       public :: dot', &
+'       public :: point', &
+'       public :: something_else', &
 '', &
-'        end module M_demo_extends_type_of', &
+'       end module M_demo_extends_type_of', &
 '', &
-'        program demo_extends_type_of', &
-'        use M_demo_extends_type_of, only : nothing, dot, point, something_else', &
-'        implicit none', &
-'        type(nothing) :: grandpa', &
-'        type(dot) :: dad', &
-'        type(point) :: me', &
-'        type(something_else) :: alien', &
+'       program demo_extends_type_of', &
+'       use M_demo_extends_type_of, only : nothing, dot, point, something_else', &
+'       implicit none', &
+'       type(nothing) :: grandpa', &
+'       type(dot) :: dad', &
+'       type(point) :: me', &
+'       type(something_else) :: alien', &
 '', &
-'         write(*,*)''these should all be true''', &
-'         write(*,*)extends_type_of(me,grandpa),''I am descended from Grandpa''', &
-'         write(*,*)extends_type_of(dad,grandpa),''Dad is descended from Grandpa''', &
-'         write(*,*)extends_type_of(me,dad),''Dad is my ancestor''', &
+'        write(*,*)''these should all be true''', &
+'        write(*,*)extends_type_of(me,grandpa),''I am descended from Grandpa''', &
+'        write(*,*)extends_type_of(dad,grandpa),''Dad is descended from Grandpa''', &
+'        write(*,*)extends_type_of(me,dad),''Dad is my ancestor''', &
 '', &
-'         write(*,*)''is an object an extension of itself?''', &
-'         write(*,*)extends_type_of(grandpa,grandpa) ,''self-propagating!''', &
-'         write(*,*)extends_type_of(dad,dad) ,''clone!''', &
+'        write(*,*)''is an object an extension of itself?''', &
+'        write(*,*)extends_type_of(grandpa,grandpa) ,''self-propagating!''', &
+'        write(*,*)extends_type_of(dad,dad) ,''clone!''', &
 '', &
-'         write(*,*)'' you did not father your grandfather''', &
-'         write(*,*)extends_type_of(grandpa,dad),''no paradox here''', &
+'        write(*,*)'' you did not father your grandfather''', &
+'        write(*,*)extends_type_of(grandpa,dad),''no paradox here''', &
 '', &
-'         write(*,*)extends_type_of(dad,me),''no paradox here''', &
-'         write(*,*)extends_type_of(grandpa,me),''no relation whatsoever''', &
-'         write(*,*)extends_type_of(grandpa,alien),''no relation''', &
-'         write(*,*)extends_type_of(me,alien),''not what everyone thinks''', &
+'        write(*,*)extends_type_of(dad,me),''no paradox here''', &
+'        write(*,*)extends_type_of(grandpa,me),''no relation whatsoever''', &
+'        write(*,*)extends_type_of(grandpa,alien),''no relation''', &
+'        write(*,*)extends_type_of(me,alien),''not what everyone thinks''', &
 '', &
-'         call pointers()', &
-'         contains', &
+'        call pointers()', &
+'        contains', &
 '', &
-'         subroutine pointers()', &
-'         ! Given the declarations and assignments', &
-'         type t1', &
-'         real c', &
-'         end type', &
-'         type, extends(t1) :: t2', &
-'         end type', &
-'         class(t1), pointer :: p, q', &
-'            allocate (p)', &
-'            allocate (t2 :: q)', &
-'            ! the result of EXTENDS_TYPE_OF (P, Q) will be false, and the result', &
-'            ! of EXTENDS_TYPE_OF (Q, P) will be true.', &
-'            write(*,*)''(P,Q)'',extends_type_of(p,q),"mind your P''s and Q''s"', &
-'            write(*,*)''(Q,P)'',extends_type_of(q,p)', &
-'         end subroutine pointers', &
+'        subroutine pointers()', &
+'        ! Given the declarations and assignments', &
+'        type t1', &
+'        real c', &
+'        end type', &
+'        type, extends(t1) :: t2', &
+'        end type', &
+'        class(t1), pointer :: p, q', &
+'           allocate (p)', &
+'           allocate (t2 :: q)', &
+'           ! the result of EXTENDS_TYPE_OF (P, Q) will be false, and the result', &
+'           ! of EXTENDS_TYPE_OF (Q, P) will be true.', &
+'           write(*,*)''(P,Q)'',extends_type_of(p,q),"mind your P''s and Q''s"', &
+'           write(*,*)''(Q,P)'',extends_type_of(q,p)', &
+'        end subroutine pointers', &
 '', &
-'        end program demo_extends_type_of', &
+'       end program demo_extends_type_of', &
 '', &
 '  Results:', &
 '', &
-'          these should all be true', &
-'          T I am descended from Grandpa', &
-'          T Dad is descended from Grandpa', &
-'          T Dad is my ancestor', &
-'          is an object an extension of itself?', &
-'          T self-propagating!', &
-'          T clone!', &
-'           you did not father your grandfather', &
-'          F no paradox here', &
-'          F no paradox here', &
-'          F no relation whatsoever', &
-'          F no relation', &
-'          F not what everyone thinks', &
-'          (P,Q) F mind your P''s and Q''s', &
-'          (Q,P) T', &
+'         these should all be true', &
+'         T I am descended from Grandpa', &
+'         T Dad is descended from Grandpa', &
+'         T Dad is my ancestor', &
+'         is an object an extension of itself?', &
+'         T self-propagating!', &
+'         T clone!', &
+'          you did not father your grandfather', &
+'         F no paradox here', &
+'         F no paradox here', &
+'         F no relation whatsoever', &
+'         F no relation', &
+'         F not what everyone thinks', &
+'         (P,Q) F mind your P''s and Q''s', &
+'         (Q,P) T', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -8198,7 +8784,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023      extends_type_of(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023       extends_type_of(3fortran)', &
 '']
 
 shortname="extends_type_of"
@@ -8209,11 +8797,14 @@ case('85','findloc')
 
 textblock=[character(len=256) :: &
 '', &
-'findloc(3fortran)                                            findloc(3fortran)', &
+'findloc(3fortran)                                           findloc(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  FINDLOC(3) - [ARRAY:LOCATION] Location of first element of ARRAY identified', &
 '  by MASK along dimension DIM matching a target value', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = findloc (array, value, dim [,mask] [,kind] [,back]) | findloc', &
@@ -8221,12 +8812,13 @@ textblock=[character(len=256) :: &
 '', &
 '    function findloc (array, value, dim, mask, kind, back)', &
 '', &
-'              type TYPE(kind=KIND),intent(in)      :: array(..)', &
-'              type TYPE(kind=KIND),intent(in)      :: value', &
-'              integer(kind=**),intent(in),optional :: dim', &
-'              logical(kind=**),intent(in),optional :: mask(..)', &
-'              integer(kind=**),intent(in),optional :: kind', &
-'              logical(kind=**),intent(in),optional :: back', &
+'             type(TYPE(kind=KIND)),intent(in)     :: array(..)', &
+'             type(TYPE(kind=KIND)),intent(in)     :: value', &
+'             integer(kind=**),intent(in),optional :: dim', &
+'             logical(kind=**),intent(in),optional :: mask(..)', &
+'             integer(kind=**),intent(in),optional :: kind', &
+'             logical(kind=**),intent(in),optional :: back', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY is an array of any intrinsic type.', &
@@ -8288,11 +8880,11 @@ textblock=[character(len=256) :: &
 '  DIM does not appear, the result is an array of rank one and of size equal to', &
 '  the rank of ARRAY; otherwise, the result is of rank n - 1 and shape', &
 '', &
-'         [d1, d2, . . ., dDIM-1, dDIM+1, . . ., dn ]', &
+'        [d1, d2, . . ., dDIM-1, dDIM+1, . . ., dn ]', &
 '', &
 '  where', &
 '', &
-'         [d1, d2, . . ., dn ]', &
+'        [d1, d2, . . ., dn ]', &
 '', &
 '  is the shape of ARRAY.', &
 '', &
@@ -8319,115 +8911,115 @@ textblock=[character(len=256) :: &
 '      logical,parameter :: T=.true., F=.false.', &
 '      integer,allocatable :: ibox(:,:)', &
 '      logical,allocatable :: mask(:,:)', &
-'        ! basics', &
-'         ! the first element matching the value is returned AS AN ARRAY', &
-'         call printi(''== 6'',findloc ([2, 6, 4, 6], value = 6))', &
-'         call printi(''== 6'',findloc ([2, 6, 4, 6], value = 6,back=.true.))', &
-'         ! the first element matching the value is returned AS A SCALAR', &
-'         call printi(''== 6'',findloc ([2, 6, 4, 6], value = 6,dim=1))', &
-'         call printi(''== 6'',findloc ([2, 6, 4, 6], value = 6,back=.true.,dim=1))', &
+'       ! basics', &
+'        ! the first element matching the value is returned AS AN ARRAY', &
+'        call printi(''== 6'',findloc ([2, 6, 4, 6], value = 6))', &
+'        call printi(''== 6'',findloc ([2, 6, 4, 6], value = 6,back=.true.))', &
+'        ! the first element matching the value is returned AS A SCALAR', &
+'        call printi(''== 6'',findloc ([2, 6, 4, 6], value = 6,dim=1))', &
+'        call printi(''== 6'',findloc ([2, 6, 4, 6], value = 6,back=.true.,dim=1))', &
 '', &
-'         ibox=reshape([ 0,-5,  7, 7, &', &
-'                        3, 4, -1, 2, &', &
-'                        1, 5,  6, 7] ,shape=[3,4],order=[2,1])', &
+'        ibox=reshape([ 0,-5,  7, 7, &', &
+'                       3, 4, -1, 2, &', &
+'                       1, 5,  6, 7] ,shape=[3,4],order=[2,1])', &
 '', &
-'         mask=reshape([ T, T, F, T, &', &
-'                        T, T, F, T, &', &
-'                        T, T, F, T] ,shape=[3,4],order=[2,1])', &
+'        mask=reshape([ T, T, F, T, &', &
+'                       T, T, F, T, &', &
+'                       T, T, F, T] ,shape=[3,4],order=[2,1])', &
 '', &
-'         call printi(''array is'', ibox )', &
-'         call printl(''mask  is'', mask )', &
-'         print *, ''so for == 7 and back=.false.''', &
-'         call printi(''so for == 7 the address of the element is'', &', &
-'                 & findloc (ibox, 7, mask = mask) )', &
-'         print *, ''so for == 7 and back=.true.''', &
-'         call printi(''so for == 7 the address of the element is'', &', &
-'                 & findloc (ibox, 7, mask = mask, back=.true.) )', &
+'        call printi(''array is'', ibox )', &
+'        call printl(''mask  is'', mask )', &
+'        print *, ''so for == 7 and back=.false.''', &
+'        call printi(''so for == 7 the address of the element is'', &', &
+'                & findloc (ibox, 7, mask = mask) )', &
+'        print *, ''so for == 7 and back=.true.''', &
+'        call printi(''so for == 7 the address of the element is'', &', &
+'                & findloc (ibox, 7, mask = mask, back=.true.) )', &
 '', &
-'         print *,''This is independent of declared lower bounds for the array''', &
+'        print *,''This is independent of declared lower bounds for the array''', &
 '', &
-'         print *, '' using dim=N''', &
-'         ibox=reshape([ 1,  2, -9,  &', &
-'                        2,  2,  6 ] ,shape=[2,3],order=[2,1])', &
+'        print *, '' using dim=N''', &
+'        ibox=reshape([ 1,  2, -9,  &', &
+'                       2,  2,  6 ] ,shape=[2,3],order=[2,1])', &
 '', &
-'         call printi(''array is'', ibox )', &
-'         ! has the value [2, 1, 0] and', &
-'         call printi('''',findloc (ibox, value = 2, dim = 1) )', &
-'         ! has the value [2, 1].', &
-'         call printi('''',findloc (ibox, value = 2, dim = 2) )', &
+'        call printi(''array is'', ibox )', &
+'        ! has the value [2, 1, 0] and', &
+'        call printi('''',findloc (ibox, value = 2, dim = 1) )', &
+'        ! has the value [2, 1].', &
+'        call printi('''',findloc (ibox, value = 2, dim = 2) )', &
 '      contains', &
 '      ! GENERIC ROUTINES TO PRINT MATRICES', &
 '      subroutine printl(title,a)', &
 '      implicit none', &
 '      !@(#) print small 2d logical scalar, vector, matrix in row-column format', &
 '      character(len=*),intent(in)  :: title', &
-'      logical,intent(in)           :: a(..)', &
+'      logical,intent(in)          :: a(..)', &
 '', &
 '      character(len=*),parameter   :: row=''(" > [ ",*(l1:,","))''', &
 '      character(len=*),parameter   :: all=''(" ",*(g0,1x))''', &
-'      logical,allocatable          :: b(:,:)', &
-'      integer                      :: i', &
-'         write(*,all,advance=''no'')trim(title)', &
-'         ! copy everything to a matrix to keep code simple', &
-'         select rank(a)', &
-'         rank (0); write(*,''(a)'')'' (a scalar)''; b=reshape([a],[1,1])', &
-'         rank (1); write(*,''(a)'')'' (a vector)''; b=reshape(a,[size(a),1])', &
-'         rank (2); write(*,''(a)'')'' (a matrix)''; b=a', &
-'         rank default; stop ''*printl* unexpected rank''', &
-'         end select', &
-'         do i=1,size(b,dim=1)', &
-'            write(*,fmt=row,advance=''no'')b(i,:)', &
-'            write(*,''(" ]")'')', &
-'         enddo', &
-'         write(*,all) ''>shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
-'         write(*,*)', &
+'      logical,allocatable         :: b(:,:)', &
+'      integer                     :: i', &
+'        write(*,all,advance=''no'')trim(title)', &
+'        ! copy everything to a matrix to keep code simple', &
+'        select rank(a)', &
+'        rank (0); write(*,''(a)'')'' (a scalar)''; b=reshape([a],[1,1])', &
+'        rank (1); write(*,''(a)'')'' (a vector)''; b=reshape(a,[size(a),1])', &
+'        rank (2); write(*,''(a)'')'' (a matrix)''; b=a', &
+'        rank default; stop ''*printl* unexpected rank''', &
+'        end select', &
+'        do i=1,size(b,dim=1)', &
+'           write(*,fmt=row,advance=''no'')b(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
+'        write(*,all) ''>shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
+'        write(*,*)', &
 '      end subroutine printl', &
 '', &
 '      subroutine printi(title,a)', &
 '      implicit none', &
 '      !@(#) print small 2d integer scalar, vector, matrix in row-column format', &
 '      character(len=*),intent(in)  :: title', &
-'      integer,intent(in)           :: a(..)', &
+'      integer,intent(in)          :: a(..)', &
 '      character(len=*),parameter   :: all=''(" ",*(g0,1x))''', &
-'      character(len=20)            :: row', &
-'      integer,allocatable          :: b(:,:)', &
-'      integer                      :: i', &
-'         write(*,all,advance=''no'')trim(title)', &
-'         ! copy everything to a matrix to keep code simple', &
-'         select rank(a)', &
-'         rank (0); write(*,''(a)'')'' (a scalar)''; b=reshape([a],[1,1])', &
-'         rank (1); write(*,''(a)'')'' (a vector)''; b=reshape(a,[size(a),1])', &
-'         rank (2); write(*,''(a)'')'' (a matrix)''; b=a', &
-'         rank default; stop ''*printi* unexpected rank''', &
-'         end select', &
-'         ! find how many characters to use for integers', &
-'         write(row,''(i0)'')ceiling(log10(real(maxval(abs(b)))))+2', &
-'         ! use this format to write a row', &
-'         row=''(" > [",*(i''//trim(row)//'':,","))''', &
-'         do i=1,size(b,dim=1)', &
-'            write(*,fmt=row,advance=''no'')b(i,:)', &
-'            write(*,''(" ]")'')', &
-'         enddo', &
-'         write(*,all) ''>shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
-'         write(*,*)', &
+'      character(len=20)           :: row', &
+'      integer,allocatable         :: b(:,:)', &
+'      integer                     :: i', &
+'        write(*,all,advance=''no'')trim(title)', &
+'        ! copy everything to a matrix to keep code simple', &
+'        select rank(a)', &
+'        rank (0); write(*,''(a)'')'' (a scalar)''; b=reshape([a],[1,1])', &
+'        rank (1); write(*,''(a)'')'' (a vector)''; b=reshape(a,[size(a),1])', &
+'        rank (2); write(*,''(a)'')'' (a matrix)''; b=a', &
+'        rank default; stop ''*printi* unexpected rank''', &
+'        end select', &
+'        ! find how many characters to use for integers', &
+'        write(row,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(b))))))+2', &
+'        ! use this format to write a row', &
+'        row=''(" > [",*(i''//trim(row)//'':,","))''', &
+'        do i=1,size(b,dim=1)', &
+'           write(*,fmt=row,advance=''no'')b(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
+'        write(*,all) ''>shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
+'        write(*,*)', &
 '      end subroutine printi', &
 '      end program demo_findloc', &
 '', &
 '  Results:', &
 '', &
-'       >  == 6  (a vector)', &
+'       >  == 6 (a vector)', &
 '       >  > [  2 ]', &
 '       >  >shape= 1 ,rank= 1 ,size= 1', &
 '       >', &
-'       >  == 6  (a vector)', &
+'       >  == 6 (a vector)', &
 '       >  > [  4 ]', &
 '       >  >shape= 1 ,rank= 1 ,size= 1', &
 '       >', &
-'       >  == 6  (a scalar)', &
+'       >  == 6 (a scalar)', &
 '       >  > [  2 ]', &
 '       >  >shape= ,rank= 0 ,size= 1', &
 '       >', &
-'       >  == 6  (a scalar)', &
+'       >  == 6 (a scalar)', &
 '       >  > [  4 ]', &
 '       >  >shape= ,rank= 0 ,size= 1', &
 '       >', &
@@ -8437,7 +9029,7 @@ textblock=[character(len=256) :: &
 '       >  > [  1,  5,  6,  7 ]', &
 '       >  >shape= 3 4 ,rank= 2 ,size= 12', &
 '       >', &
-'       >  mask  is  (a matrix)', &
+'       >  mask is  (a matrix)', &
 '       >  > [ T,T,F,T ]', &
 '       >  > [ T,T,F,T ]', &
 '       >  > [ T,T,F,T ]', &
@@ -8474,6 +9066,7 @@ textblock=[character(len=256) :: &
 '       >  >shape= 2 ,rank= 1 ,size= 2', &
 '       >', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
@@ -8484,7 +9077,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              findloc(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               findloc(3fortran)', &
 '']
 
 shortname="findloc"
@@ -8495,19 +9090,23 @@ case('86','floor')
 
 textblock=[character(len=256) :: &
 '', &
-'floor(3fortran)                                                floor(3fortran)', &
+'floor(3fortran)                                               floor(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  FLOOR(3) - [NUMERIC] Function to return largest integral value not greater', &
 '  than argument', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = floor(a [,kind])', &
 '', &
-'           elemental integer(kind=KIND) function floor( a ,kind )', &
+'          elemental integer(kind=KIND) function floor( a ,kind )', &
 '', &
-'            real(kind=**),intent(in) :: a', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           real(kind=**),intent(in) :: a', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -8558,30 +9157,31 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real :: x = 63.29', &
 '      real :: y = -63.59', &
-'          print *, x, floor(x)', &
-'          print *, y, floor(y)', &
-'         ! elemental', &
-'         print *,floor([ &', &
-'         &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &', &
-'         &  0.0,   &', &
-'         &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])', &
+'         print *, x, floor(x)', &
+'         print *, y, floor(y)', &
+'        ! elemental', &
+'        print *,floor([ &', &
+'        &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &', &
+'        &  0.0,   &', &
+'        &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])', &
 '', &
-'         ! note even a small deviation from the whole number changes the result', &
-'         print *,      [2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)]', &
-'         print *,floor([2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)])', &
+'        ! note even a small deviation from the whole number changes the result', &
+'        print *,      [2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)]', &
+'        print *,floor([2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)])', &
 '', &
-'         ! A=Nan, Infinity or  <huge(0_KIND)-1 < A > huge(0_KIND) is undefined', &
+'        ! A=Nan, Infinity or  <huge(0_KIND)-1 < A > huge(0_KIND) is undefined', &
 '      end program demo_floor', &
 '', &
 '  Results:', &
 '', &
-'       >     63.29000             63', &
-'       >    -63.59000            -64', &
-'       >            -3         -3         -3         -2         -2         -1', &
-'       >            -1          0          0          1          1          2', &
-'       >             2          2          2', &
-'       >     2.000000      2.000000      2.000000', &
-'       >             2          1          1', &
+'       >     63.29000            63', &
+'       >    -63.59000           -64', &
+'       >           -3         -3         -3         -2         -2         -1', &
+'       >           -1          0          0          1          1          2', &
+'       >            2          2          2', &
+'       >     2.000000     2.000000      2.000000', &
+'       >            2          1          1', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -8591,7 +9191,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                floor(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 floor(3fortran)', &
 '']
 
 shortname="floor"
@@ -8602,17 +9204,21 @@ case('87','fraction')
 
 textblock=[character(len=256) :: &
 '', &
-'fraction(3fortran)                                          fraction(3fortran)', &
+'fraction(3fortran)                                         fraction(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  FRACTION(3) - [MODEL_COMPONENTS] Fractional part of the model representation', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = fraction(x)', &
 '', &
-'           elemental real(kind=KIND) function fraction(x)', &
+'          elemental real(kind=KIND) function fraction(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: fraction', &
+'           real(kind=KIND),intent(in) :: fraction', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is of type real', &
@@ -8641,13 +9247,14 @@ textblock=[character(len=256) :: &
 '      program demo_fraction', &
 '      implicit none', &
 '      real :: x', &
-'         x = 178.1387e-4', &
-'         print *, fraction(x), x * radix(x)**(-exponent(x))', &
+'        x = 178.1387e-4', &
+'        print *, fraction(x), x * radix(x)**(-exponent(x))', &
 '      end program demo_fraction', &
 '', &
 '  Results:', &
 '', &
-'           0.5700439      0.5700439', &
+'          0.5700439      0.5700439', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -8659,7 +9266,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023             fraction(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              fraction(3fortran)', &
 '']
 
 shortname="fraction"
@@ -8670,18 +9279,22 @@ case('88','gamma')
 
 textblock=[character(len=256) :: &
 '', &
-'gamma(3fortran)                                                gamma(3fortran)', &
+'gamma(3fortran)                                               gamma(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  GAMMA(3) - [MATHEMATICS] Gamma function, which yields factorials for', &
 '  positive whole numbers', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = gamma(x)', &
 '', &
-'           elemental real(kind=KIND) function gamma( x)', &
+'          elemental real(kind=KIND) function gamma( x)', &
 '', &
-'            type(real,kind=KIND),intent(in) :: x', &
+'           type(real,kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is a real value', &
@@ -8709,92 +9322,93 @@ textblock=[character(len=256) :: &
 '  Sample program:', &
 '', &
 '      program demo_gamma', &
-'      use, intrinsic :: iso_fortran_env, only : wp=>real64', &
+'      use, intrinsic :: iso_fortran_env, only : wp=>real64, int64', &
 '      implicit none', &
 '      real :: x, xa(4)', &
-'      integer :: i', &
+'      integer :: i, j', &
 '', &
-'         x = gamma(1.0)', &
-'         write(*,*)''gamma(1.0)='',x', &
+'        ! basic usage', &
+'        x = gamma(1.0)', &
+'        write(*,*)''gamma(1.0)='',x', &
 '', &
-'         ! elemental', &
-'         xa=gamma([1.0,2.0,3.0,4.0])', &
-'         write(*,*)xa', &
-'         write(*,*)', &
+'        ! elemental', &
+'        xa=gamma([1.0,2.0,3.0,4.0])', &
+'        write(*,*)xa', &
+'        write(*,*)', &
 '', &
-'         ! gamma(3) is related to the factorial function', &
-'         do i=1,20', &
-'            ! check value is not too big for default integer type', &
-'            if(factorial(i).gt.huge(0))then', &
-'               write(*,*)i,factorial(i)', &
-'            else', &
-'               write(*,*)i,factorial(i),int(factorial(i))', &
-'            endif', &
-'         enddo', &
-'         ! more factorials', &
-'         FAC: block', &
-'         integer,parameter :: n(*)=[0,1,5,11,170]', &
-'         integer :: j', &
-'            do j=1,size(n)', &
-'               write(*,''(*(g0,1x))'')''factorial of'', n(j),'' is '', &', &
-'                & product([(real(i,kind=wp),i=1,n(j))]),  &', &
-'                & gamma(real(n(j)+1,kind=wp))', &
-'            enddo', &
-'         endblock FAC', &
 '', &
-'         contains', &
-'         function factorial(i) result(f)', &
-'         integer,parameter :: dp=kind(0d0)', &
-'         integer,intent(in) :: i', &
-'         real :: f', &
-'            if(i.le.0)then', &
-'               write(*,''(*(g0))'')''<ERROR> gamma(3) function value '',i,'' <= 0''', &
-'               stop      ''<STOP> bad value in gamma function''', &
-'            endif', &
-'            f=gamma(real(i+1))', &
-'         end function factorial', &
+'        ! gamma() is related to the factorial function', &
+'        do i = 1, 171', &
+'           ! check value is not too big for default integer type', &
+'           if (factorial(i)  <=  huge(0)) then', &
+'              write(*,*) i, nint(factorial(i)), ''integer''', &
+'           elseif (factorial(i)  <=  huge(0_int64)) then', &
+'              write(*,*) i, nint(factorial(i),kind=int64),''integer(kind=int64)''', &
+'           else', &
+'              write(*,*) i, factorial(i) , ''user factorial function''', &
+'              write(*,*) i, product([(real(j, kind=wp), j=1, i)]), ''product''', &
+'              write(*,*) i, gamma(real(i + 1, kind=wp)), ''gamma directly''', &
+'           endif', &
+'        enddo', &
+'', &
+'', &
+'      contains', &
+'      function factorial(i) result(f)', &
+'      !  GAMMA(X) computes Gamma of X. For positive whole number values of N the', &
+'      !  Gamma function can be used to calculate factorials, as (N-1)! ==', &
+'      !  GAMMA(REAL(N)). That is', &
+'      !', &
+'      !      n! == gamma(real(n+1))', &
+'      !', &
+'      integer, intent(in) :: i', &
+'      real(kind=wp) :: f', &
+'        if (i  <=  0) then', &
+'           write(*,''(*(g0))'') ''<ERROR> gamma(3) function value '', i, '' <= 0''', &
+'           stop ''<STOP> bad value in gamma function''', &
+'        endif', &
+'        f = anint(gamma(real(i + 1,kind=wp)))', &
+'      end function factorial', &
+'', &
 '      end program demo_gamma', &
 '', &
 '  Results:', &
 '', &
-'          gamma(1.0)=   1.000000', &
-'            1.000000       1.000000       2.000000       6.000000', &
+'       >  gamma(1.0)=  1.00000000', &
+'       >    1.00000000      1.00000000       2.00000000       6.00000000', &
+'       >', &
+'       >           1           1 integer', &
+'       >           2           2 integer', &
+'       >           3           6 integer', &
+'       >           4          24 integer', &
+'       >           5         120 integer', &
+'       >           6         720 integer', &
+'       >           7        5040 integer', &
+'       >           8       40320 integer', &
+'       >           9      362880 integer', &
+'       >          10     3628800 integer', &
+'       >          11    39916800 integer', &
+'       >          12   479001600 integer', &
+'       >          13           6227020800 integer(kind=int64)', &
+'       >          14          87178291200 integer(kind=int64)', &
+'       >          15        1307674368000 integer(kind=int64)', &
+'       >          16       20922789888000 integer(kind=int64)', &
+'       >          17      355687428096000 integer(kind=int64)', &
+'       >          18     6402373705728001 integer(kind=int64)', &
+'       >          19   121645100408832000 integer(kind=int64)', &
+'       >          20  2432902008176640000 integer(kind=int64)', &
+'       >          21   5.1090942171709440E+019 user factorial function', &
+'       >          21   5.1090942171709440E+019 product', &
+'       >          21   5.1090942171709440E+019 gamma directly', &
+'       >           :', &
+'       >           :', &
+'       >           :', &
+'       >         170   7.2574156153079990E+306 user factorial function', &
+'       >         170   7.2574156153079940E+306 product', &
+'       >         170   7.2574156153079990E+306 gamma directly', &
+'       >         171                  Infinity user factorial function', &
+'       >         171                  Infinity product', &
+'       >         171                  Infinity gamma directly', &
 '', &
-'                    1   1.000000               1', &
-'                    2   2.000000               2', &
-'                    3   6.000000               6', &
-'                    4   24.00000              24', &
-'                    5   120.0000             120', &
-'                    6   720.0000             720', &
-'                    7   5040.000            5040', &
-'                    8   40320.00           40320', &
-'                    9   362880.0          362880', &
-'                   10   3628800.         3628800', &
-'                   11  3.9916800E+07    39916800', &
-'                   12  4.7900160E+08   479001600', &
-'                   13  6.2270208E+09', &
-'                   14  8.7178289E+10', &
-'                   15  1.3076744E+12', &
-'                   16  2.0922791E+13', &
-'                   17  3.5568741E+14', &
-'                   18  6.4023735E+15', &
-'                   19  1.2164510E+17', &
-'                   20  2.4329020E+18', &
-'', &
-'    factorial of 0', &
-'      is  1.000000000000000 1.000000000000000', &
-'', &
-'    factorial of 1', &
-'      is  1.000000000000000 1.000000000000000', &
-'', &
-'    factorial of 5', &
-'      is  120.0000000000000 120.0000000000000', &
-'', &
-'    factorial of 11', &
-'      is  39916800.00000000 39916800.00000000', &
-'', &
-'    factorial of 170', &
-'      is  .7257415615307994E+307 .7257415615307999E+307', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -8807,7 +9421,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023                gamma(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 gamma(3fortran)', &
 '']
 
 shortname="gamma"
@@ -8818,21 +9434,25 @@ case('89','get_command')
 
 textblock=[character(len=256) :: &
 '', &
-'get_command(3fortran)                                    get_command(3fortran)', &
+'get_command(3fortran)                                   get_command(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  GET_COMMAND(3) - [SYSTEM:COMMAND LINE] Get the entire command line', &
 '  invocation', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call get_command([command] [,length] [,status] [,errmsg])', &
 '', &
-'           subroutine get_command( command ,length ,status, errmsg )', &
+'          subroutine get_command( command ,length ,status, errmsg )', &
 '', &
-'            character(len=*),intent(out),optional   :: command', &
-'            integer(kind=**),intent(out),optional   :: length', &
-'            integer(kind=**),intent(out),optional   :: status', &
-'            character(len=*),intent(inout),optional :: errmsg', &
+'           character(len=*),intent(out),optional   :: command', &
+'           integer(kind=**),intent(out),optional   :: length', &
+'           integer(kind=**),intent(out),optional   :: status', &
+'           character(len=*),intent(inout),optional :: errmsg', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type meeting', &
@@ -8875,31 +9495,32 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_get_command', &
 '      implicit none', &
-'      integer                      :: command_line_length', &
+'      integer                     :: command_line_length', &
 '      character(len=:),allocatable :: command_line', &
-'         ! get command line length', &
-'         call get_command(length=command_line_length)', &
-'         ! allocate string big enough to hold command line', &
-'         allocate(character(len=command_line_length) :: command_line)', &
-'         ! get command line as a string', &
-'         call get_command(command=command_line)', &
-'         ! trim leading spaces just in case', &
-'         command_line=adjustl(command_line)', &
-'         write(*,''("OUTPUT:",a)'')command_line', &
+'        ! get command line length', &
+'        call get_command(length=command_line_length)', &
+'        ! allocate string big enough to hold command line', &
+'        allocate(character(len=command_line_length) :: command_line)', &
+'        ! get command line as a string', &
+'        call get_command(command=command_line)', &
+'        ! trim leading spaces just in case', &
+'        command_line=adjustl(command_line)', &
+'        write(*,''("OUTPUT:",a)'')command_line', &
 '      end program demo_get_command', &
 '', &
 '  Results:', &
 '', &
-'           # note that shell expansion removes some of the whitespace', &
-'           # without quotes', &
-'           ./test_get_command  arguments    on command   line to   echo', &
+'          # note that shell expansion removes some of the whitespace', &
+'          # without quotes', &
+'          ./test_get_command  arguments    on command   line to   echo', &
 '', &
-'           OUTPUT:./test_get_command arguments on command line to echo', &
+'          OUTPUT:./test_get_command arguments on command line to echo', &
 '', &
-'           # using the bash shell with single quotes', &
-'           ./test_get_command  ''arguments  *><`~[]!{}?"\''| ''', &
+'          # using the bash shell with single quotes', &
+'          ./test_get_command  ''arguments  *><`~[]!{}?"\''| ''', &
 '', &
-'           OUTPUT:./test_get_command arguments  *><`~[]!{}?"''|', &
+'          OUTPUT:./test_get_command arguments  *><`~[]!{}?"''|', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -8909,7 +9530,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023          get_command(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           get_command(3fortran)', &
 '']
 
 shortname="get_command"
@@ -8920,22 +9543,26 @@ case('90','get_command_argument')
 
 textblock=[character(len=256) :: &
 '', &
-'get_command_argument(3fortran)                  get_command_argument(3fortran)', &
+'get_command_argument(3fortran)                 get_command_argument(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  GET_COMMAND_ARGUMENT(3) - [SYSTEM:COMMAND LINE] Get command line arguments', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call get_command_argument(number [,value] [,length] & & [,status] [,errmsg])', &
 '', &
-'         subroutine get_command_argument( number, value, length, &', &
-'         & status ,errmsg)', &
+'        subroutine get_command_argument( number, value, length, &', &
+'        & status ,errmsg)', &
 '', &
-'          integer(kind=**),intent(in)             :: number', &
-'          character(len=*),intent(out),optional   :: value', &
-'          integer(kind=**),intent(out),optional   :: length', &
-'          integer(kind=**),intent(out),optional   :: status', &
-'          character(len=*),intent(inout),optional :: errmsg', &
+'         integer(kind=**),intent(in)             :: number', &
+'         character(len=*),intent(out),optional   :: value', &
+'         integer(kind=**),intent(out),optional   :: length', &
+'         integer(kind=**),intent(out),optional   :: status', &
+'         character(len=*),intent(inout),optional :: errmsg', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type meeting', &
@@ -8991,48 +9618,49 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_get_command_argument', &
 '      implicit none', &
-'      character(len=255)           :: progname', &
-'      integer                      :: count, i, argument_length, istat', &
+'      character(len=255)          :: progname', &
+'      integer                     :: count, i, argument_length, istat', &
 '      character(len=:),allocatable :: arg', &
 '', &
 '       ! command name assuming it is less than 255 characters in length', &
-'        call get_command_argument (0, progname, status=istat)', &
-'        if (istat == 0) then', &
-'           print *, "The program''s name is " // trim (progname)', &
-'        else', &
-'           print *, "Could not get the program''s name " // trim (progname)', &
-'        endif', &
+'       call get_command_argument (0, progname, status=istat)', &
+'       if (istat == 0) then', &
+'          print *, "The program''s name is " // trim (progname)', &
+'       else', &
+'          print *, "Could not get the program''s name " // trim (progname)', &
+'       endif', &
 '', &
 '       ! get number of arguments', &
-'        count = command_argument_count()', &
-'        write(*,*)''The number of arguments is '',count', &
+'       count = command_argument_count()', &
+'       write(*,*)''The number of arguments is '',count', &
 '', &
-'        !', &
-'        ! allocate string array big enough to hold command line', &
-'        ! argument strings and related information', &
-'        !', &
-'        do i=1,count', &
-'           call get_command_argument(number=i,length=argument_length)', &
-'           if(allocated(arg))deallocate(arg)', &
-'           allocate(character(len=argument_length) :: arg)', &
-'           call get_command_argument(i, arg,status=istat)', &
-'           ! show the results', &
-'           write (*,''(i3.3,1x,i0.5,1x,i0.5,1x,"[",a,"]")'') &', &
-'           & i,istat,argument_length,arg', &
-'        enddo', &
+'       !', &
+'       ! allocate string array big enough to hold command line', &
+'       ! argument strings and related information', &
+'       !', &
+'       do i=1,count', &
+'          call get_command_argument(number=i,length=argument_length)', &
+'          if(allocated(arg))deallocate(arg)', &
+'          allocate(character(len=argument_length) :: arg)', &
+'          call get_command_argument(i, arg,status=istat)', &
+'          ! show the results', &
+'          write (*,''(i3.3,1x,i0.5,1x,i0.5,1x,"[",a,"]")'') &', &
+'          & i,istat,argument_length,arg', &
+'       enddo', &
 '', &
 '      end program demo_get_command_argument', &
 '', &
 '  Results:', &
 '', &
-'       ./demo_get_command_argument a  test ''of getting  arguments '' " leading"', &
+'      ./demo_get_command_argument a  test ''of getting  arguments '' " leading"', &
 '', &
 '       The program''s name is ./demo_get_command_argument', &
-'       The number of arguments is            4', &
-'  001 00000 00001 [a] 002 00000 00004 [test]', &
+'       The number of arguments is           4', &
+'      001 00000 00001 [a]', &
+'      002 00000 00004 [test]', &
+'      003 00000 00022 [of getting  arguments ]', &
+'      004 00000 00008 [ leading]', &
 '', &
-'    003 00000 00022 [of getting', &
-'      arguments ] 004 00000 00008 [ leading]', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -9042,7 +9670,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023 get_command_argument(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023  get_command_argument(3fortran)', &
 '']
 
 shortname="get_command_argument"
@@ -9053,25 +9683,29 @@ case('91','get_environment_variable')
 
 textblock=[character(len=256) :: &
 '', &
-'get_environment_variable(3fortran)          get_environment_variable(3fortran)', &
+'get_environment_variable(3fortran)         get_environment_variable(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  GET_ENVIRONMENT_VARIABLE(3) - [SYSTEM:ENVIRONMENT] Get value of an', &
 '  environment variable', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call get_environment_variable(name [,value] [,length] & & [,status]', &
 '  [,trim_name] [,errmsg] )', &
 '', &
-'           subroutine character(len=*) get_environment_variable( &', &
-'           & name, value, length, status, trim_name, errmsg )', &
+'          subroutine character(len=*) get_environment_variable( &', &
+'          & name, value, length, status, trim_name, errmsg )', &
 '', &
-'            character(len=*),intent(in) :: name', &
-'            character(len=*),intent(out),optional   :: value', &
-'            integer(kind=**),intent(out),optional   :: length', &
-'            integer(kind=**),intent(out),optional   :: status', &
-'            logical,intent(out),optional            :: trim_name', &
-'            character(len=*),intent(inout),optional :: errmsg', &
+'           character(len=*),intent(in) :: name', &
+'           character(len=*),intent(out),optional   :: value', &
+'           integer(kind=**),intent(out),optional   :: length', &
+'           integer(kind=**),intent(out),optional   :: status', &
+'           logical,intent(out),optional            :: trim_name', &
+'           character(len=*),intent(inout),optional :: errmsg', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type meeting', &
@@ -9127,52 +9761,53 @@ textblock=[character(len=256) :: &
 '      character(len=:),allocatable :: homedir', &
 '      character(len=:),allocatable :: var', &
 '', &
-'           var=''HOME''', &
-'           homedir=get_env(var)', &
-'           write (*,''(a,"=""",a,"""")'')var,homedir', &
+'          var=''HOME''', &
+'          homedir=get_env(var)', &
+'          write (*,''(a,"=""",a,"""")'')var,homedir', &
 '', &
 '      contains', &
 '', &
 '      function get_env(name,default) result(value)', &
 '      ! a function that makes calling get_environment_variable(3) simple', &
 '      implicit none', &
-'      character(len=*),intent(in)          :: name', &
+'      character(len=*),intent(in)         :: name', &
 '      character(len=*),intent(in),optional :: default', &
-'      character(len=:),allocatable         :: value', &
-'      integer                              :: howbig', &
-'      integer                              :: stat', &
-'      integer                              :: length', &
-'         length=0', &
-'         value=''''', &
-'         if(name.ne.'''')then', &
-'            call get_environment_variable( name, &', &
-'            & length=howbig,status=stat,trim_name=.true.)', &
-'            select case (stat)', &
-'            case (1)', &
-'             print *, name, " is not defined in the environment. Strange..."', &
-'             value=''''', &
-'            case (2)', &
-'             print *, &', &
-'             "This processor does not support environment variables. Boooh!"', &
-'             value=''''', &
-'            case default', &
-'             ! make string of sufficient size to hold value', &
-'             if(allocated(value))deallocate(value)', &
-'             allocate(character(len=max(howbig,1)) :: value)', &
-'             ! get value', &
-'             call get_environment_variable( &', &
-'             & name,value,status=stat,trim_name=.true.)', &
-'             if(stat.ne.0)value=''''', &
-'            end select', &
-'         endif', &
-'         if(value.eq.''''.and.present(default))value=default', &
+'      character(len=:),allocatable        :: value', &
+'      integer                             :: howbig', &
+'      integer                             :: stat', &
+'      integer                             :: length', &
+'        length=0', &
+'        value=''''', &
+'        if(name.ne.'''')then', &
+'           call get_environment_variable( name, &', &
+'           & length=howbig,status=stat,trim_name=.true.)', &
+'           select case (stat)', &
+'           case (1)', &
+'            print *, name, " is not defined in the environment. Strange..."', &
+'            value=''''', &
+'           case (2)', &
+'            print *, &', &
+'            "This processor does not support environment variables. Boooh!"', &
+'            value=''''', &
+'           case default', &
+'            ! make string of sufficient size to hold value', &
+'            if(allocated(value))deallocate(value)', &
+'            allocate(character(len=max(howbig,1)) :: value)', &
+'            ! get value', &
+'            call get_environment_variable( &', &
+'            & name,value,status=stat,trim_name=.true.)', &
+'            if(stat.ne.0)value=''''', &
+'           end select', &
+'        endif', &
+'        if(value.eq.''''.and.present(default))value=default', &
 '      end function get_env', &
 '', &
 '      end program demo_getenv', &
 '', &
 '  Typical Results:', &
 '', &
-'         HOME="/home/urbanjs"', &
+'        HOME="/home/urbanjs"', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -9182,7 +9817,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2get_environment_variable(3fortran)', &
+'', &
+'', &
+'                                July 22, 20get_environment_variable(3fortran)', &
 '']
 
 shortname="get_environment_variable"
@@ -9193,17 +9830,21 @@ case('92','huge')
 
 textblock=[character(len=256) :: &
 '', &
-'huge(3fortran)                                                  huge(3fortran)', &
+'huge(3fortran)                                                 huge(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  HUGE(3) - [NUMERIC MODEL] Largest number of a type and kind', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = huge(x)', &
 '', &
-'           TYPE(kind=KIND) function huge(x)', &
+'          TYPE(kind=KIND) function huge(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x(..)', &
+'           TYPE(kind=KIND),intent(in) :: x(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be any real or integer scalar or array and any kind.', &
@@ -9234,45 +9875,56 @@ textblock=[character(len=256) :: &
 '      character(len=*),parameter :: f=''(i2,1x,2(i11,1x),f14.0:,1x,l1,1x,a)''', &
 '      integer :: i,j,k,biggest', &
 '      real :: v, w', &
-'         ! basic', &
-'         print *, huge(0), huge(0.0), huge(0.0d0)', &
-'         print *, tiny(0.0), tiny(0.0d0)', &
+'      doubleprecision :: tally', &
+'        ! basic', &
+'        print *, huge(0), huge(0.0), huge(0.0d0)', &
+'        print *, tiny(0.0), tiny(0.0d0)', &
 '', &
-'         ! advanced', &
-'         biggest=huge(0)', &
-'         ! be careful of overflow when using integers in computation', &
-'         do i=1,14', &
-'            j=6**i   ! Danger, Danger', &
-'            w=6**i   ! Danger, Danger', &
-'            v=6.0**i', &
-'            k=v      ! Danger, Danger', &
-'            if(v.gt.biggest)then', &
-'               write(*,f) i, j, k, v, v.eq.w, ''wrong j and k and w''', &
-'            else', &
-'               write(*,f) i, j, k, v, v.eq.w', &
-'            endif', &
-'         enddo', &
+'        tally=0.0d0', &
+'        ! note subtracting one because counter is the end value+1 on exit', &
+'        do i=0,huge(0)-1', &
+'           tally=tally+i', &
+'        enddo', &
+'        write(*,*)''tally='',tally', &
+'', &
+'        ! advanced', &
+'        biggest=huge(0)', &
+'        ! be careful of overflow when using integers in computation', &
+'        do i=1,14', &
+'           j=6**i   ! Danger, Danger', &
+'           w=6**i   ! Danger, Danger', &
+'           v=6.0**i', &
+'           k=v      ! Danger, Danger', &
+'', &
+'           if(v.gt.biggest)then', &
+'              write(*,f) i, j, k, v, v.eq.w, ''wrong j and k and w''', &
+'           else', &
+'              write(*,f) i, j, k, v, v.eq.w', &
+'           endif', &
+'', &
+'        enddo', &
 '      end program demo_huge', &
 '', &
 '  Results:', &
 '', &
-'        2147483647  3.4028235E+38  1.797693134862316E+308', &
-'        1.1754944E-38  2.225073858507201E-308', &
+'       2147483647  3.4028235E+38  1.797693134862316E+308', &
+'       1.1754944E-38  2.225073858507201E-308', &
 '', &
-'          1      6           6             6. T', &
-'          2      36          36            36. T', &
-'          3      216         216           216. T', &
-'          4      1296        1296          1296. T', &
-'          5      7776        7776          7776. T', &
-'          6      46656       46656         46656. T', &
-'          7      279936      279936        279936. T', &
-'          8      1679616     1679616       1679616. T', &
-'          9      10077696    10077696      10077696. T', &
-'          10     60466176    60466176      60466176. T', &
-'          11     362797056   362797056     362797056. T', &
-'          12    -2118184960 -2147483648    2176782336. F wrong for j and k and w', &
-'          13     175792128  -2147483648   13060694016. F wrong for j and k and w', &
-'          14     1054752768 -2147483648   78364164096. F wrong for j and k and w', &
+'         1      6           6             6. T', &
+'         2      36          36            36. T', &
+'         3      216         216           216. T', &
+'         4      1296        1296          1296. T', &
+'         5      7776        7776          7776. T', &
+'         6      46656       46656         46656. T', &
+'         7      279936      279936        279936. T', &
+'         8      1679616     1679616       1679616. T', &
+'         9      10077696    10077696      10077696. T', &
+'         10     60466176    60466176      60466176. T', &
+'         11     362797056   362797056     362797056. T', &
+'         12    -2118184960 -2147483648    2176782336. F wrong for j and k and w', &
+'         13     175792128  -2147483648   13060694016. F wrong for j and k and w', &
+'         14     1054752768 -2147483648   78364164096. F wrong for j and k and w', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -9284,7 +9936,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 huge(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  huge(3fortran)', &
 '']
 
 shortname="huge"
@@ -9295,19 +9949,23 @@ case('93','hypot')
 
 textblock=[character(len=256) :: &
 '', &
-'hypot(3fortran)                                                hypot(3fortran)', &
+'hypot(3fortran)                                               hypot(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  HYPOT(3) - [MATHEMATICS] Returns the Euclidean distance - the distance', &
 '  between a point and the origin.', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = hypot(x, y)', &
 '', &
-'           elemental real(kind=KIND) function hypot(x,y)', &
+'          elemental real(kind=KIND) function hypot(x,y)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
-'            real(kind=KIND),intent(in) :: y', &
+'           real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: y', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X,Y and the result shall all be real and of the same KIND.', &
@@ -9347,41 +10005,42 @@ textblock=[character(len=256) :: &
 '      integer :: i', &
 '      character(len=*),parameter :: f=''(a,/,SP,*(3x,g0,1x,g0:,/))''', &
 '', &
-'         x = 1.e0_real32', &
-'         y = 0.5e0_real32', &
+'        x = 1.e0_real32', &
+'        y = 0.5e0_real32', &
 '', &
-'         write(*,*)', &
-'         write(*,''(*(g0))'')''point <'',x,'','',y,''> is '',hypot(x,y)', &
-'         write(*,''(*(g0))'')''units away from the origin''', &
-'         write(*,*)', &
+'        write(*,*)', &
+'        write(*,''(*(g0))'')''point <'',x,'','',y,''> is '',hypot(x,y)', &
+'        write(*,''(*(g0))'')''units away from the origin''', &
+'        write(*,*)', &
 '', &
-'         ! elemental', &
-'         xs=[  x,  x**2,  x*10.0,  x*15.0, -x**2  ]', &
-'         ys=[  y,  y**2, -y*20.0,  y**2,   -y**2  ]', &
+'        ! elemental', &
+'        xs=[  x,  x**2,  x*10.0,  x*15.0, -x**2  ]', &
+'        ys=[  y,  y**2, -y*20.0,  y**2,   -y**2  ]', &
 '', &
-'         write(*,f)"the points",(xs(i),ys(i),i=1,size(xs))', &
-'         write(*,f)"have distances from the origin of ",hypot(xs,ys)', &
-'         write(*,f)"the closest is",minval(hypot(xs,ys))', &
+'        write(*,f)"the points",(xs(i),ys(i),i=1,size(xs))', &
+'        write(*,f)"have distances from the origin of ",hypot(xs,ys)', &
+'        write(*,f)"the closest is",minval(hypot(xs,ys))', &
 '', &
 '      end program demo_hypot', &
 '', &
 '  Results:', &
 '', &
-'         point <1.00000000,0.500000000> is 1.11803401', &
-'         units away from the origin', &
+'        point <1.00000000,0.500000000> is 1.11803401', &
+'        units away from the origin', &
 '', &
-'         the points', &
-'            +1.00000000 +0.500000000', &
-'            +1.00000000 +0.250000000', &
-'            +10.0000000 -10.0000000', &
-'            +15.0000000 +0.250000000', &
-'            -1.00000000 -0.250000000', &
-'         have distances from the origin of', &
-'            +1.11803401 +1.03077638', &
-'            +14.1421356 +15.0020828', &
-'            +1.03077638', &
-'         the closest is', &
-'            +1.03077638', &
+'        the points', &
+'           +1.00000000 +0.500000000', &
+'           +1.00000000 +0.250000000', &
+'           +10.0000000 -10.0000000', &
+'           +15.0000000 +0.250000000', &
+'           -1.00000000 -0.250000000', &
+'        have distances from the origin of', &
+'           +1.11803401 +1.03077638', &
+'           +14.1421356 +15.0020828', &
+'           +1.03077638', &
+'        the closest is', &
+'           +1.03077638', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -9391,7 +10050,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                hypot(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 hypot(3fortran)', &
 '']
 
 shortname="hypot"
@@ -9402,18 +10063,22 @@ case('94','iachar')
 
 textblock=[character(len=256) :: &
 '', &
-'iachar(3fortran)                                              iachar(3fortran)', &
+'iachar(3fortran)                                             iachar(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IACHAR(3) - [CHARACTER:CONVERSION] Return integer ASCII code of a character', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = iachar(c [,kind])', &
 '', &
-'           elemental integer(kind=KIND) function iachar(c,kind)', &
+'          elemental integer(kind=KIND) function iachar(c,kind)', &
 '', &
-'            character(len=1),intent(in) :: c', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           character(len=1),intent(in) :: c', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  C is a single character', &
@@ -9454,39 +10119,40 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_iachar', &
 '      implicit none', &
-'         ! basic usage', &
-'          ! just does a string one character long', &
-'          write(*,*)iachar(''A'')', &
-'          ! elemental: can do an array of letters', &
-'          write(*,*)iachar([''A'',''Z'',''a'',''z''])', &
+'        ! basic usage', &
+'         ! just does a string one character long', &
+'         write(*,*)iachar(''A'')', &
+'         ! elemental: can do an array of letters', &
+'         write(*,*)iachar([''A'',''Z'',''a'',''z''])', &
 '', &
-'         ! convert all characters to lowercase', &
-'          write(*,''(a)'')lower(''abcdefg ABCDEFG'')', &
+'        ! convert all characters to lowercase', &
+'         write(*,''(a)'')lower(''abcdefg ABCDEFG'')', &
 '      contains', &
 '      !', &
 '      pure elemental function lower(str) result (string)', &
 '      ! Changes a string to lowercase', &
-'      character(*), intent(In)     :: str', &
-'      character(len(str))          :: string', &
-'      integer                      :: i', &
-'         string = str', &
-'         ! step thru each letter in the string in specified range', &
-'         do i = 1, len(str)', &
-'            select case (str(i:i))', &
-'            case (''A'':''Z'') ! change letter to miniscule', &
-'               string(i:i) = char(iachar(str(i:i))+32)', &
-'            case default', &
-'            end select', &
-'         end do', &
+'      character(*), intent(In)    :: str', &
+'      character(len(str))         :: string', &
+'      integer                     :: i', &
+'        string = str', &
+'        ! step thru each letter in the string in specified range', &
+'        do i = 1, len(str)', &
+'           select case (str(i:i))', &
+'           case (''A'':''Z'') ! change letter to miniscule', &
+'              string(i:i) = char(iachar(str(i:i))+32)', &
+'           case default', &
+'           end select', &
+'        end do', &
 '      end function lower', &
 '      !', &
 '      end program demo_iachar', &
 '', &
 '  Results:', &
 '', &
-'         65', &
-'         65          90          97         122', &
-'         abcdefg abcdefg', &
+'        65', &
+'        65          90          97         122', &
+'        abcdefg abcdefg', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 , with KIND argument - Fortran 2003', &
@@ -9506,7 +10172,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               iachar(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                iachar(3fortran)', &
 '']
 
 shortname="iachar"
@@ -9517,19 +10185,23 @@ case('95','iall')
 
 textblock=[character(len=256) :: &
 '', &
-'iall(3fortran)                                                  iall(3fortran)', &
+'iall(3fortran)                                                 iall(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IALL(3) - [BIT:LOGICAL] Bitwise and of array elements', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = iall(array [,mask]) | iall(array ,dim [,mask])', &
 '', &
-'           integer(kind=KIND) function iall(array,dim,mask)', &
+'          integer(kind=KIND) function iall(array,dim,mask)', &
 '', &
-'            integer(kind=KIND),intent(in)        :: array(*)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(*)', &
+'           integer(kind=KIND),intent(in)        :: array(*)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(*)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -9571,16 +10243,17 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer(kind=int8) :: a(2)', &
 '', &
-'         a(1) = int(b''00100100'')', &
-'         a(2) = int(b''01101010'')', &
+'        a(1) = int(b''00100100'')', &
+'        a(2) = int(b''01101010'')', &
 '', &
-'         print ''(b8.8)'', iall(a)', &
+'        print ''(b8.8)'', iall(a)', &
 '', &
 '      end program demo_iall', &
 '', &
 '  Results:', &
 '', &
 '       > 00100000', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -9590,7 +10263,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 iall(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  iall(3fortran)', &
 '']
 
 shortname="iall"
@@ -9601,18 +10276,22 @@ case('96','iand')
 
 textblock=[character(len=256) :: &
 '', &
-'iand(3fortran)                                                  iand(3fortran)', &
+'iand(3fortran)                                                 iand(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IAND(3) - [BIT:LOGICAL] Bitwise logical AND', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = iand(i, j)', &
 '', &
-'           elemental integer(kind=KIND) function iand(i,j)', &
+'          elemental integer(kind=KIND) function iand(i,j)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=KIND),intent(in) :: j', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=KIND),intent(in) :: j', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I, J and the result shall have the same integer type and kind, with the', &
@@ -9634,16 +10313,16 @@ textblock=[character(len=256) :: &
 '  The result has the value obtained by combining I and I bit-by-bit according', &
 '  to the following table:', &
 '', &
-'          I  |  J  |  IAND (I, J)', &
+'         I  |  J  |  IAND (I, J)', &
 '  ----------------------------', &
 '', &
-'    1 |  1  |    1', &
+'    1 |  1  |   1', &
 '', &
-'    1 |  0  |    0', &
+'    1 |  0  |   0', &
 '', &
-'    0 |  1  |    0', &
+'    0 |  1  |   0', &
 '', &
-'    0 |  0  |    0', &
+'    0 |  0  |   0', &
 '', &
 '  So if both the bit in I and J are on the resulting bit is on (a one); else', &
 '  the resulting bit is off (a zero).', &
@@ -9663,7 +10342,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Results:', &
 '', &
-'          a= 15  b= 3 iand(a,b)= 3', &
+'         a= 15  b= 3 iand(a,b)= 3', &
 '  00000000000000000000000000001111 00000000000000000000000000000011', &
 '  00000000000000000000000000000011', &
 '', &
@@ -9671,12 +10350,13 @@ textblock=[character(len=256) :: &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  IEOR(3), IBCLR(3), NOT(3), BTEST(3), IBCLR(3), IBITS(3), IBSET(3), IOR(3),', &
-'  IEOR(3), MVBITS(3)', &
+'  BTEST(3), IBCLR(3), IBITS(3), IBSET(3), IEOR(3), IOR(3), MVBITS(3), NOT(3)', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 iand(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  iand(3fortran)', &
 '']
 
 shortname="iand"
@@ -9687,19 +10367,23 @@ case('97','iany')
 
 textblock=[character(len=256) :: &
 '', &
-'iany(3fortran)                                                  iany(3fortran)', &
+'iany(3fortran)                                                 iany(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IANY(3) - [BIT:LOGICAL] Bitwise OR of array elements', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = iany(array [,mask]) | iany(array ,dim [,mask])', &
 '', &
-'           integer(kind=KIND) function iany(array,dim,mask)', &
+'          integer(kind=KIND) function iany(array,dim,mask)', &
 '', &
-'            integer(kind=KIND),intent(in)        :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(..)', &
+'           integer(kind=KIND),intent(in)        :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY is an integer array', &
@@ -9741,42 +10425,42 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      logical,parameter :: T=.true., F=.false.', &
 '      integer(kind=int8) :: a(3)', &
-'         a(1) = int(b''00100100'',int8)', &
-'         a(2) = int(b''01101010'',int8)', &
-'         a(3) = int(b''10101010'',int8)', &
-'         write(*,*)''A=''', &
-'         print ''(1x,b8.8)'', a', &
-'         print *', &
-'         write(*,*)''IANY(A)=''', &
-'         print ''(1x,b8.8)'', iany(a)', &
-'         print *', &
-'         write(*,*)''IANY(A) with a mask''', &
-'         print ''(1x,b8.8)'', iany(a,mask=[T,F,T])', &
-'         print *', &
-'         write(*,*)''should match ''', &
-'         print ''(1x,b8.8)'', iany([a(1),a(3)])', &
-'         print *', &
-'         write(*,*)''does it?''', &
-'         write(*,*)iany(a,[T,F,T]) == iany([a(1),a(3)])', &
+'        a(1) = int(b''00100100'',int8)', &
+'        a(2) = int(b''01101010'',int8)', &
+'        a(3) = int(b''10101010'',int8)', &
+'        write(*,*)''A=''', &
+'        print ''(1x,b8.8)'', a', &
+'        print *', &
+'        write(*,*)''IANY(A)=''', &
+'        print ''(1x,b8.8)'', iany(a)', &
+'        print *', &
+'        write(*,*)''IANY(A) with a mask''', &
+'        print ''(1x,b8.8)'', iany(a,mask=[T,F,T])', &
+'        print *', &
+'        write(*,*)''should match ''', &
+'        print ''(1x,b8.8)'', iany([a(1),a(3)])', &
+'        print *', &
+'        write(*,*)''does it?''', &
+'        write(*,*)iany(a,[T,F,T]) == iany([a(1),a(3)])', &
 '      end program demo_iany', &
 '', &
 '  Results:', &
 '', &
-'          A=', &
-'          00100100', &
-'          01101010', &
-'          10101010', &
+'         A=', &
+'         00100100', &
+'         01101010', &
+'         10101010', &
 '', &
-'          IANY(A)=', &
-'          11101110', &
+'         IANY(A)=', &
+'         11101110', &
 '', &
-'          IANY(A) with a mask', &
-'          10101110', &
+'         IANY(A) with a mask', &
+'         10101110', &
 '', &
-'          should match', &
-'          10101110', &
+'         should match', &
+'         10101110', &
 '', &
-'          does it?', &
+'         does it?', &
 '', &
 '   T', &
 'STANDARD', &
@@ -9787,7 +10471,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 iany(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  iany(3fortran)', &
 '']
 
 shortname="iany"
@@ -9798,18 +10484,22 @@ case('98','ibclr')
 
 textblock=[character(len=256) :: &
 '', &
-'ibclr(3fortran)                                                ibclr(3fortran)', &
+'ibclr(3fortran)                                               ibclr(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IBCLR(3) - [BIT:SET] Clear a bit', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ibclr(i, pos)', &
 '', &
-'           elemental integer(kind=KIND) function ibclr(i,pos)', &
+'          elemental integer(kind=KIND) function ibclr(i,pos)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: pos', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: pos', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I shall be type integer.', &
@@ -9841,33 +10531,33 @@ textblock=[character(len=256) :: &
 '      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64', &
 '      implicit none', &
 '      integer(kind=int16) :: i', &
-'        ! basic usage', &
-'         print *,ibclr (16, 1), '' ==> ibclr(16,1) has the value 15''', &
+'       ! basic usage', &
+'        print *,ibclr (16, 1), '' ==> ibclr(16,1) has the value 15''', &
 '', &
-'         ! it is easier to see using binary representation', &
-'         i=int(b''0000000000111111'',kind=int16)', &
-'         write(*,''(b16.16,1x,i0)'') ibclr(i,3), ibclr(i,3)', &
+'        ! it is easier to see using binary representation', &
+'        i=int(b''0000000000111111'',kind=int16)', &
+'        write(*,''(b16.16,1x,i0)'') ibclr(i,3), ibclr(i,3)', &
 '', &
-'        ! elemental', &
-'         print *,''an array of initial values may be given as well''', &
-'         print *,ibclr(i=[7,4096,9], pos=2)', &
-'         print *', &
-'         print *,''a list of positions results in multiple returned values''', &
-'         print *,''not multiple bits set in one value, as the routine is  ''', &
-'         print *,''a scalar function; calling it elementally essentially  ''', &
-'         print *,''calls it multiple times.                               ''', &
-'         write(*,''(b16.16)'') ibclr(i=-1_int16, pos=[1,2,3,4])', &
+'       ! elemental', &
+'        print *,''an array of initial values may be given as well''', &
+'        print *,ibclr(i=[7,4096,9], pos=2)', &
+'        print *', &
+'        print *,''a list of positions results in multiple returned values''', &
+'        print *,''not multiple bits set in one value, as the routine is  ''', &
+'        print *,''a scalar function; calling it elementally essentially  ''', &
+'        print *,''calls it multiple times.                              ''', &
+'        write(*,''(b16.16)'') ibclr(i=-1_int16, pos=[1,2,3,4])', &
 '', &
-'         ! both may be arrays if of the same size', &
+'        ! both may be arrays if of the same size', &
 '', &
 '      end program demo_ibclr', &
 '', &
 '  Results:', &
 '', &
-'       >           16  ==> ibclr(16,1) has the value 15', &
+'       >          16  ==> ibclr(16,1) has the value 15', &
 '       > 0000000000110111 55', &
 '       >  an array of initial values may be given as well', &
-'       >            3        4096           9', &
+'       >           3        4096           9', &
 '       >', &
 '       >  a list of positions results in multiple returned values', &
 '       >  not multiple bits set in one value, as the routine is', &
@@ -9878,16 +10568,18 @@ textblock=[character(len=256) :: &
 '       > 1111111111110111', &
 '       > 1111111111101111', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  IEOR(3), NOT(3), BTEST(3), IBSET(3), IBITS(3), IAND(3), IOR(3), IEOR(3),', &
-'  MVBITS(3)', &
+'  BTEST(3), IAND(3), IBITS(3), IBSET(3), IEOR(3), IOR(3), MVBITS(3), NOT(3)', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                ibclr(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 ibclr(3fortran)', &
 '']
 
 shortname="ibclr"
@@ -9898,19 +10590,23 @@ case('99','ibits')
 
 textblock=[character(len=256) :: &
 '', &
-'ibits(3fortran)                                                ibits(3fortran)', &
+'ibits(3fortran)                                               ibits(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IBITS(3) - [BIT:COPY] Extraction of a subset of bits', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ibits(i, pos, len)', &
 '', &
-'           elemental integer(kind=KIND) function ibits(i,pos,len)', &
+'          elemental integer(kind=KIND) function ibits(i,pos,len)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: pos', &
-'            integer(kind=**),intent(in) :: len', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: pos', &
+'           integer(kind=**),intent(in) :: len', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported integer kind', &
@@ -9949,28 +10645,28 @@ textblock=[character(len=256) :: &
 '      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64', &
 '      implicit none', &
 '      integer(kind=int16) :: i,j', &
-'        ! basic usage', &
-'         print *,ibits (14, 1, 3) ! should be seven', &
-'         print *,ibits(-1,10,3)   ! and so is this', &
-'         ! it is easier to see using binary representation', &
-'         i=int(b''0101010101011101'',kind=int16)', &
-'         write(*,''(b16.16,1x,i0)'') ibits(i,3,3), ibits(i,3,3)', &
+'       ! basic usage', &
+'        print *,ibits (14, 1, 3) ! should be seven', &
+'        print *,ibits(-1,10,3)   ! and so is this', &
+'        ! it is easier to see using binary representation', &
+'        i=int(b''0101010101011101'',kind=int16)', &
+'        write(*,''(b16.16,1x,i0)'') ibits(i,3,3), ibits(i,3,3)', &
 '', &
-'        ! we can illustrate this as', &
-'         !        #-- position 15', &
-'         !        |              #-- position 0', &
-'         !        |   <-- +len   |', &
-'         !        V              V', &
-'         !        5432109876543210', &
-'         i =int(b''1111111111111111'',kind=int16)', &
-'         !          ^^^^', &
-'         j=ibits(i,10,4) ! start at 10th from left and proceed', &
-'                         ! left for a total of 4 characters', &
-'         write(*,''(a,b16.16)'')''j='',j', &
-'        ! lets do something less ambiguous', &
-'         i =int(b''0010011000000000'',kind=int16)', &
-'         j=ibits(i,9,5)', &
-'         write(*,''(a,b16.16)'')''j='',j', &
+'       ! we can illustrate this as', &
+'        !        #-- position 15', &
+'        !        |              #-- position 0', &
+'        !        |   <-- +len   |', &
+'        !        V              V', &
+'        !        5432109876543210', &
+'        i =int(b''1111111111111111'',kind=int16)', &
+'        !          ^^^^', &
+'        j=ibits(i,10,4) ! start at 10th from left and proceed', &
+'                        ! left for a total of 4 characters', &
+'        write(*,''(a,b16.16)'')''j='',j', &
+'       ! lets do something less ambiguous', &
+'        i =int(b''0010011000000000'',kind=int16)', &
+'        j=ibits(i,9,5)', &
+'        write(*,''(a,b16.16)'')''j='',j', &
 '      end program demo_ibits', &
 '', &
 '  Results:', &
@@ -9981,16 +10677,18 @@ textblock=[character(len=256) :: &
 '       > j=0000000000001111', &
 '       > j=0000000000010011', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  IEOR(3), IBCLR(3), NOT(3), BTEST(3), IBCLR(3), IBSET(3), IAND(3), IOR(3),', &
-'  IEOR(3), MVBITS(3)', &
+'  BTEST(3), IAND(3), IBCLR(3), IBSET(3), IEOR(3), IOR(3), MVBITS(3), NOT(3)', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                ibits(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 ibits(3fortran)', &
 '']
 
 shortname="ibits"
@@ -10001,18 +10699,22 @@ case('100','ibset')
 
 textblock=[character(len=256) :: &
 '', &
-'ibset(3fortran)                                                ibset(3fortran)', &
+'ibset(3fortran)                                               ibset(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IBSET(3) - [BIT:SET] Set a bit to one in an integer value', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ibset(i, pos)', &
 '', &
-'           elemental integer(kind=KIND) function ibset(i,pos)', &
+'          elemental integer(kind=KIND) function ibset(i,pos)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: pos', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: pos', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -10041,33 +10743,33 @@ textblock=[character(len=256) :: &
 '      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64', &
 '      implicit none', &
 '      integer(kind=int16) :: i', &
-'        ! basic usage', &
-'         print *,ibset (12, 1), ''ibset(12,1) has the value 14''', &
+'       ! basic usage', &
+'        print *,ibset (12, 1), ''ibset(12,1) has the value 14''', &
 '', &
-'         ! it is easier to see using binary representation', &
-'         i=int(b''0000000000000110'',kind=int16)', &
-'         write(*,''(b16.16,1x,i0,1x,i0)'') ibset(i,12), ibset(i,12), i', &
+'        ! it is easier to see using binary representation', &
+'        i=int(b''0000000000000110'',kind=int16)', &
+'        write(*,''(b16.16,1x,i0,1x,i0)'') ibset(i,12), ibset(i,12), i', &
 '', &
-'        ! elemental', &
-'         print *,''an array of initial values may be given as well''', &
-'         print *,ibset(i=[0,4096], pos=2)', &
-'         print *', &
-'         print *,''a list of positions results in multiple returned values''', &
-'         print *,''not multiple bits set in one value, as the routine is  ''', &
-'         print *,''a scalar function; calling it elementally essentially  ''', &
-'         print *,''calls it multiple times.                               ''', &
-'         write(*,''(b16.16)'') ibset(i=0, pos=[1,2,3,4])', &
+'       ! elemental', &
+'        print *,''an array of initial values may be given as well''', &
+'        print *,ibset(i=[0,4096], pos=2)', &
+'        print *', &
+'        print *,''a list of positions results in multiple returned values''', &
+'        print *,''not multiple bits set in one value, as the routine is  ''', &
+'        print *,''a scalar function; calling it elementally essentially  ''', &
+'        print *,''calls it multiple times.                              ''', &
+'        write(*,''(b16.16)'') ibset(i=0, pos=[1,2,3,4])', &
 '', &
-'         ! both may be arrays if of the same size', &
+'        ! both may be arrays if of the same size', &
 '', &
 '      end program demo_ibset', &
 '', &
 '  Results:', &
 '', &
-'       >           14 ibset(12,1) has the value 14', &
+'       >          14 ibset(12,1) has the value 14', &
 '       > 0001000000000110 4102 6', &
 '       >  an array of initial values may be given as well', &
-'       >            4        4100', &
+'       >           4        4100', &
 '       >', &
 '       >  a list of positions results in multiple returned values', &
 '       >  not multiple bits set in one value, as the routine is', &
@@ -10078,17 +10780,20 @@ textblock=[character(len=256) :: &
 '       > 0000000000001000', &
 '       > 0000000000010000', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
 '  IBCLR(3)', &
 '', &
-'  IEOR(3), NOT(3), BTEST(3), IBITS(3), IAND(3), IOR(3), IEOR(3), MVBITS(3)', &
+'  BTEST(3), IAND(3), IBITS(3), IEOR(3), IOR(3), MVBITS(3), NOT(3)', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                ibset(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 ibset(3fortran)', &
 '']
 
 shortname="ibset"
@@ -10099,19 +10804,23 @@ case('101','ichar')
 
 textblock=[character(len=256) :: &
 '', &
-'ichar(3fortran)                                                ichar(3fortran)', &
+'ichar(3fortran)                                               ichar(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ICHAR(3) - [CHARACTER:CONVERSION] Character-to-integer code conversion', &
 '  function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ichar(c [,kind])', &
 '', &
-'           elemental integer(kind=KIND) function ichar(c,KIND)', &
+'          elemental integer(kind=KIND) function ichar(c,KIND)', &
 '', &
-'            character(len=1,kind=**),intent(in) :: c', &
-'            integer,intent(in),optional :: KIND', &
+'           character(len=1,kind=**),intent(in) :: c', &
+'           integer,intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  C is a scalar character', &
@@ -10161,13 +10870,14 @@ textblock=[character(len=256) :: &
 '      program demo_ichar', &
 '      implicit none', &
 '', &
-'         write(*,*)ichar([''a'',''z'',''A'',''Z''])', &
+'        write(*,*)ichar([''a'',''z'',''A'',''Z''])', &
 '', &
 '      end program demo_ichar', &
 '', &
 '  Results:', &
 '', &
-'                   97         122          65          90', &
+'                  97         122          65          90', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 , with KIND argument -Fortran 2003', &
@@ -10186,7 +10896,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                ichar(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 ichar(3fortran)', &
 '']
 
 shortname="ichar"
@@ -10197,18 +10909,22 @@ case('102','ieor')
 
 textblock=[character(len=256) :: &
 '', &
-'ieor(3fortran)                                                  ieor(3fortran)', &
+'ieor(3fortran)                                                 ieor(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IEOR(3) - [BIT:LOGICAL] Bitwise exclusive OR', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ieor(i, j)', &
 '', &
-'           elemental integer(kind=**) function ieor(i,j)', &
+'          elemental integer(kind=**) function ieor(i,j)', &
 '', &
-'            integer(kind=**),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: j', &
+'           integer(kind=**),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: j', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I, J and the result must be of the same integer kind.', &
@@ -10227,12 +10943,13 @@ textblock=[character(len=256) :: &
 '  An alternate way to view the process is that the result has the value', &
 '  obtained by combining I and J bit-by-bit according to the following table:', &
 '', &
-'        >  I | J |IEOR (I, J)', &
-'        >  --#---#-----------', &
-'        >  1 | 1 |  0', &
-'        >  1 | 0 |  1', &
-'        >  0 | 1 |  1', &
-'        >  0 | 0 |  0', &
+'       >  I | J |IEOR (I, J)', &
+'       >  --#---#-----------', &
+'       >  1 | 1 |  0', &
+'       >  1 | 0 |  1', &
+'       >  0 | 1 |  1', &
+'       >  0 | 0 |  0', &
+'', &
 '', &
 'OPTIONS', &
 '  o  I : the first of the two values to XOR', &
@@ -10254,45 +10971,48 @@ textblock=[character(len=256) :: &
 '      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64', &
 '      implicit none', &
 '      integer(kind=int16) :: i,j', &
-'        ! basic usage', &
-'         print *,ieor (16, 1), '' ==> ieor(16,1) has the value 17''', &
+'       ! basic usage', &
+'        print *,ieor (16, 1), '' ==> ieor(16,1) has the value 17''', &
 '', &
-'         ! it is easier to see using binary representation', &
-'         i=int(b''0000000000111111'',kind=int16)', &
-'         j=int(b''0000001111110000'',kind=int16)', &
-'         write(*,''(a,b16.16,1x,i0)'')''i=     '',i, i', &
-'         write(*,''(a,b16.16,1x,i0)'')''j=     '',j, j', &
-'         write(*,''(a,b16.16,1x,i0)'')''result='',ieor(i,j), ieor(i,j)', &
+'        ! it is easier to see using binary representation', &
+'        i=int(b''0000000000111111'',kind=int16)', &
+'        j=int(b''0000001111110000'',kind=int16)', &
+'        write(*,''(a,b16.16,1x,i0)'')''i=     '',i, i', &
+'        write(*,''(a,b16.16,1x,i0)'')''j=     '',j, j', &
+'        write(*,''(a,b16.16,1x,i0)'')''result='',ieor(i,j), ieor(i,j)', &
 '', &
-'        ! elemental', &
-'         print *,''arguments may be arrays. If both are arrays they ''', &
-'         print *,''must have the same shape.                        ''', &
-'         print *,ieor(i=[7,4096,9], j=2)', &
+'       ! elemental', &
+'        print *,''arguments may be arrays. If both are arrays they ''', &
+'        print *,''must have the same shape.                       ''', &
+'        print *,ieor(i=[7,4096,9], j=2)', &
 '', &
-'         ! both may be arrays if of the same size', &
+'        ! both may be arrays if of the same size', &
 '', &
 '      end program demo_ieor', &
 '', &
 '  Results:', &
 '', &
-'       >           17  ==> ieor(16,1) has the value 17', &
-'       > i=     0000000000111111 63', &
-'       > j=     0000001111110000 1008', &
+'       >          17  ==> ieor(16,1) has the value 17', &
+'       > i=    0000000000111111 63', &
+'       > j=    0000001111110000 1008', &
 '       > result=0000001111001111 975', &
 '       >  arguments may be arrays. If both are arrays they', &
 '       >  must have the same shape.', &
-'       >            5        4098          11', &
+'       >           5        4098          11', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  IEOR(3), IBCLR(3), NOT(3), BTEST(3), IBCLR(3), IBITS(3), IBSET(3), IAND(3),', &
-'  IOR(3), MVBITS(3)', &
+'  BTEST(3), IAND(3), IBCLR(3), IBITS(3), IBSET(3), IEOR(3), IOR(3), MVBITS(3),', &
+'  NOT(3)', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 ieor(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  ieor(3fortran)', &
 '']
 
 shortname="ieor"
@@ -10303,10 +11023,13 @@ case('103','image_index')
 
 textblock=[character(len=256) :: &
 '', &
-'image_index(3fortran)                                    image_index(3fortran)', &
+'image_index(3fortran)                                   image_index(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IMAGE_INDEX(3) - [COLLECTIVE] Cosubscript to image index conversion', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = image_index(coarray, sub)', &
@@ -10331,9 +11054,10 @@ textblock=[character(len=256) :: &
 '      program demo image_index', &
 '      implicit none', &
 '      integer :: array[2,-1:4,8,*]', &
-'         ! Writes  28 (or 0 if there are fewer than 28 images)', &
-'         write (*,*) image_index(array, [2,0,3,1])', &
+'        ! Writes  28 (or 0 if there are fewer than 28 images)', &
+'        write (*,*) image_index(array, [2,0,3,1])', &
 '      end demo image_index', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -10343,7 +11067,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023          image_index(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           image_index(3fortran)', &
 '']
 
 shortname="image_index"
@@ -10354,20 +11080,24 @@ case('104','index')
 
 textblock=[character(len=256) :: &
 '', &
-'index(3fortran)                                                index(3fortran)', &
+'index(3fortran)                                               index(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  INDEX(3) - [CHARACTER:SEARCH] Position of a substring within a string', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = index( string, substring [,back] [,kind] )', &
 '', &
 '       elemental integer(kind=KIND) function index(string,substring,back,kind)', &
 '', &
-'        character(len=*,kind=KIND),intent(in) :: string', &
-'        character(len=*,kind=KIND),intent(in) :: substring', &
-'        logical(kind=**),intent(in),optional :: back', &
-'        integer(kind=**),intent(in),optional :: kind', &
+'       character(len=*,kind=KIND),intent(in) :: string', &
+'       character(len=*,kind=KIND),intent(in) :: substring', &
+'       logical(kind=**),intent(in),optional :: back', &
+'       integer(kind=**),intent(in),optional :: kind', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING is a character variable of any kind', &
@@ -10418,14 +11148,14 @@ textblock=[character(len=256) :: &
 '      program demo_index', &
 '      implicit none', &
 '      character(len=*),parameter :: str=&', &
-'         ''Search this string for this expression''', &
-'         !1234567890123456789012345678901234567890', &
-'         write(*,*)&', &
-'            index(str,''this'').eq.8,              &', &
-'            ! return value is counted from the left end even if BACK=.TRUE.', &
-'            index(str,''this'',back=.true.).eq.24, &', &
-'            ! INDEX is case-sensitive', &
-'            index(str,''This'').eq.0', &
+'        ''Search this string for this expression''', &
+'        !1234567890123456789012345678901234567890', &
+'        write(*,*)&', &
+'           index(str,''this'').eq.8,            &', &
+'           ! return value is counted from the left end even if BACK=.TRUE.', &
+'           index(str,''this'',back=.true.).eq.24, &', &
+'           ! INDEX is case-sensitive', &
+'           index(str,''This'').eq.0', &
 '      end program demo_index', &
 '', &
 '  Expected Results:', &
@@ -10444,7 +11174,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023                index(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 index(3fortran)', &
 '']
 
 shortname="index"
@@ -10455,18 +11187,22 @@ case('105','int')
 
 textblock=[character(len=256) :: &
 '', &
-'int(3fortran)                                                    int(3fortran)', &
+'int(3fortran)                                                   int(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  INT(3) - [TYPE:NUMERIC] Truncate towards zero and convert to integer', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = int(a [,kind])', &
 '', &
-'           elemental integer(kind=KIND) function int(a, KIND )', &
+'          elemental integer(kind=KIND) function int(a, KIND )', &
 '', &
-'            TYPE(kind=**),intent(in) :: a', &
-'            integer,optional :: KIND', &
+'           TYPE(kind=**),intent(in) :: a', &
+'           integer,optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -10516,54 +11252,55 @@ textblock=[character(len=256) :: &
 '      complex :: z = (-3.7, 1.0)', &
 '      real :: x=-10.5, y=10.5', &
 '', &
-'         print *, int(x), int(y)', &
+'        print *, int(x), int(y)', &
 '', &
-'         print *, int(i)', &
+'        print *, int(i)', &
 '', &
-'         print *, int(z), int(z,8)', &
-'         ! elemental', &
-'         print *, int([-10.9,-10.5,-10.3,10.3,10.5,10.9])', &
-'         ! note int(3) truncates towards zero', &
+'        print *, int(z), int(z,8)', &
+'        ! elemental', &
+'        print *, int([-10.9,-10.5,-10.3,10.3,10.5,10.9])', &
+'        ! note int(3) truncates towards zero', &
 '', &
-'         ! CAUTION:', &
-'         ! a number bigger than a default integer can represent', &
-'         ! produces an incorrect result and is not required to', &
-'         ! be detected by the program.', &
-'         x=real(huge(0))+1000.0', &
-'         print *, int(x),x', &
-'         ! using a larger kind', &
-'         print *, int(x,kind=int64),x', &
+'        ! CAUTION:', &
+'        ! a number bigger than a default integer can represent', &
+'        ! produces an incorrect result and is not required to', &
+'        ! be detected by the program.', &
+'        x=real(huge(0))+1000.0', &
+'        print *, int(x),x', &
+'        ! using a larger kind', &
+'        print *, int(x,kind=int64),x', &
 '', &
-'         print *, int(&', &
-'         & B"111111111111111111111111111111111111111111111111111111111111111",&', &
-'         & kind=int64)', &
-'         print *, int(O"777777777777777777777",kind=int64)', &
-'         print *, int(Z"7FFFFFFFFFFFFFFF",kind=int64)', &
+'        print *, int(&', &
+'        & B"111111111111111111111111111111111111111111111111111111111111111",&', &
+'        & kind=int64)', &
+'        print *, int(O"777777777777777777777",kind=int64)', &
+'        print *, int(Z"7FFFFFFFFFFFFFFF",kind=int64)', &
 '', &
-'         ! elemental', &
-'         print *', &
-'         print *,int([ &', &
-'         &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &', &
-'         &  0.0,   &', &
-'         &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])', &
+'        ! elemental', &
+'        print *', &
+'        print *,int([ &', &
+'        &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &', &
+'        &  0.0,   &', &
+'        &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])', &
 '', &
 '      end program demo_int', &
 '', &
 '  Results:', &
 '', &
-'       >          -10   10', &
-'       >           42', &
-'       >           -3  -3', &
-'       >          -10  -10  -10   10   10  10', &
-'       >  -2147483648   2.14748467E+09', &
-'       >   2147484672   2.14748467E+09', &
+'       >         -10   10', &
+'       >          42', &
+'       >          -3  -3', &
+'       >         -10  -10  -10   10   10  10', &
+'       >  -2147483648  2.14748467E+09', &
+'       >   2147484672  2.14748467E+09', &
 '       >   9223372036854775807', &
 '       >   9223372036854775807', &
 '       >   9223372036854775807', &
 '       >', &
-'       >  -2          -2          -2          -2          -1', &
-'       >  -1           0           0           0           1', &
-'       >   1           2           2           2           2', &
+'       >  -2         -2          -2          -2          -1', &
+'       >  -1          0           0           0           1', &
+'       >   1          2           2           2           2', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -10573,7 +11310,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  int(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   int(3fortran)', &
 '']
 
 shortname="int"
@@ -10584,18 +11323,22 @@ case('106','ior')
 
 textblock=[character(len=256) :: &
 '', &
-'ior(3fortran)                                                    ior(3fortran)', &
+'ior(3fortran)                                                   ior(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IOR(3) - [BIT:LOGICAL] Bitwise logical inclusive OR', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ior(i, j)', &
 '', &
-'           elemental integer(kind=KIND) function ior(i,j)', &
+'          elemental integer(kind=KIND) function ior(i,j)', &
 '', &
-'            integer(kind=KIND ,intent(in) :: i', &
-'            integer(kind=KIND ,intent(in) :: j', &
+'           integer(kind=KIND ,intent(in) :: i', &
+'           integer(kind=KIND ,intent(in) :: j', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I, J and the result shall have the same integer type and kind, with the', &
@@ -10617,11 +11360,11 @@ textblock=[character(len=256) :: &
 '  The result has the value obtained by combining I and J bit-by-bit according', &
 '  to the following table:', &
 '', &
-'                I   J   IOR (I, J)', &
-'                1   1        1', &
-'                1   0        1', &
-'                0   1        1', &
-'                0   0        0', &
+'               I   J   IOR (I, J)', &
+'               1   1        1', &
+'               1   0        1', &
+'               0   1        1', &
+'               0   0        0', &
 '', &
 '  Where if the bit is set in either input value, it is set in the result.', &
 '  Otherwise the result bit is zero.', &
@@ -10635,28 +11378,30 @@ textblock=[character(len=256) :: &
 '      program demo_ior', &
 '      implicit none', &
 '      integer :: i, j, k', &
-'         i=53       ! i=00110101 binary (lowest order byte)', &
-'         j=45       ! j=00101101 binary (lowest order byte)', &
-'         k=ior(i,j) ! k=00111101 binary (lowest order byte), k=61 decimal', &
-'         write(*,''(i8,1x,b8.8)'')i,i,j,j,k,k', &
+'        i=53       ! i=00110101 binary (lowest order byte)', &
+'        j=45       ! j=00101101 binary (lowest order byte)', &
+'        k=ior(i,j) ! k=00111101 binary (lowest order byte), k=61 decimal', &
+'        write(*,''(i8,1x,b8.8)'')i,i,j,j,k,k', &
 '      end program demo_ior', &
 '', &
 '  Results:', &
 '', &
-'               53 00110101', &
-'               45 00101101', &
-'               61 00111101', &
+'              53 00110101', &
+'              45 00101101', &
+'              61 00111101', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  IEOR(3), IBCLR(3), NOT(3), BTEST(3), IBCLR(3), IBITS(3), IBSET(3), IAND(3),', &
-'  IEOR(3), MVBITS(3)', &
+'  BTEST(3), IAND(3), IBCLR(3), IBITS(3), IBSET(3), IEOR(3), MVBITS(3), NOT(3)', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  ior(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   ior(3fortran)', &
 '']
 
 shortname="ior"
@@ -10667,25 +11412,29 @@ case('107','iparity')
 
 textblock=[character(len=256) :: &
 '', &
-'iparity(3fortran)                                            iparity(3fortran)', &
+'iparity(3fortran)                                           iparity(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IPARITY(3) - [BIT:LOGICAL] Bitwise exclusive OR of array elements', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = iparity( array [,mask] ) | iparity( array, dim [,mask] )', &
 '', &
-'           integer(kind=KIND) function iparity(array, dim, mask )', &
+'          integer(kind=KIND) function iparity(array, dim, mask )', &
 '', &
-'            integer(kind=KIND),intent(in) :: array(..)', &
-'            logical(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(..)', &
+'           integer(kind=KIND),intent(in) :: array(..)', &
+'           logical(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(..)', &
+'', &
 '', &
 '  o  ARRAY - An integer array.', &
 '', &
-'     o  DIM - an integer scalar from 1 to the rank of ARRAY', &
+'     o DIM - an integer scalar from 1 to the rank of ARRAY', &
 '', &
-'     o  MASK - logical conformable with ARRAY.', &
+'     o MASK - logical conformable with ARRAY.', &
 '', &
 'DESCRIPTION', &
 '  IPARITY(3) reduces with bitwise xor (exclusive or) the elements of ARRAY', &
@@ -10713,13 +11462,14 @@ textblock=[character(len=256) :: &
 '  Case (ii): The result of IPARITY (ARRAY, MASK=MASK) has a value equal to', &
 '  that of', &
 '', &
-'                     IPARITY (PACK (ARRAY, MASK)).', &
+'                    IPARITY (PACK (ARRAY, MASK)).', &
 '', &
 '  Case (iii): The result of IPARITY (ARRAY, DIM=DIM [, MASK=MASK]) has a value', &
 '  equal to that of IPARITY (ARRAY [, MASK=MASK]) if ARRAY has rank one.', &
 '', &
-'                 Otherwise, an array of values reduced along the dimension', &
-'                 **dim** is returned.', &
+'                Otherwise, an array of values reduced along the dimension', &
+'                **dim** is returned.', &
+'', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
@@ -10727,14 +11477,15 @@ textblock=[character(len=256) :: &
 '      program demo_iparity', &
 '      implicit none', &
 '      integer, dimension(2) :: a', &
-'        a(1) = int(b''00100100'')', &
-'        a(2) = int(b''01101010'')', &
-'        print ''(b8.8)'', iparity(a)', &
+'       a(1) = int(b''00100100'')', &
+'       a(2) = int(b''01101010'')', &
+'       print ''(b8.8)'', iparity(a)', &
 '      end program demo_iparity', &
 '', &
 '  Results:', &
 '', &
-'         01001110', &
+'        01001110', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -10744,7 +11495,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023              iparity(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               iparity(3fortran)', &
 '']
 
 shortname="iparity"
@@ -10755,17 +11508,21 @@ case('108','is_contiguous')
 
 textblock=[character(len=256) :: &
 '', &
-'is_contiguous(3fortran)                                is_contiguous(3fortran)', &
+'is_contiguous(3fortran)                               is_contiguous(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IS_CONTIGUOUS(3) - [ARRAY:INQUIRY] Test if object is contiguous', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = is_contiguous(array)', &
 '', &
-'           logical function is_contiguous(array)', &
+'          logical function is_contiguous(array)', &
 '', &
-'            type(TYPE(kind=**)),intent(in) :: array', &
+'           type(TYPE(kind=**)),intent(in) :: array', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -10793,21 +11550,21 @@ textblock=[character(len=256) :: &
 '', &
 '  o  (6) a nonzero-sized array section provided that', &
 '', &
-'     o  (A) its base object is contiguous,', &
+'     o (A) its base object is contiguous,', &
 '', &
-'     o  (B) it does not have a vector subscript,', &
+'     o (B) it does not have a vector subscript,', &
 '', &
-'     o  (C) the elements of the section, in array element order, are a subset', &
-'        of the base object elements that are consecutive in array element', &
-'        order,', &
+'     o (C) the elements of the section, in array element order, are a subset', &
+'       of the base object elements that are consecutive in array element', &
+'       order,', &
 '', &
-'     o  (D) if the array is of type character and a substring-range appears,', &
-'        the substring-range specifies all of the characters of the parent-', &
-'        string,', &
+'     o (D) if the array is of type character and a substring-range appears,', &
+'       the substring-range specifies all of the characters of the parent-', &
+'       string,', &
 '', &
-'     o  (E) only its final part-ref has nonzero rank, and', &
+'     o (E) only its final part-ref has nonzero rank, and', &
 '', &
-'     o  (F) it is not the real or imaginary part of an array of type complex.', &
+'     o (F) it is not the real or imaginary part of an array of type complex.', &
 '', &
 '  An object is not contiguous if it is an array subobject, and', &
 '', &
@@ -10840,19 +11597,20 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      intrinsic is_contiguous', &
 '      real, DIMENSION (1000, 1000), TARGET :: A', &
-'      real, DIMENSION (:, :), POINTER       :: IN, OUT', &
-'         IN => A              ! Associate IN with target A', &
-'         OUT => A(1:1000:2,:) ! Associate OUT with subset of target A', &
-'         !', &
-'         write(*,*)''IN is '',IS_CONTIGUOUS(IN)', &
-'         write(*,*)''OUT is '',IS_CONTIGUOUS(OUT)', &
-'         !', &
+'      real, DIMENSION (:, :), POINTER      :: IN, OUT', &
+'        IN => A              ! Associate IN with target A', &
+'        OUT => A(1:1000:2,:) ! Associate OUT with subset of target A', &
+'        !', &
+'        write(*,*)''IN is '',IS_CONTIGUOUS(IN)', &
+'        write(*,*)''OUT is '',IS_CONTIGUOUS(OUT)', &
+'        !', &
 '      end program demo_is_contiguous', &
 '', &
 '  Results:', &
 '', &
-'          IN is  T', &
-'          OUT is  F', &
+'         IN is  T', &
+'         OUT is  F', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -10862,7 +11620,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023        is_contiguous(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023         is_contiguous(3fortran)', &
 '']
 
 shortname="is_contiguous"
@@ -10873,18 +11633,22 @@ case('109','ishft')
 
 textblock=[character(len=256) :: &
 '', &
-'ishft(3fortran)                                                ishft(3fortran)', &
+'ishft(3fortran)                                               ishft(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ISHFT(3) - [BIT:SHIFT] Logical shift of bits in an integer', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ishftc( i, shift )', &
 '', &
-'           elemental integer(kind=KIND) function ishft(i, shift )', &
+'          elemental integer(kind=KIND) function ishft(i, shift )', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: shift', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: shift', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -10930,25 +11694,26 @@ textblock=[character(len=256) :: &
 '      program demo_ishft', &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
-'      integer             :: shift', &
+'      integer            :: shift', &
 '      character(len=*),parameter :: g=''(b32.32,1x,i0)''', &
 '', &
-'         write(*,*) ishft(3, 1),'' <== typically should have the value 6''', &
+'        write(*,*) ishft(3, 1),'' <== typically should have the value 6''', &
 '', &
-'         shift=4', &
-'         write(*,g) ishft(huge(0),shift), shift', &
-'         shift=0', &
-'         write(*,g) ishft(huge(0),shift), shift', &
-'         shift=-4', &
-'         write(*,g) ishft(huge(0),shift), shift', &
+'        shift=4', &
+'        write(*,g) ishft(huge(0),shift), shift', &
+'        shift=0', &
+'        write(*,g) ishft(huge(0),shift), shift', &
+'        shift=-4', &
+'        write(*,g) ishft(huge(0),shift), shift', &
 '      end program demo_ishft', &
 '', &
 '  Results:', &
 '', &
-'      >              6  <== typically should have the value 6', &
+'      >             6  <== typically should have the value 6', &
 '      >   11111111111111111111111111110000 4', &
 '      >   01111111111111111111111111111111 0', &
 '      >   00000111111111111111111111111111 -4', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -10958,7 +11723,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                ishft(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 ishft(3fortran)', &
 '']
 
 shortname="ishft"
@@ -10969,20 +11736,24 @@ case('110','ishftc')
 
 textblock=[character(len=256) :: &
 '', &
-'ishftc(3fortran)                                              ishftc(3fortran)', &
+'ishftc(3fortran)                                             ishftc(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  ISHFTC(3) - [BIT:SHIFT] Shift rightmost bits circularly, AKA. a logical', &
 '  shift', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ishftc( i, shift [,size] )', &
 '', &
-'           elemental integer(kind=KIND) function ishftc(i, shift, size)', &
+'          elemental integer(kind=KIND) function ishftc(i, shift, size)', &
 '', &
-'            integer(kind=KIND),intent(in)        :: i', &
-'            integer(kind=**),intent(in)          :: shift', &
-'            integer(kind=**),intent(in),optional :: size', &
+'           integer(kind=KIND),intent(in)        :: i', &
+'           integer(kind=**),intent(in)          :: shift', &
+'           integer(kind=**),intent(in),optional :: size', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -11037,29 +11808,29 @@ textblock=[character(len=256) :: &
 '      program demo_ishftc', &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
-'      integer             :: i', &
+'      integer            :: i', &
 '      character(len=*),parameter :: g=''(b32.32,1x,i0)''', &
-'        ! basics', &
-'         write(*,*) ishftc(3, 1),'' <== typically should have the value 6''', &
+'       ! basics', &
+'        write(*,*) ishftc(3, 1),'' <== typically should have the value 6''', &
 '', &
-'         print *, ''lets start with this:''', &
-'         write(*,''(b32.32)'')huge(0)', &
-'         print *, ''shift the value by various amounts, negative and positive''', &
-'         do i= -bit_size(0), bit_size(0), 8', &
-'            write(*,g) ishftc(huge(0),i), i', &
-'         enddo', &
-'        print *,''elemental''', &
-'        i=huge(0)', &
-'        write(*,*)ishftc(i,[2,3,4,5])', &
-'        write(*,*)ishftc([2**1,2**3,-2**7],3)', &
-'        print *,''note the arrays have to conform when elemental''', &
-'        write(*,*)ishftc([2**1,2**3,-2**7],[5,20,0])', &
+'        print *, ''lets start with this:''', &
+'        write(*,''(b32.32)'')huge(0)', &
+'        print *, ''shift the value by various amounts, negative and positive''', &
+'        do i= -bit_size(0), bit_size(0), 8', &
+'           write(*,g) ishftc(huge(0),i), i', &
+'        enddo', &
+'       print *,''elemental''', &
+'       i=huge(0)', &
+'       write(*,*)ishftc(i,[2,3,4,5])', &
+'       write(*,*)ishftc([2**1,2**3,-2**7],3)', &
+'       print *,''note the arrays have to conform when elemental''', &
+'       write(*,*)ishftc([2**1,2**3,-2**7],[5,20,0])', &
 '', &
 '      end program demo_ishftc', &
 '', &
 '  Results:', &
 '', &
-'       >            6  <== typically should have the value 6', &
+'       >           6  <== typically should have the value 6', &
 '       >  lets start with this:', &
 '       > 01111111111111111111111111111111', &
 '       >  shift the value by various amounts, negative and positive', &
@@ -11073,10 +11844,11 @@ textblock=[character(len=256) :: &
 '       > 11111111011111111111111111111111 24', &
 '       > 01111111111111111111111111111111 32', &
 '       >  elemental', &
-'       >           -3          -5          -9         -17', &
-'       >           16          64       -1017', &
+'       >          -3          -5          -9         -17', &
+'       >          16          64       -1017', &
 '       >  note the arrays have to conform when elemental', &
-'       >           64     8388608        -128', &
+'       >          64     8388608        -128', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -11100,7 +11872,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               ishftc(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                ishftc(3fortran)', &
 '']
 
 shortname="ishftc"
@@ -11111,17 +11885,21 @@ case('111','is_iostat_end')
 
 textblock=[character(len=256) :: &
 '', &
-'is_iostat_end(3fortran)                                is_iostat_end(3fortran)', &
+'is_iostat_end(3fortran)                               is_iostat_end(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IS_IOSTAT_END(3) - [STATE:INQUIRY] Test for end-of-file value', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = is_iostat_end(i)', &
 '', &
-'           elemental logical function is_iostat_end(i)', &
+'          elemental logical function is_iostat_end(i)', &
 '', &
-'            integer,intent(in) :: i', &
+'           integer,intent(in) :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I is integer of any kind', &
@@ -11147,23 +11925,24 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_iostat', &
 '      implicit none', &
-'      real               :: value', &
-'      integer            :: ios', &
+'      real              :: value', &
+'      integer           :: ios', &
 '      character(len=256) :: message', &
-'         write(*,*)''Begin entering numeric values, one per line''', &
-'         do', &
-'            read(*,*,iostat=ios,iomsg=message)value', &
-'            if(ios.eq.0)then', &
-'               write(*,*)''VALUE='',value', &
-'            elseif( is_iostat_end(ios) ) then', &
-'               stop ''end of file. Goodbye!''', &
-'            else', &
-'               write(*,*)''ERROR:'',ios,trim(message)', &
-'               exit', &
-'            endif', &
-'            !', &
-'         enddo', &
+'        write(*,*)''Begin entering numeric values, one per line''', &
+'        do', &
+'           read(*,*,iostat=ios,iomsg=message)value', &
+'           if(ios.eq.0)then', &
+'              write(*,*)''VALUE='',value', &
+'           elseif( is_iostat_end(ios) ) then', &
+'              stop ''end of file. Goodbye!''', &
+'           else', &
+'              write(*,*)''ERROR:'',ios,trim(message)', &
+'              exit', &
+'           endif', &
+'           !', &
+'        enddo', &
 '      end program demo_iostat', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -11173,7 +11952,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023        is_iostat_end(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023         is_iostat_end(3fortran)', &
 '']
 
 shortname="is_iostat_end"
@@ -11184,17 +11965,21 @@ case('112','is_iostat_eor')
 
 textblock=[character(len=256) :: &
 '', &
-'is_iostat_eor(3fortran)                                is_iostat_eor(3fortran)', &
+'is_iostat_eor(3fortran)                               is_iostat_eor(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  IS_IOSTAT_EOR(3) - [STATE:INQUIRY] Test for end-of-record value', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = is_iostat_eor(i)', &
 '', &
-'           elemental integer function is_iostat_eor(i)', &
+'          elemental integer function is_iostat_eor(i)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=KIND),intent(in) :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I is integer of any kind', &
@@ -11221,37 +12006,38 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer :: inums(5), lun, ios', &
 '', &
-'        ! create a test file to read from', &
-'         open(newunit=lun, form=''formatted'',status=''scratch'')', &
-'         write(lun, ''(a)'') ''10 20 30''', &
-'         write(lun, ''(a)'') ''40 50 60 70''', &
-'         write(lun, ''(a)'') ''80 90''', &
-'         write(lun, ''(a)'') ''100''', &
-'         rewind(lun)', &
+'       ! create a test file to read from', &
+'        open(newunit=lun, form=''formatted'',status=''scratch'')', &
+'        write(lun, ''(a)'') ''10 20 30''', &
+'        write(lun, ''(a)'') ''40 50 60 70''', &
+'        write(lun, ''(a)'') ''80 90''', &
+'        write(lun, ''(a)'') ''100''', &
+'        rewind(lun)', &
 '', &
-'         do', &
-'            read(lun, *, iostat=ios) inums', &
-'            write(*,*)''iostat='',ios', &
-'            if(is_iostat_eor(ios)) then', &
-'               stop ''end of record''', &
-'            elseif(is_iostat_end(ios)) then', &
-'               print *,''end of file''', &
-'               exit', &
-'            elseif(ios.ne.0)then', &
-'               print *,''I/O error'',ios', &
-'               exit', &
-'            endif', &
-'         enddo', &
+'        do', &
+'           read(lun, *, iostat=ios) inums', &
+'           write(*,*)''iostat='',ios', &
+'           if(is_iostat_eor(ios)) then', &
+'              stop ''end of record''', &
+'           elseif(is_iostat_end(ios)) then', &
+'              print *,''end of file''', &
+'              exit', &
+'           elseif(ios.ne.0)then', &
+'              print *,''I/O error'',ios', &
+'              exit', &
+'           endif', &
+'        enddo', &
 '', &
-'         close(lun,iostat=ios,status=''delete'')', &
+'        close(lun,iostat=ios,status=''delete'')', &
 '', &
 '      end program demo_is_iostat_eor', &
 '', &
 '  Results:', &
 '', &
-'       >  iostat=           0', &
-'       >  iostat=          -1', &
+'       >  iostat=          0', &
+'       >  iostat=         -1', &
 '       >  end of file', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -11261,7 +12047,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023        is_iostat_eor(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023         is_iostat_eor(3fortran)', &
 '']
 
 shortname="is_iostat_eor"
@@ -11272,17 +12060,21 @@ case('113','kind')
 
 textblock=[character(len=256) :: &
 '', &
-'kind(3fortran)                                                  kind(3fortran)', &
+'kind(3fortran)                                                 kind(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  KIND(3) - [KIND:INQUIRY] Query kind of an entity', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = kind(x)', &
 '', &
-'           integer function kind(x)', &
+'          integer function kind(x)', &
 '', &
-'            type(TYPE,kind=**),intent(in) :: x(..)', &
+'           type(TYPE(kind=**)),intent(in) :: x(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be of any intrinsic type. It may be a scalar or an array.', &
@@ -11308,15 +12100,16 @@ textblock=[character(len=256) :: &
 '      integer,parameter :: dc = kind('' '')', &
 '      integer,parameter :: dl = kind(.true.)', &
 '', &
-'         print *, "The default character kind is ", dc', &
-'         print *, "The default logical kind is ", dl', &
+'        print *, "The default character kind is ", dc', &
+'        print *, "The default logical kind is ", dl', &
 '', &
 '      end program demo_kind', &
 '', &
 '  Results:', &
 '', &
-'          The default character kind is            1', &
-'          The default logical kind is            4', &
+'         The default character kind is            1', &
+'         The default logical kind is            4', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -11344,7 +12137,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 kind(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  kind(3fortran)', &
 '']
 
 shortname="kind"
@@ -11355,19 +12150,23 @@ case('114','lbound')
 
 textblock=[character(len=256) :: &
 '', &
-'lbound(3fortran)                                              lbound(3fortran)', &
+'lbound(3fortran)                                             lbound(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LBOUND(3) - [ARRAY:INQUIRY] Lower dimension bounds of an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = lbound(array [,dim] [,kind] )', &
 '', &
-'           elemental TYPE(kind=KIND) function lbound(array,dim,kind)', &
+'          elemental TYPE(kind=KIND) function lbound(array,dim,kind)', &
 '', &
-'            TYPE(kind=KIND),intent(in)           :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            integer(kind=**),intent(in),optional :: kind', &
+'           TYPE(kind=KIND),intent(in)           :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           integer(kind=**),intent(in),optional :: kind', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY shall be assumed-rank or an array, of any type. It cannot be an', &
@@ -11410,10 +12209,12 @@ textblock=[character(len=256) :: &
 '', &
 '  1.', &
 '', &
+'', &
 '      NOTE1', &
 '', &
 '      If **array** is assumed-rank and has rank zero, **dim** cannot be', &
 '      present since it cannot satisfy the requirement **1 <= dim <= 0**.', &
+'', &
 '', &
 'EXAMPLES', &
 '  Note that in my opinion this function should not be used on assumed-size', &
@@ -11426,56 +12227,57 @@ textblock=[character(len=256) :: &
 '      module m_bounds', &
 '      implicit none', &
 '       contains', &
-'          subroutine msub(arr)', &
-'             !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array', &
-'             integer,intent(in) :: arr(:)', &
-'             write(*,*)''MSUB: LOWER='',lbound(arr), &', &
-'             & ''UPPER='',ubound(arr), &', &
-'             & ''SIZE='',size(arr)', &
-'          end subroutine msub', &
+'         subroutine msub(arr)', &
+'            !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array', &
+'            integer,intent(in) :: arr(:)', &
+'            write(*,*)''MSUB: LOWER='',lbound(arr), &', &
+'            & ''UPPER='',ubound(arr), &', &
+'            & ''SIZE='',size(arr)', &
+'         end subroutine msub', &
 '       end module m_bounds', &
 '', &
 '       program demo_lbound', &
 '       use m_bounds, only : msub', &
 '       implicit none', &
 '       interface', &
-'          subroutine esub(arr)', &
-'          integer,intent(in) :: arr(:)', &
-'          end subroutine esub', &
+'         subroutine esub(arr)', &
+'         integer,intent(in) :: arr(:)', &
+'         end subroutine esub', &
 '       end interface', &
 '       integer :: arr(-10:10)', &
-'          write(*,*)''MAIN: LOWER='',lbound(arr), &', &
-'          & ''UPPER='',ubound(arr), &', &
-'          & ''SIZE='',size(arr)', &
-'          call csub()', &
-'          call msub(arr)', &
-'          call esub(arr)', &
-'       contains', &
-'      subroutine csub', &
-'         write(*,*)''CSUB: LOWER='',lbound(arr), &', &
+'         write(*,*)''MAIN: LOWER='',lbound(arr), &', &
 '         & ''UPPER='',ubound(arr), &', &
 '         & ''SIZE='',size(arr)', &
+'         call csub()', &
+'         call msub(arr)', &
+'         call esub(arr)', &
+'       contains', &
+'      subroutine csub', &
+'        write(*,*)''CSUB: LOWER='',lbound(arr), &', &
+'        & ''UPPER='',ubound(arr), &', &
+'        & ''SIZE='',size(arr)', &
 '      end subroutine csub', &
 '      end', &
 '', &
 '       subroutine esub(arr)', &
 '       implicit none', &
 '       integer,intent(in) :: arr(:)', &
-'          ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE', &
-'          ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)', &
-'          write(*,*)''ESUB: LOWER='',lbound(arr), &', &
-'          & ''UPPER='',ubound(arr), &', &
-'          & ''SIZE='',size(arr)', &
+'         ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE', &
+'         ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)', &
+'         write(*,*)''ESUB: LOWER='',lbound(arr), &', &
+'         & ''UPPER='',ubound(arr), &', &
+'         & ''SIZE='',size(arr)', &
 '       end subroutine esub', &
 '', &
 '      !end program demo_lbound', &
 '', &
 '  Results:', &
 '', &
-'         MAIN: LOWER=         -10 UPPER=          10 SIZE=          21', &
-'         CSUB: LOWER=         -10 UPPER=          10 SIZE=          21', &
-'         MSUB: LOWER=           1 UPPER=          21 SIZE=          21', &
-'         ESUB: LOWER=           1 UPPER=          21 SIZE=          21', &
+'        MAIN: LOWER=         -10 UPPER=          10 SIZE=          21', &
+'        CSUB: LOWER=         -10 UPPER=          10 SIZE=          21', &
+'        MSUB: LOWER=           1 UPPER=          21 SIZE=          21', &
+'        ESUB: LOWER=           1 UPPER=          21 SIZE=          21', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 , with KIND argument - Fortran 2003', &
@@ -11513,28 +12315,86 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               lbound(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                lbound(3fortran)', &
 '']
 
 shortname="lbound"
 call process()
 
 
-case('115','leadz')
+case('115','lcobound')
 
 textblock=[character(len=256) :: &
 '', &
-'leadz(3fortran)                                                leadz(3fortran)', &
+'lcobound(3fortran)                                         lcobound(3fortran)', &
+'', &
+'', &
+'', &
+'NAME', &
+'  LCOBOUND(3) - [COLLECTIVE] Lower codimension bounds of an array', &
+'', &
+'', &
+'SYNOPSIS', &
+'  result = lcobound( coarray [,dim] [,kind] )', &
+'', &
+'CHARACTERISTICS', &
+'DESCRIPTION', &
+'  LCOBOUND(3) returns the lower bounds of a coarray, or a single lower cobound', &
+'  along the DIM codimension.', &
+'', &
+'OPTIONS', &
+'  o  ARRAY : Shall be an coarray, of any type.', &
+'', &
+'  o  DIM : (Optional) Shall be a scalar integer.', &
+'', &
+'  o  KIND : (Optional) An integer initialization expression indicating the', &
+'     kind parameter of the result.', &
+'', &
+'RESULT', &
+'  The return value is of type integer and of kind KIND. If KIND is absent, the', &
+'  return value is of default integer kind. If DIM is absent, the result is an', &
+'  array of the lower cobounds of COARRAY. If DIM is present, the result is a', &
+'  scalar corresponding to the lower cobound of the array along that', &
+'  codimension.', &
+'', &
+'STANDARD', &
+'  Fortran 2008', &
+'', &
+'SEE ALSO', &
+'  UCOBOUND(3), LBOUND(3)', &
+'', &
+'  fortran-lang intrinsic descriptions', &
+'', &
+'', &
+'', &
+'                                July 22, 2023              lcobound(3fortran)', &
+'']
+
+shortname="lcobound"
+call process()
+
+
+case('116','leadz')
+
+textblock=[character(len=256) :: &
+'', &
+'leadz(3fortran)                                               leadz(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LEADZ(3) - [BIT:COUNT] Number of leading zero bits of an integer', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = leadz(i)', &
 '', &
-'           elemental integer function leadz(i)', &
+'          elemental integer function leadz(i)', &
 '', &
-'            integer(kind=**),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I may be an integer of any kind.', &
@@ -11563,33 +12423,34 @@ textblock=[character(len=256) :: &
 '      integer :: value, i', &
 '      character(len=80) :: f', &
 '', &
-'        ! make a format statement for writing a value as a bit string', &
-'        write(f,''("(b",i0,".",i0,")")'')bit_size(value),bit_size(value)', &
+'       ! make a format statement for writing a value as a bit string', &
+'       write(f,''("(b",i0,".",i0,")")'')bit_size(value),bit_size(value)', &
 '', &
-'        ! show output for various integer values', &
-'        value=0', &
-'        do i=-150, 150, 50', &
-'           value=i', &
-'           write (*,''("LEADING ZERO BITS=",i3)'',advance=''no'') leadz(value)', &
-'           write (*,''(" OF VALUE ")'',advance=''no'')', &
-'           write(*,f,advance=''no'') value', &
-'           write(*,''(*(1x,g0))'') "AKA",value', &
-'        enddo', &
-'        ! Notes:', &
-'        ! for two''s-complements programming environments a negative non-zero', &
-'        ! integer value will always start with a 1 and a positive value with 0', &
-'        ! as the first bit is the sign bit. Such platforms are very common.', &
+'       ! show output for various integer values', &
+'       value=0', &
+'       do i=-150, 150, 50', &
+'          value=i', &
+'          write (*,''("LEADING ZERO BITS=",i3)'',advance=''no'') leadz(value)', &
+'          write (*,''(" OF VALUE ")'',advance=''no'')', &
+'          write(*,f,advance=''no'') value', &
+'          write(*,''(*(1x,g0))'') "AKA",value', &
+'       enddo', &
+'       ! Notes:', &
+'       ! for two''s-complements programming environments a negative non-zero', &
+'       ! integer value will always start with a 1 and a positive value with 0', &
+'       ! as the first bit is the sign bit. Such platforms are very common.', &
 '      end program demo_leadz', &
 '', &
 '  Results:', &
 '', &
-'        LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111101101010 AKA -150', &
-'        LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111110011100 AKA -100', &
-'        LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111111001110 AKA -50', &
-'        LEADING ZERO BITS= 32 OF VALUE 00000000000000000000000000000000 AKA 0', &
-'        LEADING ZERO BITS= 26 OF VALUE 00000000000000000000000000110010 AKA 50', &
-'        LEADING ZERO BITS= 25 OF VALUE 00000000000000000000000001100100 AKA 100', &
-'        LEADING ZERO BITS= 24 OF VALUE 00000000000000000000000010010110 AKA 150', &
+'       LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111101101010 AKA -150', &
+'       LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111110011100 AKA -100', &
+'       LEADING ZERO BITS=  0 OF VALUE 11111111111111111111111111001110 AKA -50', &
+'       LEADING ZERO BITS= 32 OF VALUE 00000000000000000000000000000000 AKA 0', &
+'       LEADING ZERO BITS= 26 OF VALUE 00000000000000000000000000110010 AKA 50', &
+'       LEADING ZERO BITS= 25 OF VALUE 00000000000000000000000001100100 AKA 100', &
+'       LEADING ZERO BITS= 24 OF VALUE 00000000000000000000000010010110 AKA 150', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -11599,29 +12460,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                leadz(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 leadz(3fortran)', &
 '']
 
 shortname="leadz"
 call process()
 
 
-case('116','len')
+case('117','len')
 
 textblock=[character(len=256) :: &
 '', &
-'len(3fortran)                                                    len(3fortran)', &
+'len(3fortran)                                                   len(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LEN(3) - [CHARACTER] Length of a character entity', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = len(string [,kind])', &
 '', &
-'           integer(kind=KIND) function len(string,KIND)', &
+'          integer(kind=KIND) function len(string,KIND)', &
 '', &
-'            character(len=*),intent(in) :: string(..)', &
-'            integer,optional,intent(in) :: KIND', &
+'           character(len=*),intent(in) :: string(..)', &
+'           integer,optional,intent(in) :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING is a scalar or array character variable', &
@@ -11663,67 +12530,68 @@ textblock=[character(len=256) :: &
 '      character(len=:),allocatable :: astring', &
 '      character(len=:),allocatable :: many_strings(:)', &
 '      integer :: ii', &
-'        ! BASIC USAGE', &
-'         ii=len(string)', &
-'         write(*,*)''length ='',ii', &
+'       ! BASIC USAGE', &
+'        ii=len(string)', &
+'        write(*,*)''length ='',ii', &
 '', &
-'        ! ALLOCATABLE VARIABLE LENGTH CAN CHANGE', &
-'        ! the allocatable string length will be the length of RHS expression', &
-'         astring='' How long is this allocatable string? ''', &
-'         write(*,*)astring, '' LEN='', len(astring)', &
-'        ! print underline', &
-'         write(*,*) repeat(''='',len(astring))', &
-'        ! assign new value to astring and length changes', &
-'         astring=''New allocatable string''', &
-'         write(*,*)astring, '' LEN='', len(astring)', &
-'        ! print underline', &
-'         write(*,*) repeat(''='',len(astring))', &
+'       ! ALLOCATABLE VARIABLE LENGTH CAN CHANGE', &
+'       ! the allocatable string length will be the length of RHS expression', &
+'        astring='' How long is this allocatable string? ''', &
+'        write(*,*)astring, '' LEN='', len(astring)', &
+'       ! print underline', &
+'        write(*,*) repeat(''='',len(astring))', &
+'       ! assign new value to astring and length changes', &
+'        astring=''New allocatable string''', &
+'        write(*,*)astring, '' LEN='', len(astring)', &
+'       ! print underline', &
+'        write(*,*) repeat(''='',len(astring))', &
 '', &
-'        ! THE STRING LENGTH WILL BE CONSTANT FOR A FIXED-LENGTH VARIABLE', &
-'         string='' How long is this fixed string? ''', &
-'         write(*,*)string,'' LEN='',len(string)', &
-'         string=''New fixed string ''', &
-'         write(*,*)string,'' LEN='',len(string)', &
+'       ! THE STRING LENGTH WILL BE CONSTANT FOR A FIXED-LENGTH VARIABLE', &
+'        string='' How long is this fixed string? ''', &
+'        write(*,*)string,'' LEN='',len(string)', &
+'        string=''New fixed string ''', &
+'        write(*,*)string,'' LEN='',len(string)', &
 '', &
-'        ! ALL STRINGS IN AN ARRAY ARE THE SAME LENGTH', &
-'        ! a scalar is returned for an array, as all values in a Fortran', &
-'        ! character array must be of the same length.', &
-'         many_strings = [ character(len=7) :: ''Tom'', ''Dick'', ''Harry'' ]', &
-'         write(*,*)''length of ALL elements of array='',len(many_strings)', &
+'       ! ALL STRINGS IN AN ARRAY ARE THE SAME LENGTH', &
+'       ! a scalar is returned for an array, as all values in a Fortran', &
+'       ! character array must be of the same length.', &
+'        many_strings = [ character(len=7) :: ''Tom'', ''Dick'', ''Harry'' ]', &
+'        write(*,*)''length of ALL elements of array='',len(many_strings)', &
 '', &
-'        ! NAME%LEN IS ESSENTIALLY THE SAME AS LEN(NAME)', &
-'        ! you can also query the length (and other attributes) of a string', &
-'        ! using a "type parameter inquiry" (available since fortran 2018)', &
-'         write(*,*)''length from type parameter inquiry='',string%len', &
-'        ! %len is equivalent to a call to LEN() except the kind of the integer', &
-'        ! value returned is always of default kind.', &
+'       ! NAME%LEN IS ESSENTIALLY THE SAME AS LEN(NAME)', &
+'       ! you can also query the length (and other attributes) of a string', &
+'       ! using a "type parameter inquiry" (available since fortran 2018)', &
+'        write(*,*)''length from type parameter inquiry='',string%len', &
+'       ! %len is equivalent to a call to LEN() except the kind of the integer', &
+'       ! value returned is always of default kind.', &
 '', &
-'        ! LOOK AT HOW A PASSED STRING CAN BE USED ...', &
-'         call passed('' how long? '')', &
+'       ! LOOK AT HOW A PASSED STRING CAN BE USED ...', &
+'        call passed('' how long? '')', &
 '', &
 '      contains', &
 '', &
-'         subroutine passed(str)', &
-'         character(len=*),intent(in)  :: str', &
-'         ! the length of str can be used in the definitions of variables', &
-'            ! you can query the length of the passed variable', &
-'            write(*,*)''length of passed value is '', LEN(str)', &
-'         end subroutine passed', &
+'        subroutine passed(str)', &
+'        character(len=*),intent(in)  :: str', &
+'        ! the length of str can be used in the definitions of variables', &
+'           ! you can query the length of the passed variable', &
+'           write(*,*)''length of passed value is '', LEN(str)', &
+'        end subroutine passed', &
 '', &
 '      end program demo_len', &
 '', &
 '  Results:', &
 '', &
-'       >  length =          40', &
-'       >   How long is this allocatable string?  LEN=          38', &
+'       >  length =         40', &
+'       >   How long is this allocatable string?  LEN=         38', &
 '       >  ======================================', &
-'       >  New allocatable string LEN=          22', &
+'       >  New allocatable string LEN=         22', &
 '       >  ======================', &
-'       >   How long is this fixed string?          LEN=          40', &
-'       >  New fixed string                         LEN=          40', &
-'       >  length of ALL elements of array=           7', &
-'       >  length from type parameter inquiry=          40', &
-'       >  length of passed value is           11', &
+'       >   How long is this fixed string?         LEN=          40', &
+'       >  New fixed string                        LEN=          40', &
+'       >  length of ALL elements of array=          7', &
+'       >  length from type parameter inquiry=         40', &
+'       >  length of passed value is          11', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77 ; with KIND argument - Fortran 2003', &
@@ -11741,30 +12609,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  len(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   len(3fortran)', &
 '']
 
 shortname="len"
 call process()
 
 
-case('117','len_trim')
+case('118','len_trim')
 
 textblock=[character(len=256) :: &
 '', &
-'len_trim(3fortran)                                          len_trim(3fortran)', &
+'len_trim(3fortran)                                         len_trim(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LEN_TRIM(3) - [CHARACTER:WHITESPACE] Character length without trailing blank', &
 '  characters', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = len_trim(string [,kind])', &
 '', &
-'         elemental integer(kind=KIND) function len_trim(string,KIND)', &
+'        elemental integer(kind=KIND) function len_trim(string,KIND)', &
 '', &
-'          character(len=*),intent(in) :: string', &
-'          integer(kind=KIND),intent(in),optional :: KIND', &
+'         character(len=*),intent(in) :: string', &
+'         integer(kind=KIND),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING is of type character', &
@@ -11798,34 +12672,34 @@ textblock=[character(len=256) :: &
 '      character(len=:),allocatable :: string', &
 '      integer :: i', &
 '      ! basic usage', &
-'         string=" how long is this string?     "', &
-'         write(*,*) string', &
-'         write(*,*)''UNTRIMMED LENGTH='',len(string)', &
-'         write(*,*)''TRIMMED LENGTH='',len_trim(string)', &
+'        string=" how long is this string?     "', &
+'        write(*,*) string', &
+'        write(*,*)''UNTRIMMED LENGTH='',len(string)', &
+'        write(*,*)''TRIMMED LENGTH='',len_trim(string)', &
 '', &
-'         ! print string, then print substring of string', &
-'         string=''xxxxx   ''', &
-'         write(*,*)string,string,string', &
-'         i=len_trim(string)', &
-'         write(*,*)string(:i),string(:i),string(:i)', &
-'         !', &
-'        ! elemental example', &
-'         ELE:block', &
-'         ! an array of strings may be used', &
-'         character(len=:),allocatable :: tablet(:)', &
-'         tablet=[character(len=256) :: &', &
-'         & '' how long is this string?     '',&', &
-'         & ''and this one?'']', &
-'            write(*,*)''UNTRIMMED LENGTH=  '',len(tablet)', &
-'            write(*,*)''TRIMMED LENGTH=    '',len_trim(tablet)', &
-'            write(*,*)''SUM TRIMMED LENGTH='',sum(len_trim(tablet))', &
-'         endblock ELE', &
-'         !', &
+'        ! print string, then print substring of string', &
+'        string=''xxxxx  ''', &
+'        write(*,*)string,string,string', &
+'        i=len_trim(string)', &
+'        write(*,*)string(:i),string(:i),string(:i)', &
+'        !', &
+'       ! elemental example', &
+'        ELE:block', &
+'        ! an array of strings may be used', &
+'        character(len=:),allocatable :: tablet(:)', &
+'        tablet=[character(len=256) :: &', &
+'        & '' how long is this string?    '',&', &
+'        & ''and this one?'']', &
+'           write(*,*)''UNTRIMMED LENGTH=  '',len(tablet)', &
+'           write(*,*)''TRIMMED LENGTH=   '',len_trim(tablet)', &
+'           write(*,*)''SUM TRIMMED LENGTH='',sum(len_trim(tablet))', &
+'        endblock ELE', &
+'        !', &
 '      end program demo_len_trim', &
 '', &
 '  Results:', &
 '', &
-'           how long is this string?', &
+'          how long is this string?', &
 '', &
 '    UNTRIMMED LENGTH=', &
 '      30', &
@@ -11840,7 +12714,7 @@ textblock=[character(len=256) :: &
 '      256', &
 '', &
 '    TRIMMED LENGTH=', &
-'      25          13', &
+'      25         13', &
 '', &
 '    SUM TRIMMED LENGTH=', &
 '      38', &
@@ -11858,29 +12732,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023             len_trim(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              len_trim(3fortran)', &
 '']
 
 shortname="len_trim"
 call process()
 
 
-case('118','lge')
+case('119','lge')
 
 textblock=[character(len=256) :: &
 '', &
-'lge(3fortran)                                                    lge(3fortran)', &
+'lge(3fortran)                                                   lge(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LGE(3) - [CHARACTER:COMPARE] ASCII Lexical greater than or equal', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = lge(string_a, stringb)', &
 '', &
-'           elemental logical function lge(string_a, string_b)', &
+'          elemental logical function lge(string_a, string_b)', &
 '', &
-'            character(len=*),intent(in) :: string_a', &
-'            character(len=*),intent(in) :: string_b', &
+'           character(len=*),intent(in) :: string_a', &
+'           character(len=*),intent(in) :: string_b', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING_A is default character or an ASCII character.', &
@@ -11921,18 +12801,18 @@ textblock=[character(len=256) :: &
 '      program demo_lge', &
 '      implicit none', &
 '      integer :: i', &
-'         print *,''the ASCII collating sequence for printable characters''', &
-'         write(*,''(1x,19a)'')(char(i),i=32,126) ! ASCII order', &
-'         write(*,*) lge(''abc'',''ABC'')           ! [T] lowercase is > uppercase', &
-'         write(*,*) lge(''abc'',''abc  '')         ! [T] trailing spaces', &
-'         ! If both strings are of zero length the result is true', &
-'         write(*,*) lge('''','''')                 ! [T]', &
-'         write(*,*) lge('''',''a'')                ! [F] the null string is padded', &
-'         write(*,*) lge(''a'','''')                ! [T]', &
-'         ! elemental', &
-'         write(*,*) lge(''abc'',[''abc'',''123''])   ! [T T]  scalar and array', &
-'         write(*,*) lge([''cba'', ''123''],''abc'')  ! [T F]', &
-'         write(*,*) lge([''abc'',''123''],[''cba'',''123'']) ! [F T]  both arrays', &
+'        print *,''the ASCII collating sequence for printable characters''', &
+'        write(*,''(1x,19a)'')(char(i),i=32,126) ! ASCII order', &
+'        write(*,*) lge(''abc'',''ABC'')               ! [T] lowercase is > uppercase', &
+'        write(*,*) lge(''abc'',''abc  '')             ! [T] trailing spaces', &
+'        ! If both strings are of zero length the result is true', &
+'        write(*,*) lge('''','''')                     ! [T]', &
+'        write(*,*) lge('''',''a'')            ! [F] the null string is padded', &
+'        write(*,*) lge(''a'','''')            ! [T]', &
+'        ! elemental', &
+'        write(*,*) lge(''abc'',[''abc'',''123''])   ! [T T]    scalar and array', &
+'        write(*,*) lge([''cba'', ''123''],''abc'')  ! [T F]', &
+'        write(*,*) lge([''abc'',''123''],[''cba'',''123'']) ! [F T]  both arrays', &
 '      end program demo_lge', &
 '', &
 '  Results:', &
@@ -11952,6 +12832,7 @@ textblock=[character(len=256) :: &
 '       >  T F', &
 '       >  F T', &
 '', &
+'', &
 'STANDARD', &
 '  FORTRAN 77', &
 '', &
@@ -11969,29 +12850,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  lge(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   lge(3fortran)', &
 '']
 
 shortname="lge"
 call process()
 
 
-case('119','lgt')
+case('120','lgt')
 
 textblock=[character(len=256) :: &
 '', &
-'lgt(3fortran)                                                    lgt(3fortran)', &
+'lgt(3fortran)                                                   lgt(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LGT(3) - [CHARACTER:COMPARE] ASCII Lexical greater than', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = lgt(string_a, string_b)', &
 '', &
-'            elemental logical function lgt(string_a, string_b)', &
+'           elemental logical function lgt(string_a, string_b)', &
 '', &
-'             character(len=*),intent(in) :: string_a', &
-'             character(len=*),intent(in) :: string_b', &
+'            character(len=*),intent(in) :: string_a', &
+'            character(len=*),intent(in) :: string_b', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING_A is default character or an ASCII character.', &
@@ -12032,19 +12919,19 @@ textblock=[character(len=256) :: &
 '      program demo_lgt', &
 '      implicit none', &
 '      integer :: i', &
-'         print *,''the ASCII collating sequence for printable characters''', &
-'         write(*,''(1x,19a)'')(char(i),i=32,126)', &
+'        print *,''the ASCII collating sequence for printable characters''', &
+'        write(*,''(1x,19a)'')(char(i),i=32,126)', &
 '', &
-'         write(*,*) lgt(''abc'',''ABC'')          ! [T] lowercase is > uppercase', &
-'         write(*,*) lgt(''abc'',''abc  '')        ! [F] trailing spaces', &
+'        write(*,*) lgt(''abc'',''ABC'')              ! [T] lowercase is > uppercase', &
+'        write(*,*) lgt(''abc'',''abc  '')            ! [F] trailing spaces', &
 '', &
-'         ! If both strings are of zero length the result is false.', &
-'         write(*,*) lgt('''','''')                ! [F]', &
-'         write(*,*) lgt('''',''a'')               ! [F] the null string is padded', &
-'         write(*,*) lgt(''a'','''')               ! [T]', &
-'         write(*,*) lgt(''abc'',[''abc'',''123''])  ! [F T]  scalar and array', &
-'         write(*,*) lgt([''cba'', ''123''],''abc'') ! [T F]', &
-'         write(*,*) lgt([''abc'',''123''],[''cba'',''123'']) ! [F F]  both arrays', &
+'        ! If both strings are of zero length the result is false.', &
+'        write(*,*) lgt('''','''')                    ! [F]', &
+'        write(*,*) lgt('''',''a'')           ! [F] the null string is padded', &
+'        write(*,*) lgt(''a'','''')           ! [T]', &
+'        write(*,*) lgt(''abc'',[''abc'',''123''])  ! [F T]  scalar and array', &
+'        write(*,*) lgt([''cba'', ''123''],''abc'') ! [T F]', &
+'        write(*,*) lgt([''abc'',''123''],[''cba'',''123'']) ! [F F]  both arrays', &
 '      end program demo_lgt', &
 '', &
 '  Results:', &
@@ -12064,6 +12951,7 @@ textblock=[character(len=256) :: &
 '       >  T F', &
 '       >  F F', &
 '', &
+'', &
 'STANDARD', &
 '  FORTRAN 77', &
 '', &
@@ -12081,29 +12969,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  lgt(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   lgt(3fortran)', &
 '']
 
 shortname="lgt"
 call process()
 
 
-case('120','lle')
+case('121','lle')
 
 textblock=[character(len=256) :: &
 '', &
-'lle(3fortran)                                                    lle(3fortran)', &
+'lle(3fortran)                                                   lle(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LLE(3) - [CHARACTER:COMPARE] ASCII Lexical less than or equal', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = lle(string_a, stringb)', &
 '', &
-'            elemental logical function lle(string_a, string_b)', &
+'           elemental logical function lle(string_a, string_b)', &
 '', &
-'             character(len=*),intent(in) :: string_a', &
-'             character(len=*),intent(in) :: string_b', &
+'            character(len=*),intent(in) :: string_a', &
+'            character(len=*),intent(in) :: string_b', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING_A is default character or an ASCII character.', &
@@ -12148,31 +13042,31 @@ textblock=[character(len=256) :: &
 '      program demo_lle', &
 '      implicit none', &
 '      integer :: i', &
-'         print *,''the ASCII collating sequence for printable characters''', &
-'         write(*,''(1x,19a)'')(char(i),i=32,126)', &
-'        ! basics', &
+'        print *,''the ASCII collating sequence for printable characters''', &
+'        write(*,''(1x,19a)'')(char(i),i=32,126)', &
+'       ! basics', &
 '', &
-'         print *,''case matters''', &
-'         write(*,*) lle(''abc'',''ABC'')          ! F lowercase is > uppercase', &
+'        print *,''case matters''', &
+'        write(*,*) lle(''abc'',''ABC'')           ! F lowercase is > uppercase', &
 '', &
-'         print *,''a space is the lowest printable character''', &
-'         write(*,*) lle(''abcd'',''abc'')         ! F  d > space', &
-'         write(*,*) lle(''abc'',''abcd'')         ! T  space < d', &
+'        print *,''a space is the lowest printable character''', &
+'        write(*,*) lle(''abcd'',''abc'')          ! F  d > space', &
+'        write(*,*) lle(''abc'',''abcd'')          ! T  space < d', &
 '', &
-'         print *,''leading spaces matter, trailing spaces do not''', &
-'         write(*,*) lle(''abc'',''abc  '')        ! T trailing spaces', &
-'         write(*,*) lle(''abc'','' abc'')         ! F leading spaces are significant', &
+'        print *,''leading spaces matter, trailing spaces do not''', &
+'        write(*,*) lle(''abc'',''abc  '')         ! T trailing spaces', &
+'        write(*,*) lle(''abc'','' abc'')          ! F leading spaces are significant', &
 '', &
-'         print *,''even null strings are padded and compared''', &
-'         ! If both strings are of zero length the result is true.', &
-'         write(*,*) lle('''','''')                ! T', &
-'         write(*,*) lle('''',''a'')               ! T the null string is padded', &
-'         write(*,*) lle(''a'','''')               ! F', &
-'         print *,''elemental''', &
-'         write(*,*) lle(''abc'',[''abc'',''123''])  ! [T,F] scalar and array', &
-'         write(*,*) lle([''cba'', ''123''],''abc'') ! [F,T]', &
-'         ! per the rules for elemental procedures arrays must be the same size', &
-'         write(*,*) lle([''abc'',''123''],[''cba'',''123'']) ! [T,T] both arrays', &
+'        print *,''even null strings are padded and compared''', &
+'        ! If both strings are of zero length the result is true.', &
+'        write(*,*) lle('''','''')                 ! T', &
+'        write(*,*) lle('''',''a'')        ! T the null string is padded', &
+'        write(*,*) lle(''a'','''')        ! F', &
+'        print *,''elemental''', &
+'        write(*,*) lle(''abc'',[''abc'',''123''])  ! [T,F] scalar and array', &
+'        write(*,*) lle([''cba'', ''123''],''abc'') ! [F,T]', &
+'        ! per the rules for elemental procedures arrays must be the same size', &
+'        write(*,*) lle([''abc'',''123''],[''cba'',''123'']) ! [T,T] both arrays', &
 '      end program demo_lle', &
 '', &
 '  Results:', &
@@ -12200,6 +13094,7 @@ textblock=[character(len=256) :: &
 '       >  F T', &
 '       >  T T', &
 '', &
+'', &
 'STANDARD', &
 '  FORTRAN 77', &
 '', &
@@ -12217,29 +13112,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  lle(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   lle(3fortran)', &
 '']
 
 shortname="lle"
 call process()
 
 
-case('121','llt')
+case('122','llt')
 
 textblock=[character(len=256) :: &
 '', &
-'llt(3fortran)                                                    llt(3fortran)', &
+'llt(3fortran)                                                   llt(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LLT(3) - [CHARACTER:COMPARE] ASCII Lexical less than', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = llt(string_a, stringb)', &
 '', &
-'            elemental logical function llt(string_a, string_b)', &
+'           elemental logical function llt(string_a, string_b)', &
 '', &
-'             character(len=*),intent(in) :: string_a', &
-'             character(len=*),intent(in) :: string_b', &
+'            character(len=*),intent(in) :: string_a', &
+'            character(len=*),intent(in) :: string_b', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING_A is default character or an ASCII character.', &
@@ -12281,21 +13182,21 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer :: i', &
 '', &
-'         print *,''the ASCII collating sequence for printable characters''', &
-'         write(*,''(1x,19a)'')(char(i),i=32,126) ! ASCII order', &
+'        print *,''the ASCII collating sequence for printable characters''', &
+'        write(*,''(1x,19a)'')(char(i),i=32,126) ! ASCII order', &
 '', &
-'        ! basics', &
-'         print *,''case matters''', &
-'         write(*,*) llt(''abc'',''ABC'')           ! [F] lowercase is > uppercase', &
-'         write(*,*) llt(''abc'',''abc  '')         ! [F] trailing spaces', &
-'         ! If both strings are of zero length the result is false.', &
-'         write(*,*) llt('''','''')                 ! [F]', &
-'         write(*,*) llt('''',''a'')                ! [T] the null string is padded', &
-'         write(*,*) llt(''a'','''')                ! [F]', &
-'         print *,''elemental''', &
-'         write(*,*) llt(''abc'',[''abc'',''123''])   ! [F F]  scalar and array', &
-'         write(*,*) llt([''cba'', ''123''],''abc'')  ! [F T]', &
-'         write(*,*) llt([''abc'',''123''],[''cba'',''123'']) ! [T F]  both arrays', &
+'       ! basics', &
+'        print *,''case matters''', &
+'        write(*,*) llt(''abc'',''ABC'')               ! [F] lowercase is > uppercase', &
+'        write(*,*) llt(''abc'',''abc  '')             ! [F] trailing spaces', &
+'        ! If both strings are of zero length the result is false.', &
+'        write(*,*) llt('''','''')                     ! [F]', &
+'        write(*,*) llt('''',''a'')            ! [T] the null string is padded', &
+'        write(*,*) llt(''a'','''')            ! [F]', &
+'        print *,''elemental''', &
+'        write(*,*) llt(''abc'',[''abc'',''123''])   ! [F F]    scalar and array', &
+'        write(*,*) llt([''cba'', ''123''],''abc'')  ! [F T]', &
+'        write(*,*) llt([''abc'',''123''],[''cba'',''123'']) ! [T F]  both arrays', &
 '      end program demo_llt', &
 '', &
 '  Results:', &
@@ -12317,6 +13218,7 @@ textblock=[character(len=256) :: &
 '       >  F T', &
 '       >  T F', &
 '', &
+'', &
 'STANDARD', &
 '  FORTRAN 77', &
 '', &
@@ -12332,28 +13234,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  llt(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   llt(3fortran)', &
 '']
 
 shortname="llt"
 call process()
 
 
-case('122','log10')
+case('123','log10')
 
 textblock=[character(len=256) :: &
 '', &
-'log10(3fortran)                                                log10(3fortran)', &
+'log10(3fortran)                                               log10(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LOG10(3) - [MATHEMATICS] Base 10 or common logarithm', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = log10(x)', &
 '', &
-'           elemental real(kind=KIND) function log10(x)', &
+'          elemental real(kind=KIND) function log10(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be any kind of real value', &
@@ -12379,20 +13287,21 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real(kind=real64) :: x = 10.0_real64', &
 '', &
-'         x = log10(x)', &
-'         write(*,''(*(g0))'')''log10('',x,'') is '',log10(x)', &
+'        x = log10(x)', &
+'        write(*,''(*(g0))'')''log10('',x,'') is '',log10(x)', &
 '', &
-'         ! elemental', &
-'         write(*, *)log10([1.0, 10.0, 100.0, 1000.0, 10000.0, &', &
-'                           & 100000.0, 1000000.0, 10000000.0])', &
+'        ! elemental', &
+'        write(*, *)log10([1.0, 10.0, 100.0, 1000.0, 10000.0, &', &
+'                          & 100000.0, 1000000.0, 10000000.0])', &
 '', &
 '      end program demo_log10', &
 '', &
 '  Results:', &
 '', &
 '       > log10(1.000000000000000) is .000000000000000', &
-'       >   0.0000000E+00   1.000000       2.000000       3.000000       4.000000', &
-'       >    5.000000       6.000000       7.000000', &
+'       >   0.0000000E+00   1.000000      2.000000       3.000000       4.000000', &
+'       >    5.000000      6.000000       7.000000', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -12402,28 +13311,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023                log10(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 log10(3fortran)', &
 '']
 
 shortname="log10"
 call process()
 
 
-case('123','log')
+case('124','log')
 
 textblock=[character(len=256) :: &
 '', &
-'log(3fortran)                                                    log(3fortran)', &
+'log(3fortran)                                                   log(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LOG(3) - [MATHEMATICS] Natural logarithm', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = log(x)', &
 '', &
-'         elemental TYPE(kind=KIND) function log(x)', &
+'        elemental TYPE(kind=KIND) function log(x)', &
 '', &
-'          TYPE(kind=KIND),intent(in) :: x', &
+'         TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be any real or complex kind.', &
@@ -12442,7 +13357,7 @@ textblock=[character(len=256) :: &
 '  The natural logarithm of X. If X is the complex value (R,I) , the imaginary', &
 '  part "i" is in the range', &
 '', &
-'          -PI < i <= PI', &
+'         -PI < i <= PI', &
 '', &
 '  If the real part of X is less than zero and the imaginary part of X is zero,', &
 '  then the imaginary part of the result is approximately PI if the imaginary', &
@@ -12455,15 +13370,15 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_log', &
 '      implicit none', &
-'        real(kind(0.0d0)) :: x = 2.71828182845904518d0', &
-'        complex :: z = (1.0, 2.0)', &
-'        write(*,*)x, log(x)    ! will yield (approximately) 1', &
-'        write(*,*)z, log(z)', &
+'       real(kind(0.0d0)) :: x = 2.71828182845904518d0', &
+'       complex :: z = (1.0, 2.0)', &
+'       write(*,*)x, log(x)    ! will yield (approximately) 1', &
+'       write(*,*)z, log(z)', &
 '      end program demo_log', &
 '', &
 '  Results:', &
 '', &
-'            2.7182818284590451        1.0000000000000000', &
+'           2.7182818284590451        1.0000000000000000', &
 '  (1.00000000,2.00000000) (0.804718971,1.10714877)', &
 '', &
 'STANDARD', &
@@ -12474,29 +13389,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  log(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   log(3fortran)', &
 '']
 
 shortname="log"
 call process()
 
 
-case('124','log_gamma')
+case('125','log_gamma')
 
 textblock=[character(len=256) :: &
 '', &
-'log_gamma(3fortran)                                        log_gamma(3fortran)', &
+'log_gamma(3fortran)                                       log_gamma(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LOG_GAMMA(3) - [MATHEMATICS] Logarithm of the absolute value of the Gamma', &
 '  function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = log_gamma(x)', &
 '', &
-'           elemental real(kind=KIND) function log_gamma(x)', &
+'          elemental real(kind=KIND) function log_gamma(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be any real type', &
@@ -12520,14 +13441,15 @@ textblock=[character(len=256) :: &
 '      program demo_log_gamma', &
 '      implicit none', &
 '      real :: x = 1.0', &
-'         write(*,*)x,log_gamma(x) ! returns 0.0', &
-'         write(*,*)x,log_gamma(3.0) ! returns 0.693 (approximately)', &
+'        write(*,*)x,log_gamma(x) ! returns 0.0', &
+'        write(*,*)x,log_gamma(3.0) ! returns 0.693 (approximately)', &
 '      end program demo_log_gamma', &
 '', &
 '  Results:', &
 '', &
-'       >    1.000000      0.0000000E+00', &
-'       >    1.000000      0.6931472', &
+'       >    1.000000     0.0000000E+00', &
+'       >    1.000000     0.6931472', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -12537,29 +13459,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            log_gamma(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             log_gamma(3fortran)', &
 '']
 
 shortname="log_gamma"
 call process()
 
 
-case('125','logical')
+case('126','logical')
 
 textblock=[character(len=256) :: &
 '', &
-'logical(3fortran)                                            logical(3fortran)', &
+'logical(3fortran)                                           logical(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  LOGICAL(3) - [TYPE:LOGICAL] Conversion between kinds of logical values', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = logical(l [,kind])', &
 '', &
-'           elemental logical(kind=KIND) function logical(l,KIND)', &
+'          elemental logical(kind=KIND) function logical(l,KIND)', &
 '', &
-'            logical(kind=**),intent(in) :: l', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           logical(kind=**),intent(in) :: l', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -12594,12 +13522,12 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer :: i', &
 '', &
-'         ! list kind values supported on this platform, which generally vary', &
-'         ! in storage size as alias declarations', &
-'         do i =1, size(logical_kinds)', &
-'            write(*,''(*(g0))'')''integer,parameter :: boolean'', &', &
-'            & logical_kinds(i),''='', logical_kinds(i)', &
-'         enddo', &
+'        ! list kind values supported on this platform, which generally vary', &
+'        ! in storage size as alias declarations', &
+'        do i =1, size(logical_kinds)', &
+'           write(*,''(*(g0))'')''integer,parameter :: boolean'', &', &
+'           & logical_kinds(i),''='', logical_kinds(i)', &
+'        enddo', &
 '', &
 '      end program demo_logical', &
 '', &
@@ -12611,6 +13539,7 @@ textblock=[character(len=256) :: &
 '       > integer,parameter :: boolean8=8', &
 '       > integer,parameter :: boolean16=16', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95 , related ISO_FORTRAN_ENV module - fortran 2009', &
 '', &
@@ -12619,29 +13548,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              logical(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               logical(3fortran)', &
 '']
 
 shortname="logical"
 call process()
 
 
-case('126','maskl')
+case('127','maskl')
 
 textblock=[character(len=256) :: &
 '', &
-'maskl(3fortran)                                                maskl(3fortran)', &
+'maskl(3fortran)                                               maskl(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MASKL(3) - [BIT:SET] Generates a left justified mask', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = maskl( i [,kind] )', &
 '', &
-'           elemental integer(kind=KIND) function maskl(i,KIND)', &
+'          elemental integer(kind=KIND) function maskl(i,KIND)', &
 '', &
-'            integer(kind=**),intent(in) :: i', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           integer(kind=**),intent(in) :: i', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -12659,14 +13594,16 @@ textblock=[character(len=256) :: &
 '', &
 '  0.', &
 '', &
+'', &
 'OPTIONS', &
 '  o  I : the number of left-most bits to set in the integer result. It must be', &
 '     from 0 to the number of bits for the kind of the result. The default kind', &
 '     of the result is the same as I unless the result size is specified by', &
 '     KIND. That is, these Fortran statements must be .true. :', &
 '', &
-'         i >= 0 .and. i < bitsize(i) ! if KIND is not specified', &
-'         i >= 0 .and. i < bitsize(0_KIND) ! if KIND is specified', &
+'        i >= 0 .and. i < bitsize(i) ! if KIND is not specified', &
+'        i >= 0 .and. i < bitsize(0_KIND) ! if KIND is specified', &
+'', &
 '', &
 '  o  KIND : designates the kind of the integer result.', &
 '', &
@@ -12680,26 +13617,27 @@ textblock=[character(len=256) :: &
 '      program demo_maskl', &
 '      implicit none', &
 '      integer :: i', &
-'        ! basics', &
-'         i=3', &
-'         write(*,''(i0,1x,b0)'') i, maskl(i)', &
+'       ! basics', &
+'        i=3', &
+'        write(*,''(i0,1x,b0)'') i, maskl(i)', &
 '', &
-'        ! elemental', &
-'         write(*,''(*(i11,1x,b0.32,1x,/))'') maskl([(i,i,i=0,bit_size(0),4)])', &
+'       ! elemental', &
+'        write(*,''(*(i11,1x,b0.32,1x,/))'') maskl([(i,i,i=0,bit_size(0),4)])', &
 '      end program demo_maskl', &
 '', &
 '  Results:', &
 '', &
 '       > 3 11100000000000000000000000000000', &
-'       >           0 00000000000000000000000000000000', &
+'       >          0 00000000000000000000000000000000', &
 '       >  -268435456 11110000000000000000000000000000', &
 '       >   -16777216 11111111000000000000000000000000', &
 '       >    -1048576 11111111111100000000000000000000', &
 '       >      -65536 11111111111111110000000000000000', &
 '       >       -4096 11111111111111111111000000000000', &
-'       >        -256 11111111111111111111111100000000', &
-'       >         -16 11111111111111111111111111110000', &
-'       >          -1 11111111111111111111111111111111', &
+'       >       -256 11111111111111111111111100000000', &
+'       >        -16 11111111111111111111111111110000', &
+'       >         -1 11111111111111111111111111111111', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -12709,29 +13647,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                maskl(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 maskl(3fortran)', &
 '']
 
 shortname="maskl"
 call process()
 
 
-case('127','maskr')
+case('128','maskr')
 
 textblock=[character(len=256) :: &
 '', &
-'maskr(3fortran)                                                maskr(3fortran)', &
+'maskr(3fortran)                                               maskr(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MASKR(3) - [BIT:SET] Generates a right-justified mask', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = maskr( i [,kind] )', &
 '', &
-'           elemental integer(kind=KIND) function maskr(i,KIND)', &
+'          elemental integer(kind=KIND) function maskr(i,KIND)', &
 '', &
-'            integer(kind=**),intent(in) :: i', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           integer(kind=**),intent(in) :: i', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -12754,8 +13698,9 @@ textblock=[character(len=256) :: &
 '     kind of the result is the same as I unless the result size is specified', &
 '     by KIND. That is, these Fortran statements must be .true. :', &
 '', &
-'         i >= 0 .and. i < bitsize(i) ! if KIND is not specified', &
-'         i >= 0 .and. i < bitsize(0_KIND) ! if KIND is specified', &
+'        i >= 0 .and. i < bitsize(i) ! if KIND is not specified', &
+'        i >= 0 .and. i < bitsize(0_KIND) ! if KIND is specified', &
+'', &
 '', &
 '  o  KIND : designates the kind of the integer result.', &
 '', &
@@ -12770,20 +13715,20 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer :: i', &
 '', &
-'        ! basics', &
-'         print *,''basics''', &
-'         write(*,''(i0,t5,b32.32)'') 1, maskr(1)', &
-'         write(*,''(i0,t5,b32.32)'') 5,  maskr(5)', &
-'         write(*,''(i0,t5,b32.32)'') 11, maskr(11)', &
-'         print *,"should be equivalent on two''s-complement processors"', &
-'         write(*,''(i0,t5,b32.32)'') 1,  shiftr(-1,bit_size(0)-1)', &
-'         write(*,''(i0,t5,b32.32)'') 5,  shiftr(-1,bit_size(0)-5)', &
-'         write(*,''(i0,t5,b32.32)'') 11, shiftr(-1,bit_size(0)-11)', &
+'       ! basics', &
+'        print *,''basics''', &
+'        write(*,''(i0,t5,b32.32)'') 1, maskr(1)', &
+'        write(*,''(i0,t5,b32.32)'') 5,  maskr(5)', &
+'        write(*,''(i0,t5,b32.32)'') 11, maskr(11)', &
+'        print *,"should be equivalent on two''s-complement processors"', &
+'        write(*,''(i0,t5,b32.32)'') 1,  shiftr(-1,bit_size(0)-1)', &
+'        write(*,''(i0,t5,b32.32)'') 5,  shiftr(-1,bit_size(0)-5)', &
+'        write(*,''(i0,t5,b32.32)'') 11, shiftr(-1,bit_size(0)-11)', &
 '', &
-'        ! elemental', &
-'         print *,''elemental ''', &
-'         print *,''(array argument accepted like called with each element)''', &
-'         write(*,''(*(i11,1x,b0.32,1x,/))'') maskr([(i,i,i=0,bit_size(0),4)])', &
+'       ! elemental', &
+'        print *,''elemental ''', &
+'        print *,''(array argument accepted like called with each element)''', &
+'        write(*,''(*(i11,1x,b0.32,1x,/))'') maskr([(i,i,i=0,bit_size(0),4)])', &
 '', &
 '      end program demo_maskr', &
 '', &
@@ -12799,15 +13744,16 @@ textblock=[character(len=256) :: &
 '       >  11  00000000000000000000011111111111', &
 '       >   elemental', &
 '       >   (array argument accepted like called with each element)', &
-'       >            0 00000000000000000000000000000000', &
-'       >           15 00000000000000000000000000001111', &
-'       >          255 00000000000000000000000011111111', &
-'       >         4095 00000000000000000000111111111111', &
-'       >        65535 00000000000000001111111111111111', &
+'       >           0 00000000000000000000000000000000', &
+'       >          15 00000000000000000000000000001111', &
+'       >         255 00000000000000000000000011111111', &
+'       >        4095 00000000000000000000111111111111', &
+'       >       65535 00000000000000001111111111111111', &
 '       >      1048575 00000000000011111111111111111111', &
 '       >     16777215 00000000111111111111111111111111', &
 '       >    268435455 00001111111111111111111111111111', &
-'       >           -1 11111111111111111111111111111111', &
+'       >          -1 11111111111111111111111111111111', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -12817,30 +13763,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                maskr(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 maskr(3fortran)', &
 '']
 
 shortname="maskr"
 call process()
 
 
-case('128','matmul')
+case('129','matmul')
 
 textblock=[character(len=256) :: &
 '', &
-'matmul(3fortran)                                              matmul(3fortran)', &
+'matmul(3fortran)                                             matmul(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MATMUL(3) - [TRANSFORMATIONAL] Numeric or logical matrix multiplication', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = matmul(matrix_a,matrix_b)', &
 '', &
-'           function matmul(matrix_a, matrix_b)', &
+'          function matmul(matrix_a, matrix_b)', &
 '', &
-'            type(TYPE1(kind=**)       :: matrix_a(..)', &
-'            type(TYPE2(kind=**)       :: matrix_b(..)', &
-'            type(TYPE(kind=PROMOTED)) :: matmul(..)', &
+'           type(TYPE1(kind=**))      :: matrix_a(..)', &
+'           type(TYPE2(kind=**))      :: matrix_b(..)', &
+'           type(TYPE(kind=PROMOTED)) :: matmul(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  MATRIX_A is a numeric (integer, real, or complex ) or logical array of', &
@@ -12914,8 +13866,9 @@ textblock=[character(len=256) :: &
 '  If MATRIX_A and MATRIX_B are of type logical, the array elements of the', &
 '  result are instead:', &
 '', &
-'        Value_of_Element (i,j) = &', &
-'        ANY( (row_i_of_MATRIX_A) .AND. (column_j_of_MATRIX_B) )', &
+'       Value_of_Element (i,j) = &', &
+'       ANY( (row_i_of_MATRIX_A) .AND. (column_j_of_MATRIX_B) )', &
+'', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
@@ -12923,72 +13876,72 @@ textblock=[character(len=256) :: &
 '      program demo_matmul', &
 '      implicit none', &
 '      integer :: a(2,3), b(3,2), c(2), d(3), e(2,2), f(3), g(2), v1(4),v2(4)', &
-'         a = reshape([1, 2, 3, 4, 5, 6], [2, 3])', &
-'         b = reshape([10, 20, 30, 40, 50, 60], [3, 2])', &
-'         c = [1, 2]', &
-'         d = [1, 2, 3]', &
-'         e = matmul(a, b)', &
-'         f = matmul(c,a)', &
-'         g = matmul(a,d)', &
+'        a = reshape([1, 2, 3, 4, 5, 6], [2, 3])', &
+'        b = reshape([10, 20, 30, 40, 50, 60], [3, 2])', &
+'        c = [1, 2]', &
+'        d = [1, 2, 3]', &
+'        e = matmul(a, b)', &
+'        f = matmul(c,a)', &
+'        g = matmul(a,d)', &
 '', &
-'         call print_matrix_int(''A is '',a)', &
-'         call print_matrix_int(''B is '',b)', &
-'         call print_vector_int(''C is '',c)', &
-'         call print_vector_int(''D is '',d)', &
-'         call print_matrix_int(''E is matmul(A,B)'',e)', &
-'         call print_vector_int(''F is matmul(C,A)'',f)', &
-'         call print_vector_int(''G is matmul(A,D)'',g)', &
+'        call print_matrix_int(''A is '',a)', &
+'        call print_matrix_int(''B is '',b)', &
+'        call print_vector_int(''C is '',c)', &
+'        call print_vector_int(''D is '',d)', &
+'        call print_matrix_int(''E is matmul(A,B)'',e)', &
+'        call print_vector_int(''F is matmul(C,A)'',f)', &
+'        call print_vector_int(''G is matmul(A,D)'',g)', &
 '', &
-'         ! look at argument shapes when one is a vector', &
-'         write(*,''(" > shape")'')', &
-'         ! at least one argument must be of rank two', &
-'         ! so for two vectors at least one must be reshaped', &
-'         v1=[11,22,33,44]', &
-'         v2=[10,20,30,40]', &
+'        ! look at argument shapes when one is a vector', &
+'        write(*,''(" > shape")'')', &
+'        ! at least one argument must be of rank two', &
+'        ! so for two vectors at least one must be reshaped', &
+'        v1=[11,22,33,44]', &
+'        v2=[10,20,30,40]', &
 '', &
-'         ! these return a vector C(1:1)', &
-'         ! treat A(1:n) as A(1:1,1:n)', &
-'         call print_vector_int(''Cd is a vector (not a scalar)'',&', &
-'         & matmul(reshape(v1,[1,size(v1)]),v2))', &
-'         ! or treat B(1:m) as B(1:m,1:1)', &
-'         call print_vector_int(''cD is a vector too'',&', &
-'         & matmul(v1,reshape(v2,[size(v2),1])))', &
+'        ! these return a vector C(1:1)', &
+'        ! treat A(1:n) as A(1:1,1:n)', &
+'        call print_vector_int(''Cd is a vector (not a scalar)'',&', &
+'        & matmul(reshape(v1,[1,size(v1)]),v2))', &
+'        ! or treat B(1:m) as B(1:m,1:1)', &
+'        call print_vector_int(''cD is a vector too'',&', &
+'        & matmul(v1,reshape(v2,[size(v2),1])))', &
 '', &
-'         ! or treat A(1:n) as A(1:1,1:n) and B(1:m) as B(1:m,1:1)', &
-'         ! but note this returns a matrix C(1:1,1:1) not a vector!', &
-'         call print_matrix_int(''CD is a matrix'',matmul(&', &
-'         & reshape(v1,[1,size(v1)]), &', &
-'         & reshape(v2,[size(v2),1])))', &
+'        ! or treat A(1:n) as A(1:1,1:n) and B(1:m) as B(1:m,1:1)', &
+'        ! but note this returns a matrix C(1:1,1:1) not a vector!', &
+'        call print_matrix_int(''CD is a matrix'',matmul(&', &
+'        & reshape(v1,[1,size(v1)]), &', &
+'        & reshape(v2,[size(v2),1])))', &
 '', &
 '      contains', &
 '', &
 '      ! CONVENIENCE ROUTINES TO PRINT IN ROW-COLUMN ORDER', &
 '      subroutine print_vector_int(title,arr)', &
 '      character(len=*),intent(in)  :: title', &
-'      integer,intent(in)           :: arr(:)', &
-'         call print_matrix_int(title,reshape(arr,[1,shape(arr)]))', &
+'      integer,intent(in)          :: arr(:)', &
+'        call print_matrix_int(title,reshape(arr,[1,shape(arr)]))', &
 '      end subroutine print_vector_int', &
 '', &
 '      subroutine print_matrix_int(title,arr)', &
 '      !@(#) print small 2d integer arrays in row-column format', &
 '      character(len=*),parameter :: all=''(" > ",*(g0,1x))'' ! a handy format', &
 '      character(len=*),intent(in)  :: title', &
-'      integer,intent(in)           :: arr(:,:)', &
-'      integer                      :: i', &
+'      integer,intent(in)          :: arr(:,:)', &
+'      integer                     :: i', &
 '      character(len=:),allocatable :: biggest', &
 '', &
-'         print all', &
-'         print all, trim(title)', &
-'         biggest=''           ''  ! make buffer to write integer into', &
-'         ! find how many characters to use for integers', &
-'         write(biggest,''(i0)'')ceiling(log10(real(maxval(abs(arr)))))+2', &
-'         ! use this format to write a row', &
-'         biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
-'         ! print one row of array at a time', &
-'         do i=1,size(arr,dim=1)', &
-'            write(*,fmt=biggest,advance=''no'')arr(i,:)', &
-'            write(*,''(" ]")'')', &
-'         enddo', &
+'        print all', &
+'        print all, trim(title)', &
+'        biggest=''          '' ! make buffer to write integer into', &
+'        ! find how many characters to use for integers', &
+'        write(biggest,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2', &
+'        ! use this format to write a row', &
+'        biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
+'        ! print one row of array at a time', &
+'        do i=1,size(arr,dim=1)', &
+'           write(*,fmt=biggest,advance=''no'')arr(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
 '', &
 '      end subroutine print_matrix_int', &
 '', &
@@ -12996,41 +13949,42 @@ textblock=[character(len=256) :: &
 '', &
 '  Results:', &
 '', &
-'          >', &
-'          > A is', &
-'          > [  1,  3,  5 ]', &
-'          > [  2,  4,  6 ]', &
-'          >', &
-'          > B is', &
-'          > [  10,  40 ]', &
-'          > [  20,  50 ]', &
-'          > [  30,  60 ]', &
-'          >', &
-'          > C is', &
-'          > [  1,  2 ]', &
-'          >', &
-'          > D is', &
-'          > [  1,  2,  3 ]', &
-'          >', &
-'          > E is matmul(A,B)', &
-'          > [  220,  490 ]', &
-'          > [  280,  640 ]', &
-'          >', &
-'          > F is matmul(C,A)', &
-'          > [   5,  11,  17 ]', &
-'          >', &
-'          > G is matmul(A,D)', &
-'          > [  22,  28 ]', &
-'          > shape', &
-'          >', &
-'          > Cd is a vector (not a scalar)', &
-'          > [  3300 ]', &
-'          >', &
-'          > cD is a vector too', &
-'          > [  3300 ]', &
-'          >', &
-'          > CD is a matrix', &
-'          > [  3300 ]', &
+'         >', &
+'         > A is', &
+'         > [  1,  3,  5 ]', &
+'         > [  2,  4,  6 ]', &
+'         >', &
+'         > B is', &
+'         > [  10,  40 ]', &
+'         > [  20,  50 ]', &
+'         > [  30,  60 ]', &
+'         >', &
+'         > C is', &
+'         > [  1,  2 ]', &
+'         >', &
+'         > D is', &
+'         > [  1,  2,  3 ]', &
+'         >', &
+'         > E is matmul(A,B)', &
+'         > [  220,  490 ]', &
+'         > [  280,  640 ]', &
+'         >', &
+'         > F is matmul(C,A)', &
+'         > [   5,  11,  17 ]', &
+'         >', &
+'         > G is matmul(A,D)', &
+'         > [  22,  28 ]', &
+'         > shape', &
+'         >', &
+'         > Cd is a vector (not a scalar)', &
+'         > [  3300 ]', &
+'         >', &
+'         > cD is a vector too', &
+'         > [  3300 ]', &
+'         >', &
+'         > CD is a matrix', &
+'         > [  3300 ]', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -13044,45 +13998,51 @@ textblock=[character(len=256) :: &
 '  o  The Winograd variant of Strassen''s matrix-matrix multiply algorithm may', &
 '     be of interest for optimizing multiplication of very large matrices. See', &
 '', &
-'          "GEMMW: A portable level 3 BLAS Winograd variant of Strassen''s', &
-'          matrix-matrix multiply algorithm",', &
+'         "GEMMW: A portable level 3 BLAS Winograd variant of Strassen''s', &
+'         matrix-matrix multiply algorithm",', &
 '', &
-'          Douglas, C. C., Heroux, M., Slishman, G., and Smith, R. M.,', &
-'          Journal of Computational Physics,', &
-'          Vol. 110, No. 1, January 1994, pages 1-10.', &
+'         Douglas, C. C., Heroux, M., Slishman, G., and Smith, R. M.,', &
+'         Journal of Computational Physics,', &
+'         Vol. 110, No. 1, January 1994, pages 1-10.', &
 '', &
 '  The numerical instabilities of Strassen''s method for matrix multiplication', &
 '  requires special processing.', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               matmul(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                matmul(3fortran)', &
 '']
 
 shortname="matmul"
 call process()
 
 
-case('129','max')
+case('130','max')
 
 textblock=[character(len=256) :: &
 '', &
-'max(3fortran)                                                    max(3fortran)', &
+'max(3fortran)                                                   max(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MAX(3) - [NUMERIC] Maximum value of an argument list', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = max(a1, a2, a3, ...)', &
 '', &
-'           elemental TYPE(kind=KIND) function max(a1, a2, a3, ... )', &
+'          elemental TYPE(kind=KIND) function max(a1, a2, a3, ... )', &
 '', &
-'            TYPE(kind=KIND,intent(in),optional :: a1', &
-'            TYPE(kind=KIND,intent(in),optional :: a2', &
-'            TYPE(kind=KIND,intent(in),optional :: a3', &
-'                      :', &
-'                      :', &
-'                      :', &
+'           TYPE(kind=KIND,intent(in),optional :: a1', &
+'           TYPE(kind=KIND,intent(in),optional :: a2', &
+'           TYPE(kind=KIND,intent(in),optional :: a3', &
+'                     :', &
+'                     :', &
+'                     :', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A3, A3, A4, ... must be of the same type and kind as A1', &
@@ -13140,61 +14100,61 @@ textblock=[character(len=256) :: &
 '      real :: arr2(5)= [20.0,21.0,32.0,-200.0,2200.0]', &
 '      integer :: box(3,4)= reshape([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6],shape(box))', &
 '', &
-'        ! basic usage', &
-'         ! this is simple enough when all arguments are scalar', &
+'       ! basic usage', &
+'        ! this is simple enough when all arguments are scalar', &
 '', &
-'         ! the most positive value is returned, not the one with the', &
-'         ! largest magnitude', &
-'         write(*,*)''scalars:'',max(10.0,11.0,30.0,-100.0)', &
-'         write(*,*)''scalars:'',max(-22222.0,-0.0001)', &
+'        ! the most positive value is returned, not the one with the', &
+'        ! largest magnitude', &
+'        write(*,*)''scalars:'',max(10.0,11.0,30.0,-100.0)', &
+'        write(*,*)''scalars:'',max(-22222.0,-0.0001)', &
 '', &
-'         ! strings do not need to be of the same length', &
-'         write(*,*)''characters:'',max(''the'',''words'',''order'')', &
+'        ! strings do not need to be of the same length', &
+'        write(*,*)''characters:'',max(''the'',''words'',''order'')', &
 '', &
-'         ! leading spaces are significant; everyone is padded on the right', &
-'         ! to the length of the longest argument', &
-'         write(*,*)''characters:'',max(''c'',''bb'',''a'')', &
-'         write(*,*)''characters:'',max('' c'',''b'',''a'')', &
+'        ! leading spaces are significant; everyone is padded on the right', &
+'        ! to the length of the longest argument', &
+'        write(*,*)''characters:'',max(''c'',''bb'',''a'')', &
+'        write(*,*)''characters:'',max('' c'',''b'',''a'')', &
 '', &
-'        ! elemental', &
-'         ! there must be at least two arguments, so even if A1 is an array', &
-'         ! max(A1) is not valid. See MAXVAL(3) and/or MAXLOC(3) instead.', &
+'       ! elemental', &
+'        ! there must be at least two arguments, so even if A1 is an array', &
+'        ! max(A1) is not valid. See MAXVAL(3) and/or MAXLOC(3) instead.', &
 '', &
-'         ! strings in a single array do need to be of the same length', &
-'         ! but the different objects can still be of different lengths.', &
-'         write(*,"(*(''""'',a,''""'':,1x))")MAX([''A'',''Z''],[''BB'',''Y ''])', &
-'         ! note the result is now an array with the max of every element', &
-'         ! position, as can be illustrated numerically as well:', &
-'         write(*,''(a,*(i3,1x))'')''box=   '',box', &
-'         write(*,''(a,*(i3,1x))'')''box**2='',sign(1,box)*box**2', &
-'         write(*,''(a,*(i3,1x))'')''max    '',max(box,sign(1,box)*box**2)', &
+'        ! strings in a single array do need to be of the same length', &
+'        ! but the different objects can still be of different lengths.', &
+'        write(*,"(*(''""'',a,''""'':,1x))")MAX([''A'',''Z''],[''BB'',''Y ''])', &
+'        ! note the result is now an array with the max of every element', &
+'        ! position, as can be illustrated numerically as well:', &
+'        write(*,''(a,*(i3,1x))'')''box=        '',box', &
+'        write(*,''(a,*(i3,1x))'')''box**2='',sign(1,box)*box**2', &
+'        write(*,''(a,*(i3,1x))'')''max '',max(box,sign(1,box)*box**2)', &
 '', &
-'         ! Remember if any argument is an array by the definition of an', &
-'         ! elemental function all the array arguments must be the same shape.', &
+'        ! Remember if any argument is an array by the definition of an', &
+'        ! elemental function all the array arguments must be the same shape.', &
 '', &
-'         ! to find the single largest value of arrays you could use something', &
-'         ! like MAXVAL([arr1, arr2]) or probably better (no large temp array),', &
-'         ! max(maxval(arr1),maxval(arr2)) instead', &
+'        ! to find the single largest value of arrays you could use something', &
+'        ! like MAXVAL([arr1, arr2]) or probably better (no large temp array),', &
+'        ! max(maxval(arr1),maxval(arr2)) instead', &
 '', &
-'         ! so this returns an array of the same shape as any input array', &
-'         ! where each result is the maximum that occurs at that position.', &
-'         write(*,*)max(arr1,arr2(1:4))', &
-'         ! this returns an array just like arr1 except all values less than', &
-'         ! zero are set to zero:', &
-'         write(*,*)max(box,0)', &
-'         ! When mixing arrays and scalars you can think of the scalars', &
-'         ! as being a copy of one of the arrays with all values set to', &
-'         ! the scalar value.', &
+'        ! so this returns an array of the same shape as any input array', &
+'        ! where each result is the maximum that occurs at that position.', &
+'        write(*,*)max(arr1,arr2(1:4))', &
+'        ! this returns an array just like arr1 except all values less than', &
+'        ! zero are set to zero:', &
+'        write(*,*)max(box,0)', &
+'        ! When mixing arrays and scalars you can think of the scalars', &
+'        ! as being a copy of one of the arrays with all values set to', &
+'        ! the scalar value.', &
 '', &
 '      end program demo_max', &
 '', &
 '  Results:', &
 '', &
-'          scalars:   30.00000', &
-'          scalars: -9.9999997E-05', &
-'          characters:words', &
-'          characters:c', &
-'          characters:b', &
+'         scalars:   30.00000', &
+'         scalars: -9.9999997E-05', &
+'         characters:words', &
+'         characters:c', &
+'         characters:b', &
 '  "BB" "Z "', &
 '', &
 '    box=', &
@@ -13207,7 +14167,7 @@ textblock=[character(len=256) :: &
 '      -6  -5  -4  -3  -2  -1   1   4   9  16  25  36', &
 '', &
 '    20.00000', &
-'      21.00000  32.00000  -100.0000', &
+'      21.00000 32.00000  -100.0000', &
 '', &
 '    0 0  0  0  0  0', &
 '', &
@@ -13221,28 +14181,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  max(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   max(3fortran)', &
 '']
 
 shortname="max"
 call process()
 
 
-case('130','maxexponent')
+case('131','maxexponent')
 
 textblock=[character(len=256) :: &
 '', &
-'maxexponent(3fortran)                                    maxexponent(3fortran)', &
+'maxexponent(3fortran)                                   maxexponent(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MAXEXPONENT(3) - [NUMERIC MODEL] Maximum exponent of a real kind', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = maxexponent(x)', &
 '', &
-'           elemental integer function maxexponent(x)', &
+'          elemental integer function maxexponent(x)', &
 '', &
-'            real(kind=**),intent(in)   :: x', &
+'           real(kind=**),intent(in)   :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is a real scalar or array of any real kind', &
@@ -13265,16 +14231,17 @@ textblock=[character(len=256) :: &
 '      use, intrinsic :: iso_fortran_env, only : real32,real64,real128', &
 '      implicit none', &
 '      character(len=*),parameter :: g=''(*(g0,1x))''', &
-'         print  g,  minexponent(0.0_real32),   maxexponent(0.0_real32)', &
-'         print  g,  minexponent(0.0_real64),   maxexponent(0.0_real64)', &
-'         print  g,  minexponent(0.0_real128),  maxexponent(0.0_real128)', &
+'        print  g,  minexponent(0.0_real32),   maxexponent(0.0_real32)', &
+'        print  g,  minexponent(0.0_real64),   maxexponent(0.0_real64)', &
+'        print  g,  minexponent(0.0_real128),  maxexponent(0.0_real128)', &
 '      end program demo_maxexponent', &
 '', &
 '  Results:', &
 '', &
-'         -125 128', &
-'         -1021 1024', &
-'         -16381 16384', &
+'        -125 128', &
+'        -1021 1024', &
+'        -16381 16384', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -13286,30 +14253,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023          maxexponent(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           maxexponent(3fortran)', &
 '']
 
 shortname="maxexponent"
 call process()
 
 
-case('131','maxloc')
+case('132','maxloc')
 
 textblock=[character(len=256) :: &
 '', &
-'maxloc(3fortran)                                              maxloc(3fortran)', &
+'maxloc(3fortran)                                             maxloc(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MAXLOC(3) - [ARRAY:LOCATION] Location of the maximum value within an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = maxloc(array [,mask]) | maxloc(array [,dim] [,mask])', &
 '', &
-'           NUMERIC function maxloc(array, dim, mask)', &
+'          NUMERIC function maxloc(array, dim, mask)', &
 '', &
-'            NUMERIC,intent(in) :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(..)', &
+'           NUMERIC,intent(in) :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -13356,34 +14329,34 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_maxloc', &
 '      implicit none', &
-'      integer      :: ii', &
+'      integer     :: ii', &
 '      integer,save :: i(-3:3)=[(abs(abs(ii)-50),ii=-3,3)]', &
 '      integer,save :: ints(3,5)= reshape([&', &
-'         1,  2,  3,  4,  5, &', &
-'         10, 20, 30, 40, 50, &', &
-'         11, 22, 33, 44, 55  &', &
+'        1,  2,  3,  4,  5, &', &
+'        10, 20, 30, 40, 50, &', &
+'        11, 22, 33, 44, 55  &', &
 '      ],shape(ints),order=[2,1])', &
 '', &
-'          write(*,*) maxloc(ints)', &
-'          write(*,*) maxloc(ints,dim=1)', &
-'          write(*,*) maxloc(ints,dim=2)', &
-'          ! when array bounds do not start with one remember MAXLOC(3) returns', &
-'          ! the offset relative to the lower bound-1 of the location of the', &
-'          ! maximum value, not the subscript of the maximum value. When the', &
-'          ! lower bound of the array is one, these values are the same. In', &
-'          ! other words, MAXLOC(3) returns the subscript of the value assuming', &
-'          ! the first subscript of the array is one no matter what the lower', &
-'          ! bound of the subscript actually is.', &
-'          write(*,''(g0,1x,g0)'') (ii,i(ii),ii=lbound(i,dim=1),ubound(i,dim=1))', &
-'          write(*,*)maxloc(i)', &
+'         write(*,*) maxloc(ints)', &
+'         write(*,*) maxloc(ints,dim=1)', &
+'         write(*,*) maxloc(ints,dim=2)', &
+'         ! when array bounds do not start with one remember MAXLOC(3) returns', &
+'         ! the offset relative to the lower bound-1 of the location of the', &
+'         ! maximum value, not the subscript of the maximum value. When the', &
+'         ! lower bound of the array is one, these values are the same. In', &
+'         ! other words, MAXLOC(3) returns the subscript of the value assuming', &
+'         ! the first subscript of the array is one no matter what the lower', &
+'         ! bound of the subscript actually is.', &
+'         write(*,''(g0,1x,g0)'') (ii,i(ii),ii=lbound(i,dim=1),ubound(i,dim=1))', &
+'         write(*,*)maxloc(i)', &
 '', &
 '      end program demo_maxloc', &
 '', &
 '  Results:', &
 '', &
-'       >     3       5', &
-'       >     3       3       3       3       3', &
-'       >     5       5       5', &
+'       >     3      5', &
+'       >     3      3       3       3       3', &
+'       >     5      5       5', &
 '       >  -3 47', &
 '       >  -2 48', &
 '       >  -1 49', &
@@ -13391,6 +14364,7 @@ textblock=[character(len=256) :: &
 '       >  1 49', &
 '       >  2 48', &
 '       >  3 47', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -13409,31 +14383,37 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023               maxloc(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                maxloc(3fortran)', &
 '']
 
 shortname="maxloc"
 call process()
 
 
-case('132','maxval')
+case('133','maxval')
 
 textblock=[character(len=256) :: &
 '', &
-'maxval(3fortran)                                              maxval(3fortran)', &
+'maxval(3fortran)                                             maxval(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MAXVAL(3) - [ARRAY:REDUCTION] Determines the maximum value in an array or', &
 '  row', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = maxval(array [,mask]) | maxval(array [,dim] [,mask])', &
 '', &
-'           NUMERIC function maxval(array ,dim, mask)', &
+'          NUMERIC function maxval(array ,dim, mask)', &
 '', &
-'            NUMERIC,intent(in) :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(..)', &
+'           NUMERIC,intent(in) :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -13471,24 +14451,25 @@ textblock=[character(len=256) :: &
 '      program demo_maxval', &
 '      implicit none', &
 '      integer,save :: ints(3,5)= reshape([&', &
-'         1,  2,  3,  4,  5, &', &
-'        10, 20, 30, 40, 50, &', &
-'        11, 22, 33, 44, 55  &', &
+'        1,  2,  3,  4,  5, &', &
+'       10, 20, 30, 40, 50, &', &
+'       11, 22, 33, 44, 55  &', &
 '      ],shape(ints),order=[2,1])', &
 '', &
-'         write(*,*) maxval(ints)', &
-'         write(*,*) maxval(ints,dim=1)', &
-'         write(*,*) maxval(ints,dim=2)', &
-'         ! find biggest number less than 30 with mask', &
-'         write(*,*) maxval(ints,mask=ints.lt.30)', &
+'        write(*,*) maxval(ints)', &
+'        write(*,*) maxval(ints,dim=1)', &
+'        write(*,*) maxval(ints,dim=2)', &
+'        ! find biggest number less than 30 with mask', &
+'        write(*,*) maxval(ints,mask=ints.lt.30)', &
 '      end program demo_maxval', &
 '', &
 '  Results:', &
 '', &
 '       >  55', &
-'       >  11     22     33     44     55', &
-'       >   5     50     55', &
+'       >  11    22     33     44     55', &
+'       >   5    50     55', &
 '       >  22', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -13498,31 +14479,37 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023               maxval(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                maxval(3fortran)', &
 '']
 
 shortname="maxval"
 call process()
 
 
-case('133','merge')
+case('134','merge')
 
 textblock=[character(len=256) :: &
 '', &
-'merge(3fortran)                                                merge(3fortran)', &
+'merge(3fortran)                                               merge(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MERGE(3) - [ARRAY:CONSTRUCTION] Merge variables', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = merge(tsource, fsource, mask)', &
 '', &
-'           elemental type(TYPE(kind=KIND)) function merge(tsource,fsource,mask)', &
+'          elemental type(TYPE(kind=KIND)) function merge(tsource,fsource,mask)', &
 '', &
-'            type(TYPE(kind=KIND)),intent(in) :: tsource', &
-'            type(TYPE(kind=KIND)),intent(in) :: fsource', &
-'            logical(kind=**),intent(in)   :: mask', &
-'            mask** : Shall be of type logical.', &
+'           type(TYPE(kind=KIND)),intent(in) :: tsource', &
+'           type(TYPE(kind=KIND)),intent(in) :: fsource', &
+'           logical(kind=**),intent(in)   :: mask', &
+'           mask** : Shall be of type logical.', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -13549,7 +14536,7 @@ textblock=[character(len=256) :: &
 '  being generated; as 1.0/X may be evaluated for all values of X before the', &
 '  mask is used to select which value to retain:', &
 '', &
-'            y = merge( 1.0/x, 0.0, x /= 0.0 )', &
+'           y = merge( 1.0/x, 0.0, x /= 0.0 )', &
 '', &
 '  Note the compiler is also free to short-circuit or to generate an infinity', &
 '  so this may work in many programming environments but is not recommended.', &
@@ -13557,15 +14544,16 @@ textblock=[character(len=256) :: &
 '  For cases like this one may instead use masked assignment via the WHERE', &
 '  construct:', &
 '', &
-'            where(x .ne. 0.0)', &
-'               y = 1.0/x', &
-'            elsewhere', &
-'               y = 0.0', &
-'            endwhere', &
+'           where(x .ne. 0.0)', &
+'              y = 1.0/x', &
+'           elsewhere', &
+'              y = 0.0', &
+'           endwhere', &
 '', &
 '  instead of the more obscure', &
 '', &
-'            merge(1.0/merge(x,1.0,x /= 0.0), 0.0, x /= 0.0)', &
+'           merge(1.0/merge(x,1.0,x /= 0.0), 0.0, x /= 0.0)', &
+'', &
 '', &
 'OPTIONS', &
 '  o  TSOURCE : May be of any type, including user-defined.', &
@@ -13595,72 +14583,75 @@ textblock=[character(len=256) :: &
 '      integer :: k', &
 '      logical :: chooseleft', &
 '', &
-'         ! Works with scalars', &
-'         k=5', &
-'         write(*,*)merge (1.0, 0.0, k > 0)', &
-'         k=-2', &
-'         write(*,*)merge (1.0, 0.0, k > 0)', &
+'        ! Works with scalars', &
+'        k=5', &
+'        write(*,*)merge (1.0, 0.0, k > 0)', &
+'        k=-2', &
+'        write(*,*)merge (1.0, 0.0, k > 0)', &
 '', &
-'         ! set up some simple arrays that all conform to the', &
-'         ! same shape', &
-'         tvals(1,:)=[  10, -60,  50 ]', &
-'         tvals(2,:)=[ -20,  40, -60 ]', &
+'        ! set up some simple arrays that all conform to the', &
+'        ! same shape', &
+'        tvals(1,:)=[  10, -60,  50 ]', &
+'        tvals(2,:)=[ -20,  40, -60 ]', &
 '', &
-'         fvals(1,:)=[ 0, 3, 2 ]', &
-'         fvals(2,:)=[ 7, 4, 8 ]', &
+'        fvals(1,:)=[ 0, 3, 2 ]', &
+'        fvals(2,:)=[ 7, 4, 8 ]', &
 '', &
-'         mask(1,:)=[ .true.,  .false., .true. ]', &
-'         mask(2,:)=[ .false., .false., .true. ]', &
+'        mask(1,:)=[ .true.,  .false., .true. ]', &
+'        mask(2,:)=[ .false., .false., .true. ]', &
 '', &
-'         ! lets use the mask of specific values', &
-'         write(*,*)''mask of logicals''', &
-'         answer=merge( tvals, fvals, mask )', &
-'         call printme()', &
+'        ! lets use the mask of specific values', &
+'        write(*,*)''mask of logicals''', &
+'        answer=merge( tvals, fvals, mask )', &
+'        call printme()', &
 '', &
-'         ! more typically the mask is an expression', &
-'         write(*, *)''highest values''', &
-'         answer=merge( tvals, fvals, tvals > fvals )', &
-'         call printme()', &
+'        ! more typically the mask is an expression', &
+'        write(*, *)''highest values''', &
+'        answer=merge( tvals, fvals, tvals > fvals )', &
+'        call printme()', &
 '', &
-'         write(*, *)''lowest values''', &
-'         answer=merge( tvals, fvals, tvals < fvals )', &
-'         call printme()', &
+'        write(*, *)''lowest values''', &
+'        answer=merge( tvals, fvals, tvals < fvals )', &
+'        call printme()', &
 '', &
-'         write(*, *)''zero out negative values''', &
-'         answer=merge( tvals, 0, tvals < 0)', &
-'         call printme()', &
+'        write(*, *)''zero out negative values''', &
+'        answer=merge( 0, tvals, tvals < 0)', &
+'        call printme()', &
 '', &
-'         write(*, *)''binary choice''', &
-'         chooseleft=.false.', &
-'         write(*, ''(3i4)'')merge([1,2,3],[10,20,30],chooseleft)', &
-'         chooseleft=.true.', &
-'         write(*, ''(3i4)'')merge([1,2,3],[10,20,30],chooseleft)', &
+'        write(*, *)''binary choice''', &
+'        chooseleft=.false.', &
+'        write(*, ''(3i4)'')merge([1,2,3],[10,20,30],chooseleft)', &
+'        chooseleft=.true.', &
+'        write(*, ''(3i4)'')merge([1,2,3],[10,20,30],chooseleft)', &
 '', &
 '      contains', &
 '', &
 '      subroutine printme()', &
-'            write(*, ''(3i4)'')(answer(i, :), i=1, size(answer, dim=1))', &
+'           write(*, ''(3i4)'')(answer(i, :), i=1, size(answer, dim=1))', &
 '      end subroutine printme', &
 '', &
 '      end program demo_merge', &
 '', &
-'  Expected Results:', &
+'  Results:', &
 '', &
-'       >     mask of logicals', &
-'       >      10   3  50', &
-'       >       7   4 -60', &
-'       >     highest values', &
-'       >      10   3  50', &
-'       >       7  40   8', &
-'       >     lowest values', &
-'       >       0 -60   2', &
-'       >     -20   4 -60', &
-'       >     zero out negative values', &
-'       >       0 -60   0', &
-'       >     -20   0 -60', &
-'       >     binary choice', &
-'       >      10  20  30', &
-'       >       1   2   3', &
+'       >    1.00000000', &
+'       >    0.00000000', &
+'       >  mask of logicals', &
+'       >   10  3  50', &
+'       >    7  4 -60', &
+'       >  highest values', &
+'       >   10  3  50', &
+'       >    7  40   8', &
+'       >  lowest values', &
+'       >    0 -60   2', &
+'       >  -20  4 -60', &
+'       >  zero out negative values', &
+'       >   10  0  50', &
+'       >    0  40   0', &
+'       >  binary choice', &
+'       >   10  20  30', &
+'       >    1  2   3', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -13676,28 +14667,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                merge(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 merge(3fortran)', &
 '']
 
 shortname="merge"
 call process()
 
 
-case('134','merge_bits')
+case('135','merge_bits')
 
 textblock=[character(len=256) :: &
 '', &
-'merge_bits(3fortran)                                      merge_bits(3fortran)', &
+'merge_bits(3fortran)                                     merge_bits(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MERGE_BITS(3) - [BIT:COPY] Merge bits using a mask', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = merge_bits(i, j, mask)', &
 '', &
-'           elemental integer(kind=KIND) function merge_bits(i,j,mask)', &
+'          elemental integer(kind=KIND) function merge_bits(i,j,mask)', &
 '', &
-'            integer(kind=KIND), intent(in) :: i, j, mask', &
+'           integer(kind=KIND), intent(in) :: i, j, mask', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  the result and all input values have the same integer type and KIND with', &
@@ -13715,7 +14712,7 @@ textblock=[character(len=256) :: &
 '', &
 '  The resulting value is the same as would result from', &
 '', &
-'          ior (iand (i, mask),iand (j, not (mask)))', &
+'         ior (iand (i, mask),iand (j, not (mask)))', &
 '', &
 '  An exception to all values being of the same integer type is that I or J', &
 '  and/or the mask may be a BOZ constant (A BOZ constant means it is either a', &
@@ -13729,9 +14726,11 @@ textblock=[character(len=256) :: &
 '', &
 '     1.', &
 '', &
+'', &
 '  o  J : value to select bits from when the associated bit in the mask is', &
 '', &
 '     0.', &
+'', &
 '', &
 '  o  MASK : a value whose bits are used as a mask to select bits from I and J', &
 '', &
@@ -13747,45 +14746,45 @@ textblock=[character(len=256) :: &
 '      integer(kind=int16) :: if_one,if_zero,msk', &
 '      character(len=*),parameter :: fmt=''(*(g0, 1X))''', &
 '', &
-'         ! basic usage', &
-'         print *,''MERGE_BITS( 5,10,41) should be 3.=>'',merge_bits(5,10,41)', &
-'         print *,''MERGE_BITS(13,18,22) should be 4.=>'',merge_bits(13,18,22)', &
+'        ! basic usage', &
+'        print *,''MERGE_BITS( 5,10,41) should be 3.=>'',merge_bits(5,10,41)', &
+'        print *,''MERGE_BITS(13,18,22) should be 4.=>'',merge_bits(13,18,22)', &
 '', &
-'         ! use some values in base2 illustratively:', &
-'         if_one =int(b''1010101010101010'',kind=int16)', &
-'         if_zero=int(b''0101010101010101'',kind=int16)', &
+'        ! use some values in base2 illustratively:', &
+'        if_one =int(b''1010101010101010'',kind=int16)', &
+'        if_zero=int(b''0101010101010101'',kind=int16)', &
 '', &
-'         msk=int(b''0101010101010101'',kind=int16)', &
-'         print ''("should get all zero bits =>",b16.16)'', &', &
-'         & merge_bits(if_one,if_zero,msk)', &
+'        msk=int(b''0101010101010101'',kind=int16)', &
+'        print ''("should get all zero bits =>",b16.16)'', &', &
+'        & merge_bits(if_one,if_zero,msk)', &
 '', &
-'         msk=int(b''1010101010101010'',kind=int16)', &
-'         print ''("should get all ones bits =>",b16.16)'', &', &
-'         & merge_bits(if_one,if_zero,msk)', &
+'        msk=int(b''1010101010101010'',kind=int16)', &
+'        print ''("should get all ones bits =>",b16.16)'', &', &
+'        & merge_bits(if_one,if_zero,msk)', &
 '', &
-'         ! using BOZ values', &
-'         print fmt, &', &
-'         & merge_bits(32767_int16,    o''12345'',         32767_int16), &', &
-'         & merge_bits(o''12345'', 32767_int16, b''0000000000010101''), &', &
-'         & merge_bits(32767_int16,    o''12345'',             z''1234'')', &
+'        ! using BOZ values', &
+'        print fmt, &', &
+'        & merge_bits(32767_int16,    o''12345'',       32767_int16), &', &
+'        & merge_bits(o''12345'', 32767_int16, b''0000000000010101''), &', &
+'        & merge_bits(32767_int16,    o''12345'',           z''1234'')', &
 '', &
-'         ! a do-it-yourself equivalent for comparison and validation', &
-'         print fmt, &', &
-'         & ior(iand(32767_int16, 32767_int16),                   &', &
-'         &   iand(o''12345'', not(32767_int16))),                  &', &
+'        ! a do-it-yourself equivalent for comparison and validation', &
+'        print fmt, &', &
+'        & ior(iand(32767_int16, 32767_int16),                   &', &
+'        &   iand(o''12345'', not(32767_int16))),                &', &
 '', &
-'         & ior(iand(o''12345'', int(o''12345'', kind=int16)),        &', &
-'         &   iand(32767_int16, not(int(o''12345'', kind=int16)))), &', &
+'        & ior(iand(o''12345'', int(o''12345'', kind=int16)),    &', &
+'        &   iand(32767_int16, not(int(o''12345'', kind=int16)))), &', &
 '', &
-'         & ior(iand(32767_int16, z''1234''),                       &', &
-'         &   iand(o''12345'', not(int( z''1234'', kind=int16))))', &
+'        & ior(iand(32767_int16, z''1234''),                     &', &
+'        &   iand(o''12345'', not(int( z''1234'', kind=int16))))', &
 '', &
 '      end program demo_merge_bits', &
 '', &
 '  Results:', &
 '', &
-'          MERGE_BITS( 5,10,41) should be 3.=>           3', &
-'          MERGE_BITS(13,18,22) should be 4.=>           4', &
+'         MERGE_BITS( 5,10,41) should be 3.=>           3', &
+'         MERGE_BITS(13,18,22) should be 4.=>           4', &
 '  should get all zero bits =>0000000000000000 should get all ones bits', &
 '  =>1111111111111111 32767 32751 5877 32767 32767 5877', &
 '', &
@@ -13797,33 +14796,39 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023           merge_bits(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            merge_bits(3fortran)', &
 '']
 
 shortname="merge_bits"
 call process()
 
 
-case('135','min')
+case('136','min')
 
 textblock=[character(len=256) :: &
 '', &
-'min(3fortran)                                                    min(3fortran)', &
+'min(3fortran)                                                   min(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MIN(3) - [NUMERIC] Minimum value of an argument list', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = min(a1, a2, a3, ... )', &
 '', &
-'           elemental TYPE(kind=KIND) function min(a1, a2, a3, ... )', &
+'          elemental TYPE(kind=KIND) function min(a1, a2, a3, ... )', &
 '', &
-'            TYPE(kind=KIND,intent(in)   :: a1', &
-'            TYPE(kind=KIND,intent(in)   :: a2', &
-'            TYPE(kind=KIND,intent(in)   :: a3', &
-'                      :', &
-'                      :', &
-'                      :', &
+'           TYPE(kind=KIND,intent(in)   :: a1', &
+'           TYPE(kind=KIND,intent(in)   :: a2', &
+'           TYPE(kind=KIND,intent(in)   :: a3', &
+'                     :', &
+'                     :', &
+'                     :', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  TYPE may be integer, real or character.', &
@@ -13848,12 +14853,13 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_min', &
 '      implicit none', &
-'          write(*,*)min(10.0,11.0,30.0,-100.0)', &
+'         write(*,*)min(10.0,11.0,30.0,-100.0)', &
 '      end program demo_min', &
 '', &
 '  Results:', &
 '', &
-'            -100.0000000', &
+'           -100.0000000', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -13863,28 +14869,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  min(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   min(3fortran)', &
 '']
 
 shortname="min"
 call process()
 
 
-case('136','minexponent')
+case('137','minexponent')
 
 textblock=[character(len=256) :: &
 '', &
-'minexponent(3fortran)                                    minexponent(3fortran)', &
+'minexponent(3fortran)                                   minexponent(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MINEXPONENT(3) - [NUMERIC MODEL] Minimum exponent of a real kind', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = minexponent(x)', &
 '', &
-'           elemental integer function minexponent(x)', &
+'          elemental integer function minexponent(x)', &
 '', &
-'            real(kind=**),intent(in) :: x', &
+'           real(kind=**),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is a real scalar or array of any real kind', &
@@ -13909,13 +14921,13 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real(kind=real32) :: x', &
 '      real(kind=real64) :: y', &
-'          print *, minexponent(x), maxexponent(x)', &
-'          print *, minexponent(y), maxexponent(y)', &
+'         print *, minexponent(x), maxexponent(x)', &
+'         print *, minexponent(y), maxexponent(y)', &
 '      end program demo_minexponent', &
 '', &
 '  Expected Results:', &
 '', &
-'              -125         128', &
+'             -125         128', &
 '', &
 '    -1021', &
 '      1024', &
@@ -13930,30 +14942,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023          minexponent(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           minexponent(3fortran)', &
 '']
 
 shortname="minexponent"
 call process()
 
 
-case('137','minloc')
+case('138','minloc')
 
 textblock=[character(len=256) :: &
 '', &
-'minloc(3fortran)                                              minloc(3fortran)', &
+'minloc(3fortran)                                             minloc(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MINLOC(3) - [ARRAY:LOCATION] Location of the minimum value within an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = minloc(array [,mask]) | minloc(array [,dim] [,mask])', &
 '', &
-'           NUMERIC function minloc(array, dim, mask)', &
+'          NUMERIC function minloc(array, dim, mask)', &
 '', &
-'            NUMERIC,intent(in) :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(..)', &
+'           NUMERIC,intent(in) :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -13999,26 +15017,27 @@ textblock=[character(len=256) :: &
 '      program demo_minloc', &
 '      implicit none', &
 '      integer,save :: ints(3,5)= reshape([&', &
-'         4, 10,  1,  7, 13, &', &
-'         9, 15,  6, 12,  3, &', &
-'        14,  5, 11,  2,  8  &', &
+'        4, 10,  1,  7, 13, &', &
+'        9, 15,  6, 12,  3, &', &
+'       14,  5, 11,  2,  8  &', &
 '      ],shape(ints),order=[2,1])', &
-'         write(*,*) minloc(ints)', &
-'         write(*,*) minloc(ints,dim=1)', &
-'         write(*,*) minloc(ints,dim=2)', &
-'         ! where in each column is the smallest number .gt. 10 ?', &
-'         write(*,*) minloc(ints,dim=2,mask=ints.gt.10)', &
-'         ! a one-dimensional array with dim=1 explicitly listed returns a scalar', &
-'         write(*,*) minloc(pack(ints,.true.),dim=1) ! scalar', &
+'        write(*,*) minloc(ints)', &
+'        write(*,*) minloc(ints,dim=1)', &
+'        write(*,*) minloc(ints,dim=2)', &
+'        ! where in each column is the smallest number .gt. 10 ?', &
+'        write(*,*) minloc(ints,dim=2,mask=ints.gt.10)', &
+'        ! a one-dimensional array with dim=1 explicitly listed returns a scalar', &
+'        write(*,*) minloc(pack(ints,.true.),dim=1) ! scalar', &
 '      end program demo_minloc', &
 '', &
 '  Results:', &
 '', &
-'       >        1       3', &
-'       >        1       3       1       3       2', &
-'       >        3       5       4', &
-'       >        5       4       3', &
-'       >        7', &
+'       >       1       3', &
+'       >       1       3       1       3       2', &
+'       >       3       5       4', &
+'       >       5       4       3', &
+'       >       7', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -14041,30 +15060,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               minloc(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                minloc(3fortran)', &
 '']
 
 shortname="minloc"
 call process()
 
 
-case('138','minval')
+case('139','minval')
 
 textblock=[character(len=256) :: &
 '', &
-'minval(3fortran)                                              minval(3fortran)', &
+'minval(3fortran)                                             minval(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MINVAL(3) - [ARRAY:REDUCTION] Minimum value of an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = minval(array, [mask]) | minval(array [,dim] [,mask])', &
 '', &
-'           NUMERIC function minval(array, dim, mask)', &
+'          NUMERIC function minval(array, dim, mask)', &
 '', &
-'            NUMERIC,intent(in) :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(..)', &
+'           NUMERIC,intent(in) :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -14109,62 +15134,62 @@ textblock=[character(len=256) :: &
 '      character(len=*),parameter :: g=''(3x,*(g0,1x))''', &
 '', &
 '      integer,save :: ints(3,5)= reshape([&', &
-'             1,  -2,   3,   4,   5,  &', &
-'            10,  20, -30,  40,  50,  &', &
-'            11,  22,  33, -44,  55  &', &
+'            1,  -2,   3,   4,   5,  &', &
+'           10,  20, -30,  40,  50,  &', &
+'           11,  22,  33, -44,  55  &', &
 '      ],shape(ints),order=[2,1])', &
 '', &
 '      integer,save :: box(3,5,2)', &
 '', &
-'         box(:,:,1)=ints', &
-'         box(:,:,2)=-ints', &
+'        box(:,:,1)=ints', &
+'        box(:,:,2)=-ints', &
 '', &
-'         write(*,*)''Given the array''', &
-'         write(*,''(1x,*(g4.4,1x))'') &', &
-'         & (ints(i,:),new_line(''a''),i=1,size(ints,dim=1))', &
+'        write(*,*)''Given the array''', &
+'        write(*,''(1x,*(g4.4,1x))'') &', &
+'        & (ints(i,:),new_line(''a''),i=1,size(ints,dim=1))', &
 '', &
-'         write(*,*)''What is the smallest element in the array?''', &
-'         write(*,g) minval(ints),''at <'',minloc(ints),''>''', &
+'        write(*,*)''What is the smallest element in the array?''', &
+'        write(*,g) minval(ints),''at <'',minloc(ints),''>''', &
 '', &
-'         write(*,*)''What is the smallest element in each column?''', &
-'         write(*,g) minval(ints,dim=1)', &
+'        write(*,*)''What is the smallest element in each column?''', &
+'        write(*,g) minval(ints,dim=1)', &
 '', &
-'         write(*,*)''What is the smallest element in each row?''', &
-'         write(*,g) minval(ints,dim=2)', &
+'        write(*,*)''What is the smallest element in each row?''', &
+'        write(*,g) minval(ints,dim=2)', &
 '', &
-'         ! notice the shape of the output has less columns', &
-'         ! than the input in this case', &
-'         write(*,*)''What is the smallest element in each column,''', &
-'         write(*,*)''considering only those elements that are''', &
-'         write(*,*)''greater than zero?''', &
-'         write(*,g) minval(ints, dim=1, mask = ints > 0)', &
+'        ! notice the shape of the output has less columns', &
+'        ! than the input in this case', &
+'        write(*,*)''What is the smallest element in each column,''', &
+'        write(*,*)''considering only those elements that are''', &
+'        write(*,*)''greater than zero?''', &
+'        write(*,g) minval(ints, dim=1, mask = ints > 0)', &
 '', &
-'         write(*,*)&', &
-'         & ''if everything is false a zero-sized array is NOT returned''', &
-'         write(*,*) minval(ints, dim=1, mask = .false.)', &
-'         write(*,*)''even for a zero-sized input''', &
-'         write(*,g) minval([integer ::], dim=1, mask = .false.)', &
+'        write(*,*)&', &
+'        & ''if everything is false a zero-sized array is NOT returned''', &
+'        write(*,*) minval(ints, dim=1, mask = .false.)', &
+'        write(*,*)''even for a zero-sized input''', &
+'        write(*,g) minval([integer ::], dim=1, mask = .false.)', &
 '', &
-'         write(*,*)''a scalar answer for everything false is huge()''', &
-'         write(*,g) minval(ints, mask = .false.)', &
-'         write(*,g) minval([integer ::], mask = .false.)', &
+'        write(*,*)''a scalar answer for everything false is huge()''', &
+'        write(*,g) minval(ints, mask = .false.)', &
+'        write(*,g) minval([integer ::], mask = .false.)', &
 '', &
-'         write(*,*)''some calls with three dimensions''', &
-'         write(*,g) minval(box, mask = .true. )', &
-'         write(*,g) minval(box, dim=1, mask = .true. )', &
+'        write(*,*)''some calls with three dimensions''', &
+'        write(*,g) minval(box, mask = .true. )', &
+'        write(*,g) minval(box, dim=1, mask = .true. )', &
 '', &
-'         write(*,g) minval(box, dim=2, mask = .true. )', &
-'         write(*,g) ''shape of answer is '', &', &
-'         & shape(minval(box, dim=2, mask = .true. ))', &
+'        write(*,g) minval(box, dim=2, mask = .true. )', &
+'        write(*,g) ''shape of answer is '', &', &
+'        & shape(minval(box, dim=2, mask = .true. ))', &
 '', &
 '      end program demo_minval', &
 '', &
 '  Results:', &
 '', &
 '       > Given the array', &
-'       >    1   -2    3    4    5', &
-'       >   10   20  -30   40   50', &
-'       >   11   22   33  -44   55', &
+'       >    1  -2    3    4    5', &
+'       >   10  20  -30   40   50', &
+'       >   11  22   33  -44   55', &
 '       >', &
 '       > What is the smallest element in the array?', &
 '       >   -44 at < 3 4 >', &
@@ -14189,6 +15214,7 @@ textblock=[character(len=256) :: &
 '       >   -2 -30 -44 -5 -50 -55', &
 '       >   shape of answer is  3 2', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
@@ -14197,29 +15223,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               minval(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                minval(3fortran)', &
 '']
 
 shortname="minval"
 call process()
 
 
-case('139','mod')
+case('140','mod')
 
 textblock=[character(len=256) :: &
 '', &
-'mod(3fortran)                                                    mod(3fortran)', &
+'mod(3fortran)                                                   mod(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MOD(3) - [NUMERIC] Remainder function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = mod(a, p)', &
 '', &
-'           elemental type(TYPE(kind=KIND)) function mod(a,p)', &
+'          elemental type(TYPE(kind=KIND)) function mod(a,p)', &
 '', &
-'            type(TYPE(kind=KIND),intent(in) :: a', &
-'            type(TYPE(kind=KIND),intent(in) :: p', &
+'           type(TYPE(kind=KIND)),intent(in) :: a', &
+'           type(TYPE(kind=KIND)),intent(in) :: p', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  The result and arguments are all of the same type and kind.', &
@@ -14260,40 +15292,40 @@ textblock=[character(len=256) :: &
 '      program demo_mod', &
 '      implicit none', &
 '', &
-'         ! basics', &
-'          print *, mod( -17,  3 ), modulo( -17,  3 )', &
-'          print *, mod(  17, -3 ), modulo(  17, -3 )', &
-'          print *, mod(  17,  3 ), modulo(  17,  3 )', &
-'          print *, mod( -17, -3 ), modulo( -17, -3 )', &
+'        ! basics', &
+'         print *, mod( -17,  3 ), modulo( -17,  3 )', &
+'         print *, mod(  17, -3 ), modulo(  17, -3 )', &
+'         print *, mod(  17,  3 ), modulo(  17,  3 )', &
+'         print *, mod( -17, -3 ), modulo( -17, -3 )', &
 '', &
-'          print *, mod(-17.5, 5.2), modulo(-17.5, 5.2)', &
-'          print *, mod( 17.5,-5.2), modulo( 17.5,-5.2)', &
-'          print *, mod( 17.5, 5.2), modulo( 17.5, 5.2)', &
-'          print *, mod(-17.5,-5.2), modulo(-17.5,-5.2)', &
+'         print *, mod(-17.5, 5.2), modulo(-17.5, 5.2)', &
+'         print *, mod( 17.5,-5.2), modulo( 17.5,-5.2)', &
+'         print *, mod( 17.5, 5.2), modulo( 17.5, 5.2)', &
+'         print *, mod(-17.5,-5.2), modulo(-17.5,-5.2)', &
 '', &
-'        ! with a divisor of 1 the fractional part is returned', &
-'          print *, mod(-17.5, 1.0), modulo(-17.5, 1.0)', &
-'          print *, mod( 17.5,-1.0), modulo( 17.5,-1.0)', &
-'          print *, mod( 17.5, 1.0), modulo( 17.5, 1.0)', &
-'          print *, mod(-17.5,-1.0), modulo(-17.5,-1.0)', &
+'       ! with a divisor of 1 the fractional part is returned', &
+'         print *, mod(-17.5, 1.0), modulo(-17.5, 1.0)', &
+'         print *, mod( 17.5,-1.0), modulo( 17.5,-1.0)', &
+'         print *, mod( 17.5, 1.0), modulo( 17.5, 1.0)', &
+'         print *, mod(-17.5,-1.0), modulo(-17.5,-1.0)', &
 '', &
 '      end program demo_mod', &
 '', &
 '  Results:', &
 '', &
-'                   -2           1', &
-'                    2          -1', &
-'                    2           2', &
-'                   -2          -2', &
+'                  -2           1', &
+'                   2          -1', &
+'                   2           2', &
+'                  -2          -2', &
 '', &
 '    -1.900001', &
 '      3.299999', &
 '', &
 '      1.900001', &
-'        -3.299999', &
+'       -3.299999', &
 '', &
 '      1.900001', &
-'        1.900001', &
+'       1.900001', &
 '', &
 '    -1.900001', &
 '      -1.900001', &
@@ -14326,29 +15358,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  mod(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   mod(3fortran)', &
 '']
 
 shortname="mod"
 call process()
 
 
-case('140','modulo')
+case('141','modulo')
 
 textblock=[character(len=256) :: &
 '', &
-'modulo(3fortran)                                              modulo(3fortran)', &
+'modulo(3fortran)                                             modulo(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MODULO(3) - [NUMERIC] Modulo function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = modulo(a, p)', &
 '', &
-'           elemental TYPE(kind=KIND) function modulo(a,p)', &
+'          elemental TYPE(kind=KIND) function modulo(a,p)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: a', &
-'            TYPE(kind=KIND),intent(in) :: p', &
+'           TYPE(kind=KIND),intent(in) :: a', &
+'           TYPE(kind=KIND),intent(in) :: p', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A may be any kind of real or integer.', &
@@ -14383,24 +15421,25 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_modulo', &
 '      implicit none', &
-'           print *, modulo(17,3)        ! yields 2', &
-'           print *, modulo(17.5,5.5)    ! yields 1.0', &
+'          print *, modulo(17,3)        ! yields 2', &
+'          print *, modulo(17.5,5.5)    ! yields 1.0', &
 '', &
-'           print *, modulo(-17,3)       ! yields 1', &
-'           print *, modulo(-17.5,5.5)   ! yields 4.5', &
+'          print *, modulo(-17,3)       ! yields 1', &
+'          print *, modulo(-17.5,5.5)   ! yields 4.5', &
 '', &
-'           print *, modulo(17,-3)       ! yields -1', &
-'           print *, modulo(17.5,-5.5)   ! yields -4.5', &
+'          print *, modulo(17,-3)       ! yields -1', &
+'          print *, modulo(17.5,-5.5)   ! yields -4.5', &
 '      end program demo_modulo', &
 '', &
 '  Results:', &
 '', &
-'       >            2', &
+'       >           2', &
 '       >    1.000000', &
-'       >            1', &
+'       >           1', &
 '       >    4.500000', &
-'       >           -1', &
+'       >          -1', &
 '       >   -4.500000', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -14410,31 +15449,37 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023               modulo(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                modulo(3fortran)', &
 '']
 
 shortname="modulo"
 call process()
 
 
-case('141','move_alloc')
+case('142','move_alloc')
 
 textblock=[character(len=256) :: &
 '', &
-'move_alloc(3fortran)                                      move_alloc(3fortran)', &
+'move_alloc(3fortran)                                     move_alloc(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MOVE_ALLOC(3) - [MEMORY] Move allocation from one object to another', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call move_alloc(from, to [,stat] [,errmsg] )', &
 '', &
-'           subroutine move_alloc(from, to)', &
+'          subroutine move_alloc(from, to)', &
 '', &
-'            type(TYPE(kind=**)),intent(inout),allocatable :: from(..)', &
-'            type(TYPE(kind=**)),intent(out),allocatable   :: to(..)', &
-'            integer(kind=**),intent(out)   :: stat', &
-'            character(len=*),intent(inout) :: errmsg', &
+'           type(TYPE(kind=**)),intent(inout),allocatable :: from(..)', &
+'           type(TYPE(kind=**)),intent(out),allocatable   :: to(..)', &
+'           integer(kind=**),intent(out)   :: stat', &
+'           character(len=*),intent(inout) :: errmsg', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  FROM may be of any type and kind.', &
@@ -14446,7 +15491,7 @@ textblock=[character(len=256) :: &
 '  deallocated in the process.', &
 '', &
 '  This is potentially more efficient than other methods of assigning the', &
-'  values in FROM to TO and explicitly deallocating FROM, which are for more', &
+'  values in FROM to TO and explicitly deallocating FROM, which are far more', &
 '  likely to require a temporary object or a copy of the elements of the array.', &
 '', &
 'OPTIONS', &
@@ -14458,19 +15503,19 @@ textblock=[character(len=256) :: &
 '  o  STAT : If STAT is present and execution is successful, it is assigned the', &
 '     value zero. : If an error condition occurs,', &
 '', &
-'     o  if **stat** is absent, error termination is initiated;', &
+'     o if **stat** is absent, error termination is initiated;', &
 '', &
-'     o  otherwise, if **from** is a coarray and the current team contains a', &
-'        stopped image, **stat** is assigned the value STAT\_STOPPED\_IMAGE', &
-'        from the intrinsic module ISO\_FORTRAN\_ENV;', &
+'     o otherwise, if **from** is a coarray and the current team contains a', &
+'       stopped image, **stat** is assigned the value STAT\_STOPPED\_IMAGE', &
+'       from the intrinsic module ISO\_FORTRAN\_ENV;', &
 '', &
-'     o  otherwise, if **from** is a coarray and the current team contains a', &
-'        failed image, and no other error condition occurs, **stat** is', &
-'        assigned the value STAT\_FAILED\_IMAGE from the intrinsic module', &
-'        ISO\_FORTRAN\_ENV;', &
+'     o otherwise, if **from** is a coarray and the current team contains a', &
+'       failed image, and no other error condition occurs, **stat** is', &
+'       assigned the value STAT\_FAILED\_IMAGE from the intrinsic module', &
+'       ISO\_FORTRAN\_ENV;', &
 '', &
-'     o  otherwise, **stat** is assigned a processor-dependent positive value', &
-'        that differs from that of STAT\_STOPPED\_IMAGE or STAT\_FAILED\_IMAGE.', &
+'     o otherwise, **stat** is assigned a processor-dependent positive value', &
+'       that differs from that of STAT\_STOPPED\_IMAGE or STAT\_FAILED\_IMAGE.', &
 '', &
 '  o  ERRMSG : If the ERRMSG argument is present and an error condition occurs,', &
 '     it is assigned an explanatory message. If no error condition occurs, the', &
@@ -14485,26 +15530,26 @@ textblock=[character(len=256) :: &
 '      real, allocatable :: grid(:), tempgrid(:)', &
 '      integer :: n, i', &
 '', &
-'         ! initialize small GRID', &
-'         n = 3', &
-'         allocate (grid(1:n))', &
-'         grid = [ (real (i), i=1,n) ]', &
+'        ! initialize small GRID', &
+'        n = 3', &
+'        allocate (grid(1:n))', &
+'        grid = [ (real (i), i=1,n) ]', &
 '', &
-'         ! initialize TEMPGRID which will be used to replace GRID', &
-'         allocate (tempgrid(1:2*n))    ! Allocate bigger grid', &
-'         tempgrid(::2)  = grid         ! Distribute values to new locations', &
-'         tempgrid(2::2) = grid + 0.5   ! initialize other values', &
+'        ! initialize TEMPGRID which will be used to replace GRID', &
+'        allocate (tempgrid(1:2*n))    ! Allocate bigger grid', &
+'        tempgrid(::2)  = grid         ! Distribute values to new locations', &
+'        tempgrid(2::2) = grid + 0.5   ! initialize other values', &
 '', &
-'         ! move TEMPGRID to GRID', &
-'         call MOVE_ALLOC (from=tempgrid, to=grid)', &
+'        ! move TEMPGRID to GRID', &
+'        call MOVE_ALLOC (from=tempgrid, to=grid)', &
 '', &
-'         ! TEMPGRID should no longer be allocated', &
-'         ! and GRID should be the size TEMPGRID was', &
-'         if (size (grid) /= 2*n .or. allocated (tempgrid)) then', &
-'            print *, "Failure in move_alloc!"', &
-'         endif', &
-'         print *, allocated(grid), allocated(tempgrid)', &
-'         print ''(99f8.3)'', grid', &
+'        ! TEMPGRID should no longer be allocated', &
+'        ! and GRID should be the size TEMPGRID was', &
+'        if (size (grid) /= 2*n .or. allocated (tempgrid)) then', &
+'           print *, "Failure in move_alloc!"', &
+'        endif', &
+'        print *, allocated(grid), allocated(tempgrid)', &
+'        print ''(99f8.3)'', grid', &
 '      end program demo_move_alloc', &
 '', &
 '  Results:', &
@@ -14521,33 +15566,39 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023           move_alloc(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            move_alloc(3fortran)', &
 '']
 
 shortname="move_alloc"
 call process()
 
 
-case('142','mvbits')
+case('143','mvbits')
 
 textblock=[character(len=256) :: &
 '', &
-'mvbits(3fortran)                                              mvbits(3fortran)', &
+'mvbits(3fortran)                                             mvbits(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  MVBITS(3) - [BIT:COPY] Reproduce bit patterns found in one integer in', &
 '  another', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call mvbits(from, frompos, len, to, topos)', &
 '', &
-'          elemental subroutine mvbits( from, frompos, len, to, topos )', &
+'         elemental subroutine mvbits( from, frompos, len, to, topos )', &
 '', &
-'           integer(kind=KIND),intent(in)    :: from', &
-'           integer(kind=**),intent(in)      :: frompos', &
-'           integer(kind=**),intent(in)      :: len', &
-'           integer(kind=KIND),intent(inout) :: to', &
-'           integer(kind=**),intent(in)      :: topos', &
+'          integer(kind=KIND),intent(in)    :: from', &
+'          integer(kind=**),intent(in)      :: frompos', &
+'          integer(kind=**),intent(in)      :: len', &
+'          integer(kind=KIND),intent(inout) :: to', &
+'          integer(kind=**),intent(in)      :: topos', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  FROM is an integer', &
@@ -14605,38 +15656,38 @@ textblock=[character(len=256) :: &
 '      character(len=*),parameter :: bits= ''(g0,t30,b32.32)''', &
 '      character(len=*),parameter :: fmt= ''(g0,t30,a,t40,b32.32)''', &
 '', &
-'          intfrom=huge(0)  ! all bits are 1 accept the sign bit', &
-'          intto=0          ! all bits are 0', &
+'         intfrom=huge(0)  ! all bits are 1 accept the sign bit', &
+'         intto=0          ! all bits are 0', &
 '', &
-'          !! CHANGE BIT 0', &
-'          ! show the value and bit pattern', &
-'          write(*,bits)intfrom,intfrom', &
-'          write(*,bits)intto,intto', &
+'         !! CHANGE BIT 0', &
+'         ! show the value and bit pattern', &
+'         write(*,bits)intfrom,intfrom', &
+'         write(*,bits)intto,intto', &
 '', &
-'          ! copy bit 0 from intfrom to intto to show the rightmost bit changes', &
-'          !          (from,    frompos, len,    to, topos)', &
-'          call mvbits(intfrom,       0,   1, intto,     0) ! change bit 0', &
-'          write(*,bits)intto,intto', &
+'         ! copy bit 0 from intfrom to intto to show the rightmost bit changes', &
+'         !          (from,    frompos, len,    to, topos)', &
+'         call mvbits(intfrom,       0,   1, intto,     0) ! change bit 0', &
+'         write(*,bits)intto,intto', &
 '', &
-'          !! COPY PART OF A VALUE TO ITSELF', &
-'          ! can copy bit from a value to itself', &
-'          call mvbits(intfrom,0,1,intfrom,31)', &
-'          write(*,bits)intfrom,intfrom', &
+'         !! COPY PART OF A VALUE TO ITSELF', &
+'         ! can copy bit from a value to itself', &
+'         call mvbits(intfrom,0,1,intfrom,31)', &
+'         write(*,bits)intfrom,intfrom', &
 '', &
-'          !! MOVING BYTES AT A TIME', &
-'          ! make native integer value with bit patterns', &
-'          ! that happen to be the same as the beginning of the alphabet', &
-'          ! to make it easy to see the bytes are reversed', &
-'          abcd_int=transfer(''abcd'',0)', &
-'          ! show the value and bit pattern', &
-'          write(*,*)''native''', &
-'          write(*,fmt)abcd_int,abcd_int,abcd_int', &
+'         !! MOVING BYTES AT A TIME', &
+'         ! make native integer value with bit patterns', &
+'         ! that happen to be the same as the beginning of the alphabet', &
+'         ! to make it easy to see the bytes are reversed', &
+'         abcd_int=transfer(''abcd'',0)', &
+'         ! show the value and bit pattern', &
+'         write(*,*)''native''', &
+'         write(*,fmt)abcd_int,abcd_int,abcd_int', &
 '', &
-'          ! change endian of the value', &
-'          abcd_int=int_swap32(abcd_int)', &
-'          ! show the values and their bit pattern', &
-'          write(*,*)''non-native''', &
-'          write(*,fmt)abcd_int,abcd_int,abcd_int', &
+'         ! change endian of the value', &
+'         abcd_int=int_swap32(abcd_int)', &
+'         ! show the values and their bit pattern', &
+'         write(*,*)''non-native''', &
+'         write(*,fmt)abcd_int,abcd_int,abcd_int', &
 '', &
 '       contains', &
 '', &
@@ -14644,61 +15695,67 @@ textblock=[character(len=256) :: &
 '       ! Convert a 32 bit integer from big Endian to little Endian,', &
 '       ! or conversely from little Endian to big Endian.', &
 '       !', &
-'       integer(kind=int32), intent(in)  :: intin', &
+'       integer(kind=int32), intent(in) :: intin', &
 '       integer(kind=int32) :: intout', &
-'          ! copy bytes from input value to new position in output value', &
-'          !          (from,  frompos, len,     to, topos)', &
-'          call mvbits(intin,       0,   8, intout,    24) ! byte1 to byte4', &
-'          call mvbits(intin,       8,   8, intout,    16) ! byte2 to byte3', &
-'          call mvbits(intin,      16,   8, intout,     8) ! byte3 to byte2', &
-'          call mvbits(intin,      24,   8, intout,     0) ! byte4 to byte1', &
+'         ! copy bytes from input value to new position in output value', &
+'         !          (from,  frompos, len,     to, topos)', &
+'         call mvbits(intin,       0,   8, intout,    24) ! byte1 to byte4', &
+'         call mvbits(intin,       8,   8, intout,    16) ! byte2 to byte3', &
+'         call mvbits(intin,      16,   8, intout,     8) ! byte3 to byte2', &
+'         call mvbits(intin,      24,   8, intout,     0) ! byte4 to byte1', &
 '       end function int_swap32', &
 '', &
 '       end program demo_mvbits', &
 '', &
 '  Results:', &
 '', &
-'         2147483647                   01111111111111111111111111111111', &
-'         0                            00000000000000000000000000000000', &
-'         1                            00000000000000000000000000000001', &
-'         -1                           11111111111111111111111111111111', &
-'          native', &
-'         1684234849                   abcd      01100100011000110110001001100001', &
-'          non-native', &
-'         1633837924                   dcba      01100001011000100110001101100100', &
+'        2147483647                   01111111111111111111111111111111', &
+'        0                            00000000000000000000000000000000', &
+'        1                            00000000000000000000000000000001', &
+'        -1                           11111111111111111111111111111111', &
+'         native', &
+'        1684234849                   abcd      01100100011000110110001001100001', &
+'         non-native', &
+'        1633837924                   dcba      01100001011000100110001101100100', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  IEOR(3), IBCLR(3), NOT(3), BTEST(3), IBCLR(3), IBITS(3), IBSET(3), IAND(3),', &
-'  IOR(3), IEOR(3)', &
+'  BTEST(3), IAND(3), IBCLR(3), IBITS(3), IBSET(3), IEOR(3), IOR(3), NOT(3)', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               mvbits(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                mvbits(3fortran)', &
 '']
 
 shortname="mvbits"
 call process()
 
 
-case('143','nearest')
+case('144','nearest')
 
 textblock=[character(len=256) :: &
 '', &
-'nearest(3fortran)                                            nearest(3fortran)', &
+'nearest(3fortran)                                           nearest(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  NEAREST(3) - [MODEL_COMPONENTS] Nearest representable number', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = nearest(x, s)', &
 '', &
-'           elemental real(kind=KIND) function nearest(x,s)', &
+'          elemental real(kind=KIND) function nearest(x,s)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
-'            real(kind=**),intent(in) :: s', &
+'           real(kind=KIND),intent(in) :: x', &
+'           real(kind=**),intent(in) :: s', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be a real value of any kind.', &
@@ -14737,10 +15794,10 @@ textblock=[character(len=256) :: &
 '      program demo_nearest', &
 '      implicit none', &
 '', &
-'         real :: x, y', &
-'         x = nearest(42.0, 1.0)', &
-'         y = nearest(42.0, -1.0)', &
-'         write (*,"(3(g20.15))") x, y, x - y', &
+'        real :: x, y', &
+'        x = nearest(42.0, 1.0)', &
+'        y = nearest(42.0, -1.0)', &
+'        write (*,"(3(g20.15))") x, y, x - y', &
 '', &
 '      !  write (*,"(3(g20.15))") &', &
 '      !   nearest(tiny(0.0),1.0), &', &
@@ -14756,7 +15813,8 @@ textblock=[character(len=256) :: &
 '', &
 '  Results:', &
 '', &
-'         42.0000038146973    41.9999961853027    .762939453125000E-05', &
+'        42.0000038146973    41.9999961853027    .762939453125000E-05', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -14768,28 +15826,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023              nearest(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               nearest(3fortran)', &
 '']
 
 shortname="nearest"
 call process()
 
 
-case('144','new_line')
+case('145','new_line')
 
 textblock=[character(len=256) :: &
 '', &
-'new_line(3fortran)                                          new_line(3fortran)', &
+'new_line(3fortran)                                         new_line(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  NEW_LINE(3) - [CHARACTER:INQUIRY] Newline character', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = new_line(c)', &
 '', &
-'           character(len=1,kind=KIND) function new_line(c)', &
+'          character(len=1,kind=KIND) function new_line(c)', &
 '', &
-'            character(len=1,kind=KIND),intent(in) :: c(..)', &
+'           character(len=1,kind=KIND),intent(in) :: c(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  C shall be of type character. It may be a scalar or an array.', &
@@ -14803,10 +15867,10 @@ textblock=[character(len=256) :: &
 '  Normally, newlines are generated with regular formatted I/O statements like', &
 '  WRITE() and PRINT() when each statement completes:', &
 '', &
-'         print *, ''x=11''', &
-'         print *', &
-'         print *, ''y=22''', &
-'         end', &
+'        print *, ''x=11''', &
+'        print *', &
+'        print *, ''y=22''', &
+'        end', &
 '', &
 '  produces: x=11', &
 '', &
@@ -14815,25 +15879,25 @@ textblock=[character(len=256) :: &
 '      Alternatively, a "/" descriptor in a format is used to generate a', &
 '      newline on the output. For example:', &
 '      ```fortran', &
-'         write(*,''(a,1x,i0,/,a)'') ''x ='',11,''is the answer''', &
-'         end', &
+'        write(*,''(a,1x,i0,/,a)'') ''x ='',11,''is the answer''', &
+'        end', &
 '', &
 '  produces:', &
 '', &
-'         x = 11', &
-'         is the answer', &
+'        x = 11', &
+'        is the answer', &
 '', &
 '  Also, for formatted sequential output if more data is listed on the output', &
 '  statement than can be represented by the format statement a newline is', &
 '  generated and then the format is reused until the output list is exhausted.', &
 '', &
-'         write(*,''(a,"=",i0)'') ''x'', 10, ''y'', 20', &
-'         end', &
+'        write(*,''(a,"=",i0)'') ''x'', 10, ''y'', 20', &
+'        end', &
 '', &
 '  produces', &
 '', &
-'         x=10', &
-'         y=20', &
+'        x=10', &
+'        y=20', &
 '', &
 '  But there are occasions, particularly when non-advancing I/O or stream I/O', &
 '  is being generated (which does not generate a newline at the end of each', &
@@ -14879,55 +15943,56 @@ textblock=[character(len=256) :: &
 '      real :: r', &
 '      integer :: i, count', &
 '', &
-'        ! basics', &
-'         ! print a string with a newline embedded in it', &
-'         string=''This is record 1.''//nl//''This is record 2.''', &
-'         write(*,''(a)'') string', &
+'       ! basics', &
+'        ! print a string with a newline embedded in it', &
+'        string=''This is record 1.''//nl//''This is record 2.''', &
+'        write(*,''(a)'') string', &
 '', &
-'         ! print a newline character string', &
-'         write(*,''(*(a))'',advance=''no'') &', &
-'            nl,''This is record 1.'',nl,''This is record 2.'',nl', &
+'        ! print a newline character string', &
+'        write(*,''(*(a))'',advance=''no'') &', &
+'           nl,''This is record 1.'',nl,''This is record 2.'',nl', &
 '', &
-'         ! output a number of words of random length as a paragraph', &
-'         ! by inserting a new_line before line exceeds 70 characters', &
+'        ! output a number of words of random length as a paragraph', &
+'        ! by inserting a new_line before line exceeds 70 characters', &
 '', &
-'        ! simplistic paragraph print using non-advancing I/O', &
-'         count=0', &
-'         do i=1,100', &
+'       ! simplistic paragraph print using non-advancing I/O', &
+'        count=0', &
+'        do i=1,100', &
 '', &
-'            ! make some fake word of random length', &
-'            call random_number(r)', &
-'            string=repeat(''x'',int(r*10)+1)', &
+'           ! make some fake word of random length', &
+'           call random_number(r)', &
+'           string=repeat(''x'',int(r*10)+1)', &
 '', &
-'            count=count+len(string)+1', &
-'            if(count.gt.70)then', &
-'               write(*,''(a)'',advance=''no'')nl', &
-'               count=len(string)+1', &
-'            endif', &
-'            write(*,''(1x,a)'',advance=''no'')string', &
-'         enddo', &
-'         write(*,''(a)'',advance=''no'')nl', &
+'           count=count+len(string)+1', &
+'           if(count.gt.70)then', &
+'              write(*,''(a)'',advance=''no'')nl', &
+'              count=len(string)+1', &
+'           endif', &
+'           write(*,''(1x,a)'',advance=''no'')string', &
+'        enddo', &
+'        write(*,''(a)'',advance=''no'')nl', &
 '', &
 '      end program demo_new_line', &
 '', &
 '  Results:', &
 '', &
-'         This is record 1.', &
-'         This is record 2.', &
+'        This is record 1.', &
+'        This is record 2.', &
 '', &
-'         This is record 1.', &
-'         This is record 2.', &
-'          x x xxxx xxxxxxx xxxxxxxxxx xxxxxxxxx xxxx xxxxxxxxxx xxxxxxxx', &
-'          xxxxxxxxx xxxx xxxxxxxxx x xxxxxxxxx xxxxxxxx xxxxxxxx xxxx x', &
-'          xxxxxxxxxx x x x xxxxxx xxxxxxxxxx x xxxxxxxxxx x xxxxxxx xxxxxxxxx', &
-'          xx xxxxxxxxxx xxxxxxxx x xx xxxxxxxxxx xxxxxxxx xxx xxxxxxx xxxxxx', &
-'          xxxxx xxxxxxxxx x xxxxxxxxxx xxxxxx xxxxxxxx xxxxx xxxxxxxx xxxxxxxx', &
-'          xxxxx xxx xxxxxxxx xxxxxxx xxxxxxxx xxx xxxx xxx xxxxxxxx xxxxxx', &
-'          xxxxxxx xxxxxxx xxxxx xxxxx xx xxxxxx xx xxxxxxxxxx xxxxxx x xxxx', &
-'          xxxxxx xxxxxxx x xxx xxxxx xxxxxxxxx xxx xxxxxxx x xxxxxx xxxxxxxxx', &
-'          xxxx xxxxxxxxx xxxxxxxx xxxxxxxx xxx xxxxxxx xxxxxxx xxxxxxxxxx', &
-'          xxxxxxxxxx xxxxxx xxxxx xxxx xxxxxxx xx xxxxxxxxxx xxxxxx xxxxxx', &
-'          xxxxxx xxxx xxxxx', &
+'        This is record 1.', &
+'        This is record 2.', &
+'         x x xxxx xxxxxxx xxxxxxxxxx xxxxxxxxx xxxx xxxxxxxxxx xxxxxxxx', &
+'         xxxxxxxxx xxxx xxxxxxxxx x xxxxxxxxx xxxxxxxx xxxxxxxx xxxx x', &
+'         xxxxxxxxxx x x x xxxxxx xxxxxxxxxx x xxxxxxxxxx x xxxxxxx xxxxxxxxx', &
+'         xx xxxxxxxxxx xxxxxxxx x xx xxxxxxxxxx xxxxxxxx xxx xxxxxxx xxxxxx', &
+'         xxxxx xxxxxxxxx x xxxxxxxxxx xxxxxx xxxxxxxx xxxxx xxxxxxxx xxxxxxxx', &
+'         xxxxx xxx xxxxxxxx xxxxxxx xxxxxxxx xxx xxxx xxx xxxxxxxx xxxxxx', &
+'         xxxxxxx xxxxxxx xxxxx xxxxx xx xxxxxx xx xxxxxxxxxx xxxxxx x xxxx', &
+'         xxxxxx xxxxxxx x xxx xxxxx xxxxxxxxx xxx xxxxxxx x xxxxxx xxxxxxxxx', &
+'         xxxx xxxxxxxxx xxxxxxxx xxxxxxxx xxx xxxxxxx xxxxxxx xxxxxxxxxx', &
+'         xxxxxxxxxx xxxxxx xxxxx xxxx xxxxxxx xx xxxxxxxxxx xxxxxx xxxxxx', &
+'         xxxxxx xxxx xxxxx', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -14937,29 +16002,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023             new_line(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              new_line(3fortran)', &
 '']
 
 shortname="new_line"
 call process()
 
 
-case('145','nint')
+case('146','nint')
 
 textblock=[character(len=256) :: &
 '', &
-'nint(3fortran)                                                  nint(3fortran)', &
+'nint(3fortran)                                                 nint(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  NINT(3) - [TYPE:NUMERIC] Nearest whole number', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = nint( a [,kind] )', &
 '', &
-'           elemental integer(kind=KIND) function nint(a, kind )', &
+'          elemental integer(kind=KIND) function nint(a, kind )', &
 '', &
-'            real(kind=**),intent(in) :: a', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           real(kind=**),intent(in) :: a', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -15002,84 +16073,85 @@ textblock=[character(len=256) :: &
 '      program demo_nint', &
 '      implicit none', &
 '      integer,parameter   :: dp=kind(0.0d0)', &
-'      real,allocatable    :: in(:)', &
+'      real,allocatable   :: in(:)', &
 '      integer,allocatable :: out(:)', &
-'      integer             :: i', &
-'      real                :: x4', &
-'      real(kind=dp)       :: x8', &
+'      integer            :: i', &
+'      real               :: x4', &
+'      real(kind=dp)      :: x8', &
 '', &
-'        ! basic use', &
-'         x4 = 1.234E0', &
-'         x8 = 4.721_dp', &
-'         print *, nint(x4), nint(-x4)', &
-'         print *, nint(x8), nint(-x8)', &
+'       ! basic use', &
+'        x4 = 1.234E0', &
+'        x8 = 4.721_dp', &
+'        print *, nint(x4), nint(-x4)', &
+'        print *, nint(x8), nint(-x8)', &
 '', &
-'        ! elemental', &
-'         in = [ -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, -0.4, &', &
-'              &  0.0,   &', &
-'              & +0.04, +0.5, +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ]', &
-'         out = nint(in)', &
-'         do i=1,size(in)', &
-'            write(*,*)in(i),out(i)', &
-'         enddo', &
+'       ! elemental', &
+'        in = [ -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, -0.4, &', &
+'             &  0.0,   &', &
+'             & +0.04, +0.5, +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ]', &
+'        out = nint(in)', &
+'        do i=1,size(in)', &
+'           write(*,*)in(i),out(i)', &
+'        enddo', &
 '', &
-'        ! dusty corners', &
-'         ISSUES: block', &
-'         use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
-'         integer :: icheck', &
-'            ! make sure input is in range for the type returned', &
-'            write(*,*)''Range limits for typical KINDS:''', &
-'            write(*,''(1x,g0,1x,g0)'')  &', &
-'            & int8,huge(0_int8),   &', &
-'            & int16,huge(0_int16), &', &
-'            & int32,huge(0_int32), &', &
-'            & int64,huge(0_int64)', &
+'       ! dusty corners', &
+'        ISSUES: block', &
+'        use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
+'        integer :: icheck', &
+'           ! make sure input is in range for the type returned', &
+'           write(*,*)''Range limits for typical KINDS:''', &
+'           write(*,''(1x,g0,1x,g0)'')  &', &
+'           & int8,huge(0_int8),   &', &
+'           & int16,huge(0_int16), &', &
+'           & int32,huge(0_int32), &', &
+'           & int64,huge(0_int64)', &
 '', &
-'            ! the standard does not require this to be an error ...', &
-'            x8=12345.67e15 ! too big of a number', &
-'            icheck=selected_int_kind(ceiling(log10(x8)))', &
-'            write(*,*)''Any KIND big enough? ICHECK='',icheck', &
-'            print *, ''These are all wrong answers for '',x8', &
-'            print *, nint(x8,kind=int8)', &
-'            print *, nint(x8,kind=int16)', &
-'            print *, nint(x8,kind=int32)', &
-'            print *, nint(x8,kind=int64)', &
-'         endblock ISSUES', &
+'           ! the standard does not require this to be an error ...', &
+'           x8=12345.67e15 ! too big of a number', &
+'           icheck=selected_int_kind(ceiling(log10(x8)))', &
+'           write(*,*)''Any KIND big enough? ICHECK='',icheck', &
+'           print *, ''These are all wrong answers for '',x8', &
+'           print *, nint(x8,kind=int8)', &
+'           print *, nint(x8,kind=int16)', &
+'           print *, nint(x8,kind=int32)', &
+'           print *, nint(x8,kind=int64)', &
+'        endblock ISSUES', &
 '', &
 '      end program demo_nint', &
 '', &
 '  Results:', &
 '', &
-'       >               1          -1', &
-'       >               5          -5', &
-'       >      -2.700000              -3', &
-'       >      -2.500000              -3', &
-'       >      -2.200000              -2', &
-'       >      -2.000000              -2', &
-'       >      -1.500000              -2', &
-'       >      -1.000000              -1', &
-'       >     -0.5000000              -1', &
-'       >     -0.4000000               0', &
-'       >      0.0000000E+00           0', &
-'       >      3.9999999E-02           0', &
-'       >      0.5000000               1', &
-'       >       1.000000               1', &
-'       >       1.500000               2', &
-'       >       2.000000               2', &
-'       >       2.200000               2', &
-'       >       2.500000               3', &
-'       >       2.700000               3', &
+'       >              1          -1', &
+'       >              5          -5', &
+'       >      -2.700000             -3', &
+'       >      -2.500000             -3', &
+'       >      -2.200000             -2', &
+'       >      -2.000000             -2', &
+'       >      -1.500000             -2', &
+'       >      -1.000000             -1', &
+'       >     -0.5000000             -1', &
+'       >     -0.4000000              0', &
+'       >      0.0000000E+00          0', &
+'       >      3.9999999E-02          0', &
+'       >      0.5000000              1', &
+'       >       1.000000              1', &
+'       >       1.500000              2', &
+'       >       2.000000              2', &
+'       >       2.200000              2', &
+'       >       2.500000              3', &
+'       >       2.700000              3', &
 '       >     Range limits for typical KINDS:', &
 '       >     1 127', &
 '       >     2 32767', &
 '       >     4 2147483647', &
 '       >     8 9223372036854775807', &
-'       >     Any KIND big enough? ICHECK=          -1', &
+'       >     Any KIND big enough? ICHECK=         -1', &
 '       >     These are all wrong answers for   1.234566949990144E+019', &
-'       >        0', &
-'       >          0', &
+'       >       0', &
+'       >         0', &
 '       >     -2147483648', &
 '       >      -9223372036854775808', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77 , with KIND argument - Fortran 90', &
@@ -15089,29 +16161,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 nint(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  nint(3fortran)', &
 '']
 
 shortname="nint"
 call process()
 
 
-case('146','norm2')
+case('147','norm2')
 
 textblock=[character(len=256) :: &
 '', &
-'norm2(3fortran)                                                norm2(3fortran)', &
+'norm2(3fortran)                                               norm2(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  NORM2(3) - [MATHEMATICS] Euclidean vector norm', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = norm2(array, [dim])', &
 '', &
-'           real(kind=KIND) function norm2(array, dim)', &
+'          real(kind=KIND) function norm2(array, dim)', &
 '', &
-'            real(kind=KIND),intent(in) :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
+'           real(kind=KIND),intent(in) :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY shall be an array of type real.', &
@@ -15136,18 +16214,18 @@ textblock=[character(len=256) :: &
 '  Otherwise, an array of rank N-1, where N equals the rank of ARRAY, and a', &
 '  shape similar to that of ARRAY with dimension DIM dropped is returned.', &
 '', &
-'        Case (i):     The result of NORM2 (X) has a value equal to a', &
-'                      processor-dependent approximation to the generalized', &
-'                      L norm of X, which is the square root of the sum of', &
-'                      the squares of the elements of X. If X has size zero,', &
-'                      the result has the value zero.', &
+'       Case (i):     The result of NORM2 (X) has a value equal to a', &
+'                     processor-dependent approximation to the generalized', &
+'                     L norm of X, which is the square root of the sum of', &
+'                     the squares of the elements of X. If X has size zero,', &
+'                     the result has the value zero.', &
 '', &
-'        Case (ii):    The result of NORM2 (X, DIM=DIM) has a value equal', &
-'                      to that of NORM2 (X) if X has rank one. Otherwise,', &
-'                      the resulting array is reduced in rank with dimension', &
-'                      **dim** removed, and each remaining elment is the', &
-'                      result of NORM2(X) for the values along dimension', &
-'                      **dim**.', &
+'       Case (ii):    The result of NORM2 (X, DIM=DIM) has a value equal', &
+'                     to that of NORM2 (X) if X has rank one. Otherwise,', &
+'                     the resulting array is reduced in rank with dimension', &
+'                     **dim** removed, and each remaining elment is the', &
+'                     result of NORM2(X) for the values along dimension', &
+'                     **dim**.', &
 '', &
 '  It is recommended that the processor compute the result without undue', &
 '  overflow or underflow.', &
@@ -15159,26 +16237,26 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer :: i', &
 '      real :: x(2,3) = reshape([ &', &
-'         1, 2, 3, &', &
-'         4, 5, 6  &', &
-'         ],shape(x),order=[2,1])', &
+'        1, 2, 3, &', &
+'        4, 5, 6  &', &
+'        ],shape(x),order=[2,1])', &
 '', &
-'        write(*,*) ''input in row-column order''', &
-'        write(*,*) ''x=''', &
-'        write(*,''(4x,3f4.0)'')transpose(x)', &
-'        write(*,*)', &
-'        write(*,*) ''norm2(x)='',norm2(x)', &
-'        write(*,*) ''which is equivalent to''', &
-'        write(*,*) ''sqrt(sum(x**2))='',sqrt(sum(x**2))', &
-'        write(*,*)', &
-'        write(*,*) ''for reference the array squared is''', &
-'        write(*,*) ''x**2=''', &
-'        write(*,''(4x,3f4.0)'')transpose(x**2)', &
-'        write(*,*)', &
-'        write(*,*) ''norm2(x,dim=1)='',norm2(x,dim=1)', &
-'        write(*,*) ''norm2(x,dim=2)='',norm2(x,dim=2)', &
-'        write(*,*) ''(sqrt(sum(x(:,i)**2)),i=1,3)='',(sqrt(sum(x(:,i)**2)),i=1,3)', &
-'        write(*,*) ''(sqrt(sum(x(i,:)**2)),i=1,2)='',(sqrt(sum(x(i,:)**2)),i=1,2)', &
+'       write(*,*) ''input in row-column order''', &
+'       write(*,*) ''x=''', &
+'       write(*,''(4x,3f4.0)'')transpose(x)', &
+'       write(*,*)', &
+'       write(*,*) ''norm2(x)='',norm2(x)', &
+'       write(*,*) ''which is equivalent to''', &
+'       write(*,*) ''sqrt(sum(x**2))='',sqrt(sum(x**2))', &
+'       write(*,*)', &
+'       write(*,*) ''for reference the array squared is''', &
+'       write(*,*) ''x**2=''', &
+'       write(*,''(4x,3f4.0)'')transpose(x**2)', &
+'       write(*,*)', &
+'       write(*,*) ''norm2(x,dim=1)='',norm2(x,dim=1)', &
+'       write(*,*) ''norm2(x,dim=2)='',norm2(x,dim=2)', &
+'       write(*,*) ''(sqrt(sum(x(:,i)**2)),i=1,3)='',(sqrt(sum(x(:,i)**2)),i=1,3)', &
+'       write(*,*) ''(sqrt(sum(x(i,:)**2)),i=1,2)='',(sqrt(sum(x(i,:)**2)),i=1,2)', &
 '', &
 '      end program demo_norm2', &
 '', &
@@ -15198,10 +16276,11 @@ textblock=[character(len=256) :: &
 '       >       1.  4.  9.', &
 '       >      16. 25. 36.', &
 '       >', &
-'       >  norm2(x,dim=1)=   4.123106       5.385165       6.708204', &
-'       >  norm2(x,dim=2)=   3.741657       8.774964', &
-'       >  (sqrt(sum(x(:,i)**2)),i=1,3)=   4.123106       5.385165       6.708204', &
-'       >  (sqrt(sum(x(i,:)**2)),i=1,2)=   3.741657       8.774964', &
+'       >  norm2(x,dim=1)=   4.123106      5.385165       6.708204', &
+'       >  norm2(x,dim=2)=   3.741657      8.774964', &
+'       >  (sqrt(sum(x(:,i)**2)),i=1,3)=   4.123106      5.385165       6.708204', &
+'       >  (sqrt(sum(x(i,:)**2)),i=1,2)=   3.741657      8.774964', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -15211,28 +16290,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                norm2(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 norm2(3fortran)', &
 '']
 
 shortname="norm2"
 call process()
 
 
-case('147','not')
+case('148','not')
 
 textblock=[character(len=256) :: &
 '', &
-'not(3fortran)                                                    not(3fortran)', &
+'not(3fortran)                                                   not(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  NOT(3) - [BIT:LOGICAL] Logical negation; flips all bits in an integer', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = not(i)', &
 '', &
 '  elemental integer(kind=KIND) function not(i)', &
 '', &
-'           integer(kind=KIND), intent(in) :: i', &
+'          integer(kind=KIND), intent(in) :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I may be an integer of any valid kind', &
@@ -15253,10 +16338,10 @@ textblock=[character(len=256) :: &
 '  The result has the value obtained by complementing I bit-by-bit according to', &
 '  the following truth table:', &
 '', &
-'         >    I   |  NOT(I)', &
-'         >    ----#----------', &
-'         >    1   |   0', &
-'         >    0   |   1', &
+'        >    I   |  NOT(I)', &
+'        >    ----#----------', &
+'        >    1   |   0', &
+'        >    0   |   1', &
 '', &
 '  That is, every input bit is flipped.', &
 '', &
@@ -15266,31 +16351,32 @@ textblock=[character(len=256) :: &
 '      program demo_not', &
 '      implicit none', &
 '      integer :: i', &
-'        ! basics', &
-'         i=-13741', &
-'         print *,''the input value'',i,''represented in bits is''', &
-'         write(*,''(1x,b32.32,1x,i0)'') i, i', &
-'         i=not(i)', &
-'         print *,''on output it is'',i', &
-'         write(*,''(1x,b32.32,1x,i0)'') i, i', &
-'         print *, " on a two''s complement machine flip the bits and add 1"', &
-'         print *, " to get the value with the sign changed, for example."', &
-'         print *, 1234, not(1234)+1', &
-'         print *, -1234, not(-1234)+1', &
-'         print *, " of course ''x=-x'' works just fine and more generally."', &
+'       ! basics', &
+'        i=-13741', &
+'        print *,''the input value'',i,''represented in bits is''', &
+'        write(*,''(1x,b32.32,1x,i0)'') i, i', &
+'        i=not(i)', &
+'        print *,''on output it is'',i', &
+'        write(*,''(1x,b32.32,1x,i0)'') i, i', &
+'        print *, " on a two''s complement machine flip the bits and add 1"', &
+'        print *, " to get the value with the sign changed, for example."', &
+'        print *, 1234, not(1234)+1', &
+'        print *, -1234, not(-1234)+1', &
+'        print *, " of course ''x=-x'' works just fine and more generally."', &
 '      end program demo_not', &
 '', &
 '  Results:', &
 '', &
-'          the input value      -13741 represented in bits is', &
-'          11111111111111111100101001010011 -13741', &
-'          on output it is       13740', &
-'          00000000000000000011010110101100 13740', &
-'           on a two''s complement machine flip the bits and add 1', &
-'           to get the value with the sign changed, for example.', &
-'                 1234       -1234', &
-'                -1234        1234', &
-'           of course ''x=-x'' works just fine and more generally.', &
+'         the input value      -13741 represented in bits is', &
+'         11111111111111111100101001010011 -13741', &
+'         on output it is       13740', &
+'         00000000000000000011010110101100 13740', &
+'          on a two''s complement machine flip the bits and add 1', &
+'          to get the value with the sign changed, for example.', &
+'                1234       -1234', &
+'               -1234        1234', &
+'          of course ''x=-x'' works just fine and more generally.', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -15302,28 +16388,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  not(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   not(3fortran)', &
 '']
 
 shortname="not"
 call process()
 
 
-case('148','null')
+case('149','null')
 
 textblock=[character(len=256) :: &
 '', &
-'null(3fortran)                                                  null(3fortran)', &
+'null(3fortran)                                                 null(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  NULL(3) - [TRANSFORMATIONAL] Function that returns a disassociated pointer', &
 '', &
+'', &
 'SYNOPSIS', &
 '  ptr => null( [mold] )', &
 '', &
-'           function null(mold)', &
+'          function null(mold)', &
 '', &
-'            type(TYPE(kind=**)),pointer,optional :: mold', &
+'           type(TYPE(kind=**)),pointer,optional :: mold', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  MOLD is a pointer of any association status and of any type.', &
@@ -15367,21 +16459,21 @@ textblock=[character(len=256) :: &
 '      subroutine s1 (j, pi)', &
 '       integer j', &
 '       integer, pointer :: pi', &
-'         if(associated(pi))then', &
-'            write(*,g)''Two integers in S1:,'',j,''and'',pi', &
-'         else', &
-'            write(*,g)''One integer in S1:,'',j', &
-'         endif', &
+'        if(associated(pi))then', &
+'           write(*,g)''Two integers in S1:,'',j,''and'',pi', &
+'        else', &
+'           write(*,g)''One integer in S1:,'',j', &
+'        endif', &
 '      end subroutine s1', &
 '', &
 '      subroutine s2 (k, pr)', &
 '       integer k', &
 '       real, pointer :: pr', &
-'         if(associated(pr))then', &
-'            write(*,g)''integer and real in S2:,'',k,''and'',pr', &
-'         else', &
-'            write(*,g)''One integer in S2:,'',k', &
-'         endif', &
+'        if(associated(pr))then', &
+'           write(*,g)''integer and real in S2:,'',k,''and'',pr', &
+'        else', &
+'           write(*,g)''One integer in S2:,'',k', &
+'        endif', &
 '      end subroutine s2', &
 '', &
 '      end module showit', &
@@ -15406,7 +16498,7 @@ textblock=[character(len=256) :: &
 '      ! or s2() is called, even though the pointers are', &
 '      ! not associated or defined', &
 '', &
-'      call gen (1, null (real_ptr) )    ! invokes s2', &
+'      call gen (1, null (real_ptr) )   ! invokes s2', &
 '      call gen (2, null (integer_ptr) ) ! invokes s1', &
 '      real_ptr => x', &
 '      integer_ptr => i', &
@@ -15417,10 +16509,11 @@ textblock=[character(len=256) :: &
 '', &
 '  Results:', &
 '', &
-'         One integer in S2:, 1', &
-'         One integer in S1:, 2', &
-'         integer and real in S2:, 3 and 200.000000', &
-'         Two integers in S1:, 4 and 100', &
+'        One integer in S2:, 1', &
+'        One integer in S1:, 2', &
+'        integer and real in S2:, 3 and 200.000000', &
+'        Two integers in S1:, 4 and 100', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -15430,34 +16523,40 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 null(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  null(3fortran)', &
 '']
 
 shortname="null"
 call process()
 
 
-case('149','num_images')
+case('150','num_images')
 
 textblock=[character(len=256) :: &
 '', &
-'num_images(3fortran)                                      num_images(3fortran)', &
+'num_images(3fortran)                                     num_images(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  NUM_IMAGES(3) - [COLLECTIVE] Number of images', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = num_images([team|team_number])', &
 '', &
-'           integer function num_images (team)', &
+'          integer function num_images (team)', &
 '', &
-'            type(TEAM_TYPE),intent(in),optional    :: team', &
-'            integer(kind=KIND),intent(in),optional :: team_number', &
+'           type(TEAM_TYPE),intent(in),optional    :: team', &
+'           integer(kind=KIND),intent(in),optional :: team_number', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  use of TEAM and TEAM_NUMBER is mutually exclusive', &
 '', &
-'  o  TEAM is is a scalar of of type TEAM_TYPE from the intrinsic module', &
+'  o  TEAM is a scalar of type TEAM_TYPE from the intrinsic module', &
 '     ISO_FORTRAN_ENV.', &
 '', &
 '  o  TEAM_NUMBER is an integer scalar.', &
@@ -15488,25 +16587,26 @@ textblock=[character(len=256) :: &
 '      real    :: p[*]', &
 '      integer :: i', &
 '', &
-'         value = this_image()', &
-'         sync all', &
-'         if (this_image() == 1) then', &
-'           do i = 1, num_images()', &
-'             write(*,''(2(a,i0))'') ''value['', i, ''] is '', value[i]', &
-'           end do', &
-'         endif', &
+'        value = this_image()', &
+'        sync all', &
+'        if (this_image() == 1) then', &
+'          do i = 1, num_images()', &
+'            write(*,''(2(a,i0))'') ''value['', i, ''] is '', value[i]', &
+'          end do', &
+'        endif', &
 '', &
 '       ! The following code uses image 1 to read data and', &
 '       ! broadcast it to other images.', &
-'         if (this_image()==1) then', &
-'            p=1234.5678', &
-'            do i = 2, num_images()', &
-'               p[i] = p', &
-'            end do', &
-'         end if', &
-'         sync all', &
+'        if (this_image()==1) then', &
+'           p=1234.5678', &
+'           do i = 2, num_images()', &
+'              p[i] = p', &
+'           end do', &
+'        end if', &
+'        sync all', &
 '', &
 '      end program demo_num_images', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008 . With DISTANCE or FAILED argument, TS 18508', &
@@ -15516,30 +16616,37 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023           num_images(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            num_images(3fortran)', &
 '']
 
 shortname="num_images"
 call process()
 
 
-case('150','out_of_range')
+case('151','out_of_range')
 
 textblock=[character(len=256) :: &
 '', &
-'out_of_range(3fortran)                                  out_of_range(3fortran)', &
+'out_of_range(3fortran)                                 out_of_range(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
-'  OUT_OF_RANGE(3) - [TYPE:NUMERIC] Whether a value cannot be converted safely.', &
+'  OUT_OF_RANGE(3) - [TYPE:NUMERIC] Whether a numeric value can be converted', &
+'  safely to another type', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = out_of_range (x, mold [, round])', &
 '', &
-'           elemental logical function(x, mold, round)', &
+'          elemental logical function(x, mold, round)', &
 '', &
-'            TYPE,kind=KIND),intent(in) :: x', &
-'            TYPE,kind=KIND),intent(in) :: mold', &
-'            logical,intent(in),optional     :: round', &
+'           type(TYPE(kind=**)),intent(in) :: x', &
+'           type(TYPE(kind=**)),intent(in) :: mold', &
+'           logical,intent(in),optional    :: round', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is of type integer or real.', &
@@ -15554,22 +16661,30 @@ textblock=[character(len=256) :: &
 '  OUT_OF_RANGE(3) determines whether a value X can be converted safely to a', &
 '  real or integer variable the same type and kind as MOLD.', &
 '', &
-'  For example, if INT8 is the kind value for an 8-bit binary integer type,', &
-'  OUT_OF_RANGE(-128.5, 0_INT8) will have the value false and', &
-'  OUT_OF_RANGE(-128.5, 0_INT8, .TRUE.) will have the value .true. because the', &
-'  value will be truncated when converted to an integer and -128 is a', &
-'  representable value on a two''s complement machine in eight bits even though', &
-'  +128 is not.', &
+'  For example, if INT8 is the KIND name for an 8-bit binary integer type, then', &
+'  for', &
+'', &
+'         logical :: L1, L2', &
+'         L1=out_of_range(-128.5, 0_int8)', &
+'         L2=out_of_range(-128.5, 0_int8,.true.)', &
+'         end', &
+'', &
+'  L1 likely will have the value __.false.__ because the value will be', &
+'  truncated to -128.0, which is a representable integer number on a two''s', &
+'  complement machine.', &
+'', &
+'    L2 will be __.true.__ because it will be rounded to -129.0, which is not', &
+'    likely to be a representable eight-bit integer.', &
 '', &
 'OPTIONS', &
 '  o  X : a scalar to be tested for whether it can be stored in a variable of', &
 '     the type and kind of MOLD', &
 '', &
-'  o  MOLD and kind are queried to determine the characteristics of what needs', &
-'     to be fit into.', &
+'  o  MOLD : the type and kind of the variable (but not the value) is used to', &
+'     identify the characteristics of the variable type to fit X into.', &
 '', &
-'  o  ROUND : flag whether to round the value of XX before validating it as an', &
-'     integer value like MOLD.', &
+'  o  ROUND : flag whether to round the value of X before validating it as a', &
+'     value like MOLD.', &
 '', &
 '     ROUND can only be present if X is of type real and MOLD is of type', &
 '     integer.', &
@@ -15610,38 +16725,39 @@ textblock=[character(len=256) :: &
 '      use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      use, intrinsic :: iso_fortran_env, only : real32, real64, real128', &
 '      implicit none', &
-'      integer            :: i', &
+'      integer           :: i', &
 '      integer(kind=int8) :: i8, j8', &
 '', &
-'          ! compilers are not required to produce an error on out of range.', &
-'          ! here storing the default integers into 1-byte integers', &
-'          ! incorrectly can have unexpected results', &
-'          do i=127,130', &
-'             i8=i', &
-'             j8=-i', &
-'             ! OUT_OF_RANGE(3f) can let you check if the value will fit', &
-'             write(*,*)i8,j8,'' might have expected'',i,-i, &', &
-'              & out_of_range( i,i8), &', &
-'              & out_of_range(-i,i8)', &
-'          enddo', &
-'          write(*,*) ''RANGE IS '',-1-huge(0_int8),''TO'',huge(0_int8)', &
-'          ! the real -128.5 is truncated to -128 and is in range', &
-'          write(*,*) out_of_range (  -128.5, 0_int8)         ! false', &
+'         ! compilers are not required to produce an error on out of range.', &
+'         ! here storing the default integers into 1-byte integers', &
+'         ! incorrectly can have unexpected results', &
+'         do i=127,130', &
+'            i8=i', &
+'            j8=-i', &
+'            ! OUT_OF_RANGE(3f) can let you check if the value will fit', &
+'            write(*,*)i8,j8,'' might have expected'',i,-i, &', &
+'             & out_of_range( i,i8), &', &
+'             & out_of_range(-i,i8)', &
+'         enddo', &
+'         write(*,*) ''RANGE IS '',-1-huge(0_int8),''TO'',huge(0_int8)', &
+'         ! the real -128.5 is truncated to -128 and is in range', &
+'         write(*,*) out_of_range (  -128.5, 0_int8)         ! false', &
 '', &
-'          ! the real -128.5 is rounded to -129 and is not in range', &
-'          write(*,*) out_of_range (  -128.5, 0_int8, .true.) ! true', &
+'         ! the real -128.5 is rounded to -129 and is not in range', &
+'         write(*,*) out_of_range (  -128.5, 0_int8, .true.) ! true', &
 '', &
 '      end program demo_out_of_range', &
 '', &
 '  Results:', &
 '', &
-'        >  127 -127  might have expected         127        -127 F F', &
-'        > -128 -128  might have expected         128        -128 T F', &
-'        > -127  127  might have expected         129        -129 T T', &
-'        > -126  126  might have expected         130        -130 T T', &
-'        > RANGE IS         -128 TO  127', &
-'        > F', &
-'        > T', &
+'       >  127 -127  might have expected         127        -127 F F', &
+'       > -128 -128  might have expected         128        -128 T F', &
+'       > -127  127  might have expected         129        -129 T T', &
+'       > -126  126  might have expected         130        -130 T T', &
+'       > RANGE IS         -128 TO  127', &
+'       > F', &
+'       > T', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 2018', &
@@ -15661,30 +16777,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023         out_of_range(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023          out_of_range(3fortran)', &
 '']
 
 shortname="out_of_range"
 call process()
 
 
-case('151','pack')
+case('152','pack')
 
 textblock=[character(len=256) :: &
 '', &
-'pack(3fortran)                                                  pack(3fortran)', &
+'pack(3fortran)                                                 pack(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  PACK(3) - [ARRAY:CONSTRUCTION] Pack an array into an array of rank one', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = pack( array, mask [,vector] )', &
 '', &
-'           TYPE(kind=KIND) function pack(array,mask,vector)', &
+'          TYPE(kind=KIND) function pack(array,mask,vector)', &
 '', &
-'            TYPE(kind=KIND),option(in) :: array(..)', &
-'            logical  :: mask(..)', &
-'            TYPE(kind=KIND),option(in),optional :: vector(*)', &
+'           TYPE(kind=KIND),option(in) :: array(..)', &
+'           logical  :: mask(..)', &
+'           TYPE(kind=KIND),option(in),optional :: vector(*)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY is an array of any type', &
@@ -15733,19 +16855,19 @@ textblock=[character(len=256) :: &
 '      character(len=10) :: c(4)', &
 '', &
 '       ! gathering nonzero elements from an array:', &
-'         m = [ 1, 0, 0, 0, 5, 0 ]', &
-'         write(*, fmt="(*(i0, '' ''))") pack(m, m /= 0)', &
+'        m = [ 1, 0, 0, 0, 5, 0 ]', &
+'        write(*, fmt="(*(i0, '' ''))") pack(m, m /= 0)', &
 '', &
 '       ! Gathering nonzero elements from an array and appending elements', &
 '       ! from VECTOR till the size of the mask array (or array size if the', &
 '       ! mask is scalar):', &
-'         m = [ 1, 0, 0, 2 ]', &
-'         write(*, fmt="(*(i0, '' ''))") pack(m, m /= 0, [ 0, 0, 3, 4 ])', &
-'         write(*, fmt="(*(i0, '' ''))") pack(m, m /= 0 )', &
+'        m = [ 1, 0, 0, 2 ]', &
+'        write(*, fmt="(*(i0, '' ''))") pack(m, m /= 0, [ 0, 0, 3, 4 ])', &
+'        write(*, fmt="(*(i0, '' ''))") pack(m, m /= 0 )', &
 '', &
 '       ! select strings whose second character is "a"', &
-'         c = [ character(len=10) :: ''ape'', ''bat'', ''cat'', ''dog'']', &
-'         write(*, fmt="(*(g0, '' ''))") pack(c, c(:)(2:2) == ''a'' )', &
+'        c = [ character(len=10) :: ''ape'', ''bat'', ''cat'', ''dog'']', &
+'        write(*, fmt="(*(g0, '' ''))") pack(c, c(:)(2:2) == ''a'' )', &
 '', &
 '      end program demo_pack', &
 '', &
@@ -15754,7 +16876,8 @@ textblock=[character(len=256) :: &
 '       > 1 5', &
 '       > 1 2 3 4', &
 '       > 1 2', &
-'       > bat        cat', &
+'       > bat       cat', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -15764,29 +16887,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 pack(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  pack(3fortran)', &
 '']
 
 shortname="pack"
 call process()
 
 
-case('152','parity')
+case('153','parity')
 
 textblock=[character(len=256) :: &
 '', &
-'parity(3fortran)                                              parity(3fortran)', &
+'parity(3fortran)                                             parity(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  PARITY(3) - [ARRAY:REDUCTION] Array reduction by .NEQV. operation', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = parity( mask [,dim] )', &
 '', &
-'           logical(kind=KIND) function parity(mask, dim)', &
+'          logical(kind=KIND) function parity(mask, dim)', &
 '', &
-'            type(logical(kind=KIND)),intent(in)        :: mask(..)', &
-'            type(integer(kind=**)),intent(in),optional :: dim', &
+'           type(logical(kind=KIND)),intent(in)        :: mask(..)', &
+'           type(integer(kind=**)),intent(in),optional :: dim', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  MASK is a logical array', &
@@ -15828,17 +16957,17 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      logical, parameter :: T=.true., F=.false.', &
 '      logical :: x(3,4)', &
-'        ! basics', &
-'         print *, parity([T,F])', &
-'         print *, parity([T,F,F])', &
-'         print *, parity([T,F,F,T])', &
-'         print *, parity([T,F,F,T,T])', &
-'         x(1,:)=[T,T,T,T]', &
-'         x(2,:)=[T,T,T,T]', &
-'         x(3,:)=[T,T,T,T]', &
-'         print *, parity(x)', &
-'         print *, parity(x,dim=1)', &
-'         print *, parity(x,dim=2)', &
+'       ! basics', &
+'        print *, parity([T,F])', &
+'        print *, parity([T,F,F])', &
+'        print *, parity([T,F,F,T])', &
+'        print *, parity([T,F,F,T,T])', &
+'        x(1,:)=[T,T,T,T]', &
+'        x(2,:)=[T,T,T,T]', &
+'        x(3,:)=[T,T,T,T]', &
+'        print *, parity(x)', &
+'        print *, parity(x,dim=1)', &
+'        print *, parity(x,dim=2)', &
 '      end program demo_parity', &
 '', &
 '  Results:', &
@@ -15850,6 +16979,7 @@ textblock=[character(len=256) :: &
 '       >  F', &
 '       >  T T T T', &
 '       >  F F F', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -15873,28 +17003,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               parity(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                parity(3fortran)', &
 '']
 
 shortname="parity"
 call process()
 
 
-case('153','popcnt')
+case('154','popcnt')
 
 textblock=[character(len=256) :: &
 '', &
-'popcnt(3fortran)                                              popcnt(3fortran)', &
+'popcnt(3fortran)                                             popcnt(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  POPCNT(3) - [BIT:COUNT] Number of bits set', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = popcnt(i)', &
 '', &
-'           elemental integer function popcnt(i)', &
+'          elemental integer function popcnt(i)', &
 '', &
-'            integer(kind=KIND), intent(in) :: i', &
+'           integer(kind=KIND), intent(in) :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I may be an integer of any kind.', &
@@ -15916,18 +17052,18 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_popcnt', &
 '      use, intrinsic :: iso_fortran_env, only : integer_kinds, &', &
-'         & int8, int16, int32, int64', &
+'        & int8, int16, int32, int64', &
 '      implicit none', &
 '      character(len=*),parameter :: pretty=''(b64,1x,i0)''', &
-'        ! basic usage', &
-'         print pretty, 127,     popcnt(127)', &
-'         print pretty, int(b"01010"), popcnt(int(b"01010"))', &
+'       ! basic usage', &
+'        print pretty, 127,     popcnt(127)', &
+'        print pretty, int(b"01010"), popcnt(int(b"01010"))', &
 '', &
-'        ! any kind of an integer can be used', &
-'         print pretty, huge(0_int8),  popcnt(huge(0_int8))', &
-'         print pretty, huge(0_int16), popcnt(huge(0_int16))', &
-'         print pretty, huge(0_int32), popcnt(huge(0_int32))', &
-'         print pretty, huge(0_int64), popcnt(huge(0_int64))', &
+'       ! any kind of an integer can be used', &
+'        print pretty, huge(0_int8),  popcnt(huge(0_int8))', &
+'        print pretty, huge(0_int16), popcnt(huge(0_int16))', &
+'        print pretty, huge(0_int32), popcnt(huge(0_int32))', &
+'        print pretty, huge(0_int64), popcnt(huge(0_int64))', &
 '      end program demo_popcnt', &
 '', &
 '  Results:', &
@@ -15936,12 +17072,13 @@ textblock=[character(len=256) :: &
 '  for positive values; but that this is system-dependent. These are typical', &
 '  values, where the huge(3f) function has set all but the first bit to 1.', &
 '', &
-'       >                                                         1111111 7', &
-'       >                                                            1010 2', &
-'       >                                                         1111111 7', &
-'       >                                                 111111111111111 15', &
-'       >                                 1111111111111111111111111111111 31', &
+'       >                                                        1111111 7', &
+'       >                                                           1010 2', &
+'       >                                                        1111111 7', &
+'       >                                                111111111111111 15', &
+'       >                                1111111111111111111111111111111 31', &
 '       > 111111111111111111111111111111111111111111111111111111111111111 63', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -15959,28 +17096,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               popcnt(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                popcnt(3fortran)', &
 '']
 
 shortname="popcnt"
 call process()
 
 
-case('154','poppar')
+case('155','poppar')
 
 textblock=[character(len=256) :: &
 '', &
-'poppar(3fortran)                                              poppar(3fortran)', &
+'poppar(3fortran)                                             poppar(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  POPPAR(3) - [BIT:COUNT] Parity of the number of bits set', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = poppar(i)', &
 '', &
-'           elemental integer function poppar(i)', &
+'          elemental integer function poppar(i)', &
 '', &
-'            integer(kind=KIND), intent(in) :: i', &
+'           integer(kind=KIND), intent(in) :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I is an integer of any kind', &
@@ -16009,31 +17152,32 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_poppar', &
 '      use, intrinsic :: iso_fortran_env, only : integer_kinds, &', &
-'         & int8, int16, int32, int64', &
+'        & int8, int16, int32, int64', &
 '      implicit none', &
 '      character(len=*),parameter :: pretty=''(b64,1x,i0)''', &
-'         ! basic usage', &
-'         print pretty, 127,     poppar(127)', &
-'         print pretty, 128,     poppar(128)', &
-'         print pretty, int(b"01010"), poppar(int(b"01010"))', &
+'        ! basic usage', &
+'        print pretty, 127,     poppar(127)', &
+'        print pretty, 128,     poppar(128)', &
+'        print pretty, int(b"01010"), poppar(int(b"01010"))', &
 '', &
-'         ! any kind of an integer can be used', &
-'         print pretty, huge(0_int8),  poppar(huge(0_int8))', &
-'         print pretty, huge(0_int16), poppar(huge(0_int16))', &
-'         print pretty, huge(0_int32), poppar(huge(0_int32))', &
-'         print pretty, huge(0_int64), poppar(huge(0_int64))', &
+'        ! any kind of an integer can be used', &
+'        print pretty, huge(0_int8),  poppar(huge(0_int8))', &
+'        print pretty, huge(0_int16), poppar(huge(0_int16))', &
+'        print pretty, huge(0_int32), poppar(huge(0_int32))', &
+'        print pretty, huge(0_int64), poppar(huge(0_int64))', &
 '      end program demo_poppar', &
 '', &
 '  Results:', &
 '', &
-'       >                                                          1111111 1', &
-'       >                                                         10000000 1', &
-'       >                                                             1010 0', &
-'       >                                  1111111111111111111111111111111 1', &
-'       >                                                          1111111 1', &
-'       >                                                  111111111111111 1', &
-'       >                                  1111111111111111111111111111111 1', &
+'       >                                                         1111111 1', &
+'       >                                                        10000000 1', &
+'       >                                                            1010 0', &
+'       >                                 1111111111111111111111111111111 1', &
+'       >                                                         1111111 1', &
+'       >                                                 111111111111111 1', &
+'       >                                 1111111111111111111111111111111 1', &
 '       >  111111111111111111111111111111111111111111111111111111111111111 1', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -16051,28 +17195,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               poppar(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                poppar(3fortran)', &
 '']
 
 shortname="poppar"
 call process()
 
 
-case('155','precision')
+case('156','precision')
 
 textblock=[character(len=256) :: &
 '', &
-'precision(3fortran)                                        precision(3fortran)', &
+'precision(3fortran)                                       precision(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  PRECISION(3) - [NUMERIC MODEL] Decimal precision of a real kind', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = precision(x)', &
 '', &
-'           integer function precision(x)', &
+'          integer function precision(x)', &
 '', &
-'            TYPE(kind=**),intent(in) :: x', &
+'           TYPE(kind=**),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X shall be of type real or complex. It may be a scalar or an array.', &
@@ -16099,15 +17249,16 @@ textblock=[character(len=256) :: &
 '      real(kind=sp)    :: x(2)', &
 '      complex(kind=dp) :: y', &
 '', &
-'         print *, precision(x), range(x)', &
-'         print *, precision(y), range(y)', &
+'        print *, precision(x), range(x)', &
+'        print *, precision(y), range(y)', &
 '', &
 '      end program demo_precision', &
 '', &
 '  Results:', &
 '', &
-'        >           6          37', &
-'        >          15         307', &
+'       >           6          37', &
+'       >          15         307', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -16119,29 +17270,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023            precision(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             precision(3fortran)', &
 '']
 
 shortname="precision"
 call process()
 
 
-case('156','present')
+case('157','present')
 
 textblock=[character(len=256) :: &
 '', &
-'present(3fortran)                                            present(3fortran)', &
+'present(3fortran)                                           present(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  PRESENT(3) - [STATE:INQUIRY] Determine whether an optional dummy argument is', &
 '  specified', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = present(a)', &
 '', &
-'           logical function present (a)', &
+'          logical function present (a)', &
 '', &
-'            type(TYPE(kind=KIND)) :: a(..)', &
+'           type(TYPE(kind=KIND)) :: a(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A May be of any type and may be a pointer, scalar or array value, or a', &
@@ -16173,12 +17330,12 @@ textblock=[character(len=256) :: &
 '      program demo_present', &
 '      implicit none', &
 '      integer :: answer', &
-'         ! argument to func() is not present', &
-'         answer=func()', &
-'         write(*,*) answer', &
-'         ! argument to func() is present', &
-'         answer=func(1492)', &
-'         write(*,*) answer', &
+'        ! argument to func() is not present', &
+'        answer=func()', &
+'        write(*,*) answer', &
+'        ! argument to func() is present', &
+'        answer=func(1492)', &
+'        write(*,*) answer', &
 '      contains', &
 '      !', &
 '      integer function func(x)', &
@@ -16187,87 +17344,94 @@ textblock=[character(len=256) :: &
 '      ! be passed to PRESENT(3):', &
 '      integer, intent(in), optional :: x', &
 '      integer :: x_local', &
-'         !', &
-'         ! basic', &
-'         if(present(x))then', &
-'           ! if present, you can use x like any other variable.', &
-'           x_local=x', &
-'         else', &
-'           ! if not, you cannot define or reference x except to', &
-'           ! pass it as an optional parameter to another procedure', &
-'           ! or in a call to present(3f)', &
-'           x_local=0', &
-'         endif', &
-'         !', &
-'         func=x_local**2', &
-'         !', &
-'         ! passing the argument on to other procedures', &
-'         ! so something like this is a bad idea because x is used', &
-'         ! as the first argument to merge(3f) when it might not be', &
-'         ! present', &
-'         ! xlocal=merge(x,0,present(x)) ! NO!!', &
-'         !', &
-'         ! We can pass it to another procedure if another', &
-'         ! procedure declares the argument as optional as well,', &
-'         ! or we have tested that X is present', &
-'         call tattle(''optional argument x'',x)', &
-'         if(present(x))call not_optional(x)', &
+'        !', &
+'        ! basic', &
+'        if(present(x))then', &
+'          ! if present, you can use x like any other variable.', &
+'          x_local=x', &
+'        else', &
+'          ! if not, you cannot define or reference x except to', &
+'          ! pass it as an optional parameter to another procedure', &
+'          ! or in a call to present(3f)', &
+'          x_local=0', &
+'        endif', &
+'        !', &
+'        func=x_local**2', &
+'        !', &
+'        ! passing the argument on to other procedures', &
+'        ! so something like this is a bad idea because x is used', &
+'        ! as the first argument to merge(3f) when it might not be', &
+'        ! present', &
+'        ! xlocal=merge(x,0,present(x)) ! NO!!', &
+'        !', &
+'        ! We can pass it to another procedure if another', &
+'        ! procedure declares the argument as optional as well,', &
+'        ! or we have tested that X is present', &
+'        call tattle(''optional argument x'',x)', &
+'        if(present(x))call not_optional(x)', &
 '      end function', &
 '      !', &
 '      subroutine tattle(label,arg)', &
 '      character(len=*),intent(in) :: label', &
 '      integer,intent(in),optional :: arg', &
-'         if(present(arg))then', &
-'            write(*,*)label,'' is present''', &
-'         else', &
-'            write(*,*)label,'' is not present''', &
-'         endif', &
+'        if(present(arg))then', &
+'           write(*,*)label,'' is present''', &
+'        else', &
+'           write(*,*)label,'' is not present''', &
+'        endif', &
 '      end subroutine tattle', &
 '      !', &
 '      subroutine not_optional(arg)', &
 '      integer,intent(in) :: arg', &
-'         write(*,*)''already tested X is defined'',arg', &
+'        write(*,*)''already tested X is defined'',arg', &
 '      end subroutine not_optional', &
 '      !', &
 '      end program demo_present', &
 '', &
 '  Results:', &
 '', &
-'          optional argument x is not present', &
-'                    0', &
-'          optional argument x is present', &
-'          already tested X is defined 1492', &
-'              2226064', &
+'         optional argument x is not present', &
+'                   0', &
+'         optional argument x is present', &
+'         already tested X is defined 1492', &
+'             2226064', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              present(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               present(3fortran)', &
 '']
 
 shortname="present"
 call process()
 
 
-case('157','product')
+case('158','product')
 
 textblock=[character(len=256) :: &
 '', &
-'product(3fortran)                                            product(3fortran)', &
+'product(3fortran)                                           product(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  PRODUCT(3) - [ARRAY:REDUCTION] Product of array elements', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = product(array [,dim] [,mask])', &
 '', &
-'           NUMERIC function product(array, dim, mask)', &
+'          NUMERIC function product(array, dim, mask)', &
 '', &
-'            NUMERIC,intent(in) :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(..)', &
+'           NUMERIC,intent(in) :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -16311,25 +17475,25 @@ textblock=[character(len=256) :: &
 '      !    selected array elements.', &
 '      integer :: i,n, p1, p2', &
 '      integer,allocatable :: array(:)', &
-'         ! all elements are selected by default', &
-'         do n=1,10', &
-'            print all, ''factorial of '',n,'' is '', product([(real(i),i=1,n)])', &
-'         enddo', &
+'        ! all elements are selected by default', &
+'        do n=1,10', &
+'           print all, ''factorial of '',n,'' is '', product([(real(i),i=1,n)])', &
+'        enddo', &
 '', &
-'         ! using a mask', &
-'         array=[10,12,13,15,20,25,30]', &
-'         p1=product(array, mask=mod(array, 2)==1) ! only odd elements', &
-'         p2=product(array, mask=mod(array, 2)/=1) ! only even elements', &
-'         print all, nl,''product of all elements'',product(array) ! all elements', &
-'         print all, '' odd * even ='',nl,p1,''*'',p2,''='',p1*p2', &
+'        ! using a mask', &
+'        array=[10,12,13,15,20,25,30]', &
+'        p1=product(array, mask=mod(array, 2)==1) ! only odd elements', &
+'        p2=product(array, mask=mod(array, 2)/=1) ! only even elements', &
+'        print all, nl,''product of all elements'',product(array) ! all elements', &
+'        print all, '' odd * even ='',nl,p1,''*'',p2,''='',p1*p2', &
 '', &
-'         ! NOTE: If ARRAY is a zero-sized array, the result is equal to one', &
-'         print all', &
-'         print all, ''zero-sized array=>'',product([integer :: ])', &
-'         ! NOTE: If nothing in the mask is true, this also results in a null', &
-'         !       array', &
-'         print all, ''all elements have a false mask=>'', &', &
-'                  & product(array,mask=.false.)', &
+'        ! NOTE: If ARRAY is a zero-sized array, the result is equal to one', &
+'        print all', &
+'        print all, ''zero-sized array=>'',product([integer :: ])', &
+'        ! NOTE: If nothing in the mask is true, this also results in a null', &
+'        !       array', &
+'        print all, ''all elements have a false mask=>'', &', &
+'                 & product(array,mask=.false.)', &
 '', &
 '      endblock NO_DIM', &
 '', &
@@ -16338,75 +17502,75 @@ textblock=[character(len=256) :: &
 '      integer :: box(2,3,4)', &
 '', &
 '      !  lets fill a few arrays', &
-'         rect = reshape([ &', &
-'           1, 2, 3,       &', &
-'           4, 5, 6        &', &
-'         ],shape(rect),order=[2,1])', &
-'         call print_matrix_int(''rect'',rect)', &
+'        rect = reshape([ &', &
+'          1, 2, 3,       &', &
+'          4, 5, 6        &', &
+'        ],shape(rect),order=[2,1])', &
+'        call print_matrix_int(''rect'',rect)', &
 '', &
 '      !  Find the product of each column in RECT.', &
-'         print all, ''product of columns='',product(rect, dim = 1)', &
+'        print all, ''product of columns='',product(rect, dim = 1)', &
 '', &
 '      ! Find the product of each row in RECT.', &
-'         print all, ''product of rows='',product(rect, dim = 2)', &
+'        print all, ''product of rows='',product(rect, dim = 2)', &
 '', &
 '      ! now lets try a box', &
-'         box(:,:,1)=rect', &
-'         box(:,:,2)=rect*(+10)', &
-'         box(:,:,3)=rect*(-10)', &
-'         box(:,:,4)=rect*2', &
-'         ! lets look at the values', &
-'         call print_matrix_int(''box 1'',box(:,:,1))', &
-'         call print_matrix_int(''box 2'',box(:,:,2))', &
-'         call print_matrix_int(''box 3'',box(:,:,3))', &
-'         call print_matrix_int(''box 4'',box(:,:,4))', &
+'        box(:,:,1)=rect', &
+'        box(:,:,2)=rect*(+10)', &
+'        box(:,:,3)=rect*(-10)', &
+'        box(:,:,4)=rect*2', &
+'        ! lets look at the values', &
+'        call print_matrix_int(''box 1'',box(:,:,1))', &
+'        call print_matrix_int(''box 2'',box(:,:,2))', &
+'        call print_matrix_int(''box 3'',box(:,:,3))', &
+'        call print_matrix_int(''box 4'',box(:,:,4))', &
 '', &
-'         ! remember without dim= even a box produces a scalar', &
-'         print all, ''no dim gives a scalar'',product(real(box))', &
+'        ! remember without dim= even a box produces a scalar', &
+'        print all, ''no dim gives a scalar'',product(real(box))', &
 '', &
-'         ! only one plane has negative values, so note all the "1" values', &
-'         ! for vectors with no elements', &
-'         call print_matrix_int(''negative values'', &', &
-'         & product(box,mask=box < 0,dim=1))', &
+'        ! only one plane has negative values, so note all the "1" values', &
+'        ! for vectors with no elements', &
+'        call print_matrix_int(''negative values'', &', &
+'        & product(box,mask=box < 0,dim=1))', &
 '', &
 '      !   If DIM is specified and ARRAY has rank greater than one, the', &
 '      !   result is a new array in which dimension DIM has been eliminated.', &
 '', &
-'         ! pick a dimension to multiply though', &
-'         call print_matrix_int(''dim=1'',product(box,dim=1))', &
+'        ! pick a dimension to multiply though', &
+'        call print_matrix_int(''dim=1'',product(box,dim=1))', &
 '', &
-'         call print_matrix_int(''dim=2'',product(box,dim=2))', &
+'        call print_matrix_int(''dim=2'',product(box,dim=2))', &
 '', &
-'         call print_matrix_int(''dim=3'',product(box,dim=3))', &
+'        call print_matrix_int(''dim=3'',product(box,dim=3))', &
 '', &
 '      endblock WITH_DIM', &
 '', &
 '      contains', &
 '', &
-'         subroutine print_matrix_int(title,arr)', &
-'         implicit none', &
+'      subroutine print_matrix_int(title,arr)', &
+'      implicit none', &
 '', &
-'         !@(#) print small 2d integer arrays in row-column format', &
+'      !@(#) print small 2d integer arrays in row-column format', &
 '', &
-'         character(len=*),intent(in)  :: title', &
-'         integer,intent(in)           :: arr(:,:)', &
-'         integer                      :: i', &
-'         character(len=:),allocatable :: biggest', &
+'      character(len=*),intent(in)  :: title', &
+'      integer,intent(in)          :: arr(:,:)', &
+'      integer                     :: i', &
+'      character(len=:),allocatable :: biggest', &
 '', &
-'            print all', &
-'            print all, trim(title),'':('',shape(arr),'')''  ! print title', &
-'            biggest=''           ''  ! make buffer to write integer into', &
-'            ! find how many characters to use for integers', &
-'            write(biggest,''(i0)'')ceiling(log10(real(maxval(abs(arr)))))+2', &
-'            ! use this format to write a row', &
-'            biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
-'            ! print one row of array at a time', &
-'            do i=1,size(arr,dim=1)', &
-'               write(*,fmt=biggest,advance=''no'')arr(i,:)', &
-'               write(*,''(" ]")'')', &
-'            enddo', &
+'        print all', &
+'        print all, trim(title),'':('',shape(arr),'')''  ! print title', &
+'        biggest=''          '' ! make buffer to write integer into', &
+'        ! find how many characters to use for integers', &
+'        write(biggest,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2', &
+'        ! use this format to write a row', &
+'        biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
+'        ! print one row of array at a time', &
+'        do i=1,size(arr,dim=1)', &
+'           write(*,fmt=biggest,advance=''no'')arr(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
 '', &
-'         end subroutine print_matrix_int', &
+'      end subroutine print_matrix_int', &
 '', &
 '      end program demo_product', &
 '', &
@@ -16421,7 +17585,7 @@ textblock=[character(len=256) :: &
 '      factorial of  7  is  5040.000', &
 '      factorial of  8  is  40320.00', &
 '      factorial of  9  is  362880.0', &
-'      factorial of  10  is  3628800.', &
+'      factorial of  10 is  3628800.', &
 '', &
 '       product of all elements 351000000', &
 '       odd * even =', &
@@ -16431,14 +17595,14 @@ textblock=[character(len=256) :: &
 '      all elements have a false mask=> 1', &
 '', &
 '      rect :( 2 3 )', &
-'       > [  1,  2,  3 ]', &
-'       > [  4,  5,  6 ]', &
+'       > [  1, 2,  3 ]', &
+'       > [  4, 5,  6 ]', &
 '      product of columns= 4 10 18', &
 '      product of rows= 6 120', &
 '', &
 '      box 1 :( 2 3 )', &
-'       > [  1,  2,  3 ]', &
-'       > [  4,  5,  6 ]', &
+'       > [  1, 2,  3 ]', &
+'       > [  4, 5,  6 ]', &
 '', &
 '      box 2 :( 2 3 )', &
 '       > [  10,  20,  30 ]', &
@@ -16464,12 +17628,13 @@ textblock=[character(len=256) :: &
 '       > [    18,  1800,  1800,    72 ]', &
 '', &
 '      dim=2 :( 2 4 )', &
-'       > [       6,    6000,   -6000,      48 ]', &
-'       > [     120,  120000, -120000,     960 ]', &
+'       > [      6,    6000,   -6000,      48 ]', &
+'       > [     120,  120000, -120000,    960 ]', &
 '', &
 '      dim=3 :( 2 3 )', &
 '       > [    -200,   -3200,  -16200 ]', &
 '       > [  -51200, -125000, -259200 ]', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -16480,28 +17645,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              product(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               product(3fortran)', &
 '']
 
 shortname="product"
 call process()
 
 
-case('158','radix')
+case('159','radix')
 
 textblock=[character(len=256) :: &
 '', &
-'radix(3fortran)                                                radix(3fortran)', &
+'radix(3fortran)                                               radix(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  RADIX(3) - [NUMERIC MODEL] Base of a numeric model', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = radix(x)', &
 '', &
-'          integer function radix(x)', &
+'         integer function radix(x)', &
 '', &
-'           TYPE(kind=**),intent(in) :: x(..)', &
+'          TYPE(kind=**),intent(in) :: x(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be scalar or an array of any real or integer type.', &
@@ -16531,16 +17702,17 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_radix', &
 '      implicit none', &
-'         print *, "The radix for the default integer kind is", radix(0)', &
-'         print *, "The radix for the default real kind is", radix(0.0)', &
-'         print *, "The radix for the doubleprecision real kind is", radix(0.0d0)', &
+'        print *, "The radix for the default integer kind is", radix(0)', &
+'        print *, "The radix for the default real kind is", radix(0.0)', &
+'        print *, "The radix for the doubleprecision real kind is", radix(0.0d0)', &
 '      end program demo_radix', &
 '', &
 '  Results:', &
 '', &
-'       >  The radix for the default integer kind is           2', &
-'       >  The radix for the default real kind is           2', &
-'       >  The radix for the doubleprecision real kind is           2', &
+'       >  The radix for the default integer kind is          2', &
+'       >  The radix for the default real kind is          2', &
+'       >  The radix for the doubleprecision real kind is          2', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -16552,28 +17724,99 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                radix(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 radix(3fortran)', &
 '']
 
 shortname="radix"
 call process()
 
 
-case('159','random_number')
+case('160','random_init')
 
 textblock=[character(len=256) :: &
 '', &
-'random_number(3fortran)                                random_number(3fortran)', &
+'random_init(3fortran)                                   random_init(3fortran)', &
+'', &
+'', &
+'', &
+'NAME', &
+'  RANDOM_INIT(3) - [MATHEMATICS:RANDOM] Initializes the state of the', &
+'  pseudorandom number generator', &
+'', &
+'', &
+'SYNOPSIS', &
+'  call random_init(repeatable, image_distinct)', &
+'', &
+'          logical,intent(in) :: repeatable', &
+'          logical,intent(in) :: image_distinct', &
+'', &
+'', &
+'CHARACTERISTICS', &
+'  o  HARVEST and IMAGE_DISTINCT are logical scalars', &
+'', &
+'  Description', &
+'', &
+'  Initializes the state of the pseudorandom number generator used by', &
+'  RANDOM_NUMBER.', &
+'', &
+'OPTIONS', &
+'  REPEATABLE : If it is .TRUE., the seed is set to a processor-dependent value', &
+'  that is the same each time RANDOM_INIT is called from the same image. The', &
+'  term "same image" means a single instance of program execution. The sequence', &
+'  of random numbers is different for repeated execution of the program.', &
+'', &
+'  If it is .FALSE., the seed is set to a processor-dependent value.', &
+'', &
+'  IMAGE_DISTINCT : If is .true., the seed is set to a processor-dependent', &
+'  value that is distinct from the seed set by a call to RANDOM_INITin another', &
+'  image. If it is .FALSE., the seed is set value that does depend which image', &
+'  called RANDOM_INIT.', &
+'', &
+'STANDARD', &
+'  Fortran 2018', &
+'', &
+'EXAMPLE', &
+'  program demo_random_init implicit none real x(3), y(3) call', &
+'  random_init(.true., .true.)  call random_number(x) call random_init(.true.,', &
+'  .true.)  call random_number(y) ! x and y should be the same sequence if (', &
+'  any(x /= y) ) stop "x(:) and y(:) are not all equal" end program', &
+'  demo_random_init', &
+'', &
+'SEE ALSO', &
+'  random_number, random_seed', &
+'', &
+'  _fortran-lang intrinsic descriptions', &
+'', &
+'', &
+'', &
+'                                July 22, 2023           random_init(3fortran)', &
+'']
+
+shortname="random_init"
+call process()
+
+
+case('161','random_number')
+
+textblock=[character(len=256) :: &
+'', &
+'random_number(3fortran)                               random_number(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  RANDOM_NUMBER(3) - [MATHEMATICS:RANDOM] Pseudo-random number', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call random_number(harvest)', &
 '', &
-'           subroutine random_number(harvest)', &
+'          subroutine random_number(harvest)', &
 '', &
-'            real,intent(out) :: harvest(..)', &
+'           real,intent(out) :: harvest(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  HARVEST and the result are default real variables', &
@@ -16593,41 +17836,41 @@ textblock=[character(len=256) :: &
 '      use, intrinsic :: iso_fortran_env, only : dp=>real64', &
 '      implicit none', &
 '      integer, allocatable :: seed(:)', &
-'      integer              :: n', &
-'      integer              :: first,last', &
-'      integer              :: i', &
-'      integer              :: rand_int', &
+'      integer             :: n', &
+'      integer             :: first,last', &
+'      integer             :: i', &
+'      integer             :: rand_int', &
 '      integer,allocatable  :: count(:)', &
-'      real(kind=dp)        :: rand_val', &
-'         call random_seed(size = n)', &
-'         allocate(seed(n))', &
-'         call random_seed(get=seed)', &
-'         first=1', &
-'         last=10', &
-'         allocate(count(last-first+1))', &
-'         ! To have a discrete uniform distribution on the integers', &
-'         ! [first, first+1, ..., last-1, last] carve the continuous', &
-'         ! distribution up into last+1-first equal sized chunks,', &
-'         ! mapping each chunk to an integer.', &
-'         !', &
-'         ! One way is:', &
-'         !   call random_number(rand_val)', &
-'         ! choose one from last-first+1 integers', &
-'         !   rand_int = first + FLOOR((last+1-first)*rand_val)', &
-'            count=0', &
-'            ! generate a lot of random integers from 1 to 10 and count them.', &
-'            ! with a large number of values you should get about the same', &
-'            ! number of each value', &
-'            do i=1,100000000', &
-'               call random_number(rand_val)', &
-'               rand_int=first+floor((last+1-first)*rand_val)', &
-'               if(rand_int.ge.first.and.rand_int.le.last)then', &
-'                  count(rand_int)=count(rand_int)+1', &
-'               else', &
-'                  write(*,*)rand_int,'' is out of range''', &
-'               endif', &
-'            enddo', &
-'            write(*,''(i0,1x,i0)'')(i,count(i),i=1,size(count))', &
+'      real(kind=dp)       :: rand_val', &
+'        call random_seed(size = n)', &
+'        allocate(seed(n))', &
+'        call random_seed(get=seed)', &
+'        first=1', &
+'        last=10', &
+'        allocate(count(last-first+1))', &
+'        ! To have a discrete uniform distribution on the integers', &
+'        ! [first, first+1, ..., last-1, last] carve the continuous', &
+'        ! distribution up into last+1-first equal sized chunks,', &
+'        ! mapping each chunk to an integer.', &
+'        !', &
+'        ! One way is:', &
+'        !   call random_number(rand_val)', &
+'        ! choose one from last-first+1 integers', &
+'        !   rand_int = first + FLOOR((last+1-first)*rand_val)', &
+'           count=0', &
+'           ! generate a lot of random integers from 1 to 10 and count them.', &
+'           ! with a large number of values you should get about the same', &
+'           ! number of each value', &
+'           do i=1,100000000', &
+'              call random_number(rand_val)', &
+'              rand_int=first+floor((last+1-first)*rand_val)', &
+'              if(rand_int.ge.first.and.rand_int.le.last)then', &
+'                 count(rand_int)=count(rand_int)+1', &
+'              else', &
+'                 write(*,*)rand_int,'' is out of range''', &
+'              endif', &
+'           enddo', &
+'           write(*,''(i0,1x,i0)'')(i,count(i),i=1,size(count))', &
 '      end program demo_random_number', &
 '', &
 '  Results:', &
@@ -16643,31 +17886,37 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023        random_number(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023         random_number(3fortran)', &
 '']
 
 shortname="random_number"
 call process()
 
 
-case('160','random_seed')
+case('162','random_seed')
 
 textblock=[character(len=256) :: &
 '', &
-'random_seed(3fortran)                                    random_seed(3fortran)', &
+'random_seed(3fortran)                                   random_seed(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  RANDOM_SEED(3) - [MATHEMATICS:RANDOM] Initialize a pseudo-random number', &
 '  sequence', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call random_seed( [size] [,put] [,get] )', &
 '', &
-'           subroutine random_seed( size, put, get )', &
+'          subroutine random_seed( size, put, get )', &
 '', &
-'            integer,intent(out),optional :: size', &
-'            integer,intent(in),optional :: put(*)', &
-'            integer,intent(out),optional :: get(*)', &
+'           integer,intent(out),optional :: size', &
+'           integer,intent(in),optional :: put(*)', &
+'           integer,intent(out),optional :: get(*)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  SIZE a scalar default integer', &
@@ -16698,22 +17947,23 @@ textblock=[character(len=256) :: &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
-'      program demo_random_seed', &
-'      implicit none', &
-'      integer, allocatable :: seed(:)', &
-'      integer :: n', &
+'         program demo_random_seed', &
+'         implicit none', &
+'         integer, allocatable :: seed(:)', &
+'         integer :: n', &
 '', &
-'         call random_seed(size = n)', &
-'         allocate(seed(n))', &
-'         call random_seed(get=seed)', &
-'         write (*, *) seed', &
+'            call random_seed(size = n)', &
+'            allocate(seed(n))', &
+'            call random_seed(get=seed)', &
+'            write (*, *) seed', &
 '', &
-'      end program demo_random_seed', &
+'         end program demo_random_seed', &
 '', &
 '  Results:', &
 '', &
-'           -674862499 -1750483360  -183136071  -317862567   682500039', &
-'           349459   344020729 -1725483289', &
+'          -674862499 -1750483360  -183136071  -317862567   682500039', &
+'          349459   344020729 -1725483289', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -16723,28 +17973,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023          random_seed(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023           random_seed(3fortran)', &
 '']
 
 shortname="random_seed"
 call process()
 
 
-case('161','range')
+case('163','range')
 
 textblock=[character(len=256) :: &
 '', &
-'range(3fortran)                                                range(3fortran)', &
+'range(3fortran)                                               range(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  RANGE(3) - [NUMERIC MODEL] Decimal exponent range of a numeric kind', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = range(x)', &
 '', &
-'            integer function range (x)', &
+'           integer function range (x)', &
 '', &
-'             TYPE(kind=KIND),intent(in) :: x', &
+'            TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be of type integer, real, or complex. It may be a scalar or an', &
@@ -16766,15 +18022,16 @@ textblock=[character(len=256) :: &
 'RESULT', &
 '  Case (i) : For an integer argument, the result has the value', &
 '', &
-'          int (log10 (huge(x)))', &
+'         int (log10 (huge(x)))', &
 '', &
 '  Case (ii) : For a real argument, the result has the value', &
 '', &
-'           int(min (log10 (huge(x)), -log10(tiny(x) )))', &
+'          int(min (log10 (huge(x)), -log10(tiny(x) )))', &
 '', &
 '  Case (iii) : For a complex argument, the result has the value', &
 '', &
-'          range(real(x))', &
+'         range(real(x))', &
+'', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
@@ -16784,14 +18041,15 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real(kind=sp)    :: x(2)', &
 '      complex(kind=dp) :: y', &
-'         print *, precision(x), range(x)', &
-'         print *, precision(y), range(y)', &
+'        print *, precision(x), range(x)', &
+'        print *, precision(y), range(y)', &
 '      end program demo_range', &
 '', &
 '  Results:', &
 '', &
-'       >            6          37', &
-'       >           15         307', &
+'       >           6          37', &
+'       >          15         307', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -16803,28 +18061,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                range(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 range(3fortran)', &
 '']
 
 shortname="range"
 call process()
 
 
-case('162','rank')
+case('164','rank')
 
 textblock=[character(len=256) :: &
 '', &
-'rank(3fortran)                                                  rank(3fortran)', &
+'rank(3fortran)                                                 rank(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  RANK(3) - [ARRAY:INQUIRY] Rank of a data object', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = rank(a)', &
 '', &
-'           integer function rank(a)', &
+'          integer function rank(a)', &
 '', &
-'            type(TYPE(kind=**)),intent(in) :: a(..)', &
+'           type(TYPE(kind=**)),intent(in) :: a(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A can be of any type TYPE and rank.', &
@@ -16853,38 +18117,38 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '', &
 '      ! a bunch of data objects to query', &
-'      integer           :: a', &
+'      integer          :: a', &
 '      real, allocatable :: b(:,:)', &
-'      real, pointer     :: c(:)', &
-'      complex           :: d', &
+'      real, pointer    :: c(:)', &
+'      complex          :: d', &
 '', &
 '      ! make up a type', &
 '      type mytype', &
-'         integer :: int', &
-'         real :: float', &
-'         character :: char', &
+'        integer :: int', &
+'        real :: float', &
+'        character :: char', &
 '      end type mytype', &
 '      type(mytype) :: any_thing(1,2,3,4,5)', &
 '', &
-'        ! basics', &
-'         print *, ''rank of scalar a='',rank(a)', &
-'         ! you can query this array even though it is not allocated', &
-'         print *, ''rank of matrix b='',rank(b)', &
-'         print *, ''rank of vector pointer c='',rank(c)', &
-'         print *, ''rank of complex scalar d='',rank(d)', &
+'       ! basics', &
+'        print *, ''rank of scalar a='',rank(a)', &
+'        ! you can query this array even though it is not allocated', &
+'        print *, ''rank of matrix b='',rank(b)', &
+'        print *, ''rank of vector pointer c='',rank(c)', &
+'        print *, ''rank of complex scalar d='',rank(d)', &
 '', &
-'        ! you can query any type, not just intrinsics', &
-'         print *, ''rank of any arbitrary type='',rank(any_thing)', &
+'       ! you can query any type, not just intrinsics', &
+'        print *, ''rank of any arbitrary type='',rank(any_thing)', &
 '', &
-'        ! an assumed-rank object may be queried', &
-'         call query_int(10)', &
-'         call query_int([20,30])', &
-'         call query_int( reshape([40,50,60,70],[2,2]) )', &
+'       ! an assumed-rank object may be queried', &
+'        call query_int(10)', &
+'        call query_int([20,30])', &
+'        call query_int( reshape([40,50,60,70],[2,2]) )', &
 '', &
-'        ! you can even query an unlimited polymorphic entity', &
-'         call query_anything(10.0)', &
-'         call query_anything([.true.,.false.])', &
-'         call query_anything( reshape([40.0,50.0,60.0,70.0],[2,2]) )', &
+'       ! you can even query an unlimited polymorphic entity', &
+'        call query_anything(10.0)', &
+'        call query_anything([.true.,.false.])', &
+'        call query_anything( reshape([40.0,50.0,60.0,70.0],[2,2]) )', &
 '', &
 '      contains', &
 '', &
@@ -16896,41 +18160,41 @@ textblock=[character(len=256) :: &
 '      integer,intent(in) :: data_object(..)', &
 '      character(len=*),parameter :: all=''(*(g0,1x))''', &
 '', &
-'         if(rank(data_object).eq.0)then', &
-'            print all,&', &
-'            & ''passed a scalar to an assumed rank,  &', &
-'            & rank='',rank(data_object)', &
-'         else', &
-'            print all,&', &
-'            & ''passed an array to an assumed rank,  &', &
-'            & rank='',rank(data_object)', &
-'         endif', &
+'        if(rank(data_object).eq.0)then', &
+'           print all,&', &
+'           & ''passed a scalar to an assumed rank,  &', &
+'           & rank='',rank(data_object)', &
+'        else', &
+'           print all,&', &
+'           & ''passed an array to an assumed rank,  &', &
+'           & rank='',rank(data_object)', &
+'        endif', &
 '', &
 '      end subroutine query_int', &
 '', &
 '      subroutine query_anything(data_object)', &
 '      class(*),intent(in) ::data_object(..)', &
 '      character(len=*),parameter :: all=''(*(g0,1x))''', &
-'        if(rank(data_object).eq.0)then', &
-'          print all,&', &
-'          &''passed a scalar to an unlimited polymorphic rank='', &', &
-'          & rank(data_object)', &
-'        else', &
-'          print all,&', &
-'          & ''passed an array to an unlimited polymorphic, rank='', &', &
-'          & rank(data_object)', &
-'        endif', &
+'       if(rank(data_object).eq.0)then', &
+'         print all,&', &
+'         &''passed a scalar to an unlimited polymorphic rank='', &', &
+'         & rank(data_object)', &
+'       else', &
+'         print all,&', &
+'         & ''passed an array to an unlimited polymorphic, rank='', &', &
+'         & rank(data_object)', &
+'       endif', &
 '      end subroutine query_anything', &
 '', &
 '      end program demo_rank', &
 '', &
 '  Results:', &
 '', &
-'          rank of scalar a=           0', &
-'          rank of matrix b=           2', &
-'          rank of vector pointer c=           1', &
-'          rank of complex scalar d=           0', &
-'          rank of any arbitrary type=           5', &
+'         rank of scalar a=           0', &
+'         rank of matrix b=           2', &
+'         rank of vector pointer c=           1', &
+'         rank of complex scalar d=           0', &
+'         rank of any arbitrary type=           5', &
 '', &
 '    passed a scalar to an assumed rank,', &
 '      rank= 0', &
@@ -16977,29 +18241,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 rank(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  rank(3fortran)', &
 '']
 
 shortname="rank"
 call process()
 
 
-case('163','real')
+case('165','real')
 
 textblock=[character(len=256) :: &
 '', &
-'real(3fortran)                                                  real(3fortran)', &
+'real(3fortran)                                                 real(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  REAL(3) - [TYPE:NUMERIC] Convert to real type', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = real(x [,kind])', &
 '', &
-'         elemental real(kind=KIND) function real(x,KIND)', &
+'        elemental real(kind=KIND) function real(x,KIND)', &
 '', &
-'          TYPE(kind=**),intent(in) :: x', &
-'          integer(kind=**),intent(in),optional :: KIND', &
+'         TYPE(kind=**),intent(in) :: x', &
+'         integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  the type of X may be integer, real, or complex; or a BOZ-literal-', &
@@ -17007,13 +18277,13 @@ textblock=[character(len=256) :: &
 '', &
 '  o  KIND is a integer initialization expression (a constant expression)', &
 '', &
-'     o  If KIND is present it defines the kind of the real result', &
+'     o If KIND is present it defines the kind of the real result', &
 '', &
-'     o  if KIND is not present', &
+'     o if KIND is not present', &
 '', &
-'        o  when X is complex the result is a real of the same kind as X.', &
+'       o  when X is complex the result is a real of the same kind as X.', &
 '', &
-'        o  when X is real or integer the result is a real of default kind', &
+'       o  when X is real or integer the result is a real of default kind', &
 '', &
 '  o  a kind designated as ** may be any supported kind for the type', &
 '', &
@@ -17024,8 +18294,9 @@ textblock=[character(len=256) :: &
 '  similar to the modern complex-part-designator %RE which also designates the', &
 '  real part of a complex value.', &
 '', &
-'            z=(3.0,4.0)     ! if z is a complex value', &
-'            print *, z%re == real(z) ! these expressions are equivalent', &
+'           z=(3.0,4.0)     ! if z is a complex value', &
+'           print *, z%re == real(z) ! these expressions are equivalent', &
+'', &
 '', &
 'OPTIONS', &
 '  o  X : An integer, real, or complex value to convert to real.', &
@@ -17048,21 +18319,22 @@ textblock=[character(len=256) :: &
 '      program demo_real', &
 '      use,intrinsic :: iso_fortran_env, only : dp=>real64', &
 '      implicit none', &
-'      complex              :: zr = (1.0, 2.0)', &
-'      doubleprecision      :: xd=huge(3.0d0)', &
+'      complex             :: zr = (1.0, 2.0)', &
+'      doubleprecision     :: xd=huge(3.0d0)', &
 '      complex(kind=dp) :: zd=cmplx(4.0e0_dp,5.0e0_dp,kind=dp)', &
 '', &
-'         print *, real(zr), aimag(zr)', &
-'         print *, dble(zd), aimag(zd)', &
+'        print *, real(zr), aimag(zr)', &
+'        print *, dble(zd), aimag(zd)', &
 '', &
-'         write(*,*)xd,real(xd,kind=kind(0.0d0)),dble(xd)', &
+'        write(*,*)xd,real(xd,kind=kind(0.0d0)),dble(xd)', &
 '      end program demo_real', &
 '', &
 '  Results:', &
 '', &
-'       1.00000000       2.00000000', &
-'       4.0000000000000000       5.0000000000000000', &
-'       1.7976931348623157E+308  1.7976931348623157E+308  1.7976931348623157E+308', &
+'       1.00000000      2.00000000', &
+'       4.0000000000000000      5.0000000000000000', &
+'       1.7976931348623157E+308 1.7976931348623157E+308  1.7976931348623157E+308', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -17086,52 +18358,58 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 real(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  real(3fortran)', &
 '']
 
 shortname="real"
 call process()
 
 
-case('164','reduce')
+case('166','reduce')
 
 textblock=[character(len=256) :: &
 '', &
-'reduce(3fortran)                                              reduce(3fortran)', &
+'reduce(3fortran)                                             reduce(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  REDUCE(3) - [TRANSFORMATIONAL] General reduction of an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  There are two forms to this function:', &
 '', &
-'         result = reduce(array, operation [,mask]  [,identity]  [,ordered] )', &
+'        result = reduce(array, operation [,mask]  [,identity]  [,ordered] )', &
 '', &
 '  or', &
 '', &
-'         result = reduce (array, operation, dim  &', &
-'         & [,mask] [,identity] [,ordered] )', &
+'        result = reduce (array, operation, dim  &', &
+'        & [,mask] [,identity] [,ordered] )', &
 '', &
-'          type(TYPE(kind=KIND)) function reduce &', &
-'          & (array, operation, dim, mask, identity, ordered )', &
+'         type(TYPE(kind=KIND)) function reduce &', &
+'         & (array, operation, dim, mask, identity, ordered )', &
 '', &
-'           type(TYPE(kind=KIND)),intent(in) :: array', &
-'           pure function                  :: operation', &
-'           integer,intent(in),optional    :: dim', &
-'           logical,optional               :: mask', &
-'           type(TYPE),intent(in),optional :: identity', &
-'           logical,intent(in),optional    :: ordered', &
+'          type(TYPE(kind=KIND)),intent(in) :: array', &
+'          pure function                  :: operation', &
+'          integer,intent(in),optional    :: dim', &
+'          logical,optional               :: mask', &
+'          type(TYPE),intent(in),optional :: identity', &
+'          logical,intent(in),optional    :: ordered', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY is an array of any type', &
 '', &
 '  o  OPERATION is a pure function with exactly two arguments', &
 '', &
-'     o  each argument is scalar, non-allocatable, a nonpointer, nonpolymorphic', &
-'        and nonoptional with the same type and kind as array.', &
+'     o each argument is scalar, non-allocatable, a nonpointer, nonpolymorphic', &
+'       and nonoptional with the same type and kind as array.', &
 '', &
-'     o  if one argument has the asynchronous, target, or value attribute so', &
-'        shall the other.', &
+'     o if one argument has the asynchronous, target, or value attribute so', &
+'       shall the other.', &
 '', &
 '  o  DIM is an integer scalar', &
 '', &
@@ -17184,25 +18462,25 @@ textblock=[character(len=256) :: &
 '  o  DIM : An integer scalar with a value in the range 1<= DIM <= n, where n', &
 '     is the rank of ARRAY.', &
 '', &
-'     o  MASK : (optional) shall be of type logical and shall be conformable', &
-'        with ARRAY.', &
+'     o MASK : (optional) shall be of type logical and shall be conformable', &
+'       with ARRAY.', &
 '', &
-'        When present only those elements of ARRAY are passed to OPERATION for', &
-'        which the corresponding elements of MASK are true, as if *array was', &
-'        filtered with PACK(3).', &
+'       When present only those elements of ARRAY are passed to OPERATION for', &
+'       which the corresponding elements of MASK are true, as if *array was', &
+'       filtered with PACK(3).', &
 '', &
-'     o  IDENTITY : shall be scalar with the same type and type parameters as', &
-'        ARRAY. If the initial sequence is empty, the result has the value', &
-'        IDENTIFY if IDENTIFY is present, and otherwise, error termination is', &
-'        initiated.', &
+'     o IDENTITY : shall be scalar with the same type and type parameters as', &
+'       ARRAY. If the initial sequence is empty, the result has the value', &
+'       IDENTIFY if IDENTIFY is present, and otherwise, error termination is', &
+'       initiated.', &
 '', &
-'     o  ORDERED : shall be a logical scalar. If ORDERED is present with the', &
-'        value .true., the calls to the OPERATOR function begins with the first', &
-'        two elements of ARRAY and the process continues in row-column order', &
-'        until the sequence has only one element which is the value of the', &
-'        reduction. Otherwise, the compiler is free to assume that the', &
-'        operation is commutative and may evaluate the reduction in the most', &
-'        optimal way.', &
+'     o ORDERED : shall be a logical scalar. If ORDERED is present with the', &
+'       value .true., the calls to the OPERATOR function begins with the first', &
+'       two elements of ARRAY and the process continues in row-column order', &
+'       until the sequence has only one element which is the value of the', &
+'       reduction. Otherwise, the compiler is free to assume that the', &
+'       operation is commutative and may evaluate the reduction in the most', &
+'       optimal way.', &
 '', &
 'RESULT', &
 '  The result is of the same type and type parameters as ARRAY. It is scalar if', &
@@ -17216,67 +18494,68 @@ textblock=[character(len=256) :: &
 '  The following examples all use the function MY_MULT, which returns the', &
 '  product of its two real arguments.', &
 '', &
-'         program demo_reduce', &
-'         implicit none', &
-'         character(len=*),parameter :: f=''("[",*(g0,",",1x),"]")''', &
-'         integer,allocatable :: arr(:), b(:,:)', &
+'        program demo_reduce', &
+'        implicit none', &
+'        character(len=*),parameter :: f=''("[",*(g0,",",1x),"]")''', &
+'        integer,allocatable :: arr(:), b(:,:)', &
 '', &
-'         ! Basic usage:', &
-'            ! the product of the elements of an array', &
-'            arr=[1, 2, 3, 4 ]', &
-'            write(*,*) arr', &
-'            write(*,*) ''product='', reduce(arr, my_mult)', &
-'            write(*,*) ''sum='', reduce(arr, my_sum)', &
+'        ! Basic usage:', &
+'           ! the product of the elements of an array', &
+'           arr=[1, 2, 3, 4 ]', &
+'           write(*,*) arr', &
+'           write(*,*) ''product='', reduce(arr, my_mult)', &
+'           write(*,*) ''sum='', reduce(arr, my_sum)', &
 '', &
-'         ! Examples of masking:', &
-'            ! the product of only the positive elements of an array', &
-'            arr=[1, -1, 2, -2, 3, -3 ]', &
-'            write(*,*)''positive value product='',reduce(arr, my_mult, mask=arr>0)', &
-'         ! sum values ignoring negative values', &
-'            write(*,*)''sum positive values='',reduce(arr, my_sum, mask=arr>0)', &
+'        ! Examples of masking:', &
+'           ! the product of only the positive elements of an array', &
+'           arr=[1, -1, 2, -2, 3, -3 ]', &
+'           write(*,*)''positive value product='',reduce(arr, my_mult, mask=arr>0)', &
+'        ! sum values ignoring negative values', &
+'           write(*,*)''sum positive values='',reduce(arr, my_sum, mask=arr>0)', &
 '', &
-'         ! a single-valued array returns the single value as the', &
-'         ! calls to the operator stop when only one element remains', &
-'            arr=[ 1234 ]', &
-'            write(*,*)''single value sum'',reduce(arr, my_sum )', &
-'            write(*,*)''single value product'',reduce(arr, my_mult )', &
+'        ! a single-valued array returns the single value as the', &
+'        ! calls to the operator stop when only one element remains', &
+'           arr=[ 1234 ]', &
+'           write(*,*)''single value sum'',reduce(arr, my_sum )', &
+'           write(*,*)''single value product'',reduce(arr, my_mult )', &
 '', &
-'         ! Example of operations along a dimension:', &
-'         !  If B is the array   1 3 5', &
-'         !                      2 4 6', &
-'            b=reshape([1,2,3,4,5,6],[2,3])', &
-'            write(*,f) REDUCE(B, MY_MULT),''should be [720]''', &
-'            write(*,f) REDUCE(B, MY_MULT, DIM=1),''should be [2,12,30]''', &
-'            write(*,f) REDUCE(B, MY_MULT, DIM=2),''should be [15, 48]''', &
+'        ! Example of operations along a dimension:', &
+'        !  If B is the array   1 3 5', &
+'        !                      2 4 6', &
+'           b=reshape([1,2,3,4,5,6],[2,3])', &
+'           write(*,f) REDUCE(B, MY_MULT),''should be [720]''', &
+'           write(*,f) REDUCE(B, MY_MULT, DIM=1),''should be [2,12,30]''', &
+'           write(*,f) REDUCE(B, MY_MULT, DIM=2),''should be [15, 48]''', &
 '', &
-'         contains', &
+'        contains', &
 '', &
-'         pure function my_mult(a,b) result(c)', &
-'         integer,intent(in) :: a, b', &
-'         integer            :: c', &
-'            c=a*b', &
-'         end function my_mult', &
+'        pure function my_mult(a,b) result(c)', &
+'        integer,intent(in) :: a, b', &
+'        integer            :: c', &
+'           c=a*b', &
+'        end function my_mult', &
 '', &
-'         pure function my_sum(a,b) result(c)', &
-'         integer,intent(in) :: a, b', &
-'         integer            :: c', &
-'            c=a+b', &
-'         end function my_sum', &
+'        pure function my_sum(a,b) result(c)', &
+'        integer,intent(in) :: a, b', &
+'        integer            :: c', &
+'           c=a+b', &
+'        end function my_sum', &
 '', &
-'         end program demo_reduce', &
+'        end program demo_reduce', &
 '', &
 '  Results:', &
 '', &
-'           >  1 2 3 4', &
-'           >  product= 24', &
-'           >  sum=     10', &
-'           >  positive value sum= 6', &
-'           >  sum positive values= 6', &
-'           >  single value sum     1234', &
-'           >  single value product 1234', &
-'           > [720, should be [720],', &
-'           > [2, 12, 30, should be [2,12,30],', &
-'           > [15, 48, should be [15, 48],', &
+'          >  1 2 3 4', &
+'          >  product= 24', &
+'          >  sum=     10', &
+'          >  positive value sum= 6', &
+'          >  sum positive values= 6', &
+'          >  single value sum     1234', &
+'          >  single value product 1234', &
+'          > [720, should be [720],', &
+'          > [2, 12, 30, should be [2,12,30],', &
+'          > [15, 48, should be [15, 48],', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2018', &
@@ -17289,29 +18568,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               reduce(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                reduce(3fortran)', &
 '']
 
 shortname="reduce"
 call process()
 
 
-case('165','repeat')
+case('167','repeat')
 
 textblock=[character(len=256) :: &
 '', &
-'repeat(3fortran)                                              repeat(3fortran)', &
+'repeat(3fortran)                                             repeat(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  REPEAT(3) - [CHARACTER] Repeated string concatenation', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = repeat(string, ncopies)', &
 '', &
-'           character(len=len(string)*ncopies) function repeat(string, ncopies)', &
+'          character(len=len(string)*ncopies) function repeat(string, ncopies)', &
 '', &
-'            character(len=*),intent(in)   :: string', &
-'            integer(kind=**),intent(in)   :: ncopies', &
+'           character(len=*),intent(in)   :: string', &
+'           integer(kind=**),intent(in)   :: ncopies', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -17340,10 +18625,10 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_repeat', &
 '      implicit none', &
-'          write(*,''(a)'') repeat("^v", 35)         ! line break', &
-'          write(*,''(a)'') repeat("_", 70)          ! line break', &
-'          write(*,''(a)'') repeat("1234567890", 7)  ! number line', &
-'          write(*,''(a)'') repeat("         |", 7)  !', &
+'         write(*,''(a)'') repeat("^v", 35)       ! line break', &
+'         write(*,''(a)'') repeat("_", 70)        ! line break', &
+'         write(*,''(a)'') repeat("1234567890", 7)  ! number line', &
+'         write(*,''(a)'') repeat("       |", 7)  !', &
 '      end program demo_repeat', &
 '', &
 '  Results:', &
@@ -17351,7 +18636,8 @@ textblock=[character(len=256) :: &
 '       > ^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v', &
 '       > ______________________________________________________________________', &
 '       > 1234567890123456789012345678901234567890123456789012345678901234567890', &
-'       >          |         |         |         |         |         |         |', &
+'       >         |         |         |         |         |         |         |', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -17365,33 +18651,39 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               repeat(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                repeat(3fortran)', &
 '']
 
 shortname="repeat"
 call process()
 
 
-case('166','reshape')
+case('168','reshape')
 
 textblock=[character(len=256) :: &
 '', &
-'reshape(3fortran)                                            reshape(3fortran)', &
+'reshape(3fortran)                                           reshape(3fortran)', &
 '', &
-'              reshape', &
+'', &
+'', &
+'             reshape', &
 '', &
 'NAME', &
 '  RESHAPE(3) - [ARRAY:RESHAPE] Function to reshape an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = reshape( source, shape [,pad] [,order] )', &
 '', &
-'           type(TYPE(kind=KIND) function reshape', &
+'          type(TYPE(kind=KIND)) function reshape', &
 '', &
-'            type(TYPE(kind=KIND),intent(in)          :: source(..)', &
-'            integer(kind=**),intent(in)              :: shape(:)', &
-'            type(TYPE(kind=KIND),intent(in),optional :: pad(..)', &
-'            integer(kind=**),intent(in),optional     :: order(:)', &
+'           type(TYPE(kind=KIND)),intent(in)          :: source(..)', &
+'           integer(kind=**),intent(in)               :: shape(:)', &
+'           type(TYPE(kind=KIND)),intent(in),optional :: pad(..)', &
+'           integer(kind=**),intent(in),optional      :: order(:)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  SOURCE is an array of any type', &
@@ -17423,11 +18715,12 @@ textblock=[character(len=256) :: &
 '     there must be enough elements in the source to fill the new shape if PAD', &
 '     is omitted or has size zero. Expressed in Fortran ...', &
 '', &
-'         if(.not.present(pad))then', &
-'            if(size(source) < product(shape))then', &
-'              stop ''not enough elements in the old array to fill the new one''', &
-'            endif', &
-'         endif', &
+'        if(.not.present(pad))then', &
+'           if(size(source) < product(shape))then', &
+'             stop ''not enough elements in the old array to fill the new one''', &
+'           endif', &
+'        endif', &
+'', &
 '', &
 '  o  SHAPE : This is the shape of the new array being generated. Being by', &
 '     definition a shape; all elements are either positive integers or zero,', &
@@ -17463,34 +18756,34 @@ textblock=[character(len=256) :: &
 '      integer :: box(3,4)=reshape([1,2,3,4,5,6,7,8,9,10,11,12],shape(box))', &
 '      integer,allocatable :: v(:,:)', &
 '      integer :: rc(2)', &
-'         ! basics0', &
-'          ! what is the current shape of the array?', &
-'          call printi(''shape of box is '',box)', &
-'          ! change the shape', &
-'          call printi(''reshaped '',reshape(box,[2,6]))', &
-'          call printi(''reshaped '',reshape(box,[4,3]))', &
+'        ! basics0', &
+'         ! what is the current shape of the array?', &
+'         call printi(''shape of box is '',box)', &
+'         ! change the shape', &
+'         call printi(''reshaped '',reshape(box,[2,6]))', &
+'         call printi(''reshaped '',reshape(box,[4,3]))', &
 '', &
-'         ! fill in row column order using order', &
-'          v=reshape([1,2,3,4,10,20,30,40,100,200,300,400],[1,12])', &
-'          call printi(''here is some data to shape'',v)', &
-'          call printi(''normally fills columns first '',reshape([v],[3,4]))', &
-'          call printi(''fill rows first'', reshape([v],[3,4],order=[2,1]))', &
+'        ! fill in row column order using order', &
+'         v=reshape([1,2,3,4,10,20,30,40,100,200,300,400],[1,12])', &
+'         call printi(''here is some data to shape'',v)', &
+'         call printi(''normally fills columns first '',reshape([v],[3,4]))', &
+'         call printi(''fill rows first'', reshape([v],[3,4],order=[2,1]))', &
 '', &
-'          ! if we take the data and put in back in filling', &
-'          ! rows first instead of columns, and flipping the', &
-'          ! height and width of the box we not only fill in', &
-'          ! a vector using row-column order we actually', &
-'          ! transpose it.', &
-'          rc(2:1:-1)=shape(box)', &
-'          ! copy the data in changing column number fastest', &
-'          v=reshape(box,rc,order=[2,1])', &
-'          call printi(''reshaped and reordered'',v)', &
-'          ! of course we could have just done a transpose', &
-'          call printi(''transposed'',transpose(box))', &
+'         ! if we take the data and put in back in filling', &
+'         ! rows first instead of columns, and flipping the', &
+'         ! height and width of the box we not only fill in', &
+'         ! a vector using row-column order we actually', &
+'         ! transpose it.', &
+'         rc(2:1:-1)=shape(box)', &
+'         ! copy the data in changing column number fastest', &
+'         v=reshape(box,rc,order=[2,1])', &
+'         call printi(''reshaped and reordered'',v)', &
+'         ! of course we could have just done a transpose', &
+'         call printi(''transposed'',transpose(box))', &
 '', &
-'         ! making the result bigger than source using pad', &
-'          v=reshape(box,rc*2,pad=[-1,-2,-3],order=[2,1])', &
-'          call printi(''bigger and padded and reordered'',v)', &
+'        ! making the result bigger than source using pad', &
+'         v=reshape(box,rc*2,pad=[-1,-2,-3],order=[2,1])', &
+'         call printi(''bigger and padded and reordered'',v)', &
 '      contains', &
 '', &
 '      subroutine printi(title,arr)', &
@@ -17500,22 +18793,22 @@ textblock=[character(len=256) :: &
 '', &
 '      character(len=*),parameter :: all=''(*(g0,1x))'' ! a handy format', &
 '      character(len=*),intent(in)  :: title', &
-'      integer,intent(in)           :: arr(:,:)', &
-'      integer                      :: i', &
+'      integer,intent(in)          :: arr(:,:)', &
+'      integer                     :: i', &
 '      character(len=:),allocatable :: biggest', &
 '', &
-'         print all', &
-'         print all, trim(title),'':('',shape(arr),'')''  ! print title', &
-'         biggest=''           ''  ! make buffer to write integer into', &
-'         ! find how many characters to use for integers', &
-'         write(biggest,''(i0)'')ceiling(log10(real(maxval(abs(arr)))))+2', &
-'         ! use this format to write a row', &
-'         biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
-'         ! print one row of array at a time', &
-'         do i=1,size(arr,dim=1)', &
-'            write(*,fmt=biggest,advance=''no'')arr(i,:)', &
-'            write(*,''(" ]")'')', &
-'         enddo', &
+'        print all', &
+'        print all, trim(title),'':('',shape(arr),'')''  ! print title', &
+'        biggest=''          '' ! make buffer to write integer into', &
+'        ! find how many characters to use for integers', &
+'        write(biggest,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2', &
+'        ! use this format to write a row', &
+'        biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
+'        ! print one row of array at a time', &
+'        do i=1,size(arr,dim=1)', &
+'           write(*,fmt=biggest,advance=''no'')arr(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
 '', &
 '      end subroutine printi', &
 '', &
@@ -17523,55 +18816,56 @@ textblock=[character(len=256) :: &
 '', &
 '  Results:', &
 '', &
-'         shape of box is :( 3 4 )', &
-'          > [   1,   4,   7,  10 ]', &
-'          > [   2,   5,   8,  11 ]', &
-'          > [   3,   6,   9,  12 ]', &
+'        shape of box is :( 3 4 )', &
+'         > [   1,   4,   7,  10 ]', &
+'         > [   2,   5,   8,  11 ]', &
+'         > [   3,   6,   9,  12 ]', &
 '', &
-'         reshaped :( 2 6 )', &
-'          > [   1,   3,   5,   7,   9,  11 ]', &
-'          > [   2,   4,   6,   8,  10,  12 ]', &
+'        reshaped :( 2 6 )', &
+'         > [   1,   3,   5,   7,   9,  11 ]', &
+'         > [   2,   4,   6,   8,  10,  12 ]', &
 '', &
-'         reshaped :( 4 3 )', &
-'          > [   1,   5,   9 ]', &
-'          > [   2,   6,  10 ]', &
-'          > [   3,   7,  11 ]', &
-'          > [   4,   8,  12 ]', &
+'        reshaped :( 4 3 )', &
+'         > [   1,   5,   9 ]', &
+'         > [   2,   6,  10 ]', &
+'         > [   3,   7,  11 ]', &
+'         > [   4,   8,  12 ]', &
 '', &
-'         here is some data to shape :( 1 12 )', &
-'          > [   1,   2,   3,   4,  10,  20,  30,  40, 100, 200, 300, 400 ]', &
+'        here is some data to shape :( 1 12 )', &
+'         > [   1,   2,   3,   4,  10,  20,  30,  40, 100, 200, 300, 400 ]', &
 '', &
-'         normally fills columns first :( 3 4 )', &
-'          > [    1,    4,   30,  200 ]', &
-'          > [    2,   10,   40,  300 ]', &
-'          > [    3,   20,  100,  400 ]', &
+'        normally fills columns first :( 3 4 )', &
+'         > [    1,    4,   30,  200 ]', &
+'         > [    2,   10,   40,  300 ]', &
+'         > [    3,   20,  100,  400 ]', &
 '', &
-'         fill rows first :( 3 4 )', &
-'          > [    1,    2,    3,    4 ]', &
-'          > [   10,   20,   30,   40 ]', &
-'          > [  100,  200,  300,  400 ]', &
+'        fill rows first :( 3 4 )', &
+'         > [    1,    2,    3,    4 ]', &
+'         > [   10,   20,   30,   40 ]', &
+'         > [  100,  200,  300,  400 ]', &
 '', &
-'         reshaped and reordered :( 4 3 )', &
-'          > [   1,   2,   3 ]', &
-'          > [   4,   5,   6 ]', &
-'          > [   7,   8,   9 ]', &
-'          > [  10,  11,  12 ]', &
+'        reshaped and reordered :( 4 3 )', &
+'         > [   1,   2,   3 ]', &
+'         > [   4,   5,   6 ]', &
+'         > [   7,   8,   9 ]', &
+'         > [  10,  11,  12 ]', &
 '', &
-'         transposed :( 4 3 )', &
-'          > [   1,   2,   3 ]', &
-'          > [   4,   5,   6 ]', &
-'          > [   7,   8,   9 ]', &
-'          > [  10,  11,  12 ]', &
+'        transposed :( 4 3 )', &
+'         > [   1,   2,   3 ]', &
+'         > [   4,   5,   6 ]', &
+'         > [   7,   8,   9 ]', &
+'         > [  10,  11,  12 ]', &
 '', &
-'         bigger and padded and reordered :( 8 6 )', &
-'          > [   1,   2,   3,   4,   5,   6 ]', &
-'          > [   7,   8,   9,  10,  11,  12 ]', &
-'          > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
-'          > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
-'          > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
-'          > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
-'          > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
-'          > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
+'        bigger and padded and reordered :( 8 6 )', &
+'         > [   1,   2,   3,   4,   5,   6 ]', &
+'         > [   7,   8,   9,  10,  11,  12 ]', &
+'         > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
+'         > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
+'         > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
+'         > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
+'         > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
+'         > [  -1,  -2,  -3,  -1,  -2,  -3 ]', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -17581,29 +18875,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              reshape(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               reshape(3fortran)', &
 '']
 
 shortname="reshape"
 call process()
 
 
-case('167','rrspacing')
+case('169','rrspacing')
 
 textblock=[character(len=256) :: &
 '', &
-'rrspacing(3fortran)                                        rrspacing(3fortran)', &
+'rrspacing(3fortran)                                       rrspacing(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  RRSPACING(3) - [MODEL_COMPONENTS] Reciprocal of the relative spacing of a', &
 '  numeric type', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = rrspacing(x)', &
 '', &
-'           elemental real(kind=KIND) function rrspacing(x)', &
+'          elemental real(kind=KIND) function rrspacing(x)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
+'           real(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is type real an any kind', &
@@ -17631,29 +18931,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023            rrspacing(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             rrspacing(3fortran)', &
 '']
 
 shortname="rrspacing"
 call process()
 
 
-case('168','same_type_as')
+case('170','same_type_as')
 
 textblock=[character(len=256) :: &
 '', &
-'same_type_as(3fortran)                                  same_type_as(3fortran)', &
+'same_type_as(3fortran)                                 same_type_as(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SAME_TYPE_AS(3) - [STATE:INQUIRY] Query dynamic types for equality', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = same_type_as(a, b)', &
 '', &
-'           logical same_type_as(a, b)', &
+'          logical same_type_as(a, b)', &
 '', &
-'            type(TYPE(kind=KIND),intent(in) :: a', &
-'            type(TYPE(kind=KIND),intent(in) :: b', &
+'           type(TYPE(kind=KIND)),intent(in) :: a', &
+'           type(TYPE(kind=KIND)),intent(in) :: b', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A shall be an object of extensible declared type or unlimited', &
@@ -17691,72 +18997,73 @@ textblock=[character(len=256) :: &
 '', &
 '  Sample program:', &
 '', &
-'        ! program demo_same_type_as', &
-'        module M_ether', &
-'        implicit none', &
-'        private', &
+'       ! program demo_same_type_as', &
+'       module M_ether', &
+'       implicit none', &
+'       private', &
 '', &
-'        type   :: dot', &
-'          real :: x=0', &
-'          real :: y=0', &
-'        end type dot', &
+'       type   :: dot', &
+'         real :: x=0', &
+'         real :: y=0', &
+'       end type dot', &
 '', &
-'        type, extends(dot) :: point', &
-'          real :: z=0', &
-'        end type point', &
+'       type, extends(dot) :: point', &
+'         real :: z=0', &
+'       end type point', &
 '', &
-'        type something_else', &
-'        end type something_else', &
+'       type something_else', &
+'       end type something_else', &
 '', &
-'        public :: dot', &
-'        public :: point', &
-'        public :: something_else', &
+'       public :: dot', &
+'       public :: point', &
+'       public :: something_else', &
 '', &
-'        end module M_ether', &
+'       end module M_ether', &
 '', &
-'        program demo_same_type_as', &
-'        use M_ether, only : dot, point, something_else', &
-'        implicit none', &
-'        type(dot) :: dad, mom', &
-'        type(point) :: me', &
-'        type(something_else) :: alien', &
+'       program demo_same_type_as', &
+'       use M_ether, only : dot, point, something_else', &
+'       implicit none', &
+'       type(dot) :: dad, mom', &
+'       type(point) :: me', &
+'       type(something_else) :: alien', &
 '', &
-'         write(*,*)same_type_as(me,dad),''I am descended from Dad, but equal?''', &
-'         write(*,*)same_type_as(me,me) ,''I am what I am''', &
-'         write(*,*)same_type_as(dad,mom) ,''what a pair!''', &
+'        write(*,*)same_type_as(me,dad),''I am descended from Dad, but equal?''', &
+'        write(*,*)same_type_as(me,me) ,''I am what I am''', &
+'        write(*,*)same_type_as(dad,mom) ,''what a pair!''', &
 '', &
-'         write(*,*)same_type_as(dad,me),''no paradox here''', &
-'         write(*,*)same_type_as(dad,alien),''no relation''', &
+'        write(*,*)same_type_as(dad,me),''no paradox here''', &
+'        write(*,*)same_type_as(dad,alien),''no relation''', &
 '', &
-'         call pointers()', &
-'         contains', &
-'         subroutine pointers()', &
-'         ! Given the declarations and assignments', &
-'         type t1', &
-'            real c', &
-'         end type', &
-'         type, extends(t1) :: t2', &
-'         end type', &
-'         class(t1), pointer :: p, q, r', &
-'            allocate (p, q)', &
-'            allocate (t2 :: r)', &
-'            ! the result of SAME_TYPE_AS (P, Q) will be true, and the result', &
-'            ! of SAME_TYPE_AS (P, R) will be false.', &
-'            write(*,*)''(P,Q)'',same_type_as(p,q),"mind your P''s and Q''s"', &
-'            write(*,*)''(P,R)'',same_type_as(p,r)', &
-'         end subroutine pointers', &
+'        call pointers()', &
+'        contains', &
+'        subroutine pointers()', &
+'        ! Given the declarations and assignments', &
+'        type t1', &
+'           real c', &
+'        end type', &
+'        type, extends(t1) :: t2', &
+'        end type', &
+'        class(t1), pointer :: p, q, r', &
+'           allocate (p, q)', &
+'           allocate (t2 :: r)', &
+'           ! the result of SAME_TYPE_AS (P, Q) will be true, and the result', &
+'           ! of SAME_TYPE_AS (P, R) will be false.', &
+'           write(*,*)''(P,Q)'',same_type_as(p,q),"mind your P''s and Q''s"', &
+'           write(*,*)''(P,R)'',same_type_as(p,r)', &
+'        end subroutine pointers', &
 '', &
-'        end program demo_same_type_as', &
+'       end program demo_same_type_as', &
 '', &
 '  Results:', &
 '', &
-'          F I am descended from Dad, but equal?', &
-'          T I am what I am', &
-'          T what a pair!', &
-'          F no paradox here', &
-'          F no relation', &
-'          (P,Q) T mind your P''s and Q''s', &
-'          (P,R) F', &
+'         F I am descended from Dad, but equal?', &
+'         T I am what I am', &
+'         T what a pair!', &
+'         F no paradox here', &
+'         F no relation', &
+'         (P,Q) T mind your P''s and Q''s', &
+'         (P,R) F', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2003', &
@@ -17766,30 +19073,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023         same_type_as(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023          same_type_as(3fortran)', &
 '']
 
 shortname="same_type_as"
 call process()
 
 
-case('169','scale')
+case('171','scale')
 
 textblock=[character(len=256) :: &
 '', &
-'scale(3fortran)                                                scale(3fortran)', &
+'scale(3fortran)                                               scale(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SCALE(3) - [MODEL_COMPONENTS] Scale a real value by a whole power of the', &
 '  radix', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = scale(x, i)', &
 '', &
-'           elemental real(kind=KIND) function scale(x, i)', &
+'          elemental real(kind=KIND) function scale(x, i)', &
 '', &
-'            real(kind=KIND),intent(in)   :: x', &
-'            integer(kind=**),intent(in)  :: i', &
+'           real(kind=KIND),intent(in)   :: x', &
+'           integer(kind=**),intent(in)  :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is type real of any kind', &
@@ -17823,12 +19136,13 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real :: x = 178.1387e-4', &
 '      integer :: i = 5', &
-'         print *, scale(x,i), x*radix(x)**i', &
+'        print *, scale(x,i), x*radix(x)**i', &
 '      end program demo_scale', &
 '', &
 '  Results:', &
 '', &
-'          0.570043862      0.570043862', &
+'         0.570043862      0.570043862', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -17840,32 +19154,38 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                scale(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 scale(3fortran)', &
 '']
 
 shortname="scale"
 call process()
 
 
-case('170','scan')
+case('172','scan')
 
 textblock=[character(len=256) :: &
 '', &
-'scan(3fortran)                                                  scan(3fortran)', &
+'scan(3fortran)                                                 scan(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SCAN(3) - [CHARACTER:SEARCH] Scan a string for the presence of a set of', &
 '  characters', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = scan( string, set, [,back] [,kind] )', &
 '', &
-'           elemental integer(kind=KIND) function scan(string,set,back,kind)', &
+'          elemental integer(kind=KIND) function scan(string,set,back,kind)', &
 '', &
-'            character(len=*,kind=**),intent(in) :: string', &
-'            character(len=*,kind=**),intent(in) :: set', &
-'            logical,intent(in),optional :: back', &
-'            integer,intent(in),optional :: kind', &
+'           character(len=*,kind=**),intent(in) :: string', &
+'           character(len=*,kind=**),intent(in) :: set', &
+'           logical,intent(in),optional :: back', &
+'           integer,intent(in),optional :: kind', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING is a character string of any kind', &
@@ -17915,16 +19235,17 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_scan', &
 '      implicit none', &
-'         write(*,*) scan("fortran", "ao")          ! 2, found ''o''', &
-'         write(*,*) scan("fortran", "ao", .true.)  ! 6, found ''a''', &
-'         write(*,*) scan("fortran", "c++")         ! 0, found none', &
+'        write(*,*) scan("fortran", "ao")          ! 2, found ''o''', &
+'        write(*,*) scan("fortran", "ao", .true.)  ! 6, found ''a''', &
+'        write(*,*) scan("fortran", "c++")         ! 0, found none', &
 '      end program demo_scan', &
 '', &
 '  Results:', &
 '', &
-'       >            2', &
-'       >            6', &
-'       >            0', &
+'       >           2', &
+'       >           6', &
+'       >           0', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 , with KIND argument - Fortran 2003', &
@@ -17939,28 +19260,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 scan(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  scan(3fortran)', &
 '']
 
 shortname="scan"
 call process()
 
 
-case('171','selected_char_kind')
+case('173','selected_char_kind')
 
 textblock=[character(len=256) :: &
 '', &
-'selected_char_kind(3fortran)                      selected_char_kind(3fortran)', &
+'selected_char_kind(3fortran)                     selected_char_kind(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SELECTED_CHAR_KIND(3) - [KIND] Select character kind such as "Unicode"', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = selected_char_kind(name)', &
 '', &
-'           integer function selected_char_kind(name)', &
+'          integer function selected_char_kind(name)', &
 '', &
-'            character(len=*),intent(in) :: name', &
+'           character(len=*),intent(in) :: name', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  NAME is a default character scalar', &
@@ -18028,36 +19355,36 @@ textblock=[character(len=256) :: &
 '      character(len=30, kind=ucs4  ) :: hello_world', &
 '      character(len=30, kind=ucs4  ) :: string', &
 '', &
-'         write(*,*)''ASCII     '',&', &
-'          & merge(''Supported    '',''Not Supported'',ascii /= -1)', &
-'         write(*,*)''ISO_10646 '',&', &
-'          & merge(''Supported    '',''Not Supported'',ucs4 /= -1)', &
-'         write(*,*)''UTF-8     '',&', &
-'          & merge(''Supported    '',''Not Supported'',utf8 /= -1)', &
+'        write(*,*)''ASCII     '',&', &
+'         & merge(''Supported   '',''Not Supported'',ascii /= -1)', &
+'        write(*,*)''ISO_10646 '',&', &
+'         & merge(''Supported   '',''Not Supported'',ucs4 /= -1)', &
+'        write(*,*)''UTF-8     '',&', &
+'         & merge(''Supported   '',''Not Supported'',utf8 /= -1)', &
 '', &
-'         if(default.eq.ascii)then', &
-'             write(*,*)''ASCII is the default on this processor''', &
-'         endif', &
+'        if(default.eq.ascii)then', &
+'            write(*,*)''ASCII is the default on this processor''', &
+'        endif', &
 '', &
-'        ! for constants the kind precedes the value, somewhat like a', &
-'        ! BOZ constant', &
-'         alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"', &
-'         write (*,*) alphabet', &
+'       ! for constants the kind precedes the value, somewhat like a', &
+'       ! BOZ constant', &
+'        alphabet = ascii_"abcdefghijklmnopqrstuvwxyz"', &
+'        write (*,*) alphabet', &
 '', &
-'         hello_world = ucs4_''Hello World and Ni Hao -- '' &', &
-'                       // char (int (z''4F60''), ucs4)     &', &
-'                       // char (int (z''597D''), ucs4)', &
+'        hello_world = ucs4_''Hello World and Ni Hao -- '' &', &
+'                      // char (int (z''4F60''), ucs4)   &', &
+'                      // char (int (z''597D''), ucs4)', &
 '', &
-'        ! an encoding option is required on OPEN for non-default I/O', &
-'         if(ucs4 /= -1 )then', &
-'            open (output_unit, encoding=''UTF-8'')', &
-'            write (*,*) trim (hello_world)', &
-'         else', &
-'            write (*,*) ''cannot use utf-8''', &
-'         endif', &
+'       ! an encoding option is required on OPEN for non-default I/O', &
+'        if(ucs4 /= -1 )then', &
+'           open (output_unit, encoding=''UTF-8'')', &
+'           write (*,*) trim (hello_world)', &
+'        else', &
+'           write (*,*) ''cannot use utf-8''', &
+'        endif', &
 '', &
-'         call create_date_string(string)', &
-'         write (*,*) trim (string)', &
+'        call create_date_string(string)', &
+'        write (*,*) trim (string)', &
 '', &
 '      contains', &
 '', &
@@ -18066,13 +19393,13 @@ textblock=[character(len=256) :: &
 '      intrinsic date_and_time,selected_char_kind', &
 '      integer,parameter :: ucs4 = selected_char_kind("ISO_10646")', &
 '      character(len=1,kind=ucs4),parameter :: &', &
-'             nen =   char(int( z''5e74'' ),ucs4), & ! year', &
-'             gatsu = char(int( z''6708'' ),ucs4), & ! month', &
-'             nichi = char(int( z''65e5'' ),ucs4)    ! day', &
+'            nen =   char(int( z''5e74'' ),ucs4), & ! year', &
+'            gatsu = char(int( z''6708'' ),ucs4), & ! month', &
+'            nichi = char(int( z''65e5'' ),ucs4)          ! day', &
 '      character(len= *, kind= ucs4) string', &
 '      integer values(8)', &
-'         call date_and_time(values=values)', &
-'         write(string,101) values(1),nen,values(2),gatsu,values(3),nichi', &
+'        call date_and_time(values=values)', &
+'        write(string,101) values(1),nen,values(2),gatsu,values(3),nichi', &
 '       101 format(*(i0,a))', &
 '      end subroutine create_date_string', &
 '', &
@@ -18090,6 +19417,7 @@ textblock=[character(len=256) :: &
 '       >  Hello World and Ni Hao --', &
 '       >  20221015', &
 '', &
+'', &
 'STANDARD', &
 '  Fortran 2003', &
 '', &
@@ -18100,28 +19428,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023   selected_char_kind(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023    selected_char_kind(3fortran)', &
 '']
 
 shortname="selected_char_kind"
 call process()
 
 
-case('172','selected_int_kind')
+case('174','selected_int_kind')
 
 textblock=[character(len=256) :: &
 '', &
-'selected_int_kind(3fortran)                        selected_int_kind(3fortran)', &
+'selected_int_kind(3fortran)                       selected_int_kind(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SELECTED_INT_KIND(3) - [KIND] Choose integer kind', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = selected_int_kind(r)', &
 '', &
 '  integer function selected_int_kind(r)', &
 '', &
-'           integer(kind=KIND),intent(in) :: r', &
+'          integer(kind=KIND),intent(in) :: r', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  R is an integer scalar.', &
@@ -18160,18 +19494,19 @@ textblock=[character(len=256) :: &
 '      integer(kind=k5) :: i5', &
 '      integer(kind=k15) :: i15', &
 '', &
-'          print *, huge(i5), huge(i15)', &
+'         print *, huge(i5), huge(i15)', &
 '', &
-'          ! the following inequalities are always true', &
-'          print *, huge(i5) >= 10_k5**5-1', &
-'          print *, huge(i15) >= 10_k15**15-1', &
+'         ! the following inequalities are always true', &
+'         print *, huge(i5) >= 10_k5**5-1', &
+'         print *, huge(i15) >= 10_k15**15-1', &
 '      end program demo_selected_int_kind', &
 '', &
 '  Results:', &
 '', &
-'        >   2147483647  9223372036854775807', &
-'        >  T', &
-'        >  T', &
+'       >   2147483647  9223372036854775807', &
+'       >  T', &
+'       >  T', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -18181,30 +19516,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023    selected_int_kind(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023     selected_int_kind(3fortran)', &
 '']
 
 shortname="selected_int_kind"
 call process()
 
 
-case('173','selected_real_kind')
+case('175','selected_real_kind')
 
 textblock=[character(len=256) :: &
 '', &
-'selected_real_kind(3fortran)                      selected_real_kind(3fortran)', &
+'selected_real_kind(3fortran)                     selected_real_kind(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SELECTED_REAL_KIND(3) - [KIND] Choose real kind', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = selected_real_kind([p] [,r] [,radix] )', &
 '', &
 '  integer function selected_int_kind(r)', &
 '', &
-'           real(kind=KIND),intent(in),optional :: p', &
-'           real(kind=KIND),intent(in),optional :: r', &
-'           real(kind=KIND),intent(in),optional :: radix', &
+'          real(kind=KIND),intent(in),optional :: p', &
+'          real(kind=KIND),intent(in),optional :: r', &
+'          real(kind=KIND),intent(in),optional :: radix', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  P is an integer scalar', &
@@ -18221,9 +19562,9 @@ textblock=[character(len=256) :: &
 '  radix of RADIX. That is, if such a kind exists', &
 '', &
 '      + it has the decimal precision as returned by **precision**(3) of at', &
-'        least **p** digits.', &
+'       least **p** digits.', &
 '      + a decimal exponent range, as returned by the function **range**(3)', &
-'        of at least **r**', &
+'       of at least **r**', &
 '      + a radix, as returned by the function **radix**(3) , of **radix**,', &
 '', &
 '  If the requested kind does not exist, -1 is returned.', &
@@ -18239,6 +19580,7 @@ textblock=[character(len=256) :: &
 '', &
 '      Before FORTRAN 2008, at least one of the arguments R or P shall be', &
 '      present; since FORTRAN 2008, they are assumed to be zero if absent.', &
+'', &
 '', &
 'RESULT', &
 '  selected_real_kind returns the value of the kind type parameter of a real', &
@@ -18280,16 +19622,17 @@ textblock=[character(len=256) :: &
 '      real(kind=p10r100) :: y', &
 '      real(kind=r400) :: z', &
 '', &
-'         print *, precision(x), range(x)', &
-'         print *, precision(y), range(y)', &
-'         print *, precision(z), range(z)', &
+'        print *, precision(x), range(x)', &
+'        print *, precision(y), range(y)', &
+'        print *, precision(z), range(z)', &
 '      end program demo_selected_real_kind', &
 '', &
 '  Results:', &
 '', &
-'        >            6          37', &
-'        >           15         307', &
-'        >           18        4931', &
+'       >            6          37', &
+'       >           15         307', &
+'       >           18        4931', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 ; with RADIX - Fortran 2008', &
@@ -18299,29 +19642,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023   selected_real_kind(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023    selected_real_kind(3fortran)', &
 '']
 
 shortname="selected_real_kind"
 call process()
 
 
-case('174','set_exponent')
+case('176','set_exponent')
 
 textblock=[character(len=256) :: &
 '', &
-'set_exponent(3fortran)                                  set_exponent(3fortran)', &
+'set_exponent(3fortran)                                 set_exponent(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SET_EXPONENT(3) - [MODEL_COMPONENTS] real value with specified exponent', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = set_exponent(x, i)', &
 '', &
-'           elemental real(kind=KIND) function set_exponent(x,i)', &
+'          elemental real(kind=KIND) function set_exponent(x,i)', &
 '', &
-'            real(kind=KIND),intent(in) :: x', &
-'            integer(kind=**),intent(in) :: i', &
+'           real(kind=KIND),intent(in) :: x', &
+'           integer(kind=**),intent(in) :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is type real', &
@@ -18359,12 +19708,13 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      real :: x = 178.1387e-4', &
 '      integer :: i = 17', &
-'         print *, set_exponent(x, i), fraction(x) * radix(x)**i', &
+'        print *, set_exponent(x, i), fraction(x) * radix(x)**i', &
 '      end program demo_setexp', &
 '', &
 '  Results:', &
 '', &
-'            74716.7891       74716.7891', &
+'           74716.7891       74716.7891', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -18376,29 +19726,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023         set_exponent(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023          set_exponent(3fortran)', &
 '']
 
 shortname="set_exponent"
 call process()
 
 
-case('175','shape')
+case('177','shape')
 
 textblock=[character(len=256) :: &
 '', &
-'shape(3fortran)                                                shape(3fortran)', &
+'shape(3fortran)                                               shape(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SHAPE(3) - [ARRAY:INQUIRY] Determine the shape of an array or scalar', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = shape( source [,kind] )', &
 '', &
-'         integer(kind=KIND) function shape( source, KIND )', &
+'        integer(kind=KIND) function shape( source, KIND )', &
 '', &
-'          type(TYPE(kind=**)),intent(in)       :: source(..)', &
-'          integer(kind=**),intent(in),optional :: KIND', &
+'         type(TYPE(kind=**)),intent(in)       :: source(..)', &
+'         integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -18438,20 +19794,21 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      character(len=*),parameter :: all=''(*(g0,1x))''', &
 '      integer, dimension(-1:1, -1:2) :: a', &
-'         print all, ''shape of array='',shape(a)', &
-'         print all, ''shape of constant='',shape(42)', &
-'         print all, ''size of shape of constant='',size(shape(42))', &
-'         print all, ''ubound of array='',ubound(a)', &
-'         print all, ''lbound of array='',lbound(a)', &
+'        print all, ''shape of array='',shape(a)', &
+'        print all, ''shape of constant='',shape(42)', &
+'        print all, ''size of shape of constant='',size(shape(42))', &
+'        print all, ''ubound of array='',ubound(a)', &
+'        print all, ''lbound of array='',lbound(a)', &
 '      end program demo_shape', &
 '', &
 '  Results:', &
 '', &
-'         shape of array= 3 4', &
-'         shape of constant=', &
-'         size of shape of constant= 0', &
-'         ubound of array= 1 2', &
-'         lbound of array= -1 -1', &
+'        shape of array= 3 4', &
+'        shape of constant=', &
+'        size of shape of constant= 0', &
+'        ubound of array= 1 2', &
+'        lbound of array= -1 -1', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 ; with KIND argument Fortran 2003', &
@@ -18487,29 +19844,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                shape(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                 shape(3fortran)', &
 '']
 
 shortname="shape"
 call process()
 
 
-case('176','shifta')
+case('178','shifta')
 
 textblock=[character(len=256) :: &
 '', &
-'shifta(3fortran)                                              shifta(3fortran)', &
+'shifta(3fortran)                                             shifta(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SHIFTA(3) - [BIT:SHIFT] Right shift with fill', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = shifta(i, shift )', &
 '', &
-'           elemental integer(kind=KIND) function shifta(i, shift)', &
+'          elemental integer(kind=KIND) function shifta(i, shift)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: shift', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: shift', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -18549,62 +19912,63 @@ textblock=[character(len=256) :: &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
 '      integer(kind=int32) :: ival', &
-'      integer             :: shift', &
+'      integer            :: shift', &
 '      integer(kind=int32) :: oval', &
 '      integer(kind=int32),allocatable :: ivals(:)', &
-'      integer             :: i', &
+'      integer            :: i', &
 '      integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])', &
 '', &
-'        ! basic usage', &
-'        write(*,*)shifta(100,3)', &
+'       ! basic usage', &
+'       write(*,*)shifta(100,3)', &
 '', &
-'        ! loop through some interesting values', &
-'         shift=5', &
+'       ! loop through some interesting values', &
+'        shift=5', &
 '', &
-'         ivals=[ -1, -0, +0, +1, &', &
-'         & int(b"01010101010101010101010101010101"), &', &
-'         & int(b"10101010101010101010101010101010"), &', &
-'         & int(b"00000000000000000000000000011111") ]', &
+'        ivals=[ -1, -0, +0, +1, &', &
+'        & int(b"01010101010101010101010101010101"), &', &
+'        & int(b"10101010101010101010101010101010"), &', &
+'        & int(b"00000000000000000000000000011111") ]', &
 '', &
-'         ! does your platform distinguish between +0 and -0?', &
-'         ! note the original leftmost bit is used to fill in the vacated bits', &
+'        ! does your platform distinguish between +0 and -0?', &
+'        ! note the original leftmost bit is used to fill in the vacated bits', &
 '', &
-'         write(*,''(/,"SHIFT =  ",i0)'') shift', &
-'         do i=1,size(ivals)', &
-'            ival=ivals(i)', &
-'            write(*,''(  "I =      ",b32.32," == ",i0)'') ival,ival', &
-'            oval=shifta(ival,shift)', &
-'            write(*,''(  "RESULT = ",b32.32," == ",i0)'') oval,oval', &
-'         enddo', &
-'         ! elemental', &
-'         write(*,*)"characteristics of the result are the same as input"', &
-'         write(*,''(*(g0,1x))'') &', &
-'           & "kind=",kind(shifta(arr,3)), "shape=",shape(shifta(arr,3)), &', &
-'           & "size=",size(shifta(arr,3)) !, "rank=",rank(shifta(arr,3))', &
+'        write(*,''(/,"SHIFT =  ",i0)'') shift', &
+'        do i=1,size(ivals)', &
+'           ival=ivals(i)', &
+'           write(*,''( "I =      ",b32.32," == ",i0)'') ival,ival', &
+'           oval=shifta(ival,shift)', &
+'           write(*,''( "RESULT = ",b32.32," == ",i0)'') oval,oval', &
+'        enddo', &
+'        ! elemental', &
+'        write(*,*)"characteristics of the result are the same as input"', &
+'        write(*,''(*(g0,1x))'') &', &
+'          & "kind=",kind(shifta(arr,3)), "shape=",shape(shifta(arr,3)), &', &
+'          & "size=",size(shifta(arr,3)) !, "rank=",rank(shifta(arr,3))', &
 '', &
 '      end program demo_shifta', &
 '', &
 '  Results:', &
 '', &
-'       >           12', &
+'       >          12', &
 '       >', &
 '       > SHIFT =  5', &
-'       > I =      11111111111111111111111111111111 == -1', &
+'       > I =     11111111111111111111111111111111 == -1', &
 '       > RESULT = 11111111111111111111111111111111 == -1', &
-'       > I =      00000000000000000000000000000000 == 0', &
+'       > I =     00000000000000000000000000000000 == 0', &
 '       > RESULT = 00000000000000000000000000000000 == 0', &
-'       > I =      00000000000000000000000000000000 == 0', &
+'       > I =     00000000000000000000000000000000 == 0', &
 '       > RESULT = 00000000000000000000000000000000 == 0', &
-'       > I =      00000000000000000000000000000001 == 1', &
+'       > I =     00000000000000000000000000000001 == 1', &
 '       > RESULT = 00000000000000000000000000000000 == 0', &
-'       > I =      01010101010101010101010101010101 == 1431655765', &
+'       > I =     01010101010101010101010101010101 == 1431655765', &
 '       > RESULT = 00000010101010101010101010101010 == 44739242', &
-'       > I =      10101010101010101010101010101010 == -1431655766', &
+'       > I =     10101010101010101010101010101010 == -1431655766', &
 '       > RESULT = 11111101010101010101010101010101 == -44739243', &
-'       > I =      00000000000000000000000000011111 == 31', &
+'       > I =     00000000000000000000000000011111 == 31', &
 '       > RESULT = 00000000000000000000000000000000 == 0', &
 '       >  characteristics of the result are the same as input', &
 '       > kind= 1 shape= 2 2 size= 4', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -18614,29 +19978,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               shifta(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                shifta(3fortran)', &
 '']
 
 shortname="shifta"
 call process()
 
 
-case('177','shiftl')
+case('179','shiftl')
 
 textblock=[character(len=256) :: &
 '', &
-'shiftl(3fortran)                                              shiftl(3fortran)', &
+'shiftl(3fortran)                                             shiftl(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SHIFTL(3) - [BIT:SHIFT] Shift bits left', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = shiftl( i, shift )', &
 '', &
-'           elemental integer(kind=KIND) function shiftl(i, shift)', &
+'          elemental integer(kind=KIND) function shiftl(i, shift)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: shift', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: shift', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -18659,9 +20029,9 @@ textblock=[character(len=256) :: &
 '', &
 '  For example, for a 16-bit integer left-shifted five ...', &
 '', &
-'          >  |a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p| <- original 16-bit example', &
-'          >  |f|g|h|i|j|k|l|m|n|o|p|           <- left-shifted five', &
-'          >  |f|g|h|i|j|k|l|m|n|o|p|0|0|0|0|0| <- right-padded with zeros', &
+'         >  |a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p| <- original 16-bit example', &
+'         >  |f|g|h|i|j|k|l|m|n|o|p|           <- left-shifted five', &
+'         >  |f|g|h|i|j|k|l|m|n|o|p|0|0|0|0|0| <- right-padded with zeros', &
 '', &
 '  Note the value of the result is the same as ISHFT (I, SHIFT).', &
 '', &
@@ -18680,61 +20050,62 @@ textblock=[character(len=256) :: &
 '      program demo_shiftl', &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
-'      integer             :: shift', &
+'      integer            :: shift', &
 '      integer(kind=int32) :: oval', &
 '      integer(kind=int32) :: ival', &
 '      integer(kind=int32),allocatable :: ivals(:)', &
-'      integer             :: i', &
+'      integer            :: i', &
 '', &
-'        print *, '' basic usage''', &
-'        ival=100', &
-'        write(*,*)ival, shiftl(ival,3)', &
+'       print *, '' basic usage''', &
+'       ival=100', &
+'       write(*,*)ival, shiftl(ival,3)', &
 '', &
 '       ! elemental (input values may be conformant arrays)', &
-'        print *, '' elemental''', &
+'       print *, '' elemental''', &
 '', &
 '       ! loop through some ivalues', &
-'         shift=9', &
-'         ivals=[ &', &
-'         & int(b"01010101010101010101010101010101"), &', &
-'         & int(b"10101010101010101010101010101010"), &', &
-'         & int(b"11111111111111111111111111111111") ]', &
+'        shift=9', &
+'        ivals=[ &', &
+'        & int(b"01010101010101010101010101010101"), &', &
+'        & int(b"10101010101010101010101010101010"), &', &
+'        & int(b"11111111111111111111111111111111") ]', &
 '', &
-'         write(*,''(/,"SHIFT =  ",i0)'') shift', &
-'         do i=1,size(ivals)', &
-'            ! print initial value as binary and decimal', &
-'            write(*,''(  "I =      ",b32.32," == ",i0)'') ivals(i),ivals(i)', &
-'            ! print shifted value as binary and decimal', &
-'            oval=shiftl(ivals(i),shift)', &
-'            write(*,''(  "RESULT = ",b32.32," == ",i0)'') oval,oval', &
-'         enddo', &
+'        write(*,''(/,"SHIFT =  ",i0)'') shift', &
+'        do i=1,size(ivals)', &
+'           ! print initial value as binary and decimal', &
+'           write(*,''( "I =      ",b32.32," == ",i0)'') ivals(i),ivals(i)', &
+'           ! print shifted value as binary and decimal', &
+'           oval=shiftl(ivals(i),shift)', &
+'           write(*,''( "RESULT = ",b32.32," == ",i0)'') oval,oval', &
+'        enddo', &
 '', &
-'        ! more about elemental', &
-'         ELEM : block', &
-'         integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])', &
-'         write(*,*)"characteristics of the result are the same as input"', &
-'         write(*,''(*(g0,1x))'') &', &
-'           & "kind=",kind(shiftl(arr,3)), "shape=",shape(shiftl(arr,3)), &', &
-'           & "size=",size(shiftl(arr,3)) !, "rank=",rank(shiftl(arr,3))', &
-'         endblock ELEM', &
+'       ! more about elemental', &
+'        ELEM : block', &
+'        integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])', &
+'        write(*,*)"characteristics of the result are the same as input"', &
+'        write(*,''(*(g0,1x))'') &', &
+'          & "kind=",kind(shiftl(arr,3)), "shape=",shape(shiftl(arr,3)), &', &
+'          & "size=",size(shiftl(arr,3)) !, "rank=",rank(shiftl(arr,3))', &
+'        endblock ELEM', &
 '', &
 '      end program demo_shiftl', &
 '', &
 '  Results:', &
 '', &
 '       >    basic usage', &
-'       >           100         800', &
+'       >          100         800', &
 '       >    elemental', &
 '       >', &
 '       >  SHIFT =  9', &
-'       >  I =      01010101010101010101010101010101 == 1431655765', &
+'       >  I =     01010101010101010101010101010101 == 1431655765', &
 '       >  RESULT = 10101010101010101010101000000000 == -1431655936', &
-'       >  I =      10101010101010101010101010101010 == -1431655766', &
+'       >  I =     10101010101010101010101010101010 == -1431655766', &
 '       >  RESULT = 01010101010101010101010000000000 == 1431655424', &
-'       >  I =      11111111111111111111111111111111 == -1', &
+'       >  I =     11111111111111111111111111111111 == -1', &
 '       >  RESULT = 11111111111111111111111000000000 == -512', &
 '       >   characteristics of the result are the same as input', &
 '       >  kind= 1 shape= 2 2 size= 4', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -18744,29 +20115,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               shiftl(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                shiftl(3fortran)', &
 '']
 
 shortname="shiftl"
 call process()
 
 
-case('178','shiftr')
+case('180','shiftr')
 
 textblock=[character(len=256) :: &
 '', &
-'shiftr(3fortran)                                              shiftr(3fortran)', &
+'shiftr(3fortran)                                             shiftr(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SHIFTR(3) - [BIT:SHIFT] Shift bits right', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = shiftr( i, shift )', &
 '', &
-'           elemental integer(kind=KIND) function shiftr(i, shift)', &
+'          elemental integer(kind=KIND) function shiftr(i, shift)', &
 '', &
-'            integer(kind=KIND),intent(in) :: i', &
-'            integer(kind=**),intent(in) :: shift', &
+'           integer(kind=KIND),intent(in) :: i', &
+'           integer(kind=**),intent(in) :: shift', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -18789,9 +20166,9 @@ textblock=[character(len=256) :: &
 '', &
 '  For example, for a 16-bit integer right-shifted five ...', &
 '', &
-'          >  |a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p| <- original 16-bit example', &
-'          >            |a|b|c|d|e|f|g|h|i|j|k| <- right-shifted five', &
-'          >  |0|0|0|0|0|f|g|h|i|j|k|l|m|n|o|p| <- left-padded with zeros', &
+'         >  |a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p| <- original 16-bit example', &
+'         >            |a|b|c|d|e|f|g|h|i|j|k| <- right-shifted five', &
+'         >  |0|0|0|0|0|f|g|h|i|j|k|l|m|n|o|p| <- left-padded with zeros', &
 '', &
 '  Note the value of the result is the same as ISHFT (I, -SHIFT).', &
 '', &
@@ -18811,62 +20188,63 @@ textblock=[character(len=256) :: &
 '      program demo_shiftr', &
 '      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
 '      implicit none', &
-'      integer             :: shift', &
+'      integer            :: shift', &
 '      integer(kind=int32) :: oval', &
 '      integer(kind=int32) :: ival', &
 '      integer(kind=int32),allocatable :: ivals(:)', &
-'      integer             :: i', &
+'      integer            :: i', &
 '', &
-'        print *,'' basic usage''', &
-'        ival=100', &
-'        write(*,*)ival, shiftr(100,3)', &
+'       print *,'' basic usage''', &
+'       ival=100', &
+'       write(*,*)ival, shiftr(100,3)', &
 '', &
-'        ! elemental (input values may be conformant arrays)', &
-'        print *,'' elemental''', &
-'         shift=9', &
-'         ivals=[ &', &
-'         & int(b"01010101010101010101010101010101"), &', &
-'         & int(b"10101010101010101010101010101010"), &', &
-'         & int(b"11111111111111111111111111111111") ]', &
+'       ! elemental (input values may be conformant arrays)', &
+'       print *,'' elemental''', &
+'        shift=9', &
+'        ivals=[ &', &
+'        & int(b"01010101010101010101010101010101"), &', &
+'        & int(b"10101010101010101010101010101010"), &', &
+'        & int(b"11111111111111111111111111111111") ]', &
 '', &
-'         write(*,''(/,"SHIFT =  ",i0)'') shift', &
-'         do i=1,size(ivals)', &
-'            ! print initial value as binary and decimal', &
-'            write(*,''(  "I =      ",b32.32," == ",i0)'') ivals(i),ivals(i)', &
-'            ! print shifted value as binary and decimal', &
-'            oval=shiftr(ivals(i),shift)', &
-'            write(*,''(  "RESULT = ",b32.32," == ",i0,/)'') oval,oval', &
-'         enddo', &
+'        write(*,''(/,"SHIFT =  ",i0)'') shift', &
+'        do i=1,size(ivals)', &
+'           ! print initial value as binary and decimal', &
+'           write(*,''( "I =      ",b32.32," == ",i0)'') ivals(i),ivals(i)', &
+'           ! print shifted value as binary and decimal', &
+'           oval=shiftr(ivals(i),shift)', &
+'           write(*,''( "RESULT = ",b32.32," == ",i0,/)'') oval,oval', &
+'        enddo', &
 '', &
-'         ! more on elemental', &
-'         ELEM : block', &
-'         integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])', &
-'         write(*,*)"characteristics of the result are the same as input"', &
-'         write(*,''(*(g0,1x))'') &', &
-'           & "kind=",kind(shiftr(arr,3)), "shape=",shape(shiftr(arr,3)), &', &
-'           & "size=",size(shiftr(arr,3)) !, "rank=",rank(shiftr(arr,3))', &
-'         endblock ELEM', &
+'        ! more on elemental', &
+'        ELEM : block', &
+'        integer(kind=int8)  :: arr(2,2)=reshape([2,4,8,16],[2,2])', &
+'        write(*,*)"characteristics of the result are the same as input"', &
+'        write(*,''(*(g0,1x))'') &', &
+'          & "kind=",kind(shiftr(arr,3)), "shape=",shape(shiftr(arr,3)), &', &
+'          & "size=",size(shiftr(arr,3)) !, "rank=",rank(shiftr(arr,3))', &
+'        endblock ELEM', &
 '', &
 '      end program demo_shiftr', &
 '', &
 '  Results:', &
 '', &
-'        >    basic usage', &
-'        >           100          12', &
-'        >    elemental', &
-'        >', &
-'        >  SHIFT =  9', &
-'        >  I =      01010101010101010101010101010101 == 1431655765', &
-'        >  RESULT = 00000000001010101010101010101010 == 2796202', &
-'        >', &
-'        >  I =      10101010101010101010101010101010 == -1431655766', &
-'        >  RESULT = 00000000010101010101010101010101 == 5592405', &
-'        >', &
-'        >  I =      11111111111111111111111111111111 == -1', &
-'        >  RESULT = 00000000011111111111111111111111 == 8388607', &
-'        >', &
-'        >   characteristics of the result are the same as input', &
-'        >  kind= 1 shape= 2 2 size= 4', &
+'       >    basic usage', &
+'       >           100          12', &
+'       >    elemental', &
+'       >', &
+'       >  SHIFT =  9', &
+'       >  I =      01010101010101010101010101010101 == 1431655765', &
+'       >  RESULT = 00000000001010101010101010101010 == 2796202', &
+'       >', &
+'       >  I =      10101010101010101010101010101010 == -1431655766', &
+'       >  RESULT = 00000000010101010101010101010101 == 5592405', &
+'       >', &
+'       >  I =      11111111111111111111111111111111 == -1', &
+'       >  RESULT = 00000000011111111111111111111111 == 8388607', &
+'       >', &
+'       >   characteristics of the result are the same as input', &
+'       >  kind= 1 shape= 2 2 size= 4', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -18876,28 +20254,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               shiftr(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                shiftr(3fortran)', &
 '']
 
 shortname="shiftr"
 call process()
 
 
-case('179','sign')
+case('181','sign')
 
 textblock=[character(len=256) :: &
 '', &
-'sign(3fortran)                                                  sign(3fortran)', &
+'sign(3fortran)                                                 sign(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SIGN(3) - [NUMERIC] Sign copying function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = sign(a, b)', &
 '', &
-'           elemental type(TYPE(kind=KIND))function sign(a, b)', &
+'          elemental type(TYPE(kind=KIND))function sign(a, b)', &
 '', &
-'            type(TYPE(kind=KIND)),intent(in) :: a, b', &
+'           type(TYPE(kind=KIND)),intent(in) :: a, b', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  A shall be of type integer or real.', &
@@ -18933,32 +20317,32 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_sign', &
 '      implicit none', &
-'        ! basics', &
-'         print *,  sign( -12,  1 )', &
-'         print *,  sign( -12,  0 )', &
-'         print *,  sign( -12, -1 )', &
-'         print *,  sign(  12,  1 )', &
-'         print *,  sign(  12,  0 )', &
-'         print *,  sign(  12, -1 )', &
+'       ! basics', &
+'        print *,  sign( -12,  1 )', &
+'        print *,  sign( -12,  0 )', &
+'        print *,  sign( -12, -1 )', &
+'        print *,  sign(  12,  1 )', &
+'        print *,  sign(  12,  0 )', &
+'        print *,  sign(  12, -1 )', &
 '', &
-'         if(sign(1.0,-0.0)== -1.0)then', &
-'            print *, ''this processor distinguishes +0 from -0''', &
-'         else', &
-'            print *, ''this processor does not distinguish +0 from -0''', &
-'         endif', &
+'        if(sign(1.0,-0.0)== -1.0)then', &
+'           print *, ''this processor distinguishes +0 from -0''', &
+'        else', &
+'           print *, ''this processor does not distinguish +0 from -0''', &
+'        endif', &
 '', &
-'         print *,  ''elemental'', sign( -12.0, [1.0, 0.0, -1.0] )', &
+'        print *,  ''elemental'', sign( -12.0, [1.0, 0.0, -1.0] )', &
 '', &
 '      end program demo_sign', &
 '', &
 '  Results:', &
 '', &
-'                   12', &
-'                   12', &
+'                  12', &
+'                  12', &
 '  -12 12 12 -12 this processor does not distinguish +0 from -0', &
 '', &
 '    elemental', &
-'      12.00000       12.00000      -12.00000', &
+'      12.00000      12.00000      -12.00000', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -18968,28 +20352,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 sign(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  sign(3fortran)', &
 '']
 
 shortname="sign"
 call process()
 
 
-case('180','sin')
+case('182','sin')
 
 textblock=[character(len=256) :: &
 '', &
-'sin(3fortran)                                                    sin(3fortran)', &
+'sin(3fortran)                                                   sin(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SIN(3) - [MATHEMATICS:TRIGONOMETRIC] Sine function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = sin(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function sin(x)', &
+'          elemental TYPE(kind=KIND) function sin(x)', &
 '', &
-'            TYPE(kind=KIND) :: x', &
+'           TYPE(kind=KIND) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be any real or complex type', &
@@ -19022,8 +20412,8 @@ textblock=[character(len=256) :: &
 '      program sample_sin', &
 '      implicit none', &
 '      real :: x = 0.0', &
-'         x = sin(x)', &
-'         write(*,*)''X='',x', &
+'        x = sin(x)', &
+'        write(*,*)''X='',x', &
 '      end program sample_sin', &
 '', &
 '  Results:', &
@@ -19036,20 +20426,21 @@ textblock=[character(len=256) :: &
 '', &
 '  From the article on "Haversine formula" in Wikipedia:', &
 '', &
-'          The haversine formula is an equation important in navigation,', &
-'          giving great-circle distances between two points on a sphere from', &
-'          their longitudes and latitudes.', &
+'         The haversine formula is an equation important in navigation,', &
+'         giving great-circle distances between two points on a sphere from', &
+'         their longitudes and latitudes.', &
 '', &
 '  So to show the great-circle distance between the Nashville International', &
 '  Airport (BNA) in TN, USA, and the Los Angeles International Airport (LAX) in', &
 '  CA, USA you would start with their latitude and longitude, commonly given as', &
 '', &
-'        BNA: N 36 degrees 7.2'',   W 86 degrees 40.2''', &
-'        LAX: N 33 degrees 56.4'',  W 118 degrees 24.0''', &
+'       BNA: N 36 degrees 7.2'',   W 86 degrees 40.2''', &
+'       LAX: N 33 degrees 56.4'',  W 118 degrees 24.0''', &
 '', &
 '  which converted to floating-point values in degrees is:', &
 '', &
-'             Latitude Longitude', &
+'            Latitude Longitude', &
+'', &
 '', &
 '    o  BNA 36.12, -86.67', &
 '', &
@@ -19063,8 +20454,8 @@ textblock=[character(len=256) :: &
 '      program demo_sin', &
 '      implicit none', &
 '      real :: d', &
-'          d = haversine(36.12,-86.67, 33.94,-118.40) ! BNA to LAX', &
-'          print ''(A,F9.4,A)'', ''distance: '',d,'' km''', &
+'         d = haversine(36.12,-86.67, 33.94,-118.40) ! BNA to LAX', &
+'         print ''(A,F9.4,A)'', ''distance: '',d,'' km''', &
 '      contains', &
 '      function haversine(latA,lonA,latB,lonB) result (dist)', &
 '      !', &
@@ -19078,20 +20469,21 @@ textblock=[character(len=256) :: &
 '', &
 '      ! generate constant pi/180', &
 '      real, parameter :: deg_to_rad = atan(1.0)/45.0', &
-'         delta_lat = deg_to_rad*(latB-latA)', &
-'         delta_lon = deg_to_rad*(lonB-lonA)', &
-'         lat1 = deg_to_rad*(latA)', &
-'         lat2 = deg_to_rad*(latB)', &
-'         a = (sin(delta_lat/2))**2 + &', &
-'                & cos(lat1)*cos(lat2)*(sin(delta_lon/2))**2', &
-'         c = 2*asin(sqrt(a))', &
-'         dist = radius*c', &
+'        delta_lat = deg_to_rad*(latB-latA)', &
+'        delta_lon = deg_to_rad*(lonB-lonA)', &
+'        lat1 = deg_to_rad*(latA)', &
+'        lat2 = deg_to_rad*(latB)', &
+'        a = (sin(delta_lat/2))**2 + &', &
+'               & cos(lat1)*cos(lat2)*(sin(delta_lon/2))**2', &
+'        c = 2*asin(sqrt(a))', &
+'        dist = radius*c', &
 '      end function haversine', &
 '      end program demo_sin', &
 '', &
 '  Results:', &
 '', &
 '       > distance: 2886.4446 km', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -19105,28 +20497,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  sin(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   sin(3fortran)', &
 '']
 
 shortname="sin"
 call process()
 
 
-case('181','sinh')
+case('183','sinh')
 
 textblock=[character(len=256) :: &
 '', &
-'sinh(3fortran)                                                  sinh(3fortran)', &
+'sinh(3fortran)                                                 sinh(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SINH(3) - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic sine function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = sinh(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function sinh(x)', &
+'          elemental TYPE(kind=KIND) function sinh(x)', &
 '', &
-'            TYPE(kind=KIND) :: x', &
+'           TYPE(kind=KIND) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  TYPE may be real or complex', &
@@ -19140,7 +20538,8 @@ textblock=[character(len=256) :: &
 '', &
 '  The hyperbolic sine of x is defined mathematically as:', &
 '', &
-'           sinh(x) = (exp(x) - exp(-x)) / 2.0', &
+'          sinh(x) = (exp(x) - exp(-x)) / 2.0', &
+'', &
 '', &
 'OPTIONS', &
 '  o  X : The value to calculate the hyperbolic sine of', &
@@ -19161,37 +20560,38 @@ textblock=[character(len=256) :: &
 '      real(kind=real64) :: nan, inf', &
 '      character(len=20) :: line', &
 '', &
-'        ! basics', &
-'         print *, sinh(x)', &
-'         print *, (exp(x)-exp(-x))/2.0', &
+'       ! basics', &
+'        print *, sinh(x)', &
+'        print *, (exp(x)-exp(-x))/2.0', &
 '', &
-'        ! sinh(3) is elemental and can handle an array', &
-'         print *, sinh([x,2.0*x,x/3.0])', &
+'       ! sinh(3) is elemental and can handle an array', &
+'        print *, sinh([x,2.0*x,x/3.0])', &
 '', &
-'         ! a NaN input returns NaN', &
-'         line=''NAN''', &
-'         read(line,*) nan', &
-'         print *, sinh(nan)', &
+'        ! a NaN input returns NaN', &
+'        line=''NAN''', &
+'        read(line,*) nan', &
+'        print *, sinh(nan)', &
 '', &
-'         ! a Inf input returns Inf', &
-'         line=''Infinity''', &
-'         read(line,*) inf', &
-'         print *, sinh(inf)', &
+'        ! a Inf input returns Inf', &
+'        line=''Infinity''', &
+'        read(line,*) inf', &
+'        print *, sinh(inf)', &
 '', &
-'         ! an overflow returns Inf', &
-'         x=huge(0.0d0)', &
-'         print *, sinh(x)', &
+'        ! an overflow returns Inf', &
+'        x=huge(0.0d0)', &
+'        print *, sinh(x)', &
 '', &
 '      end program demo_sinh', &
 '', &
 '  Results:', &
 '', &
-'        -1.1752011936438014', &
-'        -1.1752011936438014', &
-'        -1.1752011936438014       -3.6268604078470190      -0.33954055725615012', &
-'                             NaN', &
-'                        Infinity', &
-'                        Infinity', &
+'       -1.1752011936438014', &
+'       -1.1752011936438014', &
+'       -1.1752011936438014       -3.6268604078470190      -0.33954055725615012', &
+'                            NaN', &
+'                       Infinity', &
+'                       Infinity', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 , for a complex argument Fortran 2008', &
@@ -19204,31 +20604,37 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 sinh(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  sinh(3fortran)', &
 '']
 
 shortname="sinh"
 call process()
 
 
-case('182','size')
+case('184','size')
 
 textblock=[character(len=256) :: &
 '', &
-'size(3fortran)                                                  size(3fortran)', &
+'size(3fortran)                                                 size(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SIZE(3) - [ARRAY:INQUIRY] Determine the size of an array or extent of one', &
 '  dimension', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = size(array [,dim] [,kind])', &
 '', &
-'           integer(kind=KIND) function size(array,dim,kind)', &
+'          integer(kind=KIND) function size(array,dim,kind)', &
 '', &
-'            type(TYPE(kind=KIND),intent(in) :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            integer(kind=**),intent(in),optional :: KIND', &
+'           type(TYPE(kind=KIND)),intent(in) :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           integer(kind=**),intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY is an assumed-rank array or array of any type and associated kind.', &
@@ -19297,14 +20703,14 @@ textblock=[character(len=256) :: &
 '      program demo_size', &
 '      implicit none', &
 '      integer :: arr(0:2,-5:5)', &
-'         write(*,*)''SIZE of simple two-dimensional array''', &
-'         write(*,*)''SIZE(arr)       :total count of elements:'',size(arr)', &
-'         write(*,*)''SIZE(arr,DIM=1) :number of rows         :'',size(arr,dim=1)', &
-'         write(*,*)''SIZE(arr,DIM=2) :number of columns      :'',size(arr,dim=2)', &
+'        write(*,*)''SIZE of simple two-dimensional array''', &
+'        write(*,*)''SIZE(arr)      :total count of elements:'',size(arr)', &
+'        write(*,*)''SIZE(arr,DIM=1) :number of rows        :'',size(arr,dim=1)', &
+'        write(*,*)''SIZE(arr,DIM=2) :number of columns     :'',size(arr,dim=2)', &
 '', &
-'         ! pass the same array to a procedure that passes the value two', &
-'         ! different ways', &
-'         call interfaced(arr,arr)', &
+'        ! pass the same array to a procedure that passes the value two', &
+'        ! different ways', &
+'        call interfaced(arr,arr)', &
 '      contains', &
 '', &
 '      subroutine interfaced(arr1,arr2)', &
@@ -19312,14 +20718,14 @@ textblock=[character(len=256) :: &
 '      ! for arr1 and arr2.', &
 '      integer,intent(in) :: arr1(:,:)', &
 '      integer,intent(in) :: arr2(2,*)', &
-'         !', &
-'         write(*,*)''interfaced assumed-shape array''', &
-'         write(*,*)''SIZE(arr1)        :'',size(arr1)', &
-'         write(*,*)''SIZE(arr1,DIM=1)  :'',size(arr1,dim=1)', &
-'         write(*,*)''SIZE(arr1,DIM=2)  :'',size(arr1,dim=2)', &
+'        !', &
+'        write(*,*)''interfaced assumed-shape array''', &
+'        write(*,*)''SIZE(arr1)       :'',size(arr1)', &
+'        write(*,*)''SIZE(arr1,DIM=1)  :'',size(arr1,dim=1)', &
+'        write(*,*)''SIZE(arr1,DIM=2)  :'',size(arr1,dim=2)', &
 '', &
-'      !  write(*,*)''SIZE(arr2)        :'',size(arr2)', &
-'         write(*,*)''SIZE(arr2,DIM=1)  :'',size(arr2,dim=1)', &
+'      !  write(*,*)''SIZE(arr2)              :'',size(arr2)', &
+'        write(*,*)''SIZE(arr2,DIM=1)  :'',size(arr2,dim=1)', &
 '      !', &
 '      ! CANNOT DETERMINE SIZE OF ASSUMED SIZE ARRAY LAST DIMENSION', &
 '      !  write(*,*)''SIZE(arr2,DIM=2)  :'',size(arr2,dim=2)', &
@@ -19330,15 +20736,16 @@ textblock=[character(len=256) :: &
 '', &
 '  Results:', &
 '', &
-'          SIZE of simple two-dimensional array', &
-'          SIZE(arr)       :total count of elements:          33', &
-'          SIZE(arr,DIM=1) :number of rows         :           3', &
-'          SIZE(arr,DIM=2) :number of columns      :          11', &
-'          interfaced assumed-shape array', &
-'          SIZE(arr1)        :          33', &
-'          SIZE(arr1,DIM=1)  :           3', &
-'          SIZE(arr1,DIM=2)  :          11', &
-'          SIZE(arr2,DIM=1)  :           2', &
+'         SIZE of simple two-dimensional array', &
+'         SIZE(arr)       :total count of elements:          33', &
+'         SIZE(arr,DIM=1) :number of rows         :           3', &
+'         SIZE(arr,DIM=2) :number of columns      :          11', &
+'         interfaced assumed-shape array', &
+'         SIZE(arr1)        :          33', &
+'         SIZE(arr1,DIM=1)  :           3', &
+'         SIZE(arr1,DIM=2)  :          11', &
+'         SIZE(arr2,DIM=1)  :           2', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 , with KIND argument - Fortran 2003', &
@@ -19376,29 +20783,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 size(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  size(3fortran)', &
 '']
 
 shortname="size"
 call process()
 
 
-case('183','spacing')
+case('185','spacing')
 
 textblock=[character(len=256) :: &
 '', &
-'spacing(3fortran)                                            spacing(3fortran)', &
+'spacing(3fortran)                                           spacing(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SPACING(3) - [MODEL_COMPONENTS] Smallest distance between two numbers of a', &
 '  given type', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = spacing(x)', &
 '', &
-'           elemental real(kind=KIND) function spacing(x)', &
+'          elemental real(kind=KIND) function spacing(x)', &
 '', &
-'            real(kind=KIND), intent(in) :: x', &
+'           real(kind=KIND), intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X is type real of any valid kind', &
@@ -19431,20 +20844,21 @@ textblock=[character(len=256) :: &
 '      integer, parameter :: sgl = selected_real_kind(p=6, r=37)', &
 '      integer, parameter :: dbl = selected_real_kind(p=13, r=200)', &
 '', &
-'         write(*,*) spacing(1.0_sgl)', &
-'         write(*,*) nearest(1.0_sgl,+1.0),nearest(1.0_sgl,+1.0)-1.0', &
+'        write(*,*) spacing(1.0_sgl)', &
+'        write(*,*) nearest(1.0_sgl,+1.0),nearest(1.0_sgl,+1.0)-1.0', &
 '', &
-'         write(*,*) spacing(1.0_dbl)', &
+'        write(*,*) spacing(1.0_dbl)', &
 '      end program demo_spacing', &
 '', &
 '  Results:', &
 '', &
 '  Typical values ...', &
 '', &
-'           1.1920929E-07', &
-'            1.000000      1.1920929E-07', &
-'           0.9999999     -5.9604645E-08', &
-'           2.220446049250313E-016', &
+'          1.1920929E-07', &
+'           1.000000      1.1920929E-07', &
+'          0.9999999     -5.9604645E-08', &
+'          2.220446049250313E-016', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -19456,33 +20870,39 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023              spacing(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023               spacing(3fortran)', &
 '']
 
 shortname="spacing"
 call process()
 
 
-case('184','spread')
+case('186','spread')
 
 textblock=[character(len=256) :: &
 '', &
-'spread(3fortran)                                              spread(3fortran)', &
+'spread(3fortran)                                             spread(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SPREAD(3) - [ARRAY:CONSTRUCTION] Add a dimension and replicate data', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = spread(source, dim, ncopies)', &
 '', &
-'           TYPE(kind=KIND) function spread(source, dim, ncopies)', &
+'          TYPE(kind=KIND) function spread(source, dim, ncopies)', &
 '', &
-'            TYPE(kind=KIND)             :: source(..)', &
-'            integer(kind=**),intent(in) :: dim', &
-'            integer(kind=**),intent(in) :: ncopies', &
+'           TYPE(kind=KIND)             :: source(..)', &
+'           integer(kind=**),intent(in) :: dim', &
+'           integer(kind=**),intent(in) :: ncopies', &
+'', &
 '', &
 'CHARACTERISTICS', &
-'  o  SOURCE is a scalar or array of any type.', &
+'  o  SOURCE is a scalar or array of any type and a rank less than fifteen.', &
 '', &
 '  o  DIM is an integer scalar', &
 '', &
@@ -19499,12 +20919,10 @@ textblock=[character(len=256) :: &
 '  element of the result has a value equal to SOURCE.', &
 '', &
 'OPTIONS', &
-'  o  SOURCE : a scalar or array of any type and a rank less than fifteen.', &
+'  o  SOURCE : the input data to duplicate', &
 '', &
-'  o  DIM', &
-'', &
-'      : The additional dimension value in the range from 1 to N+1, where N', &
-'      equals the rank of SOURCE.', &
+'  o  DIM : The additional dimension value in the range from 1 to N+1, where N', &
+'     equals the rank of SOURCE.', &
 '', &
 '  o  NCOPIES : the number of copies of the original data to generate', &
 '', &
@@ -19520,30 +20938,27 @@ textblock=[character(len=256) :: &
 '', &
 '      integer a1(4,3), a2(3,4), v(4), s', &
 '', &
-'         write(*,''(a)'' ) &', &
-'         ''TEST SPREAD(3)                                      '', &', &
-'         ''  SPREAD(3) is a FORTRAN90 function which replicates'', &', &
-'         ''  an array by adding a dimension.                   '', &', &
-'         '' ''', &
+'        write(*,''(a)'' ) &', &
+'        ''TEST SPREAD(3)                                     '', &', &
+'        ''  SPREAD(3) is a FORTRAN90 function which replicates'', &', &
+'        ''  an array by adding a dimension.                  '', &', &
+'        '' ''', &
 '', &
-'         s = 99', &
-'         call printi(''suppose we have a scalar S'',s)', &
+'        s = 99', &
+'        call printi(''suppose we have a scalar S'',s)', &
 '', &
-'         write(*,*) ''to add a new dimension (1) of extent 4 call''', &
-'         call printi(''spread( s, dim=1, ncopies=4 )'',spread ( s, 1, 4 ))', &
+'        write(*,*) ''to add a new dimension (1) of extent 4 call''', &
+'        call printi(''spread( s, dim=1, ncopies=4 )'',spread ( s, 1, 4 ))', &
 '', &
-'         v = [ 1, 2, 3, 4 ]', &
-'         call printi('' first we will set V to'',v)', &
+'        v = [ 1, 2, 3, 4 ]', &
+'        call printi('' first we will set V to'',v)', &
 '', &
-'         write(*,''(a)'')'' and then do "spread ( v, dim=2, ncopies=3 )"''', &
-'         a1 = spread ( v, dim=2, ncopies=3 )', &
-'         call printi(''this adds a new dimension (2) of extent 3'',a1)', &
+'        write(*,''(a)'')'' and then do "spread ( v, dim=2, ncopies=3 )"''', &
+'        a1 = spread ( v, dim=2, ncopies=3 )', &
+'        call printi(''uses v as a column and makes 3 columns'',a1)', &
 '', &
-'         a2 = spread ( v, 1, 3 )', &
-'         call printi('' spread(v,1,3) adds a new dimension (1) of extent 3'',a2)', &
-'         ! add more', &
-'         a2 = spread ( v, 1, 3 )', &
-'         call printi('' spread(v,1,3) adds a new dimension (1) of extent 3'',a2)', &
+'        a2 = spread ( v, 1, 3 )', &
+'        call printi('' spread(v,1,3) uses v as a row and makes 3 rows'',a2)', &
 '', &
 '      contains', &
 '      ! CONVENIENCE ROUTINE; NOT DIRECTLY CONNECTED TO SPREAD(3)', &
@@ -19556,40 +20971,40 @@ textblock=[character(len=256) :: &
 '', &
 '      character(len=*),parameter   :: all=''(" ",*(g0,1x))''', &
 '      character(len=*),intent(in)  :: title', &
-'      character(len=20)            :: row', &
-'      integer,intent(in)           :: a(..)', &
-'      integer                      :: i', &
+'      character(len=20)           :: row', &
+'      integer,intent(in)          :: a(..)', &
+'      integer                     :: i', &
 '', &
-'         write(*,all,advance=''no'')trim(title)', &
-'         ! select rank of input', &
-'         select rank(a)', &
-'         rank (0); write(*,''(a)'')'' (a scalar)''', &
-'            write(*,''(" > [ ",i0," ]")'')a', &
-'         rank (1); write(*,''(a)'')'' (a vector)''', &
-'            ! find how many characters to use for integers', &
-'            write(row,''(i0)'')ceiling(log10(real(maxval(abs(a)))))+2', &
-'            ! use this format to write a row', &
-'            row=''(" > [",*(i''//trim(row)//'':,","))''', &
-'            do i=1,size(a)', &
-'               write(*,fmt=row,advance=''no'')a(i)', &
-'               write(*,''(" ]")'')', &
-'            enddo', &
-'         rank (2); write(*,''(a)'')'' (a matrix) ''', &
-'            ! find how many characters to use for integers', &
-'            write(row,''(i0)'')ceiling(log10(real(maxval(abs(a)))))+2', &
-'            ! use this format to write a row', &
-'            row=''(" > [",*(i''//trim(row)//'':,","))''', &
-'            do i=1,size(a,dim=1)', &
-'               write(*,fmt=row,advance=''no'')a(i,:)', &
-'               write(*,''(" ]")'')', &
-'            enddo', &
-'         rank default', &
-'            write(stderr,*)''*printi* did not expect rank='', rank(a), &', &
-'             & ''shape='', shape(a),''size='',size(a)', &
-'            stop ''*printi* unexpected rank''', &
-'         end select', &
-'         write(*,all) ''>shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
-'         write(*,*)', &
+'        write(*,all,advance=''no'')trim(title)', &
+'        ! select rank of input', &
+'        select rank(a)', &
+'        rank (0); write(*,''(a)'')'' (a scalar)''', &
+'           write(*,''(" > [ ",i0," ]")'')a', &
+'        rank (1); write(*,''(a)'')'' (a vector)''', &
+'           ! find how many characters to use for integers', &
+'           write(row,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(a))))))+2', &
+'           ! use this format to write a row', &
+'           row=''(" > [",*(i''//trim(row)//'':,","))''', &
+'           do i=1,size(a)', &
+'              write(*,fmt=row,advance=''no'')a(i)', &
+'              write(*,''(" ]")'')', &
+'           enddo', &
+'        rank (2); write(*,''(a)'')'' (a matrix) ''', &
+'           ! find how many characters to use for integers', &
+'           write(row,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(a))))))+2', &
+'           ! use this format to write a row', &
+'           row=''(" > [",*(i''//trim(row)//'':,","))''', &
+'           do i=1,size(a,dim=1)', &
+'              write(*,fmt=row,advance=''no'')a(i,:)', &
+'              write(*,''(" ]")'')', &
+'           enddo', &
+'        rank default', &
+'           write(stderr,*)''*printi* did not expect rank='', rank(a), &', &
+'            & ''shape='', shape(a),''size='',size(a)', &
+'           stop ''*printi* unexpected rank''', &
+'        end select', &
+'        write(*,all) ''>shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
+'        write(*,*)', &
 '', &
 '      end subroutine printi', &
 '', &
@@ -19597,42 +21012,44 @@ textblock=[character(len=256) :: &
 '', &
 '  Results:', &
 '', &
-'         TEST SPREAD(3)', &
-'           SPREAD(3) is a FORTRAN90 function which replicates', &
-'           an array by adding a dimension.', &
+'       > TEST SPREAD(3)', &
+'       >   SPREAD(3) is a FORTRAN90 function which replicates', &
+'       >   an array by adding a dimension.', &
+'       >', &
+'       >  suppose we have a scalar S  (a scalar)', &
+'       >  > [ 99 ]', &
+'       >  >shape= ,rank= 0 ,size= 1', &
+'       >', &
+'       >  to add a new dimension (1) of extent 4 call', &
+'       >  spread( s, dim=1, ncopies=4 )  (a vector)', &
+'       >  > [  99 ]', &
+'       >  > [  99 ]', &
+'       >  > [  99 ]', &
+'       >  > [  0 ]', &
+'       >  >shape= 4 ,rank= 1 ,size= 4', &
+'       >', &
+'       >   first we will set V to  (a vector)', &
+'       >  > [  1 ]', &
+'       >  > [  2 ]', &
+'       >  > [  3 ]', &
+'       >  > [  4 ]', &
+'       >  >shape= 4 ,rank= 1 ,size= 4', &
+'       >', &
+'       >  and then do "spread ( v, dim=2, ncopies=3 )"', &
+'       >  uses v as a column and makes 3 columns  (a matrix)', &
+'       >  > [  1,  1,  1 ]', &
+'       >  > [  2,  2,  2 ]', &
+'       >  > [  3,  3,  3 ]', &
+'       >  > [  4,  4,  4 ]', &
+'       >  >shape= 4 3 ,rank= 2 ,size= 12', &
+'       >', &
+'       >   spread(v,1,3) uses v as a row and makes 3 rows  (a matrix)', &
+'       >  > [  1,  2,  3,  4 ]', &
+'       >  > [  1,  2,  3,  4 ]', &
+'       >  > [  1,  2,  3,  4 ]', &
+'       >  >shape= 3 4 ,rank= 2 ,size= 12', &
+'       >', &
 '', &
-'          suppose we have a scalar S  (a scalar)', &
-'          > [ 99 ]', &
-'          >shape= ,rank= 0 ,size= 1', &
-'', &
-'          to add a new dimension (1) of extent 4 call', &
-'          spread( s, dim=1, ncopies=4 )  (a vector)', &
-'          > [  99 ]', &
-'          > [  99 ]', &
-'          > [  99 ]', &
-'          > [  99 ]', &
-'          >shape= 4 ,rank= 1 ,size= 4', &
-'', &
-'           first we will set V to  (a vector)', &
-'          > [  1 ]', &
-'          > [  2 ]', &
-'          > [  3 ]', &
-'          > [  4 ]', &
-'          >shape= 4 ,rank= 1 ,size= 4', &
-'', &
-'          and then do "spread ( v, dim=2, ncopies=3 )"', &
-'          this adds a new dimension (2) of extent 3  (a matrix)', &
-'          > [  1,  1,  1 ]', &
-'          > [  2,  2,  2 ]', &
-'          > [  3,  3,  3 ]', &
-'          > [  4,  4,  4 ]', &
-'          >shape= 4 3 ,rank= 2 ,size= 12', &
-'', &
-'           spread(v,dim=1,ncopies=3) adds a new dimension (1) (a matrix)', &
-'          > [  1,  2,  3,  4 ]', &
-'          > [  1,  2,  3,  4 ]', &
-'          > [  1,  2,  3,  4 ]', &
-'          >shape= 3 4 ,rank= 2 ,size= 12', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -19642,28 +21059,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               spread(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                spread(3fortran)', &
 '']
 
 shortname="spread"
 call process()
 
 
-case('185','sqrt')
+case('187','sqrt')
 
 textblock=[character(len=256) :: &
 '', &
-'sqrt(3fortran)                                                  sqrt(3fortran)', &
+'sqrt(3fortran)                                                 sqrt(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SQRT(3) - [MATHEMATICS] Square-root function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = sqrt(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function sqrt(x)', &
+'          elemental TYPE(kind=KIND) function sqrt(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  TYPE may be real or complex.', &
@@ -19713,32 +21136,33 @@ textblock=[character(len=256) :: &
 '      real(kind=real64) :: x, x2', &
 '      complex :: z, z2', &
 '', &
-'        ! basics', &
-'         x = 2.0_real64', &
-'         ! complex', &
-'         z = (1.0, 2.0)', &
-'         write(*,*)''input values '',x,z', &
+'       ! basics', &
+'        x = 2.0_real64', &
+'        ! complex', &
+'        z = (1.0, 2.0)', &
+'        write(*,*)''input values '',x,z', &
 '', &
-'         x2 = sqrt(x)', &
-'         z2 = sqrt(z)', &
-'         write(*,*)''output values '',x2,z2', &
+'        x2 = sqrt(x)', &
+'        z2 = sqrt(z)', &
+'        write(*,*)''output values '',x2,z2', &
 '', &
-'        ! elemental', &
-'        write(*,*)''elemental'',sqrt([64.0,121.0,30.0])', &
+'       ! elemental', &
+'       write(*,*)''elemental'',sqrt([64.0,121.0,30.0])', &
 '', &
-'        ! alternatives', &
-'         x2 = x**0.5', &
-'         z2 = z**0.5', &
-'         write(*,*)''alternatively'',x2,z2', &
+'       ! alternatives', &
+'        x2 = x**0.5', &
+'        z2 = z**0.5', &
+'        write(*,*)''alternatively'',x2,z2', &
 '', &
 '      end program demo_sqrt', &
 '', &
 '  Results:', &
 '', &
-'          input values    2.00000000000000      (1.000000,2.000000)', &
-'          output values    1.41421356237310      (1.272020,0.7861513)', &
-'          elemental   8.000000       11.00000       5.477226', &
-'          alternatively   1.41421356237310      (1.272020,0.7861513)', &
+'         input values    2.00000000000000      (1.000000,2.000000)', &
+'         output values    1.41421356237310      (1.272020,0.7861513)', &
+'         elemental   8.000000       11.00000       5.477226', &
+'         alternatively   1.41421356237310      (1.272020,0.7861513)', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -19748,29 +21172,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 sqrt(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  sqrt(3fortran)', &
 '']
 
 shortname="sqrt"
 call process()
 
 
-case('186','storage_size')
+case('188','storage_size')
 
 textblock=[character(len=256) :: &
 '', &
-'storage_size(3fortran)                                  storage_size(3fortran)', &
+'storage_size(3fortran)                                 storage_size(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  STORAGE_SIZE(3) - [BIT:INQUIRY] Storage size in bits', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = storage_size(a [,KIND] )', &
 '', &
-'           integer(kind=KIND) storage_size(a,KIND)', &
+'          integer(kind=KIND) storage_size(a,KIND)', &
 '', &
-'            type(TYPE(kind=**)) :: a', &
-'            integer,intent(in),optional :: KIND', &
+'           type(TYPE(kind=**)) :: a', &
+'           integer,intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -19824,25 +21254,26 @@ textblock=[character(len=256) :: &
 '      program demo_storage_size', &
 '      implicit none', &
 '', &
-'         ! a default real, integer, and logical are the same storage size', &
-'         write(*,*)''size of integer       '',storage_size(0)', &
-'         write(*,*)''size of real          '',storage_size(0.0)', &
-'         write(*,*)''size of logical       '',storage_size(.true.)', &
-'         write(*,*)''size of complex       '',storage_size((0.0,0.0))', &
+'        ! a default real, integer, and logical are the same storage size', &
+'        write(*,*)''size of integer      '',storage_size(0)', &
+'        write(*,*)''size of real         '',storage_size(0.0)', &
+'        write(*,*)''size of logical      '',storage_size(.true.)', &
+'        write(*,*)''size of complex      '',storage_size((0.0,0.0))', &
 '', &
-'         ! note the size of an element of the array, not the storage size of', &
-'         ! the entire array is returned for array arguments', &
-'         write(*,*)''size of integer array '',storage_size([0,1,2,3,4,5,6,7,8,9])', &
+'        ! note the size of an element of the array, not the storage size of', &
+'        ! the entire array is returned for array arguments', &
+'        write(*,*)''size of integer array '',storage_size([0,1,2,3,4,5,6,7,8,9])', &
 '', &
 '      end program demo_storage_size', &
 '', &
 '  Results:', &
 '', &
-'          size of integer                 32', &
-'          size of real                    32', &
-'          size of logical                 32', &
-'          size of complex                 64', &
-'          size of integer array           32', &
+'         size of integer                 32', &
+'         size of real                    32', &
+'         size of logical                 32', &
+'         size of complex                 64', &
+'         size of integer array           32', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -19852,30 +21283,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023         storage_size(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023          storage_size(3fortran)', &
 '']
 
 shortname="storage_size"
 call process()
 
 
-case('187','sum')
+case('189','sum')
 
 textblock=[character(len=256) :: &
 '', &
-'sum(3fortran)                                                    sum(3fortran)', &
+'sum(3fortran)                                                   sum(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SUM(3) - [ARRAY:REDUCTION] Sum the elements of an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = sum(array [,dim[,mask]] | [mask] )', &
 '', &
-'           TYPE(kind=KIND) function sum(array, dim, mask)', &
+'          TYPE(kind=KIND) function sum(array, dim, mask)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: array(..)', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            logical(kind=**),intent(in),optional :: mask(..)', &
+'           TYPE(kind=KIND),intent(in) :: array(..)', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           logical(kind=**),intent(in),optional :: mask(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -19924,32 +21361,32 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer :: vector(5) , matrix(3,4), box(5,6,7)', &
 '', &
-'         vector = [ 1, 2, -3, 4, 5 ]', &
+'        vector = [ 1, 2, -3, 4, 5 ]', &
 '', &
-'         matrix(1,:)=[  -1,   2,    -3,   4    ]', &
-'         matrix(2,:)=[  10,   -20,  30,   -40  ]', &
-'         matrix(3,:)=[  100,  200, -300,  400  ]', &
+'        matrix(1,:)=[  -1,   2,    -3,   4    ]', &
+'        matrix(2,:)=[  10,   -20,  30,   -40  ]', &
+'        matrix(3,:)=[  100,  200, -300,  400  ]', &
 '', &
-'         box=11', &
+'        box=11', &
 '', &
-'        ! basics', &
-'         print *, ''sum all elements:'',sum(vector)', &
-'         print *, ''real :'',sum([11.0,-5.0,20.0])', &
-'         print *, ''complex :'',sum([(1.1,-3.3),(4.0,5.0),(8.0,-6.0)])', &
-'        ! with MASK option', &
-'         print *, ''sum odd elements:'',sum(vector, mask=mod(vector, 2)==1)', &
-'         print *, ''sum positive values:'', sum(vector, mask=vector>0)', &
+'       ! basics', &
+'        print *, ''sum all elements:'',sum(vector)', &
+'        print *, ''real :'',sum([11.0,-5.0,20.0])', &
+'        print *, ''complex :'',sum([(1.1,-3.3),(4.0,5.0),(8.0,-6.0)])', &
+'       ! with MASK option', &
+'        print *, ''sum odd elements:'',sum(vector, mask=mod(vector, 2)==1)', &
+'        print *, ''sum positive values:'', sum(vector, mask=vector>0)', &
 '', &
-'         call printi(''the input array'', matrix )', &
-'         call printi(''sum of all elements in matrix'', sum(matrix) )', &
-'         call printi(''sum of positive elements'', sum(matrix,matrix>=0) )', &
-'        ! along dimensions', &
-'         call printi(''sum along rows'', sum(matrix,dim=1) )', &
-'         call printi(''sum along columns'', sum(matrix,dim=2) )', &
-'         call printi(''sum of a vector is always a scalar'', sum(vector,dim=1) )', &
-'         call printi(''sum of a volume by row'', sum(box,dim=1) )', &
-'         call printi(''sum of a volume by column'', sum(box,dim=2) )', &
-'         call printi(''sum of a volume by depth'', sum(box,dim=3) )', &
+'        call printi(''the input array'', matrix )', &
+'        call printi(''sum of all elements in matrix'', sum(matrix) )', &
+'        call printi(''sum of positive elements'', sum(matrix,matrix>=0) )', &
+'       ! along dimensions', &
+'        call printi(''sum along rows'', sum(matrix,dim=1) )', &
+'        call printi(''sum along columns'', sum(matrix,dim=2) )', &
+'        call printi(''sum of a vector is always a scalar'', sum(vector,dim=1) )', &
+'        call printi(''sum of a volume by row'', sum(box,dim=1) )', &
+'        call printi(''sum of a volume by column'', sum(box,dim=2) )', &
+'        call printi(''sum of a volume by depth'', sum(box,dim=3) )', &
 '', &
 '      contains', &
 '      ! CONVENIENCE ROUTINE; NOT DIRECTLY CONNECTED TO SPREAD(3)', &
@@ -19961,95 +21398,96 @@ textblock=[character(len=256) :: &
 '      !@(#) print small 2d integer scalar, vector, matrix in row-column format', &
 '', &
 '      character(len=*),intent(in)  :: title', &
-'      integer,intent(in)           :: a(..)', &
+'      integer,intent(in)          :: a(..)', &
 '', &
 '      character(len=*),parameter   :: all=''(" ",*(g0,1x))''', &
-'      character(len=20)            :: row', &
-'      integer,allocatable          :: b(:,:)', &
-'      integer                      :: i', &
-'         write(*,all,advance=''no'')trim(title)', &
-'         ! copy everything to a matrix to keep code simple', &
-'         select rank(a)', &
-'         rank (0); write(*,''(a)'')'' (a scalar)''; b=reshape([a],[1,1])', &
-'         rank (1); write(*,''(a)'')'' (a vector)''; b=reshape(a,[size(a),1])', &
-'         rank (2); write(*,''(a)'')'' (a matrix)''; b=a', &
-'         rank default; stop ''*printi* unexpected rank''', &
-'         end select', &
-'         ! find how many characters to use for integers', &
-'         write(row,''(i0)'')ceiling(log10(real(maxval(abs(b)))))+2', &
-'         ! use this format to write a row', &
-'         row=''(" > [",*(i''//trim(row)//'':,","))''', &
-'         do i=1,size(b,dim=1)', &
-'            write(*,fmt=row,advance=''no'')b(i,:)', &
-'            write(*,''(" ]")'')', &
-'         enddo', &
-'         write(*,all) ''>shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
-'         write(*,*)', &
+'      character(len=20)           :: row', &
+'      integer,allocatable         :: b(:,:)', &
+'      integer                     :: i', &
+'        write(*,all,advance=''no'')trim(title)', &
+'        ! copy everything to a matrix to keep code simple', &
+'        select rank(a)', &
+'        rank (0); write(*,''(a)'')'' (a scalar)''; b=reshape([a],[1,1])', &
+'        rank (1); write(*,''(a)'')'' (a vector)''; b=reshape(a,[size(a),1])', &
+'        rank (2); write(*,''(a)'')'' (a matrix)''; b=a', &
+'        rank default; stop ''*printi* unexpected rank''', &
+'        end select', &
+'        ! find how many characters to use for integers', &
+'        write(row,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(b))))))+2', &
+'        ! use this format to write a row', &
+'        row=''(" > [",*(i''//trim(row)//'':,","))''', &
+'        do i=1,size(b,dim=1)', &
+'           write(*,fmt=row,advance=''no'')b(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
+'        write(*,all) ''>shape='',shape(a),'',rank='',rank(a),'',size='',size(a)', &
+'        write(*,*)', &
 '      end subroutine printi', &
 '      end program demo_sum', &
 '', &
 '  Results:', &
 '', &
-'          sum all elements:           9', &
-'          real :   26.00000', &
-'          complex : (13.10000,-4.300000)', &
-'          sum odd elements:           6', &
-'          sum positive values:          12', &
-'          the input array  (a matrix)', &
-'          > [   -1,    2,   -3,    4 ]', &
-'          > [   10,  -20,   30,  -40 ]', &
-'          > [  100,  200, -300,  400 ]', &
-'          >shape= 3 4 ,rank= 2 ,size= 12', &
+'         sum all elements:           9', &
+'         real :   26.00000', &
+'         complex : (13.10000,-4.300000)', &
+'         sum odd elements:           6', &
+'         sum positive values:          12', &
+'         the input array  (a matrix)', &
+'         > [   -1,    2,   -3,    4 ]', &
+'         > [   10,  -20,   30,  -40 ]', &
+'         > [  100,  200, -300,  400 ]', &
+'         >shape= 3 4 ,rank= 2 ,size= 12', &
 '', &
-'          sum of all elements in matrix  (a scalar)', &
-'          > [  382 ]', &
-'          >shape= ,rank= 0 ,size= 1', &
+'         sum of all elements in matrix  (a scalar)', &
+'         > [  382 ]', &
+'         >shape= ,rank= 0 ,size= 1', &
 '', &
-'          sum of positive elements  (a scalar)', &
-'          > [  746 ]', &
-'          >shape= ,rank= 0 ,size= 1', &
+'         sum of positive elements  (a scalar)', &
+'         > [  746 ]', &
+'         >shape= ,rank= 0 ,size= 1', &
 '', &
-'          sum along rows  (a vector)', &
-'          > [  109 ]', &
-'          > [  182 ]', &
-'          > [ -273 ]', &
-'          > [  364 ]', &
-'          >shape= 4 ,rank= 1 ,size= 4', &
+'         sum along rows  (a vector)', &
+'         > [  109 ]', &
+'         > [  182 ]', &
+'         > [ -273 ]', &
+'         > [  364 ]', &
+'         >shape= 4 ,rank= 1 ,size= 4', &
 '', &
-'          sum along columns  (a vector)', &
-'          > [    2 ]', &
-'          > [  -20 ]', &
-'          > [  400 ]', &
-'          >shape= 3 ,rank= 1 ,size= 3', &
+'         sum along columns  (a vector)', &
+'         > [    2 ]', &
+'         > [  -20 ]', &
+'         > [  400 ]', &
+'         >shape= 3 ,rank= 1 ,size= 3', &
 '', &
-'          sum of a vector is always a scalar  (a scalar)', &
-'          > [  9 ]', &
-'          >shape= ,rank= 0 ,size= 1', &
+'         sum of a vector is always a scalar  (a scalar)', &
+'         > [  9 ]', &
+'         >shape= ,rank= 0 ,size= 1', &
 '', &
-'          sum of a volume by row  (a matrix)', &
-'          > [  55,  55,  55,  55,  55,  55,  55 ]', &
-'          > [  55,  55,  55,  55,  55,  55,  55 ]', &
-'          > [  55,  55,  55,  55,  55,  55,  55 ]', &
-'          > [  55,  55,  55,  55,  55,  55,  55 ]', &
-'          > [  55,  55,  55,  55,  55,  55,  55 ]', &
-'          > [  55,  55,  55,  55,  55,  55,  55 ]', &
-'          >shape= 6 7 ,rank= 2 ,size= 42', &
+'         sum of a volume by row  (a matrix)', &
+'         > [  55,  55,  55,  55,  55,  55,  55 ]', &
+'         > [  55,  55,  55,  55,  55,  55,  55 ]', &
+'         > [  55,  55,  55,  55,  55,  55,  55 ]', &
+'         > [  55,  55,  55,  55,  55,  55,  55 ]', &
+'         > [  55,  55,  55,  55,  55,  55,  55 ]', &
+'         > [  55,  55,  55,  55,  55,  55,  55 ]', &
+'         >shape= 6 7 ,rank= 2 ,size= 42', &
 '', &
-'          sum of a volume by column  (a matrix)', &
-'          > [  66,  66,  66,  66,  66,  66,  66 ]', &
-'          > [  66,  66,  66,  66,  66,  66,  66 ]', &
-'          > [  66,  66,  66,  66,  66,  66,  66 ]', &
-'          > [  66,  66,  66,  66,  66,  66,  66 ]', &
-'          > [  66,  66,  66,  66,  66,  66,  66 ]', &
-'          >shape= 5 7 ,rank= 2 ,size= 35', &
+'         sum of a volume by column  (a matrix)', &
+'         > [  66,  66,  66,  66,  66,  66,  66 ]', &
+'         > [  66,  66,  66,  66,  66,  66,  66 ]', &
+'         > [  66,  66,  66,  66,  66,  66,  66 ]', &
+'         > [  66,  66,  66,  66,  66,  66,  66 ]', &
+'         > [  66,  66,  66,  66,  66,  66,  66 ]', &
+'         >shape= 5 7 ,rank= 2 ,size= 35', &
 '', &
-'          sum of a volume by depth  (a matrix)', &
-'          > [  77,  77,  77,  77,  77,  77 ]', &
-'          > [  77,  77,  77,  77,  77,  77 ]', &
-'          > [  77,  77,  77,  77,  77,  77 ]', &
-'          > [  77,  77,  77,  77,  77,  77 ]', &
-'          > [  77,  77,  77,  77,  77,  77 ]', &
-'          >shape= 5 6 ,rank= 2 ,size= 30', &
+'         sum of a volume by depth  (a matrix)', &
+'         > [  77,  77,  77,  77,  77,  77 ]', &
+'         > [  77,  77,  77,  77,  77,  77 ]', &
+'         > [  77,  77,  77,  77,  77,  77 ]', &
+'         > [  77,  77,  77,  77,  77,  77 ]', &
+'         > [  77,  77,  77,  77,  77,  77 ]', &
+'         >shape= 5 6 ,rank= 2 ,size= 30', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -20071,37 +21509,43 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  sum(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   sum(3fortran)', &
 '']
 
 shortname="sum"
 call process()
 
 
-case('188','system_clock')
+case('190','system_clock')
 
 textblock=[character(len=256) :: &
 '', &
-'system_clock(3fortran)                                  system_clock(3fortran)', &
+'system_clock(3fortran)                                 system_clock(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  SYSTEM_CLOCK(3) - [SYSTEM:TIME] Query system clock', &
 '', &
+'', &
 'SYNOPSIS', &
 '  call system_clock([count] [,count_rate] [,count_max] )', &
 '', &
-'           subroutine system_clock(count, count_rate, count_max)', &
+'          subroutine system_clock(count, count_rate, count_max)', &
 '', &
-'            integer,intent(out),optional  :: count', &
-'            type(TYPE(kind=KIND),intent(out),optional  :: count_rate', &
-'            integer,intent(out),optional  :: count_max', &
+'           integer(kind=**),intent(out),optional    :: count', &
+'           type(TYPE(kind=**)),intent(out),optional :: count_rate', &
+'           integer(kind=**),intent(out),optional    :: count_max', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  COUNT is an integer scalar', &
 '', &
-'  o  COUNT_RATE an integer or real scalar', &
+'  o  COUNT_RATE is an integer or real scalar', &
 '', &
-'  o  COUNT_MAX an integer scalar', &
+'  o  COUNT_MAX is an integer scalar', &
 '', &
 'DESCRIPTION', &
 '  SYSTEM_CLOCK(3) lets you measure durations of time with the precision of the', &
@@ -20117,24 +21561,26 @@ textblock=[character(len=256) :: &
 '  COUNT_RATE and COUNT_MAX are assumed constant (even though CPU rates can', &
 '  vary on a single platform).', &
 '', &
-'  The accuracy of the measurements may depend on the kind of the arguments!', &
-'', &
 '  Whether an image has no clock, has a single clock of its own, or shares a', &
 '  clock with another image, is processor dependent.', &
 '', &
 '  If there is no clock, or querying the clock fails, COUNT is set to', &
 '  -HUGE(COUNT), and COUNT_RATE and COUNT_MAX are set to zero.', &
 '', &
+'  The accuracy of the measurements may depend on the kind of the arguments!', &
+'', &
+'  Timing-related procedures are obviously processor and system-dependent.', &
+'  More specific information may generally be found in compiler-specific', &
+'  documentation.', &
+'', &
 'OPTIONS', &
-'  o  COUNT', &
+'  o  COUNT If there is no clock, the returned value for COUNT is the negative', &
+'     value -HUGE(COUNT).', &
 '', &
-'      If there is no clock, COUNT is returned as the negative value', &
-'      -HUGE(COUNT).', &
-'', &
-'      Otherwise, the CLOCK value is incremented by one for each clock', &
-'      count until the value COUNT_MAX is reached and is then reset to zero', &
-'      at the next count. CLOCK therefore is a modulo value that lies in', &
-'      the range 0 TO COUNT_MAX.', &
+'     Otherwise, the CLOCK value is incremented by one for each clock count', &
+'     until the value COUNT_MAX is reached and is then reset to zero at the', &
+'     next count. CLOCK therefore is a modulo value that lies in the range 0 TO', &
+'     COUNT_MAX.', &
 '', &
 '  o  COUNT_RATE : is assigned a processor-dependent approximation to the', &
 '     number of processor clock counts per second, or zero if there is no', &
@@ -20149,69 +21595,76 @@ textblock=[character(len=256) :: &
 '  If the processor clock is a 24-hour clock that registers time at', &
 '  approximately 18.20648193 ticks per second, at 11:30 A.M. the reference', &
 '', &
-'            call system_clock (count = c, count_rate = r, count_max = m)', &
+'           call system_clock (count = c, count_rate = r, count_max = m)', &
 '', &
 '  defines', &
 '', &
-'            C = (11*3600+30*60)*18.20648193 = 753748,', &
-'            R = 18.20648193, and', &
-'            M = 24*3600*18.20648193-1 = 1573039.', &
+'           C = (11*3600+30*60)*18.20648193 = 753748,', &
+'           R = 18.20648193, and', &
+'           M = 24*3600*18.20648193-1 = 1573039.', &
 '', &
 '  Sample program:', &
 '', &
 '      program demo_system_clock', &
-'      use, intrinsic :: iso_fortran_env, only : wp=>real64,int32,int64', &
+'      use, intrinsic :: iso_fortran_env, only: wp => real64, int32, int64', &
 '      implicit none', &
-'      character(len=*),parameter :: g=''(1x,*(g0,1x))''', &
+'      character(len=*), parameter :: g = ''(1x,*(g0,1x))''', &
+'', &
 '      integer(kind=int64) :: count64, count_rate64, count_max64', &
 '      integer(kind=int64) :: start64, finish64', &
+'', &
 '      integer(kind=int32) :: count32, count_rate32, count_max32', &
 '      integer(kind=int32) :: start32, finish32', &
-'      real(kind=wp)       :: time_read', &
-'      real(kind=wp)       :: sum', &
-'      integer             :: i', &
 '', &
-'        print g,''accuracy may vary with argument type!''', &
-'        call system_clock(count_rate=count_rate64)', &
-'        print g,''COUNT RATE FOR INT64:'',count_rate64', &
-'        call system_clock(count_rate=count_rate32)', &
-'        print g,''COUNT RATE FOR INT32:'',count_rate32', &
+'      real(kind=wp)      :: time_read', &
+'      real(kind=wp)      :: sum', &
+'      integer            :: i', &
 '', &
-'        print g,''query all arguments''', &
+'        print g, ''accuracy may vary with argument type!''', &
+'', &
+'        print g, ''query all arguments''', &
+'', &
 '        call system_clock(count64, count_rate64, count_max64)', &
-'        print g, ''COUNT_MAX='',count_max64', &
-'        print g, ''COUNT_RATE='',count_rate64', &
-'        print g, ''CURRENT COUNT='',count64', &
+'        print g, ''COUNT_MAX(64bit)='', count_max64', &
+'        print g, ''COUNT_RATE(64bit)='', count_rate64', &
+'        print g, ''CURRENT COUNT(64bit)='', count64', &
 '', &
-'        print g,''time some computation''', &
+'        call system_clock(count32, count_rate32, count_max32)', &
+'        print g, ''COUNT_MAX(32bit)='', count_max32', &
+'        print g, ''COUNT_RATE(32bit)='', count_rate32', &
+'        print g, ''CURRENT COUNT(32bit)='', count32', &
+'', &
+'        print g, ''time some computation''', &
 '        call system_clock(start64)', &
 '', &
 '        ! some code to time', &
-'        sum=0.0_wp', &
-'        do i=-huge(0)-1, huge(0)-1, 10', &
-'           sum=sum+sqrt(real(i))', &
-'        enddo', &
-'        print g,''SUM='',sum', &
+'        sum = 0.0_wp', &
+'        do i = -0, huge(0) - 1', &
+'           sum = sum + sqrt(real(i))', &
+'        end do', &
+'        print g, ''SUM='', sum', &
 '', &
 '        call system_clock(finish64)', &
 '', &
-'        time_read=(finish64-start64)/real(count_rate64,wp)', &
-'        write(*,''(a30,1x,f7.4,1x,a)'') ''time : '', time_read, '' seconds''', &
+'        time_read = (finish64 - start64)/real(count_rate64, wp)', &
+'        write (*, ''(1x,a,1x,g0,1x,a)'') ''time : '', time_read, '' seconds''', &
 '', &
 '      end program demo_system_clock', &
 '', &
 '  Results:', &
 '', &
-'       accuracy may vary with argument type!', &
-'       COUNT RATE FOR INT64: 1000000000', &
-'       COUNT RATE FOR INT32: 1000', &
-'       query all arguments', &
-'       COUNT_MAX= 9223372036854775807', &
-'       COUNT_RATE= 1000000000', &
-'       CURRENT COUNT= 518240530647469', &
-'       time some computation', &
-'       SUM= NaN', &
-'                             time :   1.6686  seconds', &
+'       >  accuracy may vary with argument type!', &
+'       >  query all arguments', &
+'       >  COUNT_MAX(64bit)= 9223372036854775807', &
+'       >  COUNT_RATE(64bit)= 1000000000', &
+'       >  CURRENT COUNT(64bit)= 1105422387865806', &
+'       >  COUNT_MAX(32bit)= 2147483647', &
+'       >  COUNT_RATE(32bit)= 1000', &
+'       >  CURRENT COUNT(32bit)= 1105422387', &
+'       >  time some computation', &
+'       >  SUM= 66344288183024.266', &
+'       >  time :  6.1341038460000004  seconds', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -20221,28 +21674,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023         system_clock(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023          system_clock(3fortran)', &
 '']
 
 shortname="system_clock"
 call process()
 
 
-case('189','tan')
+case('191','tan')
 
 textblock=[character(len=256) :: &
 '', &
-'tan(3fortran)                                                    tan(3fortran)', &
+'tan(3fortran)                                                   tan(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  TAN(3) - [MATHEMATICS:TRIGONOMETRIC] Tangent function', &
+'', &
 '', &
 'SYNOPSIS', &
 '  result = tan(x)', &
 '', &
 '       elemental TYPE(kind=KIND) function tan(x)', &
 '', &
-'        TYPE(kind=KIND),intent(in) :: x', &
+'       TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  the TYPE of X may be real or complex of any supported kind', &
@@ -20267,12 +21726,13 @@ textblock=[character(len=256) :: &
 '      & real32, real64, real128', &
 '      implicit none', &
 '      real(kind=real64) :: x = 0.165_real64', &
-'           write(*,*)x, tan(x)', &
+'          write(*,*)x, tan(x)', &
 '      end program demo_tan', &
 '', &
 '  Results:', &
 '', &
-'           0.16500000000000001       0.16651386310913616', &
+'          0.16500000000000001       0.16651386310913616', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77 . For a complex argument, Fortran 2008 .', &
@@ -20282,28 +21742,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                  tan(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                   tan(3fortran)', &
 '']
 
 shortname="tan"
 call process()
 
 
-case('190','tanh')
+case('192','tanh')
 
 textblock=[character(len=256) :: &
 '', &
-'tanh(3fortran)                                                  tanh(3fortran)', &
+'tanh(3fortran)                                                 tanh(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  TANH(3) - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic tangent function', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = tanh(x)', &
 '', &
-'           elemental TYPE(kind=KIND) function tanh(x)', &
+'          elemental TYPE(kind=KIND) function tanh(x)', &
 '', &
-'            TYPE(kind=KIND),intent(in) :: x', &
+'           TYPE(kind=KIND),intent(in) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be real or complex and any associated kind supported by the', &
@@ -20325,7 +21791,8 @@ textblock=[character(len=256) :: &
 '', &
 '  If X is real, the return value lies in the range', &
 '', &
-'            -1 <= tanh(x) <= 1.', &
+'           -1 <= tanh(x) <= 1.', &
+'', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
@@ -20335,12 +21802,13 @@ textblock=[character(len=256) :: &
 '      & real_kinds, real32, real64, real128', &
 '      implicit none', &
 '      real(kind=real64) :: x = 2.1_real64', &
-'         write(*,*)x, tanh(x)', &
+'        write(*,*)x, tanh(x)', &
 '      end program demo_tanh', &
 '', &
 '  Results:', &
 '', &
-'            2.1000000000000001       0.97045193661345386', &
+'           2.1000000000000001       0.97045193661345386', &
+'', &
 '', &
 'STANDARD', &
 '  FORTRAN 77 , for a complex argument Fortran 2008', &
@@ -20353,30 +21821,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023                 tanh(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  tanh(3fortran)', &
 '']
 
 shortname="tanh"
 call process()
 
 
-case('191','this_image')
+case('193','this_image')
 
 textblock=[character(len=256) :: &
 '', &
-'this_image(3fortran)                                      this_image(3fortran)', &
+'this_image(3fortran)                                     this_image(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  THIS_IMAGE(3) - [COLLECTIVE] Cosubscript index of this image', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = this_image() | = this_image(distance) | = this_image(coarray,dim)', &
 '', &
-'         integer function this_image( distance ,coarray, dim )', &
+'        integer function this_image( distance ,coarray, dim )', &
 '', &
-'          type(TYPE(kind=**),optional :: coarray[*]', &
-'          integer,intent(in),optional :: distance', &
-'          integer,intent(in),optional :: dim', &
+'         type(TYPE(kind=**)),optional :: coarray[*]', &
+'         integer,intent(in),optional  :: distance', &
+'         integer,intent(in),optional  :: dim', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  a kind designated as ** may be any supported kind for the type', &
@@ -20417,18 +21891,19 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      integer :: value[*]', &
 '      integer :: i', &
-'         value = this_image()', &
-'         sync all', &
-'         if (this_image() == 1) then', &
-'            do i = 1, num_images()', &
-'               write(*,''(2(a,i0))'') ''value['', i, ''] is '', value[i]', &
-'            end do', &
-'         endif', &
+'        value = this_image()', &
+'        sync all', &
+'        if (this_image() == 1) then', &
+'           do i = 1, num_images()', &
+'              write(*,''(2(a,i0))'') ''value['', i, ''] is '', value[i]', &
+'           end do', &
+'        endif', &
 '      end program demo_this_image', &
 '', &
 '  Results:', &
 '', &
-'         value[1] is 1', &
+'        value[1] is 1', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008. With DISTANCE argument, TS 18508', &
@@ -20438,28 +21913,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023           this_image(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023            this_image(3fortran)', &
 '']
 
 shortname="this_image"
 call process()
 
 
-case('192','tiny')
+case('194','tiny')
 
 textblock=[character(len=256) :: &
 '', &
-'tiny(3fortran)                                                  tiny(3fortran)', &
+'tiny(3fortran)                                                 tiny(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  TINY(3) - [NUMERIC MODEL] Smallest positive number of a real kind', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = tiny(x)', &
 '', &
-'           real(kind=KIND) function tiny(x)', &
+'          real(kind=KIND) function tiny(x)', &
 '', &
-'            real(kind=KIND) :: x', &
+'           real(kind=KIND) :: x', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  X may be any real scalar or array', &
@@ -20472,7 +21953,8 @@ textblock=[character(len=256) :: &
 '', &
 '  For real X', &
 '', &
-'         result = 2.0**(minexponent(x)-1)', &
+'        result = 2.0**(minexponent(x)-1)', &
+'', &
 '', &
 'OPTIONS', &
 '  o  X : The value whose kind is used to determine the model type to query', &
@@ -20485,8 +21967,8 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_tiny', &
 '      implicit none', &
-'         print *, ''default real is from'', tiny(0.0), ''to'',huge(0.0)', &
-'         print *, ''doubleprecision is from '', tiny(0.0d0), ''to'',huge(0.0d0)', &
+'        print *, ''default real is from'', tiny(0.0), ''to'',huge(0.0)', &
+'        print *, ''doubleprecision is from '', tiny(0.0d0), ''to'',huge(0.0d0)', &
 '      end program demo_tiny', &
 '', &
 '  Results:', &
@@ -20494,6 +21976,7 @@ textblock=[character(len=256) :: &
 '       default real is from 1.17549435E-38 to 3.40282347E+38', &
 '       doubleprecision is from 2.2250738585072014E-308 to', &
 '       1.7976931348623157E+308', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -20505,28 +21988,34 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 tiny(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  tiny(3fortran)', &
 '']
 
 shortname="tiny"
 call process()
 
 
-case('193','trailz')
+case('195','trailz')
 
 textblock=[character(len=256) :: &
 '', &
-'trailz(3fortran)                                              trailz(3fortran)', &
+'trailz(3fortran)                                             trailz(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  TRAILZ(3) - [BIT:COUNT] Number of trailing zero bits of an integer', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = trailz(i)', &
 '', &
-'        elemental integer function trailz(i)', &
+'       elemental integer function trailz(i)', &
 '', &
-'         integer(kind=**),intent(in) :: i', &
+'        integer(kind=**),intent(in) :: i', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  I is an integer of any kind.', &
@@ -20543,11 +22032,11 @@ textblock=[character(len=256) :: &
 '  The number of trailing rightmost zero bits in an integer value after the', &
 '  last non-zero bit.', &
 '', &
-'             >      right-most non-zero bit', &
-'             >                 V', &
-'             >  |0|0|0|1|1|1|0|1|0|0|0|0|0|0|', &
-'             >  ^               |___________| trailing zero bits', &
-'             >   bit_size(i)', &
+'            >      right-most non-zero bit', &
+'            >                 V', &
+'            >  |0|0|0|1|1|1|0|1|0|0|0|0|0|0|', &
+'            >  ^               |___________| trailing zero bits', &
+'            >   bit_size(i)', &
 '', &
 '  If all the bits of I are zero, the result is the size of the input value in', &
 '  bits, ie. BIT_SIZE(I).', &
@@ -20571,32 +22060,33 @@ textblock=[character(len=256) :: &
 '       & show = ''(1x,"value=",i4,", value(bits)=",b32.32,1x,", trailz=",i3)''', &
 '', &
 '      integer(kind=int64) :: bigi', &
-'        ! basics', &
-'         write(*,*)''Note default integer is'',bit_size(0),''bits''', &
-'         print  show,  -1, -1,  trailz(-1)', &
-'         print  show,   0,  0,  trailz(0)', &
-'         print  show,   1,  1,  trailz(1)', &
-'         print  show,  96, 96,  trailz(96)', &
-'        ! elemental', &
-'         print *, ''elemental and any integer kind:''', &
-'         bigi=2**5', &
-'         write(*,*) trailz( [ bigi, bigi*256, bigi/2 ] )', &
-'         write(*,''(1x,b64.64)'')[ bigi, bigi*256, bigi/2 ]', &
+'       ! basics', &
+'        write(*,*)''Note default integer is'',bit_size(0),''bits''', &
+'        print  show,  -1, -1,  trailz(-1)', &
+'        print  show,   0,  0,  trailz(0)', &
+'        print  show,   1,  1,  trailz(1)', &
+'        print  show,  96, 96,  trailz(96)', &
+'       ! elemental', &
+'        print *, ''elemental and any integer kind:''', &
+'        bigi=2**5', &
+'        write(*,*) trailz( [ bigi, bigi*256, bigi/2 ] )', &
+'        write(*,''(1x,b64.64)'')[ bigi, bigi*256, bigi/2 ]', &
 '', &
 '      end program demo_trailz', &
 '', &
 '  Results:', &
 '', &
-'          Note default integer is          32 bits', &
-'          value=  -1, value(bits)=11111111111111111111111111111111 , trailz=  0', &
-'          value=   0, value(bits)=00000000000000000000000000000000 , trailz= 32', &
-'          value=   1, value(bits)=00000000000000000000000000000001 , trailz=  0', &
-'          value=  96, value(bits)=00000000000000000000000001100000 , trailz=  5', &
-'          elemental and any integer kind:', &
-'                    5          13           4', &
-'          0000000000000000000000000000000000000000000000000000000000100000', &
-'          0000000000000000000000000000000000000000000000000010000000000000', &
-'          0000000000000000000000000000000000000000000000000000000000010000', &
+'         Note default integer is          32 bits', &
+'         value=  -1, value(bits)=11111111111111111111111111111111 , trailz=  0', &
+'         value=   0, value(bits)=00000000000000000000000000000000 , trailz= 32', &
+'         value=   1, value(bits)=00000000000000000000000000000001 , trailz=  0', &
+'         value=  96, value(bits)=00000000000000000000000001100000 , trailz=  5', &
+'         elemental and any integer kind:', &
+'                   5          13           4', &
+'         0000000000000000000000000000000000000000000000000000000000100000', &
+'         0000000000000000000000000000000000000000000000000010000000000000', &
+'         0000000000000000000000000000000000000000000000000000000000010000', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 2008', &
@@ -20606,30 +22096,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               trailz(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                trailz(3fortran)', &
 '']
 
 shortname="trailz"
 call process()
 
 
-case('194','transfer')
+case('196','transfer')
 
 textblock=[character(len=256) :: &
 '', &
-'transfer(3fortran)                                          transfer(3fortran)', &
+'transfer(3fortran)                                         transfer(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  TRANSFER(3) - [TYPE:MOLD] Transfer bit patterns', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = transfer(source, mold [,size] )', &
 '', &
-'           type(TYPE(kind=KIND)) function transfer(source,mold,size)', &
+'          type(TYPE(kind=KIND)) function transfer(source,mold,size)', &
 '', &
-'            type(TYPE(kind=KIND)),intent(in) :: source(..)', &
-'            type(TYPE(kind=KIND)),intent(in) :: mold(..)', &
-'            integer(kind=**),intent(in),optional :: size', &
+'           type(TYPE(kind=KIND)),intent(in) :: source(..)', &
+'           type(TYPE(kind=KIND)),intent(in) :: mold(..)', &
+'           integer(kind=**),intent(in),optional :: size', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  SOURCE shall be a scalar or an array of any type.', &
@@ -20684,25 +22180,26 @@ textblock=[character(len=256) :: &
 '      integer(kind=int32) :: i = 2143289344', &
 '      real(kind=real32)   :: x', &
 '      character(len=10)   :: string', &
-'      character(len=1)    :: chars(10)', &
-'         x=transfer(i, 1.0)    ! prints "nan" on i686', &
-'         ! the bit patterns are the same', &
-'         write(*,''(b0,1x,g0)'')x,x ! create a NaN', &
-'         write(*,''(b0,1x,g0)'')i,i', &
+'      character(len=1)   :: chars(10)', &
+'        x=transfer(i, 1.0)    ! prints "nan" on i686', &
+'        ! the bit patterns are the same', &
+'        write(*,''(b0,1x,g0)'')x,x ! create a NaN', &
+'        write(*,''(b0,1x,g0)'')i,i', &
 '', &
-'         ! a string to an array of characters', &
-'         string=''abcdefghij''', &
-'         chars=transfer(string,chars)', &
-'         write(*,''(*("[",a,"]":,1x))'')string', &
-'         write(*,''(*("[",a,"]":,1x))'')chars', &
+'        ! a string to an array of characters', &
+'        string=''abcdefghij''', &
+'        chars=transfer(string,chars)', &
+'        write(*,''(*("[",a,"]":,1x))'')string', &
+'        write(*,''(*("[",a,"]":,1x))'')chars', &
 '      end program demo_transfer', &
 '', &
 '  Results:', &
 '', &
-'         1111111110000000000000000000000 NaN', &
-'         1111111110000000000000000000000 2143289344', &
-'         [abcdefghij]', &
-'         [a] [b] [c] [d] [e] [f] [g] [h] [i] [j]', &
+'        1111111110000000000000000000000 NaN', &
+'        1111111110000000000000000000000 2143289344', &
+'        [abcdefghij]', &
+'        [a] [b] [c] [d] [e] [f] [g] [h] [i] [j]', &
+'', &
 '', &
 'COMMENTS', &
 '  Joe Krahn: Fortran uses MOLDING rather than CASTING.', &
@@ -20732,29 +22229,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions', &
 '', &
-'                               January 21, 2023             transfer(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023              transfer(3fortran)', &
 '']
 
 shortname="transfer"
 call process()
 
 
-case('195','transpose')
+case('197','transpose')
 
 textblock=[character(len=256) :: &
 '', &
-'transpose(3fortran)                                        transpose(3fortran)', &
+'transpose(3fortran)                                       transpose(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  TRANSPOSE(3) - [ARRAY:MANIPULATION] Transpose an array of rank two', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = transpose(matrix)', &
 '', &
-'           function transpose(matrix)', &
+'          function transpose(matrix)', &
 '', &
-'            type(TYPE(kind=KIND)            :: transpose(N,M)', &
-'            type(TYPE(kind=KIND),intent(in) :: matrix(M,N)', &
+'           type(TYPE(kind=KIND))            :: transpose(N,M)', &
+'           type(TYPE(kind=KIND)),intent(in) :: matrix(M,N)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  MATRIX is an array of any type with a rank of two.', &
@@ -20782,9 +22285,9 @@ textblock=[character(len=256) :: &
 '      program demo_transpose', &
 '      implicit none', &
 '      integer,save :: xx(3,5)= reshape([&', &
-'          1,  2,  3,  4,  5,    &', &
-'         10, 20, 30, 40, 50,    &', &
-'         11, 22, 33, 44, -1055  &', &
+'         1,  2,  3,  4,  5,    &', &
+'        10, 20, 30, 40, 50,    &', &
+'        11, 22, 33, 44, -1055  &', &
 '       ],shape(xx),order=[2,1])', &
 '', &
 '      call print_matrix_int(''xx array:'',xx)', &
@@ -20796,36 +22299,37 @@ textblock=[character(len=256) :: &
 '      ! print small 2d integer arrays in row-column format', &
 '      implicit none', &
 '      character(len=*),intent(in)  :: title', &
-'      integer,intent(in)           :: arr(:,:)', &
-'      integer                      :: i', &
+'      integer,intent(in)          :: arr(:,:)', &
+'      integer                     :: i', &
 '      character(len=:),allocatable :: biggest', &
-'         write(*,*)trim(title)  ! print title', &
-'         biggest=''           ''  ! make buffer to write integer into', &
-'         ! find how many characters to use for integers', &
-'         write(biggest,''(i0)'')ceiling(log10(real(maxval(abs(arr)))))+2', &
-'         ! use this format to write a row', &
-'         biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
-'         ! print one row of array at a time', &
-'         do i=1,size(arr,dim=1)', &
-'            write(*,fmt=biggest,advance=''no'')arr(i,:)', &
-'            write(*,''(" ]")'')', &
-'         enddo', &
+'        write(*,*)trim(title)  ! print title', &
+'        biggest=''          '' ! make buffer to write integer into', &
+'        ! find how many characters to use for integers', &
+'        write(biggest,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2', &
+'        ! use this format to write a row', &
+'        biggest=''(" > [",*(i''//trim(biggest)//'':,","))''', &
+'        ! print one row of array at a time', &
+'        do i=1,size(arr,dim=1)', &
+'           write(*,fmt=biggest,advance=''no'')arr(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
 '      end subroutine print_matrix_int', &
 '', &
 '      end program demo_transpose', &
 '', &
 '  Results:', &
 '', &
-'          xx array:', &
-'          > [     1,     2,     3,     4,     5 ]', &
-'          > [    10,    20,    30,    40,    50 ]', &
-'          > [    11,    22,    33,    44, -1055 ]', &
-'          xx array transposed:', &
-'          > [     1,    10,    11 ]', &
-'          > [     2,    20,    22 ]', &
-'          > [     3,    30,    33 ]', &
-'          > [     4,    40,    44 ]', &
-'          > [     5,    50, -1055 ]', &
+'         xx array:', &
+'         > [     1,     2,     3,     4,     5 ]', &
+'         > [    10,    20,    30,    40,    50 ]', &
+'         > [    11,    22,    33,    44, -1055 ]', &
+'         xx array transposed:', &
+'         > [     1,    10,    11 ]', &
+'         > [     2,    20,    22 ]', &
+'         > [     3,    30,    33 ]', &
+'         > [     4,    40,    44 ]', &
+'         > [     5,    50, -1055 ]', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -20841,29 +22345,35 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023            transpose(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023             transpose(3fortran)', &
 '']
 
 shortname="transpose"
 call process()
 
 
-case('196','trim')
+case('198','trim')
 
 textblock=[character(len=256) :: &
 '', &
-'trim(3fortran)                                                  trim(3fortran)', &
+'trim(3fortran)                                                 trim(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  TRIM(3) - [CHARACTER:WHITESPACE] Remove trailing blank characters from a', &
 '  string', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = trim(string)', &
 '', &
-'           character(len=:,kind=KIND) function trim(string)', &
+'          character(len=:,kind=KIND) function trim(string)', &
 '', &
-'            character(len=*,kind=KIND),intent(in) :: string', &
+'           character(len=*,kind=KIND),intent(in) :: string', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  KIND can be any kind supported for the character type.', &
@@ -20891,43 +22401,44 @@ textblock=[character(len=256) :: &
 '      character(len=*),parameter :: brackets=''( *("[",a,"]":,1x) )''', &
 '      integer :: i', &
 '', &
-'         str=''   trailing    ''', &
-'         print brackets, str,trim(str) ! trims it', &
+'        str=''  trailing    ''', &
+'        print brackets, str,trim(str) ! trims it', &
 '', &
-'         str=''   leading''', &
-'         print brackets, str,trim(str) ! no effect', &
+'        str=''  leading''', &
+'        print brackets, str,trim(str) ! no effect', &
 '', &
-'         str=''            ''', &
-'         print brackets, str,trim(str) ! becomes zero length', &
-'         print *,  len(str), len(trim(''               ''))', &
+'        str=''           ''', &
+'        print brackets, str,trim(str) ! becomes zero length', &
+'        print *,  len(str), len(trim(''              ''))', &
 '', &
-'        ! array elements are all the same length, so you often', &
-'        ! want to print them', &
-'         strs=[character(len=10) :: "Z"," a b c","ABC",""]', &
+'       ! array elements are all the same length, so you often', &
+'       ! want to print them', &
+'        strs=[character(len=10) :: "Z"," a b c","ABC",""]', &
 '', &
-'         write(*,*)''untrimmed:''', &
-'         ! everything prints as ten characters; nice for neat columns', &
-'         print brackets, (strs(i), i=1,size(strs))', &
-'         print brackets, (strs(i), i=size(strs),1,-1)', &
-'         write(*,*)''trimmed:''', &
-'         ! everything prints trimmed', &
-'         print brackets, (trim(strs(i)), i=1,size(strs))', &
-'         print brackets, (trim(strs(i)), i=size(strs),1,-1)', &
+'        write(*,*)''untrimmed:''', &
+'        ! everything prints as ten characters; nice for neat columns', &
+'        print brackets, (strs(i), i=1,size(strs))', &
+'        print brackets, (strs(i), i=size(strs),1,-1)', &
+'        write(*,*)''trimmed:''', &
+'        ! everything prints trimmed', &
+'        print brackets, (trim(strs(i)), i=1,size(strs))', &
+'        print brackets, (trim(strs(i)), i=size(strs),1,-1)', &
 '', &
 '      end program demo_trim', &
 '', &
 '  Results:', &
 '', &
-'          > [   trailing    ] [   trailing]', &
-'          > [   leading] [   leading]', &
-'          > [            ] []', &
-'          >           12           0', &
-'          >  untrimmed:', &
-'          > [Z         ] [ a b c    ] [ABC       ] [          ]', &
-'          > [          ] [ABC       ] [ a b c    ] [Z         ]', &
-'          >  trimmed:', &
-'          > [Z] [ a b c] [ABC] []', &
-'          > [] [ABC] [ a b c] [Z]', &
+'         > [   trailing    ] [   trailing]', &
+'         > [   leading] [   leading]', &
+'         > [            ] []', &
+'         >           12           0', &
+'         >  untrimmed:', &
+'         > [Z         ] [ a b c    ] [ABC       ] [          ]', &
+'         > [          ] [ABC       ] [ a b c    ] [Z         ]', &
+'         >  trimmed:', &
+'         > [Z] [ a b c] [ABC] []', &
+'         > [] [ABC] [ a b c] [Z]', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -20942,30 +22453,36 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023                 trim(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                  trim(3fortran)', &
 '']
 
 shortname="trim"
 call process()
 
 
-case('197','ubound')
+case('199','ubound')
 
 textblock=[character(len=256) :: &
 '', &
-'ubound(3fortran)                                              ubound(3fortran)', &
+'ubound(3fortran)                                             ubound(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  UBOUND(3) - [ARRAY:INQUIRY] Upper dimension bounds of an array', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = ubound(array [,dim] [,kind] )', &
 '', &
-'           elemental TYPE(kind=KIND) function ubound(array,dim,kind)', &
+'          elemental TYPE(kind=KIND) function ubound(array,dim,kind)', &
 '', &
-'            TYPE(kind=KIND),intent(in)           :: array', &
-'            integer(kind=**),intent(in),optional :: dim', &
-'            integer(kind=**),intent(in),optional :: kind', &
+'           TYPE(kind=KIND),intent(in)           :: array', &
+'           integer(kind=**),intent(in),optional :: dim', &
+'           integer(kind=**),intent(in),optional :: kind', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  ARRAY shall be assumed-rank or an array, of any type. It cannot be an', &
@@ -21036,8 +22553,8 @@ textblock=[character(len=256) :: &
 '      subroutine msub(arr)', &
 '      !!integer,intent(in) :: arr(*)  ! cannot be assumed-size array', &
 '      integer,intent(in) :: arr(:)', &
-'         write(*,*)''MSUB: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
-'         & ''SIZE='',size(arr)', &
+'        write(*,*)''MSUB: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
+'        & ''SIZE='',size(arr)', &
 '      end subroutine msub', &
 '', &
 '      end module m2_bounds', &
@@ -21046,20 +22563,20 @@ textblock=[character(len=256) :: &
 '      use m2_bounds, only : msub', &
 '      implicit none', &
 '      interface', &
-'         subroutine esub(arr)', &
-'         integer,intent(in) :: arr(:)', &
-'         end subroutine esub', &
+'        subroutine esub(arr)', &
+'        integer,intent(in) :: arr(:)', &
+'        end subroutine esub', &
 '      end interface', &
 '      integer :: arr(-10:10)', &
-'         write(*,*)''MAIN: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
-'         & ''SIZE='',size(arr)', &
-'         call csub()', &
-'         call msub(arr)', &
-'         call esub(arr)', &
+'        write(*,*)''MAIN: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
+'        & ''SIZE='',size(arr)', &
+'        call csub()', &
+'        call msub(arr)', &
+'        call esub(arr)', &
 '      contains', &
 '      subroutine csub', &
-'         write(*,*)''CSUB: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
-'         & ''SIZE='',size(arr)', &
+'        write(*,*)''CSUB: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
+'        & ''SIZE='',size(arr)', &
 '      end subroutine csub', &
 '', &
 '      end', &
@@ -21067,19 +22584,20 @@ textblock=[character(len=256) :: &
 '      subroutine esub(arr)', &
 '      implicit none', &
 '      integer,intent(in) :: arr(:)', &
-'         ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE', &
-'         ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)', &
-'         write(*,*)''ESUB: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
-'         & ''SIZE='',size(arr)', &
+'        ! WARNING: IF CALLED WITHOUT AN EXPLICIT INTERFACE', &
+'        ! THIS WILL GIVE UNDEFINED ANSWERS (like 0,0,0)', &
+'        write(*,*)''ESUB: LOWER='',lbound(arr),''UPPER='',ubound(arr), &', &
+'        & ''SIZE='',size(arr)', &
 '      end subroutine esub', &
 '      !end program demo_ubound', &
 '', &
 '  Results:', &
 '', &
-'       >  MAIN: LOWER=         -10 UPPER=          10 SIZE=          21', &
-'       >  CSUB: LOWER=         -10 UPPER=          10 SIZE=          21', &
-'       >  MSUB: LOWER=           1 UPPER=          21 SIZE=          21', &
-'       >  ESUB: LOWER=           1 UPPER=          21 SIZE=          21', &
+'       >  MAIN: LOWER=        -10 UPPER=          10 SIZE=          21', &
+'       >  CSUB: LOWER=        -10 UPPER=          10 SIZE=          21', &
+'       >  MSUB: LOWER=          1 UPPER=          21 SIZE=          21', &
+'       >  ESUB: LOWER=          1 UPPER=          21 SIZE=          21', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 , with KIND argument Fortran 2003', &
@@ -21119,31 +22637,87 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               ubound(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                ubound(3fortran)', &
 '']
 
 shortname="ubound"
 call process()
 
 
-case('198','unpack')
+case('200','ucobound')
 
 textblock=[character(len=256) :: &
 '', &
-'unpack(3fortran)                                              unpack(3fortran)', &
+'ucobound(3fortran)                                         ucobound(3fortran)', &
+'', &
+'', &
+'', &
+'NAME', &
+'  UCOBOUND(3) - [COLLECTIVE] Upper codimension bounds of an array', &
+'', &
+'', &
+'SYNOPSIS', &
+'  result = ucobound(coarray [,dim] [,kind] )', &
+'', &
+'CHARACTERISTICS', &
+'DESCRIPTION', &
+'  UCOBOUND(3) returns the upper cobounds of a coarray, or a single upper', &
+'  cobound along the DIM codimension.', &
+'', &
+'OPTIONS', &
+'  o  ARRAY : Shall be an coarray, of any type.', &
+'', &
+'  o  DIM : (Optional) Shall be a scalar integer.', &
+'', &
+'  o  KIND : (Optional) An integer initialization expression indicating the', &
+'     kind parameter of the result.', &
+'', &
+'RESULT', &
+'  The return value is of type integer and of kind KIND. If KIND is absent, the', &
+'  return value is of default integer kind. If DIM is absent, the result is an', &
+'  array of the lower cobounds of COARRAY. If DIM is present, the result is a', &
+'  scalar corresponding to the lower cobound of the array along that', &
+'  codimension.', &
+'', &
+'STANDARD', &
+'  Fortran 2008', &
+'', &
+'SEE ALSO', &
+'  LCOBOUND(3), LBOUND(3), UBOUND(3)', &
+'', &
+'', &
+'', &
+'                                July 22, 2023              ucobound(3fortran)', &
+'']
+
+shortname="ucobound"
+call process()
+
+
+case('201','unpack')
+
+textblock=[character(len=256) :: &
+'', &
+'unpack(3fortran)                                             unpack(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  UNPACK(3) - [ARRAY:CONSTRUCTION] Scatter the elements of a vector into an', &
 '  array using a mask', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = unpack(vector, mask, field)', &
 '', &
-'           type(TYPE(kind=KIND)) unpack(vector, mask, field)', &
+'          type(TYPE(kind=KIND)) unpack(vector, mask, field)', &
 '', &
-'            type(TYPE(kind=KIND)),intent(in) :: vector(:)', &
-'            logical,intent(in)               :: mask(..)', &
-'            type(TYPE(kind=KIND)),intent(in) :: field(..)', &
+'           type(TYPE(kind=KIND)),intent(in) :: vector(:)', &
+'           logical,intent(in)               :: mask(..)', &
+'           type(TYPE(kind=KIND)),intent(in) :: field(..)', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  VECTOR is a rank-one array of any type', &
@@ -21221,54 +22795,55 @@ textblock=[character(len=256) :: &
 '      logical :: mask(r,c)  = reshape([ T,F,F,T ],[2,2])', &
 '      integer :: field(r,c) = 0, unity(2,2)', &
 '', &
-'         ! basic usage', &
-'         unity = unpack( vector, mask, field )', &
-'         call print_matrix_int(''unity='', unity)', &
+'        ! basic usage', &
+'        unity = unpack( vector, mask, field )', &
+'        call print_matrix_int(''unity='', unity)', &
 '', &
-'         ! if FIELD is a scalar it is used to fill all the elements', &
-'         ! not assigned to by the vector and mask.', &
-'         call print_matrix_int(''scalar field'',         &', &
-'         & unpack(                                     &', &
-'         & vector=[ 1, 2, 3, 4 ],                      &', &
-'         & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &', &
-'         & field=0) )', &
+'        ! if FIELD is a scalar it is used to fill all the elements', &
+'        ! not assigned to by the vector and mask.', &
+'        call print_matrix_int(''scalar field'',               &', &
+'        & unpack(                                     &', &
+'        & vector=[ 1, 2, 3, 4 ],                      &', &
+'        & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &', &
+'        & field=0) )', &
 '', &
 '      contains', &
 '', &
-'         subroutine print_matrix_int(title,arr)', &
-'         ! convenience routine:', &
-'         ! just prints small integer arrays in row-column format', &
-'         implicit none', &
-'         character(len=*),intent(in)  :: title', &
-'         integer,intent(in)           :: arr(:,:)', &
-'         integer                      :: i', &
-'         character(len=:),allocatable :: biggest', &
+'      subroutine print_matrix_int(title,arr)', &
+'      ! convenience routine:', &
+'      ! just prints small integer arrays in row-column format', &
+'      implicit none', &
+'      character(len=*),intent(in)  :: title', &
+'      integer,intent(in)          :: arr(:,:)', &
+'      integer                     :: i', &
+'      character(len=:),allocatable :: biggest', &
 '', &
-'            write(*,*)trim(title)', &
-'            ! make buffer to write integer into', &
-'            biggest=''           ''', &
-'            ! find how many characters to use for integers', &
-'            write(biggest,''(i0)'')ceiling(log10(real(maxval(abs(arr)))))+2', &
-'            ! use this format to write a row', &
-'            biggest=''("  [",*(i''//trim(biggest)//'':,","))''', &
-'            ! print one row of array at a time', &
-'            do i=1,size(arr,dim=1)', &
-'               write(*,fmt=biggest,advance=''no'')arr(i,:)', &
-'               write(*,''(" ]")'')', &
-'            enddo', &
-'         end subroutine print_matrix_int', &
+'        write(*,*)trim(title)', &
+'        ! make buffer to write integer into', &
+'        biggest=''          ''', &
+'        ! find how many characters to use for integers', &
+'        write(biggest,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2', &
+'        ! use this format to write a row', &
+'        biggest=''("  [",*(i''//trim(biggest)//'':,","))''', &
+'        ! print one row of array at a time', &
+'        do i=1,size(arr,dim=1)', &
+'           write(*,fmt=biggest,advance=''no'')arr(i,:)', &
+'           write(*,''(" ]")'')', &
+'        enddo', &
+'      end subroutine print_matrix_int', &
 '', &
 '      end program demo_unpack', &
 '', &
 '  Results:', &
 '', &
-'         > unity=', &
-'         >  [ 1, 0 ]', &
-'         >  [ 0, 1 ]', &
-'         > scalar field', &
-'         >  [  1,  0,  3 ]', &
-'         >  [  0,  0,  0 ]', &
-'         >  [  2,  0,  4 ]', &
+'        > unity=', &
+'        >  [ 1, 0 ]', &
+'        >  [ 0, 1 ]', &
+'        > scalar field', &
+'        >  [  1,  0,  3 ]', &
+'        >  [  0,  0,  0 ]', &
+'        >  [  2,  0,  4 ]', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -21278,32 +22853,38 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               unpack(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                unpack(3fortran)', &
 '']
 
 shortname="unpack"
 call process()
 
 
-case('199','verify')
+case('202','verify')
 
 textblock=[character(len=256) :: &
 '', &
-'verify(3fortran)                                              verify(3fortran)', &
+'verify(3fortran)                                             verify(3fortran)', &
+'', &
+'', &
 '', &
 'NAME', &
 '  VERIFY(3) - [CHARACTER:SEARCH] Position of a character in a string of', &
 '  characters that does not appear in a given set of characters.', &
 '', &
+'', &
 'SYNOPSIS', &
 '  result = verify(string, set [,back] [,kind] )', &
 '', &
-'           elemental integer(kind=KIND) function verify(string,set,back,KIND)', &
+'          elemental integer(kind=KIND) function verify(string,set,back,KIND)', &
 '', &
-'            character(len=*,kind=**),intent(in) :: string', &
-'            character(len=*,kind=**),intent(in) :: set', &
-'            logical,intent(in),optional :: back', &
-'            integer,intent(in),optional :: KIND', &
+'           character(len=*,kind=**),intent(in) :: string', &
+'           character(len=*,kind=**),intent(in) :: set', &
+'           logical,intent(in),optional :: back', &
+'           integer,intent(in),optional :: KIND', &
+'', &
 '', &
 'CHARACTERISTICS', &
 '  o  STRING and SET must be of type character and have the same kind for any', &
@@ -21363,84 +22944,84 @@ textblock=[character(len=256) :: &
 '       & upp*(*)   = ''ABCDEFGHIJKLMNOPQRSTUVWXYZ'', &', &
 '       & punc*(*)  = "!""#$%&''()*+,-./:;<=>?@[\]^_`{|}~", &', &
 '       & blank*(*) = '' '', &', &
-'       & tab       = char(11), &', &
+'       & tab      = char(11), &', &
 '       & prnt*(*) = int//low//upp//blank//punc', &
 '', &
 '      character(len=:),allocatable :: string', &
 '      integer :: i', &
-'          print *, ''basics:''', &
-'          print *, VERIFY (''ABBA'', ''A'')                ! has the value 2.', &
-'          print *, VERIFY (''ABBA'', ''A'', BACK = .TRUE.) ! has the value 3.', &
-'          print *, VERIFY (''ABBA'', ''AB'')               ! has the value 0.', &
+'         print *, ''basics:''', &
+'         print *, VERIFY (''ABBA'', ''A'')            ! has the value 2.', &
+'         print *, VERIFY (''ABBA'', ''A'', BACK = .TRUE.) ! has the value 3.', &
+'         print *, VERIFY (''ABBA'', ''AB'')           ! has the value 0.', &
 '', &
-'         print *,''find first non-uppercase letter''', &
-'         ! will produce the location of "d", because there is no match in UPP', &
-'         write(*,*) ''something unmatched'',verify("ABCdEFG", upp)', &
+'        print *,''find first non-uppercase letter''', &
+'        ! will produce the location of "d", because there is no match in UPP', &
+'        write(*,*) ''something unmatched'',verify("ABCdEFG", upp)', &
 '', &
-'         print *,''if everything is matched return zero''', &
-'         ! will produce 0 as all letters have a match', &
-'         write(*,*) ''everything matched'',verify("ffoorrttrraann", "nartrof")', &
+'        print *,''if everything is matched return zero''', &
+'        ! will produce 0 as all letters have a match', &
+'        write(*,*) ''everything matched'',verify("ffoorrttrraann", "nartrof")', &
 '', &
-'         print *,''easily categorize strings as uppercase, lowercase, ...''', &
-'         ! easy C-like functionality but does entire strings not just characters', &
-'         write(*,*)''isdigit 123?'',verify("123", int) == 0', &
-'         write(*,*)''islower abc?'',verify("abc", low) == 0', &
-'         write(*,*)''isalpha aBc?'',verify("aBc", low//upp) == 0', &
-'         write(*,*)''isblank aBc dEf?'',verify("aBc dEf", blank//tab ) /= 0', &
-'         ! check if all printable characters', &
-'         string="aB;cde,fgHI!Jklmno PQRSTU vwxyz"', &
-'         write(*,*)''isprint?'',verify(string,prnt) == 0', &
-'         ! this now has a nonprintable tab character in it', &
-'         string(10:10)=char(11)', &
-'         write(*,*)''isprint?'',verify(string,prnt) == 0', &
+'        print *,''easily categorize strings as uppercase, lowercase, ...''', &
+'        ! easy C-like functionality but does entire strings not just characters', &
+'        write(*,*)''isdigit 123?'',verify("123", int) == 0', &
+'        write(*,*)''islower abc?'',verify("abc", low) == 0', &
+'        write(*,*)''isalpha aBc?'',verify("aBc", low//upp) == 0', &
+'        write(*,*)''isblank aBc dEf?'',verify("aBc dEf", blank//tab ) /= 0', &
+'        ! check if all printable characters', &
+'        string="aB;cde,fgHI!Jklmno PQRSTU vwxyz"', &
+'        write(*,*)''isprint?'',verify(string,prnt) == 0', &
+'        ! this now has a nonprintable tab character in it', &
+'        string(10:10)=char(11)', &
+'        write(*,*)''isprint?'',verify(string,prnt) == 0', &
 '', &
-'         print *,''VERIFY(3) is very powerful using expressions as masks''', &
-'         ! verify(3f) is often used in a logical expression', &
-'         string=" This is NOT all UPPERCASE "', &
-'         write(*,*)''all uppercase/spaces?'',verify(string, blank//upp) == 0', &
-'         string=" This IS all uppercase "', &
-'         write(*,*) ''string=[''//string//'']''', &
-'         write(*,*)''all uppercase/spaces?'',verify(string, blank//upp) == 0', &
+'        print *,''VERIFY(3) is very powerful using expressions as masks''', &
+'        ! verify(3f) is often used in a logical expression', &
+'        string=" This is NOT all UPPERCASE "', &
+'        write(*,*)''all uppercase/spaces?'',verify(string, blank//upp) == 0', &
+'        string=" This IS all uppercase "', &
+'        write(*,*) ''string=[''//string//'']''', &
+'        write(*,*)''all uppercase/spaces?'',verify(string, blank//upp) == 0', &
 '', &
-'        ! set and show complex string to be tested', &
-'         string=''  Check this out. Let me know  ''', &
-'         ! show the string being examined', &
-'         write(*,*) ''string=[''//string//'']''', &
-'         write(*,*) ''        ''//repeat(int,4) ! number line', &
+'       ! set and show complex string to be tested', &
+'        string=''  Check this out. Let me know ''', &
+'        ! show the string being examined', &
+'        write(*,*) ''string=[''//string//'']''', &
+'        write(*,*) ''       ''//repeat(int,4) ! number line', &
 '', &
-'         ! the Fortran functions returns a position just not a logical like C', &
-'         print *, ''returning a position not just a logical is useful''', &
-'         ! which can be very useful for parsing strings', &
-'         write(*,*)''first non-blank character'',verify(string, blank)', &
-'         write(*,*)''last non-blank character'',verify(string, blank,back=.true.)', &
-'         write(*,*)''first non-letter non-blank'',verify(string,low//upp//blank)', &
+'        ! the Fortran functions returns a position just not a logical like C', &
+'        print *, ''returning a position not just a logical is useful''', &
+'        ! which can be very useful for parsing strings', &
+'        write(*,*)''first non-blank character'',verify(string, blank)', &
+'        write(*,*)''last non-blank character'',verify(string, blank,back=.true.)', &
+'        write(*,*)''first non-letter non-blank'',verify(string,low//upp//blank)', &
 '', &
-'        !VERIFY(3) is elemental so you can check an array of strings in one call', &
-'        print *, ''elemental''', &
-'         ! are strings all letters (or blanks)?', &
-'         write(*,*) ''array of strings'',verify( &', &
-'         ! strings must all be same length, so force to length 10', &
-'         & [character(len=10) :: "YES","ok","000","good one","Nope!"], &', &
-'         & low//upp//blank) == 0', &
+'       !VERIFY(3) is elemental so you can check an array of strings in one call', &
+'       print *, ''elemental''', &
+'        ! are strings all letters (or blanks)?', &
+'        write(*,*) ''array of strings'',verify( &', &
+'        ! strings must all be same length, so force to length 10', &
+'        & [character(len=10) :: "YES","ok","000","good one","Nope!"], &', &
+'        & low//upp//blank) == 0', &
 '', &
-'         ! rarer, but the set can be an array, not just the strings to test', &
-'         ! you could do ISPRINT() this (harder) way :>', &
-'         write(*,*)''isprint?'',.not.all(verify("aBc", [(char(i),i=32,126)])==1)', &
-'         ! instead of this way', &
-'         write(*,*)''isprint?'',verify("aBc",prnt) == 0', &
+'        ! rarer, but the set can be an array, not just the strings to test', &
+'        ! you could do ISPRINT() this (harder) way :>', &
+'        write(*,*)''isprint?'',.not.all(verify("aBc", [(char(i),i=32,126)])==1)', &
+'        ! instead of this way', &
+'        write(*,*)''isprint?'',verify("aBc",prnt) == 0', &
 '', &
 '      end program demo_verify', &
 '', &
 '  Results:', &
 '', &
 '       >  basics:', &
-'       >            2', &
-'       >            3', &
-'       >            0', &
+'       >           2', &
+'       >           3', &
+'       >           0', &
 '       >  find first non-uppercase letter', &
-'       >  something unmatched           4', &
+'       >  something unmatched          4', &
 '       >  if everything is matched return zero', &
-'       >  everything matched           0', &
+'       >  everything matched          0', &
 '       >  easily categorize strings as uppercase, lowercase, ...', &
 '       >  isdigit 123? T', &
 '       >  islower abc? T', &
@@ -21453,11 +23034,11 @@ textblock=[character(len=256) :: &
 '       >  string=[ This IS all uppercase ]', &
 '       >  all uppercase/spaces? F', &
 '       >  string=[  Check this out. Let me know  ]', &
-'       >          1234567890123456789012345678901234567890', &
+'       >         1234567890123456789012345678901234567890', &
 '       >  returning a position not just a logical is useful', &
-'       >  first non-blank character           3', &
-'       >  last non-blank character          29', &
-'       >  first non-letter non-blank          17', &
+'       >  first non-blank character          3', &
+'       >  last non-blank character         29', &
+'       >  first non-letter non-blank         17', &
 '       >  elemental', &
 '       >  array of strings T T F T F', &
 '       >  isprint? T', &
@@ -21478,10 +23059,10 @@ textblock=[character(len=256) :: &
 '       ''1 2 3'', &', &
 '       ''  -3000 '', &', &
 '       '' '']', &
-'         ! show the strings to test', &
-'         write(*,''("|",*(g0,"|"))'') ints', &
-'         ! show if strings pass or fail the test done by isint(3f)', &
-'         write(*,''("|",*(1x,l1,8x,"|"))'') isint(ints)', &
+'        ! show the strings to test', &
+'        write(*,''("|",*(g0,"|"))'') ints', &
+'        ! show if strings pass or fail the test done by isint(3f)', &
+'        write(*,''("|",*(1x,l1,8x,"|"))'') isint(ints)', &
 '', &
 '      contains', &
 '', &
@@ -21493,25 +23074,25 @@ textblock=[character(len=256) :: &
 '      character(len=*),parameter   :: digits=''0123456789''', &
 '      character(len=*),intent(in)  :: line', &
 '      character(len=:),allocatable :: name', &
-'      logical                      :: lout', &
-'         lout=.false.', &
-'         ! make sure at least two characters long to simplify tests', &
-'         name=adjustl(line)//''  ''', &
-'         ! blank string', &
-'         if( name == '''' )return', &
-'         ! allow one leading sign', &
-'         if( verify(name(1:1),''+-'') == 0 ) name=name(2:)', &
-'         ! was just a sign', &
-'         if( name == '''' )return', &
-'         lout=verify(trim(name), digits)  == 0', &
+'      logical                     :: lout', &
+'        lout=.false.', &
+'        ! make sure at least two characters long to simplify tests', &
+'        name=adjustl(line)//'' ''', &
+'        ! blank string', &
+'        if( name == '''' )return', &
+'        ! allow one leading sign', &
+'        if( verify(name(1:1),''+-'') == 0 ) name=name(2:)', &
+'        ! was just a sign', &
+'        if( name == '''' )return', &
+'        lout=verify(trim(name), digits)  == 0', &
 '      end function isint', &
 '', &
 '      end program fortran_ints', &
 '', &
 '  Results:', &
 '', &
-'      |+1       |3044848  |30.40    |September|1 2 3    |  -3000  |         |', &
-'      | T       | T       | F       | F       | F       | T       | F       |', &
+'      |+1      |3044848  |30.40    |September|1 2 3    |  -3000  |         |', &
+'      | T      | T       | F       | F       | F       | T       | F       |', &
 '', &
 '  Sample program III:', &
 '', &
@@ -21528,8 +23109,8 @@ textblock=[character(len=256) :: &
 '       ''_A '', &', &
 '       '' '']', &
 '', &
-'         write(*,''("|",*(g0,"|"))'') symbols', &
-'         write(*,''("|",*(1x,l1,8x,"|"))'') fortran_name(symbols)', &
+'        write(*,''("|",*(g0,"|"))'') symbols', &
+'        write(*,''("|",*(1x,l1,8x,"|"))'') fortran_name(symbols)', &
 '', &
 '      contains', &
 '', &
@@ -21545,26 +23126,26 @@ textblock=[character(len=256) :: &
 '', &
 '      character(len=*),intent(in)  :: line', &
 '      character(len=:),allocatable :: name', &
-'      logical                      :: lout', &
-'         name=trim(line)', &
-'         if(len(name).ne.0)then', &
-'            ! first character is alphameric', &
-'            lout = verify(name(1:1), lower//upper) == 0  &', &
-'             ! other characters are allowed in a symbol name', &
-'             & .and. verify(name,allowed) == 0           &', &
-'             ! allowable length', &
-'             & .and. len(name) <= 63', &
-'         else', &
-'            lout = .false.', &
-'         endif', &
+'      logical                     :: lout', &
+'        name=trim(line)', &
+'        if(len(name).ne.0)then', &
+'           ! first character is alphameric', &
+'           lout = verify(name(1:1), lower//upper) == 0  &', &
+'            ! other characters are allowed in a symbol name', &
+'            & .and. verify(name,allowed) == 0           &', &
+'            ! allowable length', &
+'            & .and. len(name) <= 63', &
+'        else', &
+'           lout = .false.', &
+'        endif', &
 '      end function fortran_name', &
 '', &
 '      end program fortran_symbol_name', &
 '', &
 '  Results:', &
 '', &
-'          |A_        |10        |September |A B       |_A        |          |', &
-'          | T        | F        | T        | F        | F        | F        |', &
+'         |A_        |10        |September |A B       |_A        |          |', &
+'         | T        | F        | T        | F        | F        | F        |', &
 '', &
 '  Sample program IV:', &
 '', &
@@ -21575,31 +23156,31 @@ textblock=[character(len=256) :: &
 '      implicit none', &
 '      character(len=*),parameter :: int=''1234567890''', &
 '      character(len=*),parameter :: hex=''abcdefABCDEF0123456789''', &
-'      logical                    :: lout', &
-'      character(len=80)          :: chars', &
+'      logical                   :: lout', &
+'      character(len=80)         :: chars', &
 '', &
-'         chars=''32-af43d''', &
-'         lout=.true.', &
+'        chars=''32-af43d''', &
+'        lout=.true.', &
 '', &
-'         ! are the first two characters integer characters?', &
-'         lout = lout.and.(verify(chars(1:2), int) == 0)', &
+'        ! are the first two characters integer characters?', &
+'        lout = lout.and.(verify(chars(1:2), int) == 0)', &
 '', &
-'         ! is the third character a dash?', &
-'         lout = lout.and.(verify(chars(3:3), ''-'') == 0)', &
+'        ! is the third character a dash?', &
+'        lout = lout.and.(verify(chars(3:3), ''-'') == 0)', &
 '', &
-'         ! is remaining string a valid representation of a hex value?', &
-'         lout = lout.and.(verify(chars(4:8), hex) == 0)', &
+'        ! is remaining string a valid representation of a hex value?', &
+'        lout = lout.and.(verify(chars(4:8), hex) == 0)', &
 '', &
-'         if(lout)then', &
-'            write(*,*)trim(chars),'' passed''', &
-'         else', &
-'            write(*,*)trim(chars),'' failed''', &
-'         endif', &
+'        if(lout)then', &
+'           write(*,*)trim(chars),'' passed''', &
+'        else', &
+'           write(*,*)trim(chars),'' failed''', &
+'        endif', &
 '      end program checkform', &
 '', &
 '  Results:', &
 '', &
-'          32-af43d passed', &
+'         32-af43d passed', &
 '', &
 '  Sample program V:', &
 '', &
@@ -21608,43 +23189,44 @@ textblock=[character(len=256) :: &
 '      program more_verify', &
 '      implicit none', &
 '      character(len=*),parameter :: &', &
-'        & int=''0123456789'', &', &
-'        & low=''abcdefghijklmnopqrstuvwxyz'', &', &
-'        & upp=''ABCDEFGHIJKLMNOPQRSTUVWXYZ'', &', &
-'        & blank='' ''', &
+'       & int=''0123456789'', &', &
+'       & low=''abcdefghijklmnopqrstuvwxyz'', &', &
+'       & upp=''ABCDEFGHIJKLMNOPQRSTUVWXYZ'', &', &
+'       & blank='' ''', &
 '      ! note character variables in an array have to be of the same length', &
 '      character(len=6) :: strings(3)=["Go    ","right ","home! "]', &
 '      character(len=2) :: sets(3)=["do","re","me"]', &
 '', &
-'        ! elemental -- you can use arrays for both strings and for sets', &
+'       ! elemental -- you can use arrays for both strings and for sets', &
 '', &
-'         ! check each string from right to left for non-letter/non-blank', &
-'         write(*,*)''last non-letter'',verify(strings,upp//low//blank,back=.true.)', &
+'        ! check each string from right to left for non-letter/non-blank', &
+'        write(*,*)''last non-letter'',verify(strings,upp//low//blank,back=.true.)', &
 '', &
-'         ! even BACK can be an array', &
-'         ! find last non-uppercase character in "Howdy "', &
-'         ! and first non-lowercase in "there "', &
-'         write(*,*) verify(strings(1:2),[upp,low],back=[.true.,.false.])', &
+'        ! even BACK can be an array', &
+'        ! find last non-uppercase character in "Howdy "', &
+'        ! and first non-lowercase in "there "', &
+'        write(*,*) verify(strings(1:2),[upp,low],back=[.true.,.false.])', &
 '', &
-'         ! using a null string for a set is not well defined. Avoid it', &
-'         write(*,*) ''null'',verify("for tran ", "", .true.) ! 8,length of string?', &
-'         ! probably what you expected', &
-'         write(*,*) ''blank'',verify("for tran ", " ", .true.) ! 7,found ''n''', &
+'        ! using a null string for a set is not well defined. Avoid it', &
+'        write(*,*) ''null'',verify("for tran ", "", .true.) ! 8,length of string?', &
+'        ! probably what you expected', &
+'        write(*,*) ''blank'',verify("for tran ", " ", .true.) ! 7,found ''n''', &
 '', &
-'         ! first character in  "Go    " not in "do",', &
-'         ! and first letter in "right " not in "ri"', &
-'         ! and first letter in "home! " not in "me"', &
-'         write(*,*) verify(strings,sets)', &
+'        ! first character in  "Go    " not in "do",', &
+'        ! and first letter in "right " not in "ri"', &
+'        ! and first letter in "home! " not in "me"', &
+'        write(*,*) verify(strings,sets)', &
 '', &
 '      end program more_verify', &
 '', &
 '  Results:', &
 '', &
-'          > last non-letter 0 0 5', &
-'          > 6 6', &
-'          > null 9', &
-'          > blank 8', &
-'          > 1 2 1', &
+'         > last non-letter 0 0 5', &
+'         > 6 6', &
+'         > null 9', &
+'         > blank 8', &
+'         > 1 2 1', &
+'', &
 '', &
 'STANDARD', &
 '  Fortran 95 , with KIND argument - Fortran 2003', &
@@ -21659,7 +23241,9 @@ textblock=[character(len=256) :: &
 '', &
 '  fortran-lang intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                               January 21, 2023               verify(3fortran)', &
+'', &
+'', &
+'                                July 22, 2023                verify(3fortran)', &
 '']
 
 shortname="verify"

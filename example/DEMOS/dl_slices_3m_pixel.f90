@@ -2,8 +2,8 @@
      !     WRITTEN BY: DGL, LAST REVISED ON  5-JAN-1994 10:31:18.86
      !                 JSU,                 19-JUL-2005
       use M_pixel
-      use M_writegif_animated, only : write_animated_gif
-      use :: M_pixel_slices, only : dl_slices, dl_init, dl_symbol
+      use M_pixel__writegif_animated, only : write_animated_gif
+      use :: M_pixel__slices, only : dl_slices, dl_init, dl_symbol
       implicit none
         integer,parameter  :: ix=35
         integer,parameter  :: iz=45
@@ -225,6 +225,6 @@
      enddo
      !
      call vexit()    ! close up plot package
-     call write_animated_gif('dl_slices.3m_pixel.gif',movie,p_colormap,delay=5)
-     !call execute_system_command('display dl_slices.3m_pixel.gif')
+     call write_animated_gif('dl_slices.3M_pixel.gif',movie,p_colormap,delay=5)
+     !call execute_system_command('display dl_slices.3M_pixel.gif')
      end program demo_dl_slices

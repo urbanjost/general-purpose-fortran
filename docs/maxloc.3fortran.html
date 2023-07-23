@@ -50,22 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>maxloc (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>maxloc (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>maxloc(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-maxloc(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-MAXLOC(3) - [ARRAY:LOCATION] Location of the maximum value within an array
+<P>
+MAXLOC(3) - [ARRAY:LOCATION] Location of the maximum value within an
+array
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -76,14 +69,15 @@ MAXLOC(3) - [ARRAY:LOCATION] Location of the maximum value within an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = maxloc(array [,mask]) | maxloc(array [,dim] [,mask])
 <P>
 <PRE>
-           NUMERIC function maxloc(array, dim, mask)
+         NUMERIC function maxloc(array, dim, mask)
 <P>
-            NUMERIC,intent(in) :: array(..)
-            integer(kind=**),intent(in),optional :: dim
-            logical(kind=**),intent(in),optional :: mask(..)
+          NUMERIC,intent(in) :: array(..)
+          integer(kind=**),intent(in),optional :: dim
+          logical(kind=**),intent(in),optional :: mask(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +87,7 @@ result = maxloc(array [,mask]) | maxloc(array [,dim] [,mask])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -111,18 +106,21 @@ NUMERIC designates any intrinsic numeric type and kind.
 
 </A>
 <BLOCKQUOTE>
+<P>
 MAXLOC(3) determines the location of the element in the array with the
-maximum value, or, if the DIM argument is supplied, determines the locations
-of the maximum element along each row of the array in the DIM direction.
+maximum value, or, if the DIM argument is supplied, determines the
+locations of the maximum element along each row of the array in the DIM
+direction.
 <P>
 If MASK is present, only the elements for which MASK is .true. are
-considered. If more than one element in the array has the maximum value, the
-location returned is that of the first such element in array element order.
+considered. If more than one element in the array has the maximum value,
+the location returned is that of the first such element in array element
+order.
 <P>
-If the array has zero size, or all of the elements of MASK are .false., then
-the result is an array of zeroes. Similarly, if DIM is supplied and all of
-the elements of MASK along a given row are zero, the result value for that
-row is zero.
+If the array has zero size, or all of the elements of MASK are .false.,
+then the result is an array of zeroes. Similarly, if DIM is supplied and
+all of the elements of MASK along a given row are zero, the result value
+for that row is zero.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -130,6 +128,7 @@ row is zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -139,14 +138,15 @@ ARRAY : Shall be an array of type integer, real, or character.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : (Optional) Shall be a scalar of type integer, with a value between
-one and the rank of ARRAY, inclusive. It may not be an optional dummy
-argument.
+DIM : (Optional) Shall be a scalar of type integer, with a value
+between one and the rank of ARRAY, inclusive. It may not be an
+optional dummy argument.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : Shall be an array of type logical, and conformable with ARRAY.
+MASK : Shall be an array of type logical, and conformable with
+ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -155,16 +155,17 @@ MASK : Shall be an array of type logical, and conformable with ARRAY.
 
 </A>
 <BLOCKQUOTE>
-If DIM is absent, the result is a rank-one array with a length equal to the
-rank of ARRAY. If DIM is present, the result is an array with a rank one
-less than the rank of ARRAY, and a size corresponding to the size of ARRAY
-with the DIM dimension removed. If DIM is present and ARRAY has a rank of
-one, the result is a scalar. In all cases, the result is of default integer
-type.
+<P>
+If DIM is absent, the result is a rank-one array with a length equal to
+the rank of ARRAY. If DIM is present, the result is an array with a rank
+one less than the rank of ARRAY, and a size corresponding to the size of
+ARRAY with the DIM dimension removed. If DIM is present and ARRAY has a
+rank of one, the result is a scalar. In all cases, the result is of
+default integer type.
 <P>
 The value returned is reference to the offset from the beginning of the
-array, not necessarily the subscript value if the array subscripts do not
-start with one.
+array, not necessarily the subscript value if the array subscripts do
+not start with one.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -172,48 +173,49 @@ start with one.
 
 </A>
 <BLOCKQUOTE>
+<P>
 sample program
 <P>
 <PRE>
-      program demo_maxloc
-      implicit none
-      integer      :: ii
-      integer,save :: i(-3:3)=[(abs(abs(ii)-50),ii=-3,3)]
-      integer,save :: ints(3,5)= reshape([&
-         1,  2,  3,  4,  5, &
-         10, 20, 30, 40, 50, &
-         11, 22, 33, 44, 55  &
-      ],shape(ints),order=[2,1])
+    program demo_maxloc
+    implicit none
+    integer      :: ii
+    integer,save :: i(-3:3)=[(abs(abs(ii)-50),ii=-3,3)]
+    integer,save :: ints(3,5)= reshape([&
+       1,  2,  3,  4,  5, &
+       10, 20, 30, 40, 50, &
+       11, 22, 33, 44, 55  &
+    ],shape(ints),order=[2,1])
 <P>
-          write(*,*) maxloc(ints)
-          write(*,*) maxloc(ints,dim=1)
-          write(*,*) maxloc(ints,dim=2)
-          ! when array bounds do not start with one remember MAXLOC(3) returns
-          ! the offset relative to the lower bound-1 of the location of the
-          ! maximum value, not the subscript of the maximum value. When the
-          ! lower bound of the array is one, these values are the same. In
-          ! other words, MAXLOC(3) returns the subscript of the value assuming
-          ! the first subscript of the array is one no matter what the lower
-          ! bound of the subscript actually is.
-          write(*,&#146;(g0,1x,g0)&#146;) (ii,i(ii),ii=lbound(i,dim=1),ubound(i,dim=1))
-          write(*,*)maxloc(i)
+        write(*,*) maxloc(ints)
+        write(*,*) maxloc(ints,dim=1)
+        write(*,*) maxloc(ints,dim=2)
+        ! when array bounds do not start with one remember MAXLOC(3) returns
+        ! the offset relative to the lower bound-1 of the location of the
+        ! maximum value, not the subscript of the maximum value. When the
+        ! lower bound of the array is one, these values are the same. In
+        ! other words, MAXLOC(3) returns the subscript of the value assuming
+        ! the first subscript of the array is one no matter what the lower
+        ! bound of the subscript actually is.
+        write(*,&#146;(g0,1x,g0)&#146;) (ii,i(ii),ii=lbound(i,dim=1),ubound(i,dim=1))
+        write(*,*)maxloc(i)
 <P>
-      end program demo_maxloc
+    end program demo_maxloc
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;     3       5
-       &gt;     3       3       3       3       3
-       &gt;     5       5       5
-       &gt;  -3 47
-       &gt;  -2 48
-       &gt;  -1 49
-       &gt;  0 50
-       &gt;  1 49
-       &gt;  2 48
-       &gt;  3 47
+     &gt;     3       5
+     &gt;     3       3       3       3       3
+     &gt;     5       5       5
+     &gt;  -3 47
+     &gt;  -2 48
+     &gt;  -1 49
+     &gt;  0 50
+     &gt;  1 49
+     &gt;  2 48
+     &gt;  3 47
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -223,6 +225,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -231,12 +234,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-FINDLOC(3) - Location of first element of ARRAY identified by MASK along
-dimension DIM matching a target
+FINDLOC(3) - Location of first element of ARRAY identified by MASK
+along dimension DIM matching a target
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -259,13 +263,9 @@ o
 MAX(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022              maxloc(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maxloc (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 09b9d92d-a0d6-4811-8055-ae1364f6f49f using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maxloc (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a2ebab6e-5969-4dec-b637-45a01c43ce57 using man macros.</FONT>
 <br><br><center><img src="images/maxloc.3fortran.gif"></center>
 </div>
 </div>

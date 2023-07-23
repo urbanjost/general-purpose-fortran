@@ -727,8 +727,8 @@ CONTAINS
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_Compare_Float_Numbers()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_framework__verify, only : unit_test_level
 implicit none
 !*! setup
    call test_compare_float_double()
@@ -743,58 +743,58 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_compare_float_double()
 
-   call unit_check_start('compare_float_double',msg='')
-   !*!call unit_check('compare_float_double', 0.eq.0, 'checking',100)
-   call unit_check_done('compare_float_double',msg='')
+   call unit_test_start('compare_float_double',msg='')
+   !*!call unit_test('compare_float_double', 0.eq.0, 'checking',100)
+   call unit_test_done('compare_float_double',msg='')
 end subroutine test_compare_float_double
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_compare_float_single()
 
-   call unit_check_start('compare_float_single',msg='')
-   !*!call unit_check('compare_float_single', 0.eq.0, 'checking',100)
-   call unit_check_done('compare_float_single',msg='')
+   call unit_test_start('compare_float_single',msg='')
+   !*!call unit_test('compare_float_single', 0.eq.0, 'checking',100)
+   call unit_test_done('compare_float_single',msg='')
 end subroutine test_compare_float_single
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_is_equal_to_double()
 
-   call unit_check_start('is_equal_to_double',msg='')
-   !*!call unit_check('is_equal_to_double', 0.eq.0, 'checking',100)
-   call unit_check_done('is_equal_to_double',msg='')
+   call unit_test_start('is_equal_to_double',msg='')
+   !*!call unit_test('is_equal_to_double', 0.eq.0, 'checking',100)
+   call unit_test_done('is_equal_to_double',msg='')
 end subroutine test_is_equal_to_double
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_is_equal_to_single()
 
-   call unit_check_start('is_equal_to_single',msg='')
-   !*!call unit_check('is_equal_to_single', 0.eq.0, 'checking',100)
-   call unit_check_done('is_equal_to_single',msg='')
+   call unit_test_start('is_equal_to_single',msg='')
+   !*!call unit_test('is_equal_to_single', 0.eq.0, 'checking',100)
+   call unit_test_done('is_equal_to_single',msg='')
 end subroutine test_is_equal_to_single
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_is_greater_than_double()
 
-   call unit_check_start('is_greater_than_double',msg='')
-   !*!call unit_check('is_greater_than_double', 0.eq.0, 'checking',100)
-   call unit_check_done('is_greater_than_double',msg='')
+   call unit_test_start('is_greater_than_double',msg='')
+   !*!call unit_test('is_greater_than_double', 0.eq.0, 'checking',100)
+   call unit_test_done('is_greater_than_double',msg='')
 end subroutine test_is_greater_than_double
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_is_greater_than_single()
 
-   call unit_check_start('is_greater_than_single',msg='')
-   !*!call unit_check('is_greater_than_single', 0.eq.0, 'checking',100)
-   call unit_check_done('is_greater_than_single',msg='')
+   call unit_test_start('is_greater_than_single',msg='')
+   !*!call unit_test('is_greater_than_single', 0.eq.0, 'checking',100)
+   call unit_test_done('is_greater_than_single',msg='')
 end subroutine test_is_greater_than_single
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_is_less_than_double()
 
-   call unit_check_start('is_less_than_double',msg='')
-   !*!call unit_check('is_less_than_double', 0.eq.0, 'checking',100)
-   call unit_check_done('is_less_than_double',msg='')
+   call unit_test_start('is_less_than_double',msg='')
+   !*!call unit_test('is_less_than_double', 0.eq.0, 'checking',100)
+   call unit_test_done('is_less_than_double',msg='')
 end subroutine test_is_less_than_double
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_is_less_than_single()
 
-   call unit_check_start('is_less_than_single',msg='')
-   !*!call unit_check('is_less_than_single', 0.eq.0, 'checking',100)
-   call unit_check_done('is_less_than_single',msg='')
+   call unit_test_start('is_less_than_single',msg='')
+   !*!call unit_test('is_less_than_single', 0.eq.0, 'checking',100)
+   call unit_test_done('is_less_than_single',msg='')
 end subroutine test_is_less_than_single
 !===================================================================================================================================
 end subroutine test_suite_M_Compare_Float_Numbers

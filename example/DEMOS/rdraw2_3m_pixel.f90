@@ -2,7 +2,7 @@
        use M_pixel, only: vinit, prefsize, ortho2,linewidth
        use M_pixel, only: clear, move2, rdraw2, vexit,color
        use M_pixel, only: P_pixel, P_colormap
-       use M_writegif, only : writegif
+       use M_pixel__writegif, only : writegif
        implicit none
 
           call prefsize(200,200)
@@ -21,8 +21,8 @@
           call move2(  0.0,-50.0)
           call square(50.0)
 
-          call writegif('rdraw2.3m_pixel.gif',P_pixel,P_colormap)
-          call execute_command_line('display rdraw2.3m_pixel.gif')
+          call writegif('rdraw2.3M_pixel.gif',P_pixel,P_colormap)
+          call execute_command_line('display rdraw2.3M_pixel.gif')
           call vexit()
 
           contains

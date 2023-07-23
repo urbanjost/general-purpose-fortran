@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>max (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>max (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>max(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-max(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 MAX(3) - [NUMERIC] Maximum value of an argument list
 <P>
 </BLOCKQUOTE>
@@ -76,17 +68,18 @@ MAX(3) - [NUMERIC] Maximum value of an argument list
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = max(a1, a2, a3, &#46;&#46;&#46;)
 <P>
 <PRE>
-           elemental TYPE(kind=KIND) function max(a1, a2, a3, &#46;&#46;&#46; )
+         elemental TYPE(kind=KIND) function max(a1, a2, a3, &#46;&#46;&#46; )
 <P>
-            TYPE(kind=KIND,intent(in),optional :: a1
-            TYPE(kind=KIND,intent(in),optional :: a2
-            TYPE(kind=KIND,intent(in),optional :: a3
-                      :
-                      :
-                      :
+          TYPE(kind=KIND,intent(in),optional :: a1
+          TYPE(kind=KIND,intent(in),optional :: a2
+          TYPE(kind=KIND,intent(in),optional :: a3
+                    :
+                    :
+                    :
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -96,6 +89,7 @@ result = max(a1, a2, a3, &#46;&#46;&#46;)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -115,12 +109,14 @@ there must be at least two arguments
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the length of a character result is the length of the longest argument
+the length of a character result is the length of the longest
+argument
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the type and kind of the result is the same as those of the arguments
+the type and kind of the result is the same as those of the
+arguments
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -129,21 +125,23 @@ the type and kind of the result is the same as those of the arguments
 
 </A>
 <BLOCKQUOTE>
+<P>
 MAX(3) returns the argument with the largest (most positive) value.
 <P>
-For arguments of character type, the result is as if the arguments had been
-successively compared with the intrinsic operational operators, taking into
-account the collating sequence of the character kind.
+For arguments of character type, the result is as if the arguments had
+been successively compared with the intrinsic operational operators,
+taking into account the collating sequence of the character kind.
 <P>
-If the selected character argument is shorter than the longest argument, the
-result is as all values were extended with blanks on the right to the length
-of the longest argument.
+If the selected character argument is shorter than the longest argument,
+the result is as all values were extended with blanks on the right to
+the length of the longest argument.
 <P>
 It is unusual for a Fortran intrinsic to take an arbitrary number of
 options, and in addition MAX(3) is elemental, meaning any number of
-arguments may be arrays as long as they are of the same shape. The examples
-have an extended description clarifying the resulting behavior for those not
-familiar with calling a "scalar" function elementally with arrays.
+arguments may be arrays as long as they are of the same shape. The
+examples have an extended description clarifying the resulting behavior
+for those not familiar with calling a "scalar" function elementally with
+arrays.
 <P>
 See maxval(3) for simply getting the max value of an array.
 </BLOCKQUOTE>
@@ -153,19 +151,20 @@ See maxval(3) for simply getting the max value of an array.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 A1 : The first argument determines the type and kind of the returned
-value, and of any remaining arguments as well as being a member of the
-set of values to find the maximum (most positive) value of.
+value, and of any remaining arguments as well as being a member of
+the set of values to find the maximum (most positive) value of.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A2,A3,&#46;&#46;&#46; : the remaining arguments of which to find the maximum value(s)
-of. : There must be at least two arguments to MAX(3).
+A2,A3,&#46;&#46;&#46; : the remaining arguments of which to find the maximum
+value(s) of. : There must be at least two arguments to MAX(3).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -174,13 +173,14 @@ of. : There must be at least two arguments to MAX(3).
 
 </A>
 <BLOCKQUOTE>
+<P>
 The return value corresponds to an array of the same shape of any array
 argument, or a scalar if all arguments are scalar.
 <P>
 The returned value when any argument is an array will be an array of the
 same shape where each element is the maximum value occurring at that
-location, treating all the scalar values as arrays of that same shape with
-all elements set to the scalar value.
+location, treating all the scalar values as arrays of that same shape
+with all elements set to the scalar value.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -188,93 +188,104 @@ all elements set to the scalar value.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program
 <P>
 <PRE>
-      program demo_max
-      implicit none
-      real :: arr1(4)= [10.0,11.0,30.0,-100.0]
-      real :: arr2(5)= [20.0,21.0,32.0,-200.0,2200.0]
-      integer :: box(3,4)= reshape([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6],shape(box))
+    program demo_max
+    implicit none
+    real :: arr1(4)= [10.0,11.0,30.0,-100.0]
+    real :: arr2(5)= [20.0,21.0,32.0,-200.0,2200.0]
+    integer :: box(3,4)= reshape([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6],shape(box))
 <P>
-        ! basic usage
-         ! this is simple enough when all arguments are scalar
+      ! basic usage
+       ! this is simple enough when all arguments are scalar
 <P>
-         ! the most positive value is returned, not the one with the
-         ! largest magnitude
-         write(*,*)&#146;scalars:&#146;,max(10.0,11.0,30.0,-100.0)
-         write(*,*)&#146;scalars:&#146;,max(-22222.0,-0.0001)
+       ! the most positive value is returned, not the one with the
+       ! largest magnitude
+       write(*,*)&#146;scalars:&#146;,max(10.0,11.0,30.0,-100.0)
+       write(*,*)&#146;scalars:&#146;,max(-22222.0,-0.0001)
 <P>
-         ! strings do not need to be of the same length
-         write(*,*)&#146;characters:&#146;,max(&#146;the&#146;,&#146;words&#146;,&#146;order&#146;)
+       ! strings do not need to be of the same length
+       write(*,*)&#146;characters:&#146;,max(&#146;the&#146;,&#146;words&#146;,&#146;order&#146;)
 <P>
-         ! leading spaces are significant; everyone is padded on the right
-         ! to the length of the longest argument
-         write(*,*)&#146;characters:&#146;,max(&#146;c&#146;,&#146;bb&#146;,&#146;a&#146;)
-         write(*,*)&#146;characters:&#146;,max(&#146; c&#146;,&#146;b&#146;,&#146;a&#146;)
+       ! leading spaces are significant; everyone is padded on the right
+       ! to the length of the longest argument
+       write(*,*)&#146;characters:&#146;,max(&#146;c&#146;,&#146;bb&#146;,&#146;a&#146;)
+       write(*,*)&#146;characters:&#146;,max(&#146; c&#146;,&#146;b&#146;,&#146;a&#146;)
 <P>
-        ! elemental
-         ! there must be at least two arguments, so even if A1 is an array
-         ! max(A1) is not valid. See MAXVAL(3) and/or MAXLOC(3) instead.
+      ! elemental
+       ! there must be at least two arguments, so even if A1 is an array
+       ! max(A1) is not valid. See MAXVAL(3) and/or MAXLOC(3) instead.
 <P>
-         ! strings in a single array do need to be of the same length
-         ! but the different objects can still be of different lengths.
-         write(*,"(*(&#146;""&#146;,a,&#146;""&#146;:,1x))")MAX([&#146;A&#146;,&#146;Z&#146;],[&#146;BB&#146;,&#146;Y &#146;])
-         ! note the result is now an array with the max of every element
-         ! position, as can be illustrated numerically as well:
-         write(*,&#146;(a,*(i3,1x))&#146;)&#146;box=   &#146;,box
-         write(*,&#146;(a,*(i3,1x))&#146;)&#146;box**2=&#146;,sign(1,box)*box**2
-         write(*,&#146;(a,*(i3,1x))&#146;)&#146;max    &#146;,max(box,sign(1,box)*box**2)
+       ! strings in a single array do need to be of the same length
+       ! but the different objects can still be of different lengths.
+       write(*,"(*(&#146;""&#146;,a,&#146;""&#146;:,1x))")MAX([&#146;A&#146;,&#146;Z&#146;],[&#146;BB&#146;,&#146;Y &#146;])
+       ! note the result is now an array with the max of every element
+       ! position, as can be illustrated numerically as well:
+       write(*,&#146;(a,*(i3,1x))&#146;)&#146;box=   &#146;,box
+       write(*,&#146;(a,*(i3,1x))&#146;)&#146;box**2=&#146;,sign(1,box)*box**2
+       write(*,&#146;(a,*(i3,1x))&#146;)&#146;max    &#146;,max(box,sign(1,box)*box**2)
 <P>
-         ! Remember if any argument is an array by the definition of an
-         ! elemental function all the array arguments must be the same shape.
+       ! Remember if any argument is an array by the definition of an
+       ! elemental function all the array arguments must be the same shape.
 <P>
-         ! to find the single largest value of arrays you could use something
-         ! like MAXVAL([arr1, arr2]) or probably better (no large temp array),
-         ! max(maxval(arr1),maxval(arr2)) instead
+       ! to find the single largest value of arrays you could use something
+       ! like MAXVAL([arr1, arr2]) or probably better (no large temp array),
+       ! max(maxval(arr1),maxval(arr2)) instead
 <P>
-         ! so this returns an array of the same shape as any input array
-         ! where each result is the maximum that occurs at that position.
-         write(*,*)max(arr1,arr2(1:4))
-         ! this returns an array just like arr1 except all values less than
-         ! zero are set to zero:
-         write(*,*)max(box,0)
-         ! When mixing arrays and scalars you can think of the scalars
-         ! as being a copy of one of the arrays with all values set to
-         ! the scalar value.
+       ! so this returns an array of the same shape as any input array
+       ! where each result is the maximum that occurs at that position.
+       write(*,*)max(arr1,arr2(1:4))
+       ! this returns an array just like arr1 except all values less than
+       ! zero are set to zero:
+       write(*,*)max(box,0)
+       ! When mixing arrays and scalars you can think of the scalars
+       ! as being a copy of one of the arrays with all values set to
+       ! the scalar value.
 <P>
-      end program demo_max
+    end program demo_max
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          scalars:   30.00000
-          scalars: -9.9999997E-05
-          characters:words
-          characters:c
-          characters:b
+        scalars:   30.00000
+        scalars: -9.9999997E-05
+        characters:words
+        characters:c
+        characters:b
 </PRE>
 "BB" "Z "
-<P>
-<PRE>
-    box=
-      -6  -5  -4  -3  -2  -1   1   2   3   4   5   6
-<P>
-    box**2=-36 -25 -16
-      -9  -4  -1   1   4   9  16  25  36
-<P>
-    max
-      -6  -5  -4  -3  -2  -1   1   4   9  16  25  36
-<P>
-    20.00000
-      21.00000  32.00000  -100.0000
-<P>
-    0 0  0  0  0  0
-<P>
-    1 2  3  4  5  6
-<P>
-</PRE>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:         scalars:   30.00000
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>box=</B> </TD><TD valign=bottom>
+<B>-6</B>  <B>-5</B>  <B>-4</B>  <B>-3</B>  <B>-2</B>  <B>-1</B>   1   2   3   4   5   6
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>box**2=</B><B>-36</B> <B>-25</B> <B>-16</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>-9</B>  <B>-4</B>  <B>-1</B>   1   4   9  16  25  36
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>max</B> </TD><TD valign=bottom>
+<B>-6</B>  <B>-5</B>  <B>-4</B>  <B>-3</B>  <B>-2</B>  <B>-1</B>   1   4   9  16  25  36
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>20.00000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+21.00000  32.00000  <B>-100.0000</B>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>0</B> </TD><TD valign=bottom>
+0  0  0  0  0
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>1</B> </TD><TD valign=bottom>
+2  3  4  5  6
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -282,6 +293,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -290,16 +302,13 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 MAXLOC(3), MINLOC(3), MAXVAL(3), MINVAL(3), MIN(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 max(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>max (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5afab529-ebf9-45b3-9f50-5e5be8c2cfb3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>max (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ae58bdf7-2e68-4bfa-9849-40cc40becb88 using man macros.</FONT>
 <br><br><center><img src="images/max.3fortran.gif"></center>
 </div>
 </div>

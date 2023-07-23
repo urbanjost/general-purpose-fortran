@@ -50,23 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>len_trim (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>len_trim (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>len_trim(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-len_trim(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-LEN_TRIM(3) - [CHARACTER:WHITESPACE] Character length without trailing blank
-characters
+<P>
+LEN_TRIM(3) - [CHARACTER:WHITESPACE] Character length without trailing
+blank characters
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -77,13 +69,14 @@ characters
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = len_trim(string [,kind])
 <P>
 <PRE>
-         elemental integer(kind=KIND) function len_trim(string,KIND)
+       elemental integer(kind=KIND) function len_trim(string,KIND)
 <P>
-          character(len=*),intent(in) :: string
-          integer(kind=KIND),intent(in),optional :: KIND
+        character(len=*),intent(in) :: string
+        integer(kind=KIND),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = len_trim(string [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -102,14 +96,14 @@ STRING is of type character
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND is a scalar integer constant expression specifying the kind of the
-returned value.
+KIND is a scalar integer constant expression specifying the kind of
+the returned value.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The return value is of type integer and of kind KIND. If KIND is absent,
-the return value is of default integer kind.
+The return value is of type integer and of kind KIND. If KIND is
+absent, the return value is of default integer kind.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -118,8 +112,9 @@ the return value is of default integer kind.
 
 </A>
 <BLOCKQUOTE>
-LEN_TRIM(3) returns the length of a character string, ignoring any trailing
-blanks.
+<P>
+LEN_TRIM(3) returns the length of a character string, ignoring any
+trailing blanks.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -127,6 +122,7 @@ blanks.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -145,10 +141,12 @@ KIND : Indicates the kind parameter of the result.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result equals the number of characters remaining after any trailing
 blanks in STRING are removed.
 <P>
-If the input argument is of zero length or all blanks the result is zero.
+If the input argument is of zero length or all blanks the result is
+zero.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -156,81 +154,76 @@ If the input argument is of zero length or all blanks the result is zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program
 <P>
 <PRE>
-      program demo_len_trim
-      implicit none
-      character(len=:),allocatable :: string
-      integer :: i
-      ! basic usage
-         string=" how long is this string?     "
-         write(*,*) string
-         write(*,*)&#146;UNTRIMMED LENGTH=&#146;,len(string)
-         write(*,*)&#146;TRIMMED LENGTH=&#146;,len_trim(string)
+    program demo_len_trim
+    implicit none
+    character(len=:),allocatable :: string
+    integer :: i
+    ! basic usage
+       string=" how long is this string?     "
+       write(*,*) string
+       write(*,*)&#146;UNTRIMMED LENGTH=&#146;,len(string)
+       write(*,*)&#146;TRIMMED LENGTH=&#146;,len_trim(string)
 <P>
-         ! print string, then print substring of string
-         string=&#146;xxxxx   &#146;
-         write(*,*)string,string,string
-         i=len_trim(string)
-         write(*,*)string(:i),string(:i),string(:i)
-         !
-        ! elemental example
-         ELE:block
-         ! an array of strings may be used
-         character(len=:),allocatable :: tablet(:)
-         tablet=[character(len=256) :: &
-         & &#146; how long is this string?     &#146;,&
-         & &#146;and this one?&#146;]
-            write(*,*)&#146;UNTRIMMED LENGTH=  &#146;,len(tablet)
-            write(*,*)&#146;TRIMMED LENGTH=    &#146;,len_trim(tablet)
-            write(*,*)&#146;SUM TRIMMED LENGTH=&#146;,sum(len_trim(tablet))
-         endblock ELE
-         !
-      end program demo_len_trim
+       ! print string, then print substring of string
+       string=&#146;xxxxx   &#146;
+       write(*,*)string,string,string
+       i=len_trim(string)
+       write(*,*)string(:i),string(:i),string(:i)
+       !
+      ! elemental example
+       ELE:block
+       ! an array of strings may be used
+       character(len=:),allocatable :: tablet(:)
+       tablet=[character(len=256) :: &
+       & &#146; how long is this string?     &#146;,&
+       & &#146;and this one?&#146;]
+          write(*,*)&#146;UNTRIMMED LENGTH=  &#146;,len(tablet)
+          write(*,*)&#146;TRIMMED LENGTH=    &#146;,len_trim(tablet)
+          write(*,*)&#146;SUM TRIMMED LENGTH=&#146;,sum(len_trim(tablet))
+       endblock ELE
+       !
+    end program demo_len_trim
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-           how long is this string?
-<P>
+         how long is this string?
 </PRE>
-UNTRIMMED LENGTH=
-30
 <BLOCKQUOTE>
-<P>
-TRIMMED LENGTH=
-25
-<P>
-xxxxx
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: xxxxx
+<TABLE cellpadding=3><!-- tsb:          how long is this string?
  -->
 <TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>UNTRIMMED LENGTH=</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+30
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>TRIMMED LENGTH=</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+25
+</TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>xxxxx</B> </TD><TD valign=bottom>
-xxxxx xxxxxxxxxxxxxxx
+xxxxx   xxxxx
+xxxxxxxxxxxxxxx
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-UNTRIMMED LENGTH=
+<TR valign=top><TD colspan=2>
+<B>UNTRIMMED LENGTH=</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 256
-<P>
-TRIMMED LENGTH=
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: TRIMMED LENGTH=
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>25</B> </TD><TD valign=bottom>
-13
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>TRIMMED LENGTH=</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+25          13
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>SUM TRIMMED LENGTH=</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+38
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<P>
-SUM TRIMMED LENGTH=
-38
-</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -238,6 +231,7 @@ SUM TRIMMED LENGTH=
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 . KIND argument added with Fortran 2003.
 </BLOCKQUOTE>
 <A name=8>
@@ -246,9 +240,10 @@ Fortran 95 . KIND argument added with Fortran 2003.
 
 </A>
 <BLOCKQUOTE>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+<P>
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -262,13 +257,9 @@ o
 NONELEMENTAL: REPEAT(3), LEN(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022            len_trim(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>len_trim (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2a118d1d-1fa5-40b0-8432-72efbc57bf34 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>len_trim (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ce4605e1-3ccd-48c2-a6b8-10ff3f6f0e9d using man macros.</FONT>
 <br><br><center><img src="images/len_trim.3fortran.gif"></center>
 </div>
 </div>

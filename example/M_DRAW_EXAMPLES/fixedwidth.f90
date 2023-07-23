@@ -1,20 +1,20 @@
 program demo_fixedwidth
 !(LICENSE:PD)
-use M_draw
-implicit none
+   use M_draw
+   implicit none
 
-character(len=50) :: device
-character(len=80) :: fname
-integer           :: ios
-integer           :: idum
+   character(len=50) :: device
+   character(len=80) :: fname
+   integer           :: ios
+   integer           :: idum
 
-   print*,'Enter output device:'
-   read(*,'(a)',iostat=ios) device
-   if(ios.ne.0)device=' '
+   print *, 'Enter output device:'
+   read (*, '(a)', iostat=ios) device
+   if (ios /= 0) device = ' '
 
-   print*,'Enter a font name:'
-   read(*,'(a)',iostat=ios) fname
-   if(ios.ne.0)fname='futura.l'
+   print *, 'Enter a font name:'
+   read (*, '(a)', iostat=ios) fname
+   if (ios /= 0) fname = 'futura.l'
 
    call vinit(device)
 
@@ -32,7 +32,7 @@ integer           :: idum
 !
    call boxtext(0.1, 0.4, 0.8, 0.1, '{This is Some text] | $')
 
-   idum=getkey()
+   idum = getkey()
 
    call color(D_BLACK)
    call clear
@@ -55,7 +55,7 @@ integer           :: idum
 !
    call centertext(.false.)
 
-   idum=getkey()
+   idum = getkey()
 
    call color(D_BLACK)
    call clear()
@@ -96,7 +96,7 @@ integer           :: idum
 !
    call textang(0.0)
 
-   idum=getkey()
+   idum = getkey()
 
    call color(D_BLACK)
    call clear
@@ -113,7 +113,7 @@ integer           :: idum
 
    call boxtext(0.1, 0.5, 0.8, 0.1, '{This is Some Fixedwidth text] | $')
 
-   idum=getkey()
+   idum = getkey()
 
    call color(D_BLACK)
    call clear
@@ -130,7 +130,7 @@ integer           :: idum
 
    call centertext(.false.)
 
-   idum=getkey()
+   idum = getkey()
    call color(D_BLACK)
    call clear
 
@@ -151,33 +151,33 @@ integer           :: idum
    call move2(0.1, 0.5)
    call drawstr('IJKLmnop')
 
-   idum=getkey()
+   idum = getkey()
 
    call vexit
 !@(#) draw a grid in the middle of the screen
 contains
 !
-subroutine drawgrid
-implicit none
-real           :: x
-integer        :: i
+   subroutine drawgrid
+      implicit none
+      real           :: x
+      integer        :: i
 
-   call color(D_GREEN)
-   call rect(0.1, 0.4, 0.9, 0.6)
+      call color(D_GREEN)
+      call rect(0.1, 0.4, 0.9, 0.6)
 
-   x = 0.2
+      x = 0.2
 
-   do i = 1, 8
-      call move2(x, 0.4)
-      call draw2(x, 0.6)
-      x = x + 0.1
-   enddo
+      do i = 1, 8
+         call move2(x, 0.4)
+         call draw2(x, 0.6)
+         x = x + 0.1
+      end do
 
-   call move2(0.1, 0.5)
-   call draw2(0.9, 0.5)
+      call move2(0.1, 0.5)
+      call draw2(0.9, 0.5)
 
-   call color(D_RED)
+      call color(D_RED)
 
-end subroutine drawgrid
+   end subroutine drawgrid
 
 end program demo_fixedwidth

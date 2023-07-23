@@ -1,28 +1,28 @@
 program flcube !@(#) track a cube with the locator
 !(LICENSE:PD)
-use M_draw
-use M_draw, only : D_BLACK
-implicit none
-real,parameter     :: TRANS = 20.0, SC = 0.1
-integer, parameter :: FACE = 1, FILLED = 2, OUTLINE = 3
-character(len=10)  :: device
-character(len=1)   :: but
-logical            :: back, fill, hatch
-integer            :: idum
-real               :: x,y
-real               :: tdir
-real               :: scal
-integer            :: nplanes
-   write(*,*)'x,y,z = translate'
-   write(*,*)'s     = apply scale'
-   write(*,*)'+,-   = change scale/translate direction'
-   write(*,*)'f,h   = fill, hatch'
-   write(*,*)'b     = toggle backface'
-   write(*,*)'q     = quit'
+   use M_draw
+   use M_draw, only: D_BLACK
+   implicit none
+   real, parameter     :: TRANS = 20.0, SC = 0.1
+   integer, parameter :: FACE = 1, FILLED = 2, OUTLINE = 3
+   character(len=10)  :: device
+   character(len=1)   :: but
+   logical            :: back, fill, hatch
+   integer            :: idum
+   real               :: x, y
+   real               :: tdir
+   real               :: scal
+   integer            :: nplanes
+   write (*, *) 'x,y,z = translate'
+   write (*, *) 's     = apply scale'
+   write (*, *) '+,-   = change scale/translate direction'
+   write (*, *) 'f,h   = fill, hatch'
+   write (*, *) 'b     = toggle backface'
+   write (*, *) 'q     = quit'
 
 !     print*, 'Enter output device:'
 !     read(*, '(a)') device
-   device=' '
+   device = ' '
 
    call prefposition(50, 50)
    call prefsize(500, 500)
@@ -56,125 +56,125 @@ integer            :: nplanes
    call makecube(FILLED)
 
    nplanes = getdepth()
-   if (nplanes .eq. 1) call makecube(OUTLINE)
+   if (nplanes == 1) call makecube(OUTLINE)
 
    call backface(back)
 !
 ! Setup drawing into the backbuffer....
 !
-   if (backbuffer().lt.0) then
+   if (backbuffer() < 0) then
       call vexit()
-      write(*,*)'Device can''t support doublebuffering'
+      write (*, *) 'Device can''t support doublebuffering'
       stop
-   endif
+   end if
 
    INFINITE: do
       idum = slocator(x, y)
       call pushmatrix()
-      call rotate(100.0 * x, 'y')
-      call rotate(100.0 * y, 'x')
+      call rotate(100.0*x, 'y')
+      call rotate(100.0*y, 'x')
       call color(D_BLACK)
       call clear()
       call callobj(FILLED)
-      if (nplanes .eq. 1 .and. (fill .or. hatch)) call callobj(OUTLINE)
+      if (nplanes == 1 .and. (fill .or. hatch)) call callobj(OUTLINE)
       call popmatrix()
       call swapbuffers()
 
       but = char(checkkey())
-      select case(but)
-       case('x')
+      select case (but)
+      case ('x')
          call translate(tdir, 0.0, 0.0)
-       case('y')
+      case ('y')
          call translate(0.0, tdir, 0.0)
-       case('z')
+      case ('z')
          call translate(0.0, 0.0, tdir)
-       case('s')
+      case ('s')
          call scale(scal, scal, scal)
-       case('f')
+      case ('f')
          fill = .not. fill
          hatch = .false.
          call polyfill(fill)
-       case('h')
+      case ('h')
          hatch = .not. hatch
          fill = .false.
          call polyhatch(hatch)
-       case('b')
+      case ('b')
          back = .not. back
          call backface(back)
-       case('-')
+      case ('-')
          tdir = -tdir
-         if (scal .lt. 1.0) then
+         if (scal < 1.0) then
             scal = 1.0 + SC
          else
             scal = 1.0 - SC
-         endif
-       case('+')
+         end if
+      case ('+')
          tdir = TRANS
-       case('q',char(27))
+      case ('q', char(27))
          call vexit()
          stop
       end select
-   enddo INFINITE
+   end do INFINITE
 contains
 
    subroutine makecube(obj)
-   use M_draw
-   use M_draw, only : D_BLACK, D_RED, D_GREEN, D_YELLOW, D_BLUE, D_CYAN, D_MAGENTA, D_WHITE
-   implicit none
+      use M_draw
+      use M_draw, only: D_BLACK, D_RED, D_GREEN, D_YELLOW, D_BLUE, D_CYAN, D_MAGENTA, D_WHITE
+      implicit none
 
-   integer           :: obj
-   integer,parameter :: OUTLINE=3, FILLED=2, FACE=1
+      integer           :: obj
+      integer, parameter :: OUTLINE = 3, FILLED = 2, FACE = 1
 
       call makeobj(obj)
-      if (obj .eq. OUTLINE) then
+      if (obj == OUTLINE) then
          call pushattributes()
          call color(D_BLACK)
          call polyfill(.false.)
          call polyhatch(.false.)
-      endif
+      end if
 
       call pushmatrix()
       call translate(0.0, 0.0, 200.0)
-      if (obj .eq. FILLED) call color(D_RED)
+      if (obj == FILLED) call color(D_RED)
       call callobj(FACE)
       call popmatrix()
 
       call pushmatrix()
       call translate(200.0, 0.0, 0.0)
       call rotate(90.0, 'y')
-      if (obj .eq. FILLED) call color(D_GREEN)
+      if (obj == FILLED) call color(D_GREEN)
       call callobj(FACE)
       call popmatrix()
 
       call pushmatrix()
       call translate(0.0, 0.0, -200.0)
       call rotate(180.0, 'y')
-      if (obj .eq. FILLED) call color(D_BLUE)
+      if (obj == FILLED) call color(D_BLUE)
       call callobj(FACE)
       call popmatrix()
 
       call pushmatrix()
       call translate(-200.0, 0.0, 0.0)
       call rotate(-90.0, 'y')
-      if (obj .eq. FILLED) call color(D_CYAN)
+      if (obj == FILLED) call color(D_CYAN)
       call callobj(FACE)
       call popmatrix()
 
       call pushmatrix()
       call translate(0.0, 200.0, 0.0)
       call rotate(-90.0, 'x')
-      if (obj .eq. FILLED) call color(D_MAGENTA)
+      if (obj == FILLED) call color(D_MAGENTA)
       call callobj(FACE)
       call popmatrix()
 
       call pushmatrix()
       call translate(0.0, -200.0, 0.0)
       call rotate(90.0, 'x')
-      if (obj .eq. FILLED) call color(D_YELLOW)
+      if (obj == FILLED) call color(D_YELLOW)
       call callobj(FACE)
       call popmatrix()
 
-      if (obj .eq. OUTLINE) call popattributes()
+      if (obj == OUTLINE) call popattributes()
 
       call closeobj()
 

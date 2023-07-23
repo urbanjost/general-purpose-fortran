@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>nearest (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>nearest (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>nearest(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-nearest(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 NEAREST(3) - [MODEL_COMPONENTS] Nearest representable number
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ NEAREST(3) - [MODEL_COMPONENTS] Nearest representable number
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = nearest(x, s)
 <P>
 <PRE>
-           elemental real(kind=KIND) function nearest(x,s)
+         elemental real(kind=KIND) function nearest(x,s)
 <P>
-            real(kind=KIND),intent(in) :: x
-            real(kind=**),intent(in) :: s
+          real(kind=KIND),intent(in) :: x
+          real(kind=**),intent(in) :: s
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = nearest(x, s)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -120,8 +114,9 @@ a kind designated as ** may be any supported kind for the type
 
 </A>
 <BLOCKQUOTE>
-NEAREST(3) returns the processor-representable number nearest to X in the
-direction indicated by the sign of S.
+<P>
+NEAREST(3) returns the processor-representable number nearest to X in
+the direction indicated by the sign of S.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -129,6 +124,7 @@ direction indicated by the sign of S.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -138,8 +134,8 @@ X : the value to find the nearest representable value of
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-S : a non-zero value whose sign is used to determine the direction in
-which to search from X to the representable value.
+S : a non-zero value whose sign is used to determine the direction
+in which to search from X to the representable value.
 <P>
 If S is positive, NEAREST returns the processor-representable number
 greater than X and nearest to it.
@@ -154,10 +150,11 @@ smaller than X and nearest to it.
 
 </A>
 <BLOCKQUOTE>
-The return value is of the same type as X. If S is positive, NEAREST returns
-the processor-representable number greater than X and nearest to it. If S is
-negative, NEAREST returns the processor-representable number smaller than X
-and nearest to it.
+<P>
+The return value is of the same type as X. If S is positive, NEAREST
+returns the processor-representable number greater than X and nearest to
+it. If S is negative, NEAREST returns the processor-representable number
+smaller than X and nearest to it.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -165,34 +162,35 @@ and nearest to it.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_nearest
-      implicit none
+    program demo_nearest
+    implicit none
 <P>
-         real :: x, y
-         x = nearest(42.0, 1.0)
-         y = nearest(42.0, -1.0)
-         write (*,"(3(g20.15))") x, y, x - y
+       real :: x, y
+       x = nearest(42.0, 1.0)
+       y = nearest(42.0, -1.0)
+       write (*,"(3(g20.15))") x, y, x - y
 <P>
-      !  write (*,"(3(g20.15))") &
-      !   nearest(tiny(0.0),1.0), &
-      !   nearest(tiny(0.0),-1.0), &
-      !   nearest(tiny(0.0),1.0) -nearest(tiny(0.0),-1.0)
+    !  write (*,"(3(g20.15))") &
+    !   nearest(tiny(0.0),1.0), &
+    !   nearest(tiny(0.0),-1.0), &
+    !   nearest(tiny(0.0),1.0) -nearest(tiny(0.0),-1.0)
 <P>
-      !  write (*,"(3(g20.15))") &
-      !   nearest(huge(0.0),1.0), &
-      !   nearest(huge(0.0),-1.0), &
-      !   nearest(huge(0.0),1.0)- nearest(huge(0.0),-1.0)
+    !  write (*,"(3(g20.15))") &
+    !   nearest(huge(0.0),1.0), &
+    !   nearest(huge(0.0),-1.0), &
+    !   nearest(huge(0.0),1.0)- nearest(huge(0.0),-1.0)
 <P>
-      end program demo_nearest
+    end program demo_nearest
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         42.0000038146973    41.9999961853027    .762939453125000E-05
+       42.0000038146973    41.9999961853027    .762939453125000E-05
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -202,6 +200,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -210,18 +209,15 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
-DIGITS(3), EPSILON(3), EXPONENT(3), FRACTION(3), HUGE(3), MAXEXPONENT(3),
-MINEXPONENT(3), PRECISION(3), RADIX(3), RANGE(3), RRSPACING(3), SCALE(3),
-SET_EXPONENT(3), SPACING(3), TINY(3)
+<P>
+DIGITS(3), EPSILON(3), EXPONENT(3), FRACTION(3), HUGE(3),
+MAXEXPONENT(3), MINEXPONENT(3), PRECISION(3), RADIX(3), RANGE(3),
+RRSPACING(3), SCALE(3), SET_EXPONENT(3), SPACING(3), TINY(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022             nearest(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nearest (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fcb66164-bed4-4c4c-8295-76b7aa679852 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nearest (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a7338d05-2e2e-4989-a432-b97f3851f588 using man macros.</FONT>
 <br><br><center><img src="images/nearest.3fortran.gif"></center>
 </div>
 </div>
