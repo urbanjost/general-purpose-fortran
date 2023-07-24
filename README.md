@@ -1,4 +1,5 @@
-# General-Purpose Fortran Repository![GPF](docs/images/GPF.gif)
+[![GPF](docs/images/GPF.gif)](https://urbanjost.github.io/general-purpose-fortran/docs/index.html)
+# [General-Purpose Fortran Repository](https://urbanjost.github.io/general-purpose-fortran/docs/man3.html)
 
 ## Shortcut
 
