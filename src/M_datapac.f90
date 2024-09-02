@@ -1,7 +1,7 @@
 module M_datapac
 use,intrinsic :: iso_fortran_env, only : stdin=>input_unit,  stdout=>output_unit, stderr=>error_unit
-use M_datapac_s
-use M_datapac_d
+use M_datapac__s
+use M_datapac__d
 public :: label
 private :: G_io
 integer, save           :: G_IO=stdout  ! IO LUN for all write statements

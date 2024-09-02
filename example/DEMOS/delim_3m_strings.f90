@@ -4,10 +4,10 @@
       implicit none
       character(len=80) :: line
       character(len=80) :: dlm
-      integer,parameter :: n=10
+      integer,parameter :: n=80
       character(len=20) :: array(n)=' '
       integer           :: ibegin(n),iterm(n)
-      integer           :: i20, icount, lgth, i10
+      integer           :: i20, icount, lgth, i10,i30
       line=' first  second 10.3 words_of_stuff  '
       do i20=1,4
          ! change delimiter list and what is calculated or parsed
@@ -47,4 +47,11 @@
             write(*,*)
          endif
       enddo
+         line='four    score and   seven  years ago'
+         call delim(line,["#N#"],n,icount,ibegin,iterm,lgth,' ')
+         do i30=1,icount
+            write(*,*)ibegin(i30),iterm(i30),&
+            & '['//line(ibegin(i30):iterm(i30))//']'
+         enddo
+
       end program demo_delim

@@ -2,14 +2,13 @@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 module M_testsuite_M_readline
-use M_verify
+use M_framework__verify
 use M_readline
 
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_suite_M_readline()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
 
 !! setup
    call test_system_readline()
@@ -26,14 +25,10 @@ end subroutine test_system_readline
 end module M_testsuite_M_readline
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 program runtest
-use M_msg
-use M_verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
-use M_verify, only : unit_check_level, unit_check_keep_going, unit_check_command
-use M_verify, only : unit_check_stop
+use M_framework__msg
+use M_framework__verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
+use M_framework__verify, only : unit_check_stop
 use M_testsuite_M_readline
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
    call test_suite_M_readline()
    call unit_check_stop()
 end program runtest

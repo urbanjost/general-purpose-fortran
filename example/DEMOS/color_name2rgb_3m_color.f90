@@ -9,8 +9,7 @@
       real              :: red,green,blue
       integer           :: i
       TRYALL: do i=1,10000
-         ! weird little thing where the color names have aliases
-         ! that are numeric strings
+         ! color names may be numeric strings from 1 to N
          write(name,'(i0)')i
          ! get the RGB values and English name of the color
          call color_name2rgb(name,red,green,blue,echoname)

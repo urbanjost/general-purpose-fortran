@@ -19,7 +19,7 @@
          & ')
        ! Assign values to elements
        ! Scalars
-      call get_args('x',x,'y',y,'z',z,'l',l,'L',lbig)
+      call get_args( 'x',x, 'y',y, 'z',z, 'l',l, 'L',lbig )
        ! Allocatable string
       call get_args('title',title)
        ! Allocatable arrays

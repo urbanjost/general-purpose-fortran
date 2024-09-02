@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ishft (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ishft (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>ishft(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-ishft(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 ISHFT(3) - [BIT:SHIFT] Logical shift of bits in an integer
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ ISHFT(3) - [BIT:SHIFT] Logical shift of bits in an integer
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = ishftc( i, shift )
 <P>
 <PRE>
-           elemental integer(kind=KIND) function ishft(i, shift )
+         elemental integer(kind=KIND) function ishft(i, shift )
 <P>
-            integer(kind=KIND),intent(in) :: i
-            integer(kind=**),intent(in) :: shift
+          integer(kind=KIND),intent(in) :: i
+          integer(kind=**),intent(in) :: shift
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = ishftc( i, shift )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -116,11 +110,13 @@ SHIFT is an integer of any kind.
 
 </A>
 <BLOCKQUOTE>
-ISHFT(3) returns a value corresponding to I with all of the bits shifted
-SHIFT places left or right as specified by the sign and magnitude of SHIFT.
 <P>
-Bits shifted out from the left end or right end are lost; zeros are shifted
-in from the opposite end.
+ISHFT(3) returns a value corresponding to I with all of the bits shifted
+SHIFT places left or right as specified by the sign and magnitude of
+SHIFT.
+<P>
+Bits shifted out from the left end or right end are lost; zeros are
+shifted in from the opposite end.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -128,6 +124,7 @@ in from the opposite end.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -137,12 +134,12 @@ I : The value specifying the pattern of bits to shift
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT : A value of SHIFT greater than zero corresponds to a left shift, a
-value of zero corresponds to no shift, and a value less than zero
-corresponds to a right shift.
+SHIFT : A value of SHIFT greater than zero corresponds to a left
+shift, a value of zero corresponds to no shift, and a value less
+than zero corresponds to a right shift.
 <P>
-If the absolute value of SHIFT is greater than BIT_SIZE(I), the value is
-undefined.
+If the absolute value of SHIFT is greater than BIT_SIZE(I), the
+value is undefined.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -151,6 +148,7 @@ undefined.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result has the value obtained by shifting the bits of I by SHIFT
 positions.
 <TABLE cellpadding=3><!-- tsb: The result has the value obtained by shifting the bits of I by SHIFT
@@ -171,8 +169,8 @@ if SHIFT is negative, the shift is to the right
 </TD><TD>
 if SHIFT is zero, no shift is performed.
 </TD></TR>
-<TR></TR></TABLE>Bits shifted out from the left or from the right, as appropriate, are lost.
-Zeros are shifted in from the opposite end.
+<TR></TR></TABLE>Bits shifted out from the left or from the right, as appropriate, are
+lost. Zeros are shifted in from the opposite end.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -180,33 +178,34 @@ Zeros are shifted in from the opposite end.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_ishft
-      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      implicit none
-      integer             :: shift
-      character(len=*),parameter :: g=&#146;(b32.32,1x,i0)&#146;
+    program demo_ishft
+    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    implicit none
+    integer             :: shift
+    character(len=*),parameter :: g=&#146;(b32.32,1x,i0)&#146;
 <P>
-         write(*,*) ishft(3, 1),&#146; &lt;== typically should have the value 6&#146;
+       write(*,*) ishft(3, 1),&#146; &lt;== typically should have the value 6&#146;
 <P>
-         shift=4
-         write(*,g) ishft(huge(0),shift), shift
-         shift=0
-         write(*,g) ishft(huge(0),shift), shift
-         shift=-4
-         write(*,g) ishft(huge(0),shift), shift
-      end program demo_ishft
+       shift=4
+       write(*,g) ishft(huge(0),shift), shift
+       shift=0
+       write(*,g) ishft(huge(0),shift), shift
+       shift=-4
+       write(*,g) ishft(huge(0),shift), shift
+    end program demo_ishft
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-      &gt;              6  &lt;== typically should have the value 6
-      &gt;   11111111111111111111111111110000 4
-      &gt;   01111111111111111111111111111111 0
-      &gt;   00000111111111111111111111111111 -4
+    &gt;              6  &lt;== typically should have the value 6
+    &gt;   11111111111111111111111111110000 4
+    &gt;   01111111111111111111111111111111 0
+    &gt;   00000111111111111111111111111111 -4
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -216,6 +215,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -224,16 +224,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 ISHFTC(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               ishft(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ishft (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bc5e536c-29c1-45af-a028-3b27672f0e51 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ishft (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b61404a5-03c0-48bb-8838-9696c7cf2db6 using man macros.</FONT>
 <br><br><center><img src="images/ishft.3fortran.gif"></center>
 </div>
 </div>

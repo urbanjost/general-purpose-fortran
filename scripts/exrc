@@ -221,14 +221,10 @@ map #f #K'a!'bFmt -ad b -ll 78
 "map #F #K1GmaGmb'e`c
 map #F #K:1ma a|$ma b'e`c
 
-
 map #h :!grep '^"|' $HOME/.exrc|more
 map #H :!grep '^"' $HOME/.exrc|more
 map #i #K:'a,'bs/.*/   &/
 map #I 1G!Gcb|expand -3
-
-
-
 
 map #l #K:'a,'bs/.*/\L&/
 
@@ -243,7 +239,7 @@ map #o "dp
 map #O "1p........
 map #p {!}Fmt -ad b -ll 78
 map #P #K{ma}mb'e`c
-
+map #q "dw!
 
 map #r miMmj`i
 map #R 'jz.`i

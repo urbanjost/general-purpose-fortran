@@ -1,9 +1,9 @@
       program demo_ordinal_to_date
       use M_time, only : ordinal_to_date
       implicit none
-      INTEGER            :: yyyy, ddd, mm, dd, yy
-      integer            :: dat(8)
-      integer            :: ios
+      integer :: yyyy, ddd, mm, dd, yy
+      integer :: dat(8)
+      integer :: ios
         INFINITE: do
            write(*,'(a)',advance='no')&
            & 'Enter year YYYY and ordinal day of year DD '

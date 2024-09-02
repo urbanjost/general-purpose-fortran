@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>parity (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>parity (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>parity(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-parity(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 PARITY(3) - [ARRAY:REDUCTION] Array reduction by .NEQV. operation
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ PARITY(3) - [ARRAY:REDUCTION] Array reduction by .NEQV. operation
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = parity( mask [,dim] )
 <P>
 <PRE>
-           logical(kind=KIND) function parity(mask, dim)
+         logical(kind=KIND) function parity(mask, dim)
 <P>
-            type(logical(kind=KIND)),intent(in)        :: mask(..)
-            type(integer(kind=**)),intent(in),optional :: dim
+          type(logical(kind=KIND)),intent(in)        :: mask(..)
+          type(integer(kind=**)),intent(in),optional :: dim
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = parity( mask [,dim] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -106,9 +100,9 @@ DIM is an integer scalar
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is of type logical with the same kind type parameter as MASK.
-It is a scalar if DIM does not appear; otherwise it is the rank and shape
-of MASK with the dimension specified by DIM removed.
+the result is of type logical with the same kind type parameter as
+MASK. It is a scalar if DIM does not appear; otherwise it is the
+rank and shape of MASK with the dimension specified by DIM removed.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -122,20 +116,18 @@ a kind designated as ** may be any supported kind for the type
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>PARITY(3) calculates the parity array (i.e. the reduction using .neqv.)</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-of
-MASK along dimension DIM if DIM is present and not 1. Otherwise, it returns
-the parity of the entire MASK array as a scalar.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+PARITY(3) calculates the parity array (i.e. the reduction using .neqv.)
+of MASK along dimension DIM if DIM is present and not 1. Otherwise, it
+returns the parity of the entire MASK array as a scalar.
+</BLOCKQUOTE>
 <A name=4>
 
      <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -145,8 +137,8 @@ MASK : Shall be an array of type logical.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : (Optional) shall be a scalar of type integer with a value in the
-range from 1 to n, where n equals the rank of MASK.
+DIM : (Optional) shall be a scalar of type integer with a value in
+the range from 1 to n, where n equals the rank of MASK.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -155,6 +147,7 @@ range from 1 to n, where n equals the rank of MASK.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result is of the same type as MASK.
 <P>
 If DIM is absent, a scalar with the parity of all elements in MASK is
@@ -171,37 +164,38 @@ dropped.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_parity
-      implicit none
-      logical, parameter :: T=.true., F=.false.
-      logical :: x(3,4)
-        ! basics
-         print *, parity([T,F])
-         print *, parity([T,F,F])
-         print *, parity([T,F,F,T])
-         print *, parity([T,F,F,T,T])
-         x(1,:)=[T,T,T,T]
-         x(2,:)=[T,T,T,T]
-         x(3,:)=[T,T,T,T]
-         print *, parity(x)
-         print *, parity(x,dim=1)
-         print *, parity(x,dim=2)
-      end program demo_parity
+    program demo_parity
+    implicit none
+    logical, parameter :: T=.true., F=.false.
+    logical :: x(3,4)
+      ! basics
+       print *, parity([T,F])
+       print *, parity([T,F,F])
+       print *, parity([T,F,F,T])
+       print *, parity([T,F,F,T,T])
+       x(1,:)=[T,T,T,T]
+       x(2,:)=[T,T,T,T]
+       x(3,:)=[T,T,T,T]
+       print *, parity(x)
+       print *, parity(x,dim=1)
+       print *, parity(x,dim=2)
+    end program demo_parity
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  T
-       &gt;  T
-       &gt;  F
-       &gt;  T
-       &gt;  F
-       &gt;  T T T T
-       &gt;  F F F
+     &gt;  T
+     &gt;  T
+     &gt;  F
+     &gt;  T
+     &gt;  F
+     &gt;  T T T T
+     &gt;  F F F
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -211,6 +205,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -219,6 +214,7 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -228,7 +224,8 @@ ALL(3) - Determines if all the values are true
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ANY(3) - Determines if any of the values in the logical array are .true.
+ANY(3) - Determines if any of the values in the logical array are
+[char46]true.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -261,13 +258,9 @@ o
 REDUCE(3) - General array reduction
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              parity(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>parity (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1c3edd5b-3845-4e3a-9222-1461839f1cad using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>parity (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 185f1b21-33da-4f5a-8052-ea971a64166c using man macros.</FONT>
 <br><br><center><img src="images/parity.3fortran.gif"></center>
 </div>
 </div>

@@ -14,6 +14,21 @@
         write(*,'(a)')&
         & 'Given 27 September 2008 is 2008-W39-6'
         call printit(2008,39,6)
+
+        string : block
+           character(len=*),parameter :: array(4)=[character(len=80) ::  &
+           & '2008-W39-6', '2008W396', '2008-W39', '2008W39' ]
+           integer  :: dat(8)
+           integer  :: i
+           do i=1,size(array)
+              write(*,'(a)')&
+              & 'Given string '//array(i)
+              call w2d(array(i),dat)
+              write(*,'(a,i0)')'RESULT:          '
+              write(*,'(a,*(i0:,","))')'   DAT array        ',dat
+              write(*,'(a,/,67("="))')'    '//fmtdate(dat,'long')
+           enddo
+        endblock string
       contains
       subroutine printit(iso_year,iso_week,iso_weekday)
       ! ISO-8601 Week: 2016-W29-1

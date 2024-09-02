@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>merge (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>merge (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>merge(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-merge(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 MERGE(3) - [ARRAY:CONSTRUCTION] Merge variables
 <P>
 </BLOCKQUOTE>
@@ -76,15 +68,16 @@ MERGE(3) - [ARRAY:CONSTRUCTION] Merge variables
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = merge(tsource, fsource, mask)
 <P>
 <PRE>
-           elemental type(TYPE(kind=KIND)) function merge(tsource,fsource,mask)
+         elemental type(TYPE(kind=KIND)) function merge(tsource,fsource,mask)
 <P>
-            type(TYPE(kind=KIND)),intent(in) :: tsource
-            type(TYPE(kind=KIND)),intent(in) :: fsource
-            logical(kind=**),intent(in)   :: mask
-            mask** : Shall be of type _logical_.
+          type(TYPE(kind=KIND)),intent(in) :: tsource
+          type(TYPE(kind=KIND)),intent(in) :: fsource
+          logical(kind=**),intent(in)   :: mask
+          mask** : Shall be of type logical.
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -94,6 +87,7 @@ result = merge(tsource, fsource, mask)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -127,41 +121,43 @@ The result will by of the same type and type parameters as TSOURCE.
 
 </A>
 <BLOCKQUOTE>
-The elemental function MERGE(3) selects values from two arrays or scalars
-according to a logical mask. The result is equal to an element of TSOURCE
-where the corresponding element of MASK is .true., or an element of FSOURCE
-when it is .false. .
+<P>
+The elemental function MERGE(3) selects values from two arrays or
+scalars according to a logical mask. The result is equal to an element
+of TSOURCE where the corresponding element of MASK is .true., or an
+element of FSOURCE when it is .false. .
 <P>
 Multi-dimensional arrays are supported.
 <P>
-Note that argument expressions to MERGE(3) are not required to be short-
-circuited so (as an example) if the array X contains zero values in the
-statement below the standard does not prevent floating point divide by zero
-being generated; as 1.0/X may be evaluated for all values of X before the
-mask is used to select which value to retain:
+Note that argument expressions to MERGE(3) are not required to be
+short-circuited so (as an example) if the array X contains zero values
+in the statement below the standard does not prevent floating point
+divide by zero being generated; as 1.0/X may be evaluated for all values
+of X before the mask is used to select which value to retain:
 <P>
 <PRE>
-            y = merge( 1.0/x, 0.0, x /= 0.0 )
+          y = merge( 1.0/x, 0.0, x /= 0.0 )
 <P>
 </PRE>
-Note the compiler is also free to short-circuit or to generate an infinity
-so this may work in many programming environments but is not recommended.
+Note the compiler is also free to short-circuit or to generate an
+infinity so this may work in many programming environments but is not
+recommended.
 <P>
 For cases like this one may instead use masked assignment via the WHERE
 construct:
 <P>
 <PRE>
-            where(x .ne. 0.0)
-               y = 1.0/x
-            elsewhere
-               y = 0.0
-            endwhere
+          where(x .ne. 0.0)
+             y = 1.0/x
+          elsewhere
+             y = 0.0
+          endwhere
 <P>
 </PRE>
 instead of the more obscure
 <P>
 <PRE>
-            merge(1.0/merge(x,1.0,x /= 0.0), 0.0, x /= 0.0)
+          merge(1.0/merge(x,1.0,x /= 0.0), 0.0, x /= 0.0)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -171,6 +167,7 @@ instead of the more obscure
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -195,8 +192,9 @@ MASK : Shall be of type logical.
 
 </A>
 <BLOCKQUOTE>
-The result is built from an element of TSOURCE if MASK is .true. and from
-FSOURCE otherwise.
+<P>
+The result is built from an element of TSOURCE if MASK is .true. and
+from FSOURCE otherwise.
 <P>
 Because TSOURCE and FSOURCE are required to have the same type and type
 parameters (for both the declared and dynamic types), the result is
@@ -208,85 +206,88 @@ polymorphic if and only if both TSOURCE and FSOURCE are polymorphic.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_merge
-      implicit none
-      integer :: tvals(2,3), fvals(2,3), answer(2,3)
-      logical :: mask(2,3)
-      integer :: i
-      integer :: k
-      logical :: chooseleft
+    program demo_merge
+    implicit none
+    integer :: tvals(2,3), fvals(2,3), answer(2,3)
+    logical :: mask(2,3)
+    integer :: i
+    integer :: k
+    logical :: chooseleft
 <P>
-         ! Works with scalars
-         k=5
-         write(*,*)merge (1.0, 0.0, k &gt; 0)
-         k=-2
-         write(*,*)merge (1.0, 0.0, k &gt; 0)
+       ! Works with scalars
+       k=5
+       write(*,*)merge (1.0, 0.0, k &gt; 0)
+       k=-2
+       write(*,*)merge (1.0, 0.0, k &gt; 0)
 <P>
-         ! set up some simple arrays that all conform to the
-         ! same shape
-         tvals(1,:)=[  10, -60,  50 ]
-         tvals(2,:)=[ -20,  40, -60 ]
+       ! set up some simple arrays that all conform to the
+       ! same shape
+       tvals(1,:)=[  10, -60,  50 ]
+       tvals(2,:)=[ -20,  40, -60 ]
 <P>
-         fvals(1,:)=[ 0, 3, 2 ]
-         fvals(2,:)=[ 7, 4, 8 ]
+       fvals(1,:)=[ 0, 3, 2 ]
+       fvals(2,:)=[ 7, 4, 8 ]
 <P>
-         mask(1,:)=[ .true.,  .false., .true. ]
-         mask(2,:)=[ .false., .false., .true. ]
+       mask(1,:)=[ .true.,  .false., .true. ]
+       mask(2,:)=[ .false., .false., .true. ]
 <P>
-         ! lets use the mask of specific values
-         write(*,*)&#146;mask of logicals&#146;
-         answer=merge( tvals, fvals, mask )
-         call printme()
+       ! lets use the mask of specific values
+       write(*,*)&#146;mask of logicals&#146;
+       answer=merge( tvals, fvals, mask )
+       call printme()
 <P>
-         ! more typically the mask is an expression
-         write(*, *)&#146;highest values&#146;
-         answer=merge( tvals, fvals, tvals &gt; fvals )
-         call printme()
+       ! more typically the mask is an expression
+       write(*, *)&#146;highest values&#146;
+       answer=merge( tvals, fvals, tvals &gt; fvals )
+       call printme()
 <P>
-         write(*, *)&#146;lowest values&#146;
-         answer=merge( tvals, fvals, tvals &lt; fvals )
-         call printme()
+       write(*, *)&#146;lowest values&#146;
+       answer=merge( tvals, fvals, tvals &lt; fvals )
+       call printme()
 <P>
-         write(*, *)&#146;zero out negative values&#146;
-         answer=merge( tvals, 0, tvals &lt; 0)
-         call printme()
+       write(*, *)&#146;zero out negative values&#146;
+       answer=merge( 0, tvals, tvals &lt; 0)
+       call printme()
 <P>
-         write(*, *)&#146;binary choice&#146;
-         chooseleft=.false.
-         write(*, &#146;(3i4)&#146;)merge([1,2,3],[10,20,30],chooseleft)
-         chooseleft=.true.
-         write(*, &#146;(3i4)&#146;)merge([1,2,3],[10,20,30],chooseleft)
+       write(*, *)&#146;binary choice&#146;
+       chooseleft=.false.
+       write(*, &#146;(3i4)&#146;)merge([1,2,3],[10,20,30],chooseleft)
+       chooseleft=.true.
+       write(*, &#146;(3i4)&#146;)merge([1,2,3],[10,20,30],chooseleft)
 <P>
-      contains
+    contains
 <P>
-      subroutine printme()
-            write(*, &#146;(3i4)&#146;)(answer(i, :), i=1, size(answer, dim=1))
-      end subroutine printme
+    subroutine printme()
+          write(*, &#146;(3i4)&#146;)(answer(i, :), i=1, size(answer, dim=1))
+    end subroutine printme
 <P>
-      end program demo_merge
+    end program demo_merge
 <P>
 </PRE>
 Expected Results:
 <P>
 <PRE>
-       &gt;     mask of logicals
-       &gt;      10   3  50
-       &gt;       7   4 -60
-       &gt;     highest values
-       &gt;      10   3  50
-       &gt;       7  40   8
-       &gt;     lowest values
-       &gt;       0 -60   2
-       &gt;     -20   4 -60
-       &gt;     zero out negative values
-       &gt;       0 -60   0
-       &gt;     -20   0 -60
-       &gt;     binary choice
-       &gt;      10  20  30
-       &gt;       1   2   3
+     &gt;    1.00000000   
+     &gt;    0.00000000   
+     &gt;  mask of logicals
+     &gt;   10   3  50
+     &gt;    7   4 -60
+     &gt;  highest values
+     &gt;   10   3  50
+     &gt;    7  40   8
+     &gt;  lowest values
+     &gt;    0 -60   2
+     &gt;  -20   4 -60
+     &gt;  zero out negative values
+     &gt;   10   0  50
+     &gt;    0  40   0
+     &gt;  binary choice
+     &gt;   10  20  30
+     &gt;    1   2   3
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -296,6 +297,7 @@ Expected Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -304,6 +306,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -326,13 +329,9 @@ o
 TRANSPOSE(3) - Transpose an array of rank two
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               merge(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>merge (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a522962e-6aa1-46ff-bcd5-b956149446a0 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>merge (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b0f0b44d-4325-4919-993b-5f21abebb4a8 using man macros.</FONT>
 <br><br><center><img src="images/merge.3fortran.gif"></center>
 </div>
 </div>

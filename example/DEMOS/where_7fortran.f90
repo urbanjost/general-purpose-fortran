@@ -1,6 +1,7 @@
      program demo_where
      !  Example of WHERE, ELSE WHERE, END WHERE
-     parameter (nd=10, ndh=nd/2, nduh=nd-ndh-1)
+     integer,parameter :: nd=10, ndh=nd/2, nduh=nd-ndh-1
+     integer :: j
      real, dimension(nd):: a=[ (2*j,j=1,nd) ]
      real, dimension(nd):: b ! =[ ndh*1.0, 0.0, nduh*2.0 ]
      real, dimension(nd):: c ! =[ nd*-77.77 ]

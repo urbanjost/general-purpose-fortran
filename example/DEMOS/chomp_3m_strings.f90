@@ -5,13 +5,13 @@
      character(len=100)            :: inline
      character(len=:),allocatable  :: token
      character(len=*),parameter    :: delimiters=' ;,'
-     integer                       :: ios
+     integer                       :: iostat
      integer                       :: icount
      integer                       :: itoken
         icount=0
         do        ! read lines from stdin until end-of-file or error
-           read (unit=*,fmt="(a)",iostat=ios) inline
-           if(ios /= 0)stop
+           read (unit=*,fmt="(a)",iostat=iostat) inline
+           if(iostat /= 0)stop
            icount=icount+1
            itoken=0
            write(*,*)'INLINE ',trim(inline)

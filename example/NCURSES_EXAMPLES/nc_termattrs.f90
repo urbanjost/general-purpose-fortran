@@ -1,27 +1,3 @@
-subroutine attryn(a, c)
-!(LICENSE:PD)
-! @(#) test termattrs(3f) and query which attributes this terminal type takes
-   use M_ncurses
-   implicit none
-   integer(C_LONG)       :: a     !chtype a
-   integer(C_LONG)       :: c     !chtype c
-   integer               :: ierr
-   !if( ior(a,c)  .eq. a) then
-   !if( iand(a,c)  .ne. 0) then  !! this would get A_NORMAL wrong, because it is zero
-   if( iand(a,c) .eq. c) then
-      ierr=addstr("Yes "//C_NULL_CHAR)
-      ierr=attron(c)
-      ierr=addstr("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"//C_NULL_CHAR)
-      ierr=attroff(c)
-   else
-      ierr=addstr("No  "//C_NULL_CHAR)
-      ierr=attron(c)
-      ierr=addstr("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"//C_NULL_CHAR)
-      ierr=attroff(c)
-   endif
-   ierr=addch(int(ichar(C_NEW_LINE),C_LONG))
-end subroutine attryn
-
 program seeattr
    use M_ncurses
    use ISO_FORTRAN_ENV
@@ -179,4 +155,30 @@ program seeattr
 ! CDEF: char *slk_label ( int labnum );
 ! CDEF: char *unctrl ( chtype c );
 !-----------------------------------------------------------------------------------------------------------------------------------
+contains
+
+subroutine attryn(a, c)
+!(LICENSE:PD)
+! @(#) test termattrs(3f) and query which attributes this terminal type takes
+   use M_ncurses
+   implicit none
+   integer(C_LONG)       :: a     !chtype a
+   integer(C_LONG)       :: c     !chtype c
+   integer               :: ierr
+   !if( ior(a,c)  .eq. a) then
+   !if( iand(a,c)  .ne. 0) then  !! this would get A_NORMAL wrong, because it is zero
+   if( iand(a,c) .eq. c) then
+      ierr=addstr("Yes "//C_NULL_CHAR)
+      ierr=attron(c)
+      ierr=addstr("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"//C_NULL_CHAR)
+      ierr=attroff(c)
+   else
+      ierr=addstr("No  "//C_NULL_CHAR)
+      ierr=attron(c)
+      ierr=addstr("abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"//C_NULL_CHAR)
+      ierr=attroff(c)
+   endif
+   ierr=addch(int(ichar(C_NEW_LINE),C_LONG))
+end subroutine attryn
+
 end program seeattr

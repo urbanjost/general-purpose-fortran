@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>all (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>all (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>all(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-all(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 ALL(3) - [ARRAY:REDUCTION] Determines if all the values are true
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ ALL(3) - [ARRAY:REDUCTION] Determines if all the values are true
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = all(mask [,dim])
 <P>
 <PRE>
-           function all(mask ,dim)
+         function all(mask ,dim)
 <P>
-            logical(kind=KIND),intent(in) :: mask(..)
-            integer,intent(in),optional   :: dim
-            logical(kind=KIND)            :: all(..)
+          logical(kind=KIND),intent(in) :: mask(..)
+          integer,intent(in),optional   :: dim
+          logical(kind=KIND)            :: all(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = all(mask [,dim])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -117,15 +111,16 @@ logical scalar. It has the same characteristics as MASK
 
 </A>
 <BLOCKQUOTE>
+<P>
 ALL(3) determines if all the values are true in MASK in the array along
 dimension DIM if DIM is specified; otherwise all elements are tested
 together.
 <P>
-This testing type is called a logical conjunction of elements of MASK along
-dimension DIM.
+This testing type is called a logical conjunction of elements of MASK
+along dimension DIM.
 <P>
-The mask is generally a logical expression, allowing for comparing arrays
-and many other common operations.
+The mask is generally a logical expression, allowing for comparing
+arrays and many other common operations.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -133,6 +128,7 @@ and many other common operations.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -142,11 +138,11 @@ MASK : the logical array to be tested for all elements being .true.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : DIM indicates the direction through the elements of MASK to group
-elements for testing. : DIM has a value that lies between one and the
-rank of MASK. : The corresponding actual argument shall not be an
-optional dummy argument. : If DIM is not present all elements are tested
-and a single scalar value is returned.
+DIM : DIM indicates the direction through the elements of MASK to
+group elements for testing. : DIM has a value that lies between one
+and the rank of MASK. : The corresponding actual argument shall not
+be an optional dummy argument. : If DIM is not present all elements
+are tested and a single scalar value is returned.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -155,13 +151,14 @@ and a single scalar value is returned.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-If DIM is not present ALL(MASK) is .true. if all elements of MASK are
-[char46]true.. It also is .true. if MASK has zero size; otherwise, it is
-[char46]false. .
+If DIM is not present ALL(MASK) is .true. if all elements of MASK
+are .true.. It also is .true. if MASK has zero size; otherwise, it
+is .false. .
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
@@ -173,10 +170,10 @@ ALL(MASK).
 3.
 </TD><TD>
 If the rank of MASK is greater than one and DIM is present then
-ALL(MASK,DIM) returns an array with the rank (number of dimensions) of
-MASK minus 1. The shape is determined from the shape of MASK where the
-DIM dimension is elided. A value is returned for each set of elements
-along the DIM dimension.
+ALL(MASK,DIM) returns an array with the rank (number of dimensions)
+of MASK minus 1. The shape is determined from the shape of MASK
+where the DIM dimension is elided. A value is returned for each set
+of elements along the DIM dimension.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -185,43 +182,44 @@ along the DIM dimension.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_all
-      implicit none
-      logical,parameter :: T=.true., F=.false.
-      logical bool
-        ! basic usage
-         ! is everything true?
-         bool = all([ T,T,T ])
-         bool = all([ T,F,T ])
-         print *, bool
+    program demo_all
+    implicit none
+    logical,parameter :: T=.true., F=.false.
+    logical bool
+      ! basic usage
+       ! is everything true?
+       bool = all([ T,T,T ])
+       bool = all([ T,F,T ])
+       print *, bool
 <P>
-        ! by a dimension
-         ARRAYS: block
-         integer :: a(2,3), b(2,3)
-          ! set everything to one except one value in b
-          a = 1
-          b = 1
-          b(2,2) = 2
-          ! now compare those two arrays
-          print *,&#146;entire array :&#146;, all(a ==  b )
-          print *,&#146;compare columns:&#146;, all(a ==  b, dim=1)
-          print *,&#146;compare rows:&#146;, all(a ==  b, dim=2)
-        end block ARRAYS
+      ! by a dimension
+       ARRAYS: block
+       integer :: a(2,3), b(2,3)
+        ! set everything to one except one value in b
+        a = 1
+        b = 1
+        b(2,2) = 2
+        ! now compare those two arrays
+        print *,&#146;entire array :&#146;, all(a ==  b )
+        print *,&#146;compare columns:&#146;, all(a ==  b, dim=1)
+        print *,&#146;compare rows:&#146;, all(a ==  b, dim=2)
+      end block ARRAYS
 <P>
-      end program demo_all
+    end program demo_all
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  T
-       &gt;  F
-       &gt;  entire array : F
-       &gt;  compare columns: T F T
-       &gt;  compare rows: T F
+     &gt;  T
+     &gt;  F
+     &gt;  entire array : F
+     &gt;  compare columns: T F T
+     &gt;  compare rows: T F
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -231,6 +229,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -239,16 +238,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 ANY(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 all(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>all (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9ccde4d8-02d5-40f3-953a-0b7446bab005 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>all (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8260dff2-3215-46dd-8918-dea571f53929 using man macros.</FONT>
 <br><br><center><img src="images/all.3fortran.gif"></center>
 </div>
 </div>

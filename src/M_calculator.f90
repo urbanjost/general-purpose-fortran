@@ -11,7 +11,7 @@
 
 !>
 !!##NAME
-!!   calculator - [M_calculator] parse calculator expression and return numeric or string value
+!!   calculator - [M_calculator] parse calculator expression and return numeric or string values
 !!   (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -103,7 +103,7 @@
 !-----------------------------------------------------------------------------------------------------------------------------------
 module M_calculator
 
-use M_journal, only : journal
+use M_framework__journal, only : journal
 use M_IO,      only : print_inquire
 use M_strings, only : upper, lower, atleast, value_to_string
 use M_list,    only : locate, insert, replace
@@ -111,13 +111,12 @@ use M_list,    only : locate, insert, replace
 implicit none
 private
 
-integer,parameter                      :: k_dbl=kind(0.0d0)
-integer,parameter                      :: dp=kind(0.0d0)
+integer,parameter                         :: dp=kind(0.0d0) ! = SELECTED_REAL_KIND(15,300)
 
-integer,parameter,public               :: iclen_calc=512           ! max length of expression or variable value as a string
-integer,parameter,public               :: ixy_calc=55555           ! number of variables in X() and Y() array
-real(kind=dp),save,public              :: x(ixy_calc)=0.0_dp       ! x array for procedure funcs_
-real(kind=dp),save,public              :: y(ixy_calc)=0.0_dp       ! y array for procedure funcs_
+integer,parameter,public                  :: iclen_calc=512        ! max length of expression or variable value as a string
+integer,parameter,public                  :: ixy_calc=55555        ! number of variables in X() and Y() array
+real(kind=dp),save,public                 :: x(ixy_calc)=0.0_dp    ! x array for procedure funcs_
+real(kind=dp),save,public                 :: y(ixy_calc)=0.0_dp    ! y array for procedure funcs_
 
 integer,parameter,public                  :: icname_calc=20        ! max length of a variable name
 
@@ -187,23 +186,23 @@ private :: c_placeholder
 
 abstract interface
    subroutine juown1_interface(func,iflen,args,iargstp,n,fval,ctmp,ier)
-      import k_dbl
-      character(len=*),intent(in)          :: func
-      integer,intent(in)                   :: iflen
-      real(kind=k_dbl),intent(in)          :: args(100)
-      integer,intent(in)                   :: iargstp(100)
-      integer,intent(in)                   :: n
-      real(kind=k_dbl)          :: fval
-      character(len=*)          :: ctmp
-      integer                   :: ier
+      import dp
+      character(len=*),intent(in)  :: func
+      integer,intent(in)           :: iflen
+      real(kind=dp),intent(in)     :: args(100)
+      integer,intent(in)           :: iargstp(100)
+      integer,intent(in)           :: n
+      real(kind=dp)                :: fval
+      character(len=*)             :: ctmp
+      integer                      :: ier
    end subroutine juown1_interface
 end interface
 
 abstract interface
    real function c_interface(args,n)
-      import k_dbl
-      integer,intent(in)            :: n
-      real(kind=k_dbl),intent(in)   :: args(n)
+      import dp
+      integer,intent(in)         :: n
+      real(kind=dp),intent(in)   :: args(n)
    end function c_interface
 end interface
 public c_interface
@@ -414,7 +413,6 @@ integer                                :: nchard
    enddo BIG
    slast=rlast                                            ! set returned value to last successfully calculated real value
 end subroutine calculator
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -560,7 +558,6 @@ help_text=[ &
       call journal(help_text(i))
    enddo
 end subroutine help_funcs_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! modulo Modulo function
 ! ncr Calculate the number of unique combinations of r objects out of n.
@@ -711,7 +708,6 @@ real(kind=dp)                :: rdum
       string=dummy
    enddo INFINITE
 end subroutine parens_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -739,10 +735,10 @@ use M_time,    only : date_to_unix , unix_to_date, fmtdate, now, fmtdate_usage, 
 use M_strings, only : matchw, change, modif, delim
 use M_time,    only : date_to_julian,day_of_week=>dow, d2o, now
 use M_math,    only : ncr
-use M_verify,  only : round, dp_accdig
 use M_random,  only : init_random_seed
 use M_process, only : process_readall           ! read all lines from process into single string
 use M_system,  only : set_environment_variable  ! call setenv(3c) to set environment variable
+use M_framework__approx,  only : round, dp_accdig
 
 ! ident_4="@(#) M_calculator funcs_(3fp) given string of form name(p1 p2 ...) (p(i) are non-parenthesized expressions) call procedure "name""
 
@@ -838,7 +834,7 @@ intrinsic                           :: sqrt,atan2,dim,mod,sign,max,min
 !-----------------------------------------------------------------------------------------------------------------------------------
    data months/'January','February','March','April','May','June','July','August','September','October','November','December'/
    data days/'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'/
-!ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc------------------------------------------------------------
+
    TRUE=0.0d0
    FALSE=1.0d0
    ier=0
@@ -875,7 +871,7 @@ case("abs","aint","anint","ceil","ceiling","floor","frac","int","nint",&
     &"sin","cos","tan",&
     &"sind","cosd","tand",&
     &"sinh","cosh","tanh",&
-    &"asin","acos","atan",&
+    &"asin","acos",&
     &"asinh","acosh","atanh",&
 !   &"cpu_time",&
     &"exponent","fraction",&
@@ -897,7 +893,6 @@ case("abs","aint","anint","ceil","ceiling","floor","frac","int","nint",&
          else
             fval= acos(args(1))
          endif
-         case("atan");   fval= atan(args(1))
          case("asin");   fval= asin(args(1))
 
          !case("cpu_time");   fval= cpu_time(args(1))
@@ -964,6 +959,26 @@ case("abs","aint","anint","ceil","ceiling","floor","frac","int","nint",&
             endif
 !=======================================================================------------------------------------------------------------
          end select
+      endif
+!=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=------------------------------------------------------------
+case("atan") ! allow one or two arguments
+      if(n.eq.1)then
+         if(.not.iargs_type(1).eq.0)then                                    ! check type of parameters
+           mssge='*atan* parameter not numeric in '//wstrng2(:iend)
+           ier=-1
+         else                                                                ! single numeric argument
+           fval= atan(args(1))
+         endif
+      elseif(n.eq.2)then
+         if(.not.all(iargs_type(1:2).eq.0))then                              ! check type of parameters
+           mssge='*funcs_* parameters not all numeric in '//wstrng2(:iend)
+           ier=-1
+         else                                                                ! single numeric argument
+           fval= atan2(args(1),args(2))
+         endif
+      else
+         mssge='*funcs_* incorrect number of parameters in '//wstrng2(:iend)
+         ier=-1
       endif
 !=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=------------------------------------------------------------
 case("atan2","dim","mod","bessel_jn","bessel_yn","sign","hypot","modulo","scale","ncr")
@@ -2003,7 +2018,6 @@ end select
          ier=-1
       end select
 end subroutine funcs_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2044,7 +2058,6 @@ character(len=5)       :: toknam
    ier=2
    mssge=string(:iend)
 end subroutine stufftok_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2129,7 +2142,6 @@ character(len=icbuf_calc)  :: wstrng
    write(mssge,'(a,i4,a)')'more than ',mx,' arguments not allowed'
    ier=-1
 end subroutine args_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2226,7 +2238,6 @@ real(kind=dp) :: temp
       call value_to_string(value,string,nchar,ier2,fmt='(g23.16e3)',trimz=.true.) ! convert sum of terms to string and return
       if(ier2.lt.0)ier=ier2
 end subroutine expressions_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2378,7 +2389,6 @@ integer                        :: nchart
          wstrng=dummy
       enddo INFINITE
 end subroutine pows_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2498,7 +2508,6 @@ integer          :: nchr
          ip=iright+1
       enddo
 end subroutine factors_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2611,7 +2620,6 @@ chars_local=chars_local//repeat(' ',512)                   ! kludge: problems if
       rval8=values_d(indx)
    endif
 end subroutine a_to_d_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2878,7 +2886,6 @@ integer                                 :: kstrln
      endif
    endif
 end subroutine squeeze_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2933,7 +2940,6 @@ integer,intent(out)          :: ierr
       mssge=values(index)
    endif
 end subroutine given_name_get_stringvalue_
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2962,8 +2968,10 @@ end subroutine given_name_get_stringvalue_
 !!    program demo_getvalue
 !!    use M_calculator, only : rnum0
 !!    use M_calculator, only: getvalue
-!!    value1=rnum0('A=100/2') ! store something into calculator
-!!    write(*,*)value1,getvalue('A')
+!!    implicit none
+!!    real :: value1
+!!       value1=rnum0('A=100/2') ! store something into calculator
+!!       write(*,*)value1,getvalue('A')
 !!    end program demo_getvalue
 !!
 !!   Results:
@@ -2991,7 +2999,6 @@ character(len=*),intent(in) :: varnam
       getvalue=values_d(index)
    endif
 end function getvalue
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -3021,10 +3028,12 @@ end function getvalue
 !!   Program:
 !!
 !!    program demo_igetvalue
-!!    use M_calculator, only : rnum0
+!!    use M_calculator, only: rnum0
 !!    use M_calculator, only: igetvalue
-!!    value1=rnum0('A=100/2') ! store something into calculator
-!!    write(*,*)value1,igetvalue('A')
+!!    implicit none
+!!    real :: value1
+!!       value1 = rnum0('A=100/2') ! store something into calculator
+!!       write (*, *) value1, igetvalue('A')
 !!    end program demo_igetvalue
 !!
 !!   Results:
@@ -3038,7 +3047,6 @@ integer function igetvalue(varnam)
 character(len=*),intent(in) :: varnam
    igetvalue=int(getvalue(varnam))
 end function igetvalue
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -3070,8 +3078,10 @@ end function igetvalue
 !!    program demo_rgetvalue
 !!    use M_calculator, only : rnum0
 !!    use M_calculator, only: rgetvalue
-!!    value1=rnum0('A=100/2') ! store something into calculator
-!!    write(*,*)value1,rgetvalue('A')
+!!    implicit none
+!!    real :: value1
+!!       value1=rnum0('A=100/2') ! store something into calculator
+!!       write(*,*)value1,rgetvalue('A')
 !!    end program demo_rgetvalue
 !!
 !!   Results:
@@ -3085,7 +3095,6 @@ real function rgetvalue(varnam)
 character(len=*),intent(in) :: varnam
    rgetvalue=real(getvalue(varnam))
 end function rgetvalue
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -3130,7 +3139,7 @@ end function rgetvalue
 !!    numeric value to associate with the name VARNAME. May be
 !!            integer, real, or doubleprecision.
 !!    ioflag  optional flag to use with journal logging. This string is
-!!            passed directly to M_journal::journal(3f)
+!!            passed directly to M_framework__journal::journal(3f)
 !!            as the first parameter. The default is to not log the
 !!            definitions to the journal(3f) command if this parameter is
 !!            blank or not present.
@@ -3143,10 +3152,10 @@ end function rgetvalue
 !!    use M_calculator, only : stuff, dnum0
 !!    implicit none
 !!    doubleprecision :: value
-!!    call stuff('A',10.0)
-!!    call stuff('PI',3.141592653589793238462643383279502884197169399375105820974944592307d0)
-!!    value=dnum0('A*PI')
-!!    write(*,*)value
+!!       call stuff('A',10.0)
+!!       call stuff('PI',3.1415926535897932384626433832795)
+!!       value=dnum0('A*PI')
+!!       write(*,*)value
 !!    end program demo_stuff
 !!
 !!   Expected result:
@@ -3198,13 +3207,13 @@ integer                               :: istart
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine stuff
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
-!!     stuffa(3f) - [M_calculator] stuffa(3f): directly store a string into calculator variable name table
+!!     stuffa(3f) - [M_calculator] directly store a string into calculator
+!!     variable name table
 !!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -3280,7 +3289,6 @@ integer                               :: ierr
    call replace(values_len,len_trim(string),indx)
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine stuffa
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -3325,10 +3333,12 @@ end subroutine stuffa
 !!
 !!       program demo_inum0
 !!       use M_calculator, only : inum0
-!!       i=inum0('20/3.4')
-!!       j=inum0('CI = 13 * 3.1')
-!!       k=inum0('CI')
-!!       write(*,*)'Answers are ',I,J,K
+!!       implicit none
+!!       integer :: i,j,k
+!!          i=inum0('20/3.4')
+!!          j=inum0('CI = 13 * 3.1')
+!!          k=inum0('CI')
+!!          write(*,*)'Answers are ',I,J,K
 !!       end program demo_inum0
 !!
 !!##SEE ALSO
@@ -3351,7 +3361,7 @@ end subroutine stuffa
 !!##VERSION: 19971123
 !-----------------------------------------------------------------------------------------------------------------------------------
 integer function inum0(inline,ierr)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 
 ! ident_16="@(#) M_calculator inum0(3f) resolve a calculator string into a whole integer number"
 
@@ -3427,10 +3437,12 @@ end function inum0
 !!
 !!     program demo_rnum0
 !!     use M_calculator, only : rnum0
-!!     x=rnum0('20/3.4')
-!!     y=rnum0('CI = 10 * sin(3.1416/4)')
-!!     z=rnum0('CI')
-!!     write(*,*)x,y,z
+!!     implicit none
+!!     real :: x, y, z
+!!        x=rnum0('20/3.4')
+!!        y=rnum0('CI = 10 * sin(3.1416/4)')
+!!        z=rnum0('CI')
+!!        write(*,*)x,y,z
 !!     end program demo_rnum0
 !!
 !!##SEE ALSO
@@ -3508,11 +3520,12 @@ end function rnum0
 !!
 !!     program demo_dnum0
 !!     use M_calculator, only : dnum0
-!!     doubleprecision x,y,z
-!!     X=DNUM0('20/3.4')
-!!     Y=DNUM0('CI = 10 * sin(3.1416/4)')
-!!     Z=DNUM0('CI')
-!!     write(*,*)x,y,z
+!!     implicit none
+!!        doubleprecision x,y,z
+!!        X=DNUM0('20/3.4')
+!!        Y=DNUM0('CI = 10 * sin(3.1416/4)')
+!!        Z=DNUM0('CI')
+!!        write(*,*)x,y,z
 !!     end program demo_dnum0
 !!
 !!##SEE ALSO
@@ -3586,17 +3599,19 @@ end function dnum0
 !!
 !!     program demo_snum0
 !!     use m_calculator, only: rnum0, snum0
+!!     implicit none
+!!     real :: rdum
 !!     character(len=80)  :: ic,jc,kc
 !!
-!!     rdum=rnum0('A=83/2') ! set a variable in the calculator
-!!     kc=snum0('$MYTITLE="This is my title variable"')
+!!        rdum=rnum0('A=83/2') ! set a variable in the calculator
+!!        kc=snum0('$MYTITLE="This is my title variable"')
 !!
-!!     ic=snum0('$STR("VALUE IS [",A,"]")')
-!!     jc=snum0('$MYTITLE')
+!!        ic=snum0('$STR("VALUE IS [",A,"]")')
+!!        jc=snum0('$MYTITLE')
 !!
-!!     write(*,*)'IC=',trim(ic)
-!!     write(*,*)'JC=',trim(jc)
-!!     write(*,*)'KC=',trim(kc)
+!!        write(*,*)'IC=',trim(ic)
+!!        write(*,*)'JC=',trim(jc)
+!!        write(*,*)'KC=',trim(kc)
 !!
 !!     end program demo_snum0
 !!
@@ -3729,15 +3744,17 @@ end function snum0
 !!    Sample program:
 !!
 !!     program demo_expression
-!!     use M_calculator,      only : iclen_calc
+!!     use M_calculator, only : iclen_calc
 !!     use M_calculator, only : expression
+!!     implicit none
 !!     character(len=iclen_calc) ::  outlin0
 !!     doubleprecision :: outval
-!!     call expression('A=3.4**5    ',outval,outlin0,ierr,ilen)
-!!     write(*,*)'value of expression is ',outval
-!!     write(*,*)'string representation of value is ',trim(outlin0)
-!!     write(*,*)'error flag value is ',ierr
-!!     write(*,*)'length of expression is ',ilen
+!!     integer :: ierr, ilen
+!!        call expression('A=3.4**5    ',outval,outlin0,ierr,ilen)
+!!        write(*,*)'value of expression is ',outval
+!!        write(*,*)'string representation of value is ',trim(outlin0)
+!!        write(*,*)'error flag value is ',ierr
+!!        write(*,*)'length of expression is ',ilen
 !!     end program demo_expression
 !!
 !!   Results:
@@ -3757,7 +3774,7 @@ end function snum0
 !! AUTHOR   John S. Urban
 !!##VERSION  V1.0, 19971123
 recursive subroutine expression(inlin0,outval,outlin0,ierr,ilen)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 
 ! ident_20="@(#) M_calculator expression(3f) call CALCULATOR(3f) calculator and display messages"
 
@@ -3877,7 +3894,9 @@ end subroutine expression
 !!    program demo_strgarr
 !!    use M_kracken, only: sget, kracken, lget
 !!    use M_calculator, only : strgarr
-!!    real vals(41)
+!!    implicit none
+!!    real vals(41), tol, sumup, sumtarget
+!!    integer :: ifound, ierr, i, ipass, ios
 !!    character(len=80) :: line=' '
 !!    character(len=10) :: delims=' ;'
 !!    !  define command arguments, default values and crack command line
@@ -3960,7 +3979,7 @@ end subroutine expression
 !!##VERSION 1.0, 19971123
 !-----------------------------------------------------------------------------------------------------------------------------------
 SUBROUTINE strgarr(line,ivals,vals,ifound,delims0,ierr)
-USE M_JOURNAL, ONLY : journal
+USE M_framework__journal, ONLY : journal
 
 ! ident_21="@(#) M_calculator strgarr(3f) read numeric expressions into an real array"
 
@@ -4113,6 +4132,7 @@ END SUBROUTINE strgarr
 !!
 !!     program demo_strgar2
 !!     use M_calculator, only : strgar2
+!!     implicit none
 !!     integer             :: ios
 !!     integer             :: i
 !!     integer             :: ifound
@@ -4183,7 +4203,7 @@ END SUBROUTINE strgarr
 !! AUTHOR   John S. Urban
 !!##VERSION  1.0 19971123
 subroutine strgar2(line,iread,numbrs,inums,delims0,ierr)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 !-----------------------------------------------------------------------------------------------------------------------------------
 
 ! ident_22="@(#) M_calculator strgar2(3f) read numeric and string calculator expressions into an array USING CALCULATOR"
@@ -4360,19 +4380,18 @@ subroutine juown1_placeholder(func,iflen,args,iargstp,n,fval,ctmp,ier)
 !         set to  2 if a string is returned
 !
 !!use M_calculator, only : x, y, values, values_len
-integer, parameter        :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
-character(len=*),intent(in)          :: func
-integer,intent(in)                   :: iflen
-real(kind=k_dbl),intent(in)          :: args(100)
-integer,intent(in)                   :: iargstp(100)
-integer,intent(in)                   :: n
-real(kind=k_dbl)          :: fval
-character(len=*)          :: ctmp
-integer                   :: ier
+character(len=*),intent(in)   :: func
+integer,intent(in)            :: iflen
+real(kind=dp),intent(in)      :: args(100)
+integer,intent(in)            :: iargstp(100)
+integer,intent(in)            :: n
+real(kind=dp)                 :: fval
+character(len=*)              :: ctmp
+integer                       :: ier
 
-integer                   :: i10
-integer                   :: iwhich
-integer                   :: ilen
+integer                       :: i10
+integer                       :: iwhich
+integer                       :: ilen
 !-----------------------------------------------------------------------
    fval=0.0d0
 !-----------------------------------------------------------------------
@@ -4397,9 +4416,9 @@ end subroutine juown1_placeholder
 real function c_placeholder(args,n)
 ! a built-in calculator function called c must be satisfied.
 ! write whatever you want here as a function
-integer,intent(in)          :: n
-real(kind=k_dbl),intent(in) :: args(n)
-   c_placeholder=0.0_k_dbl
+integer,intent(in)       :: n
+real(kind=dp),intent(in) :: args(n)
+   c_placeholder=0.0_dp
 end function c_placeholder
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

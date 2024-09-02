@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ibset (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ibset (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>ibset(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-ibset(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 IBSET(3) - [BIT:SET] Set a bit to one in an integer value
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ IBSET(3) - [BIT:SET] Set a bit to one in an integer value
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = ibset(i, pos)
 <P>
 <PRE>
-           elemental integer(kind=KIND) function ibset(i,pos)
+         elemental integer(kind=KIND) function ibset(i,pos)
 <P>
-            integer(kind=KIND),intent(in) :: i
-            integer(kind=**),intent(in) :: pos
+          integer(kind=KIND),intent(in) :: i
+          integer(kind=**),intent(in) :: pos
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = ibset(i, pos)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -101,8 +95,8 @@ a kind designated as ** may be any supported kind for the type
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The return value is of the same kind as I. Otherwise, any integer kinds
-are allowed.
+The return value is of the same kind as I. Otherwise, any integer
+kinds are allowed.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -111,6 +105,7 @@ are allowed.
 
 </A>
 <BLOCKQUOTE>
+<P>
 IBSET(3) returns the value of I with the bit at position POS set to one.
 </BLOCKQUOTE>
 <A name=4>
@@ -119,6 +114,7 @@ IBSET(3) returns the value of I with the bit at position POS set to one.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -128,9 +124,9 @@ I : The initial value to be modified
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-POS : The position of the bit to change in the input value. A value of
-zero refers to the right-most bit. The value of POS must be nonnegative
-and less than (BIT_SIZE(I)).
+POS : The position of the bit to change in the input value. A value
+of zero refers to the right-most bit. The value of POS must be
+nonnegative and less than (BIT_SIZE(I)).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -139,8 +135,9 @@ and less than (BIT_SIZE(I)).
 
 </A>
 <BLOCKQUOTE>
-The returned value has the same bit sequence as I except the designated bit
-is unconditionally set to 1.
+<P>
+The returned value has the same bit sequence as I except the designated
+bit is unconditionally set to 1.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -148,51 +145,52 @@ is unconditionally set to 1.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_ibset
-      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
-      implicit none
-      integer(kind=int16) :: i
-        ! basic usage
-         print *,ibset (12, 1), &#146;ibset(12,1) has the value 14&#146;
+    program demo_ibset
+    use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
+    implicit none
+    integer(kind=int16) :: i
+      ! basic usage
+       print *,ibset (12, 1), &#146;ibset(12,1) has the value 14&#146;
 <P>
-         ! it is easier to see using binary representation
-         i=int(b&#146;0000000000000110&#146;,kind=int16)
-         write(*,&#146;(b16.16,1x,i0,1x,i0)&#146;) ibset(i,12), ibset(i,12), i
+       ! it is easier to see using binary representation
+       i=int(b&#146;0000000000000110&#146;,kind=int16)
+       write(*,&#146;(b16.16,1x,i0,1x,i0)&#146;) ibset(i,12), ibset(i,12), i
 <P>
-        ! elemental
-         print *,&#146;an array of initial values may be given as well&#146;
-         print *,ibset(i=[0,4096], pos=2)
-         print *
-         print *,&#146;a list of positions results in multiple returned values&#146;
-         print *,&#146;not multiple bits set in one value, as the routine is  &#146;
-         print *,&#146;a scalar function; calling it elementally essentially  &#146;
-         print *,&#146;calls it multiple times.                               &#146;
-         write(*,&#146;(b16.16)&#146;) ibset(i=0, pos=[1,2,3,4])
+      ! elemental
+       print *,&#146;an array of initial values may be given as well&#146;
+       print *,ibset(i=[0,4096], pos=2)
+       print *
+       print *,&#146;a list of positions results in multiple returned values&#146;
+       print *,&#146;not multiple bits set in one value, as the routine is  &#146;
+       print *,&#146;a scalar function; calling it elementally essentially  &#146;
+       print *,&#146;calls it multiple times.                               &#146;
+       write(*,&#146;(b16.16)&#146;) ibset(i=0, pos=[1,2,3,4])
 <P>
-         ! both may be arrays if of the same size
+       ! both may be arrays if of the same size
 <P>
-      end program demo_ibset
+    end program demo_ibset
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;           14 ibset(12,1) has the value 14
-       &gt; 0001000000000110 4102 6
-       &gt;  an array of initial values may be given as well
-       &gt;            4        4100
-       &gt;
-       &gt;  a list of positions results in multiple returned values
-       &gt;  not multiple bits set in one value, as the routine is
-       &gt;  a scalar function; calling it elementally essentially
-       &gt;  calls it multiple times.
-       &gt; 0000000000000010
-       &gt; 0000000000000100
-       &gt; 0000000000001000
-       &gt; 0000000000010000
+     &gt;           14 ibset(12,1) has the value 14
+     &gt; 0001000000000110 4102 6
+     &gt;  an array of initial values may be given as well
+     &gt;            4        4100
+     &gt;
+     &gt;  a list of positions results in multiple returned values
+     &gt;  not multiple bits set in one value, as the routine is
+     &gt;  a scalar function; calling it elementally essentially
+     &gt;  calls it multiple times.
+     &gt; 0000000000000010
+     &gt; 0000000000000100
+     &gt; 0000000000001000
+     &gt; 0000000000010000
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -202,6 +200,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -210,18 +209,15 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 IBCLR(3)
 <P>
 IEOR(3), NOT(3), BTEST(3), IBITS(3), IAND(3), IOR(3), IEOR(3), MVBITS(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               ibset(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ibset (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bd01b653-1c51-4a72-93e0-2e432facf5ca using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ibset (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fd39340b-35e0-4b0b-a421-93f1d0dde1ed using man macros.</FONT>
 <br><br><center><img src="images/ibset.3fortran.gif"></center>
 </div>
 </div>

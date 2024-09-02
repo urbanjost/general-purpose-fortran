@@ -1,18 +1,20 @@
 program fgetstr
 !(LICENSE:PD)
 
-use M_draw
+   use M_draw
+   implicit none
 
 !@(#)   reading a string from graphic input
 
-   integer,parameter  :: BLACK = 0, GREEN = 2, YELLOW = 3
+   integer, parameter  :: BLACK = 0, GREEN = 2, YELLOW = 3
    character(len=128) ::  buf(10)
    character(len=20)  ::  dev
+   integer :: i, n
 
-   print*, 'Enter device:'
+   print *, 'Enter device:'
    read (*, '(a)') dev
 
-   print*, 'Enter a font name:'
+   print *, 'Enter a font name:'
    read (*, '(a)') buf(1)
 
    call vinit(dev)
@@ -25,7 +27,6 @@ use M_draw
    call lookat(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0)
 
    call textsize(0.1, 0.25)
-
 
    call rotate(30.0, 'x')
    call rotate(30.0, 'z')
@@ -44,12 +45,12 @@ use M_draw
 1  continue
    n = n + 1
    i = getstring(BLACK, buf(n))
-   if (i .gt. 0 .and. n .le. 10) goto 1
+   if (i > 0 .and. n <= 10) goto 1
 
    call vexit
 
-   do 2 i = 1, n - 1
-      write(*, '(1x, ''Line'',i3,'' was: '', a)') i, buf(i)
-2  continue
+   do i = 1, n - 1
+      write (*, '(1x, ''Line'',i3,'' was: '', a)') i, buf(i)
+   end do
 
 end program fgetstr

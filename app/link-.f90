@@ -38,31 +38,53 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   link-(1f) - [FUNIX:FILESYSTEM] call the link(3c) function to create the specified file link                                  ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   link- [file newlink][file newlink][file newlink]...                                                                          ',&
-'   link- OPTION                                                                                                                 ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   Call the link(3c) function to link the specified FILE.                                                                       ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   FILES      list of file pairs to link [oldfile newfile]...                                                                   ',&
-'   --verbose  toggle on verbose mode                                                                                            ',&
-'   --help     display this help and exit                                                                                        ',&
-'   --version  output version information and exit                                                                               ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   link-(1f) - [FUNIX:FILESYSTEM] call the link(3c) function to create the specified file link',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   link- [file newlink][file newlink][file newlink]...                          ',&
+'   link- OPTION                                                                 ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   Call the link(3c) function to link the specified FILE.                       ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'   FILES      list of file pairs to link [oldfile newfile]...                   ',&
+'   --verbose  toggle on verbose mode                                            ',&
+'   --help     display this help and exit                                        ',&
+'   --version  output version information and exit                               ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    link-(1f) - [FUNIX:FILESYSTEM] call the link(3c) function to create the specified file link
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    link- [file newlink][file newlink][file newlink]...
+!!    link- OPTION
+!!
+!!##DESCRIPTION
+!!    Call the link(3c) function to link the specified FILE.
+!!
+!!##OPTIONS
+!!    FILES      list of file pairs to link [oldfile newfile]...
+!!    --verbose  toggle on verbose mode
+!!    --help     display this help and exit
+!!    --version  output version information and exit
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -82,7 +104,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 12:23:28 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:51:12 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

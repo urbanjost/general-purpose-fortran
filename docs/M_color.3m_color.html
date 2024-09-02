@@ -1,170 +1,246 @@
-<html>
-<head>
-<title></title>
-<meta name="keywords" content="Fortran, Fortran code, Fortran source code repository, Fortran library, Fortran archive,         " />
-<meta name="keywords" content="General Purpose Fortran, Fortran modules, Fortran examples                                       " />
-<meta name="keywords" content="Fortran Repository" />
-<meta name="keywords" content="Fortran Collection" />
-<link  rel="stylesheet"            href="StyleSheets/man.css"          type="text/css"  title="man"          />
-<style>
-body { background-color:#FFF; color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
-
-a,li span { color:#000; }
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
 a:visited { color:#666; }
-a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
-a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
-
 h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
-h1 { font-size:200%; line-height: 1.1em;color:#F33}
-h2 { font-size:173%; }
-h3 { font-size:144%; }
-h4 { font-size:120%; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
 h5,h6 { font-size:100% }
-
-dt { font-size:108%; color:#00F;line-height: 2em;font-width:boldest;}
-
-table { border:double #000; border-collapse:collapse; }
-td { border:thin solid #888; margin: auto; padding: auto; border: auto;}
-td { padding-left: 1em; padding-right: 1em;}
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
 li { margin-bottom:0.5em; }
-blockquote { display:block; font-size:90%; line-height:1.5em; margin:0 0 1.5em; padding:0 2.5em; }
-pre { background-color:#DDD; font-size:90%; overflow:auto; padding:1em; }
-xmp { background-color:#DCC; font-size:80%; display: block; font-family: monospace; white-space: pre; margin: 1em 0; }
-
-#Container { margin:0 10px; text-align:center; }
-#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
 span.webName { font-size:.5em; }
 textarea#content { font-size: 1em; line-height: 1.125; }
 h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
-.property { color:#666; font-size:80%; }
+.property { color:#666; font-size:100%; }
 a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
-.byline { color:#666; font-size:.8em; font-style:italic; margin-bottom:1em; padding-top:1px; }
-</style>
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
 </head>
-<body>
-<a href="http://www.urbanjost.altervista.org/LIBRARY/libGPF/GPF.html">[GPF Home Page]</a>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
 <div id="Container">
 <div id="Content">
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="M_COLOR">NAME</a></dt> <dd>
-<!--
-<em>M_color(3)</em>&nbsp;-&nbsp;[M_color]&nbsp;a&nbsp;Fortran&nbsp;module&nbsp;that&nbsp;lets&nbsp;you&nbsp;convert&nbsp;between&nbsp;common&nbsp;color&nbsp;models
--->
-<em>M_color(3)</em> - [M_color::INTRO] a Fortran module that lets you convert between common color models
-(LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS </dt><dd>
-<pre>
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>M_color (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
 
-   use M_color, only : &amp;
+     <H3>NAME</H3>
 
-      &amp; <a href="hue.3m_color.html">hue</a>, &amp;
-      &amp; <a href="closest_color_name.3m_color.html">closest_color_name</a>, &amp;
-      &amp; <a href="color_name2rgb.3m_color.html">color_name2rgb</a>, &amp;
-      &amp; <a href="rgbmono.3m_color.html">rgbmono</a>
-</pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION</dt>  <dd>
+</A>
+<BLOCKQUOTE>
+M_color(3) - [M_color::INTRO] a Fortran module that lets you
+convert between common color models (LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Example</A><BR>
+<A HREF=#4>References</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
 
-<h1> <img src="images/swirl.gif" height="140" width="140" > Fortran color module M_color</h1>
+     <H3>SYNOPSIS</H3>
 
-<p>
-  Highly accurate color conversions are a tricky business, and color
-  is a complex topic; but these simplified conversions between common
-  color models work quite well for basic conversions.
-</p>
+</A>
+<BLOCKQUOTE>
+<P>
+use M_color, only : &
+<P>
+<PRE>
+      & hue, &
+      & closest_color_name, &
+      & color_name2rgb, &
+      & rgbmono
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
 
-<p>
-   Typically the only user routine called is
-   <a href="hue.3m_color.html">HUE(3f)</a>.
-   HUE(3f) is a single routine that interfaces to all the private
-   low-level color conversion routines to convert a color's components
-   from one color model to another. HUE(3f) converts between the
-   following color models:
-</p>
+     <H3>DESCRIPTION</H3>
 
-<ul>
-   <li>  RGB - Red, Green, Blue (color TV monitors)
-   <li>  HLS - Hue, Lightness, Saturation
-   <li>  CMY - Cyan, Magenta, Yellow (pigment-based printing devices)
-   <li>  HSV - Hue, Saturation, Value
-   <li>  YIQ - Broadcast TV color system
-</ul>
+</A>
+<BLOCKQUOTE>
+Highly accurate color conversions are a tricky business, and color
+is a complex topic; but the simplified translations between common
+color models found here work quite well for basic conversions.
+<P>
+Typically the only user routine called is HUE(3f). HUE(3f) is
+a single routine that interfaces to all the private low-level
+color conversion routines to convert a color&#146;s components from
+one color model to another. HUE(3f) converts between the
+following color models:
+<TABLE cellpadding=3><!-- tsb: Typically the only user routine called is HUE(3f). HUE(3f) is
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>RGB:</B> </TD><TD valign=bottom>
+Red, Green, Blue (color TV monitors)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>HLS:</B> </TD><TD valign=bottom>
+Hue, Lightness, Saturation
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>CMY:</B> </TD><TD valign=bottom>
+Cyan, Magenta, Yellow (pigment-based printing devices)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>HSV:</B> </TD><TD valign=bottom>
+Hue, Saturation, Value
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>YIQ:</B> </TD><TD valign=bottom>
+Broadcast TV color system
+</TD></TR>
+<TR><TD colspan=2>
+In addition to those reversible color model conversions there
+are:
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>CLOSEST_COLOR_NAME(3f):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+given RGB values, try to find closest
+named color.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>COLOR_NAME2RGB(3f):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+given a standard color name, return RGB color
+values in range 0 to 100.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>RGBMONO(3f):</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+convert RGB colors to a reasonable grayscale
+(non-reversible).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
 
-<p>
-  In addition to the reversible color model conversions there are a few
-  other user-callable color-related procedures:
-</p>
+    <H4>&nbsp; &nbsp; DESIGN OF THE MODULE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The rest of the library is composed of PRIVATE procedures. Internally
+for each color model supported the general idea of the module is that
+there are two routines for each color model:
+<TABLE cellpadding=3><!-- tsb: The rest of the library is composed of PRIVATE procedures. Internally
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+One converts that model to the RGB model
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The other converts from RGB to that model
+</TD></TR>
+<TR></TR></TABLE>This allows conversions between all color models with only 2*N
+routines. That is, to go from model A to model B the module
+would internally make two calls:
+<P>
+<PRE>
+       call modelA2rgb(&#46;&#46;&#46;)
+       call rgb2modelB(&#46;&#46;&#46;)
+<P>
+</PRE>
+The resulting internal routines are:
+<TABLE cellpadding=3><!-- tsb: The resulting internal routines are:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>HLSRGB:</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+given hue, lightness, saturation calculate red,
+green, and blue components
+<TABLE width=100% cellpadding=3><!-- tsb: given hue, lightness, saturation calculate red,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+RGBVAL ensures a value is in the appropriate range and
+quadrant
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>HVSRGB:</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+given hue, saturation, value calculate red, green,
+and blue components
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>CMYRGB:</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+given cyan, magenta, yellow components calculate
+red, green, blue components
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>YIQRGB:</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+given luma(gray scale), orange-blue chrominance,
+and purple-green chrominance components calculate red, green,
+and blue components
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>RGBHVS:</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+given red, green, blue values calculate hue, value,
+and saturation components
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>RGBHLS:</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+given red, green, blue values calculate hue,
+lightness, and saturation components
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>RGBCMY:</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+given red, green, blue values calculate cyan,
+magenta, yellow components
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>RGBYIQ:</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+given red, green, blue values calculate luma(gray
+scale), orange-blue chrominance, and purple-green chrominance
+components
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
-<a href="closest_color_name.3m_color.html">CLOSEST_COLOR_NAME</a>:&nbsp;&nbsp;given RGB values, try to find closest named color
-   <br/>
-<a href="color_name2rgb.3m_color.html">COLOR_NAME2RGB</a>:&nbsp;&nbsp;given a color name, return RGB color values in range 0 to 100
-   <br/>
-<a href="rgbmono.3m_color.html">RGBMONO</a>:&nbsp;&nbsp;convert RGB colors to a reasonable grayscale
+     <H3>EXAMPLE</H3>
 
-<h3> 2*N Design of the module</h3>
-
-<p>
-   The rest of the library is composed of PRIVATE procedures.
-   For each color model supported the general idea of the module is
-   that there are two routines for each color model:
-</p>
-
-<ul>
-   <li> One converts that model to the RGB model   </li>
-   <li> The other converts from RGB to that model   </li>
-</ul>
-
-<p>
-   This allows conversions between all color models with only 2*N
-   routines. That is, to go from model A to model B the module would
-   internally make two calls:
-</p>
-
-<pre>
-    call modelA2rgb(...)
-    call rgb2modelB(...)
-</pre>
-
-<p>
-   The resulting internal routines are:
-</p>
-
-<ul>
-   <li><a href="#HLSRGB">HLSRGB</a> given hue, lightness, saturation calculate red, green, and blue components
-      <ul>
-         <li><a href="#RGBVAL">RGBVAL</a> ensure a value is in the appropriate range and quadrant
-         </li>
-      </ul>
-   </li>
-   <li><a href="#HVSRGB">HVSRGB</a> given hue, saturation, value calculate red, green, and blue components
-   </li>
-   <li><a href="#CMYRGB">CMYRGB</a> given cyan, magenta, yellow components calculate red, green, blue components
-   </li>
-   <li><a href="#YIQRGB">YIQRGB</a> given luma(gray scale), orange-blue chrominance, and  purple-green chrominance
-                                    components calculate red, green, and blue components
-   </li>
-
-   <li><a href="#RGBHVS">RGBHVS</a> given red, green, blue values calculate hue, value, and saturation components
-   </li>
-   <li><a href="#RGBHLS">RGBHLS</a> given red, green, blue values calculate hue, lightness, and saturation components
-   </li>
-   <li><a href="#RGBCMY">RGBCMY</a> given red, green, blue values calculate cyan, magenta, yellow components
-   </li>
-   <li><a href="#RGBYIQ">RGBYIQ</a> given red, green, blue values calculate luma(gray scale), orange-blue chrominance,
-                                    and purple-green chrominance components
-   </li>
-
-</ul>
-</dd>
-<dt>EXAMPLE</dt> <dd>
-<p>
-   Sample program:
-</p>
-<xmp>
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
    program demo_M_color
    use M_color, only : hue
    use M_color, only : closest_color_name
@@ -172,73 +248,72 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    use M_color, only : rgbmono
    implicit none
    character(len=100) :: string ! at least 20 characters
-   character(len=20)  :: name
    character(len=20)  :: echoname
    real               :: red,green,blue
    real               :: gray
    integer            :: ierr
       ! find the names of colors given RGB values
-      write(*,*)'Find names given values'
-
+      write(*,*)&#146;Find names given values&#146;
+<P>
       call closest_color_name( 100.0,   0.0,   0.0, string)
       write(*,*)trim(string)
-
+<P>
       call closest_color_name(   0.0, 100.0,   0.0, string)
       write(*,*)trim(string)
-
+<P>
       call closest_color_name(   0.0,   0.0, 100.0, string)
       write(*,*)trim(string)
-
+<P>
       ! list colors known to colorname2rgb(3f) & corresponding RGB values
-      write(*,*)'given names find RGB values'
+      write(*,*)&#146;given names find RGB values&#146;
       ! get the RGB values and English name of the color
-      call color_name2rgb('RED',red,green,blue,echoname)
+      call color_name2rgb(&#146;RED&#146;,red,green,blue,echoname)
       ! display the English name and RGB values for the name
       write(*,*)echoname,int([red,green,blue])
-
-      write(*,*)'Do some conversions between RGB, HLS, and HLS'
-      write(*,*)'and check them against expected values'
+<P>
+      write(*,*)&#146;Do some conversions between RGB, HLS, and HLS&#146;
+      write(*,*)&#146;and check them against expected values&#146;
       !               NAME        RGB(0-255)            HLS(0-100)
-      call chk('hls','red',     [100, 0,   0  ], [0,   50,  100])
-      call chk('hls','orange',  [100, 65,  0  ], [39,  50,  100])
-      call chk('hls','yellow',  [100, 100, 0  ], [60,  50,  100])
-      call chk('hls','green',   [0,   100, 0  ], [120, 50,  100])
-      call chk('hls','cyan',    [0,   100, 100], [180, 50,  100])
-      call chk('hls','blue',    [0,   0,   100], [240, 50,  100])
-      call chk('hls','magenta', [100, 0,   100], [300, 50,  100])
-      call chk('hls','black',   [0,   0,   0  ], [0,   0,   0  ])
-      call chk('hls','white',   [100, 100, 100], [0,   100, 0  ])
+      call chk(&#146;hls&#146;,&#146;red&#146;,     [100, 0,   0  ], [0,   50,  100])
+      call chk(&#146;hls&#146;,&#146;orange&#146;,  [100, 65,  0  ], [39,  50,  100])
+      call chk(&#146;hls&#146;,&#146;yellow&#146;,  [100, 100, 0  ], [60,  50,  100])
+      call chk(&#146;hls&#146;,&#146;green&#146;,   [0,   100, 0  ], [120, 50,  100])
+      call chk(&#146;hls&#146;,&#146;cyan&#146;,    [0,   100, 100], [180, 50,  100])
+      call chk(&#146;hls&#146;,&#146;blue&#146;,    [0,   0,   100], [240, 50,  100])
+      call chk(&#146;hls&#146;,&#146;magenta&#146;, [100, 0,   100], [300, 50,  100])
+      call chk(&#146;hls&#146;,&#146;black&#146;,   [0,   0,   0  ], [0,   0,   0  ])
+      call chk(&#146;hls&#146;,&#146;white&#146;,   [100, 100, 100], [0,   100, 0  ])
       !               NAME        RGB(0-255)           HSV(0-100)
-      call chk('hsv','red',     [100, 0,   0  ], [0,   100, 100])
-      call chk('hsv','yellow',  [100, 100, 0  ], [60,  100, 100])
-      call chk('hsv','green',   [0,   100, 0  ], [120, 100, 100])
-      call chk('hsv','cyan',    [0,   100, 100], [180, 100, 100])
-      call chk('hsv','blue',    [0,   0,   100], [240, 100, 100])
-      call chk('hsv','magenta', [100, 0,   100], [300, 100, 100])
-      call chk('hsv','white',   [100, 100, 100], [0,   0,   100])
-      call chk('hsv','black',   [0,   0,   0  ], [0,   0,   0  ])
-      call chk('hsv','gray50',  [50,  50,  50 ], [0,   0,   50 ])
-      call chk('hsv','silver',  [75,  75,  75 ], [0,   0,   75 ])
-      call chk('hsv','red4',    [55,  0,   0  ], [0,   100, 55 ])
-      call chk('hsv','olive',   [50,  50,  0  ], [60,  100, 50 ])
-      call chk('hsv','lime',    [0,   100, 0  ], [120, 100, 100])
-      call chk('hsv','teal',    [0,   50,  50 ], [180, 100, 50 ])
-      call chk('hsv','navy',    [0,   0,   50 ], [240, 100, 50 ])
-      call chk('hsv','purple',  [63,  13,  94 ], [277, 87,  94 ])
-      call chk('hsv','magenta4',[55,  0,   55 ], [300, 100, 55 ])
-      call chk('hsv','maroon',  [69,  19,  38 ], [338, 73,  69 ])
-
-      write(*,*)'Get some grayscale values from RGB color values'
-      call rgbmono(100.,  0.,  0.,gray,ierr);write(*,*)'red     ',gray
-      call rgbmono(  0.,100.,  0.,gray,ierr);write(*,*)'green   ',gray
-      call rgbmono(  0.,  0.,100.,gray,ierr);write(*,*)'blue    ',gray
-      call rgbmono(100.,100.,  0.,gray,ierr);write(*,*)'Yellow  ',gray
-      call rgbmono(  0.,100.,100.,gray,ierr);write(*,*)'Cyan    ',gray
-      call rgbmono(100.,  0.,100.,gray,ierr);write(*,*)'Magenta ',gray
-      call rgbmono(100.,100.,100.,gray,ierr);write(*,*)'White   ',gray
-      call rgbmono( 00.,  0.,  0.,gray,ierr);write(*,*)'Black   ',gray
-      call rgbmono( 50.,  0.,  0.,gray,ierr);write(*,*)'Maroon  ',gray
-      call rgbmono(100., 50., 50.,gray,ierr);write(*,*)'Pink    ',gray
+      call chk(&#146;hsv&#146;,&#146;red&#146;,     [100, 0,   0  ], [0,   100, 100])
+      call chk(&#146;hsv&#146;,&#146;yellow&#146;,  [100, 100, 0  ], [60,  100, 100])
+      call chk(&#146;hsv&#146;,&#146;green&#146;,   [0,   100, 0  ], [120, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;cyan&#146;,    [0,   100, 100], [180, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;blue&#146;,    [0,   0,   100], [240, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;magenta&#146;, [100, 0,   100], [300, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;white&#146;,   [100, 100, 100], [0,   0,   100])
+      call chk(&#146;hsv&#146;,&#146;black&#146;,   [0,   0,   0  ], [0,   0,   0  ])
+      call chk(&#146;hsv&#146;,&#146;gray50&#146;,  [50,  50,  50 ], [0,   0,   50 ])
+      call chk(&#146;hsv&#146;,&#146;silver&#146;,  [75,  75,  75 ], [0,   0,   75 ])
+      call chk(&#146;hsv&#146;,&#146;red4&#146;,    [55,  0,   0  ], [0,   100, 55 ])
+      call chk(&#146;hsv&#146;,&#146;olive&#146;,   [50,  50,  0  ], [60,  100, 50 ])
+      call chk(&#146;hsv&#146;,&#146;lime&#146;,    [0,   100, 0  ], [120, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;teal&#146;,    [0,   50,  50 ], [180, 100, 50 ])
+      call chk(&#146;hsv&#146;,&#146;navy&#146;,    [0,   0,   50 ], [240, 100, 50 ])
+      call chk(&#146;hsv&#146;,&#146;purple&#146;,  [63,  13,  94 ], [277, 87,  94 ])
+      call chk(&#146;hsv&#146;,&#146;magenta4&#146;,[55,  0,   55 ], [300, 100, 55 ])
+      call chk(&#146;hsv&#146;,&#146;maroon&#146;,  [69,  19,  38 ], [338, 73,  69 ])
+<P>
+      write(*,*)&#146;Get some grayscale values from RGB color values&#146;
+      call rgbmono(100.,  0.,  0.,gray,ierr);write(*,*)&#146;red     &#146;,gray
+      call rgbmono(  0.,100.,  0.,gray,ierr);write(*,*)&#146;green   &#146;,gray
+      call rgbmono(  0.,  0.,100.,gray,ierr);write(*,*)&#146;blue    &#146;,gray
+      call rgbmono(100.,100.,  0.,gray,ierr);write(*,*)&#146;Yellow  &#146;,gray
+      call rgbmono(  0.,100.,100.,gray,ierr);write(*,*)&#146;Cyan    &#146;,gray
+      call rgbmono(100.,  0.,100.,gray,ierr);write(*,*)&#146;Magenta &#146;,gray
+      call rgbmono(100.,100.,100.,gray,ierr);write(*,*)&#146;White   &#146;,gray
+      call rgbmono( 00.,  0.,  0.,gray,ierr);write(*,*)&#146;Black   &#146;,gray
+      call rgbmono( 50.,  0.,  0.,gray,ierr);write(*,*)&#146;Maroon  &#146;,gray
+      call rgbmono(100., 50., 50.,gray,ierr);write(*,*)&#146;Pink    &#146;,gray
       contains
       subroutine chk(modelout,name,rgb,other)
       ! given a color convert to MODELOUT and compare to expected values
@@ -248,506 +323,50 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
       real                          :: val1,val2,val3
       integer                       :: status
          ! convert RGB values to MODELOUT values
-         call hue('rgb',REAL(rgb(1)),REAL(rgb(2)),REAL(rgb(3)),&
+         call hue(&#146;rgb&#146;,REAL(rgb(1)),REAL(rgb(2)),REAL(rgb(3)),&
          & modelout,val1,val2,val3,status)
          ! left-justify name to 10 characters or more
-         write(*,'(a,1x)',advance='no') &
-         & [ character(len=max(10,len_trim(name))) ::' '//trim(name)]
-         write(*,'(a,1x,3(i3,1x))',advance='no') &
-         & modelout//' EXPECTED',other
-         write(*,'(a,1x,3(i3,1x))',advance='no') &
-         & 'GOT',int([val1+0.5,val2+0.5,val3+0.5])
-         write(*,'(a,i0)')'STATUS ',status
+         write(*,&#146;(a,1x)&#146;,advance=&#146;no&#146;) &
+         & [ character(len=max(10,len_trim(name))) ::&#146; &#146;//trim(name)]
+         write(*,&#146;(a,1x,3(i3,1x))&#146;,advance=&#146;no&#146;) &
+         & modelout//&#146; EXPECTED&#146;,other
+         write(*,&#146;(a,1x,3(i3,1x))&#146;,advance=&#146;no&#146;) &
+         & &#146;GOT&#146;,int([val1+0.5,val2+0.5,val3+0.5])
+         write(*,&#146;(a,i0)&#146;)&#146;STATUS &#146;,status
       end subroutine chk
    end program demo_M_color
-</xmp>
-</dd>
-<!-- ======================================================================= -->
-<dt> SEE ALSO </dt> <dd>
-
-<p>
-   A simple interactive javascript-based
-   <a href="../../../public_html/javascript/color/iframe.html"> color selector</a>
-   lets you interactively select colors.
-</p>
-
-<p>
-   The color wheel below was generated using a
-   <a href="BOOK_M_draw.html"> M_draw(3f) </a>
-   graphics library program
-   <a href="../test/demos/huegif.f90">(huegif.f90)</a>
-   that uses the M_color module.
-</p>
-
-<center>
-   <img alt="HLS circle" src="images/hls.gif" width="50%" height="" />
-</center>
-
-</dd>
-<!-- ======================================================================= -->
-<dt>REFERENCES</dt><dd>
-  The algorithms are based on chapter 17 of
-  "Fundamentals of Interactive Computer Graphics"; J. D. Foley and A. Van Dam.
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="RGBHLS">NAME</a> </dt><dd>
-    RGBHLS(3fp) - [M_color] Given red, green, and blue color components
-    calculates the hue, lightness, and saturation for a color
-    (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS  </dt><dd>
-   <pre>
-
-   subroutine rgbhls(r,g,b,h,l,s,status)
-
-    ! red component as a value of 0 to 100
-    real, intent(in)  :: r
-    ! green component as a value of 0 to 100
-    real, intent(in)  :: g
-    ! blue component as a value of 0 to 100
-    real, intent(in)  :: b
-    ! hue value in the range of 0 to 360 degrees
-    real, intent(out) :: h
-    ! lightness as a percent value from 0 to 100
-    real, intent(out) :: l
-    ! saturation as a percent from 0 to 100
-    real, intent(out) :: s
-    integer           :: status
-   </pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION  </dt><dd>
-
-RGB values are in the range 0-100; hue is 0-360 degrees; lightness
-and saturation have a range of 0-100.
-<br/><br/>
-
-<blockquote>
-<table border="1" >
-<tr><TH>Color</TH><TH COLSPAN="3">RGB</TH><TH COLSPAN="3">HLS</TH><TH>Sample</TH></tr>
-<tr ALIGN="right"><td ALIGN="left">Red</td><td WIDTH="30">100.0</td><td WIDTH="30">0.0</td><td WIDTH="30">0.0</td><td WIDTH="30">0</td><td WIDTH="30">50.0</td><td WIDTH="30">100.0</td><td style="background-color:#FF0000">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">Yellow</td><td>100.0</td><td>100.0</td><td>0.0</td><td>60</td><td>50.0</td><td>100.0</td><td style="background-color:#FFFF00">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">Green</td><td>0.0</td><td>100.0</td><td>0.0</td><td>120</td><td>50.0</td><td>100.0</td><td style="background-color:#00FF00">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">Cyan</td><td>0.0</td><td>100.0</td><td>100.0</td><td>180</td><td>50.0</td><td>100.0</td><td style="background-color:#00FFFF">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">Blue</td><td>0.0</td><td>0.0</td><td>100.0</td><td>240</td><td>50.0</td><td>100.0</td><td style="background-color:#0000FF">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">Magenta</td><td>100.0</td><td>0.0</td><td>100.0</td><td>300</td><td>50.0</td><td>100.0</td><td style="background-color:#FF00FF">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">White</td><td>100.0</td><td>100.0</td><td>100.0</td><td>(any)</td><td>100.0</td><td>(any)</td><td style="background-color:#FFFFFF">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">Black</td><td>0.0</td><td>0.0</td><td>0.0</td><td>(any)</td><td>0.0</td><td>(any)</td><td style="background-color:#000000">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">Maroon</td><td>50.0</td><td>0.0</td><td>0.0</td><td>0</td><td>25.0</td><td>100.0</td><td style="background-color:#800000">&nbsp;</td></tr>
-<tr ALIGN="right"><td ALIGN="left">Pink</td><td>100.0</td><td>50.0</td><td>50.0</td><td>0</td><td>75.0</td><td>100.0</td><td style="background-color:#FF8080">&nbsp;</td></tr>
-</table>
-</blockquote>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="RGBHVS">NAME</a> </dt><dd>
-    RGBHVS(3fp) - [M_color] calculates the hue, value, &amp; saturation
-    for a color given in red, green, &amp; blue components values.
-    (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS  </dt><dd>
-   <pre>
-   subroutine rgbhvs(r,g,b,h,v,s,status)
-
-    ! the red component as a value of 0 to 100.
-    real, intent(in)  :: r
-    ! the green component as a value of 0 to 100.
-    real, intent(in)  :: g
-    ! the blue component as a value of 0 to 100.
-    real, intent(in)  :: b
-    ! the hue value in the range of 0 to 360 degrees
-    real, intent(out) :: h
-    ! the "value" as a percent value from 0 to 100.
-    real, intent(out) :: v
-    ! the saturation as a percent from 0 to 100.
-    real, intent(out) :: s
-    integer           :: status
-   <pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION  </dt><dd>
-
-RGBHVS() calculates the hue, value, &amp; saturation
-for a color given in red, green, &amp; blue components values.
-<br/><br/>
-
-<blockquote>
-<table border="1" class="dtable" >
-<tr>      <th>                                               Color</th>  <th>Color<br>name</th> <th>Hex    </th>  <th>(R,G,B)</th>        <th>(H,S,V)</th>                  </tr>
-<tr>      <td              style="background-color:#000000">&nbsp;</td>  <td>Black</td>         <td>#000000</td>  <td>(0,0,0)</td>        <td>(0&ordm;,0%,0%)</td>        </tr>
-<tr>      <td              style="background-color:#FFFFFF">&nbsp;</td>  <td>White</td>         <td>#FFFFFF</td>  <td>(100,100,100)</td>  <td>(0&ordm;,0%,100%)</td>      </tr>
-<tr>      <td              style="background-color:#FF0000">&nbsp;</td>  <td>Red</td>           <td>#FF0000</td>  <td>(100,0,0)</td>      <td>(0&ordm;,100%,100%)</td>    </tr>
-<tr>      <td              style="background-color:#00FF00">&nbsp;</td>  <td>Lime</td>          <td>#00FF00</td>  <td>(0,100,0)</td>      <td>(120&ordm;,100%,100%)</td>  </tr>
-<tr>      <td              style="background-color:#0000FF">&nbsp;</td>  <td>Blue</td>          <td>#0000FF</td>  <td>(0,0,100)</td>      <td>(240&ordm;,100%,100%)</td>  </tr>
-<tr>      <td              style="background-color:#FFFF00">&nbsp;</td>  <td>Yellow</td>        <td>#FFFF00</td>  <td>(100,100,0)</td>    <td>(60&ordm;,100%,100%)</td>   </tr>
-<tr>      <td              style="background-color:#00FFFF">&nbsp;</td>  <td>Cyan</td>          <td>#00FFFF</td>  <td>(0,100,100)</td>    <td>(180&ordm;,100%,100%)</td>  </tr>
-<tr>      <td              style="background-color:#FF00FF">&nbsp;</td>  <td>Magenta</td>       <td>#FF00FF</td>  <td>(100,0,100)</td>    <td>(300&ordm;,100%,100%)</td>  </tr>
-<tr>      <td              style="background-color:#C0C0C0">&nbsp;</td>  <td>Silver</td>        <td>#C0C0C0</td>  <td>(75,75,75)</td>     <td>(0&ordm;,0%,75%)</td>       </tr>
-<tr>      <td              style="background-color:#808080">&nbsp;</td>  <td>Gray</td>          <td>#808080</td>  <td>(50,50,50)</td>     <td>(0&ordm;,0%,50%)</td>       </tr>
-<tr>      <td              style="background-color:#800000">&nbsp;</td>  <td>Maroon</td>        <td>#800000</td>  <td>(50,0,0)</td>       <td>(0&ordm;,100%,50%)</td>     </tr>
-<tr>      <td              style="background-color:#808000">&nbsp;</td>  <td>Olive</td>         <td>#808000</td>  <td>(50,50,0)</td>      <td>(60&ordm;,100%,50%)</td>    </tr>
-<tr>      <td              style="background-color:#008000">&nbsp;</td>  <td>Green</td>         <td>#008000</td>  <td>(0,50,0)</td>       <td>(120&ordm;,100%,50%)</td>   </tr>
-<tr>      <td              style="background-color:#800080">&nbsp;</td>  <td>Purple</td>        <td>#800080</td>  <td>(50,0,50)</td>      <td>(300&ordm;,100%,50%)</td>   </tr>
-<tr>      <td              style="background-color:#008080">&nbsp;</td>  <td>Teal</td>          <td>#008080</td>  <td>(0,50,50)</td>      <td>(180&ordm;,100%,50%)</td>   </tr>
-<tr>      <td              style="background-color:#000080">&nbsp;</td>  <td>Navy</td>          <td>#000080</td>  <td>(0,0,50)</td>       <td>(240&ordm;,100%,50%)</td>     </tr>
-</table>
-</blockquote>
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="CMYRGB">NAME</a> </dt><dd>
-    cmyrgb(3fp) - [M_color] calculates the cyan, magenta, and yellow
-    components given the  red, green, and blue component values.
-    (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS  </dt><dd>
-   <pre>
-   subroutine cmyrgb(c,m,y,r,g,b,status)
-
-    ! cyan component as a value in the range of 0 to 100
-    real, intent(in)  :: c
-    ! magenta component as a value in the range of 0 to 100
-    real, intent(in)  :: m
-    ! yellow component as a value in the range of 0 to 100
-    real, intent(in)  :: y
-    ! red component as a value in the range of 0 to 100
-    real, intent(out) :: r
-    ! green component as a value in the range of 0 to 100
-    real, intent(out) :: g
-    ! blue component as a value in the range of 0 to 100
-    real, intent(out) :: b
-    integer           :: status
-   </pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION  </dt><dd>
-    cmyrgb() calculates the cyan, magenta, and yellow components
-    given the  red, green, and blue component values.
-<!-- ======================================================================= -->
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="RGBCMY">NAME</a> </dt><dd>
-    rgbcmy(3fp) - [M_color] calculates the cyan, magenta, and yellow
-    components given the  red, green, and blue component values.
-    (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS  </dt><dd>
-   <pre>
-   subroutine rgbcmy(r,g,b,c,m,y,status)
-
-    ! the red component as a value in the range of 0 to 100
-    real, intent(in)  :: r
-    ! the green component as a value in the range of 0 to 100
-    real, intent(in)  :: g
-    ! the blue component as a value in the range of 0 to 100
-    real, intent(in)  :: b
-    ! the cyan component as a value in the range of 0 to 100
-    real, intent(out) :: c
-    ! the magenta component as a value in the range of 0 to 100
-    real, intent(out) :: m
-    ! the yellow component as a value in the range of 0 to 100
-    real, intent(out) :: y
-    integer           :: status
-   </pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION  </dt><dd>
-Table ...
-<br/><br/>
-
-<blockquote>
-<table border="1" >
-<tr> <th>Color      </th>                                              <th>Color<p>name </th> <th>(C,M,Y)</th>        <th>(  R,  G,  B)</th>  <th>Hex</th>      </tr>
-<tr> <td style="background-color:#000000">&nbsp;</td> <td>Black</td>   <td>(100,100,100)</td> <td>(  0,  0,  0)</td>  <td>#000000</td>  </tr>
-<tr> <td style="background-color:#FFFFFF">&nbsp;</td> <td>White</td>   <td>(  0,  0,  0)</td> <td>(100,100,100)</td>  <td>#FFFFFF</td>  </tr>
-<tr> <td style="background-color:#FF0000">&nbsp;</td> <td>Red</td>     <td>(  0,100,100)</td> <td>(100,  0,  0)</td>  <td>#FF0000</td>  </tr>
-<tr> <td style="background-color:#00FF00">&nbsp;</td> <td>Green</td>   <td>(100,  0,100)</td> <td>(  0,100,  0)</td>  <td>#00FF00</td>  </tr>
-<tr> <td style="background-color:#0000FF">&nbsp;</td> <td>Blue</td>    <td>(100,100,  0)</td> <td>(  0,  0,100)</td>  <td>#0000FF</td>  </tr>
-<tr> <td style="background-color:#FFFF00">&nbsp;</td> <td>Yellow</td>  <td>(  0,  0,100)</td> <td>(100,100,  0)</td>  <td>#FFFF00</td>  </tr>
-<tr> <td style="background-color:#00FFFF">&nbsp;</td> <td>Cyan</td>    <td>(100,  0,  0)</td> <td>(  0,100,100)</td>  <td>#00FFFF</td>  </tr>
-<tr> <td style="background-color:#FF00FF">&nbsp;</td> <td>Magenta</td> <td>(  0,100,  0)</td> <td>(100,  0,100)</td>  <td>#FF00FF</td>  </tr>
-</table>
-</blockquote>
-<!-- ======================================================================= -->
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="RGBVAL">NAME</a> </dt><dd>
-   RGBVAL(3fp) - [M_color] is an internal private function used by hlsrgb(3fp).
-   (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS</dt><dd>
-   <pre>
-   subroutine rgbval</a>(clr1,clr2,h)
-
-    integer, intent(in) :: h ! H is the hue value in degrees
-    real, intent(in) :: clr1 !
-    real, intent(in) :: clr2 !
-   </pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION</dt>  <dd>
-   Function RGBVAL(3f) is an internal private function used by hlsrgb().
-
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<!-- ======================================================================= -->
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="HLSRGB">NAME</a> </dt><dd>
-    HLSRGB(3fp) - [M_color] calculates the red, green, &amp; blue components for a
-    color given in hue, lightness, &amp; saturation values.
-    (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS</dt>  <dd>
-   <pre>
-   subroutine hlsrgb</a> (h,l,s,r,g,b,status)
-
-    ! hue value in the range of 0 to 360 degrees
-    real, intent(in)  :: h
-    ! lightness as a percent value from 0 to 100.
-    real, intent(in)  :: l
-    ! saturation as a percent from 0 to 100.
-    real, intent(in)  :: s
-    ! red component as a value of 0 to 100.
-    real, intent(out) :: r
-    ! green component as a value of 0 to 100.
-    real, intent(out) :: g
-    ! blue component as a value of 0 to 100.
-    real, intent(out) :: b
-    integer           :: status
-   </pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION</dt>  <dd>
-
-    HLSRGB() calculates the red, green, &amp; blue components for a
-     color given in hue, lightness, &amp; saturation values.
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="HVSRGB">NAME</a> </dt><dd>
-    HVSRGB(3fp) - [M_color] calculates the red, green, &amp; blue components for a
-     color given in hue, value, &amp; saturation values.
-     (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS </dt><dd>
-   <pre>
-   subroutine hvsrgb</a>(h,v,s,r,g,b,status)
-
-    ! H is the hue value in the range of 0 to 360 degrees
-    real, intent(in)  :: h
-    ! V is the "value" as a percent value from 0 to 100.
-    real, intent(in)  :: v
-    ! S is the saturation as a percent from 0 to 100.
-    real, intent(in)  :: s
-    ! R is the red component as a value of 0 to 100.
-    real, intent(out) :: r
-    ! G is the green component as a value of 0 to 100.
-    real, intent(out) :: g
-    ! B is the blue component as a value of 0 to 100.
-    real, intent(out) :: b
-    integer           :: status
-   </pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION </dt><dd>
-
-    HVSRGB() calculates the red, green, &amp; blue components for a
-     color given in hue, value, &amp; saturation values.
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="YIQRGB">NAME</a> </dt><dd>
-   YIQRGB(3fp) - [M_color] Convert luma, orange-blue chrominance, and  purple-green chrominance
-   to RGB values.
-   (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS  </dt><dd>
-   <pre>
-   subroutine yiqrgb(y,i,q,r,g,b,status)
-
-    real,intent(in)  :: y,i,q
-    real,intent(out) :: r,g,b
-    integer          :: status
-   </pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION  </dt><dd>
-
-   Convert luma, orange-blue chrominance, and  purple-green chrominance
-   to RGB values.
-
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
-<dl>
-<!-- ======================================================================= -->
-<dt> <a name="RGBYIQ">NAME</a> </dt><dd>
-   RGBYIQ(3fp) - [M_color] Convert RGB values to luma, orange-blue chrominance, and  purple-green chrominance.
-   (LICENSE:PD)
-</dd>
-<!-- ======================================================================= -->
-<dt> SYNOPSIS  </dt><dd>
-   <pre>
-   subroutine rgbyiq(r,g,b,y,i,q,status)
-
-    real,intent(in)  :: r,g,b
-    real,intent(out) :: y,i,q
-    integer          :: status
-   </pre>
-</dd>
-<!-- ======================================================================= -->
-<dt> DESCRIPTION  </dt><dd>
-   Convert RGB values to luma, orange-blue chrominance, and  purple-green chrominance.
-</dd>
-<!-- ======================================================================= -->
-<dt> AUTHOR </dt><dd>
-
-   John S. Urban
-
-</dd>
-<!-- ======================================================================= -->
-<dt> LICENSE </dt><dd>
-
-   Public Domain
-
-</dd>
-<!-- ======================================================================= -->
-</dl>
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+The algorithms are based on chapter 17 of "Fundamentals of
+Interactive Computer Graphics"; J. D. Foley and A. Van Dam.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_color (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fb6abf20-5cc4-4f95-9645-2cd577d483f3 using man macros.</FONT>
+<br><br><center><img src="images/M_color.3m_color.gif"></center>
 </div>
 </div>
 </body>
-</html>
+</HTML>

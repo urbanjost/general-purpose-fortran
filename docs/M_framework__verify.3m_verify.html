@@ -1,0 +1,429 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>M_framework__verify (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+M_framework__verify(3fm) - [M_framework__verify::INTRO] a collection of Fortran routines for
+supporting code development by providing error
+processing, debugging procedures and unit testing.
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Quote</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Module procedures
+<P>
+<PRE>
+   use M_framework__verify, only : unit_check, unit_check_start, unit_check_done, unit_check_stop
+   use M_framework__verify, only : unit_check_good, unit_check_bad
+   use M_framework__verify, only : unit_check_msg
+   use M_framework__verify, only : debug
+   use M_framework__verify, only : fstop
+   use M_framework__verify, only : assert
+<P>
+</PRE>
+Module values
+<P>
+<PRE>
+   use M_framework__verify, only : unit_check_limit, unit_check_keep_going
+   use M_framework__verify, only : unit_check_command
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>QUOTE</H3>
+
+</A>
+<BLOCKQUOTE>
+Do not let your victories go to your head, nor let your failures go
+to your heart.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The M_framework__verify(3fm) Fortran module provides procedures and variables
+useful for providing error processing, debugging capabilities, and
+unit testing.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The M_framework__verify(3fm) Fortran module provides procedures and variables
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+allows for a user-defined command to be called to collect results or
+mail failure alerts, &#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+supports easily composing a message from up to nine scalar
+intrinsic values and different message levels
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+allows stopping on first failure or continuing
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+provides for a non-zero exit code if any tests fail
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SET MODES</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>unit_check_keep_going</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+logical variable that can be used to turn off
+program termination on errors.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check_level</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+An integer that can be used to specify
+different debug levels
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check_command</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+name of command to execute. Defaults to the name
+"".
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; UNIT TESTS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>unit_check_start(3f)</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+start tests of a procedure and optionally call
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+                             command NAME start &#46;&#46;&#46;
+</PRE>
+<TABLE cellpadding=3><!-- tsb:                              command NAME start &#46;&#46;&#46;
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if expression is false optionally call
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                             command NAME bad
+<P>
+</PRE>
+and stop program (by default)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check_done(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+call
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+                             command NAME good
+<P>
+</PRE>
+if no failures; else call
+<P>
+<PRE>
+                             command NAME bad
+</PRE>
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb:                              command NAME bad
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check_stop(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+stop program with exit value of 0 if no failures
+else with an exit value of 1
+<TABLE width=100% cellpadding=3><!-- tsb: stop program with exit value of 0 if no failures
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check_good(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+call command
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                             command NAME good
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check_bad(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+call command
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                             command NAME bad
+<P>
+</PRE>
+and stop program by default
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>unit_check_msg(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+write message
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><A name=>
+
+    <H4>&nbsp; &nbsp; BASIC DEBUGGING</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>fstop(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+calls &#146;STOP VALUE&#146; passing in a value (1-32),
+with optional message
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>pdec(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+write ASCII Decimal Equivalent (ADE) numbers
+vertically beneath string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>debug</B> </TD><TD valign=bottom>
+logical variable that can be tested by routines
+as a flag to process debug statements.
+</TD></TR>
+<TR></TR></TABLE>For unit testing, the existence of a command called "goodbad" is
+initially assumed. This is generally a script that makes entries
+for each unit in an SQLite data file which is then used to create
+CSV and HTML reports on the status of each unit. A sample goodbad(1)
+command written in the bash(1) shell and using the sqlite3(1) command
+should be included in this distribution as an example.
+<P>
+The flexibility introduced by calling an external script or program
+is that The goodbad(1) command can be changed as desired to write CSV
+files or simple logs or to notify developers with e-mail as desired.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; RELATED FUNCTIONS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+The routines in M_framework__verify(3f) are often combined with the M_hashkeys(3fm)
+routines and various math and statistical routines to quickly create
+unit tests.
+<P>
+Comparisons of real values can be done with a tolerance with
+M_Compare_Float_Numbers(3fm), for example.
+<P>
+The intrinsics ANY(3f) and ALL(3f) are particularly useful in calls
+to unit_check(3f).
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+    !!program demo_unit_tests
+    module M_framework__demo
+    private
+    public one !! regular routines
+    public two !! regular routines
+    public test_suite_M_demo !! special name for use with test_suite(1bash).
+    contains
+<P>
+    !!  regular routines
+    subroutine one()
+    end subroutine one
+<P>
+    subroutine two()
+    end subroutine two
+<P>
+    !! unit test
+    subroutine test_suite_M_demo
+    use M_framework__verify, only: unit_check_start, unit_check
+    use M_framework__verify, only: unit_check_good, unit_check_bad, unit_check_done
+    use M_framework__verify, only: unit_check_msg, unit_check_stop
+    implicit none
+    integer :: i, j, k
+    integer,allocatable :: array(:)
+    integer :: arr(4)=[21,51,14,45]
+    integer :: a=21, b=51, c=14, d=45
+    ! TEST-DRIVEN DEVELOPMENT
+    ! optional set-up       perform initialization operations common to all tests within a module
+       i=1
+       j=2
+       k=3
+       array=[10,20,30,40,50,60,70]
+       call test_one()
+       call test_two()
+    ! optional tear-down    perform finalization operations common to all tests within a module
+    contains
+<P>
+    subroutine test_one()
+    !  register an entry for specified name ("one") in database with status of zero (0)
+    call unit_check_start(&#146;one&#146;)
+<P>
+    !  if mask test fails, can
+    !  * produce a SUCCESS: or FAIL: message and stop program
+    !  * change database status for specified entry to -1 and stop program, else continue
+    !  * produce a SUCCESS: or FAIL: message and keep going
+    !  * produce a FAIL: message if test fails but no SUCCESS: message if test passes
+    call unit_check(&#146;one&#146;,i &gt; 0,msg=&#146;I &gt; 0&#146;)
+<P>
+    ! using ANY(3f) and ALL(3f)
+    call unit_check(&#146;one&#146;,all([i,j,k] &gt; 0),      &#146;testing if everyone greater than zero&#146;)
+    ! display message built of scalars as well
+    call unit_check(&#146;one&#146;,all(.not.[i,j,k] == 4),&#146;for set &#146;,i,j,k,&#146;testing if no one is equal to four&#146;)
+<P>
+    ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
+    if(i+j+k &lt; 1)then
+       call unit_check_bad(&#146;one&#146;)
+    endif
+<P>
+    call unit_check_done(&#146;one&#146;,&#146;checks on "one" ended&#146;)
+    end subroutine test_one
+<P>
+    subroutine test_two
+    ! use of all(3f), any(3f), merge(3f) can be useful
+    ! if you know what these would produce
+    ! write(*,*)[&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;B&#146;] == &#146;B&#146;      ! this would return an array, the last element having the value T, else F
+    ! write(*,*)all([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;] == &#146;X&#146;) ! this would return F
+    ! write(*,*)any([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;] == &#146;B&#146;) ! this would return F
+    ! write(*,*)any([&#146;A&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;X&#146;,&#146;B&#146;] == &#146;B&#146;) ! this would return T
+    ! write(*,*).not.all(array &lt; 100)
+    ! write(*,*)all(array &lt; 100)
+    ! write(*,*)all([a,b,c,d] == [21,51,14,45]) ! compare a list. This would return T
+    ! write(*,*)all(arr == [21,51,14,45])       ! compare an array. This would return T
+    ! you know how valuable ANY(3f) and ALL(3f) will be
+    call unit_check_start(&#146;two&#146;,&#146;check on "two" passed&#146;)
+    call unit_check(&#146;two&#146;, 1 &gt; 0 .and. abs(10.10000-10.10001) &lt; 0.0001,msg=&#146;two looks good&#146;)
+    call unit_check_done(&#146;two&#146;,&#146;checks on "two" ended&#146;)
+    end subroutine test_two
+<P>
+    end subroutine test_suite_M_demo
+<P>
+    end module M_framework__demo
+<P>
+    program demo_M_framework__verify
+    use M_demo,  only: test_suite_M_demo
+    use M_framework__verify, only: unit_check_command, unit_check_keep_going,unit_check_level
+    unit_check_command=&#146;&#146;
+    unit_check_keep_going=.true.
+    unit_check_level=0
+      call test_suite_M_demo
+    end program demo_M_framework__verify
+<P>
+</PRE>
+Expected output:
+<P>
+<PRE>
+    unit_check:       one                  SUCCESS:I &gt; 0
+    unit_check:       one                  SUCCESS:testing if everyone greater than zero
+    unit_check:       one                  SUCCESS:for set 1 2 3 testing if no one is equal to four
+    unit_check_done:  one                  PASSED   GOOD:3  BAD:0
+<P>
+    unit_check:       two                  SUCCESS:two looks good
+    unit_check_done:  two                  PASSED   GOOD:1  BAD:0
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework__verify (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ca0f56c3-0cf1-4f8a-8a4f-3c8853664196 using man macros.</FONT>
+<br><br><center><img src="images/M_framework__verify.3m_verify.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

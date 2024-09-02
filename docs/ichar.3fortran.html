@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ichar (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ichar (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>ichar(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-ichar(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 ICHAR(3) - [CHARACTER:CONVERSION] Character-to-integer code conversion
 function
 <P>
@@ -77,13 +69,14 @@ function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = ichar(c [,kind])
 <P>
 <PRE>
-           elemental integer(kind=KIND) function ichar(c,KIND)
+         elemental integer(kind=KIND) function ichar(c,KIND)
 <P>
-            character(len=1,kind=**),intent(in) :: c
-            integer,intent(in),optional :: KIND
+          character(len=1,kind=**),intent(in) :: c
+          integer,intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = ichar(c [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -102,14 +96,14 @@ C is a scalar character
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND is a constant integer initialization expression indicating the kind
-parameter of the result.
+KIND is a constant integer initialization expression indicating the
+kind parameter of the result.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The return value is of type integer and of kind KIND. If KIND is absent,
-the return value is of default integer kind.
+The return value is of type integer and of kind KIND. If KIND is
+absent, the return value is of default integer kind.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -118,11 +112,12 @@ the return value is of default integer kind.
 
 </A>
 <BLOCKQUOTE>
-ICHAR(3) returns the code for the character in the system&#146;s native character
-set. The correspondence between characters and their codes is not
-necessarily the same across different Fortran implementations. For example,
-a platform using EBCDIC would return different values than an ASCII
-platform.
+<P>
+ICHAR(3) returns the code for the character in the system&#146;s native
+character set. The correspondence between characters and their codes is
+not necessarily the same across different Fortran implementations. For
+example, a platform using EBCDIC would return different values than an
+ASCII platform.
 <P>
 See IACHAR(3) for specifically working with the ASCII character set.
 </BLOCKQUOTE>
@@ -132,18 +127,19 @@ See IACHAR(3) for specifically working with the ASCII character set.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-C : The input character to determine the code for. Its value shall be
-that of a character capable of representation in the processor.
+C : The input character to determine the code for. Its value shall
+be that of a character capable of representation in the processor.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : indicates the kind parameter of the result. If KIND is absent, the
-return value is of default integer kind.
+KIND : indicates the kind parameter of the result. If KIND is
+absent, the return value is of default integer kind.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -152,21 +148,22 @@ return value is of default integer kind.
 
 </A>
 <BLOCKQUOTE>
-The code in the system default character set for the character being queried
-is returned.
+<P>
+The code in the system default character set for the character being
+queried is returned.
 <P>
 The result is the position of C in the processor collating sequence
 associated with the kind type parameter of C.
 <P>
-it is nonnegative and less than n, where n is the number of characters in
-the collating sequence.
+it is nonnegative and less than n, where n is the number of characters
+in the collating sequence.
 <P>
-The kind type parameter of the result shall specify an integer kind that is
-capable of representing n.
+The kind type parameter of the result shall specify an integer kind that
+is capable of representing n.
 <P>
-For any characters C and D capable of representation in the processor, C &lt;=
-D is true if and only if ICHAR (C) &lt;= ICHAR (D) is true and C == D is true
-if and only if ICHAR (C) == ICHAR (D) is true.
+For any characters C and D capable of representation in the processor, C
+&lt;= D is true if and only if ICHAR (C) &lt;= ICHAR (D) is true and C == D is
+true if and only if ICHAR (C) == ICHAR (D) is true.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -174,21 +171,22 @@ if and only if ICHAR (C) == ICHAR (D) is true.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_ichar
-      implicit none
+    program demo_ichar
+    implicit none
 <P>
-         write(*,*)ichar([&#146;a&#146;,&#146;z&#146;,&#146;A&#146;,&#146;Z&#146;])
+       write(*,*)ichar([&#146;a&#146;,&#146;z&#146;,&#146;A&#146;,&#146;Z&#146;])
 <P>
-      end program demo_ichar
+    end program demo_ichar
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-                   97         122          65          90
+                 97         122          65          90
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -198,6 +196,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 , with KIND argument <B>-Fortran</B> 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -206,11 +205,12 @@ Fortran 95 , with KIND argument <B>-Fortran</B> 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 ACHAR(3), CHAR(3), IACHAR(3)
 <P>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -228,13 +228,9 @@ o
 NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               ichar(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ichar (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d69aa1e5-efba-435a-b53f-85987e62e525 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ichar (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from baff0bb5-b503-4fcf-bcd1-570da124a234 using man macros.</FONT>
 <br><br><center><img src="images/ichar.3fortran.gif"></center>
 </div>
 </div>

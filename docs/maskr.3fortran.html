@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>maskr (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>maskr (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>maskr(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-maskr(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 MASKR(3) - [BIT:SET] Generates a right-justified mask
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ MASKR(3) - [BIT:SET] Generates a right-justified mask
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = maskr( i [,kind] )
 <P>
 <PRE>
-           elemental integer(kind=KIND) function maskr(i,KIND)
+         elemental integer(kind=KIND) function maskr(i,KIND)
 <P>
-            integer(kind=**),intent(in) :: i
-            integer(kind=**),intent(in),optional :: KIND
+          integer(kind=**),intent(in) :: i
+          integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = maskr( i [,kind] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -106,14 +100,14 @@ I is an integer
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND Shall be a scalar constant expression of type integer whose value is
-a supported integer kind.
+KIND Shall be a scalar constant expression of type integer whose
+value is a supported integer kind.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The result is an integer of the same kind as I unless KIND is present,
-which is then used to specify the kind of the result.
+The result is an integer of the same kind as I unless KIND is
+present, which is then used to specify the kind of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -122,8 +116,9 @@ which is then used to specify the kind of the result.
 
 </A>
 <BLOCKQUOTE>
-MASKR(3) generates an integer with its rightmost I bits set to 1, and the
-remaining bits set to 0.
+<P>
+MASKR(3) generates an integer with its rightmost I bits set to 1, and
+the remaining bits set to 0.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -131,19 +126,21 @@ remaining bits set to 0.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-I : the number of right-most bits to set in the integer result. It must
-be from 0 to the number of bits for the kind of the result. The default
-kind of the result is the same as I unless the result size is specified
-by KIND. That is, these Fortran statements must be .true. :
+I : the number of right-most bits to set in the integer result. It
+must be from 0 to the number of bits for the kind of the result. The
+default kind of the result is the same as I unless the result size
+is specified by KIND. That is, these Fortran statements must be
+[char46]true. :
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-         i &gt;= 0 .and. i &lt; bitsize(i) ! if KIND is not specified
-         i &gt;= 0 .and. i &lt; bitsize(0_KIND) ! if KIND is specified
+       i &gt;= 0 .and. i &lt; bitsize(i) ! if KIND is not specified
+       i &gt;= 0 .and. i &lt; bitsize(0_KIND) ! if KIND is specified
 <P>
 </PRE>
 <TABLE cellpadding=3>
@@ -159,8 +156,9 @@ KIND : designates the kind of the integer result.
 
 </A>
 <BLOCKQUOTE>
-The rightmost I bits of the output integer are set to 1 and the other bits
-are set to 0.
+<P>
+The rightmost I bits of the output integer are set to 1 and the other
+bits are set to 0.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -168,53 +166,54 @@ are set to 0.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_maskr
-      implicit none
-      integer :: i
+    program demo_maskr
+    implicit none
+    integer :: i
 <P>
-        ! basics
-         print *,&#146;basics&#146;
-         write(*,&#146;(i0,t5,b32.32)&#146;) 1, maskr(1)
-         write(*,&#146;(i0,t5,b32.32)&#146;) 5,  maskr(5)
-         write(*,&#146;(i0,t5,b32.32)&#146;) 11, maskr(11)
-         print *,"should be equivalent on two&#146;s-complement processors"
-         write(*,&#146;(i0,t5,b32.32)&#146;) 1,  shiftr(-1,bit_size(0)-1)
-         write(*,&#146;(i0,t5,b32.32)&#146;) 5,  shiftr(-1,bit_size(0)-5)
-         write(*,&#146;(i0,t5,b32.32)&#146;) 11, shiftr(-1,bit_size(0)-11)
+      ! basics
+       print *,&#146;basics&#146;
+       write(*,&#146;(i0,t5,b32.32)&#146;) 1, maskr(1)
+       write(*,&#146;(i0,t5,b32.32)&#146;) 5,  maskr(5)
+       write(*,&#146;(i0,t5,b32.32)&#146;) 11, maskr(11)
+       print *,"should be equivalent on two&#146;s-complement processors"
+       write(*,&#146;(i0,t5,b32.32)&#146;) 1,  shiftr(-1,bit_size(0)-1)
+       write(*,&#146;(i0,t5,b32.32)&#146;) 5,  shiftr(-1,bit_size(0)-5)
+       write(*,&#146;(i0,t5,b32.32)&#146;) 11, shiftr(-1,bit_size(0)-11)
 <P>
-        ! elemental
-         print *,&#146;elemental &#146;
-         print *,&#146;(array argument accepted like called with each element)&#146;
-         write(*,&#146;(*(i11,1x,b0.32,1x,/))&#146;) maskr([(i,i,i=0,bit_size(0),4)])
+      ! elemental
+       print *,&#146;elemental &#146;
+       print *,&#146;(array argument accepted like called with each element)&#146;
+       write(*,&#146;(*(i11,1x,b0.32,1x,/))&#146;) maskr([(i,i,i=0,bit_size(0),4)])
 <P>
-      end program demo_maskr
+    end program demo_maskr
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;   basics
-       &gt;  1   00000000000000000000000000000001
-       &gt;  5   00000000000000000000000000011111
-       &gt;  11  00000000000000000000011111111111
-       &gt;   should be equivalent on two&#146;s-complement processors
-       &gt;  1   00000000000000000000000000000001
-       &gt;  5   00000000000000000000000000011111
-       &gt;  11  00000000000000000000011111111111
-       &gt;   elemental
-       &gt;   (array argument accepted like called with each element)
-       &gt;            0 00000000000000000000000000000000
-       &gt;           15 00000000000000000000000000001111
-       &gt;          255 00000000000000000000000011111111
-       &gt;         4095 00000000000000000000111111111111
-       &gt;        65535 00000000000000001111111111111111
-       &gt;      1048575 00000000000011111111111111111111
-       &gt;     16777215 00000000111111111111111111111111
-       &gt;    268435455 00001111111111111111111111111111
-       &gt;           -1 11111111111111111111111111111111
+     &gt;   basics
+     &gt;  1   00000000000000000000000000000001
+     &gt;  5   00000000000000000000000000011111
+     &gt;  11  00000000000000000000011111111111
+     &gt;   should be equivalent on two&#146;s-complement processors
+     &gt;  1   00000000000000000000000000000001
+     &gt;  5   00000000000000000000000000011111
+     &gt;  11  00000000000000000000011111111111
+     &gt;   elemental
+     &gt;   (array argument accepted like called with each element)
+     &gt;            0 00000000000000000000000000000000
+     &gt;           15 00000000000000000000000000001111
+     &gt;          255 00000000000000000000000011111111
+     &gt;         4095 00000000000000000000111111111111
+     &gt;        65535 00000000000000001111111111111111
+     &gt;      1048575 00000000000011111111111111111111
+     &gt;     16777215 00000000111111111111111111111111
+     &gt;    268435455 00001111111111111111111111111111
+     &gt;           -1 11111111111111111111111111111111
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -224,6 +223,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -232,16 +232,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 MASKL(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               maskr(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maskr (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1df92a91-2d7e-49ab-af83-5fbd79817b28 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maskr (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ec6a0415-9286-4674-a52b-60d51dbccccb using man macros.</FONT>
 <br><br><center><img src="images/maskr.3fortran.gif"></center>
 </div>
 </div>

@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>rank (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>rank (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>rank(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-rank(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 RANK(3) - [ARRAY:INQUIRY] Rank of a data object
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ RANK(3) - [ARRAY:INQUIRY] Rank of a data object
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = rank(a)
 <P>
 <PRE>
-           integer function rank(a)
+         integer function rank(a)
 <P>
-            type(TYPE(kind=**)),intent(in) :: a(..)
+          type(TYPE(kind=**)),intent(in) :: a(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = rank(a)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,9 +103,11 @@ a kind designated as ** may be any supported kind for the type
 
 </A>
 <BLOCKQUOTE>
+<P>
 RANK(3) returns the rank of a scalar or array data object.
 <P>
-The rank of an array is the number of dimensions it has (zero for a scalar).
+The rank of an array is the number of dimensions it has (zero for a
+scalar).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -119,15 +115,16 @@ The rank of an array is the number of dimensions it has (zero for a scalar).
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A is the data object to query the dimensionality of. The rank returned
-may be from 0 to 16.
+A is the data object to query the dimensionality of. The rank
+returned may be from 0 to 16.
 <P>
-The argument A may be any data object type, including an assumed-rank
-array.
+The argument A may be any data object type, including an
+assumed-rank array.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -136,6 +133,7 @@ array.
 
 </A>
 <BLOCKQUOTE>
+<P>
 For arrays, their rank is returned; for scalars zero is returned.
 </BLOCKQUOTE>
 <A name=6>
@@ -144,107 +142,115 @@ For arrays, their rank is returned; for scalars zero is returned.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_rank
-      implicit none
+    program demo_rank
+    implicit none
 <P>
-      ! a bunch of data objects to query
-      integer           :: a
-      real, allocatable :: b(:,:)
-      real, pointer     :: c(:)
-      complex           :: d
+    ! a bunch of data objects to query
+    integer           :: a
+    real, allocatable :: b(:,:)
+    real, pointer     :: c(:)
+    complex           :: d
 <P>
-      ! make up a type
-      type mytype
-         integer :: int
-         real :: float
-         character :: char
-      end type mytype
-      type(mytype) :: any_thing(1,2,3,4,5)
+    ! make up a type
+    type mytype
+       integer :: int
+       real :: float
+       character :: char
+    end type mytype
+    type(mytype) :: any_thing(1,2,3,4,5)
 <P>
-        ! basics
-         print *, &#146;rank of scalar a=&#146;,rank(a)
-         ! you can query this array even though it is not allocated
-         print *, &#146;rank of matrix b=&#146;,rank(b)
-         print *, &#146;rank of vector pointer c=&#146;,rank(c)
-         print *, &#146;rank of complex scalar d=&#146;,rank(d)
+      ! basics
+       print *, &#146;rank of scalar a=&#146;,rank(a)
+       ! you can query this array even though it is not allocated
+       print *, &#146;rank of matrix b=&#146;,rank(b)
+       print *, &#146;rank of vector pointer c=&#146;,rank(c)
+       print *, &#146;rank of complex scalar d=&#146;,rank(d)
 <P>
-        ! you can query any type, not just intrinsics
-         print *, &#146;rank of any arbitrary type=&#146;,rank(any_thing)
+      ! you can query any type, not just intrinsics
+       print *, &#146;rank of any arbitrary type=&#146;,rank(any_thing)
 <P>
-        ! an assumed-rank object may be queried
-         call query_int(10)
-         call query_int([20,30])
-         call query_int( reshape([40,50,60,70],[2,2]) )
+      ! an assumed-rank object may be queried
+       call query_int(10)
+       call query_int([20,30])
+       call query_int( reshape([40,50,60,70],[2,2]) )
 <P>
-        ! you can even query an unlimited polymorphic entity
-         call query_anything(10.0)
-         call query_anything([.true.,.false.])
-         call query_anything( reshape([40.0,50.0,60.0,70.0],[2,2]) )
+      ! you can even query an unlimited polymorphic entity
+       call query_anything(10.0)
+       call query_anything([.true.,.false.])
+       call query_anything( reshape([40.0,50.0,60.0,70.0],[2,2]) )
 <P>
-      contains
+    contains
 <P>
-      subroutine query_int(data_object)
-      ! It is hard to do much with something dimensioned
-      ! name(..) if not calling C except inside of a
-      ! SELECT_RANK construct but one thing you can
-      ! do is call the inquiry functions &#46;&#46;&#46;
-      integer,intent(in) :: data_object(..)
-      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+    subroutine query_int(data_object)
+    ! It is hard to do much with something dimensioned
+    ! name(..) if not calling C except inside of a
+    ! SELECT_RANK construct but one thing you can
+    ! do is call the inquiry functions &#46;&#46;&#46;
+    integer,intent(in) :: data_object(..)
+    character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
 <P>
-         if(rank(data_object).eq.0)then
-            print all,&
-            & &#146;passed a scalar to an assumed rank,  &
-            & rank=&#146;,rank(data_object)
-         else
-            print all,&
-            & &#146;passed an array to an assumed rank,  &
-            & rank=&#146;,rank(data_object)
-         endif
-<P>
-      end subroutine query_int
-<P>
-      subroutine query_anything(data_object)
-      class(*),intent(in) ::data_object(..)
-      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
-        if(rank(data_object).eq.0)then
+       if(rank(data_object).eq.0)then
           print all,&
-          &&#146;passed a scalar to an unlimited polymorphic rank=&#146;, &
-          & rank(data_object)
-        else
+          & &#146;passed a scalar to an assumed rank,  &
+          & rank=&#146;,rank(data_object)
+       else
           print all,&
-          & &#146;passed an array to an unlimited polymorphic, rank=&#146;, &
-          & rank(data_object)
-        endif
-      end subroutine query_anything
+          & &#146;passed an array to an assumed rank,  &
+          & rank=&#146;,rank(data_object)
+       endif
 <P>
-      end program demo_rank
+    end subroutine query_int
+<P>
+    subroutine query_anything(data_object)
+    class(*),intent(in) ::data_object(..)
+    character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+      if(rank(data_object).eq.0)then
+        print all,&
+        &&#146;passed a scalar to an unlimited polymorphic rank=&#146;, &
+        & rank(data_object)
+      else
+        print all,&
+        & &#146;passed an array to an unlimited polymorphic, rank=&#146;, &
+        & rank(data_object)
+      endif
+    end subroutine query_anything
+<P>
+    end program demo_rank
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          rank of scalar a=           0
-          rank of matrix b=           2
-          rank of vector pointer c=           1
-          rank of complex scalar d=           0
-          rank of any arbitrary type=           5
-<P>
+        rank of scalar a=           0
+        rank of matrix b=           2
+        rank of vector pointer c=           1
+        rank of complex scalar d=           0
+        rank of any arbitrary type=           5
 </PRE>
-passed a scalar to an assumed rank,
-rank= 0
 <BLOCKQUOTE>
-<P>
-passed an array to an assumed rank,
+<TABLE cellpadding=3><!-- tsb:         rank of scalar a=           0
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>passed a scalar to an assumed rank,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+rank= 0
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>passed an array to an assumed rank,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 rank= 1
-<P>
-passed an array to an assumed rank,
-rank= 2 passed a scalar to an unlimited polymorphic rank= 0 passed an
-array to an unlimited polymorphic, rank= 1 passed an array to an
-unlimited polymorphic, rank= 2
-</BLOCKQUOTE>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>passed an array to an assumed rank,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+rank= 2
+passed a scalar to an unlimited polymorphic rank= 0
+passed an array to an unlimited polymorphic, rank= 1
+passed an array to an unlimited polymorphic, rank= 2
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -252,6 +258,7 @@ unlimited polymorphic, rank= 2
 
 </A>
 <BLOCKQUOTE>
+<P>
 </BLOCKQUOTE>
 <A name=8>
 
@@ -259,6 +266,7 @@ unlimited polymorphic, rank= 2
 
 </A>
 <BLOCKQUOTE>
+<P>
 Array inquiry:
 <TABLE cellpadding=3><!-- tsb: Array inquiry:
  -->
@@ -331,13 +339,9 @@ o
 BTEST(3) - Tests a bit of an integer value.
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                rank(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>rank (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2939a28f-a5ff-42da-89b1-0a084339d728 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>rank (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d344ecd0-6591-44e6-be61-88011df4afee using man macros.</FONT>
 <br><br><center><img src="images/rank.3fortran.gif"></center>
 </div>
 </div>

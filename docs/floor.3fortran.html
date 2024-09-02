@@ -50,23 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>floor (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>floor (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>floor(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-floor(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-FLOOR(3) - [NUMERIC] Function to return largest integral value not greater
-than argument
+<P>
+FLOOR(3) - [NUMERIC] Function to return largest integral value not
+greater than argument
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -77,13 +69,14 @@ than argument
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = floor(a [,kind])
 <P>
 <PRE>
-           elemental integer(kind=KIND) function floor( a ,kind )
+         elemental integer(kind=KIND) function floor( a ,kind )
 <P>
-            real(kind=**),intent(in) :: a
-            integer(kind=**),intent(in),optional :: KIND
+          real(kind=**),intent(in) :: a
+          integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = floor(a [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -121,14 +115,16 @@ the result is an integer of the specified or default kind
 
 </A>
 <BLOCKQUOTE>
+<P>
 FLOOR(3) returns the greatest integer less than or equal to A.
 <P>
-In other words, it picks the whole number at or to the left of the value on
-the number line.
+In other words, it picks the whole number at or to the left of the value
+on the number line.
 <P>
-This means care has to be taken that the magnitude of the real value A does
-not exceed the range of the output value, as the range of values supported
-by real values is typically larger than the range for integers.
+This means care has to be taken that the magnitude of the real value A
+does not exceed the range of the output value, as the range of values
+supported by real values is typically larger than the range for
+integers.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -136,19 +132,20 @@ by real values is typically larger than the range for integers.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A : The value to operate on. Valid values are restricted by the size of
-the returned integer kind to the range <B>-HUGE</B>(INT(A,KIND=KIND))<B>-1</B> to
-HUGE(INT(A),KIND=KIND).
+A : The value to operate on. Valid values are restricted by the size
+of the returned integer kind to the range <B>-HUGE</B>(INT(A,KIND=KIND))<B>-1</B>
+to HUGE(INT(A),KIND=KIND).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : A scalar integer constant initialization expression indicating the
-kind parameter of the result.
+KIND : A scalar integer constant initialization expression
+indicating the kind parameter of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -157,16 +154,18 @@ kind parameter of the result.
 
 </A>
 <BLOCKQUOTE>
-The return value is of type integer(kind) if KIND is present and of default-
-kind integer otherwise.
 <P>
-The result is undefined if it cannot be represented in the specified integer
-type.
+The return value is of type integer(kind) if KIND is present and of
+default-kind integer otherwise.
 <P>
-If in range for the kind of the result the result is the whole number at or
-to the left of the input value on the number line.
+The result is undefined if it cannot be represented in the specified
+integer type.
 <P>
-If A is positive the result is the value with the fractional part removed.
+If in range for the kind of the result the result is the whole number at
+or to the left of the input value on the number line.
+<P>
+If A is positive the result is the value with the fractional part
+removed.
 <P>
 If A is negative, it is the whole number at or to the left of the input
 value.
@@ -177,39 +176,40 @@ value.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_floor
-      implicit none
-      real :: x = 63.29
-      real :: y = -63.59
-          print *, x, floor(x)
-          print *, y, floor(y)
-         ! elemental
-         print *,floor([ &
-         &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &
-         &  0.0,   &
-         &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])
+    program demo_floor
+    implicit none
+    real :: x = 63.29
+    real :: y = -63.59
+        print *, x, floor(x)
+        print *, y, floor(y)
+       ! elemental
+       print *,floor([ &
+       &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &
+       &  0.0,   &
+       &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])
 <P>
-         ! note even a small deviation from the whole number changes the result
-         print *,      [2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)]
-         print *,floor([2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)])
+       ! note even a small deviation from the whole number changes the result
+       print *,      [2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)]
+       print *,floor([2.0,2.0-epsilon(0.0),2.0-2*epsilon(0.0)])
 <P>
-         ! A=Nan, Infinity or  &lt;huge(0_KIND)-1 &lt; A &gt; huge(0_KIND) is undefined
-      end program demo_floor
+       ! A=Nan, Infinity or  &lt;huge(0_KIND)-1 &lt; A &gt; huge(0_KIND) is undefined
+    end program demo_floor
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;     63.29000             63
-       &gt;    -63.59000            -64
-       &gt;            -3         -3         -3         -2         -2         -1
-       &gt;            -1          0          0          1          1          2
-       &gt;             2          2          2
-       &gt;     2.000000      2.000000      2.000000
-       &gt;             2          1          1
+     &gt;     63.29000             63
+     &gt;    -63.59000            -64
+     &gt;            -3         -3         -3         -2         -2         -1
+     &gt;            -1          0          0          1          1          2
+     &gt;             2          2          2
+     &gt;     2.000000      2.000000      2.000000
+     &gt;             2          1          1
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -219,6 +219,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -227,16 +228,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 CEILING(3), NINT(3), AINT(3), ANINT(3), INT(3), SELECTED_INT_KIND(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               floor(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>floor (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 627e97c6-c3df-4ee5-909e-8a015cee72aa using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>floor (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 59f7cd26-d77f-4180-8010-90db9d470f39 using man macros.</FONT>
 <br><br><center><img src="images/floor.3fortran.gif"></center>
 </div>
 </div>

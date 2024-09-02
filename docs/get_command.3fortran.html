@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>get_command (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>get_command (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>get_command(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-get_command(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 GET_COMMAND(3) - [SYSTEM:COMMAND LINE] Get the entire command line
 invocation
 <P>
@@ -77,15 +69,16 @@ invocation
 
 </A>
 <BLOCKQUOTE>
+<P>
 call get_command([command] [,length] [,status] [,errmsg])
 <P>
 <PRE>
-           subroutine get_command( command ,length ,status, errmsg )
+         subroutine get_command( command ,length ,status, errmsg )
 <P>
-            character(len=*),intent(out),optional   :: command
-            integer(kind=**),intent(out),optional   :: length
-            integer(kind=**),intent(out),optional   :: status
-            character(len=*),intent(inout),optional :: errmsg
+          character(len=*),intent(out),optional   :: command
+          integer(kind=**),intent(out),optional   :: length
+          integer(kind=**),intent(out),optional   :: status
+          character(len=*),intent(inout),optional :: errmsg
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -95,12 +88,13 @@ call get_command([command] [,length] [,status] [,errmsg])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a kind designated as ** may be any supported kind for the type meeting
-the conditions described herein.
+a kind designated as ** may be any supported kind for the type
+meeting the conditions described herein.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -110,8 +104,8 @@ COMMAND and ERRMSG are scalar character variables of default kind.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-LENGTH and STATUS are scalar integer with a decimal exponent range of at
-least four.
+LENGTH and STATUS are scalar integer with a decimal exponent range
+of at least four.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -120,14 +114,16 @@ least four.
 
 </A>
 <BLOCKQUOTE>
-GET_COMMAND(3) retrieves the entire command line that was used to invoke the
-program.
 <P>
-Note that what is typed on the command line is often processed by a shell.
-The shell typically processes special characters and white space before
-passing it to the program. The processing can typically be turned off by
-turning off globbing or quoting the command line arguments and/or changing
-the default field separators, but this should rarely be necessary.
+GET_COMMAND(3) retrieves the entire command line that was used to invoke
+the program.
+<P>
+Note that what is typed on the command line is often processed by a
+shell. The shell typically processes special characters and white space
+before passing it to the program. The processing can typically be turned
+off by turning off globbing or quoting the command line arguments and/or
+changing the default field separators, but this should rarely be
+necessary.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -135,21 +131,22 @@ the default field separators, but this should rarely be necessary.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-COMMAND : If COMMAND is present, the entire command line that was used to
-invoke the program is stored into it. If the command cannot be
-determined, COMMAND is assigned all blanks.
+COMMAND : If COMMAND is present, the entire command line that was
+used to invoke the program is stored into it. If the command cannot
+be determined, COMMAND is assigned all blanks.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-LENGTH : If LENGTH is present, it is assigned the length of the command
-line. It is system-dependent as to whether trailing blanks will be
-counted. : If the command length cannot be determined, a length of 0 is
-assigned.
+LENGTH : If LENGTH is present, it is assigned the length of the
+command line. It is system-dependent as to whether trailing blanks
+will be counted. : If the command length cannot be determined, a
+length of 0 is assigned.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -161,8 +158,8 @@ positive value in case of an error.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ERRMSG : It is assigned a processor-dependent explanatory message if the
-command retrieval fails. Otherwise, it is unchanged.
+ERRMSG : It is assigned a processor-dependent explanatory message if
+the command retrieval fails. Otherwise, it is unchanged.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -171,38 +168,39 @@ command retrieval fails. Otherwise, it is unchanged.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_get_command
-      implicit none
-      integer                      :: command_line_length
-      character(len=:),allocatable :: command_line
-         ! get command line length
-         call get_command(length=command_line_length)
-         ! allocate string big enough to hold command line
-         allocate(character(len=command_line_length) :: command_line)
-         ! get command line as a string
-         call get_command(command=command_line)
-         ! trim leading spaces just in case
-         command_line=adjustl(command_line)
-         write(*,&#146;("OUTPUT:",a)&#146;)command_line
-      end program demo_get_command
+    program demo_get_command
+    implicit none
+    integer                      :: command_line_length
+    character(len=:),allocatable :: command_line
+       ! get command line length
+       call get_command(length=command_line_length)
+       ! allocate string big enough to hold command line
+       allocate(character(len=command_line_length) :: command_line)
+       ! get command line as a string
+       call get_command(command=command_line)
+       ! trim leading spaces just in case
+       command_line=adjustl(command_line)
+       write(*,&#146;("OUTPUT:",a)&#146;)command_line
+    end program demo_get_command
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-           # note that shell expansion removes some of the whitespace
-           # without quotes
-           ./test_get_command  arguments    on command   line to   echo
+         # note that shell expansion removes some of the whitespace
+         # without quotes
+         ./test_get_command  arguments    on command   line to   echo
 <P>
-           OUTPUT:./test_get_command arguments on command line to echo
+         OUTPUT:./test_get_command arguments on command line to echo
 <P>
-           # using the bash shell with single quotes
-           ./test_get_command  &#146;arguments  *&gt;&lt;&#145;~[]!{}?"#146;| &#146;
+         # using the bash shell with single quotes
+         ./test_get_command  &#146;arguments  *&gt;&lt;&#145;~[]!{}?"#146;| &#146;
 <P>
-           OUTPUT:./test_get_command arguments  *&gt;&lt;&#145;~[]!{}?"&#146;|
+         OUTPUT:./test_get_command arguments  *&gt;&lt;&#145;~[]!{}?"&#146;|
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -212,6 +210,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2003
 </BLOCKQUOTE>
 <A name=7>
@@ -220,16 +219,13 @@ Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 GET_COMMAND_ARGUMENT(3), COMMAND_ARGUMENT_COUNT(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022         get_command(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_command (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6df32b96-b874-41e4-9d33-486cab6e79aa using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_command (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ca131f67-3abe-4e93-8980-2354a0086ef8 using man macros.</FONT>
 <br><br><center><img src="images/get_command.3fortran.gif"></center>
 </div>
 </div>

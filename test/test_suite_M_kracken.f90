@@ -5,16 +5,13 @@ program test_suite_M_kracken
 use, intrinsic :: iso_fortran_env, only : ERROR_UNIT
 use,intrinsic :: IEEE_ARITHMETIC, only : IEEE_IS_NAN       ! Determine if value is IEEE Not-a-Number.
 !!use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
-use :: M_verify,   only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start, unit_check_level
-use :: M_verify,   only : unit_check_command, unit_check_keep_going, unit_check_level
-use :: M_verify,   only : almost
-use :: M_verify,   only : unit_check_stop
+use :: M_framework__verify,  only : unit_check, unit_check_good, unit_check_bad, unit_check_done, unit_check_start
+use :: M_framework__approx,  only : almost
+use :: M_framework__verify,  only : unit_check_stop
 use :: M_kracken
 implicit none
 integer,parameter :: HT=9
-unit_check_command=''
-unit_check_keep_going=.true.
-unit_check_level=0
+integer,parameter :: BUG=0
 call unit_check_start('M_kracken')
 !! setup
 call test_dget()
@@ -46,11 +43,14 @@ doubleprecision :: dd=huge(0.0d0)*0.999999999999d0
    call store('MY_DOUBLE2',-1234.0d-20,'define',ier)
    call store('BAD','nN3.3','define',ier)
    call store('BLANK',' ','define',ier)
-   call unit_check('dget', almost(dget('MY_DOUBLE1'),dd,15),  'MY_DOUBLE1',dget('MY_DOUBLE1'),'versus',dd)
-   call unit_check('dget', dget('MY_DOUBLE2').eq.-1234.0d-20, 'MY_DOUBLE2',dget('MY_DOUBLE2'))
-   call unit_check('dget', dget('NOTTHERE').eq.0,             'NOTTHERE',dget('NOTTHERE'))
-   call unit_check('dget', ieee_is_nan(dget('BAD')),          'BAD',dget('BAD'))
-   call unit_check('dget', dget('BLANK').eq.0,                'BLANK',dget('BLANK'))
+   call show(' ',.false.,0)
+   call unit_check('dget',(almost(dget('MY_DOUBLE1')+bug,dd,15)), 'MY_DOUBLE1=','versus',dd)
+   !11call unit_check('dget',(almost(dget('MY_DOUBLE1'),dd,15)), 'MY_DOUBLE1=',dget('MY_DOUBLE1')+bug,'versus',dd)
+   call unit_check('dget',dget('MY_DOUBLE2').eq.-1234.0d-20,&
+           & 'MY_DOUBLE2=',dget('MY_DOUBLE2')+bug,'DELTA=',dget('MY_DOUBLE2')-1234.0d-20)
+   call unit_check('dget',dget('NOTTHERE').eq.0,             'NOTTHERE',dget('NOTTHERE')+bug)
+   call unit_check('dget',ieee_is_nan(dget('BAD')),          'BAD',dget('BAD'))
+   call unit_check('dget',dget('BLANK').eq.0,                'BLANK',dget('BLANK'))
    call unit_check_done('dget',msg='')
 end subroutine test_dget
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -62,14 +62,16 @@ doubleprecision,allocatable :: d(:)
    call store('MY_DOUBLE2',-1234.0d-20,'define',ier)
    call store('BAD','sfs','define',ier)
    call store('BLANK',' ','define',ier)
-   call unit_check('dgets', all(dgets('MY_DOUBLE1').eq.[100.0d0,0.0d0,300.33333d2]),'MY_DOUBLE1')
-   call unit_check('dgets', all(dgets('MY_DOUBLE2').eq.[-1234.0d-20]),              'MY_DOUBLE2')
+   call show(' ',.false.,0)
+   call unit_check('dgets', all(dgets('MY_DOUBLE1').eq.[100.0d0,0.0d0,300.33333d2]),'MY_DOUBLE1=',dget('MY_DOUBLE1')+bug)
+   call unit_check('dgets', all(dgets('MY_DOUBLE2').eq.[-1234.0d-20]),&
+           & 'MY_DOUBLE2=',dget('MY_DOUBLE2')+bug)
    call unit_check('dgets', size(dgets('NOTTHERE')).eq.0,                           'NOTTHERE')
    d=dgets('BAD')
    if(size(d).gt.0)then
-      call unit_check('dgets', size(d).eq.1.and.ieee_is_nan(d(1)),                  'BAD IS NAN',size(d))
+      call unit_check('dgets', size(d).eq.1.and.ieee_is_nan(d(1)),                  'BAD IS NAN',size(d)+bug)
    else
-      call unit_check('dgets', size(d).eq.1,                                        'BAD HAS SIZE 1',size(d))
+      call unit_check('dgets', size(d).eq.1,                                        'BAD HAS SIZE 1',size(d)+bug)
    endif
    call unit_check('dgets', size(dgets('BLANK')).eq.0,                              'BLANK')
    call unit_check_done('dgets',msg='')
@@ -79,8 +81,8 @@ subroutine test_dissect()
 integer :: ierr
    call dissect('demo',' -int 1000 -float 1234.567 -str CHARACTER value','-int 456 -float 50.00 ',ierr)
    call unit_check_start('dissect',msg='')
-   call unit_check('dissect', iget('demo_int').eq.456, 'demo_int',iget('demo_int'))
-   call unit_check('dissect', rget('demo_float').eq.50.0, 'demo_float',rget('demo_float'))
+   call unit_check('dissect', iget('demo_int').eq.456, 'demo_int',iget('demo_int')+bug)
+   call unit_check('dissect', rget('demo_float').eq.50.0, 'demo_float',rget('demo_float')+bug)
    call unit_check('dissect', sget('demo_str').eq.'CHARACTER value', 'demo_str',sget('demo_str'))
    call unit_check_done('dissect',msg='')
 end subroutine test_dissect
@@ -92,10 +94,10 @@ integer        :: ier
    call store('MY_INTEGER2',-1234,'define',ier)
    call store('BAD','3z4j','define',ier)
    call store('BLANK',' ','define',ier)
-   call unit_check('iget', iget('MY_INTEGER1').eq.1234,  'MY_INTEGER1',iget('MY_INTEGER1'))
-   call unit_check('iget', iget('MY_INTEGER2').eq.-1234, 'MY_INTEGER2',iget('MY_INTEGER2'))
-   call unit_check('iget', iget('NOTTHERE').eq.0,        'NOTTHERE',iget('NOTTHERE'))
-   call unit_check('iget', iget('BLANK').eq.0,           'BLANK',iget('BLANK'))
+   call unit_check('iget', iget('MY_INTEGER1').eq.1234,  'MY_INTEGER1',iget('MY_INTEGER1')+bug)
+   call unit_check('iget', iget('MY_INTEGER2').eq.-1234, 'MY_INTEGER2',iget('MY_INTEGER2')+bug)
+   call unit_check('iget', iget('NOTTHERE').eq.0,        'NOTTHERE',iget('NOTTHERE')+bug)
+   call unit_check('iget', iget('BLANK').eq.0,           'BLANK',iget('BLANK')+bug)
    call unit_check_done('iget',msg='')
 end subroutine test_iget
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -129,11 +131,11 @@ integer        :: ier
    call store('MY_LOGICAL_FALSE',.false.,'define',ier)
    call store('BAD','.bad.','define',ier)
    call store('BLANK',' ','define',ier)
-   call unit_check('lget', lget('MY_LOGICAL_TRUE'),       'MY_LOGICAL_TRUE',lget('MY_LOGICAL_TRUE'))
-   call unit_check('lget', .not.lget('MY_LOGICAL_FALSE'), 'MY_LOGICAL_FALSE',lget('MY_LOGICAL_FALSE'))
-   call unit_check('lget', .not.lget('NOTTHERE'),         'NOTTHERE',lget('NOTTHERE'))
-   call unit_check('lget', .not.lget('BAD'),              'BAD',lget('BAD'))
-   call unit_check('lget', lget('BLANK'),                 'BLANK',lget('BLANK'))
+   call unit_check('lget', lget('MY_LOGICAL_TRUE'),       'MY_LOGICAL_TRUE',(lget('MY_LOGICAL_TRUE')))
+   call unit_check('lget', .not.lget('MY_LOGICAL_FALSE'), 'MY_LOGICAL_FALSE',(lget('MY_LOGICAL_FALSE')))
+   call unit_check('lget', .not.lget('NOTTHERE'),         'NOTTHERE',(lget('NOTTHERE')))
+   call unit_check('lget', .not.lget('BAD'),              'BAD',(lget('BAD')))
+   call unit_check('lget', lget('BLANK'),                 'BLANK',(lget('BLANK')))
    call unit_check_done('lget',msg='')
 end subroutine test_lget
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -207,11 +209,11 @@ integer        :: ier
    call store('MY_REAL1',1234.567,'define',ier)
    call store('MY_REAL2',-1234.567e3,'define',ier)
    call store('BLANK',' ','define',ier)
-   call unit_check('rget', rget('MY_REAL1').eq.1234.567,    'MY_REAL1',rget('MY_REAL1'))
-   call unit_check('rget', rget('MY_REAL2').eq.-1234.567e3, 'MY_REAL2',rget('MY_REAL2'))
-   call unit_check('rget', rget('NOTTHERE').eq.0,           'NOTTHERE',rget('NOTTHERE'))
-   call unit_check('dget', ieee_is_nan(dget('BAD')),        'BAD',dget('BAD'))
-   call unit_check('rget', rget('BLANK').eq.0,              'BLANK',rget('BLANK'))
+   call unit_check('rget', rget('MY_REAL1').eq.1234.567,    'MY_REAL1',rget('MY_REAL1')+bug)
+   call unit_check('rget', rget('MY_REAL2').eq.-1234.567e3, 'MY_REAL2',rget('MY_REAL2')+bug)
+   call unit_check('rget', rget('NOTTHERE').eq.0,           'NOTTHERE',rget('NOTTHERE')+bug)
+   call unit_check('dget', ieee_is_nan(rget('BAD')),        'BAD',rget('BAD')+bug)
+   call unit_check('rget', rget('BLANK').eq.0,              'BLANK',rget('BLANK')+bug)
    call unit_check_done('rget',msg='')
 end subroutine test_rget
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -264,6 +266,10 @@ integer        :: ier
    call unit_check('sgets', all(sgets('MY_STRING1').eq. ['100 ','0   ','-321']),      'MY_STRING1')
    call unit_check('sgets', all(sgets('MY_STRING2').eq.['-1234']),                    'MY_STRING2')
    call unit_check('sgets', all(sgets('NOTTHERE_SGETS').eq.[char(0)]),                'NOTTHERE_SGETS')
+   !write(*,*)'GOT HERE A',sgets('BLANK')
+   !write(*,*)'GOT HERE B',size(sgets('BLANK'))
+   !write(*,*)'GOT HERE C',len(sgets('BLANK')//'')
+   !write(*,*)'GOT HERE D',size(sgets('BLANK')).eq.0.and.len(sgets('BLANK')).eq.0
    call unit_check('sgets', size(sgets('BLANK')).eq.0.and.len(sgets('BLANK')).eq.0,   'BLANK')
    call unit_check_done('sgets',msg='')
 end subroutine test_sgets
@@ -290,10 +296,10 @@ integer :: ier
  call store('MY_UNKNOWN',987654321,'replace',ier)  ! 'replace' can only replace an existing entry, not add one
 
  call unit_check('store',sget('MY_STRING')  == 'My string value',    'MY_STRING',sget('MY_STRING'),'My string value')
- call unit_check('store',rget('MY_REAL')    == 1234.5677,            'MY_REAL',rget('MY_REAL'),1234.5677)
- call unit_check('store',lget('MY_LOGICAL'),                         'MY_LOGICAL',lget('MY_LOGICAL'),.true.)
- call unit_check('store',iget('MY_INTEGER') == 987654321,            'MY_INTEGER',iget('MY_INTEGER'),987654321)
- call unit_check('store',dget('MY_DOUBLE')  == 12345670000.000000d0, 'MY_DOUBLE',dget('MY_DOUBLE'),12345670000.000000d0)
+ call unit_check('store',rget('MY_REAL')    == 1234.5677,            'MY_REAL',rget('MY_REAL')+bug,1234.5677)
+ call unit_check('store',lget('MY_LOGICAL'),                         'MY_LOGICAL',(lget('MY_LOGICAL')),.true.)
+ call unit_check('store',iget('MY_INTEGER') == 987654321,            'MY_INTEGER',iget('MY_INTEGER')+bug,987654321)
+ call unit_check('store',dget('MY_DOUBLE')  == 12345670000.000000d0, 'MY_DOUBLE',dget('MY_DOUBLE')+0,12345670000.000000d0)
 
  call unit_check_done('store',msg='')
 end subroutine test_store

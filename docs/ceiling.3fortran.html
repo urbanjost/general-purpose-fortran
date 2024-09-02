@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ceiling (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ceiling (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>ceiling(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-ceiling(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 CEILING(3) - [NUMERIC] Integer ceiling function
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ CEILING(3) - [NUMERIC] Integer ceiling function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = ceiling(a [,kind])
 <P>
 <PRE>
-           elemental integer(KIND) function ceiling(a,KIND)
+         elemental integer(KIND) function ceiling(a,KIND)
 <P>
-            real(kind=**),intent(in)  :: a
-            integer,intent(in),optional :: KIND
+          real(kind=**),intent(in)  :: a
+          integer,intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = ceiling(a [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -101,8 +95,8 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND shall be a scalar integer constant expression. It specifies the kind
-of the result if present.
+KIND shall be a scalar integer constant expression. It specifies the
+kind of the result if present.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -116,10 +110,11 @@ the result is integer. It is default kind if KIND is not specified
 
 </A>
 <BLOCKQUOTE>
+<P>
 CEILING(3) returns the least integer greater than or equal to A.
 <P>
-On the number line <B>-n</B> &lt;-- 0 -&gt; +n the value returned is always at or to the
-right of the input value.
+On the number line <B>-n</B> &lt;-- 0 -&gt; +n the value returned is always at or to
+the right of the input value.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -127,6 +122,7 @@ right of the input value.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -145,13 +141,14 @@ KIND : indicates the kind parameter of the result.
 
 </A>
 <BLOCKQUOTE>
-The result will be the integer value equal to A or the least integer greater
-than A if the input value is not equal to a whole number.
+<P>
+The result will be the integer value equal to A or the least integer
+greater than A if the input value is not equal to a whole number.
 <P>
 If A is equal to a whole number, the returned value is INT(A).
 <P>
-The result is undefined if it cannot be represented in the specified integer
-type.
+The result is undefined if it cannot be represented in the specified
+integer type.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -159,48 +156,49 @@ type.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_ceiling
-      implicit none
-      ! just a convenient format for a list of integers
-      character(len=*),parameter :: ints=&#146;(*("   &gt; ",5(i0:,",",1x),/))&#146;
-      real :: x
-      real :: y
-        ! basic usage
-         x = 63.29
-         y = -63.59
-         print ints, ceiling(x)
-         print ints, ceiling(y)
-         ! note the result was the next integer larger to the right
+    program demo_ceiling
+    implicit none
+    ! just a convenient format for a list of integers
+    character(len=*),parameter :: ints=&#146;(*("   &gt; ",5(i0:,",",1x),/))&#146;
+    real :: x
+    real :: y
+      ! basic usage
+       x = 63.29
+       y = -63.59
+       print ints, ceiling(x)
+       print ints, ceiling(y)
+       ! note the result was the next integer larger to the right
 <P>
-        ! real values equal to whole numbers
-         x = 63.0
-         y = -63.0
-         print ints, ceiling(x)
-         print ints, ceiling(y)
+      ! real values equal to whole numbers
+       x = 63.0
+       y = -63.0
+       print ints, ceiling(x)
+       print ints, ceiling(y)
 <P>
-        ! elemental (so an array argument is allowed)
-         print ints , &
-         & ceiling([ &
-         &  -2.7,  -2.5, -2.2, -2.0, -1.5, &
-         &  -1.0,  -0.5,  0.0, +0.5, +1.0, &
-         &  +1.5,  +2.0, +2.2, +2.5, +2.7  ])
+      ! elemental (so an array argument is allowed)
+       print ints , &
+       & ceiling([ &
+       &  -2.7,  -2.5, -2.2, -2.0, -1.5, &
+       &  -1.0,  -0.5,  0.0, +0.5, +1.0, &
+       &  +1.5,  +2.0, +2.2, +2.5, +2.7  ])
 <P>
-      end program demo_ceiling
+    end program demo_ceiling
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         &gt; 64
-         &gt; -63
-         &gt; 63
-         &gt; -63
-         &gt; -2, -2, -2, -2, -1,
-         &gt; -1, 0, 0, 1, 1,
-         &gt; 2, 2, 3, 3, 3
+       &gt; 64
+       &gt; -63
+       &gt; 63
+       &gt; -63
+       &gt; -2, -2, -2, -2, -1,
+       &gt; -1, 0, 0, 1, 1,
+       &gt; 2, 2, 3, 3, 3
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -210,6 +208,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -218,18 +217,15 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 FLOOR(3), NINT(3)
 <P>
 AINT(3), ANINT(3), INT(3), SELECTED_INT_KIND(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             ceiling(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ceiling (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dabb7ff0-38d1-4226-8873-0270bd2fd261 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ceiling (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b36df125-c97c-46b8-911c-2237643b7c82 using man macros.</FONT>
 <br><br><center><img src="images/ceiling.3fortran.gif"></center>
 </div>
 </div>

@@ -48,38 +48,68 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   dirname-(1f) - [FUNIX:FILESYSTEM] strip last component from file name                                                        ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   dirname- [NAME...] [ -zero]|-help|-version]                                                                                  ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   Output each NAME with its last non-slash component and trailing slashes removed.                                             ',&
-'   if NAME contains no /''s, output ''.'' (meaning the current directory).                                                      ',&
-'                                                                                                                                ',&
-'   If no NAME is specified read names from stdin.                                                                               ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   -zero     end each output line with NUL, not newline                                                                         ',&
-'   -help     display this help and exit                                                                                         ',&
-'   -version  output version information and exit                                                                                ',&
-'                                                                                                                                ',&
-'EXAMPLES                                                                                                                        ',&
-'   Sample program executions:                                                                                                   ',&
-'                                                                                                                                ',&
-'     dirname- /usr/bin/          -> "/usr"                                                                                      ',&
-'     dirname- dir1/str dir2/str  -> "dir1" followed by "dir2"                                                                   ',&
-'     dirname- stdio.h            -> "."                                                                                         ',&
-'                                                                                                                                ',&
-'SEE ALSO                                                                                                                        ',&
-'   dirname(1), basename(1), readlink(1), realpath(1)                                                                            ',&
+'NAME                                                                            ',&
+'   dirname-(1f) - [FUNIX:FILESYSTEM] strip last component from file name        ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   dirname- [NAME...] [ -zero]|-help|-version]                                  ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   Output each NAME with its last non-slash component and trailing slashes removed.',&
+'   if NAME contains no /''s, output ''.'' (meaning the current directory).      ',&
+'                                                                                ',&
+'   If no NAME is specified read names from stdin.                               ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'   -zero     end each output line with NUL, not newline                         ',&
+'   -help     display this help and exit                                         ',&
+'   -version  output version information and exit                                ',&
+'                                                                                ',&
+'EXAMPLES                                                                        ',&
+'   Sample program executions:                                                   ',&
+'                                                                                ',&
+'     dirname- /usr/bin/          -> "/usr"                                      ',&
+'     dirname- dir1/str dir2/str  -> "dir1" followed by "dir2"                   ',&
+'     dirname- stdio.h            -> "."                                         ',&
+'                                                                                ',&
+'SEE ALSO                                                                        ',&
+'   dirname(1), basename(1), readlink(1), realpath(1)                            ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    dirname-(1f) - [FUNIX:FILESYSTEM] strip last component from file name
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    dirname- [NAME...] [ -zero]|-help|-version]
+!!
+!!##DESCRIPTION
+!!    Output each NAME with its last non-slash component and trailing slashes removed.
+!!    if NAME contains no /'s, output '.' (meaning the current directory).
+!!
+!!    If no NAME is specified read names from stdin.
+!!
+!!##OPTIONS
+!!    -zero     end each output line with NUL, not newline
+!!    -help     display this help and exit
+!!    -version  output version information and exit
+!!
+!!##EXAMPLES
+!!
+!!    Sample program executions:
+!!
+!!      dirname- /usr/bin/          -> "/usr"
+!!      dirname- dir1/str dir2/str  -> "dir1" followed by "dir2"
+!!      dirname- stdio.h            -> "."
+!!
+!!##SEE ALSO
+!!    dirname(1), basename(1), readlink(1), realpath(1)
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -100,7 +130,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 12:22:59 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:50:42 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -7,7 +7,7 @@ subroutine calc_NC(name,args,iargs_type,n,fval,i,ier) ! look this name up to see
 !   place characters, allowing you to precisely control the screen.
 !
 !-----------------------------------------------------------------------------------------------------------------------------------
-use M_journal, only : journal
+use M_framework__journal, only : journal
 use M_calculator, only : x, y, values_len, values, iclen_calc, icname_calc, stuff, getvalue, stuffa
 use M_ncurses                                           ! load the Fortran module to interface to the ncurses(3c) C library
 implicit none

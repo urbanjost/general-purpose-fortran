@@ -764,7 +764,7 @@ logical, intent(in),optional   :: verbose ! .false. no printing; .true. print re
 !--------LOCAL VARIABLES
    integer            :: div, indx, ii, j, n, offset, olddiv, quo, rem
    !---------data to obtain trial divisors 2, 3, 5, 7 and all higher numbers not divisible by 2, 3, 5, 7.
-   integer, parameter  :: base(52) = (/   &
+   integer, parameter  :: base(*) = (/   &
        211, 209, 199, 197, 193, 191, 187, 181, 179, 173, 169, 167, 163, &
        157, 151, 149, 143, 139, 137, 131, 127, 121, 113, 109, 107, 103, &
        101,  97,  89,  83,  79,  73,  71,  67,  61,  59,  53,  47,  43, &

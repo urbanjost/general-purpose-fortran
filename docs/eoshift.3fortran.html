@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>eoshift (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>eoshift (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>eoshift(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-eoshift(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 EOSHIFT(3) - [TRANSFORMATIONAL] End-off shift of elements of an array
 <P>
 </BLOCKQUOTE>
@@ -76,15 +68,16 @@ EOSHIFT(3) - [TRANSFORMATIONAL] End-off shift of elements of an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = eoshift( array, shift [,boundary] [,dim] )
 <P>
 <PRE>
-         type(TYPE(kind=KIND)) function eoshift(array,shift,boundary,dim)
+       type(TYPE(kind=KIND)) function eoshift(array,shift,boundary,dim)
 <P>
-          type(TYPE(kind=KIND)),intent(in) :: array(..)
-          integer(kind=**),intent(in)      :: shift(..)
-          type(TYPE(kind=KIND)),intent(in) :: boundary(..)
-          integer(kind=**),intent(in)      :: dim
+        type(TYPE(kind=KIND)),intent(in) :: array(..)
+        integer(kind=**),intent(in)      :: shift(..)
+        type(TYPE(kind=KIND)),intent(in) :: boundary(..)
+        integer(kind=**),intent(in)      :: dim
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -94,6 +87,7 @@ result = eoshift( array, shift [,boundary] [,dim] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -103,17 +97,17 @@ ARRAY an array of any type
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT is an integer of any kind. It may be a scalar. If the rank of ARRAY
-is greater than one, and DIM is specified it is the same shape as ARRAY
-reduced by removing dimension DIM.
+SHIFT is an integer of any kind. It may be a scalar. If the rank of
+ARRAY is greater than one, and DIM is specified it is the same shape
+as ARRAY reduced by removing dimension DIM.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-BOUNDARY May be a scalar of the same type and kind as ARRAY. It must be a
-scalar when ARRAY has a rank of one. Otherwise, it may be an array of the
-same shape as ARRAY reduced by dimension DIM. It may only be absent for
-certain types, as described below.
+BOUNDARY May be a scalar of the same type and kind as ARRAY. It must
+be a scalar when ARRAY has a rank of one. Otherwise, it may be an
+array of the same shape as ARRAY reduced by dimension DIM. It may
+only be absent for certain types, as described below.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -133,7 +127,8 @@ a kind designated as ** may be any supported kind for the type
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The result is an array of same type, kind and rank as the ARRAY argument.
+The result is an array of same type, kind and rank as the ARRAY
+argument.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -142,13 +137,14 @@ The result is an array of same type, kind and rank as the ARRAY argument.
 
 </A>
 <BLOCKQUOTE>
+<P>
 EOSHIFT(3) performs an end-off shift on elements of ARRAY along the
 dimension of DIM.
 <P>
 Elements shifted out one end of each rank one section are dropped.
 <P>
-If BOUNDARY is present then the corresponding value from BOUNDARY is copied
-back in the other end, else default values are used.
+If BOUNDARY is present then the corresponding value from BOUNDARY is
+copied back in the other end, else default values are used.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -156,40 +152,42 @@ back in the other end, else default values are used.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY : array of any type whose elements are to be shifted. If the rank
-of ARRAY is one, then all elements of ARRAY are shifted by SHIFT places.
-If rank is greater than one, then all complete rank one sections of ARRAY
-along the given dimension are shifted.
+ARRAY : array of any type whose elements are to be shifted. If the
+rank of ARRAY is one, then all elements of ARRAY are shifted by
+SHIFT places. If rank is greater than one, then all complete rank
+one sections of ARRAY along the given dimension are shifted.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT : the number of elements to shift. A negative value shifts to the
-right, a positive value to the left of the vector(s) being shifted.
+SHIFT : the number of elements to shift. A negative value shifts to
+the right, a positive value to the left of the vector(s) being
+shifted.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-BOUNDARY : the value to use to fill in the elements vacated by the shift.
-If BOUNDARY is not present then the following are copied in depending on
-the type of ARRAY.
+BOUNDARY : the value to use to fill in the elements vacated by the
+shift. If BOUNDARY is not present then the following are copied in
+depending on the type of ARRAY.
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-          Array Type     | Boundary Value
-          -----------------------------------------------------
-          Numeric        | 0, 0.0, or (0.0, 0.0)  of the type and kind of "array"
-          Logical        | .false.
-          Character(len) |  LEN blanks
+        Array Type    | Boundary Value
+        -----------------------------------------------------
+        Numeric       | 0, 0.0, or (0.0, 0.0) of the type and kind of "array"
+        Logical       | .false.
+        Character(len)|  LEN blanks
 <P>
 </PRE>
-These are the only types for which BOUNDARY may not be present. For these
-types the kind is converted as neccessary to the kind of ARRAY.
-<TABLE cellpadding=3><!-- tsb: These are the only types for which BOUNDARY may not be present. For these
+These are the only types for which BOUNDARY may not be present. For
+these types the kind is converted as neccessary to the kind of ARRAY.
+<TABLE cellpadding=3><!-- tsb: These are the only types for which BOUNDARY may not be present. For
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -207,10 +205,11 @@ DIM : DIM is in the range of
 
 </A>
 <BLOCKQUOTE>
-Returns an array of the same characteristics as the input with the specified
-number of elements dropped off along the specified direction indicated,
-backfilling the vacated elements with a value indicated by the BOUNDARY
-value.
+<P>
+Returns an array of the same characteristics as the input with the
+specified number of elements dropped off along the specified direction
+indicated, backfilling the vacated elements with a value indicated by
+the BOUNDARY value.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -218,36 +217,37 @@ value.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_eoshift
-      implicit none
-      integer, dimension(3,3) :: a
-      integer :: i
+    program demo_eoshift
+    implicit none
+    integer, dimension(3,3) :: a
+    integer :: i
 <P>
-          a = reshape( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], [ 3, 3 ])
-          print &#146;(3i3)&#146;, (a(i,:),i=1,3)
+        a = reshape( [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ], [ 3, 3 ])
+        print &#146;(3i3)&#146;, (a(i,:),i=1,3)
 <P>
-          print *
+        print *
 <P>
-          ! shift it
-          a = eoshift(a, SHIFT=[1, 2, 1], BOUNDARY=-5, DIM=2)
-          print &#146;(3i3)&#146;, (a(i,:),i=1,3)
+        ! shift it
+        a = eoshift(a, SHIFT=[1, 2, 1], BOUNDARY=-5, DIM=2)
+        print &#146;(3i3)&#146;, (a(i,:),i=1,3)
 <P>
-      end program demo_eoshift
+    end program demo_eoshift
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        &gt;  1  4  7
-        &gt;  2  5  8
-        &gt;  3  6  9
-        &gt;
-        &gt;  4  7 -5
-        &gt;  8 -5 -5
-        &gt;  6  9 -5
+      &gt;  1  4  7
+      &gt;  2  5  8
+      &gt;  3  6  9
+      &gt;
+      &gt;  4  7 -5
+      &gt;  8 -5 -5
+      &gt;  6  9 -5
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -257,6 +257,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -265,16 +266,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 DSHIFTR(3), DSHIFTL(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             eoshift(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>eoshift (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from adf97b6d-0505-445a-ab07-3185ce2ba396 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>eoshift (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6b0540c5-f545-45a2-a7b6-8357ab97091a using man macros.</FONT>
 <br><br><center><img src="images/eoshift.3fortran.gif"></center>
 </div>
 </div>

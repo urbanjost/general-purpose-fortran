@@ -1,5 +1,7 @@
      program demo_regfree
      use M_regex, only: regex_type, regcomp, regexec, regmatch, regfree, regerror
+     implicit none
+     integer                      :: istat
      type(regex_type)             :: regex
      character(len=:),allocatable :: expression
         expression= "([0-9\.\-\*\/]+)+"

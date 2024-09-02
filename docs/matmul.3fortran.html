@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>matmul (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>matmul (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>matmul(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-matmul(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 MATMUL(3) - [TRANSFORMATIONAL] Numeric or logical matrix multiplication
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ MATMUL(3) - [TRANSFORMATIONAL] Numeric or logical matrix multiplication
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = matmul(matrix_a,matrix_b)
 <P>
 <PRE>
-           function matmul(matrix_a, matrix_b)
+         function matmul(matrix_a, matrix_b)
 <P>
-            type(TYPE1(kind=**)       :: matrix_a(..)
-            type(TYPE2(kind=**)       :: matrix_b(..)
-            type(TYPE(kind=PROMOTED)) :: matmul(..)
+          type(TYPE1(kind=**))      :: matrix_a(..)
+          type(TYPE2(kind=**))      :: matrix_b(..)
+          type(TYPE(kind=PROMOTED)) :: matmul(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,18 +86,19 @@ result = matmul(matrix_a,matrix_b)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MATRIX_A is a numeric (integer, real, or complex ) or logical array of
-rank one two.
+MATRIX_A is a numeric (integer, real, or complex ) or logical array
+of rank one two.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MATRIX_B is a numeric (integer, real, or complex ) or logical array of
-rank one two.
+MATRIX_B is a numeric (integer, real, or complex ) or logical array
+of rank one two.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -114,23 +108,24 @@ At least one argument must be rank two.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the size of the first dimension of MATRIX_B must equal the size of the
-last dimension of MATRIX_A.
+the size of the first dimension of MATRIX_B must equal the size of
+the last dimension of MATRIX_A.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the type of the result is the same as if an element of each argument had
-been multiplied as a RHS expression (that is, if the arguments are not of
-the same type the result follows the same rules of promotion as a simple
-scalar multiplication of the two types would produce)
+the type of the result is the same as if an element of each argument
+had been multiplied as a RHS expression (that is, if the arguments
+are not of the same type the result follows the same rules of
+promotion as a simple scalar multiplication of the two types would
+produce)
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 If one argument is logical, both must be logical. For logicals the
-resulting type is as if the .and. operator has been used on elements from
-the arrays.
+resulting type is as if the .and. operator has been used on elements
+from the arrays.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -145,7 +140,9 @@ described below.
 
 </A>
 <BLOCKQUOTE>
-MATMUL(3) performs a matrix multiplication on numeric or logical arguments.
+<P>
+MATMUL(3) performs a matrix multiplication on numeric or logical
+arguments.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -153,6 +150,7 @@ MATMUL(3) performs a matrix multiplication on numeric or logical arguments.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -162,8 +160,9 @@ MATRIX_A : A numeric or logical array with a rank of one or two.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MATRIX_B : A numeric or logical array with a rank of one or two. The last
-dimension of MATRIX_A and the first dimension of MATRIX_B must be equal.
+MATRIX_B : A numeric or logical array with a rank of one or two. The
+last dimension of MATRIX_A and the first dimension of MATRIX_B must
+be equal.
 <P>
 Note that MATRIX_A and MATRIX_B may be different numeric types.
 </TD></TR>
@@ -174,6 +173,7 @@ Note that MATRIX_A and MATRIX_B may be different numeric types.
 
 </A>
 <BLOCKQUOTE>
+<P>
 </BLOCKQUOTE>
 <A name=6>
 
@@ -181,8 +181,9 @@ Note that MATRIX_A and MATRIX_B may be different numeric types.
 
 </A>
 <BLOCKQUOTE>
-If MATRIX_A and MATRIX_B are numeric the result is an array containing the
-conventional matrix product of MATRIX_A and MATRIX_B.
+<P>
+If MATRIX_A and MATRIX_B are numeric the result is an array containing
+the conventional matrix product of MATRIX_A and MATRIX_B.
 <P>
 First, for the numeric expression C=MATMUL(A,B)
 <TABLE cellpadding=3><!-- tsb: First, for the numeric expression C=MATMUL(A,B)
@@ -205,33 +206,32 @@ Any vector B(N) is treated as a column vector B(N,1).
 
 </A>
 <BLOCKQUOTE>
-The shape of the result can then be determined as the number of rows of the
-first matrix and the number of columns of the second; but if any argument is
-<TABLE cellpadding=3><!-- tsb: The shape of the result can then be determined as the number of rows of the
+<P>
+The shape of the result can then be determined as the number of rows of
+the first matrix and the number of columns of the second; but if any
+argument is of rank one (a vector) the result is also rank one.
+Conversely when both arguments are of rank two, the result has a rank of
+two. That is &#46;&#46;&#46;
+<TABLE cellpadding=3><!-- tsb: The shape of the result can then be determined as the number of rows of
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>of rank one (a vector) the result is also rank one.</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-Conversely when both
-arguments are of rank two, the result has a rank of two. That is &#46;&#46;&#46;
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If MATRIX_A has shape [n,m] and MATRIX_B has shape [m,k], the result
+has shape [n,k].
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If MATRIX_A has shape [n,m] and MATRIX_B has shape [m,k], the result has
-shape [n,k].
+If MATRIX_A has shape [m] and MATRIX_B has shape [m,k], the result
+has shape [k].
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If MATRIX_A has shape [m] and MATRIX_B has shape [m,k], the result has
-shape [k].
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-If MATRIX_A has shape [n,m] and MATRIX_B has shape [m], the result has
-shape [n].
+If MATRIX_A has shape [n,m] and MATRIX_B has shape [m], the result
+has shape [n].
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=10>
@@ -240,10 +240,11 @@ shape [n].
 
 </A>
 <BLOCKQUOTE>
-Then element C(I,J) of the product is obtained by multiplying term-by-term
-the entries of the ith row of A and the jth column of B, and summing these
-products. In other words, C(I,J) is the dot product of the ith row of A and
-the jth column of B.
+<P>
+Then element C(I,J) of the product is obtained by multiplying
+term-by-term the entries of the ith row of A and the jth column of B,
+and summing these products. In other words, C(I,J) is the dot product of
+the ith row of A and the jth column of B.
 </BLOCKQUOTE>
 <A name=9>
 
@@ -251,6 +252,7 @@ the jth column of B.
 
 </A>
 <BLOCKQUOTE>
+<P>
 </BLOCKQUOTE>
 <A name=10>
 
@@ -258,12 +260,13 @@ the jth column of B.
 
 </A>
 <BLOCKQUOTE>
+<P>
 If MATRIX_A and MATRIX_B are of type logical, the array elements of the
 result are instead:
 <P>
 <PRE>
-        Value_of_Element (i,j) = &
-        ANY( (row_i_of_MATRIX_A) .AND. (column_j_of_MATRIX_B) )
+      Value_of_Element (i,j) = &
+      ANY( (row_i_of_MATRIX_A) .AND. (column_j_of_MATRIX_B) )
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -273,122 +276,123 @@ result are instead:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_matmul
-      implicit none
-      integer :: a(2,3), b(3,2), c(2), d(3), e(2,2), f(3), g(2), v1(4),v2(4)
-         a = reshape([1, 2, 3, 4, 5, 6], [2, 3])
-         b = reshape([10, 20, 30, 40, 50, 60], [3, 2])
-         c = [1, 2]
-         d = [1, 2, 3]
-         e = matmul(a, b)
-         f = matmul(c,a)
-         g = matmul(a,d)
+    program demo_matmul
+    implicit none
+    integer :: a(2,3), b(3,2), c(2), d(3), e(2,2), f(3), g(2), v1(4),v2(4)
+       a = reshape([1, 2, 3, 4, 5, 6], [2, 3])
+       b = reshape([10, 20, 30, 40, 50, 60], [3, 2])
+       c = [1, 2]
+       d = [1, 2, 3]
+       e = matmul(a, b)
+       f = matmul(c,a)
+       g = matmul(a,d)
 <P>
-         call print_matrix_int(&#146;A is &#146;,a)
-         call print_matrix_int(&#146;B is &#146;,b)
-         call print_vector_int(&#146;C is &#146;,c)
-         call print_vector_int(&#146;D is &#146;,d)
-         call print_matrix_int(&#146;E is matmul(A,B)&#146;,e)
-         call print_vector_int(&#146;F is matmul(C,A)&#146;,f)
-         call print_vector_int(&#146;G is matmul(A,D)&#146;,g)
+       call print_matrix_int(&#146;A is &#146;,a)
+       call print_matrix_int(&#146;B is &#146;,b)
+       call print_vector_int(&#146;C is &#146;,c)
+       call print_vector_int(&#146;D is &#146;,d)
+       call print_matrix_int(&#146;E is matmul(A,B)&#146;,e)
+       call print_vector_int(&#146;F is matmul(C,A)&#146;,f)
+       call print_vector_int(&#146;G is matmul(A,D)&#146;,g)
 <P>
-         ! look at argument shapes when one is a vector
-         write(*,&#146;(" &gt; shape")&#146;)
-         ! at least one argument must be of rank two
-         ! so for two vectors at least one must be reshaped
-         v1=[11,22,33,44]
-         v2=[10,20,30,40]
+       ! look at argument shapes when one is a vector
+       write(*,&#146;(" &gt; shape")&#146;)
+       ! at least one argument must be of rank two
+       ! so for two vectors at least one must be reshaped
+       v1=[11,22,33,44]
+       v2=[10,20,30,40]
 <P>
-         ! these return a vector C(1:1)
-         ! treat A(1:n) as A(1:1,1:n)
-         call print_vector_int(&#146;Cd is a vector (not a scalar)&#146;,&
-         & matmul(reshape(v1,[1,size(v1)]),v2))
-         ! or treat B(1:m) as B(1:m,1:1)
-         call print_vector_int(&#146;cD is a vector too&#146;,&
-         & matmul(v1,reshape(v2,[size(v2),1])))
+       ! these return a vector C(1:1)
+       ! treat A(1:n) as A(1:1,1:n)
+       call print_vector_int(&#146;Cd is a vector (not a scalar)&#146;,&
+       & matmul(reshape(v1,[1,size(v1)]),v2))
+       ! or treat B(1:m) as B(1:m,1:1)
+       call print_vector_int(&#146;cD is a vector too&#146;,&
+       & matmul(v1,reshape(v2,[size(v2),1])))
 <P>
-         ! or treat A(1:n) as A(1:1,1:n) and B(1:m) as B(1:m,1:1)
-         ! but note this returns a matrix C(1:1,1:1) not a vector!
-         call print_matrix_int(&#146;CD is a matrix&#146;,matmul(&
-         & reshape(v1,[1,size(v1)]), &
-         & reshape(v2,[size(v2),1])))
+       ! or treat A(1:n) as A(1:1,1:n) and B(1:m) as B(1:m,1:1)
+       ! but note this returns a matrix C(1:1,1:1) not a vector!
+       call print_matrix_int(&#146;CD is a matrix&#146;,matmul(&
+       & reshape(v1,[1,size(v1)]), &
+       & reshape(v2,[size(v2),1])))
 <P>
-      contains
+    contains
 <P>
-      ! CONVENIENCE ROUTINES TO PRINT IN ROW-COLUMN ORDER
-      subroutine print_vector_int(title,arr)
-      character(len=*),intent(in)  :: title
-      integer,intent(in)           :: arr(:)
-         call print_matrix_int(title,reshape(arr,[1,shape(arr)]))
-      end subroutine print_vector_int
+    ! CONVENIENCE ROUTINES TO PRINT IN ROW-COLUMN ORDER
+    subroutine print_vector_int(title,arr)
+    character(len=*),intent(in)  :: title
+    integer,intent(in)           :: arr(:)
+       call print_matrix_int(title,reshape(arr,[1,shape(arr)]))
+    end subroutine print_vector_int
 <P>
-      subroutine print_matrix_int(title,arr)
-      !@(#) print small 2d integer arrays in row-column format
-      character(len=*),parameter :: all=&#146;(" &gt; ",*(g0,1x))&#146; ! a handy format
-      character(len=*),intent(in)  :: title
-      integer,intent(in)           :: arr(:,:)
-      integer                      :: i
-      character(len=:),allocatable :: biggest
+    subroutine print_matrix_int(title,arr)
+    !@(#) print small 2d integer arrays in row-column format
+    character(len=*),parameter :: all=&#146;(" &gt; ",*(g0,1x))&#146; ! a handy format
+    character(len=*),intent(in)  :: title
+    integer,intent(in)           :: arr(:,:)
+    integer                      :: i
+    character(len=:),allocatable :: biggest
 <P>
-         print all
-         print all, trim(title)
-         biggest=&#146;           &#146;  ! make buffer to write integer into
-         ! find how many characters to use for integers
-         write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
-         ! use this format to write a row
-         biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
-         ! print one row of array at a time
-         do i=1,size(arr,dim=1)
-            write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
-            write(*,&#146;(" ]")&#146;)
-         enddo
+       print all
+       print all, trim(title)
+       biggest=&#146;           &#146;  ! make buffer to write integer into
+       ! find how many characters to use for integers
+       write(biggest,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2
+       ! use this format to write a row
+       biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
+       ! print one row of array at a time
+       do i=1,size(arr,dim=1)
+          write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+          write(*,&#146;(" ]")&#146;)
+       enddo
 <P>
-      end subroutine print_matrix_int
+    end subroutine print_matrix_int
 <P>
-      end program demo_matmul
+    end program demo_matmul
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          &gt;
-          &gt; A is
-          &gt; [  1,  3,  5 ]
-          &gt; [  2,  4,  6 ]
-          &gt;
-          &gt; B is
-          &gt; [  10,  40 ]
-          &gt; [  20,  50 ]
-          &gt; [  30,  60 ]
-          &gt;
-          &gt; C is
-          &gt; [  1,  2 ]
-          &gt;
-          &gt; D is
-          &gt; [  1,  2,  3 ]
-          &gt;
-          &gt; E is matmul(A,B)
-          &gt; [  220,  490 ]
-          &gt; [  280,  640 ]
-          &gt;
-          &gt; F is matmul(C,A)
-          &gt; [   5,  11,  17 ]
-          &gt;
-          &gt; G is matmul(A,D)
-          &gt; [  22,  28 ]
-          &gt; shape
-          &gt;
-          &gt; Cd is a vector (not a scalar)
-          &gt; [  3300 ]
-          &gt;
-          &gt; cD is a vector too
-          &gt; [  3300 ]
-          &gt;
-          &gt; CD is a matrix
-          &gt; [  3300 ]
+        &gt;
+        &gt; A is
+        &gt; [  1,  3,  5 ]
+        &gt; [  2,  4,  6 ]
+        &gt;
+        &gt; B is
+        &gt; [  10,  40 ]
+        &gt; [  20,  50 ]
+        &gt; [  30,  60 ]
+        &gt;
+        &gt; C is
+        &gt; [  1,  2 ]
+        &gt;
+        &gt; D is
+        &gt; [  1,  2,  3 ]
+        &gt;
+        &gt; E is matmul(A,B)
+        &gt; [  220,  490 ]
+        &gt; [  280,  640 ]
+        &gt;
+        &gt; F is matmul(C,A)
+        &gt; [   5,  11,  17 ]
+        &gt;
+        &gt; G is matmul(A,D)
+        &gt; [  22,  28 ]
+        &gt; shape
+        &gt;
+        &gt; Cd is a vector (not a scalar)
+        &gt; [  3300 ]
+        &gt;
+        &gt; cD is a vector too
+        &gt; [  3300 ]
+        &gt;
+        &gt; CD is a matrix
+        &gt; [  3300 ]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -398,6 +402,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=13>
@@ -406,6 +411,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 PRODUCT(3), TRANSPOSE(3)
 </BLOCKQUOTE>
 <A name=14>
@@ -414,6 +420,7 @@ PRODUCT(3), TRANSPOSE(3)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -423,30 +430,27 @@ Matrix multiplication : Wikipedia
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The Winograd variant of Strassen&#146;s matrix-matrix multiply algorithm may
-be of interest for optimizing multiplication of very large matrices. See
+The Winograd variant of Strassen&#146;s matrix-matrix multiply algorithm
+may be of interest for optimizing multiplication of very large
+matrices. See
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-          "GEMMW: A portable level 3 BLAS Winograd variant of Strassen&#146;s
-          matrix-matrix multiply algorithm",
+        "GEMMW: A portable level 3 BLAS Winograd variant of Strassen&#146;s
+        matrix-matrix multiply algorithm",
 <P>
-          Douglas, C. C., Heroux, M., Slishman, G., and Smith, R. M.,
-          Journal of Computational Physics,
-          Vol. 110, No. 1, January 1994, pages 1-10.
+        Douglas, C. C., Heroux, M., Slishman, G., and Smith, R. M.,
+        Journal of Computational Physics,
+        Vol. 110, No. 1, January 1994, pages 1-10.
 <P>
 </PRE>
-The numerical instabilities of Strassen&#146;s method for matrix multiplication
-requires special processing.
+The numerical instabilities of Strassen&#146;s method for matrix
+multiplication requires special processing.
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              matmul(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>matmul (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 28d0029e-ef8a-499a-b8dd-79ef4d6cb480 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>matmul (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 817caa37-8a8a-452d-9b97-bf600d3ac8c7 using man macros.</FONT>
 <br><br><center><img src="images/matmul.3fortran.gif"></center>
 </div>
 </div>

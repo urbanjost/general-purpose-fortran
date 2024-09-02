@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>is_contiguous (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>is_contiguous (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>is_contiguous(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is_contiguous(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 IS_CONTIGUOUS(3) - [ARRAY:INQUIRY] Test if object is contiguous
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ IS_CONTIGUOUS(3) - [ARRAY:INQUIRY] Test if object is contiguous
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = is_contiguous(array)
 <P>
 <PRE>
-           logical function is_contiguous(array)
+         logical function is_contiguous(array)
 <P>
-            type(TYPE(kind=**)),intent(in) :: array
+          type(TYPE(kind=**)),intent(in) :: array
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = is_contiguous(array)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -100,8 +94,8 @@ a kind designated as ** may be any supported kind for the type
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY may be of any type. It shall be an array or assumed-rank. If it is
-a pointer it shall be associated.
+ARRAY may be of any type. It shall be an array or assumed-rank. If
+it is a pointer it shall be associated.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -115,6 +109,7 @@ the result is a default logical scalar
 
 </A>
 <BLOCKQUOTE>
+<P>
 IS_CONTIGUOUS(3) returns .true. if and only if an object is contiguous.
 <P>
 An object is contiguous if it is
@@ -134,8 +129,8 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(3) an assumed-shape array that is argument associated with an array that
-is contiguous,
+(3) an assumed-shape array that is argument associated with an array
+that is contiguous,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -167,16 +162,16 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(C) the elements of the section, in array element order, are a subset
-of the base object elements that are consecutive in array element
-order,
+(C) the elements of the section, in array element order, are a
+subset of the base object elements that are consecutive in array
+element order,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(D) if the array is of type character and a substring-range appears,
-the substring-range specifies all of the characters of the parent-
-string,
+(D) if the array is of type character and a substring-range
+appears, the substring-range specifies all of the characters of
+the parent-string,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -186,7 +181,8 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-(F) it is not the real or imaginary part of an array of type complex.
+(F) it is not the real or imaginary part of an array of type
+complex.
 </TD></TR>
 <TR></TR></TABLE><!-- .PP -->
 </TD></TR>
@@ -202,8 +198,8 @@ the object has two or more elements,
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the elements of the object in array element order are not consecutive in
-the elements of the base object,
+the elements of the object in array element order are not
+consecutive in the elements of the base object,
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -213,8 +209,8 @@ the object is not of type character with length zero, and
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the object is not of a derived type that has no ultimate components other
-than zero-sized arrays and
+the object is not of a derived type that has no ultimate components
+other than zero-sized arrays and
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -229,12 +225,13 @@ characters with length zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY : An array of any type to be tested for being contiguous. If it is
-a pointer it shall be associated.
+ARRAY : An array of any type to be tested for being contiguous. If
+it is a pointer it shall be associated.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -243,6 +240,7 @@ a pointer it shall be associated.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result has the value .true. if ARRAY is contiguous, and .false.
 otherwise.
 </BLOCKQUOTE>
@@ -252,28 +250,29 @@ otherwise.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_is_contiguous
-      implicit none
-      intrinsic is_contiguous
-      real, DIMENSION (1000, 1000), TARGET :: A
-      real, DIMENSION (:, :), POINTER       :: IN, OUT
-         IN =&gt; A              ! Associate IN with target A
-         OUT =&gt; A(1:1000:2,:) ! Associate OUT with subset of target A
-         !
-         write(*,*)&#146;IN is &#146;,IS_CONTIGUOUS(IN)
-         write(*,*)&#146;OUT is &#146;,IS_CONTIGUOUS(OUT)
-         !
-      end program demo_is_contiguous
+    program demo_is_contiguous
+    implicit none
+    intrinsic is_contiguous
+    real, DIMENSION (1000, 1000), TARGET :: A
+    real, DIMENSION (:, :), POINTER       :: IN, OUT
+       IN =&gt; A              ! Associate IN with target A
+       OUT =&gt; A(1:1000:2,:) ! Associate OUT with subset of target A
+       !
+       write(*,*)&#146;IN is &#146;,IS_CONTIGUOUS(IN)
+       write(*,*)&#146;OUT is &#146;,IS_CONTIGUOUS(OUT)
+       !
+    end program demo_is_contiguous
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          IN is  T
-          OUT is  F
+        IN is  T
+        OUT is  F
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -283,6 +282,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -291,16 +291,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 ****(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022       is_contiguous(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>is_contiguous (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 70cb9f41-b40b-4484-8308-cca3f5ebafed using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>is_contiguous (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 127a8fe2-bd42-4f88-a27d-9ff41b7d19cd using man macros.</FONT>
 <br><br><center><img src="images/is_contiguous.3fortran.gif"></center>
 </div>
 </div>

@@ -355,13 +355,10 @@
 !!    ( basic ) REs are anchors, not ordinary characters.
 !!##UNIT TEST
 !!
-!!     When porting to a new programming environment use the
-!!     built-in unit test ...
-!!
-!!      program test_M_regex
-!!      use M_regex, only : test_suite_M_regex
-!!         call test_suite_M_regex()
-!!      end program test_M_regex
+!!    The test program test_suite_M_regex may be run via "fpm test"
+!!    or when M_regex(3f) is built as part of the GPF (General Purpose
+!!    Fortran library) but requires the test framework in GPF so it
+!!    cannot be run stand-alone.
 !!
 !!##SEE ALSO
 !!
@@ -813,9 +810,11 @@ end function regmatch
 !!
 !!    program demo_regerror
 !!    use M_regex, only: regex_type, regcomp, regexec, regmatch, regfree, regerror
+!!    implicit none
 !!    type(regex_type)             :: regex
 !!    integer,parameter            :: maxmatch=10
 !!    integer                      :: matches(2,maxmatch)
+!!    integer                      :: i, istat
 !!
 !!    character(len=:),allocatable :: input_line
 !!    character(len=:),allocatable :: expression
@@ -911,6 +910,8 @@ end function regerror
 !!
 !!    program demo_regfree
 !!    use M_regex, only: regex_type, regcomp, regexec, regmatch, regfree, regerror
+!!    implicit none
+!!    integer                      :: istat
 !!    type(regex_type)             :: regex
 !!    character(len=:),allocatable :: expression
 !!       expression= "([0-9\.\-\*\/]+)+"

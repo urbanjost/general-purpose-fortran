@@ -62,27 +62,27 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   reverse(1f) - [FUNIX] print file in reverse                                                                                  ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   reverse INPUT_FILE [OUTPUT_FILE] [ --help][ --version]                                                                       ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   Read entire file into memory as a stream and write it in reverse                                                             ',&
-'   byte order                                                                                                                   ',&
-'OPTIONS                                                                                                                         ',&
-'   INPUT_FILE   input file                                                                                                      ',&
-'   OUTPUT_FILE  output file                                                                                                     ',&
-'   --help       display help text and exit                                                                                      ',&
-'   --version    display version information and exit                                                                            ',&
-'SEE ALSO                                                                                                                        ',&
-'   reverse(1), rev(1)                                                                                                           ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   reverse(1f) - [FUNIX] print file in reverse                                  ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   reverse INPUT_FILE [OUTPUT_FILE] [ --help][ --version]                       ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   Read entire file into memory as a stream and write it in reverse             ',&
+'   byte order                                                                   ',&
+'OPTIONS                                                                         ',&
+'   INPUT_FILE   input file                                                      ',&
+'   OUTPUT_FILE  output file                                                     ',&
+'   --help       display help text and exit                                      ',&
+'   --version    display version information and exit                            ',&
+'SEE ALSO                                                                        ',&
+'   reverse(1), rev(1)                                                           ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -131,7 +131,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 18:33:51 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:48:45 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

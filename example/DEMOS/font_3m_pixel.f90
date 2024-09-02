@@ -1,6 +1,6 @@
      program demo_font
      use :: M_pixel
-     use :: M_writegif, only : writegif
+     use :: M_pixel__writegif, only : writegif
      implicit none
      real    :: left
      real    :: baseline=80.0
@@ -36,8 +36,8 @@
         call nextline('COMPLEX, or times.r')
         call nextline('ITALIC, or times.i')
         call nextline('DUPLEX, or futura.m')
-        call writegif('font.3m_pixel.gif',P_pixel,P_colormap)
-        !call execute_command_line('display font.3m_pixel.gif')
+        call writegif('font.3M_pixel.gif',P_pixel,P_colormap)
+        !call execute_command_line('display font.3M_pixel.gif')
         call vexit()
      contains
      subroutine nextline(string)

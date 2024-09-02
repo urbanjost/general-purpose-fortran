@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>transfer (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>transfer (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>transfer(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-transfer(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 TRANSFER(3) - [TYPE:MOLD] Transfer bit patterns
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ TRANSFER(3) - [TYPE:MOLD] Transfer bit patterns
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = transfer(source, mold [,size] )
 <P>
 <PRE>
-           type(TYPE(kind=KIND)) function transfer(source,mold,size)
+         type(TYPE(kind=KIND)) function transfer(source,mold,size)
 <P>
-            type(TYPE(kind=KIND)),intent(in) :: source(..)
-            type(TYPE(kind=KIND)),intent(in) :: mold(..)
-            integer,intent(in),intent(in),optional :: size
+          type(TYPE(kind=KIND)),intent(in) :: source(..)
+          type(TYPE(kind=KIND)),intent(in) :: mold(..)
+          integer(kind=**),intent(in),optional :: size
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = transfer(source, mold [,size] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -121,11 +115,12 @@ RESULT has the same type as MOLD
 
 </A>
 <BLOCKQUOTE>
+<P>
 TRANSFER(3) copies the bitwise representation of SOURCE in memory into a
 variable or array of the same type and type parameters as MOLD.
 <P>
-This is approximately equivalent to the C concept of "casting" one type to
-another.
+This is approximately equivalent to the C concept of "casting" one type
+to another.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -133,6 +128,7 @@ another.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -142,9 +138,10 @@ SOURCE : Holds the bit pattern to be copied
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MOLD : the type of MOLD is used to define the type of the returned value.
-In addition, if it is an array the returned value is a one-dimensional
-array. If it is a scalar the returned value is a scalar.
+MOLD : the type of MOLD is used to define the type of the returned
+value. In addition, if it is an array the returned value is a
+one-dimensional array. If it is a scalar the returned value is a
+scalar.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -152,9 +149,9 @@ o
 SIZE : If SIZE is present, the result is a one-dimensional array of
 length SIZE.
 </TD></TR>
-<TR></TR></TABLE>If SIZE is absent but MOLD is an array (of any size or shape), the result is
-a one-dimensional array of the minimum length needed to contain the entirety
-of the bitwise representation of SOURCE.
+<TR></TR></TABLE>If SIZE is absent but MOLD is an array (of any size or shape), the
+result is a one-dimensional array of the minimum length needed to
+contain the entirety of the bitwise representation of SOURCE.
 <P>
 If SIZE is absent and MOLD is a scalar, the result is a scalar.
 </BLOCKQUOTE>
@@ -164,17 +161,18 @@ If SIZE is absent and MOLD is a scalar, the result is a scalar.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result has the bit level representation of SOURCE.
 <P>
-If the bitwise representation of the result is longer than that of SOURCE,
-then the leading bits of the result correspond to those of SOURCE but any
-trailing bits are filled arbitrarily.
+If the bitwise representation of the result is longer than that of
+SOURCE, then the leading bits of the result correspond to those of
+SOURCE but any trailing bits are filled arbitrarily.
 <P>
 When the resulting bit representation does not correspond to a valid
 representation of a variable of the same type as MOLD, the results are
-undefined, and subsequent operations on the result cannot be guaranteed to
-produce sensible behavior. For example, it is possible to create logical
-variables for which VAR and .not. var both appear to be true.
+undefined, and subsequent operations on the result cannot be guaranteed
+to produce sensible behavior. For example, it is possible to create
+logical variables for which VAR and .not. var both appear to be true.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -182,35 +180,36 @@ variables for which VAR and .not. var both appear to be true.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_transfer
-      use,intrinsic :: iso_fortran_env, only : int32, real32
-      integer(kind=int32) :: i = 2143289344
-      real(kind=real32)   :: x
-      character(len=10)   :: string
-      character(len=1)    :: chars(10)
-         x=transfer(i, 1.0)    ! prints "nan" on i686
-         ! the bit patterns are the same
-         write(*,&#146;(b0,1x,g0)&#146;)x,x ! create a NaN
-         write(*,&#146;(b0,1x,g0)&#146;)i,i
+    program demo_transfer
+    use,intrinsic :: iso_fortran_env, only : int32, real32
+    integer(kind=int32) :: i = 2143289344
+    real(kind=real32)   :: x
+    character(len=10)   :: string
+    character(len=1)    :: chars(10)
+       x=transfer(i, 1.0)    ! prints "nan" on i686
+       ! the bit patterns are the same
+       write(*,&#146;(b0,1x,g0)&#146;)x,x ! create a NaN
+       write(*,&#146;(b0,1x,g0)&#146;)i,i
 <P>
-         ! a string to an array of characters
-         string=&#146;abcdefghij&#146;
-         chars=transfer(string,chars)
-         write(*,&#146;(*("[",a,"]":,1x))&#146;)string
-         write(*,&#146;(*("[",a,"]":,1x))&#146;)chars
-      end program demo_transfer
+       ! a string to an array of characters
+       string=&#146;abcdefghij&#146;
+       chars=transfer(string,chars)
+       write(*,&#146;(*("[",a,"]":,1x))&#146;)string
+       write(*,&#146;(*("[",a,"]":,1x))&#146;)chars
+    end program demo_transfer
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         1111111110000000000000000000000 NaN
-         1111111110000000000000000000000 2143289344
-         [abcdefghij]
-         [a] [b] [c] [d] [e] [f] [g] [h] [i] [j]
+       1111111110000000000000000000000 NaN
+       1111111110000000000000000000000 2143289344
+       [abcdefghij]
+       [a] [b] [c] [d] [e] [f] [g] [h] [i] [j]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -220,24 +219,25 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Joe Krahn: Fortran uses MOLDING rather than CASTING.
 <P>
-Casting, as in C, is an in-place reinterpretation. A cast is a device that
-is built around an object to change its shape.
+Casting, as in C, is an in-place reinterpretation. A cast is a device
+that is built around an object to change its shape.
 <P>
 Fortran TRANSFER(3) reinterprets data out-of-place. It can be considered
-MOLDING rather than casting. A MOLD is a device that confers a shape onto an
-object placed into it.
+MOLDING rather than casting. A MOLD is a device that confers a shape
+onto an object placed into it.
 <P>
-The advantage of molding is that data is always valid in the context of the
-variable that holds it. For many cases, a decent compiler should optimize
-TRANSFER(3) into a simple assignment.
+The advantage of molding is that data is always valid in the context of
+the variable that holds it. For many cases, a decent compiler should
+optimize TRANSFER(3) into a simple assignment.
 <P>
 There are disadvantages of this approach. It is problematic to define a
-union of data types because you must know the largest data object, which can
-vary by compiler or compile options. In many cases, an EQUIVALENCE would be
-far more effective, but Fortran Standards committees seem oblivious to the
-benefits of _EQUIVALENCE_s when used sparingly.
+union of data types because you must know the largest data object, which
+can vary by compiler or compile options. In many cases, an EQUIVALENCE
+would be far more effective, but Fortran Standards committees seem
+oblivious to the benefits of EQUIVALENCE when used sparingly.
 </BLOCKQUOTE>
 <A name=8>
 
@@ -245,6 +245,7 @@ benefits of _EQUIVALENCE_s when used sparingly.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 90
 </BLOCKQUOTE>
 <A name=9>
@@ -253,16 +254,13 @@ Fortran 90
 
 </A>
 <BLOCKQUOTE>
+<P>
 ****(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022            transfer(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>transfer (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 42e3f421-a226-4a04-b834-f42ac1baa4d6 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>transfer (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e484aaa6-eec6-4a4e-a944-b7dc5d0fad42 using man macros.</FONT>
 <br><br><center><img src="images/transfer.3fortran.gif"></center>
 </div>
 </div>

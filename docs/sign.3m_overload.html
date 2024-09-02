@@ -1,0 +1,209 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sign (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+sign(3f) - [M_overload::INTRINSIC] When sign(3f) is given a single
+value sign(value), call sign(1,value).
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+pure elemental class(*) function sign([magnitude],copysign)
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+This is an overload of the SIGN(3f) intrinsic which assumes the
+magnitude is 1 if only one argument is supplied.
+<P>
+SIGN(3f) returns a value with the magnitude of MAGNITUDE but with the
+<TABLE cellpadding=3><!-- tsb: SIGN(3f) returns a value with the magnitude of MAGNITUDE but with the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>sign of COPYSIGN.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+All three must be of the same type, which may be
+INTEGER or REAL.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>magnitude</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the return value will have the same magnitude as this value
+Optional. A 1 is assumed if not present.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>copysign</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the return value will have the same sign as this value
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The result is a value with the magnitude of A and the sign of B
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample usage:
+<P>
+<PRE>
+   program demo_sign
+   use, intrinsic :: iso_fortran_env, only : &
+   & integer_kinds, int8, int16, int32, int64
+   use, intrinsic :: iso_fortran_env, only : &
+   & real32, real64, real128
+   ! overload can take a single argument
+   use M_overload, only: sign, lt, le, eq, ne, gt, ge
+   implicit none
+   ! basics
+   write(*,*) sign(1234), sign(-1234), sign(huge(0.0)), sign(-huge(0.0))
+   ! any type of integer or real
+   write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;, sign(10_int8).eq.1         &
+   & .and. sign(-10_int8).eq.-1        )
+   write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;, sign(10_int16).eq.1        &
+   & .and. sign(-10_int16).eq.-1       )
+   write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;, sign(10_int32).eq.1        &
+   & .and. sign(-10_int32).eq.-1       )
+   write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;, sign(10_int64).eq.1        &
+   & .and. sign(-10_int64).eq.-1       )
+   write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;, sign(10.0_real32).eq.1.0   &
+   & .and. sign(-10.0_real32).eq.-1.0  )
+   write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;, sign(10.0_real64).eq.1.0d0 &
+   & .and. sign(-10.0_real64).eq.-1.0d0 )
+   write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;, sign(10.0_real128).eq.1.0  &
+   & .and. sign(-10.0_real128).eq.-1.0 )
+   !
+   !write (*, *) sign(10 &lt; 20)
+   !
+   !if (sum(sign([1 &gt; 2, 3 == 4, 10 &lt; 5, 100 &gt; 50])) &gt; 2) then
+   !   write (*, *) &#146;two or more are not true&#146;
+   !endif
+   !
+   end program demo_sign
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &gt;  sign works
+    &gt;  sign works
+    &gt;  sign works
+    &gt;  sign works
+    &gt;  sign works
+    &gt;  sign works
+    &gt;  sign works
+    &gt;           0
+    &gt;  two or more are not true
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sign (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5dcd8f0e-0fed-470b-b06f-94faa6d3250a using man macros.</FONT>
+<br><br><center><img src="images/sign.3m_overload.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

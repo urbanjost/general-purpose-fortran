@@ -134,74 +134,131 @@ REAL(kind=real128), complex, or CHARACTER(len=*)
 Sample program
 <P>
 <PRE>
-     program demo_bytes_to_anything
-     use M_anything,      only : bytes_to_anything
-     use M_anything,      only : anything_to_bytes
-     implicit none
-     character(len=1),allocatable :: chars(:)
-     integer :: ints(10)
-     integer :: i
-        chars=anything_to_bytes([(i*i,i=1,size(ints))])
-        write(*,&#146;(/,4(1x,z2.2))&#146;)chars
-        call bytes_to_anything(chars,ints)
-        write(*,&#146;(*(g0,1x))&#146;)ints
-     end program demo_bytes_to_anything
+      program demo_bytes_to_anything
+      use, intrinsic :: ISO_FORTRAN_ENV, only: &
+           CSZ =&gt; CHARACTER_STORAGE_SIZE, &
+           stderr =&gt; error_unit
+      use :: M_anything, only : bytes_to_anything, anything_to_bytes
+      implicit none
+      character(len=1), allocatable :: chars(:)
+      character(len=:), allocatable :: line
+      character(len=:), allocatable :: lines(:)
+      integer :: ints(10)
+      integer :: i, int
+      integer,allocatable :: somesize(:)
+<P>
+      call header(&#146;integer array to bytes&#146;)
+      chars = anything_to_bytes([(i*i, i=1, size(ints))])
+      write (*, &#146;(/,4(1x,z2.2))&#146;) chars
+      call bytes_to_anything(chars, ints)
+      write(*,*)&#146;and bytes back to integer array&#146;
+      write (*, &#146;(/,*(g0,1x))&#146;) ints
+<P>
+      call header(&#146;integer scalar to bytes&#146;)
+      chars = anything_to_bytes(1234)
+      write (*, &#146;(/,"CHARS=",*(1x,z2.2))&#146;) chars
+      call bytes_to_anything(chars, int)
+      write(*,*)&#146;and bytes back to integer scalar&#146;
+      write (*, &#146;(/,"INT=",*(g0,1x))&#146;) int
+<P>
+      call header(&#146;a string&#146;)
+      chars = anything_to_bytes(&#146;this is a string&#146;)
+      write (*, &#146;(/,"CHARS=",*(1x,z2.2))&#146;) chars
+      write (*, &#146;(/,"CHARS=",*(g0,1x))&#146;) chars
+      ! string must be long enough to hold chars
+      line=repeat(&#146; &#146;,size(chars))
+      call bytes_to_anything(chars, line)
+      write (*, &#146;(/,"LINE=",*(g0,1x))&#146;) line
+<P>
+      call header(&
+      &#146;a string array (have to know length or size you wish to return to)&#146;)
+      chars = anything_to_bytes([character(len=4) :: &#146;a&#146;, &#146;bb&#146;, &#146;ccc&#146; ])
+      write (*, &#146;(/,"CHARS=",*(1x,z2.2))&#146;) chars
+      write (*, &#146;(/,"CHARS=",*(g0,1x))&#146;) chars
+      ! string must be long enough to hold chars, and have enough elements
+      ! can just return as a scalar string if unknown length
+      lines=[repeat(&#146; &#146;,size(chars))]
+      ! of for that matter just work with the chars(1) array,
+      ! but assuming know length in this case
+      lines=[(repeat(&#146;#&#146;,4),i=1,3)]
+      call bytes_to_anything(chars, lines)
+      write (*, &#146;(/,"LINES=",*("[",g0,"]",1x:))&#146;) lines
+<P>
+      call header(&#146;calculating size to allocate for non-string types&#146;)
+      ! make sure array is of sufficient size to hold results
+      chars = anything_to_bytes([11,22,33,44])
+      write (*, &#146;(/,"CHARS=",*(1x,z2.2))&#146;) chars
+      allocate(somesize(size(chars)/(storage_size(0)/CSZ)))
+      call bytes_to_anything(chars, somesize)
+      write (*, &#146;(/,"SOMESIZE=",*("[",g0,"]",1x:))&#146;) somesize
+      contains
+      subroutine header(line)
+      character(len=*),intent(in) :: line
+      write(*,&#146;(*(a))&#146;)&#146;#&#146;,repeat(&#146;=&#146;,len(line)+2),&#146;#&#146;
+      write(*,&#146;("|",1x,a,1x,"|")&#146;) line
+      write(*,&#146;(*(a))&#146;)&#146;#&#146;,repeat(&#146;=&#146;,len(line)+2),&#146;#&#146;
+      end subroutine header
+      end program demo_bytes_to_anything
 <P>
 </PRE>
 Results:
-&gt;
+<P>
+<PRE>
+    &gt; #========================#
+    &gt; | integer array to bytes |
+    &gt; #========================#
+    &gt;
+    &gt;  01 00 00 00
+    &gt;  04 00 00 00
+    &gt;  09 00 00 00
+    &gt;  10 00 00 00
+    &gt;  19 00 00 00
+    &gt;  24 00 00 00
+    &gt;  31 00 00 00
+    &gt;  40 00 00 00
+    &gt;  51 00 00 00
+    &gt;  64 00 00 00
+    &gt;  and bytes back to integer array
+    &gt;
+    &gt; 1 4 9 16 25 36 49 64 81 100
+    &gt; #=========================#
+    &gt; | integer scalar to bytes |
+    &gt; #=========================#
+    &gt;
+    &gt; CHARS= D2 04 00 00
+    &gt;  and bytes back to integer scalar
+    &gt;
+    &gt; INT=1234
+    &gt; #==========#
+    &gt; | a string |
+    &gt; #==========#
+    &gt;
+    &gt; CHARS= 74 68 69 73 20 69 73 20 61 20 73 74 72 69 6E 67
+    &gt;
+    &gt; CHARS=t h i s   i s   a   s t r i n g
+    &gt;
+    &gt; LINE=this is a string
+    &gt; #====================================================================#
+    &gt; | a string array (have to know length or size you wish to return to) |
+    &gt; #====================================================================#
+    &gt;
+    &gt; CHARS= 61 20 20 20 62 62 20 20 63 63 63 20
+    &gt;
+    &gt; CHARS=a       b b     c c c
+    &gt;
+    &gt; LINES=[a   ] [bb  ] [ccc ]
+    &gt; #===================================================#
+    &gt; | calculating size to allocate for non-string types |
+    &gt; #===================================================#
+    &gt;
+    &gt; CHARS= 0B 00 00 00 16 00 00 00 21 00 00 00 2C 00 00 00
+    &gt;
+    &gt; SOMESIZE=[11] [22] [33] [44]
+<P>
+<P>
+</PRE>
 </BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: Results:
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-01 00 00 00
-<TABLE width=100% cellpadding=3><!-- tsb: 01 00 00 00
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-04 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-09 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-10 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-19 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-24 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-31 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-40 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-51 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-64 00 00 00
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-1     4     9    16    25    36    49    64    81   100
-</TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE><A name=6>
+<A name=6>
 
      <H3>AUTHOR</H3>
 
@@ -223,7 +280,7 @@ John S. Urban
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bytes_to_anything (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4a9ecc96-cfa9-4a9b-8a83-e34b0776d318 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bytes_to_anything (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e313884a-3ce9-4062-a5cf-4d849f899deb using man macros.</FONT>
 <br><br><center><img src="images/bytes_to_anything.3m_anything.gif"></center>
 </div>
 </div>

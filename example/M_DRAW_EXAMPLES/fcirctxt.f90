@@ -4,29 +4,30 @@
 program fcirctxt
 !(LICENSE:PD)
 
-use M_draw, only: vinit, vsetflush, color, clear, font, vexit, vflush
-use M_draw, only: ortho2, textang, boxtext, rect, textsize, getkey
-use M_draw
+   use M_draw, only: vinit, vsetflush, color, clear, font, vexit, vflush
+   use M_draw, only: ortho2, textang, boxtext, rect, textsize, getkey
+   use M_draw
+   implicit none
 
-character(len=40)   :: str1, str2, str3, str4, fonts(22)
-character(len=100)  :: buf
-character(len=1)    :: c
-integer             :: i
-integer,parameter   :: BLACK = 0, YELLOW = 3, GREEN = 2, WHITE = 7
-data fonts/ 'astrology', 'cursive',    'futura.l',               &
-     &      'futura.m',  'gothic.eng', 'gothic.ger',             &
-     &      'gothic.ita','greek',      'japanese',    'markers', &
-     &      'math.low',  'math.upp',   'meteorology', 'music',   &
-     &      'cyrillic',  'script',     'symbolic',    'times.g', &
-     &      'times.ib',  'times.i',    'times.r',     'times.rb' /
+   character(len=40)   :: str1, str2, str3, str4, fonts(22)
+   character(len=100)  :: buf
+   character(len=1)    :: c
+   integer             :: i
+   integer, parameter   :: BLACK = 0, YELLOW = 3, GREEN = 2, WHITE = 7
+   data fonts/'astrology', 'cursive', 'futura.l',               &
+   &      'futura.m', 'gothic.eng', 'gothic.ger',             &
+   &      'gothic.ita', 'greek', 'japanese', 'markers', &
+   &      'math.low', 'math.upp', 'meteorology', 'music',   &
+   &      'cyrillic', 'script', 'symbolic', 'times.g', &
+   &      'times.ib', 'times.i', 'times.r', 'times.rb'/
 
-data str1/ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' /
-data str2/ 'abcdefghijklmnopqrstuvwxyz' /
-data str3/ '1234567890+-=!@#$%^&*(){}[]' /
-data str4/ '<>,./?~`\|_BONK,blark' /
-integer :: idum
-   print*,'Enter output device:'
-   read(*,'(a)')buf
+   data str1/'ABCDEFGHIJKLMNOPQRSTUVWXYZ'/
+   data str2/'abcdefghijklmnopqrstuvwxyz'/
+   data str3/'1234567890+-=!@#$%^&*(){}[]'/
+   data str4/'<>,./?~`\|_BONK,blark'/
+   integer :: idum
+   print *, 'Enter output device:'
+   read (*, '(a)') buf
    call vinit(buf)
    call vsetflush(.false.)
    call linewidth(20)
@@ -40,10 +41,10 @@ integer :: idum
       call textang(0.0)                                        ! reset text angle so title is straight
       call color(6)
       call font('futura.m')
-      write(buf, '(''This is Hershey font '',a)') fonts(i)
-      !call printattribs('before')
+      write (buf, '(''This is Hershey font '',a)') fonts(i)
+!call printattribs('before')
       call boxtext(-11.0, 12.0, 20.0, 1.0, buf)
-      !call printattribs('after')
+!call printattribs('after')
       call rect(-11.0, 12.0, 9.0, 13.0)                        ! draw a box around the title
       call font(fonts(i))                                      ! grab a font from the table
       call color(3)
@@ -61,51 +62,54 @@ integer :: idum
       call ShowCircularText(5.0, str4)
       call vflush()
 
-      idum= getkey()
-      select case(idum)
-      case(:-1,ichar('q'),ichar('Q'))
+      idum = getkey()
+      select case (idum)
+      case (:-1, ichar('q'), ichar('Q'))
          exit
       end select
 
       call color(0)
       call clear()
-   enddo
+   end do
    call vexit()
-   end program fcirctxt
+contains
 !===================================================================================================================================
-subroutine ShowCircularText(r, str) !       show a ring of text
-use M_draw, only : move2, textang, drawchar
+   subroutine ShowCircularText(r, str) !       show a ring of text
+      use M_draw, only: move2, textang, drawchar
+      implicit none
 
-real              :: r
-character(len=*)  :: str
-real              :: i, inc, x, y, a
-integer           :: j
-character(len=1)  :: c
-real,parameter    :: pi = 3.1415926535
+      real              :: r
+      character(len=*)  :: str
+      real              :: i, inc, x, y, a
+      integer           :: j
+      character(len=1)  :: c
+      real, parameter    :: pi = 3.1415926535
+      integer :: i10
 
-   j = 1
-   inc = 360.0 / len_trim(str)
+      j = 1
+      inc = 360.0/len_trim(str)
 
-   i=0.0
-   do i10 = 1,len_trim(str)
+      i = 0.0
+      do i10 = 1, len_trim(str)
 !
 ! calculate the next drawing position
-      c = str(j:j)
-      x = r * cos(i * pi / 180.0)
-      y = r * sin(i * pi / 180.0)
-      call move2(x, y)
+         c = str(j:j)
+         x = r*cos(i*pi/180.0)
+         y = r*sin(i*pi/180.0)
+         call move2(x, y)
 !
 ! calculate angle for next character
-      a = 90.0 + i
+         a = 90.0 + i
 !
 ! set the orientation of the next character
-      call textang(a)
+         call textang(a)
 !
 ! draw the character
-      call drawchar(c)
-      j = j + 1
-      i=i+inc
-   enddo
+         call drawchar(c)
+         j = j + 1
+         i = i + inc
+      end do
 
-end subroutine ShowCircularText
+   end subroutine ShowCircularText
 !===================================================================================================================================
+end program fcirctxt

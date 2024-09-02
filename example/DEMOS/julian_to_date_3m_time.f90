@@ -1,10 +1,10 @@
        program demo_julian_to_date
        use M_time, only : julian_to_date, fmtdate, realtime
        implicit none
-       integer,parameter :: dp=kind(0.0d0)
-       real(kind=realtime)     :: juliandate
-       integer                 :: dat(8)
-       integer                 :: ierr
+       integer,parameter   :: dp=kind(0.0d0)
+       real(kind=realtime) :: juliandate
+       integer             :: dat(8)
+       integer             :: ierr
           ! set sample Julian Date
           juliandate=2457589.129_dp
           ! create DAT array for this date

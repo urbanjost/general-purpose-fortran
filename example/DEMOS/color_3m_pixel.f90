@@ -1,6 +1,6 @@
       program demo_color
       use M_pixel
-      use M_writegif, only : writegif
+      use M_pixel__writegif, only : writegif
       implicit none
       real    :: b=0.5
       real    :: y1,y2,ym,x1,x2
@@ -34,8 +34,8 @@
             x1=x1+width
          enddo
          ! write plot as GIF file
-         call writegif('color.3m_pixel.gif',P_pixel,P_colormap)
+         call writegif('color.3M_pixel.gif',P_pixel,P_colormap)
          call vexit()
          ! use system to display GIF file
-         call execute_command_line('display color.3m_pixel.gif')
+         call execute_command_line('display color.3M_pixel.gif')
       end program demo_color

@@ -2,7 +2,7 @@
      use M_kracken, only: kracken, rgets
      implicit none
      real,allocatable  :: val(:)
-     integer           :: i
+     integer :: i
        ! define command arguments and parse user command
        call kracken('fc','-F -C' )
 

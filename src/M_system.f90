@@ -31,10 +31,11 @@
 !!    system_isblk, system_ischr, system_isfifo,             &
 !!    system_realpath,                                       &
 !!    system_access,                                         &
-!!    system_utime,                                          &
+!!    system_utime, system_time, system_sleep,               &
 !!    system_system,                                         &
 !!    system_issock, system_perm,                            &
 !!    system_stat_print,                                     &
+!!    epoch_to_calendar,                                     &
 !!    system_dir,                                            &
 !!    system_memcpy
 !!
@@ -87,6 +88,8 @@
 !!        o  system_stat(3f):       determine system information of file
 !!                                  by name
 !!        o  system_stat_print(3f): print system information of filename
+!!        o epoch_to_calendar(3f):  convert epoch time in seconds to calendar string
+!!
 !!        o  system_perm(3f):       create string representing file
 !!                                  permission and type
 !!        o  system_access(3f):     determine filename access or existence
@@ -119,6 +122,9 @@
 !!                                  matching a wildcard string
 !!
 !!        o  fileglob(3f): Returns list of files using a file globbing pattern
+!!##TIME
+!!        o  system_time(3f): call time(3c)
+!!        o  system_sleep(3f): pause specified amount of time
 !!
 !!##STREAM IO
 !!        o  system_getc(3f): get a character from stdin
@@ -206,6 +212,7 @@ public :: system_clearenv
 
 public :: system_stat                    ! call stat(3c) to determine system information of file by name
 public :: system_stat_print              ! call stat(3f) and print principal pathname information
+public :: epoch_to_calendar              ! convert integer 1 epoch time to calendard string
 public :: system_perm                    ! create string representing file permission and type
 public :: system_access                  ! determine filename access or existence
 public :: system_isdir                   ! determine if filename is a directory
@@ -255,7 +262,7 @@ public :: system_alarm
 public :: system_calloc
 public :: system_clock
 public :: system_time
-!public :: system_time
+public :: system_sleep
 !public :: system_qsort
 
 public :: system_realloc
@@ -4112,7 +4119,7 @@ integer, optional, intent(out) :: err
    memleak(len(string)+1)=c_null_char
 
    loc_err =  c_putenv(memleak)
-   if (present(err)) err = loc_err
+   if(present(err)) err = loc_err
 
 end subroutine system_putenv
 !===================================================================================================================================
@@ -4290,7 +4297,7 @@ end interface
    temp1 = str2_carr(trim(NAME)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
    temp2 = str2_carr(trim(VALUE)) ! kludge for bug in ifort (IFORT) 2021.3.0 20210609
    loc_err =  c_setenv(temp1,temp2,flag)
-   if (present(STATUS)) STATUS = loc_err
+   if(present(STATUS)) STATUS = loc_err
 end subroutine set_environment_variable
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -4580,6 +4587,7 @@ end function system_readenv
 !!       use M_system, only : fileglob
 !!       character(len=255),pointer :: list(:)
 !!       character(len=*) :: string
+!!       integer :: i
 !!       call fileglob(string, list)
 !!       write(*,*)'Files:',size(list)
 !!       write(*,'(a)')(trim(list(i)),i=1,size(list))
@@ -4826,7 +4834,7 @@ end subroutine system_gethostname
 !--           char *lgn;
 !--           struct passwd *pw;
 !--           ...
-!--           if ((lgn = getlogin()) == NULL || (pw = getpwnam(lgn)) == NULL) {
+!--           if((lgn = getlogin()) == NULL || (pw = getpwnam(lgn)) == NULL) {
 !--               fprintf(stderr, "Get of user information failed.\n"); exit(1);
 !--               }
 !--APPLICATION USAGE
@@ -5142,7 +5150,7 @@ integer                                       :: length
    length=0
    call c_f_pointer(c_string_pointer,char_array_pointer,[max_len])
 
-   if (.not.associated(char_array_pointer)) then
+   if(.not.associated(char_array_pointer)) then
      if(allocated(f_string))deallocate(f_string)
      allocate(character(len=4)::f_string)
      f_string=c_null_char
@@ -5152,7 +5160,7 @@ integer                                       :: length
    aux_string=" "
 
    do i=1,max_len
-     if (char_array_pointer(i)==c_null_char) then
+     if(char_array_pointer(i)==c_null_char) then
        length=i-1; exit
      endif
      aux_string(i:i)=char_array_pointer(i)
@@ -5220,7 +5228,8 @@ end function C2F_string
 !!   program demo_system_stat
 !!
 !!    use M_system, only : system_stat, system_getpwuid, system_getgrgid
-!!    use M_time, only :   fmtdate, u2d
+!!    use M_system, only : epoch_to_calendar
+!!    !use M_time, only :   fmtdate, u2d
 !!    use, intrinsic :: iso_fortran_env, only : int32, int64
 !!    implicit none
 !!
@@ -5249,7 +5258,7 @@ end function C2F_string
 !!
 !!    CALL SYSTEM_STAT("/etc/hosts", buff, status)
 !!
-!!    if (status == 0) then
+!!    if(status == 0) then
 !!       write (*, FMT="('Device ID(hex/decimal):',      &
 !!       & T30, Z0,'h/',I0,'d')") buff(1),buff(1)
 !!       write (*, FMT="('Inode number:',                &
@@ -5267,11 +5276,14 @@ end function C2F_string
 !!       write (*, FMT="('File size(bytes):',            &
 !!       & T30, I0)") buff(8)
 !!       write (*, FMT="('Last access time:',            &
-!!       & T30, I0,1x, A)") buff(9), fmtdate(u2d(int(buff(9))),fmt_date)
+!!       & T30, I0,1x, A)") buff(9),  epoch_to_calendar(buff(9))
+!!       !& T30, I0,1x, A)") buff(9), fmtdate(u2d(int(buff(9))),fmt_date)
 !!       write (*, FMT="('Last modification time:',      &
-!!       & T30, I0,1x, A)") buff(10),fmtdate(u2d(int(buff(10))),fmt_date)
+!!       & T30, I0,1x, A)") buff(10), epoch_to_calendar(buff(10))
+!!       !& T30, I0,1x, A)") buff(10),fmtdate(u2d(int(buff(10))),fmt_date)
 !!       write (*, FMT="('Last status change time:',     &
-!!       & T30, I0,1x, A)") buff(11),fmtdate(u2d(int(buff(11))),fmt_date)
+!!       & T30, I0,1x, A)") buff(11), epoch_to_calendar(buff(11))
+!!       !& T30, I0,1x, A)") buff(11),fmtdate(u2d(int(buff(11))),fmt_date)
 !!       write (*, FMT="('Preferred block size(bytes):', &
 !!       & T30, I0)") buff(12)
 !!       write (*, FMT="('No. of blocks allocated:',     &
@@ -5372,7 +5384,6 @@ end subroutine system_stat
 !!    Public Domain
 subroutine system_stat_print(filename,lun)
 !-!use M_system, only      : system_getpwuid, system_getgrgid, system_perm, system_stat
-use M_time, only          : fmtdate, u2d
 use, intrinsic :: iso_fortran_env, only : OUTPUT_UNIT
 implicit none
 character(len=*),intent(in)  :: filename
@@ -5380,8 +5391,9 @@ integer,intent(in),optional  :: lun
 integer                      :: lun_local
 character(len=*),parameter   :: dfmt='year-month-dayThour:minute:second'
 integer                      :: ierr
-integer(kind=int64)              :: values(13)
-integer(kind=int64) :: &
+integer(kind=int64)          :: values(13)
+integer(kind=int64)          :: kludge
+integer(kind=int64)          :: &
    Device_ID,           Inode_number,          File_mode,                  Number_of_links,  Owner_uid,         &
    Owner_gid,           Directory_device,      File_size,                  Last_access,      Last_modification, &
    Last_status_change,  Preferred_block_size,  Number_of_blocks_allocated
@@ -5416,7 +5428,8 @@ EQUIVALENCE                                      &
       write(lun_local, FMT="(1x,A,t10)",advance='no')  system_getpwuid(Owner_uid)
       write(lun_local, FMT="(1x,A,t10)",advance='no')  system_getgrgid(Owner_gid)
       write(lun_local, FMT="(1x,bn,I0,t10)",advance='no') File_size
-      write(lun_local, FMT="(1x,A)",advance='no')      fmtdate(u2d(int(max(Last_access,Last_modification,Last_status_change))),dfmt)
+      kludge=int(max(Last_access,Last_modification,Last_status_change))
+      write(lun_local, FMT="(1x,A)",advance='no')      epoch_to_calendar(kludge)
       write(lun_local, FMT="(1x,a)")filename
    endif
 
@@ -5466,10 +5479,13 @@ end subroutine system_stat_print
 !!    use M_system, only : system_dir, system_isdir
 !!    implicit none
 !!    character(len=:),allocatable :: dirname
-!!       write(*, '(a)')system_dir(pattern='*.f90')
+!!       write(*, '("*.f90: ",a)')system_dir(pattern='*.f90')
+!!       write(*, '("*.F90: ",a)')system_dir(pattern='*.F90')
+!!       write(*, '("ignorecase:*.F90: ",a)')system_dir(pattern='*.F90',ignorecase=.true.)
+!!       write(*, '("ignorecase:*.f90: ",a)')system_dir(pattern='*.F90',ignorecase=.true.)
 !!       dirname='/tmp'
 !!       if(system_isdir(dirname))then
-!!          write(*, '(a)')system_dir(pattern='*.f90')
+!!          write(*, '("/tmp/*.f90: ",a)')system_dir(directory='/tmp',pattern='*.f90')
 !!       else
 !!          write(*, '(a)')'<WARNING:>'//dirname//' does not exist'
 !!       endif
@@ -5488,10 +5504,17 @@ character(len=*),intent(in),optional  :: directory
 character(len=*),intent(in),optional  :: pattern
 logical,intent(in),optional           :: ignorecase
 character(len=:),allocatable          :: system_dir(:)
+
 character(len=:),allocatable          :: wild
 type(c_ptr)                           :: dir
 character(len=:),allocatable          :: filename
 integer                               :: i, ierr, icount, longest
+logical                               :: ignorecase_local
+   if(present(ignorecase))then
+      ignorecase_local=ignorecase
+   else
+      ignorecase_local=.false.
+   endif
    longest=0
    icount=0
    if(present(pattern))then
@@ -5514,7 +5537,7 @@ integer                               :: i, ierr, icount, longest
             call system_readdir(dir, filename, ierr)
             if(filename.eq.' ')exit
             if(wild.ne.'*')then
-              if(.not.matchw(filename, wild, ignorecase))cycle   ! Call a wildcard matching routine.
+              if(.not.matchw(filename, wild, ignorecase_local))cycle   ! Call a wildcard matching routine.
             endif
             icount=icount+1
             select case(i)
@@ -5571,7 +5594,11 @@ character(len=:),allocatable :: tbookmark, wbookmark
    wi=1
    ti=1
    do                                            ! Walk the text strings one character at a time.
-      if(wildtext(wi:wi) == '*')then             ! How do you match a unique text string?
+      if(wi.gt.len(wildtext))then
+         exit
+      elseif(ti.gt.len(tametext))then
+         exit
+      elseif(wildtext(wi:wi) == '*')then         ! How do you match a unique text string?
          do i=wi,wlen                            ! Easy: unique up on it!
             if(wildtext(wi:wi).eq.'*')then
                wi=wi+1
@@ -5587,7 +5614,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
             ! Fast-forward to next possible match.
             do while (tametext(ti:ti) .ne. wildtext(wi:wi))
                ti=ti+1
-               if (tametext(ti:ti).eq.NULL)then
+               if(tametext(ti:ti).eq.NULL)then
                   matchw=.false.
                   return                         ! "x" doesn't match "*y*"
                endif
@@ -5603,7 +5630,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
                wlen=len_trim(wbookmark)
                wi=1
                ! Don't go this far back again.
-               if (tametext(ti:ti) .ne. wildtext(wi:wi)) then
+               if(tametext(ti:ti) .ne. wildtext(wi:wi)) then
                   tbookmark=tbookmark(2:)
                   tametext = tbookmark
                   ti=1
@@ -5612,7 +5639,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
                   wi=wi+1
                endif
             endif
-            if (tametext(ti:ti).ne.NULL) then
+            if(tametext(ti:ti).ne.NULL) then
                ti=ti+1
                cycle                             ! "mississippi" matches "*sip*"
             endif
@@ -5622,14 +5649,16 @@ character(len=:),allocatable :: tbookmark, wbookmark
       endif
       ti=ti+1
       wi=wi+1
-      if (tametext(ti:ti).eq.NULL) then          ! How do you match a tame text string?
+      if(ti.gt.len(tametext))then
+         exit
+      elseif(tametext(ti:ti).eq.NULL) then       ! How do you match a tame text string?
          if(wildtext(wi:wi).ne.NULL)then
             do while (wildtext(wi:wi) == '*')    ! The tame way: unique up on it!
                wi=wi+1                           ! "x" matches "x*"
                if(wildtext(wi:wi).eq.NULL)exit
             enddo
          endif
-         if (wildtext(wi:wi).eq.NULL)then
+         if(wildtext(wi:wi).eq.NULL)then
             matchw=.true.
             return                               ! "x" matches "x"
          endif
@@ -5799,6 +5828,226 @@ character(len=256)          :: cmdmsg
    endif
    system_system=cmdstat
 end function system_system
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    system_sleep(3f) - [M_system:C_INTERFACE] call C sleep(3c) or usleep(3c)
+!!    procedure
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    subroutine system_sleep(wait_seconds)
+!!
+!!       type(TYPE),intent(in)  :: wait_seconds
+!!
+!!     where TYPE may be INTEGER, REAL, or DOUBLEPRECISION
+!!
+!!##DESCRIPTION
+!!   The system_sleep(3f) routine uses the intrinsic ISO_C_BINDING
+!!   interface to call the C sleep(3c) procedure or usleep(3c)
+!!   routine.
+!!
+!!##OPTIONS
+!!    wait_seconds  integer,real or doubleprecision number of seconds for
+!!                  process to sleep.
+!!
+!!##EXAMPLE
+!!
+!!    Sample program:
+!!
+!!     program demo_system_sleep
+!!     use M_system, only : system_sleep, epoch_to_calendar
+!!     implicit none
+!!     integer :: i
+!!        !
+!!        write(*,'(2a)')"Time before integer call is: ",epoch_to_calendar()
+!!        call system_sleep(4)
+!!        write(*,'(2a)')"Time after  integer call is: ",epoch_to_calendar()
+!!        write(*,*)
+!!        write(*,'(2a)')"Time before real call is: ",epoch_to_calendar()
+!!        call system_sleep(4.0)
+!!        write(*,'(2a)')"Time after  real call is: ",epoch_to_calendar()
+!!        write(*,*)
+!!        write(*,'(2a)')"Time before loop is: ",epoch_to_calendar()
+!!        do i=1,1000
+!!           call system_sleep(4.0/1000.0)
+!!        enddo
+!!        write(*,'(2a)')"Time after loop  is: ",epoch_to_calendar()
+!!     end program demo_system_sleep
+!!
+!! Results:
+!!
+!!     > Time before integer call is: 2023-10-03 01:11:14 UTC-240
+!!     > Time after  integer call is: 2023-10-03 01:11:18 UTC-240
+!!     >
+!!     > Time before real call is: 2023-10-03 01:11:18 UTC-240
+!!     > Time after  real call is: 2023-10-03 01:11:22 UTC-240
+!!     >
+!!     > Time before loop is: 2023-10-03 01:11:22 UTC-240
+!!     > Time after loop  is: 2023-10-03 01:11:26 UTC-240
+!!
+!!##AUTHOR
+!!    John S. Urban, 2015
+!!
+!!##LICENSE
+!!    Public Domain
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine system_sleep(seconds)
+use,intrinsic                 :: iso_c_binding, only: c_int
+
+! ident_36="@(#) M_system system_sleep(3f) call sleep(3c) or usleep(3c)"
+
+class(*),intent(in)           :: seconds
+integer(kind=c_int)           :: cint
+   select type(seconds)
+   type is (integer);             cint=seconds               ; call call_sleep(cint)
+   type is (real);                cint=nint(seconds*1000000) ; call call_usleep(cint)
+   type is (doubleprecision);     cint=nint(seconds*1000000) ; call call_usleep(cint)
+   end select
+end SUBROUTINE system_sleep
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine call_sleep(wait_seconds)
+use,intrinsic                   :: iso_c_binding, only: c_int
+
+! ident_37="@(#) M_system call_sleep(3fp) call sleep(3c)"
+
+integer(kind=c_int),intent(in)  :: wait_seconds
+integer(kind=c_int)             :: how_long
+interface
+   function c_sleep(seconds) bind (C,name="sleep")
+      import
+      integer(c_int)       :: c_sleep ! should be unsigned int (not available in Fortran). OK until highest bit gets set.
+      integer(c_int), intent(in), VALUE :: seconds
+   end function c_sleep
+end interface
+   if(wait_seconds>0)then
+      how_long=c_sleep(wait_seconds)
+   endif
+end subroutine call_sleep
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine call_usleep(milliseconds)
+
+! ident_38="@(#) M_system call_usleep(3fp) call usleep(3c)"
+
+use,intrinsic                   :: iso_c_binding, only: c_int
+integer(kind=c_int),intent(in)  :: milliseconds
+integer(kind=c_int)             :: status
+interface
+   function c_usleep(mseconds) bind (C,name="usleep")
+      import
+      integer(c_int)       :: c_usleep ! should be unsigned int (not available in Fortran). OK until highest bit gets set.
+      integer(c_int), intent(in), VALUE :: mseconds
+   end function c_usleep
+end interface
+   if(milliseconds>0)then
+      status=c_usleep(milliseconds)
+   endif
+end subroutine call_usleep
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+character(len=28) function epoch_to_calendar(iepoch)
+integer(kind=int64),intent(in),optional :: iepoch
+integer                                 :: dat(8)
+integer                                 :: ierr
+   if(present(iepoch))then
+      call unix_to_date(dble(iepoch),dat,ierr)
+   else
+      call date_and_time(values=dat)
+   endif
+   epoch_to_calendar=printdat()
+contains
+
+function printdat()
+character(len=len(epoch_to_calendar)) :: printdat
+character(len=*),parameter :: fmt='(i4.4,2("-",i2.2),1x,2(i2.2,":"),i2.2," UTC",sp,i5.4)'
+   associate (                                            &
+     year => dat(1), month => dat(2), day => dat(3),      &
+     zone => dat(4),                                      &
+     hour => dat(5), minute => dat(6), seconds => dat(7), &
+     milliseconds => dat(8))
+     write(printdat,fmt)year,month,day,hour,minute,seconds,zone
+   end associate
+end function printdat
+
+end function epoch_to_calendar
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine unix_to_date(unixtime,dat,ierr)
+
+! @(#) M_time julian_to_date(3f) Converts Julian Date to DAT date-time array
+
+integer,parameter                :: realtime=kind(0.0d0)    ! type for 1 epoch time and julian days
+real(kind=realtime),intent(in)   :: unixtime                ! Unix time (seconds)
+integer,intent(out)              :: dat(8)
+integer,intent(out)              :: ierr                    ! 0 for successful execution, otherwise 1
+real(kind=realtime)              :: julian                  ! Julian Date (non-negative)
+real(kind=realtime),parameter    :: SECDAY=86400.0_realtime ! 24:00:00 hours as seconds
+real(kind=realtime),parameter    :: Unix_Origin_as_Julian=2440587.5000000000_realtime
+integer                          :: year, month, day, tz, hour, minute
+real(kind=realtime)              :: second
+integer                          :: jalpha,ja,jb,jc,jd,je,ijul
+
+   julian=(unixtime/secday)+Unix_Origin_as_Julian   ! convert seconds from Unix Epoch to Julian Date
+   if(julian<0.0_realtime) then                     ! Negative Julian Date not allowed
+      ierr=1
+      return
+   else
+      ierr=0
+   endif
+
+   call date_and_time(values=dat)
+   tz=dat(4)
+
+   ijul=idint(julian)                           ! Integral Julian Date
+   second=sngl((julian-dble(ijul))*secday)      ! Seconds from beginning of Jul. Day
+   second=second+(tz*60)
+
+   if(second>=(secday/2.0_realtime)) then       ! In next calendar day
+      ijul=ijul+1
+      second=second-(secday/2.0_realtime)       ! Adjust from noon to midnight
+   else                                         ! In same calendar day
+      second=second+(secday/2.0_realtime)       ! Adjust from noon to midnight
+   endif
+
+   if(second>=secday) then                      ! Final check to prevent time 24:00:00
+      ijul=ijul+1
+      second=second-secday
+   endif
+
+   minute=int(second/60.0_realtime)             ! Integral minutes from beginning of day
+   second=second-dble(minute*60)                ! Seconds from beginning of minute
+   hour=minute/60                               ! Integral hours from beginning of day
+   minute=minute-hour*60                        ! Integral minutes from beginning of hour
+
+   jalpha=idint((dble(ijul-1867216)-0.25_realtime)/36524.25_realtime) ! Correction for Gregorian Calendar
+   ja=ijul+1+jalpha-idint(0.25_realtime*dble(jalpha))
+
+   jb=ja+1524
+   jc=idint(6680.0_realtime+(dble(jb-2439870)-122.1_realtime)/365.25_realtime)
+   jd=365*jc+idint(0.25_realtime*dble(jc))
+   je=idint(dble(jb-jd)/30.6001_realtime)
+   day=jb-jd-idint(30.6001_realtime*dble(je))
+   month=je-1
+
+   year=jc-4715
+   if(month>12) month=month-12
+   if(month>2) year=year-1
+   if(year<=0) year=year-1
+
+   dat=[ year, month, day, tz, hour, minute, int(second), int((second-int(second))*1000.0)]
+   ierr=0
+
+end subroutine unix_to_date
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

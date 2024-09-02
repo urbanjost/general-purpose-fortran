@@ -22,6 +22,7 @@ append("locpt.3m_math.html");
 append("lowess.3m_math.html");
 append("magic_square.3m_math.html");
 append("ncr.3m_math.html");
+append("nextp.3m_math.html");
 append("poly_intercept.3m_math.html");
 append("polyarea.3m_math.html");
 append("polyarea_shoelace.3m_math.html");

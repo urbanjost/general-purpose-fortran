@@ -1,5 +1,8 @@
         program demo_locator !     track a cube with the locator
         use M_draw
+        implicit none
+        real :: trans, sc, tdir, scal, x, y
+        integer :: idum, nplanes
         parameter(TRANS=20.0, SC=0.1)
         integer, parameter :: FACE=1, FILLED=2, OUTLINE=3
         character(len=10)  :: device

@@ -1,7 +1,7 @@
-        program demo_atanh
-        implicit none
-        real, dimension(3) :: x = [ -1.0, 0.0, 1.0 ]
+      program demo_atanh
+      implicit none
+      real, dimension(3) :: x = [ -1.0, 0.0, 1.0 ]
 
-           write (*,*) atanh(x)
+         write (*,*) atanh(x)
 
-        end program demo_atanh
+      end program demo_atanh

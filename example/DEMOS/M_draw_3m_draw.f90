@@ -3,7 +3,6 @@
      use M_draw,    only  : D_BLACK,   D_WHITE
      use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
      use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
-     use M_units,    only : cosd, sind
      implicit none
      integer  :: ipaws
      real     :: x1, y1
@@ -104,13 +103,12 @@
         contains
 
         subroutine target(xc,yc,rc)
-        use M_units,    only : cosd, sind
         real     :: xc,yc,rc
         integer  :: i
         real     :: x,y
            do i=0,360,10
-              x=rc*cosd(i)
-              y=rc*sind(i)
+              x=rc*cosd(real(i))
+              y=rc*sind(real(i))
               call line(xc,yc,xc+x,yc+y)
            enddo
            do i=1,int(rc),10

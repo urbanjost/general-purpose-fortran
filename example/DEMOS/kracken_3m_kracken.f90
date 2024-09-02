@@ -1,6 +1,7 @@
         program demo_kracken
 
         use M_kracken
+        implicit none
         ! define command arguments, default values and crack command line
         call kracken('cmd',              &
            &   '-int 20                  &

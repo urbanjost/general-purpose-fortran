@@ -1,6 +1,6 @@
 module M_testsuite_M_strings
 use,intrinsic :: iso_fortran_env,only : std_in=>input_unit,std_out=>output_unit,std_err=>error_unit
-use M_verify
+use M_framework__verify
 use M_strings
 implicit none
 character(len=*),parameter :: options=' -section 3 -library libGPF -filename `pwd`/M_strings.FF &
@@ -10,29 +10,27 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_suite_m_strings()
    call test_adjustc()
-   call test_pad()
-   call test_lpad()
-   call test_cpad()
-   call test_rpad()
-   call test_zpad()
    call test_base()
    call test_base2()
+   call test_bundle()
    call test_c2s()
    call test_change()
    call test_chomp()
+   call test_clip()
    call test_codebase()
    call test_compact()
+   call test_cpad()
    call test_crop()
-   call test_clip()
+   call test_dble()
    call test_decodebase()
    call test_delim()
    call test_describe()
    call test_edit_distance()
-   call test_squeeze()
-   call test_bundle()
    call test_expand()
    call test_getvals()
+   call test_glob()
    call test_indent()
+   call test_int()
    call test_isalnum()
    call test_isalpha()
    call test_isascii()
@@ -48,44 +46,46 @@ subroutine test_suite_m_strings()
    call test_isupper()
    call test_isxdigit()
    call test_join()
-   call test_len_white()
    call test_lenset()
+   call test_len_white()
    call test_listout()
    call test_lower()
-   call test_glob()
+   call test_lpad()
+   call test_match_delimiter()
    call test_merge_str()
    call test_modif()
+   call test_m_strings()
+   call test_nint()
    call test_noesc()
    call test_nospace()
    call test_notabs()
+   call test_pad()
+   call test_quote()
+   call test_real()
    call test_replace()
    call test_reverse()
+   call test_rotate13()
+   call test_rpad()
    call test_s2c()
    call test_s2v()
    call test_s2vs()
+   call test_setbits()
    call test_split()
+   call test_squeeze()
+   call test_stretch()
    call test_string_to_value()
    call test_string_to_values()
    call test_strtok()
    call test_substitute()
    call test_switch()
    call test_transliterate()
-   call test_rotate13()
-   call test_quote()
+   call test_trimzeros_()
    call test_unquote()
    call test_upper()
    call test_v2s()
    call test_value_to_string()
    call test_visible()
-   call test_m_strings()
-   call test_dble()
-   call test_int()
-   call test_real()
-   call test_nint()
-   call test_stretch()
-   call test_trimzeros_()
-   call test_setbits()
-   call test_match_delimiter()
+   call test_zpad()
 end subroutine test_suite_m_strings
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_glob()
@@ -976,9 +976,11 @@ subroutine test_upper
 !-!use M_strings, only: upper
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
 character(len=36),parameter :: uc='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+character(len=36),parameter :: rnge='abcdefghIJKLMNopqrstuvwxyz0123456789'
 !-----------------------------------------------------------------------------------------------------------------------------------
    call unit_check_start('upper',' -description ''elemental function converts string to uppercase'' '//OPTIONS )
-   call unit_check('upper',upper(lc) == uc)
+   call unit_check('upper',upper(lc) == uc,upper(lc))
+   call unit_check('upper',upper(lc,9,14) == rnge,'range',upper(lc,9,14),'expected',rnge)
    call unit_check_done('upper')
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine test_upper
@@ -987,18 +989,20 @@ subroutine test_lower
 !-!use M_strings, only: lower
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
 character(len=36),parameter :: uc='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+character(len=36),parameter :: rnge='ABCDEFGHijklmnOPQRSTUVWXYZ0123456789'
 !-----------------------------------------------------------------------------------------------------------------------------------
    call unit_check_start('lower',' -description ''elemental function converts string to miniscule'' '//OPTIONS )
-   call unit_check('lower',lower(uc) == lc,'lower')
+   call unit_check('lower',lower(uc) == lc,'lower',lower(uc),'expected',lc)
+   call unit_check('upper',lower(uc,9,14) == rnge,'range',lower(uc,9,14),'expected',rnge)
    call unit_check_done('lower')
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine test_lower
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_switch
-!-!use M_switch, only: reverse
-!-!use M_switch, only: switch
+!-!use m_switch, only: reverse
+!-!use m_switch, only: switch
 character(len=36),parameter :: lc='abcdefghijklmnopqrstuvwxyz0123456789'
-character(len=36),parameter :: uc='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+character(len=36),parameter :: uc='abcdefghijklmnopqrstuvwxyz0123456789'
 character(len=1)            :: chars(36)
 integer :: i
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1638,6 +1642,8 @@ subroutine test_describe
 integer,parameter             :: number_of_chars=128
 character(len=1)              :: char
 integer                       :: i
+character(len=*),parameter    :: at='@ at (at cost of, at sign, each at, commercial at, commat, &
+&rollmop, monkey|pigs|elephant tail, snail, arroba, strudel, asperand, ampersat, rose, cabbage, swirl, whorl)'
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! initialize database description of routine
    call unit_check_start('describe',' -description ''returns a string describing character'' '//OPTIONS )
@@ -1656,7 +1662,7 @@ call unit_check('describe', &
    'describe exclamation point')
 call unit_check('describe', describe(char( 52) )  ==   '4 four'                                 , 'describe four')
 call unit_check('describe', describe(char( 63) )  ==   '? question mark'                        , 'describe question mark')
-call unit_check('describe', describe(char( 64) )  ==   '@ at sign'                              , 'describe at sign')
+call unit_check('describe', describe(char( 64) )  ==   at                                       , 'describe at sign')
 call unit_check('describe', describe(char( 74) )  ==   'J majuscule J'                          , 'describe J')
 call unit_check('describe', describe(char( 117))  ==   'u miniscule u'                          , 'describe u')
 call unit_check('describe', describe(char( 126))  ==   '~ tilde'                                , 'describe tilde')
@@ -2146,12 +2152,10 @@ end subroutine test_match_delimiter
 end module M_testsuite_M_strings
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 program runtest
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
+use M_framework
+use M_framework__verify, only : unit_check_level, unit_check_stop
 use M_testsuite_M_strings
 implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
 !  unit_check_level=1
    unit_check_level=0
    call test_suite_M_strings()

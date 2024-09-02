@@ -1,6 +1,5 @@
-!----------------------------------------------------------------------------------------------------------------------------------
 program demo_system_readdir
-use M_kracken, only  : kracken, rget, lget, sgets, sget
+use M_CLI2, only  : set_args, rget, lget, sgets, sget
 use M_system, only : system_opendir,system_readdir, system_closedir, system_stat, system_isdir
 use iso_c_binding, only : c_ptr
 implicit none
@@ -18,16 +17,21 @@ integer                      :: i
 integer                      :: ierr
 character(len=*),parameter   :: default_dfmt='year-month-dayThour:minute:second'
 character(len=:),allocatable :: dfmt
-!----------------------------------------------------------------------------------------------------------------------------------
-   call kracken('ls','. -help F -version F -a .F. -fmt -l .F. -csv .F.')
-   call help_usage(lget('ls_help'))
-   call help_version(lget('ls_version'))
-   ls_l=lget('ls_l')
-   ls_csv=lget('ls_csv')
-   listall=lget('ls_a')
-   dfmt=sget('ls_fmt')
-   if(dfmt.eq.'')dfmt=default_dfmt
-   directories=sgets('ls_oo')
+character(len=:),allocatable :: help_text(:), version_text(:)
+
+   call setup() ! define help text and version text
+   ! define command line options and parse
+   call set_args(' --all:a F --fmt:f " " --long:l F --csv F',help_text,version_text)
+   ls_l=lget('long')
+   ls_csv=lget('csv')
+   listall=lget('all')
+   dfmt=sget('fmt')
+   if(dfmt.eq.'')then
+      dfmt=default_dfmt
+   else
+      ls_l=.true.
+   endif
+   directories=sgets()
    if(size(directories).eq.0)then
       directories=['.']
    endif
@@ -105,7 +109,8 @@ EQUIVALENCE                                      &
       write(*, FMT="(1x,A,t10)",advance='no')     system_getpwuid(Owner_uid)
       write(*, FMT="(1x,A,t10)",advance='no')     system_getgrgid(Owner_gid)
       write(*, FMT="(1x,bn,I0,t10)",advance='no') File_size
-      write(*, FMT="(1x,A)",advance='no')         fmtdate(u2d(int(max(Last_access,Last_modification,Last_status_change))),dfmt)
+      !write(*, FMT="(1x,A)",advance='no')         fmtdate(u2d(int(max(Last_modification,Last_status_change))),dfmt)
+      write(*, FMT="(1x,A)",advance='no')         fmtdate(u2d(int(Last_modification)),dfmt)
       write(*, FMT="(1x,a)")filename
    endif
 
@@ -165,116 +170,98 @@ EQUIVALENCE                                      &
    101 format(i0,",",i0,",",a,",",i0,",",a,",",a,",",i0,",",a,",",a,",",a,",",a)
 
 end subroutine print_csv
-subroutine help_usage(l_help)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
+subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'       ls-(1f) - [FUNIX:FILESYSTEM] list files in a directory                                                                   ',&
-'       (LICENSE:PD)                                                                                                             ',&
-'SYNOPSIS                                                                                                                        ',&
-'       ls- [directory|--version|--help] [ -a] [ -l|-csv]                                                                        ',&
-'DESCRIPTION                                                                                                                     ',&
-'       Given a directory name list files in the directory                                                                       ',&
-'OPTIONS                                                                                                                         ',&
-'       pathname    name of directory or pathname to display contents of.                                                        ',&
-'                   Defaults to current directory.                                                                               ',&
-'       -a          show hidden files (files beginning with ".").                                                                ',&
-'       -l          long listing                                                                                                 ',&
-'       -fmt        alternate format for date and time. Calls fmtdate(3f).                                                       ',&
-'       -csv        generate output as a CSV file. Filenames should not have                                                     ',&
-'                   ,"'' characters in them. Very useful for use with sqlite3(1)                                                 ',&
-'                   and making a file that can be read into most spreadsheets,                                                   ',&
-'       --help      display command help and exit                                                                                ',&
-'       --version   output version information and exit                                                                          ',&
-'EXAMPLES                                                                                                                        ',&
-' Sample command lines ...                                                                                                       ',&
-'                                                                                                                                ',&
-'        ls-                                                                                                                     ',&
-'        ls- . /tmp -l                                                                                                           ',&
-'                                                                                                                                ',&
-'        # add Unix Epoch date                                                                                                   ',&
-'        ls- -l -fmt year-month-day hour:minute:second epoch                                                                     ',&
-'                                                                                                                                ',&
-'        # use the phase of the moon for the date                                                                                ',&
-'        # ls- -l -fmt %p %P                                                                                                     ',&
-'                                                                                                                                ',&
-'EXTENDED SQLITE EXAMPLE                                                                                                         ',&
-'                                                                                                                                ',&
-'  The CSV output can often just be read by spreadsheets. Typically the                                                          ',&
-'  file suffix ".csv" is required. Assuming you have bash(1), sqlite3(1)                                                         ',&
-'  and column(1) on your platform this is an example script that shows                                                           ',&
-'  how SQL statements can be used to generate many kinds of file reports                                                         ',&
-'  (number of bytes owned by users, number of files, sorting, ... It                                                             ',&
-'  assumes you or somone who will assist you is familiar with SQL and                                                            ',&
-'  sqlite3(1):                                                                                                                   ',&
-'                                                                                                                                ',&
-'   #!/bin/bash                                                                                                                  ',&
-'   #@(#) list files accessed today in current directory                                                                         ',&
-'   export SCRATCH=/tmp/$(uuidgen).csv          # create scratch file name                                                       ',&
-'   trap "/bin/rm -f $SCRATCH" EXIT             # ensure scratch file is removed                                                 ',&
-'   ls- -csv -- . |tail -n +2>$SCRATCH          # generate CSV file                                                              ',&
-'   (                                                                                                                            ',&
-'   # read CSV file into an SQLite file and generate a report as HTML table                                                      ',&
-'   sqlite3 \                                                                                                                    ',&
-'    -cmd ''CREATE TABLE directory("Inode_number" INT,                                                                           ',&
-'      "Number_of_blocks_allocated" INT,                                                                                         ',&
-'      "File_mode" TEXT,                                                                                                         ',&
-'      "Number_of_links" INT,                                                                                                    ',&
-'      "Owner" TEXT,                                                                                                             ',&
-'      "Groupname" TEXT,                                                                                                         ',&
-'      "File_size" INT,                                                                                                          ',&
-'      "Last_access" DATE,                                                                                                       ',&
-'      "Last_modification" DATE,                                                                                                 ',&
-'      "Last_status_change" DATE,                                                                                                ',&
-'      "Pathname" TEXT );'' \                                                                                                    ',&
-'      -cmd ''.mode csv'' \                                                                                                      ',&
-'      -cmd ".import $SCRATCH directory" <<\end_of_file                                                                          ',&
-'   -- .schema                                                                                                                   ',&
-'   .mode column                                                                                                                 ',&
-'   .header on                                                                                                                   ',&
-'   SELECT Pathname, File_mode, Owner, Groupname, File_size, strftime(''%Y-%m-%d %H:%M:%S'', Last_access) as "Last_Access"       ',&
-'      FROM directory                                                                                                            ',&
-'      WHERE DATE(''now'', ''start of day'') < Last_access                                                                       ',&
-'      ORDER BY Pathname ASC;                                                                                                    ',&
-'   end_of_file                                                                                                                  ',&
-'   )| column -t -s ''|''                                                                                                        ',&
-'   exit                                                                                                                         ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME',&
+'       ls-(1f) - [FUNIX:FILESYSTEM] list files in a directory',&
+'       (LICENSE:PD)                                          ',&
+'SYNOPSIS                                                     ',&
+'       ls- [ --all][ --fmt DATE_FORMAT] [ --long| --csv] [pathnames]',&
+'                                                                    ',&
+'       ls- --version|--help                                         ',&
+'DESCRIPTION                                                         ',&
+'       Given a directory name list files in the directory           ',&
+'OPTIONS                                                             ',&
+'       pathnames    name of directories or pathnames to display     ',&
+'                    contents of. Defaults to current directory.     ',&
+'       --all,a      show hidden files (files beginning with ".").   ',&
+'       --long,l     long listing. Date shown is the date of last    ',&
+'                    modification.                                   ',&
+'       --fmt,f FMT  alternate format for date and time. Calls fmtdate(3f).',&
+'       --csv        generate output as a CSV file. Filenames should not have',&
+'                    ,"'' characters in them. Very useful for use with sqlite3(1)',&
+'                    and making a file that can be read into most spreadsheets,  ',&
+'       --help       display command help and exit                               ',&
+'       --version    output version information and exit                         ',&
+'EXAMPLES                                                                        ',&
+' Sample command lines ...                                                       ',&
+'                                                                                ',&
+'        ls-                                                                     ',&
+'        ls- . /tmp -l                                                           ',&
+'                                                                                ',&
+'        # add Unix Epoch date                                                   ',&
+'        ls- -l -fmt year-month-day hour:minute:second epoch                     ',&
+'                                                                                ',&
+'        # use the phase of the moon for the date                                ',&
+'        ls- -l -fmt %p %P                                                       ',&
+'                                                                                ',&
+'        # sort by file age with newest at the bottom                            ',&
+'        ls- -l -fmt %a|sort -k 8hr|column -t                                    ',&
+'                                                                                ',&
+'EXTENDED SQLITE EXAMPLE                                                         ',&
+'                                                                                ',&
+'  The CSV output can often just be read by spreadsheets. Typically the          ',&
+'  file suffix ".csv" is required. Assuming you have bash(1), sqlite3(1)         ',&
+'  and column(1) on your platform this is an example script that shows           ',&
+'  how SQL statements can be used to generate many kinds of file reports         ',&
+'  (number of bytes owned by users, number of files, sorting, ... It             ',&
+'  assumes you or somone who will assist you is familiar with SQL and            ',&
+'  sqlite3(1):                                                                   ',&
+'                                                                                ',&
+'   #!/bin/bash                                                                  ',&
+'   #@(#) list files accessed today in current directory                         ',&
+'   export SCRATCH=/tmp/$(uuidgen).csv          # create scratch file name       ',&
+'   trap "/bin/rm -f $SCRATCH" EXIT             # ensure scratch file is removed ',&
+'   ls- -csv -- . |tail -n +2>$SCRATCH          # generate CSV file              ',&
+'   (                                                                            ',&
+'   # read CSV file into an SQLite file and generate a report as HTML table      ',&
+'   sqlite3 \                                                                    ',&
+'    -cmd ''CREATE TABLE directory("Inode_number" INT,                           ',&
+'      "Number_of_blocks_allocated" INT,                                         ',&
+'      "File_mode" TEXT,                                                         ',&
+'      "Number_of_links" INT,                                                    ',&
+'      "Owner" TEXT,                                                             ',&
+'      "Groupname" TEXT,                                                         ',&
+'      "File_size" INT,                                                          ',&
+'      "Last_access" DATE,                                                       ',&
+'      "Last_modification" DATE,                                                 ',&
+'      "Last_status_change" DATE,                                                ',&
+'      "Pathname" TEXT );'' \                                                    ',&
+'      -cmd ''.mode csv'' \                                                      ',&
+'      -cmd ".import $SCRATCH directory" <<\end_of_file                          ',&
+'   -- .schema                                                                   ',&
+'   .mode column                                                                 ',&
+'   .header on                                                                   ',&
+'   SELECT Pathname, File_mode, Owner, Groupname, File_size,                     ',&
+'   strftime(''%Y-%m-%d %H:%M:%S'', Last_access) as "Last_Access"                ',&
+'      FROM directory                                                            ',&
+'      WHERE DATE(''now'', ''start of day'') < Last_access                       ',&
+'      ORDER BY Pathname ASC;                                                    ',&
+'   end_of_file                                                                  ',&
+'   )| column -t -s ''|''                                                        ',&
+'   exit                                                                         ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
-'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
-'@(#)PROGRAM:        ls-(1f)>',&
-'@(#)DESCRIPTION:    list files in a directory>',&
-'@(#)VERSION:        1.0, 20161120>',&
-'@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2023-02-12 12:23:02 UTC-300>',&
+version_text=[ CHARACTER(LEN=128) :: &
+'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&
+'PROGRAM:        ls-(1f)                                             ',&
+'DESCRIPTION:    list files in a directory                           ',&
+'VERSION:        1.0, 20161120                                       ',&
+'AUTHOR:         John S. Urban                                       ',&
 '']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
-end program demo_system_readdir
+end subroutine setup
 !----------------------------------------------------------------------------------------------------------------------------------
+end program demo_system_readdir

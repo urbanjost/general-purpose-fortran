@@ -27,7 +27,6 @@ private
    public junroach      ! <a href="junroach.3m_messages.html">print eye-catching ASCII graphic (roach)</a>
    public junsun        ! <a href="junsun.3m_messages.html">print eye-catching ASCII graphic (sunshine)</a>
    public juntrolls     ! <a href="juntrolls.3m_messages.html">print eye-catching ASCII graphic (trolls) with message</a>
-   public test_suite_M_messages
 
    ! ILLUMINATE
    public tabgraph      ! <a href="tabgraph.3m_messages.html">write columns of numbers with a text scale to the right</a>
@@ -75,7 +74,7 @@ contains
 !!       >           _,.-----.,_
 !!       >         ,-~           ~-.
 !!       >       ,^___           ___^.
-!!       >      /~"   ~"   .   "~   "~!!       >     Y  ,--._    I    _.--.  Y
+!!       >      /~"   ~"   .   "~   "~      >     Y  ,--._    I    _.--.  Y
 !!       >     | Y     ~-. | ,-~     Y |
 !!       >     | |        }:{        | |
 !!       >     j l       / | \       ! l
@@ -100,7 +99,7 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junbad(where)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::junbad(3f):print eye-catching ASCII graphic (skull)"
 character(len=*),intent(in) :: where
@@ -157,7 +156,7 @@ end subroutine junbad
 !!   >          ./'.|'.'||||\\|..    )o o(    ..|//||||`.`|.`\.
 !!   >       ./'..|'.|| |||||\`````` '`"'` ''''''/||||| ||.`|..`\.
 !!   >     ./'.||'.|||| ||||||||||||.     .|||||||||||| ||||.`||.`\.
-!!   >    /'|||'.|||||| ||||||||||||{     }|||||||||||| ||||||.`|||`!!   >   '.|||'.||||||| ||||||||||||{     }|||||||||||| |||||||.`|||.`
+!!   >    /'|||'.|||||| ||||||||||||{     }|||||||||||| ||||||.`|||`  >   '.|||'.||||||| ||||||||||||{     }|||||||||||| |||||||.`|||.`
 !!   >  '.||| ||||||||| |/'   ``\||``     ''||/''   `\| ||||||||| |||.`
 !!   >  |/' \./'     `\./         \!|\   /|!/         \./'     `\./ `\|
 !!   >  V    V         V          }' `\ /' `{          V         V    V
@@ -187,7 +186,7 @@ end subroutine junbad
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junbat(where)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 character(len=*),parameter :: ident="@(#)M_messages::junbat(3f):print eye-catching ASCII graphic (bat)"
 character(len=*),intent(in)   :: where ! the I/O flag to pass on to journal()
 call journal(where,"                      .-                    .-                       ")
@@ -226,7 +225,7 @@ end subroutine junbat
 !!   >                     _-       _--______
 !!   >                __--( /     \ )XXXXXXXXXXXXX_
 !!   >              --XXX(   O   O  )XXXXXXXXXXXXXXX-
-!!   >             /XXX(       U     )        XXXXXXX!!   >           /XXXXX(              )--_  XXXXXXXXXXX!!   >          /XXXXX/ (      O     )   XXXXXX   \XXXXX!!   >          XXXXX/   /            XXXXXX   \__ \XXXXX----
+!!   >             /XXX(       U     )        XXXXXXX  >           /XXXXX(              )--_  XXXXXXXXXXX  >          /XXXXX/ (      O     )   XXXXXX   \XXXXX  >          XXXXX/   /            XXXXXX   \__ \XXXXX----
 !!   >          XXXXXX__/          XXXXXX         \__----  -
 !!   >  ---___  XXX__/          XXXXXX      \__         ---
 !!   >    --  --__/   ___/\  XXXXXX            /  ___---=
@@ -263,7 +262,7 @@ end subroutine junbat
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junbuster(where)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::junbuster(3f):print eye-catching ASCII graphic (ghostbuster)"
 character(len=*),intent(in)   :: where
@@ -353,7 +352,7 @@ end subroutine junbuster
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine jundragon(where,a)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::jundragon(3f):print eye-catching ASCII graphic (dragon) with message"
 character(len=*),intent(in)   :: where ! the I/O flag to pass on to JUN()
@@ -411,6 +410,10 @@ end subroutine jundragon
 !!            write(*,*)'ERROR:'
 !!            call junroach('s')
 !!            write(*,*)'   explanation of error.'
+!!            write(*,*)' '
+!!            write(*,*)'Pauci sunt errata in codice tuo'
+!!            write(*,*)' or'
+!!            write(*,*)'There are a few errors in your code'
 !!         endif
 !!      end program demo_junroach
 !!
@@ -444,7 +447,7 @@ end subroutine jundragon
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junroach(where)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 character(len=*),parameter :: ident="@(#)M_messages::junroach(3f):print eye-catching ASCII graphic (roach)"
 character(len=*),intent(in)   :: where  ! the I/O flag to pass on to JOURNAL()
 call journal(where,'       ,--.     .--.        ')
@@ -528,7 +531,7 @@ end subroutine junroach
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine junsun(where)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 character(len=*),parameter :: ident="@(#)M_messages::junsun(3f):print eye-catching ASCII graphic (sunshine)"
 character(len=*),intent(in)   :: where
 call journal(where,'#####################                  #####################                   ')
@@ -615,7 +618,7 @@ end subroutine junsun
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine juntrolls(where,a)
-use M_journal, only: journal
+use M_framework__journal, only: journal
 implicit none
 character(len=*),parameter :: ident="@(#)M_messages::juntrolls(3f):print eye-catching ASCII graphic (trolls) with message"
 character(len=*),intent(in)      :: where
@@ -870,7 +873,7 @@ end subroutine juntrolls
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine tabgraph(cc,array,ivalues0,rmin,rmax,fill,ilen0)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 
 character(len=*),parameter :: ident="@(#)M_messages::tabgraph(3f): write columns of numbers with a text scale to the right"
@@ -1024,7 +1027,7 @@ subroutine blocks(str,iout)
 !      o  make an option to print a bitmap-like string for use by atobm(1)
 !      o  if bothered to order data in ASCII collating sequence could use ichar(letter) instead of slower index(string,key)
 !===================================================================================================================================
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 character(len=*),parameter      :: ident="@(#)M_messages::blocks(3f): write out 132-character string in large block letters"
 character(len=*),intent(in)     :: str
@@ -1755,94 +1758,6 @@ end subroutine percent_done
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_messages()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-!*! setup
-   call test_blocks()
-   call test_junbad()
-   call test_junbat()
-   call test_junbuster()
-   call test_jundragon()
-   call test_junroach()
-   call test_junsun()
-   call test_juntrolls()
-   call test_percent_done()
-   call test_signs()
-   call test_tabgraph()
-!*! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_blocks()
-   call unit_check_start('blocks',msg='')
-   !*!call unit_check('blocks', 0.eq.0, 'checking',100)
-   call unit_check_done('blocks',msg='')
-end subroutine test_blocks
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_junbad()
-   call unit_check_start('junbad',msg='')
-   !*!call unit_check('junbad', 0.eq.0, 'checking',100)
-   call unit_check_done('junbad',msg='')
-end subroutine test_junbad
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_junbat()
-   call unit_check_start('junbat',msg='')
-   !*!call unit_check('junbat', 0.eq.0, 'checking',100)
-   call unit_check_done('junbat',msg='')
-end subroutine test_junbat
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_junbuster()
-   call unit_check_start('junbuster',msg='')
-   !*!call unit_check('junbuster', 0.eq.0, 'checking',100)
-   call unit_check_done('junbuster',msg='')
-end subroutine test_junbuster
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_jundragon()
-   call unit_check_start('jundragon',msg='')
-   !*!call unit_check('jundragon', 0.eq.0, 'checking',100)
-   call unit_check_done('jundragon',msg='')
-end subroutine test_jundragon
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_junroach()
-   call unit_check_start('junroach',msg='')
-   !*!call unit_check('junroach', 0.eq.0, 'checking',100)
-   call unit_check_done('junroach',msg='')
-end subroutine test_junroach
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_junsun()
-   call unit_check_start('junsun',msg='')
-   !*!call unit_check('junsun', 0.eq.0, 'checking',100)
-   call unit_check_done('junsun',msg='')
-end subroutine test_junsun
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_juntrolls()
-   call unit_check_start('juntrolls',msg='')
-   !*!call unit_check('juntrolls', 0.eq.0, 'checking',100)
-   call unit_check_done('juntrolls',msg='')
-end subroutine test_juntrolls
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_percent_done()
-   call unit_check_start('percent_done',msg='')
-   !*!call unit_check('percent_done', 0.eq.0, 'checking',100)
-   call unit_check_done('percent_done',msg='')
-end subroutine test_percent_done
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_signs()
-   call unit_check_start('signs',msg='')
-   !*!call unit_check('signs', 0.eq.0, 'checking',100)
-   call unit_check_done('signs',msg='')
-end subroutine test_signs
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_tabgraph()
-   call unit_check_start('tabgraph',msg='')
-   !*!call unit_check('tabgraph', 0.eq.0, 'checking',100)
-   call unit_check_done('tabgraph',msg='')
-end subroutine test_tabgraph
-!===================================================================================================================================
-end subroutine test_suite_M_messages
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

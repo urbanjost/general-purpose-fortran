@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>date_and_time (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>date_and_time (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>date_and_time(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-date_and_time(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 DATE_AND_TIME(3) - [SYSTEM:TIME] Gets current date time
 <P>
 </BLOCKQUOTE>
@@ -76,15 +68,16 @@ DATE_AND_TIME(3) - [SYSTEM:TIME] Gets current date time
 
 </A>
 <BLOCKQUOTE>
+<P>
 call date_and_time( [date] [,time] [,zone] [,values] )
 <P>
 <PRE>
-           subroutine date_and_time(date, time, zone, values)
+         subroutine date_and_time(date, time, zone, values)
 <P>
-            character(len=8),intent(out),optional :: date
-            character(len=10),intent(out),optional :: time
-            character(len=5),intent(out),optional :: zone
-            integer,intent(out),optional :: values(8)
+          character(len=8),intent(out),optional :: date
+          character(len=10),intent(out),optional :: time
+          character(len=5),intent(out),optional :: zone
+          integer,intent(out),optional :: values(8)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -94,6 +87,7 @@ call date_and_time( [date] [,time] [,zone] [,values] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -113,8 +107,8 @@ o
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VALUES is a rank-one array of type integer with a decimal exponent range
-of at least four.
+VALUES is a rank-one array of type integer with a decimal exponent
+range of at least four.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -123,8 +117,9 @@ of at least four.
 
 </A>
 <BLOCKQUOTE>
-DATE_AND_TIME(3) gets the corresponding date and time information from the
-real-time system clock.
+<P>
+DATE_AND_TIME(3) gets the corresponding date and time information from
+the real-time system clock.
 <P>
 Unavailable time and date character parameters return blanks.
 <P>
@@ -141,27 +136,29 @@ International Earth Rotation Service (IERS).
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DATE : A character string of default kind of the form CCYYMMDD, of length
-8 or larger, where
+DATE : A character string of default kind of the form CCYYMMDD, of
+length 8 or larger, where
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-          + CCYY is the year in the Gregorian calendar
-          + MM is the month within the year
-          + DD is the day within the month.
+        + CCYY is the year in the Gregorian calendar
+        + MM is the month within the year
+        + DD is the day within the month.
 <P>
 </PRE>
 The characters of this value are all decimal digits.
+<BLOCKQUOTE>
 <P>
-<PRE>
-    If there is no date available, DATE is assigned all blanks.
-<P>
-</PRE>
-<TABLE cellpadding=3>
+If there is no date available, DATE is assigned all blanks.
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: If there is no date available, DATE is assigned all blanks.
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -185,17 +182,18 @@ o
 </TD><TD>
 and ss.sss is the seconds and milliseconds of the minute.
 </TD></TR>
-<TR></TR></TABLE>Except for the decimal point, the characters of this value shall all be
-decimal digits.
+<TR></TR></TABLE>Except for the decimal point, the characters of this value shall all
+be decimal digits.
 <P>
 If there is no clock available, TIME is assigned all blanks.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ZONE : A string of the form (+-)HHMM, of length 5 or larger, representing
-the difference with respect to Coordinated Universal Time (UTC), where
-<TABLE width=100% cellpadding=3><!-- tsb: ZONE : A string of the form (+-)HHMM, of length 5 or larger, representing
+ZONE : A string of the form (+-)HHMM, of length 5 or larger,
+representing the difference with respect to Coordinated Universal
+Time (UTC), where
+<TABLE width=100% cellpadding=3><!-- tsb: ZONE : A string of the form (+-)HHMM, of length 5 or larger,
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -204,8 +202,8 @@ o
 hh and mm are the time difference with respect to Coordinated
 Universal Time (UTC) in hours and minutes, respectively.
 </TD></TR>
-<TR></TR></TABLE>The characters of this value following the sign character are all decimal
-digits.
+<TR></TR></TABLE>The characters of this value following the sign character are all
+decimal digits.
 <P>
 If this information is not available, ZONE is assigned all blanks.
 </TD></TR>
@@ -213,7 +211,8 @@ If this information is not available, ZONE is assigned all blanks.
 o
 </TD><TD>
 VALUES : An array of at least eight elements. If there is no data
-available for a value it is set to <B>-HUGE</B>(VALUES). Otherwise, it contains:
+available for a value it is set to <B>-HUGE</B>(VALUES). Otherwise, it
+contains:
 <TABLE width=100% cellpadding=3><!-- tsb: VALUES : An array of at least eight elements. If there is no data
  -->
 <TR></TR><TR></TR>
@@ -235,8 +234,8 @@ VALUES(3) : The day of the month
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VALUES(4) : Time difference in minutes between the reported time and
-UTC time.
+VALUES(4) : Time difference in minutes between the reported time
+and UTC time.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -256,14 +255,15 @@ VALUES(7) : The seconds of the minute, in the range 0 to 60
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-VALUES(8) : The milliseconds of the second, in the range 0 to 999.
+VALUES(8) : The milliseconds of the second, in the range 0
+to 999.
 </TD></TR>
 <TR></TR></TABLE><!-- .PP -->
 </TD></TR>
-<TR></TR></TABLE>The date, clock, and time zone information might be available on some images
-and not others. If the date, clock, or time zone information is available on
-more than one image, it is processor dependent whether or not those images
-share the same information.
+<TR></TR></TABLE>The date, clock, and time zone information might be available on some
+images and not others. If the date, clock, or time zone information is
+available on more than one image, it is processor dependent whether or
+not those images share the same information.
 </BLOCKQUOTE>
 <A name=5>
 
@@ -271,47 +271,48 @@ share the same information.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_date_and_time
-      implicit none
-      character(len=8)     :: date
-      character(len=10)    :: time
-      character(len=5)     :: zone
-      integer,dimension(8) :: values
+    program demo_date_and_time
+    implicit none
+    character(len=8)     :: date
+    character(len=10)    :: time
+    character(len=5)     :: zone
+    integer,dimension(8) :: values
 <P>
-          call date_and_time(date,time,zone,values)
+        call date_and_time(date,time,zone,values)
 <P>
-          ! using keyword arguments
-          call date_and_time(DATE=date,TIME=time,ZONE=zone)
-          print &#146;(*(g0))&#146;,&#146;DATE="&#146;,date,&#146;" TIME="&#146;,time,&#146;" ZONE="&#146;,zone,&#146;"&#146;
+        ! using keyword arguments
+        call date_and_time(DATE=date,TIME=time,ZONE=zone)
+        print &#146;(*(g0))&#146;,&#146;DATE="&#146;,date,&#146;" TIME="&#146;,time,&#146;" ZONE="&#146;,zone,&#146;"&#146;
 <P>
-          call date_and_time(VALUES=values)
-          write(*,&#146;(i5,a)&#146;) &
-           & values(1),&#146; - The year&#146;, &
-           & values(2),&#146; - The month&#146;, &
-           & values(3),&#146; - The day of the month&#146;, &
-           & values(4),&#146; - Time difference with UTC in minutes&#146;, &
-           & values(5),&#146; - The hour of the day&#146;, &
-           & values(6),&#146; - The minutes of the hour&#146;, &
-           & values(7),&#146; - The seconds of the minute&#146;, &
-           & values(8),&#146; - The milliseconds of the second&#146;
-      end program demo_date_and_time
+        call date_and_time(VALUES=values)
+        write(*,&#146;(i5,a)&#146;) &
+         & values(1),&#146; - The year&#146;, &
+         & values(2),&#146; - The month&#146;, &
+         & values(3),&#146; - The day of the month&#146;, &
+         & values(4),&#146; - Time difference with UTC in minutes&#146;, &
+         & values(5),&#146; - The hour of the day&#146;, &
+         & values(6),&#146; - The minutes of the hour&#146;, &
+         & values(7),&#146; - The seconds of the minute&#146;, &
+         & values(8),&#146; - The milliseconds of the second&#146;
+    end program demo_date_and_time
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt; DATE="20201222" TIME="165738.779" ZONE="-0500"
-       &gt;  2020 - The year
-       &gt;    12 - The month
-       &gt;    22 - The day of the month
-       &gt;  -300 - Time difference with UTC in minutes
-       &gt;    16 - The hour of the day
-       &gt;    57 - The minutes of the hour
-       &gt;    38 - The seconds of the minute
-       &gt;   779 - The milliseconds of the second
+     &gt; DATE="20201222" TIME="165738.779" ZONE="-0500"
+     &gt;  2020 - The year
+     &gt;    12 - The month
+     &gt;    22 - The day of the month
+     &gt;  -300 - Time difference with UTC in minutes
+     &gt;    16 - The hour of the day
+     &gt;    57 - The minutes of the hour
+     &gt;    38 - The seconds of the minute
+     &gt;   779 - The milliseconds of the second
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -321,6 +322,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=7>
@@ -329,6 +331,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 CPU_TIME(3), SYSTEM_CLOCK(3)
 </BLOCKQUOTE>
 <A name=8>
@@ -337,6 +340,7 @@ CPU_TIME(3), SYSTEM_CLOCK(3)
 
 </A>
 <BLOCKQUOTE>
+<P>
 date and time conversion, formatting and computation
 <TABLE cellpadding=3><!-- tsb: date and time conversion, formatting and computation
  -->
@@ -354,16 +358,13 @@ fortran-datetime https://github.com/dongli/fortran-datetime
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-datetime-fortran - https://github.com/wavebitscientific/datetime-fortran
+datetime-fortran -
+https://github.com/wavebitscientific/datetime-fortran
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022       date_and_time(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4a6ca6e3-3301-4f09-92b8-bd6a3699ea69 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 45df0339-aa1d-4e1c-9948-cd5724cb4010 using man macros.</FONT>
 <br><br><center><img src="images/date_and_time.3fortran.gif"></center>
 </div>
 </div>

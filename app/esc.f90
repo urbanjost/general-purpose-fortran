@@ -30,191 +30,191 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   esc(1) - [NCURSES] set xterm(1) attributes using a screen or line mode                                                       ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'SYNOPSIS                                                                                                                        ',&
-'   esc   [keywords]                                                                                                             ',&
-'         -rows NN                                                                                                               ',&
-'         -cols NN                                                                                                               ',&
-'         -right NN                                                                                                              ',&
-'         -down NN                                                                                                               ',&
-'         -fn fontname                                                                                                           ',&
-'         -fsize fontsize                                                                                                        ',&
-'         -bg background_color                                                                                                   ',&
-'         -fg foreground_color                                                                                                   ',&
-'         -cr cursor_color                                                                                                       ',&
-'         -cn [0 COLOR_VALUE 1 COLOR_VALUE 2 COLOR_VALUE ...|]                                                                   ',&
-'         -o windowname                                                                                                          ',&
-'         -title TITLE window title                                                                                              ',&
-'         -name TITLE icon name                                                                                                  ',&
-'         -nt TITLE icon name and title                                                                                          ',&
-'         -xrdb [NAME]                                                                                                           ',&
-'         -iconstate                                                                                                             ',&
-'         -alias                                                                                                                 ',&
-'         --help                                                                                                                 ',&
-'         --version                                                                                                              ',&
-'DESCRIPTION                                                                                                                     ',&
-'   If no values are specified on the command line a screen interface is                                                         ',&
-'   displayed that allows setting the background, foreground, cursor color,                                                      ',&
-'   font size, and window size of an xterm(1) terminal emulator window                                                           ',&
-'   using ncurses(3f)/fixedform(3f).                                                                                             ',&
-'                                                                                                                                ',&
-'   If options are specified on the command line the values are set and the                                                      ',&
-'   screen mode is not launched.                                                                                                 ',&
-'                                                                                                                                ',&
-'   If the positioning and resize options do not work, run the following                                                         ',&
-'   before starting a new xterm:                                                                                                 ',&
-'                                                                                                                                ',&
-'      esc -xrdb |xrdb -merge                                                                                                    ',&
-'                                                                                                                                ',&
-'   If you use something that filters stdout such as tmux(1), screen(1) assign                                                   ',&
-'   esc(1) output to the initial stdout before starting the program, such as                                                     ',&
-'                                                                                                                                ',&
-'      export OTHERTTY=`tty`                                                                                                     ',&
-'      tmux                                                                                                                      ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   VALUES     The allowed keywords are:                                                                                         ',&
-'                                                                                                                                ',&
-'              o 80........ set terminal width to eighty characters                                                              ',&
-'              o 132....... set terminal width to 132 characters                                                                 ',&
-'              o raise..... raise to top of window stack                                                                         ',&
-'              o lower..... lower to back of window stack                                                                        ',&
-'              o iconify... iconify window                                                                                       ',&
-'              o uniconify. uniconify window                                                                                     ',&
-'              o toggle.... toggle icon state                                                                                    ',&
-'              o maximize.. make xterm(1) window size of display                                                                 ',&
-'              o restore... restore window size to before the last "maximize"                                                    ',&
-'              o vt102..... switch to VT102 terminal emulator mode                                                               ',&
-'              o tek....... switch to Tektronix 4010 terminal emulator mode                                                      ',&
-'                                                                                                                                ',&
-'   -rows NN         change number of rows of window to specified value                                                          ',&
-'   -cols NN         change number of columns of window to specified value                                                       ',&
-'   -right NN        distance in rasters from left display edge to place                                                         ',&
-'                    upper left corner                                                                                           ',&
-'   -down NN         distance in rasters from upper display edge to place                                                        ',&
-'                    upper left corner                                                                                           ',&
-'                                                                                                                                ',&
-'   -fn FONTNAME     change to specified font name. You can list several                                                         ',&
-'                    available fixed-space font names by using:                                                                  ',&
-'                                                                                                                                ',&
-'                      (xlsfonts -fn ''*-c-*'' ; xlsfonts -fn ''*-m-*'')                                                         ',&
-'                                                                                                                                ',&
-'                     Example names: (font names may vary from server to server):                                                ',&
-'                                                                                                                                ',&
-'                          fixed     8x13       9x15        ''*24*-c-*''                                                         ',&
-'                                                                                                                                ',&
-'   -fsize NN        guess at a fixed font of specified size                                                                     ',&
-'                                                                                                                                ',&
-'   -bg CNAME        specify background color by name or hex value "#RRGGBB"                                                     ',&
-'   -fg CNAME        specify foreground color by name or hex value "#RRGGBB"                                                     ',&
-'   -cr CNAME        specify cursor color by name or hex value "#RRGGBB"                                                         ',&
-'   -cn NN CNAME...  define terminal pen colors by number "NN $RRGGBB" or                                                        ',&
-'                    name. Typically, at least 0 thru 15 are supported.                                                          ',&
-'                                                                                                                                ',&
-'   -title TITLE     window title                                                                                                ',&
-'   -name TITLE      icon name                                                                                                   ',&
-'   -nt TITLE        icon name and title                                                                                         ',&
-'                                                                                                                                ',&
-'   --alias          list some common bash shell aliases that use esc(1).                                                        ',&
-'                    These are typically added to the ~/.bashrc file                                                             ',&
-'                    or sourced:                                                                                                 ',&
-'                                                                                                                                ',&
-'                       esc -alias >./junk;source ./junk;rm ./junk;alias                                                         ',&
-'                                                                                                                                ',&
-'   -o WINDOWNAME    If your window manager supports multiple virtual                                                            ',&
-'                    displays by defining the property WM_OCCUPANCY                                                              ',&
-'                    (use xprop -id $WINDOWID to see) then you can                                                               ',&
-'                    move your windows to specific virtual displays;                                                             ',&
-'                    usually by number or by name. The name "all" is                                                             ',&
-'                    typically special and makes the window visible                                                              ',&
-'                    in all the virtual displays.                                                                                ',&
-'                                                                                                                                ',&
-'                    This works for the ctwm(1) window manager.                                                                  ',&
-'                                                                                                                                ',&
-'                    If your window manager has assigned the property                                                            ',&
-'                    WS_OCCUPATION as seen by entering                                                                           ',&
-'                                                                                                                                ',&
-'                       xprop -id $WINDOWID                                                                                      ',&
-'                             :                                                                                                  ',&
-'                          WM_OCCUPATION(STRING) = "2"                                                                           ',&
-'                          WM_OCCUPATION(STRING) = "Two"                                                                         ',&
-'                            :                                                                                                   ',&
-'                                                                                                                                ',&
-'                    you can specify which virtual display to display on.                                                        ',&
-'                                                                                                                                ',&
-'  --iconstate       return current icon state of X11 xterm window (opened or                                                    ',&
-'                    closed).                                                                                                    ',&
-'                                                                                                                                ',&
-'   --xrdb NAME      print out current terminal settings as a set of                                                             ',&
-'                    X11 resources that can be added to your ~/.Xresources                                                       ',&
-'                    file so that you can launch terminals with those                                                            ',&
-'                    attributes with                                                                                             ',&
-'                                                                                                                                ',&
-'                       "xterm -name NAME"                                                                                       ',&
-'                                                                                                                                ',&
-'                    For example:                                                                                                ',&
-'                                                                                                                                ',&
-'                       esc -xrdb EDIT|xrdb -merge                                                                               ',&
-'                       xterm -name EDIT                                                                                         ',&
-'                                                                                                                                ',&
-'                    All other options will be ignored. This must be run                                                         ',&
-'                    in an xterm(1) window.                                                                                      ',&
-'                                                                                                                                ',&
-'   --help           display help and exit                                                                                       ',&
-'   --version        display version information and exit                                                                        ',&
-'                                                                                                                                ',&
-'   The following options will return the current value if given a null                                                          ',&
-'   value:                                                                                                                       ',&
-'                                                                                                                                ',&
-'   -fn                                                                                                                          ',&
-'   -bg -fg -cr                                                                                                                  ',&
-'   -rows -cols                                                                                                                  ',&
-'   -down -right                                                                                                                 ',&
-'   -iconstate                                                                                                                   ',&
-'   -cn ''''|0 1 2 ...                                                                                                           ',&
-'                                                                                                                                ',&
-'   By itself, -cn will list the first 16 pen colors. Given a list of                                                            ',&
-'   numbers, it will query those specific pen numbers.                                                                           ',&
-'                                                                                                                                ',&
-'VARIABLES                                                                                                                       ',&
-'   By default esc(1) writes output to the current stdout file. The                                                              ',&
-'   environment variable OTHERTTY can be used to change the default                                                              ',&
-'   file. This is commonly required before starting programs that                                                                ',&
-'   filter stdout, such as tmux(1) and screen(1).                                                                                ',&
-'                                                                                                                                ',&
-'      export OTHERTTY=/dev/pts/1                                                                                                ',&
-'                                                                                                                                ',&
-'EXAMPLE                                                                                                                         ',&
-'  Sample usage:                                                                                                                 ',&
-'                                                                                                                                ',&
-'   # if do not have xterm settings set might need to enter                                                                      ',&
-'   esc -xrdb|xrdb -merge                                                                                                        ',&
-'   # and then try the commands in xterm(1) windows launched after this                                                          ',&
-'                                                                                                                                ',&
-'   esc # bring up screen interface                                                                                              ',&
-'   esc -fn ''*--14*-c-*''  # find a font of specified size                                                                      ',&
-'   esc -fn 5  # set to fifth font in font menu (ctrl-Mouse2)                                                                    ',&
-'   esc -fsize 20 # set to first 20-point font found (if any)                                                                    ',&
-'   esc -rows 40 -cols 132 # set terminal size                                                                                   ',&
-'   esc -bg brown -fg white -cr red                                                                                              ',&
-'   esc -bg ''#ff00ff''                                                                                                          ',&
-'   esc -cn 0 red 1 green 2 cyan                                                                                                 ',&
-'   esc -alias >x;source x;rm x # set up a lot of bash shell aliases                                                             ',&
-'                                                                                                                                ',&
-'   # set up X11 resources so name BROWN sets some favorite defaults                                                             ',&
-'   esc -bg brown -fg black -fn 5 -xrdb BROWN >>$HOME/.Xdefaults                                                                 ',&
-'   xrdb -merge $HOME/.Xdefaults                                                                                                 ',&
-'   xterm -name BROWN                                                                                                            ',&
-'                                                                                                                                ',&
-'   C-shell                                                                                                                      ',&
-'                                                                                                                                ',&
-'      alias cd ''cd \!*; esc -nt''                                                                                              ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   esc(1) - [NCURSES] set xterm(1) attributes using a screen or line mode       ',&
+'   (LICENSE:PD)                                                                 ',&
+'SYNOPSIS                                                                        ',&
+'   esc   [keywords]                                                             ',&
+'         -rows NN                                                               ',&
+'         -cols NN                                                               ',&
+'         -right NN                                                              ',&
+'         -down NN                                                               ',&
+'         -fn fontname                                                           ',&
+'         -fsize fontsize                                                        ',&
+'         -bg background_color                                                   ',&
+'         -fg foreground_color                                                   ',&
+'         -cr cursor_color                                                       ',&
+'         -cn [0 COLOR_VALUE 1 COLOR_VALUE 2 COLOR_VALUE ...|]                   ',&
+'         -o windowname                                                          ',&
+'         -title TITLE window title                                              ',&
+'         -name TITLE icon name                                                  ',&
+'         -nt TITLE icon name and title                                          ',&
+'         -xrdb [NAME]                                                           ',&
+'         -iconstate                                                             ',&
+'         -alias                                                                 ',&
+'         --help                                                                 ',&
+'         --version                                                              ',&
+'DESCRIPTION                                                                     ',&
+'   If no values are specified on the command line a screen interface is         ',&
+'   displayed that allows setting the background, foreground, cursor color,      ',&
+'   font size, and window size of an xterm(1) terminal emulator window           ',&
+'   using ncurses(3f)/fixedform(3f).                                             ',&
+'                                                                                ',&
+'   If options are specified on the command line the values are set and the      ',&
+'   screen mode is not launched.                                                 ',&
+'                                                                                ',&
+'   If the positioning and resize options do not work, run the following         ',&
+'   before starting a new xterm:                                                 ',&
+'                                                                                ',&
+'      esc -xrdb |xrdb -merge                                                    ',&
+'                                                                                ',&
+'   If you use something that filters stdout such as tmux(1), screen(1) assign   ',&
+'   esc(1) output to the initial stdout before starting the program, such as     ',&
+'                                                                                ',&
+'      export OTHERTTY=`tty`                                                     ',&
+'      tmux                                                                      ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'   VALUES     The allowed keywords are:                                         ',&
+'                                                                                ',&
+'              o 80........ set terminal width to eighty characters              ',&
+'              o 132....... set terminal width to 132 characters                 ',&
+'              o raise..... raise to top of window stack                         ',&
+'              o lower..... lower to back of window stack                        ',&
+'              o iconify... iconify window                                       ',&
+'              o uniconify. uniconify window                                     ',&
+'              o toggle.... toggle icon state                                    ',&
+'              o maximize.. make xterm(1) window size of display                 ',&
+'              o restore... restore window size to before the last "maximize"    ',&
+'              o vt102..... switch to VT102 terminal emulator mode               ',&
+'              o tek....... switch to Tektronix 4010 terminal emulator mode      ',&
+'                                                                                ',&
+'   -rows NN         change number of rows of window to specified value          ',&
+'   -cols NN         change number of columns of window to specified value       ',&
+'   -right NN        distance in rasters from left display edge to place         ',&
+'                    upper left corner                                           ',&
+'   -down NN         distance in rasters from upper display edge to place        ',&
+'                    upper left corner                                           ',&
+'                                                                                ',&
+'   -fn FONTNAME     change to specified font name. You can list several         ',&
+'                    available fixed-space font names by using:                  ',&
+'                                                                                ',&
+'                      (xlsfonts -fn ''*-c-*'' ; xlsfonts -fn ''*-m-*'')         ',&
+'                                                                                ',&
+'                     Example names: (font names may vary from server to server):',&
+'                                                                                ',&
+'                          fixed     8x13       9x15        ''*24*-c-*''         ',&
+'                                                                                ',&
+'   -fsize NN        guess at a fixed font of specified size                     ',&
+'                                                                                ',&
+'   -bg CNAME        specify background color by name or hex value "#RRGGBB"     ',&
+'   -fg CNAME        specify foreground color by name or hex value "#RRGGBB"     ',&
+'   -cr CNAME        specify cursor color by name or hex value "#RRGGBB"         ',&
+'   -cn NN CNAME...  define terminal pen colors by number "NN $RRGGBB" or        ',&
+'                    name. Typically, at least 0 thru 15 are supported.          ',&
+'                                                                                ',&
+'   -title TITLE     window title                                                ',&
+'   -name TITLE      icon name                                                   ',&
+'   -nt TITLE        icon name and title                                         ',&
+'                                                                                ',&
+'   --alias          list some common bash shell aliases that use esc(1).        ',&
+'                    These are typically added to the ~/.bashrc file             ',&
+'                    or sourced:                                                 ',&
+'                                                                                ',&
+'                       esc -alias >./junk;source ./junk;rm ./junk;alias         ',&
+'                                                                                ',&
+'   -o WINDOWNAME    If your window manager supports multiple virtual            ',&
+'                    displays by defining the property WM_OCCUPANCY              ',&
+'                    (use xprop -id $WINDOWID to see) then you can               ',&
+'                    move your windows to specific virtual displays;             ',&
+'                    usually by number or by name. The name "all" is             ',&
+'                    typically special and makes the window visible              ',&
+'                    in all the virtual displays.                                ',&
+'                                                                                ',&
+'                    This works for the ctwm(1) window manager.                  ',&
+'                                                                                ',&
+'                    If your window manager has assigned the property            ',&
+'                    WS_OCCUPATION as seen by entering                           ',&
+'                                                                                ',&
+'                       xprop -id $WINDOWID                                      ',&
+'                             :                                                  ',&
+'                          WM_OCCUPATION(STRING) = "2"                           ',&
+'                          WM_OCCUPATION(STRING) = "Two"                         ',&
+'                            :                                                   ',&
+'                                                                                ',&
+'                    you can specify which virtual display to display on.        ',&
+'                                                                                ',&
+'  --iconstate       return current icon state of X11 xterm window (opened or    ',&
+'                    closed).                                                    ',&
+'                                                                                ',&
+'   --xrdb NAME      print out current terminal settings as a set of             ',&
+'                    X11 resources that can be added to your ~/.Xresources       ',&
+'                    file so that you can launch terminals with those            ',&
+'                    attributes with                                             ',&
+'                                                                                ',&
+'                       "xterm -name NAME"                                       ',&
+'                                                                                ',&
+'                    For example:                                                ',&
+'                                                                                ',&
+'                       esc -xrdb EDIT|xrdb -merge                               ',&
+'                       xterm -name EDIT                                         ',&
+'                                                                                ',&
+'                    All other options will be ignored. This must be run         ',&
+'                    in an xterm(1) window.                                      ',&
+'                                                                                ',&
+'   --help           display help and exit                                       ',&
+'   --version        display version information and exit                        ',&
+'                                                                                ',&
+'   The following options will return the current value if given a null          ',&
+'   value:                                                                       ',&
+'                                                                                ',&
+'   -fn                                                                          ',&
+'   -bg -fg -cr                                                                  ',&
+'   -rows -cols                                                                  ',&
+'   -down -right                                                                 ',&
+'   -iconstate                                                                   ',&
+'   -cn ''''|0 1 2 ...                                                           ',&
+'                                                                                ',&
+'   By itself, -cn will list the first 16 pen colors. Given a list of            ',&
+'   numbers, it will query those specific pen numbers.                           ',&
+'                                                                                ',&
+'VARIABLES                                                                       ',&
+'   By default esc(1) writes output to the current stdout file. The              ',&
+'   environment variable OTHERTTY can be used to change the default              ',&
+'   file. This is commonly required before starting programs that                ',&
+'   filter stdout, such as tmux(1) and screen(1).                                ',&
+'                                                                                ',&
+'      export OTHERTTY=/dev/pts/1                                                ',&
+'                                                                                ',&
+'EXAMPLE                                                                         ',&
+'  Sample usage:                                                                 ',&
+'                                                                                ',&
+'   # if do not have xterm settings set might need to enter                      ',&
+'   esc -xrdb|xrdb -merge                                                        ',&
+'   # and then try the commands in xterm(1) windows launched after this          ',&
+'                                                                                ',&
+'   esc # bring up screen interface                                              ',&
+'   esc -fn ''*--14*-c-*''  # find a font of specified size                      ',&
+'   esc -fn 5  # set to fifth font in font menu (ctrl-Mouse2)                    ',&
+'   esc -fsize 20 # set to first 20-point font found (if any)                    ',&
+'   esc -rows 40 -cols 132 # set terminal size                                   ',&
+'   esc -bg brown -fg white -cr red                                              ',&
+'   esc -bg ''#ff00ff''                                                          ',&
+'   esc -cn 0 red 1 green 2 cyan                                                 ',&
+'   esc -alias >x;source x;rm x # set up a lot of bash shell aliases             ',&
+'                                                                                ',&
+'   # set up X11 resources so name BROWN sets some favorite defaults             ',&
+'   esc -bg brown -fg black -fn 5 -xrdb BROWN >>$HOME/.Xdefaults                 ',&
+'   xrdb -merge $HOME/.Xdefaults                                                 ',&
+'   xterm -name BROWN                                                            ',&
+'                                                                                ',&
+'   C-shell                                                                      ',&
+'                                                                                ',&
+'      alias cd ''cd \!*; esc -nt''                                              ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -424,7 +424,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180408>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2023-02-12 18:34:33 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:53:31 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -919,93 +919,93 @@ text=[ CHARACTER(LEN=128) :: &
 'alias raise=''esc raise''',&
 'alias icon=''esc iconify''',&
 'alias unicon=''esc uniconify''',&
-'alias 0=''esc -fn 0''',&
-'alias 1=''esc -fn 1''',&
-'alias 2=''esc -fn 2''',&
-'alias 3=''esc -fn 3''',&
-'alias 4=''esc -fn 4''',&
-'alias 5=''esc -fn 5''',&
-'alias 6=''esc -fn 6''',&
-'alias 7=''esc -fn 7''',&
-'alias 8=''esc -fn 8''',&
+'alias 0=''esc -fn 0''         ',&
+'alias 1=''esc -fn 1''         ',&
+'alias 2=''esc -fn 2''         ',&
+'alias 3=''esc -fn 3''         ',&
+'alias 4=''esc -fn 4''         ',&
+'alias 5=''esc -fn 5''         ',&
+'alias 6=''esc -fn 6''         ',&
+'alias 7=''esc -fn 7''         ',&
+'alias 8=''esc -fn 8''         ',&
 'alias small=''esc -rows 24 -cols 80''',&
-'alias full=''esc maximize''',&
-'alias fullback=''esc restore''',&
+'alias full=''esc maximize''          ',&
+'alias fullback=''esc restore''       ',&
 '################################################################################',&
-'# some favorite terminal configurations as examples',&
-'alias default="esc \',&
-'   -fn ''*-cronyx-courier-medium-r-normal--17-120-100-100-m-90-koi8-r'' \',&
-'   -rows 36 -cols 132 \',&
-'   -down 0 -right 0 \',&
-'   -bg black -fg white -cr red \',&
-'   -cn \',&
-'      0  rgb:0000/0000/0000 \',&
-'      1  rgb:cdcd/0000/0000 \',&
-'      2  rgb:0000/cdcd/cdcd \',&
-'      3  rgb:cdcd/cdcd/0000 \',&
-'      4  rgb:0000/0000/eeee \',&
-'      5  rgb:cdcd/0000/cdcd \',&
-'      6  rgb:0000/cdcd/0000 \',&
-'      7  rgb:e5e5/e5e5/e5e5 \',&
-'      8  rgb:7f7f/7f7f/7f7f \',&
-'      9  rgb:ffff/0000/0000 \',&
-'      10 rgb:0000/ffff/0000 \',&
-'      11 rgb:ffff/ffff/0000 \',&
-'      12 rgb:5c5c/5c5c/ffff \',&
-'      13 rgb:ffff/0000/ffff \',&
-'      14 rgb:0000/ffff/ffff \',&
-'      15 rgb:ffff/ffff/ffff',&
-'"',&
-'alias green=''esc -rows 24 -cols 80 -fn huge -bg green4 -fg yellow -cr red''',&
-'alias brown=''esc -fn huge -bg brown4 -fg white -cr red''',&
+'# some favorite terminal configurations as examples                             ',&
+'alias default="esc \                                                            ',&
+'   -fn ''*-cronyx-courier-medium-r-normal--17-120-100-100-m-90-koi8-r'' \       ',&
+'   -rows 36 -cols 132 \                                                         ',&
+'   -down 0 -right 0 \                                                           ',&
+'   -bg black -fg white -cr red \                                                ',&
+'   -cn \                                                                        ',&
+'      0  rgb:0000/0000/0000 \                                                   ',&
+'      1  rgb:cdcd/0000/0000 \                                                   ',&
+'      2  rgb:0000/cdcd/cdcd \                                                   ',&
+'      3  rgb:cdcd/cdcd/0000 \                                                   ',&
+'      4  rgb:0000/0000/eeee \                                                   ',&
+'      5  rgb:cdcd/0000/cdcd \                                                   ',&
+'      6  rgb:0000/cdcd/0000 \                                                   ',&
+'      7  rgb:e5e5/e5e5/e5e5 \                                                   ',&
+'      8  rgb:7f7f/7f7f/7f7f \                                                   ',&
+'      9  rgb:ffff/0000/0000 \                                                   ',&
+'      10 rgb:0000/ffff/0000 \                                                   ',&
+'      11 rgb:ffff/ffff/0000 \                                                   ',&
+'      12 rgb:5c5c/5c5c/ffff \                                                   ',&
+'      13 rgb:ffff/0000/ffff \                                                   ',&
+'      14 rgb:0000/ffff/ffff \                                                   ',&
+'      15 rgb:ffff/ffff/ffff                                                     ',&
+'"                                                                               ',&
+'alias green=''esc -rows 24 -cols 80 -fn huge -bg green4 -fg yellow -cr red''    ',&
+'alias brown=''esc -fn huge -bg brown4 -fg white -cr red''                       ',&
 '################################################################################',&
-'function ID(){',&
-'# color terminal according to which cluster logged onto',&
-'case $(hostname) in',&
-'b15*) set -bg yellow -fg black;;',&
-'b16*) set -bg brown  -fg white;;',&
-'b17*) set -bg white  -fg black;;',&
-'*) default;;',&
-'esac',&
-'}',&
+'function ID(){                                                                  ',&
+'# color terminal according to which cluster logged onto                         ',&
+'case $(hostname) in                                                             ',&
+'b15*) set -bg yellow -fg black;;                                                ',&
+'b16*) set -bg brown  -fg white;;                                                ',&
+'b17*) set -bg white  -fg black;;                                                ',&
+'*) default;;                                                                    ',&
+'esac                                                                            ',&
+'}                                                                               ',&
 '################################################################################',&
-'function kolor(){',&
-'   # set foreground and background color',&
-'   case $# in',&
-'   0) showrgb ;;',&
-'   1) esc -bg $1        ;;',&
-'   2) esc -bg $1 -fg $2 ;;',&
-'   3) esc -bg $1 -fg $2 -cr $3;;',&
-'   *) esc -bg $1 -fg $2 -cr $3;;',&
-'   esac',&
-'}',&
+'function kolor(){                                                               ',&
+'   # set foreground and background color                                        ',&
+'   case $# in                                                                   ',&
+'   0) showrgb ;;                                                                ',&
+'   1) esc -bg $1        ;;                                                      ',&
+'   2) esc -bg $1 -fg $2 ;;                                                      ',&
+'   3) esc -bg $1 -fg $2 -cr $3;;                                                ',&
+'   *) esc -bg $1 -fg $2 -cr $3;;                                                ',&
+'   esac                                                                         ',&
+'}                                                                               ',&
 '################################################################################',&
-'function trykolor(){',&
-'# try all named background colors',&
-'TTY=$(tty)',&
-'showrgb|while read R G B COLOR_NAME',&
-'do',&
-'   [ "$COLOR_NAME" = '''' ] && continue',&
-'   esc -bg $COLOR_NAME',&
-'   printf ''\nColor %s Next ...'', "$COLOR_NAME"',&
-'   read PAWS < $TTY',&
-'done',&
-'}',&
+'function trykolor(){                                                            ',&
+'# try all named background colors                                               ',&
+'TTY=$(tty)                                                                      ',&
+'showrgb|while read R G B COLOR_NAME                                             ',&
+'do                                                                              ',&
+'   [ "$COLOR_NAME" = '''' ] && continue                                         ',&
+'   esc -bg $COLOR_NAME                                                          ',&
+'   printf ''\nColor %s Next ...'', "$COLOR_NAME"                                ',&
+'   read PAWS < $TTY                                                             ',&
+'done                                                                            ',&
+'}                                                                               ',&
 '################################################################################',&
-'tryfont(){',&
-'list and select all fixed-space fonts until prompted to stop',&
-'export TTY="`tty`"',&
-'(xlsfonts "*-${1}-*-c-*"; xlsfonts "*-${1}-*-m-*") 2>/dev/null| while read FONT',&
-'do',&
-'   echo " $FONT"',&
-'   esc -fn ''*''"$FONT"',&
-'   printf ''Keep? (y or n):''',&
-'   read PAUSE < $TTY',&
-'   case "$PAUSE" in',&
-'   y*|Y*) break;;',&
-'   esac',&
-'done',&
-'}',&
+'tryfont(){                                                                      ',&
+'list and select all fixed-space fonts until prompted to stop                    ',&
+'export TTY="`tty`"                                                              ',&
+'(xlsfonts "*-${1}-*-c-*"; xlsfonts "*-${1}-*-m-*") 2>/dev/null| while read FONT ',&
+'do                                                                              ',&
+'   echo " $FONT"                                                                ',&
+'   esc -fn ''*''"$FONT"                                                         ',&
+'   printf ''Keep? (y or n):''                                                   ',&
+'   read PAUSE < $TTY                                                            ',&
+'   case "$PAUSE" in                                                             ',&
+'   y*|Y*) break;;                                                               ',&
+'   esac                                                                         ',&
+'done                                                                            ',&
+'}                                                                               ',&
 '################################################################################',&
 '']
 !!write(*,'(a)')text

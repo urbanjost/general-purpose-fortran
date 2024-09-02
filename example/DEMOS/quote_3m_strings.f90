@@ -1,29 +1,24 @@
      program demo_quote
      use M_strings, only : quote
      implicit none
+     integer                      :: i
+     character(len=*),parameter   :: f='(*(g0))'
      character(len=:),allocatable :: str
-     character(len=1024)          :: msg
-     integer                      :: ios
-     character(len=80)            :: inline
-        do
-           write(*,'(a)',advance='no')'Enter test string:'
-           read(*,'(a)',iostat=ios,iomsg=msg)inline
-           if(ios /= 0)then
-              write(*,*)trim(inline)
-              exit
-           endif
-
+     character(len=80),parameter  :: data(3)=[character(len=80)::&
+        'test string',&
+        'quote="',&
+        '"word1" "word2"']
+        do i=1,size(data)
            ! the original string
-           write(*,'(a)')'ORIGINAL     ['//trim(inline)//']'
+           write(*,'(a)')'ORIGINAL      '//trim(data(i))
 
            ! the string processed by quote(3f)
-           str=quote(inline)
-           write(*,'(a)')'QUOTED     ['//str//']'
+           str=quote(data(i))
+           write(*,'(a)')'QUOTED        '//str
 
            ! write the string list-directed to compare the results
-           write(*,'(a)',iostat=ios,iomsg=msg) 'LIST DIRECTED:'
-           write(*,*,iostat=ios,iomsg=msg,delim='none') inline
-           write(*,*,iostat=ios,iomsg=msg,delim='quote') inline
-           write(*,*,iostat=ios,iomsg=msg,delim='apostrophe') inline
+           write(*,f,advance='no') 'LIST DIRECTED'
+           ! default is often NONE or APOSTROPHE
+           write(*,*,delim='quote') trim(data(i))
         enddo
      end program demo_quote

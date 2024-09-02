@@ -1,6 +1,6 @@
      program demo_textsize
      use M_pixel
-     use M_writegif, only : writegif
+     use M_pixel__writegif, only : writegif
      implicit none
      integer :: i,ii
         !! set up long bar as plotting area
@@ -22,8 +22,8 @@
            call drawstr('aA')
         enddo
         ! write plot as GIF file
-        call writegif('textsize.3m_pixel.gif',P_pixel,P_colormap)
+        call writegif('textsize.3M_pixel.gif',P_pixel,P_colormap)
         call vexit()
         ! use system to display GIF file
-        call execute_command_line('display textsize.3m_pixel.gif')
+        call execute_command_line('display textsize.3M_pixel.gif')
      end program demo_textsize

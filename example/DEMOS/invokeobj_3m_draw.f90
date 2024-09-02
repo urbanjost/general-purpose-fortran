@@ -40,13 +40,13 @@
            do i=1,int(360/STEP*10)
               idum=backbuffer()
               call clear()
-              call invokeobj( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, ANGLE, ANGLE, ANGLE,12345)
+              call invokeobj(0.0,0.0,0.0,1.0,1.0,1.0,ANGLE,ANGLE,ANGLE,12345)
               ANGLE=ANGLE+STEP
               call swapbuffers()
            enddo
         else
            ANGLE=45.0
-           call invokeobj( 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, ANGLE, ANGLE, ANGLE,12345)
+           call invokeobj(0.0,0.0,0.0,1.0,1.0,1.0,ANGLE,ANGLE,ANGLE,12345)
            idum=getkey()
         endif
         call vexit()

@@ -50,19 +50,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>reshape (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>reshape (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>reshape(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-reshape(3fortran)
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-              reshape
 <P>
-</PRE>
+<BLOCKQUOTE>
+reshape
 </BLOCKQUOTE>
 <A name=0>
 
@@ -70,6 +60,7 @@ reshape(3fortran)
 
 </A>
 <BLOCKQUOTE>
+<P>
 RESHAPE(3) - [ARRAY:RESHAPE] Function to reshape an array
 <P>
 </BLOCKQUOTE>
@@ -81,15 +72,16 @@ RESHAPE(3) - [ARRAY:RESHAPE] Function to reshape an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = reshape( source, shape [,pad] [,order] )
 <P>
 <PRE>
-           type(TYPE(kind=KIND) function reshape
+         type(TYPE(kind=KIND)) function reshape
 <P>
-            type(TYPE(kind=KIND),intent(in)          :: source(..)
-            integer(kind=**),intent(in)              :: shape(:)
-            type(TYPE(kind=KIND),intent(in),optional :: pad(..)
-            integer(kind=**),intent(in),optional     :: order(:)
+          type(TYPE(kind=KIND)),intent(in)          :: source(..)
+          integer(kind=**),intent(in)               :: shape(:)
+          type(TYPE(kind=KIND)),intent(in),optional :: pad(..)
+          integer(kind=**),intent(in),optional      :: order(:)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -99,6 +91,7 @@ result = reshape( source, shape [,pad] [,order] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -108,8 +101,8 @@ SOURCE is an array of any type
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHAPE defines a Fortran shape and therefore an integer vector (of rank
-one) of constant size of up to 16 non-negative values.
+SHAPE defines a Fortran shape and therefore an integer vector (of
+rank one) of constant size of up to 16 non-negative values.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -138,11 +131,12 @@ a kind designated as ** may be any supported kind for the type
 
 </A>
 <BLOCKQUOTE>
-RESHAPE constructs an array of arbitrary shape SHAPE using the elements from
-SOURCE and possibly PAD to fill it.
 <P>
-If necessary, the new array may be padded with elements from PAD or permuted
-as defined by ORDER.
+RESHAPE constructs an array of arbitrary shape SHAPE using the elements
+from SOURCE and possibly PAD to fill it.
+<P>
+If necessary, the new array may be padded with elements from PAD or
+permuted as defined by ORDER.
 <P>
 Among many other uses, RESHAPE can be used to reorder a Fortran array to
 match C array ordering before the array is passed from Fortran to a C
@@ -154,21 +148,22 @@ procedure.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SOURCE : an array containing the elements to be copied to the result.
-there must be enough elements in the source to fill the new shape if PAD
-is omitted or has size zero. Expressed in Fortran &#46;&#46;&#46;
+SOURCE : an array containing the elements to be copied to the
+result. there must be enough elements in the source to fill the new
+shape if PAD is omitted or has size zero. Expressed in Fortran &#46;&#46;&#46;
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-         if(.not.present(pad))then
-            if(size(source) &lt; product(shape))then
-              stop &#146;not enough elements in the old array to fill the new one&#146;
-            endif
-         endif
+       if(.not.present(pad))then
+          if(size(source) &lt; product(shape))then
+            stop &#146;not enough elements in the old array to fill the new one&#146;
+          endif
+       endif
 <P>
 </PRE>
 <TABLE cellpadding=3>
@@ -176,29 +171,31 @@ is omitted or has size zero. Expressed in Fortran &#46;&#46;&#46;
 o
 </TD><TD>
 SHAPE : This is the shape of the new array being generated. Being by
-definition a shape; all elements are either positive integers or zero,
-the size but be 1 or greater, it may have up to 16 elements but must be
-of constant fixed size and rank one.
+definition a shape; all elements are either positive integers or
+zero, the size but be 1 or greater, it may have up to 16 elements
+but must be of constant fixed size and rank one.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-PAD : used to fill in extra values if the result array is larger than
-SOURCE. It will be used repeatedly after all the elements of SOURCE have
-been placed in the result until the result has all elements assigned. :
-If it is absent or is a zero-sized array, you can only make SOURCE into
-another array of the same size as SOURCE or smaller.
+PAD : used to fill in extra values if the result array is larger
+than SOURCE. It will be used repeatedly after all the elements of
+SOURCE have been placed in the result until the result has all
+elements assigned. : If it is absent or is a zero-sized array, you
+can only make SOURCE into another array of the same size as SOURCE
+or smaller.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ORDER : used to insert elements in the result in an order other than the
-normal Fortran array element order, in which the first dimension varies
-fastest. : By definition of ranks the values have to be a permutation of
-the numbers from 1 to n, where n is the rank of SHAPE. : the elements of
-SOURCE and pad are placed into the result in order; changing the left-
-most rank most rapidly by default. To change the order by which the
-elements are placed in the result use ORDER.
+ORDER : used to insert elements in the result in an order other than
+the normal Fortran array element order, in which the first dimension
+varies fastest. : By definition of ranks the values have to be a
+permutation of the numbers from 1 to n, where n is the rank of
+SHAPE. : the elements of SOURCE and pad are placed into the result
+in order; changing the left-most rank most rapidly by default. To
+change the order by which the elements are placed in the result use
+ORDER.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -207,10 +204,11 @@ elements are placed in the result use ORDER.
 
 </A>
 <BLOCKQUOTE>
-The result is an array of shape SHAPE with the same type and type parameters
-as SOURCE. It is first filled with the values of elements of SOURCE, with
-the remainder filled with repeated copies of PAD until all elements are
-filled. The new array may be smaller than SOURCE.
+<P>
+The result is an array of shape SHAPE with the same type and type
+parameters as SOURCE. It is first filled with the values of elements of
+SOURCE, with the remainder filled with repeated copies of PAD until all
+elements are filled. The new array may be smaller than SOURCE.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -218,126 +216,127 @@ filled. The new array may be smaller than SOURCE.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_reshape
-      implicit none
-      ! notice the use of "shape(box)" on the RHS
-      integer :: box(3,4)=reshape([1,2,3,4,5,6,7,8,9,10,11,12],shape(box))
-      integer,allocatable :: v(:,:)
-      integer :: rc(2)
-         ! basics0
-          ! what is the current shape of the array?
-          call printi(&#146;shape of box is &#146;,box)
-          ! change the shape
-          call printi(&#146;reshaped &#146;,reshape(box,[2,6]))
-          call printi(&#146;reshaped &#146;,reshape(box,[4,3]))
+    program demo_reshape
+    implicit none
+    ! notice the use of "shape(box)" on the RHS
+    integer :: box(3,4)=reshape([1,2,3,4,5,6,7,8,9,10,11,12],shape(box))
+    integer,allocatable :: v(:,:)
+    integer :: rc(2)
+       ! basics0
+        ! what is the current shape of the array?
+        call printi(&#146;shape of box is &#146;,box)
+        ! change the shape
+        call printi(&#146;reshaped &#146;,reshape(box,[2,6]))
+        call printi(&#146;reshaped &#146;,reshape(box,[4,3]))
 <P>
-         ! fill in row column order using order
-          v=reshape([1,2,3,4,10,20,30,40,100,200,300,400],[1,12])
-          call printi(&#146;here is some data to shape&#146;,v)
-          call printi(&#146;normally fills columns first &#146;,reshape([v],[3,4]))
-          call printi(&#146;fill rows first&#146;, reshape([v],[3,4],order=[2,1]))
+       ! fill in row column order using order
+        v=reshape([1,2,3,4,10,20,30,40,100,200,300,400],[1,12])
+        call printi(&#146;here is some data to shape&#146;,v)
+        call printi(&#146;normally fills columns first &#146;,reshape([v],[3,4]))
+        call printi(&#146;fill rows first&#146;, reshape([v],[3,4],order=[2,1]))
 <P>
-          ! if we take the data and put in back in filling
-          ! rows first instead of columns, and flipping the
-          ! height and width of the box we not only fill in
-          ! a vector using row-column order we actually
-          ! transpose it.
-          rc(2:1:-1)=shape(box)
-          ! copy the data in changing column number fastest
-          v=reshape(box,rc,order=[2,1])
-          call printi(&#146;reshaped and reordered&#146;,v)
-          ! of course we could have just done a transpose
-          call printi(&#146;transposed&#146;,transpose(box))
+        ! if we take the data and put in back in filling
+        ! rows first instead of columns, and flipping the
+        ! height and width of the box we not only fill in
+        ! a vector using row-column order we actually
+        ! transpose it.
+        rc(2:1:-1)=shape(box)
+        ! copy the data in changing column number fastest
+        v=reshape(box,rc,order=[2,1])
+        call printi(&#146;reshaped and reordered&#146;,v)
+        ! of course we could have just done a transpose
+        call printi(&#146;transposed&#146;,transpose(box))
 <P>
-         ! making the result bigger than source using pad
-          v=reshape(box,rc*2,pad=[-1,-2,-3],order=[2,1])
-          call printi(&#146;bigger and padded and reordered&#146;,v)
-      contains
+       ! making the result bigger than source using pad
+        v=reshape(box,rc*2,pad=[-1,-2,-3],order=[2,1])
+        call printi(&#146;bigger and padded and reordered&#146;,v)
+    contains
 <P>
-      subroutine printi(title,arr)
-      implicit none
+    subroutine printi(title,arr)
+    implicit none
 <P>
-      !@(#) print small 2d integer arrays in row-column format
+    !@(#) print small 2d integer arrays in row-column format
 <P>
-      character(len=*),parameter :: all=&#146;(*(g0,1x))&#146; ! a handy format
-      character(len=*),intent(in)  :: title
-      integer,intent(in)           :: arr(:,:)
-      integer                      :: i
-      character(len=:),allocatable :: biggest
+    character(len=*),parameter :: all=&#146;(*(g0,1x))&#146; ! a handy format
+    character(len=*),intent(in)  :: title
+    integer,intent(in)           :: arr(:,:)
+    integer                      :: i
+    character(len=:),allocatable :: biggest
 <P>
-         print all
-         print all, trim(title),&#146;:(&#146;,shape(arr),&#146;)&#146;  ! print title
-         biggest=&#146;           &#146;  ! make buffer to write integer into
-         ! find how many characters to use for integers
-         write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
-         ! use this format to write a row
-         biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
-         ! print one row of array at a time
-         do i=1,size(arr,dim=1)
-            write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
-            write(*,&#146;(" ]")&#146;)
-         enddo
+       print all
+       print all, trim(title),&#146;:(&#146;,shape(arr),&#146;)&#146;  ! print title
+       biggest=&#146;           &#146;  ! make buffer to write integer into
+       ! find how many characters to use for integers
+       write(biggest,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2
+       ! use this format to write a row
+       biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
+       ! print one row of array at a time
+       do i=1,size(arr,dim=1)
+          write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+          write(*,&#146;(" ]")&#146;)
+       enddo
 <P>
-      end subroutine printi
+    end subroutine printi
 <P>
-      end program demo_reshape
+    end program demo_reshape
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         shape of box is :( 3 4 )
-          &gt; [   1,   4,   7,  10 ]
-          &gt; [   2,   5,   8,  11 ]
-          &gt; [   3,   6,   9,  12 ]
+       shape of box is :( 3 4 )
+        &gt; [   1,   4,   7,  10 ]
+        &gt; [   2,   5,   8,  11 ]
+        &gt; [   3,   6,   9,  12 ]
 <P>
-         reshaped :( 2 6 )
-          &gt; [   1,   3,   5,   7,   9,  11 ]
-          &gt; [   2,   4,   6,   8,  10,  12 ]
+       reshaped :( 2 6 )
+        &gt; [   1,   3,   5,   7,   9,  11 ]
+        &gt; [   2,   4,   6,   8,  10,  12 ]
 <P>
-         reshaped :( 4 3 )
-          &gt; [   1,   5,   9 ]
-          &gt; [   2,   6,  10 ]
-          &gt; [   3,   7,  11 ]
-          &gt; [   4,   8,  12 ]
+       reshaped :( 4 3 )
+        &gt; [   1,   5,   9 ]
+        &gt; [   2,   6,  10 ]
+        &gt; [   3,   7,  11 ]
+        &gt; [   4,   8,  12 ]
 <P>
-         here is some data to shape :( 1 12 )
-          &gt; [   1,   2,   3,   4,  10,  20,  30,  40, 100, 200, 300, 400 ]
+       here is some data to shape :( 1 12 )
+        &gt; [   1,   2,   3,   4,  10,  20,  30,  40, 100, 200, 300, 400 ]
 <P>
-         normally fills columns first :( 3 4 )
-          &gt; [    1,    4,   30,  200 ]
-          &gt; [    2,   10,   40,  300 ]
-          &gt; [    3,   20,  100,  400 ]
+       normally fills columns first :( 3 4 )
+        &gt; [    1,    4,   30,  200 ]
+        &gt; [    2,   10,   40,  300 ]
+        &gt; [    3,   20,  100,  400 ]
 <P>
-         fill rows first :( 3 4 )
-          &gt; [    1,    2,    3,    4 ]
-          &gt; [   10,   20,   30,   40 ]
-          &gt; [  100,  200,  300,  400 ]
+       fill rows first :( 3 4 )
+        &gt; [    1,    2,    3,    4 ]
+        &gt; [   10,   20,   30,   40 ]
+        &gt; [  100,  200,  300,  400 ]
 <P>
-         reshaped and reordered :( 4 3 )
-          &gt; [   1,   2,   3 ]
-          &gt; [   4,   5,   6 ]
-          &gt; [   7,   8,   9 ]
-          &gt; [  10,  11,  12 ]
+       reshaped and reordered :( 4 3 )
+        &gt; [   1,   2,   3 ]
+        &gt; [   4,   5,   6 ]
+        &gt; [   7,   8,   9 ]
+        &gt; [  10,  11,  12 ]
 <P>
-         transposed :( 4 3 )
-          &gt; [   1,   2,   3 ]
-          &gt; [   4,   5,   6 ]
-          &gt; [   7,   8,   9 ]
-          &gt; [  10,  11,  12 ]
+       transposed :( 4 3 )
+        &gt; [   1,   2,   3 ]
+        &gt; [   4,   5,   6 ]
+        &gt; [   7,   8,   9 ]
+        &gt; [  10,  11,  12 ]
 <P>
-         bigger and padded and reordered :( 8 6 )
-          &gt; [   1,   2,   3,   4,   5,   6 ]
-          &gt; [   7,   8,   9,  10,  11,  12 ]
-          &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
-          &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
-          &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
-          &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
-          &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
-          &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
+       bigger and padded and reordered :( 8 6 )
+        &gt; [   1,   2,   3,   4,   5,   6 ]
+        &gt; [   7,   8,   9,  10,  11,  12 ]
+        &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
+        &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
+        &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
+        &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
+        &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
+        &gt; [  -1,  -2,  -3,  -1,  -2,  -3 ]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -347,6 +346,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -355,16 +355,13 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 SHAPE(3), PACK(3), TRANSPOSE(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             reshape(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>reshape (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3c0ffb48-f2aa-4cfb-abd8-f0e66affb734 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>reshape (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bcbfbdce-63ef-48f9-8aa1-6f01c7f7f2f7 using man macros.</FONT>
 <br><br><center><img src="images/reshape.3fortran.gif"></center>
 </div>
 </div>

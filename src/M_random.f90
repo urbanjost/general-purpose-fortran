@@ -12,7 +12,6 @@
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-
 !>
 !!##NAME
 !!    M_random(3f) - [M_random::INTRO] Routines for generating random numbers and strings
@@ -261,6 +260,8 @@ end function random_hex
 !!
 !!    program demo_random_int
 !!    use M_random, only : random_int, init_random_seed_by_system_clock
+!!    implicit none
+!!    integer :: i
 !!    call init_random_seed_by_system_clock()
 !!    write(*,'(*(i0:,1x))')(random_int(1,10),i=1,20)
 !!    write(*,'(*(i0:,1x))')(random_int(-5,5),i=1,20)
@@ -418,7 +419,7 @@ end function scramble
 !==================================================================================================================================!
 !>
 !!##NAME
-!!       random_kiss64 - [M_random] A 64-bit KISS random number generator by George Margaglia.
+!!       random_kiss64(3f) - [M_random] A 64-bit KISS random number generator by George Margaglia.
 !!##SYNOPSIS
 !!
 !!    function random_kiss64()

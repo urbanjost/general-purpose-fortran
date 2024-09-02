@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>exp (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>exp (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>exp(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-exp(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 EXP(3) - [MATHEMATICS] Base-e exponential function
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ EXP(3) - [MATHEMATICS] Base-e exponential function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = exp(x)
 <P>
 <PRE>
-           elemental TYPE(kind=KIND) function exp(x)
+         elemental TYPE(kind=KIND) function exp(x)
 <P>
-            TYPE(kind=KIND),intent(in) :: x
+          TYPE(kind=KIND),intent(in) :: x
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = exp(x)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,8 +103,9 @@ The return value has the same type and kind as X.
 
 </A>
 <BLOCKQUOTE>
-EXP(3) returns the value of e (the base of natural logarithms) raised to the
-power of X.
+<P>
+EXP(3) returns the value of e (the base of natural logarithms) raised to
+the power of X.
 <P>
 "e" is also known as Euler&#146;s constant.
 <P>
@@ -118,17 +113,17 @@ If X is of type complex, its imaginary part is regarded as a value in
 radians such that if (see Euler&#146;s formula):
 <P>
 <PRE>
-          cx=(re,im)
+        cx=(re,im)
 <P>
 </PRE>
 then
 <P>
 <PRE>
-          exp(cx) = exp(re) * cmplx(cos(im),sin(im),kind=kind(cx))
+        exp(cx) = exp(re) * cmplx(cos(im),sin(im),kind=kind(cx))
 <P>
 </PRE>
-Since EXP(3) is the inverse function of LOG(3) the maximum valid magnitude
-of the real component of X is LOG(HUGE(X)).
+Since EXP(3) is the inverse function of LOG(3) the maximum valid
+magnitude of the real component of X is LOG(HUGE(X)).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -136,6 +131,7 @@ of the real component of X is LOG(HUGE(X)).
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -149,6 +145,7 @@ X : The type shall be real or complex.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The value of the result is E**X where E is Euler&#146;s constant.
 <P>
 If X is of type complex, its imaginary part is regarded as a value in
@@ -160,49 +157,50 @@ radians.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_exp
-      implicit none
-      real :: x, re, im
-      complex :: cx
+    program demo_exp
+    implicit none
+    real :: x, re, im
+    complex :: cx
 <P>
-         x = 1.0
-         write(*,*)"Euler&#146;s constant is approximately",exp(x)
+       x = 1.0
+       write(*,*)"Euler&#146;s constant is approximately",exp(x)
 <P>
-         !! complex values
-         ! given
-         re=3.0
-         im=4.0
-         cx=cmplx(re,im)
+       !! complex values
+       ! given
+       re=3.0
+       im=4.0
+       cx=cmplx(re,im)
 <P>
-         ! complex results from complex arguments are Related to Euler&#146;s formula
-         write(*,*)&#146;given the complex value &#146;,cx
-         write(*,*)&#146;exp(x) is&#146;,exp(cx)
-         write(*,*)&#146;is the same as&#146;,exp(re)*cmplx(cos(im),sin(im),kind=kind(cx))
+       ! complex results from complex arguments are Related to Euler&#146;s formula
+       write(*,*)&#146;given the complex value &#146;,cx
+       write(*,*)&#146;exp(x) is&#146;,exp(cx)
+       write(*,*)&#146;is the same as&#146;,exp(re)*cmplx(cos(im),sin(im),kind=kind(cx))
 <P>
-         ! exp(3) is the inverse function of log(3) so
-         ! the real component of the input must be less than or equal to
-         write(*,*)&#146;maximum real component&#146;,log(huge(0.0))
-         ! or for double precision
-         write(*,*)&#146;maximum doubleprecision component&#146;,log(huge(0.0d0))
+       ! exp(3) is the inverse function of log(3) so
+       ! the real component of the input must be less than or equal to
+       write(*,*)&#146;maximum real component&#146;,log(huge(0.0))
+       ! or for double precision
+       write(*,*)&#146;maximum doubleprecision component&#146;,log(huge(0.0d0))
 <P>
-         ! but since the imaginary component is passed to the cos(3) and sin(3)
-         ! functions the imaginary component can be any real value
+       ! but since the imaginary component is passed to the cos(3) and sin(3)
+       ! functions the imaginary component can be any real value
 <P>
-      end program demo_exp
+    end program demo_exp
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       Euler&#146;s constant is approximately   2.718282
-       given the complex value  (3.000000,4.000000)
-       exp(x) is (-13.12878,-15.20078)
-       is the same as (-13.12878,-15.20078)
-       maximum real component   88.72284
-       maximum doubleprecision component   709.782712893384
+     Euler&#146;s constant is approximately   2.718282
+     given the complex value  (3.000000,4.000000)
+     exp(x) is (-13.12878,-15.20078)
+     is the same as (-13.12878,-15.20078)
+     maximum real component   88.72284
+     maximum doubleprecision component   709.782712893384
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -212,6 +210,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -220,6 +219,7 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -233,6 +233,7 @@ LOG(3)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -245,13 +246,9 @@ o
 Wikipedia:Euler&#146;s formula
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 exp(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>exp (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e65a8307-9ecf-4df5-a11b-b6188427b20b using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>exp (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 651d6d29-520f-4f94-a69f-06463bd65b60 using man macros.</FONT>
 <br><br><center><img src="images/exp.3fortran.gif"></center>
 </div>
 </div>

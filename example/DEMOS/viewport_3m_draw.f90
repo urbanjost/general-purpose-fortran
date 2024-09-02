@@ -1,13 +1,15 @@
      program demo_viewport
      !
-     ! using non-square viewports, the associated distortion -- and how to fix it
+     ! using non-square viewports,
+     ! the associated distortion -- and how to fix it
      !
      use M_draw
+     implicit none
 
      character(len=50)  :: device
      character(len=120) :: buf
      real    xfact, yfact
-     integer :: ios
+     integer :: ios, idum
 
      print*,'Enter output device:'
      read(*,'(a)',iostat=ios)device
@@ -32,7 +34,9 @@
      ! Tell them what it is.
      !
      call move2(-1.0, 0.9)
-     write(buf,'(''Distorted square (viewport(-1, '', F7.3, '', -1, '', F7.3, ''))'')') xfact, yfact
+     write(buf,&
+     & '(''Distorted square (viewport(-1, '', F7.3, '', -1, '', F7.3, ''))'')')&
+     & xfact, yfact
      call drawstr(buf)
 
      idum=getkey()
@@ -51,7 +55,9 @@
      ! Tell them what it is.
      !
      call move2(-1.0, -0.9)
-     write(buf,'(''Fixed up square with ortho2(-1, '', F7.3, '', -1, '', F7.3, '')'')') xfact, yfact
+     write(buf,&
+     & '(''Fixed up square with ortho2(-1, '', F7.3, '', -1, '', F7.3, '')'')')&
+     & xfact, yfact
      call drawstr(buf)
 
      idum=getkey()

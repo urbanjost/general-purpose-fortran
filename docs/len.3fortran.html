@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>len (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>len (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>len(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-len(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 LEN(3) - [CHARACTER] Length of a character entity
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ LEN(3) - [CHARACTER] Length of a character entity
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = len(string [,kind])
 <P>
 <PRE>
-           integer(kind=KIND) function len(string,KIND)
+         integer(kind=KIND) function len(string,KIND)
 <P>
-            character(len=*),intent(in) :: string(..)
-            integer,optional,intent(in) :: KIND
+          character(len=*),intent(in) :: string(..)
+          integer,optional,intent(in) :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = len(string [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -106,8 +100,8 @@ KIND is a scalar integer constant expression.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the returned value is the same integer kind as the KIND argument, or of
-the default integer kind if KIND is not specified.
+the returned value is the same integer kind as the KIND argument, or
+of the default integer kind if KIND is not specified.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -116,13 +110,14 @@ the default integer kind if KIND is not specified.
 
 </A>
 <BLOCKQUOTE>
+<P>
 LEN(3) returns the length of a character string.
 <P>
-If STRING is an array, the length of a single element of STRING is returned,
-as all elements of an array are the same length.
+If STRING is an array, the length of a single element of STRING is
+returned, as all elements of an array are the same length.
 <P>
-Note that STRING need not be defined when this intrinsic is invoked, as only
-the length (not the content) of STRING is needed.
+Note that STRING need not be defined when this intrinsic is invoked, as
+only the length (not the content) of STRING is needed.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -130,13 +125,14 @@ the length (not the content) of STRING is needed.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-STRING : A scalar or array string to return the length of. If it is an
-unallocated allocatable variable or a pointer that is not associated, its
-length type parameter shall not be deferred.
+STRING : A scalar or array string to return the length of. If it is
+an unallocated allocatable variable or a pointer that is not
+associated, its length type parameter shall not be deferred.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -150,8 +146,9 @@ KIND : A constant indicating the kind parameter of the result.
 
 </A>
 <BLOCKQUOTE>
-The result has a value equal to the number of characters in STRING if it is
-scalar or in an element of STRING if it is an array.
+<P>
+The result has a value equal to the number of characters in STRING if it
+is scalar or in an element of STRING if it is an array.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -159,81 +156,82 @@ scalar or in an element of STRING if it is an array.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program
 <P>
 <PRE>
-      program demo_len
-      implicit none
+    program demo_len
+    implicit none
 <P>
-      ! fixed length
-      character(len=40) :: string
-      ! allocatable length
-      character(len=:),allocatable :: astring
-      character(len=:),allocatable :: many_strings(:)
-      integer :: ii
-        ! BASIC USAGE
-         ii=len(string)
-         write(*,*)&#146;length =&#146;,ii
+    ! fixed length
+    character(len=40) :: string
+    ! allocatable length
+    character(len=:),allocatable :: astring
+    character(len=:),allocatable :: many_strings(:)
+    integer :: ii
+      ! BASIC USAGE
+       ii=len(string)
+       write(*,*)&#146;length =&#146;,ii
 <P>
-        ! ALLOCATABLE VARIABLE LENGTH CAN CHANGE
-        ! the allocatable string length will be the length of RHS expression
-         astring=&#146; How long is this allocatable string? &#146;
-         write(*,*)astring, &#146; LEN=&#146;, len(astring)
-        ! print underline
-         write(*,*) repeat(&#146;=&#146;,len(astring))
-        ! assign new value to astring and length changes
-         astring=&#146;New allocatable string&#146;
-         write(*,*)astring, &#146; LEN=&#146;, len(astring)
-        ! print underline
-         write(*,*) repeat(&#146;=&#146;,len(astring))
+      ! ALLOCATABLE VARIABLE LENGTH CAN CHANGE
+      ! the allocatable string length will be the length of RHS expression
+       astring=&#146; How long is this allocatable string? &#146;
+       write(*,*)astring, &#146; LEN=&#146;, len(astring)
+      ! print underline
+       write(*,*) repeat(&#146;=&#146;,len(astring))
+      ! assign new value to astring and length changes
+       astring=&#146;New allocatable string&#146;
+       write(*,*)astring, &#146; LEN=&#146;, len(astring)
+      ! print underline
+       write(*,*) repeat(&#146;=&#146;,len(astring))
 <P>
-        ! THE STRING LENGTH WILL BE CONSTANT FOR A FIXED-LENGTH VARIABLE
-         string=&#146; How long is this fixed string? &#146;
-         write(*,*)string,&#146; LEN=&#146;,len(string)
-         string=&#146;New fixed string &#146;
-         write(*,*)string,&#146; LEN=&#146;,len(string)
+      ! THE STRING LENGTH WILL BE CONSTANT FOR A FIXED-LENGTH VARIABLE
+       string=&#146; How long is this fixed string? &#146;
+       write(*,*)string,&#146; LEN=&#146;,len(string)
+       string=&#146;New fixed string &#146;
+       write(*,*)string,&#146; LEN=&#146;,len(string)
 <P>
-        ! ALL STRINGS IN AN ARRAY ARE THE SAME LENGTH
-        ! a scalar is returned for an array, as all values in a Fortran
-        ! character array must be of the same length.
-         many_strings = [ character(len=7) :: &#146;Tom&#146;, &#146;Dick&#146;, &#146;Harry&#146; ]
-         write(*,*)&#146;length of ALL elements of array=&#146;,len(many_strings)
+      ! ALL STRINGS IN AN ARRAY ARE THE SAME LENGTH
+      ! a scalar is returned for an array, as all values in a Fortran
+      ! character array must be of the same length.
+       many_strings = [ character(len=7) :: &#146;Tom&#146;, &#146;Dick&#146;, &#146;Harry&#146; ]
+       write(*,*)&#146;length of ALL elements of array=&#146;,len(many_strings)
 <P>
-        ! NAME%LEN IS ESSENTIALLY THE SAME AS LEN(NAME)
-        ! you can also query the length (and other attributes) of a string
-        ! using a "type parameter inquiry" (available since fortran 2018)
-         write(*,*)&#146;length from type parameter inquiry=&#146;,string%len
-        ! %len is equivalent to a call to LEN() except the kind of the integer
-        ! value returned is always of default kind.
+      ! NAME%LEN IS ESSENTIALLY THE SAME AS LEN(NAME)
+      ! you can also query the length (and other attributes) of a string
+      ! using a "type parameter inquiry" (available since fortran 2018)
+       write(*,*)&#146;length from type parameter inquiry=&#146;,string%len
+      ! %len is equivalent to a call to LEN() except the kind of the integer
+      ! value returned is always of default kind.
 <P>
-        ! LOOK AT HOW A PASSED STRING CAN BE USED &#46;&#46;&#46;
-         call passed(&#146; how long? &#146;)
+      ! LOOK AT HOW A PASSED STRING CAN BE USED &#46;&#46;&#46;
+       call passed(&#146; how long? &#146;)
 <P>
-      contains
+    contains
 <P>
-         subroutine passed(str)
-         character(len=*),intent(in)  :: str
-         ! the length of str can be used in the definitions of variables
-            ! you can query the length of the passed variable
-            write(*,*)&#146;length of passed value is &#146;, LEN(str)
-         end subroutine passed
+       subroutine passed(str)
+       character(len=*),intent(in)  :: str
+       ! the length of str can be used in the definitions of variables
+          ! you can query the length of the passed variable
+          write(*,*)&#146;length of passed value is &#146;, LEN(str)
+       end subroutine passed
 <P>
-      end program demo_len
+    end program demo_len
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  length =          40
-       &gt;   How long is this allocatable string?  LEN=          38
-       &gt;  ======================================
-       &gt;  New allocatable string LEN=          22
-       &gt;  ======================
-       &gt;   How long is this fixed string?          LEN=          40
-       &gt;  New fixed string                         LEN=          40
-       &gt;  length of ALL elements of array=           7
-       &gt;  length from type parameter inquiry=          40
-       &gt;  length of passed value is           11
+     &gt;  length =          40
+     &gt;   How long is this allocatable string?  LEN=          38
+     &gt;  ======================================
+     &gt;  New allocatable string LEN=          22
+     &gt;  ======================
+     &gt;   How long is this fixed string?          LEN=          40
+     &gt;  New fixed string                         LEN=          40
+     &gt;  length of ALL elements of array=           7
+     &gt;  length from type parameter inquiry=          40
+     &gt;  length of passed value is           11
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -243,6 +241,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77 ; with KIND argument - Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -251,12 +250,13 @@ FORTRAN 77 ; with KIND argument - Fortran 2003
 
 </A>
 <BLOCKQUOTE>
-len_trim(3), adjustr(3), trim(3), and adjustl(3) are related routines that
-allow you to deal with leading and trailing blanks.
 <P>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+len_trim(3), adjustr(3), trim(3), and adjustl(3) are related routines
+that allow you to deal with leading and trailing blanks.
+<P>
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -270,13 +270,9 @@ o
 NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 len(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>len (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a3076889-f1bc-42b8-ad46-47f0122ca8b2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>len (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 54d2a429-5af3-48d8-a7d6-518718fcc7a8 using man macros.</FONT>
 <br><br><center><img src="images/len.3fortran.gif"></center>
 </div>
 </div>

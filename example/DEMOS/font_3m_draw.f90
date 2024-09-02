@@ -3,6 +3,7 @@
      use M_draw,    only  : D_BLACK,   D_WHITE
      use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
      use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+     implicit none
      real    :: left
      real    :: baseline=80.0
      integer :: icolor=1

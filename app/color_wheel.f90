@@ -220,38 +220,38 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   color_wheel(1f) - [M_draw] generate HLS color wheels                                                                         ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   color_wheel [ --help| --version]                                                                                             ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'                                                                                                                                ',&
-'   Generates color wheels using the HLS (Hue Lightness, Saturation)                                                             ',&
-'   model.                                                                                                                       ',&
-'                                                                                                                                ',&
-'   Note that if the output device does not support at least 1200 colors                                                         ',&
-'   in the color table that output will appear incorrect.                                                                        ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   --help      display this help and exit                                                                                       ',&
-'                                                                                                                                ',&
-'   --version   output version information and exit                                                                              ',&
-'EXAMPLE                                                                                                                         ',&
-'  Sample usage                                                                                                                  ',&
-'                                                                                                                                ',&
-'   # generate Adobe PDF document                                                                                                ',&
-'   export M_DRAW_FONTLIB=/usr/share/hershey                                                                                     ',&
-'   export M_DRAW_DEVICE=pdf                                                                                                     ',&
-'   color_wheel                                                                                                                  ',&
-'   # display PDF file using an Adobe PDF viewer                                                                                 ',&
-'   xpdf look.hue                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public License                                                                                                               ',&
+'NAME                                                                            ',&
+'   color_wheel(1f) - [M_draw] generate HLS color wheels                         ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   color_wheel [ --help| --version]                                             ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'                                                                                ',&
+'   Generates color wheels using the HLS (Hue Lightness, Saturation)             ',&
+'   model.                                                                       ',&
+'                                                                                ',&
+'   Note that if the output device does not support at least 1200 colors         ',&
+'   in the color table that output will appear incorrect.                        ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'   --help      display this help and exit                                       ',&
+'                                                                                ',&
+'   --version   output version information and exit                              ',&
+'EXAMPLE                                                                         ',&
+'  Sample usage                                                                  ',&
+'                                                                                ',&
+'   # generate Adobe PDF document                                                ',&
+'   export M_DRAW_FONTLIB=/usr/share/hershey                                     ',&
+'   export M_DRAW_DEVICE=pdf                                                     ',&
+'   color_wheel                                                                  ',&
+'   # display PDF file using an Adobe PDF viewer                                 ',&
+'   xpdf look.hue                                                                ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public License                                                               ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -308,7 +308,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0 20181013>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2023-02-12 16:54:33 UTC-300>',&
+'@(#)COMPILED:       2024-09-01 01:33:24 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

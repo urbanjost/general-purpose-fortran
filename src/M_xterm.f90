@@ -153,7 +153,7 @@ integer :: G_io=0
 ! make Fortran/C interface for C routine getkey(3C)
       interface
          function system_timeout_getkey(delay) bind(c, name='Ftimeout_getkey')
-            use iso_c_binding
+            use iso_c_binding, only : c_int, c_char
             implicit none
             integer(kind=c_int),intent(in),value :: delay
             character(kind=c_char) :: system_timeout_getkey
@@ -162,7 +162,7 @@ integer :: G_io=0
 
       interface
          function system_getkey() bind(c, name='Fgetkey')
-            use iso_c_binding
+            use iso_c_binding, only : c_char
             implicit none
             character(kind=c_char) :: system_getkey
          end function system_getkey
@@ -376,6 +376,7 @@ end subroutine xterm_occupancy
 !!    program demo_xterm_get_pencolor
 !!    use M_xterm, only : xterm_get_pencolor
 !!    character(len=:),allocatable :: cache
+!!    integer :: i
 !!    do i=0,15
 !!       cache=xterm_get_pencolor(i)
 !!       write(*,'(i4.4,1x,a)')i,cache
@@ -1126,6 +1127,7 @@ end subroutine xterm_clear
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function RAWGET(string) result (readback)
+use iso_c_binding, only : c_int
 ! write xterm(1) query string and read back reply until a timeout occurs, which is assumed to mean the end of the reply was reached
 !x!use M_getkey, only : system_timeout_getkey
 character(len=*),intent(in)     :: string
@@ -1162,9 +1164,9 @@ character(len=:),allocatable    :: readback
    icount=0
    readback=''
    do
-      if(icount.gt.2048)exit            ! arbitrary indication taking too long
-      letter=system_timeout_getkey(1)   ! get next key or timeout after 1/10 second
-      if(letter.eq.char(0))exit         ! assume if a null is returned it is a timeout and end of current input buffer was reached
+      if(icount.gt.2048)exit                ! arbitrary indication taking too long
+      letter=system_timeout_getkey(1_c_int) ! get next key or timeout after 1/10 second
+      if(letter.eq.char(0))exit             ! assume if null is returned it is a timeout and end of current input buffer was reached
       icount=icount+1
       readback=readback//letter
    enddo
@@ -1433,8 +1435,8 @@ end subroutine set_g_io
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_xterm()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
 
 !! setup
    call test_xterm_clear()

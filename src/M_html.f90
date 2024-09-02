@@ -111,7 +111,6 @@ CONTAINS
 !!##LICENSE
 !!    Public Domain
 subroutine h_array(iounit,array)
-implicit none
 
 ! ident_1="@(#) M_html h_array(3f) write table from array"
 
@@ -178,7 +177,6 @@ end subroutine h_array
 !!##LICENSE
 !!    Public Domain
 subroutine h_close(iounit)
-implicit none
 
 ! ident_2="@(#) M_html h_close(3f) close HTML file"
 
@@ -239,7 +237,6 @@ end subroutine h_close
 !!##LICENSE
 !!    Public Domain
 subroutine h_open(iounit,filename)
-implicit none
 
 ! ident_3="@(#) M_html h_open(3f) open HTML file"
 

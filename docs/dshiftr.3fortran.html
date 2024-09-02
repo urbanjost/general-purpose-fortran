@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>dshiftr (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>dshiftr (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>dshiftr(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-dshiftr(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 DSHIFTR(3) - [BIT:COPY] Combined right shift of the bits of two integers
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ DSHIFTR(3) - [BIT:COPY] Combined right shift of the bits of two integers
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = dshiftr(i, j, shift)
 <P>
 <PRE>
-           elemental integer(kind=KIND) function dshiftr(i, j, shift)
+         elemental integer(kind=KIND) function dshiftr(i, j, shift)
 <P>
-            integer(kind=KIND),intent(in) :: i
-            integer(kind=KIND),intent(in) :: j
-            integer(kind=**),intent(in) :: shift
+          integer(kind=KIND),intent(in) :: i
+          integer(kind=KIND),intent(in) :: j
+          integer(kind=**),intent(in) :: shift
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = dshiftr(i, j, shift)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -102,16 +96,16 @@ a kind designated as ** may be any kind value for the integer type
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the kind of I, J, and the return value are the same. An exception is that
-one of I and J may be a BOZ literal constant (A BOZ literal constant is a
-binary, octal or hex constant).
+the kind of I, J, and the return value are the same. An exception is
+that one of I and J may be a BOZ literal constant (A BOZ literal
+constant is a binary, octal or hex constant).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If either I or J is a BOZ-literal-constant, it is first converted as if
-by the intrinsic function INT(3) to type integer with the kind type
-parameter of the other.
+If either I or J is a BOZ-literal-constant, it is first converted as
+if by the intrinsic function INT(3) to type integer with the kind
+type parameter of the other.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -120,37 +114,38 @@ parameter of the other.
 
 </A>
 <BLOCKQUOTE>
-DSHIFTR(3) combines bits of I and J. The leftmost SHIFT bits of the result
-are the rightmost SHIFT bits of I, and the remaining bits are the leftmost
-bits of J.
+<P>
+DSHIFTR(3) combines bits of I and J. The leftmost SHIFT bits of the
+result are the rightmost SHIFT bits of I, and the remaining bits are the
+leftmost bits of J.
 <P>
 It may be thought of as appending the bits of I and J, dropping off the
-SHIFT rightmost bits, and then retaining the same number of rightmost bits
-as an input value, hence the name "combined right shift"&#46;&#46;&#46;
+SHIFT rightmost bits, and then retaining the same number of rightmost
+bits as an input value, hence the name "combined right shift"&#46;&#46;&#46;
 <P>
 Given two 16-bit values labeled alphabetically &#46;&#46;&#46;
 <P>
 <PRE>
-         i=ABCDEFGHIJKLMNOP
-         j=abcdefghijklmnop
+       i=ABCDEFGHIJKLMNOP
+       j=abcdefghijklmnop
 <P>
 </PRE>
 Append them together
 <P>
 <PRE>
-         ABCDEFGHIJKLMNOPabcdefghijklmnop
+       ABCDEFGHIJKLMNOPabcdefghijklmnop
 <P>
 </PRE>
 Shift them N=6 bits to the right dropping off bits
 <P>
 <PRE>
-               ABCDEFGHIJKLMNOPabcdefghij
+             ABCDEFGHIJKLMNOPabcdefghij
 <P>
 </PRE>
 Keep the 16 right-most bits
 <P>
 <PRE>
-                         KLMNOPabcdefghij
+                       KLMNOPabcdefghij
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -160,22 +155,23 @@ Keep the 16 right-most bits
 
 </A>
 <BLOCKQUOTE>
+<P>
 DSHIFR(I,J,SHIFT) is equivalent to
 <P>
 <PRE>
-           ior(shiftl (i, bit_size(i) - shift), shiftr(j, shift) )
+         ior(shiftl (i, bit_size(i) - shift), shiftr(j, shift) )
 <P>
 </PRE>
 it can also be seen that if I and J have the same value
 <P>
 <PRE>
-           dshiftr( i, i, shift )
+         dshiftr( i, i, shift )
 <P>
 </PRE>
 this has the same result as a negative circular shift
 <P>
 <PRE>
-           ishftc( i,   -shift ).
+         ishftc( i,   -shift ).
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -185,6 +181,7 @@ this has the same result as a negative circular shift
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -199,8 +196,9 @@ J : right value of the pair of values to be combine-shifted right
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT : the shift value is non-negative and less than or equal to the
-number of bits in an input value as can be computed by BIT_SIZE(3).
+SHIFT : the shift value is non-negative and less than or equal to
+the number of bits in an input value as can be computed by
+BIT_SIZE(3).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -209,10 +207,11 @@ number of bits in an input value as can be computed by BIT_SIZE(3).
 
 </A>
 <BLOCKQUOTE>
-The result is a combined right shift of I and J that is the same as the bit
-patterns of the inputs being combined left to right, dropping off SHIFT bits
-on the right and then retaining the same number of bits as an input value
-from the rightmost bits.
+<P>
+The result is a combined right shift of I and J that is the same as the
+bit patterns of the inputs being combined left to right, dropping off
+SHIFT bits on the right and then retaining the same number of bits as an
+input value from the rightmost bits.
 </BLOCKQUOTE>
 <A name=7>
 
@@ -220,56 +219,57 @@ from the rightmost bits.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_dshiftr
-      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      implicit none
-      integer(kind=int32) :: i, j
-      integer             :: shift
+    program demo_dshiftr
+    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    implicit none
+    integer(kind=int32) :: i, j
+    integer             :: shift
 <P>
-        ! basic usage
-         write(*,*) dshiftr (1, 2**30, 2)
+      ! basic usage
+       write(*,*) dshiftr (1, 2**30, 2)
 <P>
-        ! print some calls as binary to better visualize the results
-         i=-1
-         j=0
-         shift=5
+      ! print some calls as binary to better visualize the results
+       i=-1
+       j=0
+       shift=5
 <P>
-         ! print values
-          write(*,&#146;(*(g0))&#146;)&#146;I=&#146;,i,&#146; J=&#146;,j,&#146; SHIFT=&#146;,shift
-          write(*,&#146;(b32.32)&#146;) i,j, dshiftr (i, j, shift)
+       ! print values
+        write(*,&#146;(*(g0))&#146;)&#146;I=&#146;,i,&#146; J=&#146;,j,&#146; SHIFT=&#146;,shift
+        write(*,&#146;(b32.32)&#146;) i,j, dshiftr (i, j, shift)
 <P>
-        ! visualizing a "combined right shift" &#46;&#46;&#46;
-         i=int(b"00000000000000000000000000011111")
-         j=int(b"11111111111111111111111111100000")
-         ! appended together ( i//j )
-         ! 0000000000000000000000000001111111111111111111111111111111100000
-         ! shifted right SHIFT values dropping off shifted values
-         !      00000000000000000000000000011111111111111111111111111111111
-         ! keep enough rightmost bits to fill the kind
-         !                                 11111111111111111111111111111111
-         ! so the result should be all 1s bits &#46;&#46;&#46;
+      ! visualizing a "combined right shift" &#46;&#46;&#46;
+       i=int(b"00000000000000000000000000011111")
+       j=int(b"11111111111111111111111111100000")
+       ! appended together ( i//j )
+       ! 0000000000000000000000000001111111111111111111111111111111100000
+       ! shifted right SHIFT values dropping off shifted values
+       !      00000000000000000000000000011111111111111111111111111111111
+       ! keep enough rightmost bits to fill the kind
+       !                                 11111111111111111111111111111111
+       ! so the result should be all 1s bits &#46;&#46;&#46;
 <P>
-          write(*,&#146;(*(g0))&#146;)&#146;I=&#146;,i,&#146; J=&#146;,j,&#146; SHIFT=&#146;,shift
-          write(*,&#146;(b32.32)&#146;) i,j, dshiftr (i, j, shift)
+        write(*,&#146;(*(g0))&#146;)&#146;I=&#146;,i,&#146; J=&#146;,j,&#146; SHIFT=&#146;,shift
+        write(*,&#146;(b32.32)&#146;) i,j, dshiftr (i, j, shift)
 <P>
-      end program demo_dshiftr
+    end program demo_dshiftr
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;    1342177280
-       &gt;  I=-1 J=0 SHIFT=5
-       &gt;  11111111111111111111111111111111
-       &gt;  00000000000000000000000000000000
-       &gt;  11111000000000000000000000000000
-       &gt;  I=31 J=-32 SHIFT=5
-       &gt;  00000000000000000000000000011111
-       &gt;  11111111111111111111111111100000
-       &gt;  11111111111111111111111111111111
+     &gt;    1342177280
+     &gt;  I=-1 J=0 SHIFT=5
+     &gt;  11111111111111111111111111111111
+     &gt;  00000000000000000000000000000000
+     &gt;  11111000000000000000000000000000
+     &gt;  I=31 J=-32 SHIFT=5
+     &gt;  00000000000000000000000000011111
+     &gt;  11111111111111111111111111100000
+     &gt;  11111111111111111111111111111111
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -279,6 +279,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=9>
@@ -287,16 +288,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 DSHIFTL(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             dshiftr(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dshiftr (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from adb0b53e-db9a-489b-bba9-49af270a1ae8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dshiftr (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6bd85b0e-1be9-4b32-8abe-53d6e7d4888b using man macros.</FONT>
 <br><br><center><img src="images/dshiftr.3fortran.gif"></center>
 </div>
 </div>

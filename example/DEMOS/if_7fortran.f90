@@ -1,6 +1,8 @@
       program demo_if
       character(len=:),allocatable :: cvar
       logical :: PROP
+      real :: a, b, c, d
+      integer :: case
        !
        ! basic IF
        !

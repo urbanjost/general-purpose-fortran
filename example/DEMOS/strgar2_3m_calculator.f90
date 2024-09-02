@@ -1,5 +1,6 @@
       program demo_strgar2
       use M_calculator, only : strgar2
+      implicit none
       integer             :: ios
       integer             :: i
       integer             :: ifound

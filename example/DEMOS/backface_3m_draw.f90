@@ -1,9 +1,11 @@
      program demo_backface
-     !      demonstrate double buffering and what happens when you hit clipping plane
+     ! demonstrate double buffering and what happens
+     ! when you hit clipping plane
      !
-     !      Specifying an extra argument turns on the filling.
+     ! Specifying an extra argument turns on the polygon filling.
      !
      use M_draw
+     implicit none
      character(len=30) :: device
      character(len=1)  :: c
      real    r, t, dr, dt

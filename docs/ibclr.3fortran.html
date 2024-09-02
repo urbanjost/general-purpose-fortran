@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ibclr (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ibclr (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>ibclr(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-ibclr(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 IBCLR(3) - [BIT:SET] Clear a bit
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ IBCLR(3) - [BIT:SET] Clear a bit
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = ibclr(i, pos)
 <P>
 <PRE>
-           elemental integer(kind=KIND) function ibclr(i,pos)
+         elemental integer(kind=KIND) function ibclr(i,pos)
 <P>
-            integer(kind=KIND),intent(in) :: i
-            integer(kind=**),intent(in) :: pos
+          integer(kind=KIND),intent(in) :: i
+          integer(kind=**),intent(in) :: pos
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = ibclr(i, pos)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -120,7 +114,9 @@ a kind designated as ** may be any supported kind for the type
 
 </A>
 <BLOCKQUOTE>
-IBCLR(3) returns the value of I with the bit at position POS set to zero.
+<P>
+IBCLR(3) returns the value of I with the bit at position POS set to
+zero.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -128,6 +124,7 @@ IBCLR(3) returns the value of I with the bit at position POS set to zero.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -137,9 +134,9 @@ I : The initial value to be modified
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-POS : The position of the bit to change in the input value. A value of
-zero refers to the right-most bit. The value of POS must be nonnegative
-and less than (BIT_SIZE(I)).
+POS : The position of the bit to change in the input value. A value
+of zero refers to the right-most bit. The value of POS must be
+nonnegative and less than (BIT_SIZE(I)).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -148,8 +145,9 @@ and less than (BIT_SIZE(I)).
 
 </A>
 <BLOCKQUOTE>
-The returned value has the same bit sequence as I except the designated bit
-is unconditionally set to 0
+<P>
+The returned value has the same bit sequence as I except the designated
+bit is unconditionally set to 0
 </BLOCKQUOTE>
 <A name=6>
 
@@ -157,51 +155,52 @@ is unconditionally set to 0
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_ibclr
-      use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
-      implicit none
-      integer(kind=int16) :: i
-        ! basic usage
-         print *,ibclr (16, 1), &#146; ==&gt; ibclr(16,1) has the value 15&#146;
+    program demo_ibclr
+    use,intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
+    implicit none
+    integer(kind=int16) :: i
+      ! basic usage
+       print *,ibclr (16, 1), &#146; ==&gt; ibclr(16,1) has the value 15&#146;
 <P>
-         ! it is easier to see using binary representation
-         i=int(b&#146;0000000000111111&#146;,kind=int16)
-         write(*,&#146;(b16.16,1x,i0)&#146;) ibclr(i,3), ibclr(i,3)
+       ! it is easier to see using binary representation
+       i=int(b&#146;0000000000111111&#146;,kind=int16)
+       write(*,&#146;(b16.16,1x,i0)&#146;) ibclr(i,3), ibclr(i,3)
 <P>
-        ! elemental
-         print *,&#146;an array of initial values may be given as well&#146;
-         print *,ibclr(i=[7,4096,9], pos=2)
-         print *
-         print *,&#146;a list of positions results in multiple returned values&#146;
-         print *,&#146;not multiple bits set in one value, as the routine is  &#146;
-         print *,&#146;a scalar function; calling it elementally essentially  &#146;
-         print *,&#146;calls it multiple times.                               &#146;
-         write(*,&#146;(b16.16)&#146;) ibclr(i=-1_int16, pos=[1,2,3,4])
+      ! elemental
+       print *,&#146;an array of initial values may be given as well&#146;
+       print *,ibclr(i=[7,4096,9], pos=2)
+       print *
+       print *,&#146;a list of positions results in multiple returned values&#146;
+       print *,&#146;not multiple bits set in one value, as the routine is  &#146;
+       print *,&#146;a scalar function; calling it elementally essentially  &#146;
+       print *,&#146;calls it multiple times.                               &#146;
+       write(*,&#146;(b16.16)&#146;) ibclr(i=-1_int16, pos=[1,2,3,4])
 <P>
-         ! both may be arrays if of the same size
+       ! both may be arrays if of the same size
 <P>
-      end program demo_ibclr
+    end program demo_ibclr
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;           16  ==&gt; ibclr(16,1) has the value 15
-       &gt; 0000000000110111 55
-       &gt;  an array of initial values may be given as well
-       &gt;            3        4096           9
-       &gt;
-       &gt;  a list of positions results in multiple returned values
-       &gt;  not multiple bits set in one value, as the routine is
-       &gt;  a scalar function; calling it elementally essentially
-       &gt;  calls it multiple times.
-       &gt; 1111111111111101
-       &gt; 1111111111111011
-       &gt; 1111111111110111
-       &gt; 1111111111101111
+     &gt;           16  ==&gt; ibclr(16,1) has the value 15
+     &gt; 0000000000110111 55
+     &gt;  an array of initial values may be given as well
+     &gt;            3        4096           9
+     &gt;
+     &gt;  a list of positions results in multiple returned values
+     &gt;  not multiple bits set in one value, as the routine is
+     &gt;  a scalar function; calling it elementally essentially
+     &gt;  calls it multiple times.
+     &gt; 1111111111111101
+     &gt; 1111111111111011
+     &gt; 1111111111110111
+     &gt; 1111111111101111
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -211,6 +210,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -219,17 +219,14 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 IEOR(3), NOT(3), BTEST(3), IBSET(3), IBITS(3), IAND(3), IOR(3), IEOR(3),
 MVBITS(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               ibclr(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ibclr (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 83d53cba-db3b-4703-bff9-601bce6dbc36 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ibclr (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e18181b9-e081-4354-b0be-1e74d6091472 using man macros.</FONT>
 <br><br><center><img src="images/ibclr.3fortran.gif"></center>
 </div>
 </div>

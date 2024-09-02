@@ -1,151 +1,9 @@
-subroutine help_usage(l_help)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
-help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'    slice(1f) - [M_slices] display a grid of Z values with a 3D view                                                            ',&
-'    (LICENSE:PD)                                                                                                                ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'    slice -f FILENAME -d X11 -w 20 -x 680 -y 680 -a 30 -b 40                                                                    ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   Given a file that defines a grid of Z values display each row as a                                                           ',&
-'   curve with the DL_SLICES(3f) routine with a 3D view.                                                                         ',&
-'                                                                                                                                ',&
-'   On interactive devices the viewing angles may be adjusted by entering                                                        ',&
-'   from the set of letters "lrud" (left, right, up, down)..                                                                     ',&
-'                                                                                                                                ',&
-'   Enter "h" in graphics window for further help on controlling the                                                             ',&
-'   displayed curves''                                                                                                           ',&
-'                                                                                                                                ',&
-'   On batch devices the output is placed in filename                                                                            ',&
-'                                                                                                                                ',&
-'      "FILENAME_AxB.DEVICE"                                                                                                     ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   -f FILENAME   filename with contents of form                                                                                 ',&
-'                                                                                                                                ',&
-'                  z1 z2 z3 z4 z5 ...                                                                                            ',&
-'                  z1 z2 z3 z4 z5 ...                                                                                            ',&
-'                  z1 z2 z3 z4 z5 ...                                                                                            ',&
-'                  z1 z2 z3 z4 z5 ...                                                                                            ',&
-'   -a XANGLE     angle (in degrees) of x axis (NX) from horizontal                                                              ',&
-'                 from 0 to 80.                                                                                                  ',&
-'   -b YANGLE     angle (in degrees) of z axis (NZ) from horizontal                                                              ',&
-'                 from 5 to 80.                                                                                                  ',&
-'   -d DEVICE     device type. Defaults to "X11". Enter an invalid                                                               ',&
-'                 device name such as "help" to see a list of                                                                    ',&
-'                 available devices.                                                                                             ',&
-'   -w LINEWIDTH  line width in 1/10 000, of x-axis                                                                              ',&
-'   -x XSIZE      X size in device units of output                                                                               ',&
-'   -y YSIZE      Y size in device units of output                                                                               ',&
-'EXAMPLES                                                                                                                        ',&
-'  Sample commands:                                                                                                              ',&
-'                                                                                                                                ',&
-'   $ slice -f in1                                                                                                               ',&
-'                                                                                                                                ',&
-'   # you can adjust line width and size for different devices                                                                   ',&
-'   $ slice -f in1 -d svg -w 20 -x 14000 -y 14000                                                                                ',&
-'                                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban; calls M_slice(3f) module (which is based on                                                                   ',&
-'   PD routines by D. Long, 1984, JPL).                                                                                          ',&
-'LICENSE                                                                                                                         ',&
-'   Public License                                                                                                               ',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-!>
-!!##NAME
-!!     slice(1f) - [M_slices] display a grid of Z values with a 3D view
-!!     (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!     slice -f FILENAME -d X11 -w 20 -x 680 -y 680 -a 30 -b 40
-!!
-!!##DESCRIPTION
-!!    Given a file that defines a grid of Z values display each row as a
-!!    curve with the DL_SLICES(3f) routine with a 3D view.
-!!
-!!    On interactive devices the viewing angles may be adjusted by entering
-!!    from the set of letters "lrud" (left, right, up, down)..
-!!
-!!    Enter "h" in graphics window for further help on controlling the
-!!    displayed curves'
-!!
-!!    On batch devices the output is placed in filename
-!!
-!!       "FILENAME_AxB.DEVICE"
-!!
-!!##OPTIONS
-!!    -f FILENAME   filename with contents of form
-!!
-!!                   z1 z2 z3 z4 z5 ...
-!!                   z1 z2 z3 z4 z5 ...
-!!                   z1 z2 z3 z4 z5 ...
-!!                   z1 z2 z3 z4 z5 ...
-!!    -a XANGLE     angle (in degrees) of x axis (NX) from horizontal
-!!                  from 0 to 80.
-!!    -b YANGLE     angle (in degrees) of z axis (NZ) from horizontal
-!!                  from 5 to 80.
-!!    -d DEVICE     device type. Defaults to "X11". Enter an invalid
-!!                  device name such as "help" to see a list of
-!!                  available devices.
-!!    -w LINEWIDTH  line width in 1/10 000, of x-axis
-!!    -x XSIZE      X size in device units of output
-!!    -y YSIZE      Y size in device units of output
-!!##EXAMPLES
-!!
-!!   Sample commands:
-!!
-!!    $ slice -f in1
-!!
-!!    # you can adjust line width and size for different devices
-!!    $ slice -f in1 -d svg -w 20 -x 14000 -y 14000
-!!
-!!##AUTHOR
-!!    John S. Urban; calls M_slice(3f) module (which is based on
-!!    PD routines by D. Long, 1984, JPL).
-!!##LICENSE
-!!    Public License
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
-'@(#)PRODUCT:        GPF library utilities and examples>',&
-'@(#)PROGRAM:        slice(1)>',&
-'@(#)DESCRIPTION:    display a set of curves as slices with a 3D view>',&
-'@(#)VERSION:        1.1, 20190326>',&
-'@(#)AUTHOR:         John S. Urban>',&
-'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2023-02-12 18:35:02 UTC-300>',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
 program slice
-use M_io, only        : slurp
-use M_strings,   only : s2vs
-use M_kracken95, only : kracken,iget,lget,rget,sget
+use M_io,             only : slurp
+use M_strings,        only : s2vs
+use M_kracken95,      only : kracken,iget,lget,rget,sget
 use M_draw
-use M_msg,       only : str
+use M_framework__msg, only : str
 implicit none
 character(len=1),allocatable :: text(:) ! array to hold file in memory
 integer                      :: length
@@ -275,13 +133,156 @@ integer                      :: w
    CALL VFLUSH()              ! flush graphics buffers
    CALL VEXIT()               ! close up plot package
 !-----------------------------------------------------------------------------------------------------------------------------------
-end program slice
+contains
+subroutine help_usage(l_help)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
+logical,intent(in)             :: l_help
+character(len=:),allocatable :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_help)then
+help_text=[ CHARACTER(LEN=128) :: &
+'NAME                                                                            ',&
+'    slice(1f) - [M_slices] display a grid of Z values with a 3D view            ',&
+'    (LICENSE:PD)                                                                ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'    slice -f FILENAME -d X11 -w 20 -x 680 -y 680 -a 30 -b 40                    ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   Given a file that defines a grid of Z values display each row as a           ',&
+'   curve with the DL_SLICES(3f) routine with a 3D view.                         ',&
+'                                                                                ',&
+'   On interactive devices the viewing angles may be adjusted by entering        ',&
+'   from the set of letters "lrud" (left, right, up, down)..                     ',&
+'                                                                                ',&
+'   Enter "h" in graphics window for further help on controlling the             ',&
+'   displayed curves''                                                           ',&
+'                                                                                ',&
+'   On batch devices the output is placed in filename                            ',&
+'                                                                                ',&
+'      "FILENAME_AxB.DEVICE"                                                     ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'   -f FILENAME   filename with contents of form                                 ',&
+'                                                                                ',&
+'                  z1 z2 z3 z4 z5 ...                                            ',&
+'                  z1 z2 z3 z4 z5 ...                                            ',&
+'                  z1 z2 z3 z4 z5 ...                                            ',&
+'                  z1 z2 z3 z4 z5 ...                                            ',&
+'   -a XANGLE     angle (in degrees) of x axis (NX) from horizontal              ',&
+'                 from 0 to 80.                                                  ',&
+'   -b YANGLE     angle (in degrees) of z axis (NZ) from horizontal              ',&
+'                 from 5 to 80.                                                  ',&
+'   -d DEVICE     device type. Defaults to "X11". Enter an invalid               ',&
+'                 device name such as "help" to see a list of                    ',&
+'                 available devices.                                             ',&
+'   -w LINEWIDTH  line width in 1/10 000, of x-axis                              ',&
+'   -x XSIZE      X size in device units of output                               ',&
+'   -y YSIZE      Y size in device units of output                               ',&
+'EXAMPLES                                                                        ',&
+'  Sample commands:                                                              ',&
+'                                                                                ',&
+'   $ slice -f in1                                                               ',&
+'                                                                                ',&
+'   # you can adjust line width and size for different devices                   ',&
+'   $ slice -f in1 -d svg -w 20 -x 14000 -y 14000                                ',&
+'                                                                                ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban; calls M_slice(3f) module (which is based on                   ',&
+'   PD routines by D. Long, 1984, JPL).                                          ',&
+'LICENSE                                                                         ',&
+'   Public License                                                               ',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
+   stop ! if --help was specified, stop
+endif
+end subroutine help_usage
+!>
+!!##NAME
+!!     slice(1f) - [M_slices] display a grid of Z values with a 3D view
+!!     (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!     slice -f FILENAME -d X11 -w 20 -x 680 -y 680 -a 30 -b 40
+!!
+!!##DESCRIPTION
+!!    Given a file that defines a grid of Z values display each row as a
+!!    curve with the DL_SLICES(3f) routine with a 3D view.
+!!
+!!    On interactive devices the viewing angles may be adjusted by entering
+!!    from the set of letters "lrud" (left, right, up, down)..
+!!
+!!    Enter "h" in graphics window for further help on controlling the
+!!    displayed curves'
+!!
+!!    On batch devices the output is placed in filename
+!!
+!!       "FILENAME_AxB.DEVICE"
+!!
+!!##OPTIONS
+!!    -f FILENAME   filename with contents of form
+!!
+!!                   z1 z2 z3 z4 z5 ...
+!!                   z1 z2 z3 z4 z5 ...
+!!                   z1 z2 z3 z4 z5 ...
+!!                   z1 z2 z3 z4 z5 ...
+!!    -a XANGLE     angle (in degrees) of x axis (NX) from horizontal
+!!                  from 0 to 80.
+!!    -b YANGLE     angle (in degrees) of z axis (NZ) from horizontal
+!!                  from 5 to 80.
+!!    -d DEVICE     device type. Defaults to "X11". Enter an invalid
+!!                  device name such as "help" to see a list of
+!!                  available devices.
+!!    -w LINEWIDTH  line width in 1/10 000, of x-axis
+!!    -x XSIZE      X size in device units of output
+!!    -y YSIZE      Y size in device units of output
+!!##EXAMPLES
+!!
+!!   Sample commands:
+!!
+!!    $ slice -f in1
+!!
+!!    # you can adjust line width and size for different devices
+!!    $ slice -f in1 -d svg -w 20 -x 14000 -y 14000
+!!
+!!##AUTHOR
+!!    John S. Urban; calls M_slice(3f) module (which is based on
+!!    PD routines by D. Long, 1984, JPL).
+!!##LICENSE
+!!    Public License
+subroutine help_version(l_version)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
+logical,intent(in)             :: l_version
+character(len=:),allocatable   :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_version)then
+help_text=[ CHARACTER(LEN=128) :: &
+'@(#)        PRODUCT:        GPF library utilities and examples>',&
+'@(#)        PROGRAM:        slice(1)>',&
+'@(#)DESCRIPTION:    display a set of curves as slices with a 3D view>',&
+'@(#)VERSION:        1.1, 20190326>',&
+'@(#)AUTHOR:         John S. Urban>',&
+'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
+'@(#)COMPILED:       2024-06-29 21:54:16 UTC-240>',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
+endif
+end subroutine help_version
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine slices(surfdat,kix,kiz,nx,nz,a0,b0,title)
    use M_draw
    use :: M_slices, only : dl_slices, dl_init, dl_symbol
+   implicit none
 !-----------------------------------------------------------------------------------------------------------------------------------
    real,intent(in)              :: SURFDAT(kix,kiz) ! array of y values
    integer,intent(in)           :: kix              ! x dimension of surfdat array
@@ -295,6 +296,19 @@ subroutine slices(surfdat,kix,kiz,nx,nz,a0,b0,title)
    integer           :: ICOL(255)
    character(len=80) :: XT,YT,ZT                    ! axis titles
    character(len=1)  :: key                         ! pressed key in graphics window
+!-----------------------------------------------------------------------------------------------------------------------------------
+   real :: a, b, a_old, b_old
+
+   integer :: iax, ibuf, iflag, ivalue, ix, iz
+   integer :: mlx, mly, mlz
+   integer :: ndx, ndy, ndz, nmx, nmy, nmz, nnx, nny, nnz, nxt, nyt, nzt
+
+   real :: dm, dx
+   real :: smx, smy, smz
+   real :: tsx, tsy, tsz
+   real :: xe, xh, xs
+   real :: ye, yh, ys
+   real :: ze, zh, zs
 !-----------------------------------------------------------------------------------------------------------------------------------
    a=a0                                             ! mutable copy of parameter A
    b=b0                                             ! mutable copy of parameter B
@@ -503,3 +517,4 @@ END subroutine slices
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
+end program slice

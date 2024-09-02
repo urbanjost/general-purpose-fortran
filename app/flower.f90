@@ -6,7 +6,7 @@ program flower
 ! M_io           = { git = "https://github.com/urbanjost/M_io.git" }
 
 use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
-use,intrinsic :: iso_fortran_env, only : iostat_end
+use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
 use M_io,                         only : get_next_char
 use M_CLI2,                       only : set_args,lget,sget,sgets, filenames=>unnamed
 implicit none
@@ -18,8 +18,8 @@ character(len=:),allocatable    :: help_text(:)
 character(len=:),allocatable    :: version_text(:)
 character(len=:),allocatable    :: outline
 character(len=:),allocatable    :: outlinel
-character(len=256)              :: message           ! message field for returned messages
-integer,parameter               :: fd=10             ! file descriptor for file currently being read
+character(len=256)              :: iomsg             ! message field for returned messages
+integer                         :: fd                ! file descriptor for file currently being read
 integer                         :: ios               ! hold I/O error flag
 character                       :: c1                ! current character read
 character                       :: previous          ! previous significant character
@@ -61,8 +61,9 @@ if(nocomment.and.nocode)verbose=.true.
 ifblank=.false.
 
 if(size(filenames).lt.1)then
-   write(stderr,'(a)')'*flower* ERROR: missing filename.'
-   stop 4
+   filenames=['-']
+   !write(stderr,'(a)')'*flower* ERROR: missing filename.'
+   !stop 4
 endif
 FILES: do i=1,size(filenames)
    icount  = 0       ! number of characters read from file
@@ -72,12 +73,18 @@ FILES: do i=1,size(filenames)
    filename=trim(filenames(i))
    outline=''
 
-   close(unit=fd,iostat=ios)
-   open(unit=fd,file=filename,access='stream',status='old',iostat=ios,action='read',form='unformatted',iomsg=message)
-   if(ios.ne.0)then
-      write(stderr,'(a)') '*flower* ERROR: could not open '//filename
-      write(stderr,'(a)') '*flower* ERROR: '//trim(message)
-      cycle FILES
+   if(filename.eq.'-')then
+      ! currently does not seem to be a way to open stdin as a stream so kludge using non-advancing I/O
+      fd=stdin
+   else
+      fd=10
+      close(unit=fd,iostat=ios)
+      open(unit=fd,file=filename,access='stream',status='old',iostat=ios,action='read',form='unformatted',iomsg=iomsg)
+      if(ios.ne.0)then
+         write(stderr,'(a)') '*flower* ERROR: could not open '//filename
+         write(stderr,'(a)') '*flower* ERROR: '//trim(iomsg)
+         cycle FILES
+      endif
    endif
 
    if(verbose)then
@@ -99,8 +106,13 @@ FILES: do i=1,size(filenames)
    insingle=.false.
    indouble=.false.
    advance='yes'
+   iomsg=''
    ONE_CHAR_AT_A_TIME: do                                                ! loop through read of file one character at a time
-      call get_next_char(fd,c1,ios1)                                     ! get next character from buffered read from file
+      if(fd.eq.stdin)then
+         read(fd,'(a)',advance='no',iostat=ios1,iomsg=iomsg)c1
+      else
+         call get_next_char(fd,c1,ios1)                                  ! get next character from buffered read from file
+      endif
       if(ios1.eq.iostat_end)then                                         ! reached end of file so stop
          if(verbose)then
             if(nocode.and.nocomment)then
@@ -128,7 +140,9 @@ FILES: do i=1,size(filenames)
             endif
          endif
          cycle FILES
-      elseif(ios1.ne.0 )then                                             ! error or end of file
+      elseif(fd.eq.stdin.and.iostat_eor.eq.ios1)then
+         c1=nl
+      elseif(ios1.ne.0)then                                             ! error or end of file
          write(stderr,*)'*flower* ERROR: EOF or error on '//filename//' before end of '//filename
          cycle FILES
       endif
@@ -263,79 +277,76 @@ subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
 'flower(1f) - [DEVELOPER] change case of free-format Fortran file',&
-'             or remove code or remove comments',&
-'             (LICENSE:PD)',&
-'SYNOPSIS',&
+'             or remove code or remove comments                  ',&
+'             (LICENSE:PD)                                       ',&
+'SYNOPSIS                                                        ',&
 '   flower [ --stat|[ [--nocomment|--nocode] [--toupper]|[--verbose] ]',&
-'          FILENAMES(s) ]|[--help|--version|--usage]',&
-'DESCRIPTION',&
-'',&
-'',&
-'',&
-'1. flower(1) will convert free-format Fortran code to lowercase.',&
+'          FILENAMES(s) ]|[--help|--version|--usage]                  ',&
+'DESCRIPTION                                                          ',&
+'flower(1) depends on the input being plain standard free-format Fortran',&
+'so the output should be carefully checked.                             ',&
+'                                                                       ',&
+'1. flower(1) will convert free-format Fortran code to lowercase.       ',&
 '   It can also convert the code to uppercase. In each case comments and',&
-'   quoted text are left as-is.',&
-'',&
-'   This is a basic program that writes its results to stdout and does',&
-'   not recognize Hollerith strings and preprocessor directives as',&
-'   special cases.',&
-'',&
-'   Tabs should be expanded before processing the file.',&
-'',&
-'   flower(1) depends on the input being plain standard free-format',&
-'   Fortran so the output should be carefully checked.',&
-'',&
-'2. It may also be used to generate simple statistics about what percentage',&
-'   of the code is comments.',&
-'',&
-'3. flower(1) can also be used to strip comments from the code.',&
-'',&
-'4. Lastly, the code can be removed so the comments can be used for documentation',&
-'   or run through utilities like spell checkers.',&
-'',&
-'OPTIONS',&
+'   quoted text are left as-is.                                         ',&
+'                                                                       ',&
+'2. flower(3f) can additionally generate simple statistics about        ',&
+'   what percentage of the code is comments.                            ',&
+'                                                                       ',&
+'3. flower(1) can strip comments from the code.                         ',&
+'                                                                       ',&
+'4. Alternatively, the code can be removed so the comments can be used  ',&
+'   for documentation or run through utilities like spell checkers.     ',&
+'                                                                       ',&
+'                                                                       ',&
+'This is a basic program that writes its results to stdout and does not ',&
+'recognize Hollerith strings and preprocessor directives as special cases.',&
+'                                                                         ',&
+'Tabs should be expanded before processing the file.                      ',&
+'                                                                         ',&
+'OPTIONS                                                                  ',&
 '     FILENAME     Fortran source file which is to be converted to lowercase',&
-'     --nocomment  remove comment characters',&
-'     --nocode     remove code characters',&
+'     --nocomment  remove comment characters                                ',&
+'     --nocode     remove code characters                                   ',&
 '     --toupper    convert code characters to uppercase instead of lowercase',&
-'     --verbose    turn on verbose mode including file statistics. Note',&
-'                  that if --nocomment and --nocode are selected --verbose',&
-'                  is implied.',&
-'     --stat       is the same as --nocomment --nocode --verbose, meaning',&
-'                  no other output than file statistics will be produced.',&
-'                  If present, --nocomment, --nocode, and --verbose are',&
-'                  ignored.',&
-'',&
-'     --help       display help text and exit',&
-'     --version    display version text and exit',&
-'',&
-'EXAMPLES',&
-'   Typical usage',&
-'',&
-'     # convert all code to lowercase',&
-'     flower sample.f90 > sample_new.f90',&
-'',&
-'     # show stats for files measuring percent of comments',&
-'     flower --stat *.f90 *.F90',&
-'',&
-'     # check spelling on comments',&
-'     flower --nocode *.f90 *.F90|spell',&
-'',&
-'     # grep code ignoring comments',&
-'     flower --nocomment *.f90 *.F90|grep -iw contains',&
-'',&
-'EXIT STATUS',&
-'   The following exit values are returned:',&
-'',&
-'      0     no differences were found',&
-'      1     differences were found',&
+'     --verbose    turn on verbose mode including file statistics. Note     ',&
+'                  that if --nocomment and --nocode are selected --verbose  ',&
+'                  is implied.                                              ',&
+'     --stat       is the same as --nocomment --nocode --verbose, meaning   ',&
+'                  no other output than file statistics will be produced.   ',&
+'                  If present, --nocomment, --nocode, and --verbose are     ',&
+'                  ignored.                                                 ',&
+'                                                                           ',&
+'     --help       display help text and exit                               ',&
+'     --version    display version text and exit                            ',&
+'                                                                           ',&
+'EXAMPLES                                                                   ',&
+'   Typical usage                                                           ',&
+'                                                                           ',&
+'     # convert all code to lowercase                                       ',&
+'     flower sample.f90 > sample_new.f90                                    ',&
+'                                                                           ',&
+'     # show stats for files measuring percent of comments                  ',&
+'     flower --stat *.f90 *.F90                                             ',&
+'                                                                           ',&
+'     # check spelling on comments                                          ',&
+'     flower --nocode *.f90 *.F90|spell                                     ',&
+'                                                                           ',&
+'     # grep code ignoring comments                                         ',&
+'     flower --nocomment *.f90 *.F90|grep -iw contains                      ',&
+'                                                                           ',&
+'EXIT STATUS                                                                ',&
+'   The following exit values are returned:                                 ',&
+'                                                                           ',&
+'       0  no differences were found                                        ',&
+'       1  differences were found                                           ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 '@(#)PRODUCT:        GPF library utilities and examples>',&
-'@(#)PROGRAM:        flower(1)>',&
+'@(#)PROGRAM:        flower(1)>                         ',&
 '@(#)DESCRIPTION:    convert free-format Fortran source to lowercase>',&
-'@(#)VERSION:        1.0-20171126>',&
-'@(#)AUTHOR:         John S. Urban>',&
+'@(#)VERSION:        1.0-20171126>                                   ',&
+'@(#)AUTHOR:         John S. Urban>                                  ',&
 '']
 end subroutine setup
 

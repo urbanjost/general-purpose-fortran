@@ -1,5 +1,7 @@
        program demo_M_kracken
        use M_kracken, only : kracken
+       implicit none
+       real :: x, y
        ! define and crack command line arguments
        call kracken('cmd',' DEFAULT STRING -x 123 -y 456 ')
        call showstring()

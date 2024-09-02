@@ -1,0 +1,262 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>locale (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+locale(3f) - [M_time:DATE_PRINTING] allow for selecting languages to represent
+month and weekday names
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+subroutine locale(name,month_names,weekday_names, &
+& month_names_abbr,weekday_names_abbr,IERR)
+<P>
+<PRE>
+    character(len=*),intent(in)           :: name
+    character(len=*),intent(in),optional  :: month_names(12)
+    character(len=*),intent(in),optional  :: month_names_abbr(12)
+    character(len=*),intent(in),optional  :: weekday_names(7)
+    character(len=*),intent(in),optional  :: weekday_names_abbr(7)
+    integer,intent(out)                   :: ierr
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+given a pre-defined locale name or strings to substitute for month names
+and weekday names provide some basic support for non-POSIX labels in
+date representation.
+<P>
+The parameters are default character types and so may be limited to the
+basic ASCII character set, but are typically limited to the extended
+ASCII set.
+<P>
+This is only a basic attempt to support internationalization and
+currently just supports basic substitution of the default POSIX names
+with the alternate strings. As support for UTF-8 grows among Fortran
+compilers something more robust will hopefully emerge to provide full
+internationalization of the date representations.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>name</B> </TD><TD valign=bottom>
+predefined name or reserved name "user"
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>month_names</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+12 month names
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>weekday_names</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+7 weekday names
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>month_names_abbr</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+12 month name abbreviations
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>weekday_names_abbr</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+7 weekday name abbreviations
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ierr</B> </TD><TD valign=bottom>
+if non-zero an error occurred
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The NAME parameter may be a pre-defined name or the special name "user".
+The current pre-defined names are
+<P>
+<PRE>
+   &#146;bokmal&#146;,&#146;catalan&#146;,&#146;czech&#146;,&#146;dansk&#146;/&#146;danish&#146;,&#146;deutsch&#146;/&#146;german&#146;,&#146;dutch&#146;,
+   &#146;eesti&#146;/&#146;estonian&#146;,&#146;english&#146;,&#146;finnish&#146;,&#146;french&#146;,&#146;galego&#146;/&#146;galician&#146;,
+   &#146;hrvatski&#146;/&#146;croation&#146;,&#146;hungarian&#146;,&#146;icelandic&#146;,&#146;italian&#146;,&#146;korean&#146;,
+   &#146;lithuanian&#146;,&#146;norwegian&#146;,&#146;nynorsk&#146;,&#146;polish&#146;,&#146;portuguese&#146;,&#146;romanian&#146;,
+   &#146;slovak&#146;,&#146;slovene&#146;/&#146;slovenian&#146;,&#146;spanish&#146;,&#146;swedish&#146;,&#146;turkish&#146;
+<P>
+</PRE>
+These non-ISO-8859 character sets are defined in terms of ISO-8859 but will
+not work on most platforms
+<P>
+<PRE>
+   &#146;greek&#146;, &#146;russian&#146;,&#146;thai&#146;, &#146;hebrew&#146;,&#146;japanese&#146;
+<P>
+</PRE>
+The remaining reserved names take special actions
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The remaining reserved names take special actions
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+POSIX load POSIX names
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LANGUAGE use value of environment variable LANGUAGE
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+user placeholder indicating to expect at least one of the
+optional values to be set
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+reset,ISO-8601 reset back to initial defaults
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+show print user-defined values to stdout
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+chars dump characters from chars([(i,i=0,255)])
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+    program demo_locale
+    use M_time, only : locale, now
+    implicit none
+       call locale(&#146;POSIX&#146;)
+       write(*,*)now()
+       call locale(&#146;french&#146;)
+       write(*,*)now()
+       call mine()
+       write(*,*)now()
+    contains
+    subroutine mine()
+    character(len=*),parameter :: months(12)=[ character(len=9) :: &
+    &&#146;JANUARY&#146;,&#146;FEBRUARY&#146;,&#146;MARCH    &#146;,&#146;APRIL  &#146;,&#146;MAY     &#146;,&#146;JUNE    &#146;, &
+    &&#146;JULY   &#146;,&#146;AUGUST  &#146;,&#146;SEPTEMBER&#146;,&#146;OCTOBER&#146;,&#146;NOVEMBER&#146;,&#146;DECEMBER&#146;]
+    character(len=*),parameter :: weekdays(7)=[character(len=9) :: &
+    &&#146;MONDAY&#146;,&#146;TUESDAY&#146;,&#146;WEDNESDAY&#146;,&#146;THURSDAY&#146;,&#146;FRIDAY&#146;,&#146;SATURDAY&#146;,&#146;SUNDAY&#146;]
+    character(len=3),parameter :: short_months(12)=months(:)(1:3)
+    character(len=3),parameter :: short_weekdays(7)=weekdays(:)(1:3)
+    integer :: ierr
+      call locale(&#146;user&#146;,months,short_months,weekdays,short_weekdays,ierr)
+    end subroutine mine
+    end program demo_locale
+<P>
+</PRE>
+Results:
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 2015
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>locale (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e091ed11-9163-4700-b54c-9a6991d98b2c using man macros.</FONT>
+<br><br><center><img src="images/locale.3m_time.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

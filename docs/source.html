@@ -565,7 +565,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_CLI2 prototype_and_cmd_args_to_nlist create dictionary from prototype if not null and update from command line<br/>
 	 M_CLI2 get_anyarray_l(3f) given keyword fetch logical array from string in dictionary(F on err)<br/>
 	 M_CLI2 get_anyarray_d(3f) given keyword fetch dble value array from Language Dictionary (0 on err)<br/>
-	M_CLI2::get_anyarray_c(3f): Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
+	 M_CLI2 get_anyarray_c(3f) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
 	 M_CLI2 get_args_fixed_length_a_array(3f) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
 	 M_CLI2 get_fixedarray_fixed_length_c(3f) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
 	 M_CLI2 get_scalar_anylength_c(3f) Fetch string value for specified KEYWORD from the lang. dictionary<br/>
@@ -577,7 +577,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_CLI2 decodebase(3f) convert whole number string in base [2-36] to base 10 number<br/>
 	 M_CLI2 locate_c(3f) find PLACE in sorted character array LIST where VALUE can be found or should be placed<br/>
 	 M_strings atleast(3f) return string padded to at least specified length<br/>
-	 M_CLI2 locate_key(3f) find PLACE in sorted character array where VALUE can be found or should be placed<br/>
+	 M_CLI2 locate_key(3f) find PLACE in sorted character array where KEYNAME can be found or should be placed<br/>
 </td>
 <tr><td><a href="../src/M_Compare_Float_Numbers.f90">../src/M_Compare_Float_Numbers.f90</a></td>
 <td>
@@ -593,7 +593,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_anything anyscalar_to_real128(3f) convert integer or real parameter of any kind to real128<br/>
 	 M_anything anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision<br/>
 	 M_anything anyscalar_to_real(3f) convert integer or real parameter of any kind to real<br/>
-	 M_anything anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer<br/>
+	 M_anything anyscalar_to_int64(3f) convert parameter of any intrinsic kind to 64-bit integer<br/>
 	 M_anything anyinteger_to_string(3f) function that converts an integer value to a character string<br/>
 </td>
 <tr><td><a href="../src/M_args.f90">../src/M_args.f90</a></td>
@@ -688,15 +688,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_contourplot.f90">../src/M_contourplot.f90</a></td>
 <td>
-	M_contourplot::contourlines(3f):calculate contour lines from ungridded data f(x,y) and call user-supplied routine with results<br/>
+	 M_contourplot contourlines(3f) calculate contour lines from ungridded data f(x y) and call user-supplied routine with results<br/>
 </td>
 <tr><td><a href="../src/M_csv.f90">../src/M_csv.f90</a></td>
 <td>
 	 M_csv csv_write(3f) write scalar intrinsic type using current CSV style<br/>
 	 M_csv csv(3f) writes up to twenty standard scalar types as a line in a CSV file<br/>
-</td>
-<tr><td><a href="../src/M_ctrper.f90">../src/M_ctrper.f90</a></td>
-<td>
 </td>
 <tr><td><a href="../src/M_curl.f90">../src/M_curl.f90</a></td>
 <td>
@@ -704,7 +701,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/M_datapac.f90">../src/M_datapac.f90</a></td>
 <td>
 </td>
-<tr><td><a href="../src/M_datapac_d.f90">../src/M_datapac_d.f90</a></td>
+<tr><td><a href="../src/M_datapac__d.f90">../src/M_datapac__d.f90</a></td>
 <td>
 	 line plotter graph of cumulative distribution function<br/>
 	 line plotter graph of probability density function<br/>
@@ -732,7 +729,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 line plotter graph of cumulative distribution function<br/>
 	 line plotter graph of function<br/>
 </td>
-<tr><td><a href="../src/M_datapac_s.f90">../src/M_datapac_s.f90</a></td>
+<tr><td><a href="../src/M_datapac__s.f90">../src/M_datapac__s.f90</a></td>
 <td>
 	 line plotter graph of cumulative distribution function<br/>
 	 line plotter graph of probability density function<br/>
@@ -762,10 +759,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_display.f90">../src/M_display.f90</a></td>
 <td>
-	M_display(3fm): module for pretty-printing matrices<br/>
-	M_disp::disp_scalar_int(3f): integer scalar without title  (call disp_title_scalar_int(3f) with title='')<br/>
-	M_display::disp_scalar_int(3f): Default integer scalar with title<br/>
-	M_display::disp_vector_int(3f): Default integer vector without title<br/>
+	 M_display(3fm) module for pretty-printing matrices<br/>
+	 M_disp disp_scalar_int(3f) integer scalar without title (call disp_title_scalar_int(3f) with title='')<br/>
+	 M_display disp_scalar_int(3f) Default integer scalar with title<br/>
+	 M_display disp_vector_int(3f) Default integer vector without title<br/>
 </td>
 <tr><td><a href="../src/M_draw.f90">../src/M_draw.f90</a></td>
 <td>
@@ -790,11 +787,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_drawplus rdbox(3f) reads two points and outline defined box and return points<br/>
 	 M_drawplus rdpnt(3f) reads coordinates of point locator clicked at<br/>
 	 display sample page of a font<br/>
-</td>
-<tr><td><a href="../src/M_escape.f90">../src/M_escape.f90</a></td>
-<td>
-	 use the color string constants optionally ignoring them if G_switch is .false. as set by color_mode(3f)<br/>
-	 M_escape::split(3f): parse string on delimiter characters and store tokens into an allocatable array<br/>
 </td>
 <tr><td><a href="../src/M_expr.f90">../src/M_expr.f90</a></td>
 <td>
@@ -825,6 +817,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_fixedform.f90">../src/M_fixedform.f90</a></td>
 <td>
+	 plain text print reading window from ncurses<br/>
+	 print ncurses(3c) window as HTML<br/>
+	 plain text print reading window from ncurses<br/>
+	 plain text print reading window from ncurses<br/>
 	 take an appropriate action for each keypress<br/>
 	 convert user data to an ncurses(3c) window<br/>
 	 look <br/>
@@ -836,8 +832,52 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 convert tabs in input to spaces in output while maintaining columns, assuming a tab is set every 8 characters<br/>
 	 append a number to the end of the filename that makes it relatively unique<br/>
 </td>
-<tr><td><a href="../src/M_fndnth.f90">../src/M_fndnth.f90</a></td>
+<tr><td><a href="../src/M_framework.f90">../src/M_framework.f90</a></td>
 <td>
+</td>
+<tr><td><a href="../src/M_framework__approx.f90">../src/M_framework__approx.f90</a></td>
+<td>
+	 M_framework__approx almost(3f) function compares two real numbers up to specified number of digits by calling ACCDIG(3f)<br/>
+	 M_framework__approx sp_accdig(3f) compare two real numbers only up to a specified number of digits<br/>
+	 M_framework__approx accdig(3f) compare two values only up to a specified number of digits<br/>
+	 M_framework__approx in_margin(3f) check if two reals are approximately equal using a relative margin<br/>
+	 M_framework__approx round_to_power(3f) round val to specified given decimal (power) position<br/>
+	 M_framework__approx round(3f) round val to specified number of significant digits<br/>
+	 M_framework__approx significant_real32(3f) round val to specified number of significant digits<br/>
+	 M_framework__approx significant_real64(3f) round val to specified number of significant digits<br/>
+	 M_framework__approx anyscalar_to_realbig_(3f) convert integer or real parameter of any kind to real128 or biggest available<br/>
+	 M_framework__approx anyscalar_to_double_(3f) convert integer or real parameter of any kind to doubleprecision<br/>
+</td>
+<tr><td><a href="../src/M_framework__journal.f90">../src/M_framework__journal.f90</a></td>
+<td>
+	 M_framework__journal journal(3fg) provides public message routine no paging or graphic mode change<br/>
+	 M_framework__journal where_write_message_all(3f) writes a message to a string composed of any standard scalar types<br/>
+</td>
+<tr><td><a href="../src/M_framework__msg.f90">../src/M_framework__msg.f90</a></td>
+<td>
+	 M_framework__msg str(3f) {msg_scalar msg_one}<br/>
+	 M_framework__msg fmt(3f) convert any intrinsic to a string using specified format<br/>
+	 M_framework__msg stderr(3f) writes a message to standard error using a standard f2003 method<br/>
+	 M_framework__msg write(3f) writes a message to any number of open files with any scalar values<br/>
+	 M_framework__msg pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string<br/>
+	 M_framework__msg assert(3f) writes a message to a string composed of any standard scalar types<br/>
+</td>
+<tr><td><a href="../src/M_framework__utility.f90">../src/M_framework__utility.f90</a></td>
+<td>
+	 M_framework__utility fstop(3f) calls 'STOP VALUE' passing in a value (1-32) with optional message<br/>
+</td>
+<tr><td><a href="../src/M_framework__verify.f90">../src/M_framework__verify.f90</a></td>
+<td>
+	 M_framework__verify unit_test_msg(3f) writes a message to a string composed of any standard scalar types<br/>
+	 M_framework__verify unit_test(3f) assert if expression is .true. or .false. and optionally call command or stop on .false.<br/>
+	 M_framework__verify unit_test_start(3f) start testing procedure <br/>
+	 M_framework__verify unit_test_stop(3f) stop program with report on calls to unit_test(3f)<br/>
+	 M_framework__verify unit_test_end(3f) end checking procedure <br/>
+	 M_framework__verify unit_test_bad(3f) call 'goodbad NAME bad'<br/>
+	 M_framework__verify unit_test_good(3f) call 'goodbad NAME good'<br/>
+	 M_framework__verify atleast_(3f) return string padded to at least specified length<br/>
+	 M_framework__verify julian(3f) Converts proleptic Gregorian DAT date-time array to Julian Date<br/>
+	 M_strings glob_(3f) function compares text strings one of which can have wildcards ('*' or '?').<br/>
 </td>
 <tr><td><a href="../src/M_generic_list.f90">../src/M_generic_list.f90</a></td>
 <td>
@@ -862,10 +902,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_graph.f90">../src/M_graph.f90</a></td>
 <td>
-	M_graph::graph(3f): routine for plotting lines<br/>
-	M_graph::graph_init(3f): initialize the longlib graphics plot package<br/>
-	M_graph::symbol_(3f): routine to plot characters and symbols<br/>
-	M_graph::clipit(3f):clips a line segment partially visible<br/>
+	 M_graph graph(3f) routine for plotting lines<br/>
+	 M_graph graph_init(3f) initialize the longlib graphics plot package<br/>
+	 M_graph symbol_(3f) routine to plot characters and symbols<br/>
+	 M_graph clipit(3f) clips a line segment partially visible<br/>
 </td>
 <tr><td><a href="../src/M_hashkeys.f90">../src/M_hashkeys.f90</a></td>
 <td>
@@ -874,6 +914,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 LUHN_CHECKSUM determines the Luhn checksum of a string composed of digits<br/>
 	 M_hashkeys crc32_hash_arr CRC (Cyclic Redundancy Check) calculation<br/>
 	 djb2(3f) call C routine djb2(3c) with a Fortran CHARACTER variable<br/>
+</td>
+<tr><td><a href="../src/M_hashkeys__sha3.f90">../src/M_hashkeys__sha3.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_help.f90">../src/M_help.f90</a></td>
 <td>
@@ -896,22 +939,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	errc(3f): function for specifying error curve numbers<br/>
 	 M_xyplot fetch(3f) call sget(3f) (and calculator if fetched string starts with $ or double-quote)<br/>
 </td>
-<tr><td><a href="../src/M_indmed.f90">../src/M_indmed.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_indnth.f90">../src/M_indnth.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_inspar.f90">../src/M_inspar.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_inssor.f90">../src/M_inssor.f90</a></td>
-<td>
-</td>
 <tr><td><a href="../src/M_intrinsics.f90">../src/M_intrinsics.f90</a></td>
 <td>
 	 grab lines in NAME section and append them to generate an index of manpages<br/>
-	 upper(3f): function to return a trimmed uppercase-only string', &<br/>
+	 upper(3): function to return a trimmed uppercase-only string', &<br/>
 	 print small 2d logical scalar, vector, or matrix', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d logical scalar, vector, matrix in row-column format', &<br/>
@@ -1091,9 +1122,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 too much memory required<br/>
 	 M_system system_getenv(3f) call get_environment_variable as a function with a default value(3f)<br/>
 </td>
-<tr><td><a href="../src/M_median.f90">../src/M_median.f90</a></td>
-<td>
-</td>
 <tr><td><a href="../src/M_messages.f90">../src/M_messages.f90</a></td>
 <td>
 	 M_messages messages(3f) module collecting various general routines for displaying messages<br/>
@@ -1109,21 +1137,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_messages signs(3f) write large block letters<br/>
 	 place a non-advancing status counter on terminal display (not redirected)<br/>
 </td>
-<tr><td><a href="../src/M_mrgref.f90">../src/M_mrgref.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_mrgrnk.f90">../src/M_mrgrnk.f90</a></td>
-<td>
-</td>
 <tr><td><a href="../src/M_msg.f90">../src/M_msg.f90</a></td>
 <td>
 	 M_msg str(3f) {msg_scalar msg_one}<br/>
 	 M_msg fmt(3f) convert any intrinsic to a string using specified format<br/>
 	 M_msg stderr(3f) writes a message to standard error using a standard f2003 method<br/>
 	 M_msg write(3f) writes a message to any number of open files with any scalar values<br/>
-</td>
-<tr><td><a href="../src/M_mulcnt.f90">../src/M_mulcnt.f90</a></td>
-<td>
 </td>
 <tr><td><a href="../src/M_ncurses.f90">../src/M_ncurses.f90</a></td>
 <td>
@@ -1133,19 +1152,90 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/M_orderpack.f90">../src/M_orderpack.f90</a></td>
 <td>
 </td>
+<tr><td><a href="../src/M_orderpack__ctrper.f90">../src/M_orderpack__ctrper.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__fndnth.f90">../src/M_orderpack__fndnth.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__indmed.f90">../src/M_orderpack__indmed.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__indnth.f90">../src/M_orderpack__indnth.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__inspar.f90">../src/M_orderpack__inspar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__inssor.f90">../src/M_orderpack__inssor.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__median.f90">../src/M_orderpack__median.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__mrgref.f90">../src/M_orderpack__mrgref.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__mrgrnk.f90">../src/M_orderpack__mrgrnk.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__mulcnt.f90">../src/M_orderpack__mulcnt.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__rapknr.f90">../src/M_orderpack__rapknr.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__refpar.f90">../src/M_orderpack__refpar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__refsor.f90">../src/M_orderpack__refsor.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__rinpar.f90">../src/M_orderpack__rinpar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__rnkpar.f90">../src/M_orderpack__rnkpar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__uniinv.f90">../src/M_orderpack__uniinv.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__unipar.f90">../src/M_orderpack__unipar.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__unirnk.f90">../src/M_orderpack__unirnk.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__unista.f90">../src/M_orderpack__unista.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__valmed.f90">../src/M_orderpack__valmed.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_orderpack__valnth.f90">../src/M_orderpack__valnth.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_overload.f90">../src/M_overload.f90</a></td>
 <td>
 	 M_overload(3fm) overloads of standard operators and intrinsic procedures<br/>
 	 M_overload g_g(3f) convert two single intrinsic values to a string<br/>
-	 M_overload::g_g(3f): convert two single intrinsic values to a string<br/>
-	 M_strings::strmerge(3f): pads first and second arguments to MERGE(3f) to same length<br/>
-	 M_strings adjustl_atleast(3f) return string padded on right to at least specified length<br/>
+	 M_overload::strmerge(3f): pads first and second arguments to MERGE(3f) to same length<br/>
+	 M_overload adjustl_atleast(3f) return string padded on right to at least specified length<br/>
 	 M_overload adjustr_atleast(3f) return string padded on left to at least specified length<br/>
-	 M_overload ffmt(3f) convert any intrinsic to a string using specified format<br/>
+	 M_overload fmt(3f) convert any intrinsic to a string using specified format<br/>
+	 M_overload ffmt(3f) convert any intrinsic to a string using required specified format<br/>
 	 M_overload::atleast(3f): return string padded to at least specified length<br/>
-	 M_anything anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision<br/>
-	 M_anything anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer<br/>
-	 M_anything anyscalar_to_real(3f) convert integer or real parameter of any kind to real<br/>
+	 M_overload anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision<br/>
+	 M_overload anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer<br/>
+	 M_overload anyscalar_to_real(3f) convert integer or real parameter of any kind to real<br/>
+	 M_overload oz(3f) logical to integer TRUE results in 1 FALSE results in 0<br/>
+	 M_overload zo(3f) logical to integer TRUE results in 0 FALSE results in 1<br/>
+	 M_overload ge(3f) logical to integer TRUE results in 0 FALSE results in 1<br/>
+	 M_overload le(3f) logical to integer TRUE results in 0 FALSE results in 1<br/>
+	 M_overload eq(3f) logical to integer TRUE results in 0 FALSE results in 1<br/>
+	 M_overload lt(3f) logical to integer TRUE results in 0 FALSE results in 1<br/>
+	 M_overload gt(3f) logical to integer TRUE results in 0 FALSE results in 1<br/>
+	 M_overload ne(3f) logical to integer TRUE results in 0 FALSE results in 1<br/>
 </td>
 <tr><td><a href="../src/M_path.f90">../src/M_path.f90</a></td>
 <td>
@@ -1203,18 +1293,28 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_pixel vflush(3f) flush current page<br/>
 	 M_pixel cosd(3f) cos(3f) with degrees as input instead of radians<br/>
 	 M_pixel sind(3f) sin(3f) with degrees as input instead of radians<br/>
-	M_anything::anyscalar_to_real(3f): convert integer or real parameter of any kind to real<br/>
-	M_anything::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision<br/>
+	M_pixel::anyscalar_to_real(3f): convert integer or real parameter of any kind to real<br/>
+	M_pixel::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision<br/>
 	 M_pixel rgbmono(3f) convert RGB colors to a reasonable grayscale<br/>
 	 M_pixel closest_color_name(3f) given RGB values try to find closest named color<br/>
 	 M_pixel color_name2rgb(3f) given a color name return rgb color values in range 0 to 100<br/>
-	 M_strings lower(3f) Changes a string to lowercase<br/>
+	 M_pixel lower(3f) Changes a string to lowercase<br/>
 	 M_pixel polar_to_cartesian(3f) convert polar coordinates to cartesian coordinates<br/>
 	 M_pixel d2r_r(3f) Convert degrees to radians<br/>
 	 M_pixel d2r_d(3f) Convert degrees to radians<br/>
 	 M_pixel d2r_i(3f) Convert degrees to radians<br/>
 </td>
-<tr><td><a href="../src/M_pixel_slices.f90">../src/M_pixel_slices.f90</a></td>
+<tr><td><a href="../src/M_pixel__readgif.f90">../src/M_pixel__readgif.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_pixel__slices.f90">../src/M_pixel__slices.f90</a></td>
+<td>
+</td>
+<tr><td><a href="../src/M_pixel__writegif.f90">../src/M_pixel__writegif.f90</a></td>
+<td>
+	 This module can write a GIF file in GIF89 format from raster data<br/>
+</td>
+<tr><td><a href="../src/M_pixel__writegif_animated.f90">../src/M_pixel__writegif_animated.f90</a></td>
 <td>
 </td>
 <tr><td><a href="../src/M_process.f90">../src/M_process.f90</a></td>
@@ -1244,21 +1344,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_random mtprng_rand_real2(3f) Obtain a pseudo-random real number .ge. 0.0 and .lt. 1.0<br/>
 	 M_random mtprng_rand_real3(3f) Obtain a pseudo-random real number .gt. 0 and .lt. 1.<br/>
 </td>
-<tr><td><a href="../src/M_rapknr.f90">../src/M_rapknr.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_readgif.f90">../src/M_readgif.f90</a></td>
-<td>
-</td>
 <tr><td><a href="../src/M_readline.f90">../src/M_readline.f90</a></td>
 <td>
 	 Call readline(3c) from Fortran using ISO_C_BINDING<br/>
-</td>
-<tr><td><a href="../src/M_refpar.f90">../src/M_refpar.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_refsor.f90">../src/M_refsor.f90</a></td>
-<td>
 </td>
 <tr><td><a href="../src/M_regex.f90">../src/M_regex.f90</a></td>
 <td>
@@ -1271,13 +1359,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings s2c(3f) copy string(1 Clen(string)) to char array with null terminator<br/>
 	 M_strings c2s(3f) copy pointer to C char array till a null is encountered to a Fortran string up to 4096 characters<br/>
 </td>
-<tr><td><a href="../src/M_rinpar.f90">../src/M_rinpar.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_rnkpar.f90">../src/M_rnkpar.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_sha3.f90">../src/M_sha3.f90</a></td>
+<tr><td><a href="../src/M_sets.f90">../src/M_sets.f90</a></td>
 <td>
 </td>
 <tr><td><a href="../src/M_slices.f90">../src/M_slices.f90</a></td>
@@ -1290,6 +1372,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <td>
 	 M_sort sort_shell(3f) Generic subroutine sorts the array X using a shell sort<br/>
 	 M_sort sort_heap(3f) Generic subroutine sorts the array X using a heap sort<br/>
+	 M_sort sort_quick_compact(3f) Generic subroutine sorts the array X using a compact recursive quicksort<br/>
 	 M_sort unique(3f) assuming an array is sorted return array with duplicate values removed<br/>
 	 M_sort swap(3f) swap two variables of like type (real integer complex character double)<br/>
 	 M_sort sort_quick_rx_integer_int8_int32(3f) indexed hybrid quicksort of a integer(kind=int8) array<br/>
@@ -1306,8 +1389,19 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_sort sort_quick_rx_real_real32_int64(3f) indexed hybrid quicksort of a real(kind=real32) array<br/>
 	 M_sort sort_quick_rx_real_real64_int64(3f) indexed hybrid quicksort of a real(kind=real64) array<br/>
 	 M_sort sort_quick_rx_character_ascii_int64(3f) indexed hybrid quicksort of a character(kind=ascii) array<br/>
-	 M_sort sort_quick_rx_complex_int32(3f) indexed hybrid quicksort of a real array<br/>
-	 M_sort sort_quick_rx_complex_int64(3f) indexed hybrid quicksort of a real array<br/>
+	 M_sort sort_quick_rx_complex_int32(3f) indexed hybrid quicksort of an array<br/>
+	 M_sort sort_quick_rx_complex_int64(3f) indexed hybrid quicksort of an array<br/>
+	 M_sort sort_quick_compact_integer_int8(3f) recursive quicksort of a integer(kind=int8) array<br/>
+	 M_sort sort_quick_compact_integer_int16(3f) recursive quicksort of a integer(kind=int16) array<br/>
+	 M_sort sort_quick_compact_integer_int32(3f) recursive quicksort of a integer(kind=int32) array<br/>
+	 M_sort sort_quick_compact_integer_int64(3f) recursive quicksort of a integer(kind=int64) array<br/>
+	 M_sort sort_quick_compact_real_real32(3f) recursive quicksort of a real(kind=real32) array<br/>
+	 M_sort sort_quick_compact_real_real64(3f) recursive quicksort of a real(kind=real64) array<br/>
+	 M_sort sort_quick_compact_real_real128(3f) recursive quicksort of a real(kind=real128) array<br/>
+	 M_sort sort_quick_compact_complex_real32(3f) recursive quicksort of a complex(kind=real32) array<br/>
+	 M_sort sort_quick_compact_complex_real64(3f) recursive quicksort of a complex(kind=real64) array<br/>
+	 M_sort sort_quick_compact_complex_real128(3f) recursive quicksort of a complex(kind=real128) array<br/>
+	 M_sort sort_quick_compact_character_ascii(3f) recursive quicksort of a character(kind=ascii) array<br/>
 	 M_sort tree_insert(3f) sort a number of integers by building a tree sorted in infix order<br/>
 	 M_sort tree_print(3f)<br/>
 </td>
@@ -1318,6 +1412,33 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_steam67.f90">../src/M_steam67.f90</a></td>
 <td>
+	M_steam67::steam67(3f): 1967 ASME Steam Table Library<br/>
+	M_steam67::condv67(3f): compute thermal conductivity of water at pressure P and temperature T<br/>
+	M_steam67::condl67(3f): return thermal conductivity given P,T<br/>
+	M_steam67::do67(3f)L summation of a polynomial<br/>
+	M_steam67::cpl67(3f):  calculates specific isobaric head capacity of water at pressure P and temperature T<br/>
+	M_steam67::cpv67(3f): calculates specific isobaric heat capacity and specific volume of water at pressure P and temperature T<br/>
+	M_steam67::crflo67(3f): critical flow and degrees superheat of wet/superheated steam at PRES,ENTH<br/>
+	M_steam67::function critvs67(press, enth, gamma)<br/>
+	M_steam67::entry critvw67(press, enth, gamma)<br/>
+	M_steam67::critical flow(3f): velocity and isentropic exponent of wet/superheated steam<br/>
+	M_steam67::hcsl67(3f): calculate specific enthalpy/volume and entropy of liquid(P,T)<br/>
+	M_steam67::hcslvl67(3f): calculate V,S,specific enthalpy for liquid given (P,T)<br/>
+	M_steam67::hcslv267(3f): calculate specific enthalpy, specific volume, and entropy of the liquid at P and T<br/>
+	M_steam67::hss67(3f): specific enthalpy = HSS67(P,T,s,v)<br/>
+	M_steam67::hsl67(3f): specific enthalpy = HSS67(P,T,s,v)<br/>
+	M_steam67::psl67(3f): calculate saturation pressure of the saturated liquid at temperature T<br/>
+	M_steam67::psl167(3f): calculate saturation pressure of the saturated liquid at temperature T.<br/>
+	M_steam67::psv67(3f):  calculate saturation pressure of the saturated liquid at entropy SS in psia<br/>
+	M_steam67::psv167(3f): calculate saturation pressure of the saturated liquid at entropy SS in psia<br/>
+	M_steam67::psv267(3f): calculate saturation pressure in psia of the saturated liquid at entropy SS.<br/>
+	M_steam67::pls67(3f):  saturation pressure of the saturated liquid at entropy SS.<br/>
+	M_steam67::sssiss67(3f): specific entropy, temperature, specific volume, steam quality of liquid at pressure P and enthalpy H<br/>
+	M_steam67::hssiss67(3f):  specific enthalpy, temperature, specific volume, steam quality of water at pressure P and entropy S<br/>
+	M_steam67::hcl67(3f): calculate specific enthalpy and entropy of water at pressure P and temp T<br/>
+	M_steam67::p23t67(3f)<br/>
+	M_steam67::zsrh67(3f) calculate remaining variables at extremities of isentropic process in compressed liquid region.<br/>
+	M_steam67::steam67(3f):print pedigree of library and return version value<br/>
 </td>
 <tr><td><a href="../src/M_stopwatch.f90">../src/M_stopwatch.f90</a></td>
 <td>
@@ -1329,10 +1450,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings switch(3f) toggle between string and array of characters; generic{a2s s2a}<br/>
 	 M_strings string_to_value(3f) Generic subroutine converts numeric string to a number (a2d a2r a2i)<br/>
 	 M_strings v2s(3f) Generic function returns string given REAL|INTEGER|DOUBLEPRECISION value(d2s r2s i2s)<br/>
-	 M_strings msg(3f) convert up to nine scalar values to a string. Alternatively can also handle one-dimensional arrays<br/>
+	 M_strings str(3f) convert up to twenty scalar values to a (CSV) string. Alternatively can also handle one-dimensional arrays<br/>
 	 M_strings glob(3f) function compares text strings one of which can have wildcards ('*' or '?').<br/>
 	 M_strings sep(3f) parse string on delimiter characters and store tokens into an allocatable array<br/>
 	 M_strings split(3f) parse string on delimiter characters and store tokens into an allocatable array<br/>
+	 M_strings slice(3f) parse string on delimiter characters and store tokens into an allocatable array<br/>
 	 M_strings chomp(3f) Tokenize a string JSU- 20151030<br/>
 	 M_strings delim(3f) parse a string and store tokens into an array<br/>
 	 M_strings replace(3f) replace one substring for another in string<br/>
@@ -1342,13 +1464,14 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings::modif(3f): Emulate the MODIFY command from the line editor XEDIT<br/>
 	 M_strings len_white(3f) return position of last non-blank/non-null character in string<br/>
 	 M_strings crop(3f) replace control characters with whitespace and trim leading and trailings spaces from resulting string<br/>
-	 M_strings clip(3f) trim leading and trailings spaces from resulting string<br/>
+	 M_strings clip(3f) trim leading and trailings spaces or set of characters from string<br/>
 	 M_strings transliterate(3f) replace characters from old set with new set<br/>
 	 M_strings rotate13(3f) converts a character to its ROT13 equivalent which is a trivial encryption.<br/>
 	 M_strings join(3f) merge string array into a single CHARACTER value adding specified separators caps prefix and suffix<br/>
 	 M_strings reverse(3f) Return a string reversed<br/>
-	 M_strings upper_quoted(3f) elemental function converts string to miniscule skipping strings quoted per Fortran syntax rules<br/>
-	 M_strings upper(3f) returns a trimmed uppercase string<br/>
+	 M_strings upper_quoted(3f) elemental function converts string to uppercase skipping strings quoted per Fortran syntax rules<br/>
+	 M_strings upper_all(3f) returns an uppercase string<br/>
+	 M_strings upper_range(3f) returns a string with the specified range converted to uppercase<br/>
 	 M_strings lower(3f) Changes a string to lowercase over specified range<br/>
 	 M_strings s2c(3f) copy string(1 Clen(string)) to char array with null terminator<br/>
 	 M_strings c2s(3f) copy pointer to C char array till a null is encountered to a Fortran string up to 4096 characters<br/>
@@ -1400,8 +1523,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings todecimal(3f) given string and base return decimal integer<br/>
 	 M_strings tobase(3f) given integer and base return string<br/>
 	 M_strings paragraph(3f) wrap a long string into a paragraph<br/>
+	 M_strings fmt(3f) convert any intrinsic to a string using specified format<br/>
 </td>
-<tr><td><a href="../src/M_strings_oop.f90">../src/M_strings_oop.f90</a></td>
+<tr><td><a href="../src/M_strings__oop.f90">../src/M_strings__oop.f90</a></td>
 <td>
 	 M_strings construct_from_fill(3f) construct TYPE(STRING)<br/>
 	 M_strings oop_len(3f) length of string<br/>
@@ -1418,6 +1542,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings oop_adjustr(3f) adjust string to right<br/>
 	 M_strings oop_adjustc(3f) adjust string to center<br/>
 	 M_strings oop_int(3f) string to integer<br/>
+	 M_strings oop_nint(3f) string to nearest integer<br/>
 	 M_strings oop_real(3f) string to real<br/>
 	 M_strings oop_dble(3f) string to double<br/>
 	 M_strings oop_compact(3f) adjust string to center<br/>
@@ -1477,6 +1602,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_system lower(3f) Changes a string to lowercase<br/>
 	 M_anything::anyinteger_to_64(3f): convert integer parameter of any kind to 64-bit integer<br/>
 	 M_system system_system(3f) call execute_command_line as a function<br/>
+	 M_system system_sleep(3f) call sleep(3c) or usleep(3c)<br/>
+	 M_time julian_to_date(3f) Converts Julian Date to DAT date-time array<br/>
+</td>
+<tr><td><a href="../src/M_tictoc.f90">../src/M_tictoc.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_time.f90">../src/M_time.f90</a></td>
 <td>
@@ -1498,7 +1628,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_time guessdate(3f) Guess format of a date string to create a DAT date-time array<br/>
 	 M_time dow(3f) Given DAT date-time array return the day of the week<br/>
 	 M_time d2w(3f) DAT date-time array to iso-8601 Week-numbering year date yyyy-Www-d<br/>
-	 M_time w2d(3f) convert iso-8601 Week-numbering year date yyyy-Www-d to DAT date-time array<br/>
+	 M_time w2d_numeric(3f) convert iso-8601 Week-numbering year date yyyy-Www-d to DAT date-time array<br/>
+	 or form yyyy-Www-d to DAT date-time array<br/>
 	 M_time box_month(3f) generate month specified by DAT date-time array in character array<br/>
 	 M_time d2j(3f) Given DAT date-time array returns Julian Date<br/>
 	 M_time j2d(3f) Given Julian Date returns DAT date-time array<br/>
@@ -1513,7 +1644,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_time getnow(3f) get DAT for current time or value of SOURCE_DATE_EPOCH<br/>
 	 M_time now_ex(3f) use of now(3f) outside of a module<br/>
 </td>
-<tr><td><a href="../src/M_time_oop.f90">../src/M_time_oop.f90</a></td>
+<tr><td><a href="../src/M_time__oop.f90">../src/M_time__oop.f90</a></td>
 <td>
 	 M_time construct_from_dat(3f) construct TYPE(DATE_TIME) with DAT date-time array<br/>
 	 M_time construct_from_jed(3f) construct TYPE(DATE_TIME) with REAL Julian JED date-time value<br/>
@@ -1530,18 +1661,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_time minus_seconds(3f) subtract seconds from derived type date_time object<br/>
 	 M_time minus_date_time(3f) add derived type date_time object and seconds<br/>
 	 M_time eq(3f) compare derived type date_time objects (eq lt gt le ge ne)<br/>
-</td>
-<tr><td><a href="../src/M_uniinv.f90">../src/M_uniinv.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_unipar.f90">../src/M_unipar.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_unirnk.f90">../src/M_unirnk.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_unista.f90">../src/M_unista.f90</a></td>
-<td>
 </td>
 <tr><td><a href="../src/M_units.f90">../src/M_units.f90</a></td>
 <td>
@@ -1577,12 +1696,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_uuid M_uid(3fm) generate UUIDs according to RFC 4122<br/>
 	 M_uuid generate_uuid(3f) generate(approximately) a UUID (Universally Unique IDentifier) string per RFC 4122<br/>
 </td>
-<tr><td><a href="../src/M_valmed.f90">../src/M_valmed.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/M_valnth.f90">../src/M_valnth.f90</a></td>
-<td>
-</td>
 <tr><td><a href="../src/M_verify.f90">../src/M_verify.f90</a></td>
 <td>
 	 M_verify unit_check_msg(3f) writes a message to a string composed of any standard scalar types<br/>
@@ -1606,13 +1719,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_verify significant(3f) round val to specified number of significant digits<br/>
 	 M_verify anyscalar_to_realbig(3f) convert integer or real parameter of any kind to real128 or biggest available<br/>
 	 M_verify anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision<br/>
-</td>
-<tr><td><a href="../src/M_writegif.f90">../src/M_writegif.f90</a></td>
-<td>
-	 This module can write a GIF file in GIF89 format from raster data<br/>
-</td>
-<tr><td><a href="../src/M_writegif_animated.f90">../src/M_writegif_animated.f90</a></td>
-<td>
 </td>
 <tr><td><a href="../src/M_xterm.f90">../src/M_xterm.f90</a></td>
 <td>
@@ -1741,25 +1847,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/dparanoia.f90">../src/dparanoia.f90</a></td>
 <td>
 	dparanoia(3f): test doubleprecisions operations in programming environment<br/>
-</td>
-<tr><td><a href="../src/nc_errmessage.f90">../src/nc_errmessage.f90</a></td>
-<td>
-</td>
-<tr><td><a href="../src/nc_printescape.f90">../src/nc_printescape.f90</a></td>
-<td>
-	 plain text print reading window from ncurses<br/>
-</td>
-<tr><td><a href="../src/nc_printhtml.f90">../src/nc_printhtml.f90</a></td>
-<td>
-	 print ncurses(3c) window as HTML<br/>
-</td>
-<tr><td><a href="../src/nc_printplain.f90">../src/nc_printplain.f90</a></td>
-<td>
-	 plain text print reading window from ncurses<br/>
-</td>
-<tr><td><a href="../src/nc_printunicode.f90">../src/nc_printunicode.f90</a></td>
-<td>
-	 plain text print reading window from ncurses<br/>
 </td>
 <tr><td><a href="../src/paranoia.f90">../src/paranoia.f90</a></td>
 <td>

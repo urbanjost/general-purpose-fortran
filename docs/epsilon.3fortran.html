@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>epsilon (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>epsilon (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>epsilon(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-epsilon(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 EPSILON(3) - [NUMERIC MODEL] Epsilon function
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ EPSILON(3) - [NUMERIC MODEL] Epsilon function
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = epsilon(x)
 <P>
 <PRE>
-           real(kind=kind(x)) function epsilon(x)
+         real(kind=kind(x)) function epsilon(x)
 <P>
-            real(kind=kind(x),intent(in)   :: x(..)
+          real(kind=kind(x),intent(in)   :: x(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = epsilon(x)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -100,7 +94,8 @@ X shall be of type real. It may be a scalar or an array.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the result is a scalar of the same type and kind type parameter as X.
+the result is a scalar of the same type and kind type parameter as
+X.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -109,23 +104,24 @@ the result is a scalar of the same type and kind type parameter as X.
 
 </A>
 <BLOCKQUOTE>
-EPSILON(3) returns the floating point relative accuracy. It is the nearly
-negligible number relative to 1 such that 1+ LITTLE_NUMBER is not equal to
-1; or more precisely
+<P>
+EPSILON(3) returns the floating point relative accuracy. It is the
+nearly negligible number relative to 1 such that 1+ LITTLE_NUMBER is not
+equal to 1; or more precisely
 <P>
 <PRE>
-         real( 1.0, kind(x)) + epsilon(x) /=  real( 1.0, kind(x))
+       real( 1.0, kind(x)) + epsilon(x) /=  real( 1.0, kind(x))
 <P>
 </PRE>
-It may be thought of as the distance from 1.0 to the next largest floating
-point number.
+It may be thought of as the distance from 1.0 to the next largest
+floating point number.
 <P>
-One use of EPSILON(3) is to select a delta value for algorithms that search
-until the calculation is within delta of an estimate.
+One use of EPSILON(3) is to select a delta value for algorithms that
+search until the calculation is within delta of an estimate.
 <P>
 If delta is too small the algorithm might never halt, as a computation
-summing values smaller than the decimal resolution of the data type does not
-change.
+summing values smaller than the decimal resolution of the data type does
+not change.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -133,6 +129,7 @@ change.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -146,6 +143,7 @@ X : The type shall be real.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The return value is of the same type as the argument.
 </BLOCKQUOTE>
 <A name=6>
@@ -154,67 +152,67 @@ The return value is of the same type as the argument.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_epsilon
-      use,intrinsic :: iso_fortran_env, only : dp=&gt;real64,sp=&gt;real32
-      implicit none
-      real(kind=sp) :: x = 3.143
-      real(kind=dp) :: y = 2.33d0
+    program demo_epsilon
+    use,intrinsic :: iso_fortran_env, only : dp=&gt;real64,sp=&gt;real32
+    implicit none
+    real(kind=sp) :: x = 3.143
+    real(kind=dp) :: y = 2.33d0
 <P>
-         ! so if x is of type real32, epsilon(x) has the value 2**-23
-         print *, epsilon(x)
-         ! note just the type and kind of x matter, not the value
-         print *, epsilon(huge(x))
-         print *, epsilon(tiny(x))
+       ! so if x is of type real32, epsilon(x) has the value 2**-23
+       print *, epsilon(x)
+       ! note just the type and kind of x matter, not the value
+       print *, epsilon(huge(x))
+       print *, epsilon(tiny(x))
 <P>
-         ! the value changes with the kind of the real value though
-         print *, epsilon(y)
+       ! the value changes with the kind of the real value though
+       print *, epsilon(y)
 <P>
-         ! adding and subtracting epsilon(x) changes x
-         write(*,*)x == x + epsilon(x)
-         write(*,*)x == x - epsilon(x)
+       ! adding and subtracting epsilon(x) changes x
+       write(*,*)x == x + epsilon(x)
+       write(*,*)x == x - epsilon(x)
 <P>
-         ! these next two comparisons will be .true. !
-         write(*,*)x == x + epsilon(x) * 0.999999
-         write(*,*)x == x - epsilon(x) * 0.999999
+       ! these next two comparisons will be .true. !
+       write(*,*)x == x + epsilon(x) * 0.999999
+       write(*,*)x == x - epsilon(x) * 0.999999
 <P>
-         ! you can calculate epsilon(1.0d0)
-         write(*,*)my_dp_eps()
+       ! you can calculate epsilon(1.0d0)
+       write(*,*)my_dp_eps()
 <P>
-      contains
+    contains
 <P>
-         function my_dp_eps()
-         ! calculate the epsilon value of a machine the hard way
-         real(kind=dp) :: t
-         real(kind=dp) :: my_dp_eps
+       function my_dp_eps()
+       ! calculate the epsilon value of a machine the hard way
+       real(kind=dp) :: t
+       real(kind=dp) :: my_dp_eps
 <P>
-            ! starting with a value of 1, keep dividing the value
-            ! by 2 until no change is detected. Note that with
-            ! infinite precision this would be an infinite loop,
-            ! but floating point values in Fortran have a defined
-            ! and limited precision.
-            my_dp_eps = 1.0d0
-            SET_ST: do
-               my_dp_eps = my_dp_eps/2.0d0
-               t = 1.0d0 + my_dp_eps
-               if (t &lt;= 1.0d0) exit
-            enddo SET_ST
-            my_dp_eps = 2.0d0*my_dp_eps
+          ! starting with a value of 1, keep dividing the value
+          ! by 2 until no change is detected. Note that with
+          ! infinite precision this would be an infinite loop,
+          ! but floating point values in Fortran have a defined
+          ! and limited precision.
+          my_dp_eps = 1.0d0
+          SET_ST: do
+             my_dp_eps = my_dp_eps/2.0d0
+             t = 1.0d0 + my_dp_eps
+             if (t &lt;= 1.0d0) exit
+          enddo SET_ST
+          my_dp_eps = 2.0d0*my_dp_eps
 <P>
-         end function my_dp_eps
-      end program demo_epsilon
+       end function my_dp_eps
+    end program demo_epsilon
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        1.1920929E-07
-        1.1920929E-07
-        1.1920929E-07
-        2.220446049250313E-016
-<P>
+      1.1920929E-07
+      1.1920929E-07
+      1.1920929E-07
+      2.220446049250313E-016
 </PRE>
 </BLOCKQUOTE>
 <A name=>
@@ -248,6 +246,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -256,18 +255,15 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 DIGITS(3), EXPONENT(3), FRACTION(3), HUGE(3), MAXEXPONENT(3),
-MINEXPONENT(3), NEAREST(3), PRECISION(3), RADIX(3), RANGE(3), RRSPACING(3),
-SCALE(3), SET_EXPONENT(3), SPACING(3), TINY(3)
+MINEXPONENT(3), NEAREST(3), PRECISION(3), RADIX(3), RANGE(3),
+RRSPACING(3), SCALE(3), SET_EXPONENT(3), SPACING(3), TINY(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             epsilon(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>epsilon (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 65fa51b1-2f92-4d07-867c-8a966b250dee using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>epsilon (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 23bca23c-14e2-4c6f-b10b-e7024d1c4c3e using man macros.</FONT>
 <br><br><center><img src="images/epsilon.3fortran.gif"></center>
 </div>
 </div>

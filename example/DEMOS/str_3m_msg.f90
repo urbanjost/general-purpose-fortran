@@ -1,4 +1,4 @@
-     program demo_msg
+     program demo_str
      use M_msg, only : str
      implicit none
      character(len=:),allocatable :: pr
@@ -27,4 +27,4 @@
      ! which not all compilers can handle and is currently non-standard
      write(*,*)str('program will now stop')
 
-     end program demo_msg
+     end program demo_str

@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>char (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>char (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>char(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-char(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 CHAR(3) - [CHARACTER] Generate a character from a code value
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ CHAR(3) - [CHARACTER] Generate a character from a code value
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = char(i [,kind])
 <P>
 <PRE>
-           elemental character(kind=KIND) function char(i,KIND)
+         elemental character(kind=KIND) function char(i,KIND)
 <P>
-            integer(kind=**),intent(in) :: i
-            integer(kind=**),intent(in),optional :: KIND
+          integer(kind=**),intent(in) :: i
+          integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = char(i [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -112,8 +106,8 @@ parameter of the result.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The returned value is a character with the kind specified by KIND or if
-KIND is not present, the default character kind.
+The returned value is a character with the kind specified by KIND or
+if KIND is not present, the default character kind.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -122,15 +116,17 @@ KIND is not present, the default character kind.
 
 </A>
 <BLOCKQUOTE>
-Generates a character value given a numeric code representing the position I
-in the collating sequence associated with the specified kind KIND.
 <P>
-Note that ACHAR(3) is a similar function specifically for ASCII characters
-that is preferred when only ASCII is being processed, which is equivalent to
-CHAR(I,KIND=SELECTED_CHAR_KIND("ASCII") )
+Generates a character value given a numeric code representing the
+position I in the collating sequence associated with the specified kind
+KIND.
 <P>
-The ICHAR(3) function is the reverse of CHAR(3), converting characters to
-their collating sequence value.
+Note that ACHAR(3) is a similar function specifically for ASCII
+characters that is preferred when only ASCII is being processed, which
+is equivalent to CHAR(I,KIND=SELECTED_CHAR_KIND("ASCII") )
+<P>
+The ICHAR(3) function is the reverse of CHAR(3), converting characters
+to their collating sequence value.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -138,20 +134,22 @@ their collating sequence value.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 I : a value in the range 0 &lt;= I &lt;= N-1, where N is the number of
-characters in the collating sequence associated with the specified kind
-type parameter. : For ASCII, N is 127. The default character set may or
-may not allow higher values.
+characters in the collating sequence associated with the specified
+kind type parameter. : For ASCII, N is 127. The default character
+set may or may not allow higher values.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : A constant integer initialization expression indicating the kind
-parameter of the result. If not present, the default kind is assumed.
+KIND : A constant integer initialization expression indicating the
+kind parameter of the result. If not present, the default kind is
+assumed.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -160,9 +158,10 @@ parameter of the result. If not present, the default kind is assumed.
 
 </A>
 <BLOCKQUOTE>
-The return value is a single character of the specified kind, determined by
-the position of I in the collating sequence associated with the specified
-KIND.
+<P>
+The return value is a single character of the specified kind, determined
+by the position of I in the collating sequence associated with the
+specified KIND.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -170,53 +169,56 @@ KIND.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_char
-      implicit none
-      integer, parameter :: ascii =  selected_char_kind ("ascii")
-      character(len=1, kind=ascii ) :: c
-      integer :: i
-        ! basic
-         i=74
-         c=char(i)
-         write(*,*)&#146;ASCII character &#146;,i,&#146;is &#146;,c
-        !
-         print *, &#146;a selection of ASCII characters (shows hex if not printable)&#146;
-         do i=0,127,10
-            c = char(i,kind=ascii)
-            select case(i)
-            case(32:126)
-               write(*,&#146;(i3,1x,a)&#146;)i,c
-            case(0:31,127)
-               ! print hexadecimal value for unprintable characters
-               write(*,&#146;(i3,1x,z2.2)&#146;)i,c
-            case default
-               write(*,&#146;(i3,1x,a,1x,a)&#146;)i,c,&#146;non-standard ASCII&#146;
-            end select
-         enddo
+    program demo_char
+    implicit none
+    integer, parameter :: ascii =  selected_char_kind ("ascii")
+    character(len=1, kind=ascii ) :: c
+    integer :: i
+      ! basic
+       i=74
+       c=char(i)
+       write(*,*)&#146;ASCII character &#146;,i,&#146;is &#146;,c
+      !
+       print *, &#146;a selection of ASCII characters (shows hex if not printable)&#146;
+       do i=0,127,10
+          c = char(i,kind=ascii)
+          select case(i)
+          case(32:126)
+             write(*,&#146;(i3,1x,a)&#146;)i,c
+          case(0:31,127)
+             ! print hexadecimal value for unprintable characters
+             write(*,&#146;(i3,1x,z2.2)&#146;)i,c
+          case default
+             write(*,&#146;(i3,1x,a,1x,a)&#146;)i,c,&#146;non-standard ASCII&#146;
+          end select
+       enddo
 <P>
-      end program demo_char
+    end program demo_char
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          ASCII character           74 is J
-          a selection of ASCII characters (shows hex if not printable)
-           0 00
-          10 0A
-          20 14
-          30 1E
-          40 (
-          50 2
-          60 &lt;
-          70 F
-          80 P
-          90 Z
+        ASCII character           74 is J
+        a selection of ASCII characters (shows hex if not printable)
+         0 00
+        10 0A
+        20 14
+        30 1E
+        40 (
+        50 2
+        60 &lt;
+        70 F
+        80 P
+        90 Z
 </PRE>
-100 d 110 n 120 x
+100 d
+110 n
+120 x
 </BLOCKQUOTE>
 <A name=7>
 
@@ -224,6 +226,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -232,11 +235,12 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 ACHAR(3), IACHAR(3), ICHAR(3)
 <P>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -250,13 +254,9 @@ o
 NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                char(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>char (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3c0de390-4b0c-4acf-b03d-dfd4e6b6ea58 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>char (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ec66edb5-0c75-4ad1-be52-11d17362c694 using man macros.</FONT>
 <br><br><center><img src="images/char.3fortran.gif"></center>
 </div>
 </div>

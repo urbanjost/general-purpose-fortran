@@ -8,106 +8,106 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   manup(1f) - [DEVELOPER] Simple markup of text to a man(1) page                                                               ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   manup FILE -cmd title -section N --product "product name" -help .F. --version .F.                                            ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'  This program is being extended. It currently essentially                                                                      ',&
-'     o converts uppercase lines title sections                                                                                  ',&
-'     o leaves lines indented more than four characters as-is                                                                    ',&
-'     o takes other text and builds it into paragraphs delimited by                                                              ',&
-'       blank lines in the input file.                                                                                           ',&
-'OPTIONS                                                                                                                         ',&
-'     FILE                                                                                                                       ',&
-'        The input filename                                                                                                      ',&
-'                                                                                                                                ',&
-'     -section N  N is the man(1) section number. Typically the following                                                        ',&
-'                 categories are used:                                                                                           ',&
-'                                                                                                                                ',&
-'                 User Commands(1)      Executable programs or shell commands                                                    ',&
-'                 System Calls(2)       System calls (functions provided by the kernel)                                          ',&
-'                 Library Calls(3)      Library calls (functions within program libraries)                                       ',&
-'                 Special Files(4)      Special files (usually found in /dev)                                                    ',&
-'                 File Formats(5)       File formats and conventions (eg. /etc/passwd)                                           ',&
-'                 Games(6)  Games                                                                                                ',&
-'                 Miscellaneous(7)      Miscellaneous (including macro packages and conventions), e.g. man(7), groff(7)          ',&
-'                 System Admin.(8)      System administration commands (usually only for root)                                   ',&
-'                 Kernel Extensions(9)  Kernel routines [Non standard]                                                           ',&
-'                                                                                                                                ',&
-'                 See the man(1) page for man(1) for further details.                                                            ',&
-'                                                                                                                                ',&
-'     -title      title for manpage header                                                                                       ',&
-'     -product    description for manpage header                                                                                 ',&
-'     -asis       no formatting except for header lines.                                                                         ',&
-'                                                                                                                                ',&
-'     -help       display help and exit                                                                                          ',&
-'     -version    display version information and exit                                                                           ',&
-'EXAMPLE                                                                                                                         ',&
-' Given an input file such as                                                                                                    ',&
-'                                                                                                                                ',&
-'   >NAME                                                                                                                        ',&
-'   >        yes(1f) - [FUNIX] output a string repeatedly until killed or limit is reached                                       ',&
-'   >                                                                                                                            ',&
-'   >SYNOPSIS                                                                                                                    ',&
-'   >       yes [STRING] -help -version [-repeat N]                                                                              ',&
-'   >                                                                                                                            ',&
-'   >DESCRIPTION                                                                                                                 ',&
-'   >       yes(1) prints the command line arguments, separated by spaces                                                        ',&
-'   >       and followed by a newline until the repeat count is reached or                                                       ',&
-'   >       endlessly until it is killed. If no arguments are given, it prints                                                   ',&
-'   >       ''''y'''' followed by a newline endlessly until killed. Upon a write                                                 ',&
-'   >       error, yes(1) exits with status "1".                                                                                 ',&
-'   >                                                                                                                            ',&
-'   >              -repeat N  specify number of times to display string                                                          ',&
-'   >              --help     display this help and exit                                                                         ',&
-'   >              --version  output version information and exit                                                                ',&
-'   >                                                                                                                            ',&
-'   >       To output an argument that begins with -, precede it with --, e.g.,                                                  ',&
-'   >                                                                                                                            ',&
-'   >              yes -- --help.                                                                                                ',&
-'   >                                                                                                                            ',&
-'   >EXAMPLES                                                                                                                    ',&
-'   >       Sample commands                                                                                                      ',&
-'   >                                                                                                                            ',&
-'   >              # repeat a command 20 times, pausing and clearing:                                                            ',&
-'   >              yes  date --repeat 20  |xargs -iXX  sh -c ''''XX;sleep 2;clear''''                                            ',&
-'   >                                                                                                                            ',&
-'   >REPORTING BUGS                                                                                                              ',&
-'   >       Report yes bugs to <http://www.urbanjost.altervista.org/index.html>                                                  ',&
-'   >                                                                                                                            ',&
-'   >SEE ALSO                                                                                                                    ',&
-'   >       yes(1), repeat(1), xargs(1)                                                                                          ',&
-'                                                                                                                                ',&
-' run it through manup(1):                                                                                                       ',&
-'                                                                                                                                ',&
-'    A short example of usage                                                                                                    ',&
-'                                                                                                                                ',&
-'     # use help txt as input to t2m to make man(1) page                                                                         ',&
-'     # generate new man(1) page                                                                                                 ',&
-'     manup yes.1.txt >yes.1                                                                                                     ',&
-'                                                                                                                                ',&
-'     # install man page in a common location (location varies)                                                                  ',&
-'        # man pages are commonly kept as compressed files                                                                       ',&
-'        gzip yes.1                                                                                                              ',&
-'        # place file in a directory read by man(1) command.                                                                     ',&
-'        # can be changed with environment variable MANPATH                                                                      ',&
-'        # or by adding a directory to the default manpath.                                                                      ',&
-'        # varies from system to system                                                                                          ',&
-'        mv -i yes.1.gz /usr/share/man/man1/                                                                                     ',&
-'        # make sure file is readable by all users                                                                               ',&
-'        chmod a=r,u+w /usr/share/man/man1/yes.1.gz                                                                              ',&
-'                                                                                                                                ',&
-'     # test man page                                                                                                            ',&
-'     man 1 yes|more                                                                                                             ',&
-'                                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   manup(1f) - [DEVELOPER] Simple markup of text to a man(1) page               ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   manup FILE -cmd title -section N --product "product name" -help .F. --version .F.',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'  This program is being extended. It currently essentially                      ',&
+'     o converts uppercase lines title sections                                  ',&
+'     o leaves lines indented more than four characters as-is                    ',&
+'     o takes other text and builds it into paragraphs delimited by              ',&
+'       blank lines in the input file.                                           ',&
+'OPTIONS                                                                         ',&
+'     FILE                                                                       ',&
+'        The input filename                                                      ',&
+'                                                                                ',&
+'     -section N  N is the man(1) section number. Typically the following        ',&
+'                 categories are used:                                           ',&
+'                                                                                ',&
+'                 User Commands(1)      Executable programs or shell commands    ',&
+'                 System Calls(2)       System calls (functions provided by the kernel)',&
+'                 Library Calls(3)      Library calls (functions within program libraries)',&
+'                 Special Files(4)      Special files (usually found in /dev)    ',&
+'                 File Formats(5)       File formats and conventions (eg. /etc/passwd)',&
+'                 Games(6)  Games                                                ',&
+'                 Miscellaneous(7)      Miscellaneous (including macro packages and conventions), e.g. man(7), groff(7)',&
+'                 System Admin.(8)      System administration commands (usually only for root)',&
+'                 Kernel Extensions(9)  Kernel routines [Non standard]           ',&
+'                                                                                ',&
+'                 See the man(1) page for man(1) for further details.            ',&
+'                                                                                ',&
+'     -title      title for manpage header                                       ',&
+'     -product    description for manpage header                                 ',&
+'     -asis       no formatting except for header lines.                         ',&
+'                                                                                ',&
+'     -help       display help and exit                                          ',&
+'     -version    display version information and exit                           ',&
+'EXAMPLE                                                                         ',&
+' Given an input file such as                                                    ',&
+'                                                                                ',&
+'   >NAME                                                                        ',&
+'   >        yes(1f) - [FUNIX] output a string repeatedly until killed or limit is reached',&
+'   >                                                                            ',&
+'   >SYNOPSIS                                                                    ',&
+'   >       yes [STRING] -help -version [-repeat N]                              ',&
+'   >                                                                            ',&
+'   >DESCRIPTION                                                                 ',&
+'   >       yes(1) prints the command line arguments, separated by spaces        ',&
+'   >       and followed by a newline until the repeat count is reached or       ',&
+'   >       endlessly until it is killed. If no arguments are given, it prints   ',&
+'   >       ''''y'''' followed by a newline endlessly until killed. Upon a write ',&
+'   >       error, yes(1) exits with status "1".                                 ',&
+'   >                                                                            ',&
+'   >              -repeat N  specify number of times to display string          ',&
+'   >              --help     display this help and exit                         ',&
+'   >              --version  output version information and exit                ',&
+'   >                                                                            ',&
+'   >       To output an argument that begins with -, precede it with --, e.g.,  ',&
+'   >                                                                            ',&
+'   >              yes -- --help.                                                ',&
+'   >                                                                            ',&
+'   >EXAMPLES                                                                    ',&
+'   >       Sample commands                                                      ',&
+'   >                                                                            ',&
+'   >              # repeat a command 20 times, pausing and clearing:            ',&
+'   >              yes  date --repeat 20  |xargs -iXX  sh -c ''''XX;sleep 2;clear''''',&
+'   >                                                                            ',&
+'   >REPORTING BUGS                                                              ',&
+'   >       Report yes bugs to <http://www.urbanjost.altervista.org/index.html>  ',&
+'   >                                                                            ',&
+'   >SEE ALSO                                                                    ',&
+'   >       yes(1), repeat(1), xargs(1)                                          ',&
+'                                                                                ',&
+' run it through manup(1):                                                       ',&
+'                                                                                ',&
+'    A short example of usage                                                    ',&
+'                                                                                ',&
+'     # use help txt as input to t2m to make man(1) page                         ',&
+'     # generate new man(1) page                                                 ',&
+'     manup yes.1.txt >yes.1                                                     ',&
+'                                                                                ',&
+'     # install man page in a common location (location varies)                  ',&
+'        # man pages are commonly kept as compressed files                       ',&
+'        gzip yes.1                                                              ',&
+'        # place file in a directory read by man(1) command.                     ',&
+'        # can be changed with environment variable MANPATH                      ',&
+'        # or by adding a directory to the default manpath.                      ',&
+'        # varies from system to system                                          ',&
+'        mv -i yes.1.gz /usr/share/man/man1/                                     ',&
+'        # make sure file is readable by all users                               ',&
+'        chmod a=r,u+w /usr/share/man/man1/yes.1.gz                              ',&
+'                                                                                ',&
+'     # test man page                                                            ',&
+'     man 1 yes|more                                                             ',&
+'                                                                                ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -233,7 +233,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2023-02-12 18:36:12 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:56:03 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

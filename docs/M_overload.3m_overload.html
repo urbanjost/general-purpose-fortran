@@ -62,70 +62,65 @@ M_overload(3fm) - [M_overload::INTRO] overloads of standard operators and intrin
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
-<A HREF=#2>Other Operators</A><BR>
-<A HREF=#3>Description</A><BR>
-<A HREF=#4>Overloads</A><BR>
-<A HREF=#5>Examples</A><BR>
-<A HREF=#6>Author</A><BR>
-<A HREF=#7>License</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Overloads</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
 </BLOCKQUOTE>
-<A name=8>
+<A name=7>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-overloads on LOGICAL values
+overloads on operators
 <P>
 <PRE>
+   use M_overload, only : operator(==), operator(/=)
    ! use == like .eqv.; ie. logical==logical
-   use M_overload, only : operator(==)
    ! use /= like .neqv.; ie. logical/=logical
-   use M_overload, only : operator(/=)
+<P>
+   use M_overload, only : operator(//)
+   ! convert intrinsics to strings and contatenate
 <P>
 </PRE>
 overloads on INTRINSICS to take strings, logicals, and metamorphic numeric intrinsic values
 <P>
 <PRE>
-  use M_overload, only : int, real, dble
-  ! int(&#146;string&#146;)   int(logical)   int(class(*))
-  ! real(&#146;string&#146;)  real(logical)  real(class(*))
-  ! dble(&#146;string&#146;)  dble(logical)  dble(class(*))
+   use M_overload, only : int, real, dble
+   ! int(&#146;string&#146;)   int(logical)   int(class(*))
+   ! real(&#146;string&#146;)  real(logical)  real(class(*))
+   ! dble(&#146;string&#146;)  dble(logical)  dble(class(*))
+<P>
+   use M_overload, only : sign
+   ! When sign(3f) is given a single value, call sign(1,value); ie.  sign(value)
+   use M_overload, only : merge
+   ! Allow strings of different length in MERGE
 <P>
 </PRE>
-overloads on operators
+other operators
 <P>
 <PRE>
-  use M_overload, only : operator(==)
-  ! INTRINSIC // INTRINSIC // INTRINSIC &#46;&#46;&#46;
-<P>
-  ! When sign(3f) is given a single value, call sign(1,value); ie.  sign(value)
-  use M_overload, only : sign
-<P>
+   .fmt.    ! convert an intrinsic value to a CHARACTER variable using format
+   N.to.M   ! equivalent of [(integer :: i,i=N,M)], generates a range of
+            ! adjacent whole numbers
 <P>
 </PRE>
-Allow strings of different length in MERGE
+Related functions
 <P>
 <PRE>
-  use M_overload, only : merge
-  ! str=merge(&#146;one&#146;,&#146;three&#146;,i.eq.10)
+   ! logical functions that return integer values
+   use M_overload, only : oz, zo, lt, le, eq, ne, gt, ge
+<P>
+   ! same operation as .fmt. accept directly using the function
+   use M_overload, only : fmt
+<P>
+<P>
 <P>
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
-
-     <H3>OTHER OPERATORS</H3>
-
-</A>
-<BLOCKQUOTE>
-<P>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>intrinsic_value .fmt. &#146;&#146;</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-convert an intrinsic value to a CHARACTER variable
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=3>
 
      <H3>DESCRIPTION</H3>
 
@@ -137,8 +132,11 @@ from allowing existing Fortran routines to be used with almost no
 source-code changes to produce versions using arbitrary precision
 or cumulative error bounds on floating-point calculations to adding
 intuitive syntax for standard Fortran operations.
+<P>
+Herein are a few more basic examples of overloading and user-specified
+operators that demonstrate the concepts of these Fortran features &#46;&#46;&#46;
 </BLOCKQUOTE>
-<A name=4>
+<A name=3>
 
      <H3>OVERLOADS</H3>
 
@@ -184,7 +182,8 @@ using the standard intrinsic names
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
 <B>sign(value)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-call sign(1,value)
+When sign(3f) is given a single value sign(value),
+call sign(1,value).
 </TD></TR>
 <TR></TR></TABLE><!-- .RE -->
 </TD></TR>
@@ -198,7 +197,7 @@ call sign(1,value)
 allows for strings of different lengths
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=5>
+<A name=4>
 
      <H3>EXAMPLES</H3>
 
@@ -227,231 +226,87 @@ Sample usage:
    use M_overload, only : sign
    ! allow strings of different length on merge
    use M_overload, only : merge
+   ! convert logical expressions to integer
+   use M_overload, only : oz, zo, lt, le, eq, ne, gt, ge
    implicit none
    character(len=:),allocatable :: cmd
    character(len=*), parameter :: gen=&#146;(*("[",g0,"]":,","))&#146;
 <P>
+     ! merge() with different string lengths expanded to longest
      write(*,gen)merge(&#146;a&#146;,&#146;bbbbb&#146;,1.eq.1)
      write(*,gen)merge(&#146;a&#146;,&#146;bbbbb&#146;,1.eq.2)
      write(*,gen)merge([&#146;a&#146;,&#146;b&#146;],[&#146;bbbbb&#146;,&#146;ccccc&#146;],1.eq.2)
 <P>
-     if(int(&#146;1234&#146;)               .eq.1234) &
-      & write(*,*)&#146;int("STRING") works &#146;
+     ! int() can take strings representing a number as input&#146;
+     if(int(&#146;1234&#146;) .eq.1234) write(*,*)&#146;int("STRING") works &#146;
+     ! as can real() and dble()
      if(abs(real(&#146;1234.56789&#146;) - 1234.56789).lt.2*epsilon(0.0)) &
       & write(*,*)&#146;real("STRING") works &#146;
      if(abs(dble(&#146;1234.5678901234567&#146;)- 1234.5678901234567d0).lt.epsilon(0.0d0)) &
       & write(*,*)&#146;dble("STRING") works &#146;
 <P>
+     ! and logical values can be treated numerically
      write(*,*) merge(&#146;int works for .FALSE.&#146;,&#146;int fails for .FALSE.&#146;,int(.FALSE.).ne.0)
      write(*,*) merge(&#146;int works for .TRUE.&#146;,&#146;int fails for .TRUE.&#146;,int(.TRUE.).eq.0)
+     write(*,*) sum(int([.true.,.false.,.true.]))
 <P>
+     ! and == and /= work for logical expressions
      if (.true. == .true. ) &
      & write(*,*)&#146;== works like .eqv. for LOGICAL values&#146;
      if (.true. /= .false. ) &
      & write(*,*)&#146;/= works like .neqv. for LOGICAL values&#146;
 <P>
+     ! // will allow any intrinsic type and convert it to a string
      write(*,*)&#146; The value is &#146;//10//&#146; which is less than &#146;//20.2
+     block
+     character(len=:),allocatable :: myfmt
+     integer :: i
+        i=24
+        ! build a format with a variable numeric value
+        myfmt=&#146;("[",I&#146;//i//&#146;,"]")&#146;
+        write(*,fmt=myfmt)20
+     endblock
+<P>
+     ! logical values as numeric values
+     write(*,*) sum([int(.false.),int(.false.)])
+     write(*,*) int([.false.,.true.,.false.])
+     write(*,*) sum(int([.false.,.true.,.false.]))
 <P>
 <P>
+     ! and sign() assumes the second argument is 1
      write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
       & sign(10_int8).eq.1 &
       & .and. sign(-10_int8).eq.-1 )
-     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
-      & sign(10_int16).eq.1 &
-      & .and. sign(-10_int16).eq.-1 )
-     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
-      & sign(10_int32).eq.1 &
-      & .and. sign(-10_int32).eq.-1 )
-     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
-      & sign(10_int64).eq.1 &
-      & .and. sign(-10_int64).eq.-1 )
-     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
-      & sign(10.0_real32).eq.1.0 &
-      & .and. sign(-10.0_real32).eq.-1.0 )
-     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
-      & sign(10.0_real64).eq.1.0 &
-      & .and. sign(-10.0_real64).eq.-1.0 )
-     write(*,*) merge(&#146;sign works&#146;,&#146;sign fails&#146;,&
-      & sign(10.0_real128).eq.1.0&
-      & .and. sign(-10.0_real128).eq.-1.0 )
+<P>
    contains
 <P>
    end program demo_M_overload
 <P>
 </PRE>
 Results:
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: Results:
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-[a    ]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-[bbbbb]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-[bbbbb],[ccccc]
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-int("STRING") works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-real("STRING") works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-dble("STRING") works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-== works like .eqv. for LOGICAL values
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-/= works like .neqv. for LOGICAL values
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-444         555
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-444.444000       555.554993
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-444.44400000000002        555.55500000000006
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-555.44399999999996        666.66600000000005        777.77700000000004
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-int("STRING") works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-real("STRING") works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-dble("STRING") works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-== works like .eqv. for LOGICAL values
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-/= works like .neqv. for LOGICAL values
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-444         555
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-444.444000       555.554993
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-444.44400000000002        555.55500000000006
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-555.44399999999996        666.66600000000005        777.77700000000004
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>&gt;</B> </TD><TD valign=bottom>
-sign works
-&gt; 57 xx <B>-x</B> <B>-y</B> hello there xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-&gt; 0 0 [xx]
-&gt; 1 0 [-x]
-&gt; 2 0 [-y]
-&gt; 3 0 [hello there]
-&gt; 4 0 [xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>&gt; 0 0 [xx</B> <!-- Consumed .TP -->
-<BR>
-<B>&gt; 1 0 [-x</B> <!-- Consumed .TP -->
-<BR>
-<B>&gt; 2 0 [-y</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-&gt; 3 <B>-1</B> [hello ther]
-&gt; 4 <B>-1</B> [xxxxxxxxxx]
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>&gt; 0 0 [xx</B> <!-- Consumed .TP -->
-<BR>
-<B>&gt; 1 0 [-x</B> <!-- Consumed .TP -->
-<BR>
-<B>&gt; 2 0 [-y</B> <!-- Consumed .TP -->
-<BR>
-<B>&gt; 3 0 [hello there</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-&gt; 4 <B>-1</B> [xxxxxxxxxxxxxxxxxxxx]
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+<PRE>
+ &gt; [a    ]
+ &gt; [bbbbb]
+ &gt; [bbbbb],[ccccc]
+ &gt;  int("STRING") works
+ &gt;  real("STRING") works
+ &gt;  dble("STRING") works
+ &gt;  int works for .FALSE.
+ &gt;  int works for .TRUE.
+ &gt;                     1
+ &gt;  == works like .eqv. for LOGICAL values
+ &gt;  /= works like .neqv. for LOGICAL values
+ &gt;   The value is 10 which is less than 20.2000008
+ &gt; [                      20]
+ &gt;                     2
+ &gt;                     1                    0                    1
+ &gt;                     2
+ &gt;  sign works
+<P>
+</PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
      <H3>AUTHOR</H3>
 
@@ -459,7 +314,7 @@ sign works
 <BLOCKQUOTE>
 John S. Urban
 </BLOCKQUOTE>
-<A name=7>
+<A name=6>
 
      <H3>LICENSE</H3>
 
@@ -468,7 +323,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_overload (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1a9fe29f-43fe-4c7f-984e-1dcb48d3bc09 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_overload (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7d0d29e8-693e-4c8b-bfce-438911c96ae9 using man macros.</FONT>
 <br><br><center><img src="images/M_overload.3m_overload.gif"></center>
 </div>
 </div>

@@ -2,12 +2,25 @@
 #@(#) h(1): run command with --help switch and run thru txt2man(1)
 # many of my commands display their help text with the --help switch
 # and are formatted for txt2man(1)
-for NAME in $*
-do
-   clear
-   exec 2>&1
-   $NAME --help|txt2man -T|less -r
-   printf 'continue ...'
-   read PAWS
-done
+if [ "$MAKE_MANPAGE" == TRUE ]
+then
+   mkdir -p /tmp/man/man1 /tmp/man/man2 /tmp/man/man3 /tmp/man/man4
+   mkdir -p /tmp/man/man5 /tmp/man/man6 /tmp/man/man7 /tmp/man/man8
+   mkdir -p /tmp/man/man9
+   for NAME in $*
+   do
+      SHORT=$(dirname $NAME)
+      $NAME --help </dev/null|txt2man -t "$SHORT" > /tmp/man/${SHORT}.1.${USER:-${LOGNAME:-logname}}
+   done
+   echo 'files are in /tmp/man and possibly need renamed'
+else
+   for NAME in $*
+   do
+      clear
+      exec 2>&1
+      $NAME --help|txt2man -T|less -r
+      printf 'continue ...'
+      read PAWS
+   done
+fi
 exit

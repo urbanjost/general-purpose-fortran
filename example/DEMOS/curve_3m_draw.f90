@@ -3,8 +3,9 @@
      !      using curves
      !
      use M_draw
+     implicit none
 
-     integer i
+     integer i, idum, ios
      character(len=50) :: buf
      real bezier(4, 4), cardinal(4, 4), bspline(4, 4)
      real geom1(3, 4), geom2(3, 6)

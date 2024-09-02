@@ -50,22 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>allocated (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>allocated (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>allocated(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-allocated(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-ALLOCATED(3) - [ARRAY:INQUIRY] Allocation status of an allocatable entity
+<P>
+ALLOCATED(3) - [ARRAY:INQUIRY] Allocation status of an allocatable
+entity
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -76,13 +69,14 @@ ALLOCATED(3) - [ARRAY:INQUIRY] Allocation status of an allocatable entity
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = allocated(array|scalar)
 <P>
 <PRE>
-           logical function allocated(array,scalar)
+         logical function allocated(array,scalar)
 <P>
-            type(TYPE(kind=**)),allocatable,optional :: array(..)
-            type(TYPE(kind=**)),allocatable,optional :: scalar
+          type(TYPE(kind=**)),allocatable,optional :: array(..)
+          type(TYPE(kind=**)),allocatable,optional :: scalar
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +86,7 @@ result = allocated(array|scalar)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -120,6 +115,7 @@ the result is a default logical scalar
 
 </A>
 <BLOCKQUOTE>
+<P>
 ALLOCATED(3) checks the allocation status of both arrays and scalars.
 <P>
 At least one and only one of ARRAY or SCALAR must be specified.
@@ -130,6 +126,7 @@ At least one and only one of ARRAY or SCALAR must be specified.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -143,6 +140,7 @@ ENTITY : the allocatable object to test.
 
 </A>
 <BLOCKQUOTE>
+<P>
 If the argument is allocated then the result is .true.; otherwise, it
 returns .false..
 </BLOCKQUOTE>
@@ -152,54 +150,55 @@ returns .false..
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_allocated
-      use,intrinsic :: iso_fortran_env, only : dp=&gt;real64,sp=&gt;real32
-      implicit none
-      real(kind=sp), allocatable :: x(:)
-      character(len=256) :: message
-      integer :: istat
-        ! basics
-         if( allocated(x)) then
-             write(*,*)&#146;do things if allocated&#146;
-         else
-             write(*,*)&#146;do things if not allocated&#146;
-         endif
+    program demo_allocated
+    use,intrinsic :: iso_fortran_env, only : dp=&gt;real64,sp=&gt;real32
+    implicit none
+    real(kind=sp), allocatable :: x(:)
+    character(len=256) :: message
+    integer :: istat
+      ! basics
+       if( allocated(x)) then
+           write(*,*)&#146;do things if allocated&#146;
+       else
+           write(*,*)&#146;do things if not allocated&#146;
+       endif
 <P>
-         ! if already allocated, deallocate
-         if ( allocated(x) ) deallocate(x,STAT=istat, ERRMSG=message )
-         if(istat.ne.0)then
-            write(*,*)trim(message)
-            stop
-         endif
+       ! if already allocated, deallocate
+       if ( allocated(x) ) deallocate(x,STAT=istat, ERRMSG=message )
+       if(istat.ne.0)then
+          write(*,*)trim(message)
+          stop
+       endif
 <P>
-         ! only if not allocated, allocate
-         if ( .not. allocated(x) ) allocate(x(20))
+       ! only if not allocated, allocate
+       if ( .not. allocated(x) ) allocate(x(20))
 <P>
-        ! allocation and intent(out)
-         call intentout(x)
-         write(*,*)&#146;note it is deallocated!&#146;,allocated(x)
+      ! allocation and intent(out)
+       call intentout(x)
+       write(*,*)&#146;note it is deallocated!&#146;,allocated(x)
 <P>
-         contains
+       contains
 <P>
-         subroutine intentout(arr)
-         ! note that if arr has intent(out) and is allocatable,
-         ! arr is deallocated on entry
-         real(kind=sp),intent(out),allocatable :: arr(:)
-             write(*,*)&#146;note it was allocated in calling program&#146;,allocated(arr)
-         end subroutine intentout
+       subroutine intentout(arr)
+       ! note that if arr has intent(out) and is allocatable,
+       ! arr is deallocated on entry
+       real(kind=sp),intent(out),allocatable :: arr(:)
+           write(*,*)&#146;note it was allocated in calling program&#146;,allocated(arr)
+       end subroutine intentout
 <P>
-      end program demo_allocated
+    end program demo_allocated
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  do things if not allocated
-       &gt;  note it was allocated in calling program F
-       &gt;  note it is deallocated! F
+     &gt;  do things if not allocated
+     &gt;  note it was allocated in calling program F
+     &gt;  note it is deallocated! F
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -209,6 +208,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95. allocatable scalar entities were added in Fortran 2003.
 </BLOCKQUOTE>
 <A name=8>
@@ -217,16 +217,13 @@ Fortran 95. allocatable scalar entities were added in Fortran 2003.
 
 </A>
 <BLOCKQUOTE>
+<P>
 MOVE_ALLOC(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022           allocated(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>allocated (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c20d32d4-ec71-4954-8192-c04866f19e5b using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>allocated (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7e794137-dba9-427c-8a5e-6dafb7c6064d using man macros.</FONT>
 <br><br><center><img src="images/allocated.3fortran.gif"></center>
 </div>
 </div>

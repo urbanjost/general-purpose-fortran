@@ -3,7 +3,7 @@ program demo_M_sha3
 ! ident_1="@(#) sha3(1f) generate SHA-{224 256 384 512} digest values for specified files"
 
 use,intrinsic :: iso_fortran_env, only : ERROR_UNIT
-use M_sha3,                       only : sha3_auto_test, sha3_file
+use M_hashkeys__sha3,             only : sha3_auto_test, sha3_file
 use M_system,                     only : system_isreg
 use M_CLI2,                       only : set_args, iget, lget, files=>unnamed
 implicit none

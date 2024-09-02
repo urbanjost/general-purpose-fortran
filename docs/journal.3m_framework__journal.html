@@ -1,0 +1,413 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>journal (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+journal(3f) - [M_framework__journal] provides public message routine, no paging or graphic mode change
+(LICENSE:PD)
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+subroutine journal([where,],[VALUE(s)])
+<P>
+<PRE>
+    character(len=*),intent(in) :: where
+    class(*),optional :: g1,g2,g3,g4,g5,g6,g7,g8,g9,ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; WRITE MESSAGES</H4>
+</A>
+<BLOCKQUOTE>
+basic messages
+<P>
+<PRE>
+      call journal(where,[VALUE(S)])
+      call journal(message) # a shortcut for "call journal(&#146;sc&#146;,message)":
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; OPEN OR CLOSE TRAIL FILE</H4>
+</A>
+<BLOCKQUOTE>
+trail file
+<P>
+<PRE>
+      call journal(&#146;O&#146;,trailfile_name) # open trail file
+      call journal(&#146;O&#146;,&#146;&#146;)             # close trail file
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SET OUTPUT TIME PREFIX</H4>
+</A>
+<BLOCKQUOTE>
+set the function display format for timestamps. See the NOW(3f)
+procedure for allowable timestamp macros
+<P>
+<PRE>
+      call journal(&#146;%&#146;,time_stamp_prefix_specification)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MODES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Turn on/off writing DEBUG messages to trail file
+<P>
+<PRE>
+      call journal(&#146;&gt;&#146;,&#146;debug on&#146;) # turn on debug mode
+      call journal(&#146;&lt;&#146;,&#146;debug off&#146;) # turn off debug mode
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ASSIGN STDOUT TO AN ALTERNATE FILE</H4>
+</A>
+<BLOCKQUOTE>
+change stdout to iunit and open filename; or close unit and go back to stdout if filename=&#146;&#146;
+<P>
+<PRE>
+      call journal(iunit,filename)
+<P>
+</PRE>
+change stdout to iunit to use a file already open
+<P>
+<PRE>
+      call journal(iunit)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If a user procedure is used for outputting messages instead of calling
+WRITE(3f) it is easy to provide control of when messages are printed
+(ie. a "verbose" mode, or "quite" mode), creating files to replay
+program execution, duplicating output, &#46;&#46;&#46;
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>WHERE</B> </TD><TD valign=bottom>
+indicates where messages are written. A combination of the
+following characters can be used&#46;&#46;&#46;
+<P>
+Usually one of these to write to the standard output files &#46;&#46;&#46;
+<TABLE width=100% cellpadding=3><!-- tsb: Usually one of these to write to the standard output files &#46;&#46;&#46;
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>S</B> </TD><TD valign=bottom>
+write to stdout or iounit set with journal(unit) or
+journal(unit,filename).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>E</B> </TD><TD valign=bottom>
+write to stderr
+</TD></TR>
+<TR><TD colspan=2>
+And one of these to write to trail file (ignore if no trail file
+defined) &#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>C</B> </TD><TD valign=bottom>
+write to trail file as a comment (if file is open)
+Writing output "as a comment" means it is preceded by a pound(#)
+character.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>T</B> </TD><TD valign=bottom>
+write to trail file (if file is open)
+</TD></TR>
+<TR><TD colspan=2>
+Usually used by itself
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>D</B> </TD><TD valign=bottom>
+write to trail file as a comment with "DEBUG:" prefix in front
+of message (if file is open) if debug mode is on. Write to stdout
+if no trail file and debug mode is on.
+</TD></TR>
+<TR><TD colspan=2>
+Modifier for S|E|C|T|D specifiers
+</TD></TR>
+<TR></TR></TABLE><TABLE width=100% cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+subsequent files are written to with advance=&#146;no&#146;. Position is
+important. &#146;+sc&#146; does an advance=&#146;no&#146; on both files, &#146;s+c&#146;
+only does the advance=&#146;no&#146; for the trail file.
+</TD></TR>
+<TR></TR></TABLE>Mode changing options used by themselves:
+<TABLE width=100% cellpadding=3><!-- tsb: Mode changing options used by themselves:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&gt;</B> </TD><TD valign=bottom>
+turn off debug messages
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>&lt;</B> </TD><TD valign=bottom>
+turn on debug messages
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>O</B> </TD><TD valign=bottom>
+open trail file using value of "message" parameter or close
+trail file if no filename or a blank filename.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>A</B> </TD><TD valign=bottom>
+Auxiliary programs that also want to write to the current log file
+(a2b, z2a, &#46;&#46;&#46;) call this routine to see if there is a trail file
+being generated and then add to it so that a program like ush(1f)
+can call the auxiliary programs and still just generate one log file,
+but if the auxiliary program is used as a stand-alone program no trail
+is generated.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>VALUES(S)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+message to write to stdout, stderr, and the trail file.
+a numeric or character value to optionally be appended
+to the message. Up to twenty values are allowed. The WHERE
+field is required if there is anything other than a single
+character string or not values at all.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>FILENAME</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+when WHERE="O" to turn the trail file on or off, the "message"
+field becomes the trail filename to open. If blank, writing
+to the trail file is turned off.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>TIMEFORMAT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+when WHERE="%" the message is treated as a time format
+specification as described under now(3f).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_journal
+   use M_framework__journal, only : journal
+   !! BASIC USAGE
+   call journal(&
+   & &#146;write to standard output as-is, and trail file as a comment if open&#146;)
+   ! since trail file is not yet open, only stdout will display output
+   call journal(&#146;c&#146;,&#146;ignored, as trail file is not open&#146;)
+   ! now open trail file "trail"
+   call journal(&#146;o&#146;,&#146;trail&#146;)
+   call journal(&#146;sc&#146;,&#146;same thing except now trail file is open&#146;)
+   ! only write to trail file if open
+   call journal(&#146;c&#146;,&
+   & &#146;not ignored, as trail file is open. Written with # suffix&#146;)
+   call journal(&#146;t&#146;,&
+   & &#146;not ignored, as trail file is open. Written as-is&#146;)
+   ! turn off trail file
+   call journal(&#146;o&#146;,&#146;&#146;)
+   end program demo_journal
+<P>
+</PRE>
+Adding intrinsic scalar values to the message:
+<P>
+<PRE>
+   program test_journal
+   use M_framework__journal, only: journal
+   implicit none
+      call journal(&#146;S&#146;,&#146;This is a test with no optional value&#146;)
+      call journal(&#146;S&#146;,&#146;This is a test with a logical value&#146;,.true.)
+      call journal(&#146;S&#146;, &
+        & &#146;This is a test with a double value&#146;,1234567890.123456789d0)
+      call journal(&#146;S&#146;, &
+        & &#146;This is a test with a real value&#146;,1234567890.123456789)
+      call journal(&#146;S&#146;,&#146;This is a test with an integer value&#146;,1234567890)
+      call journal(&#146;STDC&#146;,&#146;This is a test using STDC&#146;,1234567890)
+      call journal(&#146;stdc&#146;,&#146;This is a test using stdc&#146;,1234567890)
+      call journal(&#146;o&#146;,&#146;journal.txt&#146;)  ! open trail file
+      call journal(&#146;S&#146;, &
+        & 1,12.34,56789.111111111d0,.false.,&#146;a bunch of values&#146;)
+      ! the combinations that make sense
+      call journal(&#146;st&#146;,&#146;stdout and trail&#146;)
+      call journal(&#146;s&#146; ,&#146;stdout only&#146;)
+      call journal(&#146;t&#146; ,&#146;trail only&#146;)
+      call journal(&#146;sc&#146;,&#146;stdout and trail_comment&#146;)
+      call journal(&#146;c&#146; ,&#146;trail_comment only &#146;)
+      call journal(&#146;d&#146; ,&#146;debug only&#146;)
+      call journal(&#146;e&#146; ,&#146;stderr only&#146;)
+      call journal(&#146;o&#146; ,&#146; &#146;) ! closing trail file
+   end program test_journal
+<P>
+   program testit
+   ! this is a utility program that calls the module routines. It is
+   ! typically built using ccall(1).
+   use M_framework__journal, only : journal
+   character(len=:),allocatable :: time_stamp_prefix
+    call journal(&#146;s&#146;, &
+    & &#146;------------------------------------------------------------&#146;)
+    call journal(&#146;s&#146;,&#146;SIMPLE WRITES&#146;)
+    call one()
+    call two()
+    call journal(&#146;sc&#146;, &
+    & &#146;called ONE() and TWO() but did not generate a log file&#146;)
+    call journal(&#146;s&#146;, &
+    & &#146;------------------------------------------------------------&#146;)
+    call journal(&#146;s&#146;,&#146;SIMPLE WRITES WITH LOG FILE&#146;)
+    call journal(&#146;o&#146;,&#146;journal.txt&#146;)     ! open trail file
+    call one()
+    call two()
+    call journal(&#146;sc&#146;, &
+    & &#146;called ONE() and TWO() and generated log file journal.txt&#146;)
+    call journal(&#146;&#146;,&#146;journal.txt&#146;)      ! close trail file
+    call journal(&#146;s&#146;, &
+    & &#146;------------------------------------------------------------&#146;)
+    call journal(&#146;s&#146;,&#146;SIMPLE WRITES WITH TIMING INFORMATION&#146;)
+    ! change time prefix
+    time_stamp_prefix=&#146;CPU_TIME=%c:CALLS=%C:SINCE=%S:%b&#146;
+    call journal(&#146;%&#146;,time_stamp_prefix) ! set a message time prefix
+    call journal(&#146;o&#146;,&#146;timed.txt&#146;)       ! open trail file
+    call one()
+    call two()
+    call journal(&#146;sc&#146;, &
+    & &#146;called ONE() and TWO() and generate log file timed.txt&#146;)
+    call journal(&#146;&#146;,&#146;timed.txt&#146;)        ! close trail file
+    call journal(&#146;%&#146;,&#146;&#146;)                ! turn off time prefix
+    call journal(&#146;o&#146;,&#146;timed.txt&#146;)       ! open trail file
+    call journal(&#146;s&#146;, &
+    & &#146;------------------------------------------------------------&#146;)
+<P>
+   contains
+<P>
+      subroutine two()
+         call journal(&#146;Entered subroutine two&#146;)
+         call journal(&#146;Exited subroutine two&#146;)
+      end subroutine two
+<P>
+      subroutine one()
+         call journal(&#146;Entered subroutine one&#146;)
+         sum=-HUGE(1.0)
+         do i=1,10000000
+           sum=sum+sqrt(real(i))
+         enddo
+         write(*,*)&#146;SUM=&#146;,sum
+         call journal(&#146;Exited subroutine one&#146;)
+      end subroutine one
+<P>
+   end program testit
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>journal (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 819814d5-d1b8-4677-870e-d514a0ac177c using man macros.</FONT>
+<br><br><center><img src="images/journal.3m_framework__journal.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

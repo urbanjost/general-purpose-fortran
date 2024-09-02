@@ -2,7 +2,7 @@
 
        use M_strings, only : len_white
        implicit none
-       character(len=80) ::  s
+       character(len=80) :: s
        integer           :: lgth, lastnb
        intrinsic len
 

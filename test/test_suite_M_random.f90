@@ -1,6 +1,7 @@
 module M_test_suite_M_random
-use M_msg
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg, unit_check_level
+use M_framework__msg
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
 use M_random
 private
 public test_suite
@@ -272,12 +273,10 @@ end subroutine test_suite
 end module M_test_suite_M_random
 !==================================================================================================================================!
 program runtest
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
+use M_framework__msg
+use M_framework__verify, only : unit_check_level, unit_check_stop
 use M_test_suite_M_random
 implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
    unit_check_level=0
    call test_suite()
    call unit_check_stop()

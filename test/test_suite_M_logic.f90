@@ -1,7 +1,7 @@
 module M_test_suite_M_logic
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
+use M_framework__msg
 use M_logic, only      : nest_level, cond, write
+implicit none
 private
 public test_suite_m_logic
 contains
@@ -17,8 +17,7 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_cond()
 
-use M_verify, only      : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only      : unit_check_level
+use M_framework__verify, only      : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
 use M_strings, only    : lower, delim, v2s  ! convert character case and split a string
 use M_calculator, only : inum0 
 use M_io, only         : gulp
@@ -37,6 +36,7 @@ integer                          :: ilen
 integer                          :: ios
 integer                          :: value
 integer                          :: i
+integer                          :: ierr_logic
 character(len=:),allocatable     :: text(:)     ! array to hold output file in memory
 character(len=:),allocatable     :: expected(:) ! array to hold expected output in memory
 character(len=:),allocatable     :: filename
@@ -155,13 +155,10 @@ end subroutine test_suite_M_logic
 end module M_test_suite_M_logic
 !==================================================================================================================================!
 program runtest
-use M_msg
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level, unit_check_stop
+use M_framework__msg
+use M_framework__verify, only : unit_check_stop
 use M_test_suite_M_logic
 implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
    call test_suite_M_logic()
    call unit_check_stop()
 end program runtest

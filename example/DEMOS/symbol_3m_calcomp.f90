@@ -1,5 +1,6 @@
      program demo_symbol
      use M_calcomp
+     implicit none
 
      ! produce a symbol table which shows the characters
      ! available in the symbol(3f) routine.
@@ -9,7 +10,7 @@
      character(len= 60),parameter :: ichr3='INTEGER FOR USE IN SYMBOL CALL SHOWN TO LEFT OF EACH SYMBOL'
      character(len= 1 )           :: ibcd
      integer                      :: ia,ib
-     integer                      :: m
+     integer                      :: m, inteq
      real                         :: z, xs, ys, x, y
         call plots(0.0,10.0,0.0,10.0)
         call plot(0.8,0.8,1001)

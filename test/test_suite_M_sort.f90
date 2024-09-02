@@ -1,8 +1,7 @@
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 module M_testsuite_M_sort
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-use M_msg, only : str
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__msg, only : str
 use M_sort
 implicit none
 private
@@ -11,11 +10,14 @@ integer,parameter            :: dp=kind(0.0d0)
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_suite_m_sort()
+
    call test_sort_shell()
    call test_sort_quick_rx_r()
    call test_sort_quick_rx_i()
    call test_sort_quick_rx_c()
    call test_sort_quick_rx_d()
+   call test_sort_quick_compact()
+
    call test_unique()
    call test_swap()
 
@@ -40,12 +42,49 @@ subroutine test_tree_print()
    call unit_check_done('tree_print',msg='')
 end subroutine test_tree_print
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_sort_quick_compact()
+integer,parameter            :: isz=10000
+real                         :: rn(isz), rn2(isz)
+complex(kind=dp)             :: cd(isz)
+complex                      :: cc(isz)
+doubleprecision              :: dd(isz)
+real                         :: rr(isz)
+integer                      :: ii(isz)
+character(len=:),allocatable :: array(:)
+integer                      :: csz
+!-----------------------------------------------------------------------------------------------------------------------------------
+call unit_check_start('sort_quick_compact','-library libGPF') ! start tests
+!-----------------------------------------------------------------------------------------------------------------------------------
+array= [ 'red    ','green  ','blue   ','yellow ','orange ','black  ','white  ','brown  ','gray   ','cyan   ','magenta','purple ']
+array=sort_quick_compact(array)
+csz=size(array)
+call unit_check('sort_quick_compact',all(array(1:csz-1) .ge. array(2:csz)),msg='sort string array')  ! verify in ascending order
+!-----------------------------------------------------------------------------------------------------------------------------------
+CALL RANDOM_NUMBER(Rn)                                           ! Rn contains uniformly distributed random numbers from 0.0 to <1.0
+CALL RANDOM_NUMBER(Rn2)
+!-----------------------------------------------------------------------------------------------------------------------------------
+ii=sort_quick_compact(int(Rn*HUGE(0)))                                                   ! spread values out along range of INTEGER
+call unit_check('sort_quick_compact',all(ii(1:isz-1) .ge. ii(2:isz)),msg='sort integer') ! verify in descending order
+rr=sort_quick_compact(Rn)
+call unit_check('sort_quick_compact',all(rr(1:isz-1) .ge. rr(2:isz)),msg='sort real')
+dd=sort_quick_compact(Rn*20000.0d0)
+call unit_check('sort_quick_compact',all(dd(1:isz-1) .ge. dd(2:isz)),msg='sort doubleprecision')
+cc=sort_quick_compact(cmplx(Rn*20000.0,Rn2*20000.0))
+call unit_check('sort_quick_compact', all(abs(cc(1:isz-1)) .ge. abs(cc(2:isz))), msg='sort complex array by magnitude')
+cd=sort_quick_compact(cmplx(Rn*20000.0,Rn2*20000.0,kind=dp))
+call unit_check('sort_quick_compact', all(abs(cd(1:isz-1)) .ge. abs(cd(2:isz))), msg='sort double complex by magnitude')
+!-----------------------------------------------------------------------------------------------------------------------------------
+call unit_check_done('sort_quick_compact') ! assume if got here passed checks
+!-----------------------------------------------------------------------------------------------------------------------------------
+end subroutine test_sort_quick_compact
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sort_shell()
 integer,parameter            :: isz=10000
+real                         :: rn(isz), rn2(isz)
 complex(kind=dp)             :: ccdd(isz)
 complex                      :: cc(isz)
 doubleprecision              :: dd(isz)
-real                         :: rr(isz), rr2(isz)
+real                         :: rr(isz)
 integer                      :: ii(isz)
 character(len=:),allocatable :: array(:)
 integer                      :: csz
@@ -53,106 +92,90 @@ integer                      :: csz
 call unit_check_start('sort_shell','-library libGPF') ! start tests
 !-----------------------------------------------------------------------------------------------------------------------------------
 array= [ 'red    ','green  ','blue   ','yellow ','orange ','black  ','white  ','brown  ','gray   ','cyan   ','magenta','purple ']
-csz=size(array)
 call sort_shell(array,order='a')
-call unit_check('sort_shell',all(array(1:csz-1) .le. array(2:csz)),msg='sort string array, ascending')  ! verify in ascending order
-!-----------------------------------------------------------------------------------------------------------------------------------
-array= [ 'RED    ','GREEN  ','BLUE   ','YELLOW ','ORANGE ','BLACK  ','WHITE  ','BROWN  ','GRAY   ','CYAN   ','MAGENTA','PURPLE ']
 csz=size(array)
+call unit_check('sort_shell',all(array(1:csz-1) .le. array(2:csz)),msg='sort string array, ascending')  ! verify in ascending order
+
+array= [ 'RED    ','GREEN  ','BLUE   ','YELLOW ','ORANGE ','BLACK  ','WHITE  ','BROWN  ','GRAY   ','CYAN   ','MAGENTA','PURPLE ']
 call sort_shell(array,order='d')
+csz=size(array)
 call unit_check('sort_shell',all(array(1:csz-1) .ge. array(2:csz)),msg='sort string array, descending') ! verify in descending order
 !-----------------------------------------------------------------------------------------------------------------------------------
-CALL RANDOM_NUMBER(RR)                                           ! RR contains uniformly distributed random numbers from 0.0 to <1.0
-II=RR*HUGE(1)                                                    ! spread values out along range of INTEGER
+CALL RANDOM_NUMBER(Rn)                                           ! Rn contains uniformly distributed random numbers from 0.0 to <1.0
+CALL RANDOM_NUMBER(Rn2)
+!-----------------------------------------------------------------------------------------------------------------------------------
+II=Rn*HUGE(1)                                                    ! spread values out along range of INTEGER
 call sort_shell(ii,order='a')
 call unit_check('sort_shell',all(ii(1:isz-1) .le. ii(2:isz)),msg='sort integer, ascending array')  ! verify in ascending order
-!-----------------------------------------------------------------------------------------------------------------------------------
-CALL RANDOM_NUMBER(RR)
-II=RR*HUGE(1)
+
+II=Rn*HUGE(1)
 call sort_shell(ii,order='d')
 call unit_check('sort_shell',all(ii(1:isz-1) .ge. ii(2:isz)),msg='sort integer, descending array')
 !-----------------------------------------------------------------------------------------------------------------------------------
-CALL RANDOM_NUMBER(RR)
+rr=rn
 call sort_shell(rr,order='a')
 call unit_check('sort_shell',all(rr(1:isz-1) .le. rr(2:isz)),msg='sort real, ascending')
-!-----------------------------------------------------------------------------------------------------------------------------------
-CALL RANDOM_NUMBER(RR)
+
+rr=rn
 call sort_shell(rr,order='d')
 call unit_check('sort_shell',all(rr(1:isz-1) .ge. rr(2:isz)),msg='sort real, descending')
 !-----------------------------------------------------------------------------------------------------------------------------------
-CALL RANDOM_NUMBER(RR)
-dd=RR*2000.0d0
+dd=Rn*2000.0d0
 call sort_shell(dd,order='a')
 call unit_check('sort_shell',all(dd(1:isz-1) .le. dd(2:isz)),msg='sort doubleprecision, ascending')
-!-----------------------------------------------------------------------------------------------------------------------------------
-CALL RANDOM_NUMBER(RR)
-dd=RR*2000.0d0
+dd=Rn*2000.0d0
 call sort_shell(dd,order='d')
 call unit_check('sort_shell',all(dd(1:isz-1) .ge. dd(2:isz)),msg='sort doubleprecision, descending')
 !-----------------------------------------------------------------------------------------------------------------------------------
-CALL RANDOM_NUMBER(RR)
-CALL RANDOM_NUMBER(RR2)
-
-cc=cmplx(RR*20000.0,RR2*20000.0)
+cc=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(cc,order='a',type='real')
 call unit_check('sort_shell',all(real(cc(1:isz-1)) .le. real(cc(2:isz))),msg='sort complex by real component, ascending')
 
-cc=cmplx(RR*20000.0,RR2*20000.0)
+cc=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(cc,order='d',type='real')
 call unit_check('sort_shell',all(real(cc(1:isz-1)) .ge. real(cc(2:isz))),msg='sort complex by real component, descending')
 
-cc=cmplx(RR*20000.0,RR2*20000.0)
+cc=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(cc,order='a',type='imaginary')
 call unit_check('sort_shell',all(aimag(cc(1:isz-1)).le.aimag(cc(2:isz))),msg='sort complex by imaginary component, ascending')
 
-cc=cmplx(RR*20000.0,RR2*20000.0)
+cc=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(cc,order='d',type='imaginary')
 call unit_check('sort_shell',all(aimag(cc(1:isz-1)) .ge. aimag(cc(2:isz))),msg='sort complex by imaginary component, descending')
 
-cc=cmplx(RR*20000.0,RR2*20000.0)
+cc=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(cc,order='a',type='size')
-call unit_check('sort_shell', &
-   all(sqrt( dble(cc(1:isz-1))**2 +aimag(cc(1:isz-1))**2) .le. sqrt(dble(cc(2:isz))**2+aimag(cc(2:isz))**2)), &
-   msg='sort complex array by magnitude, ascending')
+call unit_check('sort_shell', all(abs(cc(1:isz-1)) .le. abs(cc(2:isz))), msg='sort complex array by magnitude, ascending')
 
-cc=cmplx(RR*20000.0,RR2*20000.0)
+cc=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(cc,order='d',type='size')
-call unit_check('sort_shell', &
-   all(sqrt( dble(cc(1:isz-1))**2 +aimag(cc(1:isz-1))**2) .ge. sqrt(dble(cc(2:isz))**2+aimag(cc(2:isz))**2)), &
-   msg='sort complex array by magnitude, descending')
+call unit_check('sort_shell', all(abs(cc(1:isz-1)) .ge. abs(cc(2:isz))), msg='sort complex array by magnitude, descending')
 !-----------------------------------------------------------------------------------------------------------------------------------
-CALL RANDOM_NUMBER(RR)
-CALL RANDOM_NUMBER(RR2)
-
-ccdd=cmplx(RR*20000.0,RR2*20000.0)
+ccdd=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(ccdd,order='a',type='real')
 call unit_check('sort_shell',all(real(ccdd(1:isz-1)).le.real(ccdd(2:isz))), msg='sort double complex by real component, ascending')
 
-ccdd=cmplx(RR*20000.0,RR2*20000.0)
+ccdd=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(ccdd,order='d',type='real')
 call unit_check('sort_shell',all(real(ccdd(1:isz-1)).ge.real(ccdd(2:isz))), msg='sort double complex by real component, descending')
 
-ccdd=cmplx(RR*20000.0,RR2*20000.0)
+ccdd=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(ccdd,order='a',type='imaginary')
 call unit_check('sort_shell', &
    all(aimag(ccdd(1:isz-1)).le.aimag(ccdd(2:isz))), msg='sort double complex by imaginary component, ascending')
 
-ccdd=cmplx(RR*20000.0,RR2*20000.0)
+ccdd=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(ccdd,order='d',type='imaginary')
 call unit_check('sort_shell', &
    all(aimag(ccdd(1:isz-1)).ge.aimag(ccdd(2:isz))), msg='sort double complex by imaginary component, descending')
 
-ccdd=cmplx(RR*20000.0,RR2*20000.0)
+ccdd=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(ccdd,order='a',type='size')
-call unit_check('sort_shell', &
-   all(sqrt(real(ccdd(1:isz-1))**2+aimag(ccdd(1:isz-1))**2) .le. sqrt(real(ccdd(2:isz))**2+aimag(ccdd(2:isz))**2)),  &
-   msg='sort double complex by magnitude, ascending')
+call unit_check('sort_shell', all(abs(ccdd(1:isz-1)) .le. abs(ccdd(2:isz))), msg='sort double complex by magnitude, ascending')
 
-ccdd=cmplx(RR*20000.0,RR2*20000.0)
+ccdd=cmplx(Rn*20000.0,Rn2*20000.0)
 call sort_shell(ccdd,order='d',type='size')
-call unit_check('sort_shell', &
-   all(sqrt(real(ccdd(1:isz-1))**2+aimag(ccdd(1:isz-1))**2) .ge. sqrt(real(ccdd(2:isz))**2+aimag(ccdd(2:isz))**2)),  &
-   msg='sort double complex by magnitude, descending')
+call unit_check('sort_shell', all(abs(ccdd(1:isz-1)) .ge. abs(ccdd(2:isz))), msg='sort double complex by magnitude, descending')
 !-----------------------------------------------------------------------------------------------------------------------------------
 call unit_check_done('sort_shell') ! assume if got here passed checks
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -414,16 +437,12 @@ end subroutine test_sort_heap
 end module M_testsuite_M_sort
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 program runtest
-use M_msg
-use M_verify
-use M_verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
-use M_verify, only : unit_check_level
-use M_verify, only : unit_check_stop
+use M_framework__msg
+use M_framework__verify
+use M_framework__verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
+use M_framework__verify, only : unit_check_stop
 use M_testsuite_M_sort
 implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
    call test_suite_M_sort()
    call unit_check_stop()
 end program runtest

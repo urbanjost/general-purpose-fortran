@@ -3,6 +3,7 @@
      use M_draw,    only  : D_BLACK,   D_WHITE
      use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
      use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
+     implicit none
      real    :: b=0.5
      real    :: y1,y2,ym,x1,x2
      real    :: width=50.0/8.0,width2

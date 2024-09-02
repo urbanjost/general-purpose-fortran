@@ -18,15 +18,15 @@ character(len=21)       :: cscr
    call help_version(lget('month_version'))                          ! print version information and stop if requested
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! use user-specified year date instead of current year. Try reading year from two places (-oo and -year) on command line
-   if(sget('month_year').ne.' ')then                                 ! check -year option for a year value
+   if(sget('month_year') /= ' ')then                                 ! check -year option for a year value
       dat_values(1)=iget('month_year')                               ! if value was specified use it
-   elseif(sget('month_oo').ne.' ')then
+   elseif(sget('month_oo') /= ' ')then
          dat_values(1)=iget('month_oo')                              ! check -oo option for a year value if did not find -year VALUE
    endif
    !write(*,*)'YEAR=',dat_values(1)
 !-----------------------------------------------------------------------------------------------------------------------------------
    cscr=sget('month_month')                                          ! get month as string so can see if name or number or blank
-   if(cscr.ne.'')then
+   if(cscr /= '')then
       select case(cscr(1:1))
       case('A':'Z','a':'z')                                          ! assume month name instead of month number
         month=mo2v(trim(cscr))
@@ -37,7 +37,7 @@ character(len=21)       :: cscr
       month=dat_values(2)
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(month.eq.0)then                                                ! no month specified, display an entire year
+   if(month == 0)then                                                ! no month specified, display an entire year
       do r=1,4                                                       ! display year in four rows
          do c=1,3                                                    ! three months per row
             dat_values(2)=c+(r-1)*3
@@ -66,42 +66,42 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   month(1f) - [TIME] display a calendar                                                                                        ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   month [[ -year] NNNN] [ -month NN|month_name]                                                                                ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   month(1) displays a simple calendar. If no arguments are specified,                                                          ',&
-'   the current year is displayed.                                                                                               ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   -month      Display single month output. The month is numeric (1-12)                                                         ',&
-'               or a month name or blank. If blank the current month is assumed.                                                 ',&
-'                                                                                                                                ',&
-'   -year NNNN  Select the year to display. A year starts on Jan 1st.                                                            ',&
-'                                                                                                                                ',&
-'   -help       Display help text and exit.                                                                                      ',&
-'   -version    Display version information and exit.                                                                            ',&
-'                                                                                                                                ',&
-'EXAMPLES                                                                                                                        ',&
-'      month -month 12                                                                                                           ',&
-'                                                                                                                                ',&
-'       >    December 2015                                                                                                       ',&
-'       >Mo Tu We Th Fr Sa Su                                                                                                    ',&
-'       >    1  2  3  4  5  6                                                                                                    ',&
-'       > 7  8  9 10 11 12 13                                                                                                    ',&
-'       >14 15 16 17 18 19 20                                                                                                    ',&
-'       >21 22 23 24 25 26 27                                                                                                    ',&
-'       >28 29 30 31                                                                                                             ',&
-'                                                                                                                                ',&
-'      month -month April # month names may be given instead of numbers                                                          ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   month(1f) - [TIME] display a calendar                                        ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   month [[ -year] NNNN] [ -month NN|month_name]                                ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   month(1) displays a simple calendar. If no arguments are specified,          ',&
+'   the current year is displayed.                                               ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'   -month NN   Display single month output. The month is numeric (1-12)         ',&
+'               or a month name or blank. If blank the current month is assumed. ',&
+'                                                                                ',&
+'   -year NNNN  Select the year to display. A year starts on Jan 1st.            ',&
+'                                                                                ',&
+'   -help       Display help text and exit.                                      ',&
+'   -version    Display version information and exit.                            ',&
+'                                                                                ',&
+'EXAMPLES                                                                        ',&
+'      month -month 12                                                           ',&
+'                                                                                ',&
+'       >    December 2015                                                       ',&
+'       >Mo Tu We Th Fr Sa Su                                                    ',&
+'       >    1  2  3  4  5  6                                                    ',&
+'       > 7  8  9 10 11 12 13                                                    ',&
+'       >14 15 16 17 18 19 20                                                    ',&
+'       >21 22 23 24 25 26 27                                                    ',&
+'       >28 29 30 31                                                             ',&
+'                                                                                ',&
+'      month -month April # month names may be given instead of numbers          ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -121,7 +121,7 @@ end subroutine help_usage
 !!    the current year is displayed.
 !!
 !!##OPTIONS
-!!    -month      Display single month output. The month is numeric (1-12)
+!!    -month NN   Display single month output. The month is numeric (1-12)
 !!                or a month name or blank. If blank the current month is assumed.
 !!
 !!    -year NNNN  Select the year to display. A year starts on Jan 1st.
@@ -165,7 +165,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 18:34:45 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:53:53 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -4,10 +4,10 @@
      use M_strings, only : indent
      implicit none
      character(len=1024) :: in
-     integer             :: ios
+     integer             :: iostat
         READFILE: do
-           read(*,'(A)',iostat=ios)in
-           if(ios /= 0) exit READFILE
+           read(*,'(A)',iostat=iostat)in
+           if(iostat /= 0) exit READFILE
            write(*,'(i3,"",a)')indent(in),trim(in)
         enddo READFILE
      end program demo_indent

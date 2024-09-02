@@ -1,21 +1,25 @@
      program demo_base
-     use M_strings, only : base
+     use M_strings, only: base
      implicit none
-     integer           :: ba,bd
-     character(len=40) :: x,y
-
-     print *,' BASE CONVERSION'
-     write(*,'("Start   Base (2 to 36): ")',advance='no'); read *, bd
-     write(*,'("Arrival Base (2 to 36): ")',advance='no'); read *, ba
-     INFINITE: do
-        write(*,'("Enter number in start base (0 to quit): ")',advance='no')
-        read *, x
-        if(x == '0') exit INFINITE
-        if(base(x,bd,y,ba))then
-             write(*,'("In base ",I2,": ",A20)')  ba, y
-         else
-           print *,'Error in decoding/encoding number.'
-         endif
-      enddo INFINITE
-
-      end program demo_base
+     integer           :: ba, bd, i
+     character(len=40) :: x, y
+     character(len=*), parameter :: input(*) = [character(len=80) :: &
+        '10 12345 10', &
+        '2 10111 10', &
+        '10 12345 20', &
+        '10 abcdef 2', &
+        '0 0 0']
+     character(len=:),allocatable :: line
+        print *, 'Base Conversion using base(3f)'
+        do i = 1, size(input)
+           line=input(i)
+           read (line, *) bd, x, ba
+           if (x == '0') exit
+           if (base(x, bd, y, ba)) then
+           else
+              print *, 'Error in decoding/encoding numbers'
+           end if
+           write (*, '(a," in base ",i0," is ",a," in base ",i0)')&
+           & trim(x),bd,trim(y),ba
+        end do
+     end program demo_base

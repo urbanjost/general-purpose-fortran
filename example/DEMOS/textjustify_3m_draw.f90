@@ -15,15 +15,24 @@
         call textsize(0.9, 1.4)
         call font("times.rb")
         call linewidth(20)
-        call seejustify( "right|top",           iany([d_right,d_top]),           -10.0, -10.0 )
-        call seejustify( "right|ycentered",     iany([d_right,d_ycentered]),     -10.0,   0.0 )
-        call seejustify( "right|bottom",        iany([d_right,d_bottom]),        -10.0, +10.0 )
-        call seejustify( "xcentered|top",       iany([d_xcentered,d_top]),         0.0, -10.0 )
-        call seejustify( "xcentered|ycentered", iany([d_xcentered,d_ycentered]),   0.0,   0.0 )
-        call seejustify( "xcentered|bottom",    iany([d_xcentered,d_bottom]),      0.0, +10.0 )
-        call seejustify( "left|top",            iany([d_left,d_top]),            +10.0, -10.0 )
-        call seejustify( "left|ycentered",      iany([d_left,d_ycentered]),      +10.0,   0.0 )
-        call seejustify( "left|bottom",         iany([d_left,d_bottom]),         +10.0, +10.0 )
+        call seejustify( "right|top",           &
+                iany([d_right,d_top]),           -10.0, -10.0 )
+        call seejustify( "right|ycentered",     &
+                iany([d_right,d_ycentered]),     -10.0,   0.0 )
+        call seejustify( "right|bottom",        &
+                iany([d_right,d_bottom]),        -10.0, +10.0 )
+        call seejustify( "xcentered|top",       &
+                iany([d_xcentered,d_top]),         0.0, -10.0 )
+        call seejustify( "xcentered|ycentered", &
+                iany([d_xcentered,d_ycentered]),   0.0,   0.0 )
+        call seejustify( "xcentered|bottom",    &
+                iany([d_xcentered,d_bottom]),      0.0, +10.0 )
+        call seejustify( "left|top",            &
+                iany([d_left,d_top]),            +10.0, -10.0 )
+        call seejustify( "left|ycentered",      &
+                iany([d_left,d_ycentered]),      +10.0,   0.0 )
+        call seejustify( "left|bottom",         &
+                iany([d_left,d_bottom]),         +10.0, +10.0 )
         call vexit()
      contains
         subroutine seejustify(string,justify,x,y)
@@ -34,7 +43,8 @@
            character(len=*)        :: string
            character(kind=c_char)  :: byte
            call color(D_RED)
-           call move2(x-1.0,y); call draw2(x+1.0,y); call move2(x,y-1.0); call draw2(x,y+1.0)
+           call move2(x-1.0,y); call draw2(x+1.0,y)
+           call move2(x,y-1.0); call draw2(x,y+1.0)
            call circle(x,y,5.0)
            call color(D_BLUE)
            call move2(x,y)

@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>logical (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>logical (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>logical(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-logical(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 LOGICAL(3) - [TYPE:LOGICAL] Conversion between kinds of logical values
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ LOGICAL(3) - [TYPE:LOGICAL] Conversion between kinds of logical values
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = logical(l [,kind])
 <P>
 <PRE>
-           elemental logical(kind=KIND) function logical(l,KIND)
+         elemental logical(kind=KIND) function logical(l,KIND)
 <P>
-            logical(kind=**),intent(in) :: l
-            integer(kind=**),intent(in),optional :: KIND
+          logical(kind=**),intent(in) :: l
+          integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = logical(l [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -106,9 +100,10 @@ L is of type logical
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND shall be a scalar integer constant expression. If KIND is present,
-the kind type parameter of the result is that specified by the value of
-KIND; otherwise, the kind type parameter is that of default logical.
+KIND shall be a scalar integer constant expression. If KIND is
+present, the kind type parameter of the result is that specified by
+the value of KIND; otherwise, the kind type parameter is that of
+default logical.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -117,6 +112,7 @@ KIND; otherwise, the kind type parameter is that of default logical.
 
 </A>
 <BLOCKQUOTE>
+<P>
 LOGICAL(3) converts one kind of logical variable to another.
 </BLOCKQUOTE>
 <A name=4>
@@ -125,6 +121,7 @@ LOGICAL(3) converts one kind of logical variable to another.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -134,8 +131,8 @@ L : The logical value to produce a copy of with kind KIND
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : indicates the kind parameter of the result. If not present, the
-default kind is returned.
+KIND : indicates the kind parameter of the result. If not present,
+the default kind is returned.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -144,8 +141,10 @@ default kind is returned.
 
 </A>
 <BLOCKQUOTE>
-The return value is a logical value equal to L, with a kind corresponding to
-KIND, or of the default logical kind if KIND is not given.
+<P>
+The return value is a logical value equal to L, with a kind
+corresponding to KIND, or of the default logical kind if KIND is not
+given.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -153,35 +152,36 @@ KIND, or of the default logical kind if KIND is not given.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      Linux
-      program demo_logical
-      ! Access array containing the kind type parameter values supported by this
-      ! compiler for entities of logical type
-      use iso_fortran_env, only : logical_kinds
-      implicit none
-      integer :: i
+    Linux
+    program demo_logical
+    ! Access array containing the kind type parameter values supported by this
+    ! compiler for entities of logical type
+    use iso_fortran_env, only : logical_kinds
+    implicit none
+    integer :: i
 <P>
-         ! list kind values supported on this platform, which generally vary
-         ! in storage size as alias declarations
-         do i =1, size(logical_kinds)
-            write(*,&#146;(*(g0))&#146;)&#146;integer,parameter :: boolean&#146;, &
-            & logical_kinds(i),&#146;=&#146;, logical_kinds(i)
-         enddo
+       ! list kind values supported on this platform, which generally vary
+       ! in storage size as alias declarations
+       do i =1, size(logical_kinds)
+          write(*,&#146;(*(g0))&#146;)&#146;integer,parameter :: boolean&#146;, &
+          & logical_kinds(i),&#146;=&#146;, logical_kinds(i)
+       enddo
 <P>
-      end program demo_logical
+    end program demo_logical
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt; integer,parameter :: boolean1=1
-       &gt; integer,parameter :: boolean2=2
-       &gt; integer,parameter :: boolean4=4
-       &gt; integer,parameter :: boolean8=8
-       &gt; integer,parameter :: boolean16=16
+     &gt; integer,parameter :: boolean1=1
+     &gt; integer,parameter :: boolean2=2
+     &gt; integer,parameter :: boolean4=4
+     &gt; integer,parameter :: boolean8=8
+     &gt; integer,parameter :: boolean16=16
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -191,6 +191,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 , related ISO_FORTRAN_ENV module - fortran 2009
 </BLOCKQUOTE>
 <A name=8>
@@ -199,16 +200,13 @@ Fortran 95 , related ISO_FORTRAN_ENV module - fortran 2009
 
 </A>
 <BLOCKQUOTE>
+<P>
 INT(3), REAL(3), CMPLX(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             logical(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>logical (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e165e29c-1504-486e-9900-02cff30e6b46 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>logical (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ea943c3f-0920-451f-8cec-025ed3e97b2b using man macros.</FONT>
 <br><br><center><img src="images/logical.3fortran.gif"></center>
 </div>
 </div>

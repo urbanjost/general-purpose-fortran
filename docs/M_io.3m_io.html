@@ -58,7 +58,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
       use M_io, only : read_line, getline, rd, get_next_char
       use M_io, only : fileopen, fileclose, filedelete, filewrite, fileread, filebyte
       use M_io, only : number_of_lines
-      use M_io, only : get_env
+      use M_io, only : get_env, is_hidden_file
       </pre>
    </dd>
    <dt> DESCRIPTION </dt><dd>
@@ -109,8 +109,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
             <li><a href="getname.3m_io.html"> GETNAME </a> - a pathname to the current executable</li>
             <li><a href="which.3m_io.html"> WHICH </a> - return a pathname for a command name found with the environment variable
             <li><a href="lookfor.3m_io.html"> LOOKFOR </a> - return a pathname for a file basename found with the directories in the
-            specified environment variable</li>
-
+            <li><a href="is_hidden_file.3m_io.html"> IS_HIDDEN_FILE </a> - classify a pathname as a hidden file pathname or not</li>
          <li> MISCELLANEOUS
          <ul>
             <li><a href="notopen.3m_io.html"> NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>

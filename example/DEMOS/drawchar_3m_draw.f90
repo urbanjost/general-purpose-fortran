@@ -9,11 +9,12 @@
      use M_draw,    only  : D_RED,     D_GREEN,    D_BLUE
      use M_draw,    only  : D_YELLOW,  D_MAGENTA,  D_CYAN
      use M_draw
+     implicit none
 
      character(len=40)   :: str1, str2, str3, str4, fonts(22)
      character(len=100)  :: buf
      character(len=1)    :: c
-     integer             :: i
+     integer             :: i, ios
      data fonts/ 'astrology', 'cursive',    'futura.l',               &
      &      'futura.m',  'gothic.eng', 'gothic.ger',             &
      &      'gothic.ita','greek',      'japanese',    'markers', &
@@ -38,7 +39,7 @@
      call ortho2(-14.0, 14.0, -14.0, 14.0)
      do i = 1, 22
         ! do the title
-        call textang(0.0)                 ! reset text angle so title is straight
+        call textang(0.0)   ! reset text angle so title is straight
         call color(D_CYAN)
         call font('futura.m')
         write(buf, '(''This is Hershey font '',a)') fonts(i)
@@ -80,7 +81,7 @@
         real              :: r
         character(len=*)  :: str
         real              :: i, inc, x, y, a
-        integer           :: j
+        integer           :: j, i10
         character(len=1)  :: c
         real,parameter    :: pi = 3.1415926535
 

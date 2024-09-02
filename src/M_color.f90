@@ -1,124 +1,90 @@
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="M_COLOR">NAME</a></dt> <dd>
-!! <!--
-!! <em>M_color(3)</em>&nbsp;-&nbsp;[M_color]&nbsp;a&nbsp;Fortran&nbsp;module&nbsp;that&nbsp;lets&nbsp;you&nbsp;convert&nbsp;between&nbsp;common&nbsp;color&nbsp;models
-!! -->
-!! <em>M_color(3)</em> - [M_color::INTRO] a Fortran module that lets you convert between common color models
-!! (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS </dt><dd>
-!! <pre>
+!!##NAME
+!!    M_color(3) - [M_color::INTRO] a Fortran module that lets you
+!!    convert between common color models (LICENSE:PD)
 !!
-!!    use M_color, only : &amp;
+!!##SYNOPSIS
 !!
-!!       &amp; <a href="hue.3m_color.html">hue</a>, &amp;
-!!       &amp; <a href="closest_color_name.3m_color.html">closest_color_name</a>, &amp;
-!!       &amp; <a href="color_name2rgb.3m_color.html">color_name2rgb</a>, &amp;
-!!       &amp; <a href="rgbmono.3m_color.html">rgbmono</a>
-!! </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION</dt>  <dd>
 !!
-!! <h1> <img src="images/swirl.gif" height="140" width="140" > Fortran color module M_color</h1>
+!!    use M_color, only : &
 !!
-!! <p>
-!!   Highly accurate color conversions are a tricky business, and color
-!!   is a complex topic; but these simplified conversions between common
-!!   color models work quite well for basic conversions.
-!! </p>
+!!       & hue, &
+!!       & closest_color_name, &
+!!       & color_name2rgb, &
+!!       & rgbmono
 !!
-!! <p>
-!!    Typically the only user routine called is
-!!    <a href="hue.3m_color.html">HUE(3f)</a>.
-!!    HUE(3f) is a single routine that interfaces to all the private
-!!    low-level color conversion routines to convert a color's components
-!!    from one color model to another. HUE(3f) converts between the
+!!##DESCRIPTION
+!!    Highly accurate color conversions are a tricky business, and color
+!!    is a complex topic; but the simplified translations between common
+!!    color models found here work quite well for basic conversions.
+!!
+!!    Typically the only user routine called is HUE(3f). HUE(3f) is
+!!    a single routine that interfaces to all the private low-level
+!!    color conversion routines to convert a color's components from
+!!    one color model to another. HUE(3f) converts between the
 !!    following color models:
-!! </p>
 !!
-!! <ul>
-!!    <li>  RGB - Red, Green, Blue (color TV monitors)
-!!    <li>  HLS - Hue, Lightness, Saturation
-!!    <li>  CMY - Cyan, Magenta, Yellow (pigment-based printing devices)
-!!    <li>  HSV - Hue, Saturation, Value
-!!    <li>  YIQ - Broadcast TV color system
-!! </ul>
+!!    RGB:  Red, Green, Blue (color TV monitors)
+!!    HLS:  Hue, Lightness, Saturation
+!!    CMY:  Cyan, Magenta, Yellow (pigment-based printing devices)
+!!    HSV:  Hue, Saturation, Value
+!!    YIQ:  Broadcast TV color system
 !!
-!! <p>
-!!   In addition to the reversible color model conversions there are a few
-!!   other user-callable color-related procedures:
-!! </p>
+!!    In addition to those reversible color model conversions there
+!!    are:
 !!
-!! <a href="closest_color_name.3m_color.html">CLOSEST_COLOR_NAME</a>:&nbsp;&nbsp;given RGB values, try to find closest named color
-!!    <br/>
-!! <a href="color_name2rgb.3m_color.html">COLOR_NAME2RGB</a>:&nbsp;&nbsp;given a color name, return RGB color values in range 0 to 100
-!!    <br/>
-!! <a href="rgbmono.3m_color.html">RGBMONO</a>:&nbsp;&nbsp;convert RGB colors to a reasonable grayscale
+!!    CLOSEST_COLOR_NAME(3f):  given RGB values, try to find closest
+!!    named color.
 !!
-!! <h3> 2*N Design of the module</h3>
+!!    COLOR_NAME2RGB(3f):  given a standard color name, return RGB color
+!!    values in range 0 to 100.
 !!
-!! <p>
-!!    The rest of the library is composed of PRIVATE procedures.
-!!    For each color model supported the general idea of the module is
-!!    that there are two routines for each color model:
-!! </p>
+!!    RGBMONO(3f):  convert RGB colors to a reasonable grayscale
+!!    (non-reversible).
 !!
-!! <ul>
-!!    <li> One converts that model to the RGB model   </li>
-!!    <li> The other converts from RGB to that model   </li>
-!! </ul>
+!!    DESIGN OF THE MODULE
 !!
-!! <p>
+!!    The rest of the library is composed of PRIVATE procedures. Internally
+!!    for each color model supported the general idea of the module is that
+!!    there are two routines for each color model:
+!!
+!!    + One converts that model to the RGB model
+!!    + The other converts from RGB to that model
+!!
 !!    This allows conversions between all color models with only 2*N
-!!    routines. That is, to go from model A to model B the module would
-!!    internally make two calls:
-!! </p>
+!!    routines. That is, to go from model A to model B the module
+!!    would internally make two calls:
 !!
-!! <pre>
-!!     call modelA2rgb(...)
-!!     call rgb2modelB(...)
-!! </pre>
+!!        call modelA2rgb(...)
+!!        call rgb2modelB(...)
 !!
-!! <p>
 !!    The resulting internal routines are:
-!! </p>
 !!
-!! <ul>
-!!    <li><a href="#HLSRGB">HLSRGB</a> given hue, lightness, saturation calculate red, green, and blue components
-!!       <ul>
-!!          <li><a href="#RGBVAL">RGBVAL</a> ensure a value is in the appropriate range and quadrant
-!!          </li>
-!!       </ul>
-!!    </li>
-!!    <li><a href="#HVSRGB">HVSRGB</a> given hue, saturation, value calculate red, green, and blue components
-!!    </li>
-!!    <li><a href="#CMYRGB">CMYRGB</a> given cyan, magenta, yellow components calculate red, green, blue components
-!!    </li>
-!!    <li><a href="#YIQRGB">YIQRGB</a> given luma(gray scale), orange-blue chrominance, and  purple-green chrominance
-!!                                     components calculate red, green, and blue components
-!!    </li>
+!!    HLSRGB:   given hue, lightness, saturation calculate red,
+!!    green, and blue components
+!!       + RGBVAL ensures a value is in the appropriate range and
+!!         quadrant
+!!    HVSRGB:   given hue, saturation, value calculate red, green,
+!!    and blue components
+!!    CMYRGB:   given cyan, magenta, yellow components calculate
+!!    red, green, blue components
+!!    YIQRGB:   given luma(gray scale), orange-blue chrominance,
+!!    and purple-green chrominance components calculate red, green,
+!!    and blue components
+!!    RGBHVS:   given red, green, blue values calculate hue, value,
+!!    and saturation components
+!!    RGBHLS:   given red, green, blue values calculate hue,
+!!    lightness, and saturation components
+!!    RGBCMY:   given red, green, blue values calculate cyan,
+!!    magenta, yellow components
+!!    RGBYIQ:   given red, green, blue values calculate luma(gray
+!!    scale), orange-blue chrominance, and purple-green chrominance
+!!    components
 !!
-!!    <li><a href="#RGBHVS">RGBHVS</a> given red, green, blue values calculate hue, value, and saturation components
-!!    </li>
-!!    <li><a href="#RGBHLS">RGBHLS</a> given red, green, blue values calculate hue, lightness, and saturation components
-!!    </li>
-!!    <li><a href="#RGBCMY">RGBCMY</a> given red, green, blue values calculate cyan, magenta, yellow components
-!!    </li>
-!!    <li><a href="#RGBYIQ">RGBYIQ</a> given red, green, blue values calculate luma(gray scale), orange-blue chrominance,
-!!                                     and purple-green chrominance components
-!!    </li>
+!!##EXAMPLE
 !!
-!! </ul>
-!! </dd>
-!! <dt>EXAMPLE</dt> <dd>
-!! <p>
-!!    Sample program:
-!! </p>
-!! <xmp>
+!!  Sample program:
+!!
 !!    program demo_M_color
 !!    use M_color, only : hue
 !!    use M_color, only : closest_color_name
@@ -126,7 +92,6 @@
 !!    use M_color, only : rgbmono
 !!    implicit none
 !!    character(len=100) :: string ! at least 20 characters
-!!    character(len=20)  :: name
 !!    character(len=20)  :: echoname
 !!    real               :: red,green,blue
 !!    real               :: gray
@@ -214,49 +179,16 @@
 !!          write(*,'(a,i0)')'STATUS ',status
 !!       end subroutine chk
 !!    end program demo_M_color
-!! </xmp>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SEE ALSO </dt> <dd>
 !!
-!! <p>
-!!    A simple interactive javascript-based
-!!    <a href="../../../public_html/javascript/color/iframe.html"> color selector</a>
-!!    lets you interactively select colors.
-!! </p>
+!!##REFERENCES
+!!    The algorithms are based on chapter 17 of "Fundamentals of
+!!    Interactive Computer Graphics"; J. D. Foley and A. Van Dam.
 !!
-!! <p>
-!!    The color wheel below was generated using a
-!!    <a href="BOOK_M_draw.html"> M_draw(3f) </a>
-!!    graphics library program
-!!    <a href="../test/demos/huegif.f90">(huegif.f90)</a>
-!!    that uses the M_color module.
-!! </p>
-!!
-!! <center>
-!!    <img alt="HLS circle" src="images/hls.gif" width="50%" height="" />
-!! </center>
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt>REFERENCES</dt><dd>
-!!   The algorithms are based on chapter 17 of
-!!   "Fundamentals of Interactive Computer Graphics"; J. D. Foley and A. Van Dam.
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
-!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -286,65 +218,64 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <dt> <a name="HUE">NAME</a> </dt><dd>
-!!    HUE(3f) - [M_color] converts a color's components from one color model
-!!    to another.
-!!    (LICENSE:PD)
-!! </dd>
+!!##NAME
+!!    HUE(3f) - [M_color] converts a color's components from one color
+!!    model to another. (LICENSE:PD)
 !!
-!! <dt> SYNOPSIS </dt><dd>
-!! <pre>
-!! subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
+!!##SYNOPSIS
 !!
-!!  character(len=*),intent(in) :: modei  ! color model of input values
-!!  character(len=*),intent(in) :: modeo  ! color model of output values
-!!  real,intent(in)             :: clr1i,clr2i,clr3i
-!!  real,intent(out)            :: clr1o,clr2o,clr3o
-!!  integer,intent(out)         :: status
-!! </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION  </dt><dd>
-!! </dd>
-!! <dt> Basic color models ..</dt><dd>
-!! <p>
-!! Valid values for modei and modeo as well as the corresponding
-!! meanings for clr1*, clr2*, and clr3* are:
+!!     subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
 !!
-!! <table border="1">
-!! <tr><th>model</th><th> clr1 </th><th> clr2      </th><th> clr3      </th></tr>
-!! <tr><td>hls  </td><td> hue  </td><td> lightness </td><td> saturation</td></tr>
-!! <tr><td>hsl  </td><td> hue  </td><td> saturation</td><td> lightness </td></tr>
-!! <tr><td>hvs  </td><td> hue  </td><td> value     </td><td> saturation</td></tr>
-!! <tr><td>hsv  </td><td> hue  </td><td> saturation</td><td> value     </td></tr>
-!! <tr><td>rgb  </td><td> red  </td><td> green     </td><td> blue      </td></tr>
-!! <tr><td>cmy  </td><td> cyan </td><td> magenta   </td><td> yellow    </td></tr>
-!! <tr><td>yiq  </td><td> luma</br> grayscale </td><td> orange-blue</br>chrominance </td><td> purple-green</br>chrominance </td></tr>
-!! </table>
-!! </p>
+!!      character(len=*),intent(in) :: modei
+!!      character(len=*),intent(in) :: modeo
+!!      real,intent(in)             :: clr1i,clr2i,clr3i
+!!      real,intent(out)            :: clr1o,clr2o,clr3o
+!!      integer,intent(out)         :: status
 !!
-!! <ul>
-!!    <li>  lightness, value, saturation, red, green, blue, cyan, magenta, and yellow range from 0 to 100,
-!!    <li>  hue ranges from 0 to 360 degrees,
-!!    <li>  y   ranges from   0 to 100,
-!!    <li>  i   ranges from -60 to 60,
-!!    <li>  q   ranges from -52 to 52
-!! </ul>
+!!##DESCRIPTION
 !!
-!! <p>
+!!    HUE(3f) translates from the first model type to the second.
+!!
+!!    MODEI specifies the color model that applies to the input color
+!!    components CLR1I, CLR2I, and CLR3I.
+!!
+!!    MODEO specifies the color model desired for the output color components
+!!    CLR1O, CLR2O, and CLR3O.
+!!
+!!    At a minimum, this procedure equates the output color values to the
+!!    input color values.
+!!
+!!    Valid values for MODEI and MODEO as well as the corresponding meanings
+!!    for CLR1*, CLR2*, and CLR3* are:
+!!
+!!       | mode  | clr1             | clr2         | clr3
+!!       | ----- | ---------------- |--------------|---------------
+!!       | 'hls' | hue              | lightness    | saturation
+!!       | 'hsl' | hue              | saturation   | lightness
+!!       | 'hvs' | hue              | value        | saturation
+!!       | 'hsv' | hue              | saturation   | value
+!!       | 'rgb' | red              | green        | blue
+!!       | 'cmy' | cyan             | magenta      | yellow
+!!       | 'yiq' | luma(gray-scale) | orange-blue  | purple-green
+!!       |       |                  | chrominance  | chrominance
+!!
+!!           + lightness, value, saturation, red, green, blue, cyan, magenta,
+!!             and yellow range from 0 to 100,
+!!           + hue ranges from 0 to 360 degrees,
+!!           + y ranges from 0 to 100,
+!!           + i ranges from -60 to 60,
+!!           + q ranges from -52 to 52
+!!
 !!    The STATUS variable can signal the following conditions:
-!! </p>
 !!
-!! <pre>
+!!      -1     modei = modeo, so no substantial conversion was done,
+!!       1     one of the input color values was outside the allowable range,
+!!       2     modei was invalid
+!!       3     modeo was invalid
+!!       999   unknown error
 !!
-!!    -1   modei = modeo, so no substantial conversion was done,
-!!     1   one of the input color values was outside the allowable range,
-!!     2   modei was invalid
-!!     3   modeo was invalid
-!! </pre>
-!! <h2>EXAMPLE</h2>
-!! <pre>
+!!##EXAMPLE
+!!
 !!
 !!   Sample program
 !!
@@ -432,55 +363,16 @@ contains
 !!     magenta4  hsv EXPECTED 300 100  55 GOT 300 100  55 STATUS 0
 !!     magenta   hsv EXPECTED 300 100 100 GOT 300 100 100 STATUS 0
 !!     maroon    hsv EXPECTED 338  73  69 GOT 337  72  69 STATUS 0
-!! </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
 !!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
 
 ! ident_2="@(#) M_color hue(3f) convert color components from one color model to another"
 
-!---- modei specifies the color model that applies to the input color components  clr1i, clr2i, & clr3i.
-!---- modeo specifies the color model desired for the output color components  clr1o, clr2o, & clr3o.
-!
-!---- valid values for modei and modeo as well as the corresponding
-!     meanings for clr1_, clr2_, and clr3_  are as shown below:
-!     . | mode  | clr1             | clr2                   | clr3
-!     . | ----- | ---------------- |------------------------|------------------------
-!     . | 'hls' | hue              | lightness              | saturation
-!     . | 'hsl' | hue              | saturation             | lightness
-!     . | 'hvs' | hue              | value                  | saturation
-!     . | 'hsv' | hue              | saturation             | value
-!     . | 'rgb' | red              | green                  | blue
-!     . | 'cmy' | cyan             | magenta                | yellow
-!     . | 'yiq' | luma(gray-scale) | orange-blue chrominance| purple-green chrominance
-!
-!---- lightness, value, saturation, red, green, blue, cyan, magenta, yellow & y range from 0 to 100,
-!     hue ranges from 0 to 360 degrees,
-!     i   ranges from -60 to 60,
-!     q   ranges from -52 to 52
-!
-!---- at a minimum, this procedure equates the output color values to the input color values.
-!
-!---- status signals the following conditions:
-!     .  -1   modei = modeo, so no substantial conversion was done,
-!     .   1   one of the input color values was outside the allowable range,
-!     .   2   modei was invalid
-!     .   3   modeo was invalid
-!     . 999   unknown error
-!
 character(len=*),intent(in) :: modei
 real,intent(in)             :: clr1i,clr2i,clr3i
 character(len=*),intent(in) :: modeo
@@ -571,70 +463,50 @@ end subroutine hue
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="RGBHLS">NAME</a> </dt><dd>
-!!     RGBHLS(3fp) - [M_color] Given red, green, and blue color components
-!!     calculates the hue, lightness, and saturation for a color
-!!     (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS  </dt><dd>
-!!    <pre>
+!!##NAME
+!!    RGBHLS(3fp) - [M_color] Given red, green, and blue color components
+!!    calculates the hue, lightness, and saturation for a color (LICENSE:PD)
 !!
-!!    subroutine rgbhls(r,g,b,h,l,s,status)
+!!##SYNOPSIS
 !!
-!!     ! red component as a value of 0 to 100
-!!     real, intent(in)  :: r
-!!     ! green component as a value of 0 to 100
-!!     real, intent(in)  :: g
-!!     ! blue component as a value of 0 to 100
-!!     real, intent(in)  :: b
-!!     ! hue value in the range of 0 to 360 degrees
-!!     real, intent(out) :: h
-!!     ! lightness as a percent value from 0 to 100
-!!     real, intent(out) :: l
-!!     ! saturation as a percent from 0 to 100
-!!     real, intent(out) :: s
-!!     integer           :: status
-!!    </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION  </dt><dd>
 !!
-!! RGB values are in the range 0-100; hue is 0-360 degrees; lightness
-!! and saturation have a range of 0-100.
-!! <br/><br/>
+!!     subroutine rgbhls(r,g,b,h,l,s,status)
 !!
-!! <blockquote>
-!! <table border="1" >
-!! <tr><TH>Color</TH><TH COLSPAN="3">RGB</TH><TH COLSPAN="3">HLS</TH><TH>Sample</TH></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Red</td><td WIDTH="30">100.0</td><td WIDTH="30">0.0</td><td WIDTH="30">0.0</td><td WIDTH="30">0</td><td WIDTH="30">50.0</td><td WIDTH="30">100.0</td><td style="background-color:#FF0000">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Yellow</td><td>100.0</td><td>100.0</td><td>0.0</td><td>60</td><td>50.0</td><td>100.0</td><td style="background-color:#FFFF00">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Green</td><td>0.0</td><td>100.0</td><td>0.0</td><td>120</td><td>50.0</td><td>100.0</td><td style="background-color:#00FF00">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Cyan</td><td>0.0</td><td>100.0</td><td>100.0</td><td>180</td><td>50.0</td><td>100.0</td><td style="background-color:#00FFFF">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Blue</td><td>0.0</td><td>0.0</td><td>100.0</td><td>240</td><td>50.0</td><td>100.0</td><td style="background-color:#0000FF">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Magenta</td><td>100.0</td><td>0.0</td><td>100.0</td><td>300</td><td>50.0</td><td>100.0</td><td style="background-color:#FF00FF">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">White</td><td>100.0</td><td>100.0</td><td>100.0</td><td>(any)</td><td>100.0</td><td>(any)</td><td style="background-color:#FFFFFF">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Black</td><td>0.0</td><td>0.0</td><td>0.0</td><td>(any)</td><td>0.0</td><td>(any)</td><td style="background-color:#000000">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Maroon</td><td>50.0</td><td>0.0</td><td>0.0</td><td>0</td><td>25.0</td><td>100.0</td><td style="background-color:#800000">&nbsp;</td></tr>
-!! <tr ALIGN="right"><td ALIGN="left">Pink</td><td>100.0</td><td>50.0</td><td>50.0</td><td>0</td><td>75.0</td><td>100.0</td><td style="background-color:#FF8080">&nbsp;</td></tr>
-!! </table>
-!! </blockquote>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
+!!      ! red component as a value of 0 to 100
+!!      real, intent(in)  :: r
+!!      ! green component as a value of 0 to 100
+!!      real, intent(in)  :: g
+!!      ! blue component as a value of 0 to 100
+!!      real, intent(in)  :: b
+!!      ! hue value in the range of 0 to 360 degrees
+!!      real, intent(out) :: h
+!!      ! lightness as a percent value from 0 to 100
+!!      real, intent(out) :: l
+!!      ! saturation as a percent from 0 to 100
+!!      real, intent(out) :: s
+!!      integer           :: status
 !!
-!!    John S. Urban
+!!##DESCRIPTION
+!!    RGB values are in the range 0-100; hue is 0-360 degrees;
+!!    lightness and saturation have a range of 0-100.
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
+!!      Color   RGB                 HLS
+!!      Red     100.0   0.0   0.0     0  50.0 100.0
+!!      Yellow  100.0 100.0   0.0    60  50.0 100.0
+!!      Green     0.0 100.0   0.0   120  50.0 100.0
+!!      Cyan      0.0 100.0 100.0   180  50.0 100.0
+!!      Blue      0.0   0.0 100.0   240  50.0 100.0
+!!      Magenta 100.0   0.0 100.0   300  50.0 100.0
+!!      White   100.0 100.0 100.0 (any) 100.0 (any)
+!!      Black     0.0   0.0   0.0 (any)   0.0 (any)
+!!      Maroon   50.0   0.0   0.0     0  25.0 100.0
+!!      Pink    100.0  50.0  50.0     0  75.0 100.0
 !!
-!!    Public Domain
+!!    AUTHOR
+!!           John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
+!!    LICENSE
+!!           Public Domain
 subroutine rgbhls(r0,g0,b0,h,l,s,status)
 
 ! ident_3="@(#) M_color rgbhls(3fp) given red green blue values calculate hue lightness saturation"
@@ -695,76 +567,59 @@ end subroutine rgbhls
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="RGBHVS">NAME</a> </dt><dd>
-!!     RGBHVS(3fp) - [M_color] calculates the hue, value, &amp; saturation
-!!     for a color given in red, green, &amp; blue components values.
-!!     (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS  </dt><dd>
-!!    <pre>
-!!    subroutine rgbhvs(r,g,b,h,v,s,status)
+!!##NAME
+!!    RGBHVS(3fp) - [M_color] calculates the hue, value, & saturation
+!!    for a color given in red, green, & blue components values.
+!!    (LICENSE:PD)
 !!
-!!     ! the red component as a value of 0 to 100.
-!!     real, intent(in)  :: r
-!!     ! the green component as a value of 0 to 100.
-!!     real, intent(in)  :: g
-!!     ! the blue component as a value of 0 to 100.
-!!     real, intent(in)  :: b
-!!     ! the hue value in the range of 0 to 360 degrees
-!!     real, intent(out) :: h
-!!     ! the "value" as a percent value from 0 to 100.
-!!     real, intent(out) :: v
-!!     ! the saturation as a percent from 0 to 100.
-!!     real, intent(out) :: s
-!!     integer           :: status
-!!    <pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION  </dt><dd>
+!!##SYNOPSIS
 !!
-!! RGBHVS() calculates the hue, value, &amp; saturation
-!! for a color given in red, green, &amp; blue components values.
-!! <br/><br/>
 !!
-!! <blockquote>
-!! <table border="1" class="dtable" >
-!! <tr>      <th>                                               Color</th>  <th>Color<br>name</th> <th>Hex    </th>  <th>(R,G,B)</th>        <th>(H,S,V)</th>                  </tr>
-!! <tr>      <td              style="background-color:#000000">&nbsp;</td>  <td>Black</td>         <td>#000000</td>  <td>(0,0,0)</td>        <td>(0&ordm;,0%,0%)</td>        </tr>
-!! <tr>      <td              style="background-color:#FFFFFF">&nbsp;</td>  <td>White</td>         <td>#FFFFFF</td>  <td>(100,100,100)</td>  <td>(0&ordm;,0%,100%)</td>      </tr>
-!! <tr>      <td              style="background-color:#FF0000">&nbsp;</td>  <td>Red</td>           <td>#FF0000</td>  <td>(100,0,0)</td>      <td>(0&ordm;,100%,100%)</td>    </tr>
-!! <tr>      <td              style="background-color:#00FF00">&nbsp;</td>  <td>Lime</td>          <td>#00FF00</td>  <td>(0,100,0)</td>      <td>(120&ordm;,100%,100%)</td>  </tr>
-!! <tr>      <td              style="background-color:#0000FF">&nbsp;</td>  <td>Blue</td>          <td>#0000FF</td>  <td>(0,0,100)</td>      <td>(240&ordm;,100%,100%)</td>  </tr>
-!! <tr>      <td              style="background-color:#FFFF00">&nbsp;</td>  <td>Yellow</td>        <td>#FFFF00</td>  <td>(100,100,0)</td>    <td>(60&ordm;,100%,100%)</td>   </tr>
-!! <tr>      <td              style="background-color:#00FFFF">&nbsp;</td>  <td>Cyan</td>          <td>#00FFFF</td>  <td>(0,100,100)</td>    <td>(180&ordm;,100%,100%)</td>  </tr>
-!! <tr>      <td              style="background-color:#FF00FF">&nbsp;</td>  <td>Magenta</td>       <td>#FF00FF</td>  <td>(100,0,100)</td>    <td>(300&ordm;,100%,100%)</td>  </tr>
-!! <tr>      <td              style="background-color:#C0C0C0">&nbsp;</td>  <td>Silver</td>        <td>#C0C0C0</td>  <td>(75,75,75)</td>     <td>(0&ordm;,0%,75%)</td>       </tr>
-!! <tr>      <td              style="background-color:#808080">&nbsp;</td>  <td>Gray</td>          <td>#808080</td>  <td>(50,50,50)</td>     <td>(0&ordm;,0%,50%)</td>       </tr>
-!! <tr>      <td              style="background-color:#800000">&nbsp;</td>  <td>Maroon</td>        <td>#800000</td>  <td>(50,0,0)</td>       <td>(0&ordm;,100%,50%)</td>     </tr>
-!! <tr>      <td              style="background-color:#808000">&nbsp;</td>  <td>Olive</td>         <td>#808000</td>  <td>(50,50,0)</td>      <td>(60&ordm;,100%,50%)</td>    </tr>
-!! <tr>      <td              style="background-color:#008000">&nbsp;</td>  <td>Green</td>         <td>#008000</td>  <td>(0,50,0)</td>       <td>(120&ordm;,100%,50%)</td>   </tr>
-!! <tr>      <td              style="background-color:#800080">&nbsp;</td>  <td>Purple</td>        <td>#800080</td>  <td>(50,0,50)</td>      <td>(300&ordm;,100%,50%)</td>   </tr>
-!! <tr>      <td              style="background-color:#008080">&nbsp;</td>  <td>Teal</td>          <td>#008080</td>  <td>(0,50,50)</td>      <td>(180&ordm;,100%,50%)</td>   </tr>
-!! <tr>      <td              style="background-color:#000080">&nbsp;</td>  <td>Navy</td>          <td>#000080</td>  <td>(0,0,50)</td>       <td>(240&ordm;,100%,50%)</td>     </tr>
-!! </table>
-!! </blockquote>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
+!!     subroutine rgbhvs(r,g,b,h,v,s,status)
 !!
+!!      ! the red component as a value of 0 to 100.
+!!      real, intent(in)  :: r
+!!      ! the green component as a value of 0 to 100.
+!!      real, intent(in)  :: g
+!!      ! the blue component as a value of 0 to 100.
+!!      real, intent(in)  :: b
+!!      ! the hue value in the range of 0 to 360 degrees
+!!      real, intent(out) :: h
+!!      ! the "value" as a percent value from 0 to 100.
+!!      real, intent(out) :: v
+!!      ! the saturation as a percent from 0 to 100.
+!!      real, intent(out) :: s
+!!      integer           :: status
+!!
+!!
+!!##DESCRIPTION
+!!    RGBHVS(3f) calculates the hue, value, & saturation for a color
+!!    given in red, green, & blue components values.
+!!
+!!       Color    Color
+!!       name     Hex      (R,G,B)        (H,S,V)
+!!       Black    #000000  (0,0,0)        (0º,0%,0%)
+!!       White    #FFFFFF  (100,100,100)  (0º,0%,100%)
+!!       Red      #FF0000  (100,0,0)      (0º,100%,100%)
+!!       Lime     #00FF00  (0,100,0)      (120º,100%,100%)
+!!       Blue     #0000FF  (0,0,100)      (240º,100%,100%)
+!!       Yellow   #FFFF00  (100,100,0)    (60º,100%,100%)
+!!       Cyan     #00FFFF  (0,100,100)    (180º,100%,100%)
+!!       Magenta  #FF00FF  (100,0,100)    (300º,100%,100%)
+!!       Silver   #C0C0C0  (75,75,75)     (0º,0%,75%)
+!!       Gray     #808080  (50,50,50)     (0º,0%,50%)
+!!       Maroon   #800000  (50,0,0)       (0º,100%,50%)
+!!       Olive    #808000  (50,50,0)      (60º,100%,50%)
+!!       Green    #008000  (0,50,0)       (120º,100%,50%)
+!!       Purple   #800080  (50,0,50)      (300º,100%,50%)
+!!       Teal     #008080  (0,50,50)      (180º,100%,50%)
+!!       Navy     #000080  (0,0,50)       (240º,100%,50%)
+!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 subroutine rgbhvs(r0,g0,b0,h,v,s,status)
 
 ! ident_4="@(#) M_color rgbhvs(3fp) given red green blue calculate hue saturation value components"
@@ -827,53 +682,39 @@ end subroutine rgbhvs
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="CMYRGB">NAME</a> </dt><dd>
-!!     cmyrgb(3fp) - [M_color] calculates the cyan, magenta, and yellow
-!!     components given the  red, green, and blue component values.
-!!     (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS  </dt><dd>
-!!    <pre>
-!!    subroutine cmyrgb(c,m,y,r,g,b,status)
+!!##NAME
+!!    cmyrgb(3fp) - [M_color] calculates the cyan, magenta, and yellow
+!!    components given the red, green, and blue component values.
+!!    (LICENSE:PD)
 !!
-!!     ! cyan component as a value in the range of 0 to 100
-!!     real, intent(in)  :: c
-!!     ! magenta component as a value in the range of 0 to 100
-!!     real, intent(in)  :: m
-!!     ! yellow component as a value in the range of 0 to 100
-!!     real, intent(in)  :: y
-!!     ! red component as a value in the range of 0 to 100
-!!     real, intent(out) :: r
-!!     ! green component as a value in the range of 0 to 100
-!!     real, intent(out) :: g
-!!     ! blue component as a value in the range of 0 to 100
-!!     real, intent(out) :: b
-!!     integer           :: status
-!!    </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION  </dt><dd>
-!!     cmyrgb() calculates the cyan, magenta, and yellow components
-!!     given the  red, green, and blue component values.
-!! <!-- ======================================================================= -->
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
+!!##SYNOPSIS
 !!
+!!
+!!     subroutine cmyrgb(c,m,y,r,g,b,status)
+!!
+!!      ! cyan component as a value in the range of 0 to 100
+!!      real, intent(in)  :: c
+!!      ! magenta component as a value in the range of 0 to 100
+!!      real, intent(in)  :: m
+!!      ! yellow component as a value in the range of 0 to 100
+!!      real, intent(in)  :: y
+!!      ! red component as a value in the range of 0 to 100
+!!      real, intent(out) :: r
+!!      ! green component as a value in the range of 0 to 100
+!!      real, intent(out) :: g
+!!      ! blue component as a value in the range of 0 to 100
+!!      real, intent(out) :: b
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    CMYRGB(3f) calculates the cyan, magenta, and yellow components
+!!    given the red, green, and blue component values.
+!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 subroutine cmyrgb(c,m,y,r,g,b,status)
 
 ! ident_5="@(#) M_color cmyrgb(3fp) given cyan magenta yellow calculate red green blue components"
@@ -894,67 +735,54 @@ end subroutine cmyrgb
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="RGBCMY">NAME</a> </dt><dd>
-!!     rgbcmy(3fp) - [M_color] calculates the cyan, magenta, and yellow
-!!     components given the  red, green, and blue component values.
-!!     (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS  </dt><dd>
-!!    <pre>
-!!    subroutine rgbcmy(r,g,b,c,m,y,status)
+!!##NAME
+!!    rgbcmy(3fp) - [M_color] calculates the cyan, magenta, and yellow
+!!    components given the red, green, and blue component values.
+!!    (LICENSE:PD)
 !!
-!!     ! the red component as a value in the range of 0 to 100
-!!     real, intent(in)  :: r
-!!     ! the green component as a value in the range of 0 to 100
-!!     real, intent(in)  :: g
-!!     ! the blue component as a value in the range of 0 to 100
-!!     real, intent(in)  :: b
-!!     ! the cyan component as a value in the range of 0 to 100
-!!     real, intent(out) :: c
-!!     ! the magenta component as a value in the range of 0 to 100
-!!     real, intent(out) :: m
-!!     ! the yellow component as a value in the range of 0 to 100
-!!     real, intent(out) :: y
-!!     integer           :: status
-!!    </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION  </dt><dd>
-!! Table ...
-!! <br/><br/>
+!!##SYNOPSIS
 !!
-!! <blockquote>
-!! <table border="1" >
-!! <tr> <th>Color      </th>                                              <th>Color<p>name </th> <th>(C,M,Y)</th>        <th>(  R,  G,  B)</th>  <th>Hex</th>      </tr>
-!! <tr> <td style="background-color:#000000">&nbsp;</td> <td>Black</td>   <td>(100,100,100)</td> <td>(  0,  0,  0)</td>  <td>#000000</td>  </tr>
-!! <tr> <td style="background-color:#FFFFFF">&nbsp;</td> <td>White</td>   <td>(  0,  0,  0)</td> <td>(100,100,100)</td>  <td>#FFFFFF</td>  </tr>
-!! <tr> <td style="background-color:#FF0000">&nbsp;</td> <td>Red</td>     <td>(  0,100,100)</td> <td>(100,  0,  0)</td>  <td>#FF0000</td>  </tr>
-!! <tr> <td style="background-color:#00FF00">&nbsp;</td> <td>Green</td>   <td>(100,  0,100)</td> <td>(  0,100,  0)</td>  <td>#00FF00</td>  </tr>
-!! <tr> <td style="background-color:#0000FF">&nbsp;</td> <td>Blue</td>    <td>(100,100,  0)</td> <td>(  0,  0,100)</td>  <td>#0000FF</td>  </tr>
-!! <tr> <td style="background-color:#FFFF00">&nbsp;</td> <td>Yellow</td>  <td>(  0,  0,100)</td> <td>(100,100,  0)</td>  <td>#FFFF00</td>  </tr>
-!! <tr> <td style="background-color:#00FFFF">&nbsp;</td> <td>Cyan</td>    <td>(100,  0,  0)</td> <td>(  0,100,100)</td>  <td>#00FFFF</td>  </tr>
-!! <tr> <td style="background-color:#FF00FF">&nbsp;</td> <td>Magenta</td> <td>(  0,100,  0)</td> <td>(100,  0,100)</td>  <td>#FF00FF</td>  </tr>
-!! </table>
-!! </blockquote>
-!! <!-- ======================================================================= -->
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
 !!
+!!     subroutine rgbcmy(r,g,b,c,m,y,status)
+!!
+!!      ! the red component as a value in the range of 0 to 100
+!!      real, intent(in)  :: r
+!!      ! the green component as a value in the range of 0 to 100
+!!      real, intent(in)  :: g
+!!      ! the blue component as a value in the range of 0 to 100
+!!      real, intent(in)  :: b
+!!      ! the cyan component as a value in the range of 0 to 100
+!!      real, intent(out) :: c
+!!      ! the magenta component as a value in the range of 0 to 100
+!!      real, intent(out) :: m
+!!      ! the yellow component as a value in the range of 0 to 100
+!!      real, intent(out) :: y
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    rgbcmy(3fp) calculates the cyan, magenta, and yellow
+!!    components given the red, green, and blue component values.
+!!
+!!##EXAMPLE
+!!
+!!  Sample values:
+!!
+!!       Color
+!!       name     (C,M,Y)        (R,G,B)        Hex
+!!       Black    (100,100,100)  (0,0,0)        #000000
+!!       White    (0,0,0)        (100,100,100)  #FFFFFF
+!!       Red      (0,100,100)    (100,0,0)      #FF0000
+!!       Green    (100,0,100)    (0,100,0)      #00FF00
+!!       Blue     (100,100,0)    (0,0,100)      #0000FF
+!!       Yellow   (0,0,100)      (100,100,0)    #FFFF00
+!!       Cyan     (100,0,0)      (0,100,100)    #00FFFF
+!!       Magenta  (0,100,0)      (100,0,100)    #FF00FF
+!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 subroutine rgbcmy(r,g,b,c,m,y,status)
 
 ! ident_6="@(#) M_color rgbcmy(3fp) given red green blue calculate cyan magenta yellow components"
@@ -983,7 +811,7 @@ end subroutine rgbcmy
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine rgbmono</a>(rr,rg,rb,ri,status)
+!!    subroutine rgbmono(rr,rg,rb,ri,status)
 !!
 !!     real, intent(in)  :: RR
 !!     real, intent(in)  :: RG
@@ -1069,42 +897,28 @@ end subroutine rgbmono
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="RGBVAL">NAME</a> </dt><dd>
-!!    RGBVAL(3fp) - [M_color] is an internal private function used by hlsrgb(3fp).
-!!    (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS</dt><dd>
-!!    <pre>
-!!    subroutine rgbval</a>(clr1,clr2,h)
+!!##NAME
+!!    RGBVAL(3fp) - [M_color] is an internal private function used by
+!!    hlsrgb(3fp). (LICENSE:PD)
 !!
-!!     integer, intent(in) :: h ! H is the hue value in degrees
-!!     real, intent(in) :: clr1 !
-!!     real, intent(in) :: clr2 !
-!!    </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION</dt>  <dd>
-!!    Function RGBVAL(3f) is an internal private function used by hlsrgb().
+!!##SYNOPSIS
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
 !!
+!!     subroutine rgbval(clr1,clr2,h)
+!!
+!!      integer, intent(in) :: h ! H is the hue value in degrees
+!!      real, intent(in) :: clr1 !
+!!      real, intent(in) :: clr2 !
+!!
+!!##DESCRIPTION
+!!    Function RGBVAL(3f) is an internal private function used by
+!!    hlsrgb().
+!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
-!! <!-- ======================================================================= -->
 real function rgbval(clr1,clr2,h)
 
 ! ident_8="@(#) M_color rgbval(3fp) ensure a value is in the appropriate range and quadrant"
@@ -1144,53 +958,39 @@ end function rgbval
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="HLSRGB">NAME</a> </dt><dd>
-!!     HLSRGB(3fp) - [M_color] calculates the red, green, &amp; blue components for a
-!!     color given in hue, lightness, &amp; saturation values.
-!!     (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS</dt>  <dd>
-!!    <pre>
-!!    subroutine hlsrgb</a> (h,l,s,r,g,b,status)
+!!##NAME
+!!    HLSRGB(3fp) - [M_color] calculates the red, green, & blue
+!!    components for a color given in hue, lightness, & saturation
+!!    values. (LICENSE:PD)
 !!
-!!     ! hue value in the range of 0 to 360 degrees
-!!     real, intent(in)  :: h
-!!     ! lightness as a percent value from 0 to 100.
-!!     real, intent(in)  :: l
-!!     ! saturation as a percent from 0 to 100.
-!!     real, intent(in)  :: s
-!!     ! red component as a value of 0 to 100.
-!!     real, intent(out) :: r
-!!     ! green component as a value of 0 to 100.
-!!     real, intent(out) :: g
-!!     ! blue component as a value of 0 to 100.
-!!     real, intent(out) :: b
-!!     integer           :: status
-!!    </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION</dt>  <dd>
+!!##SYNOPSIS
 !!
-!!     HLSRGB() calculates the red, green, &amp; blue components for a
-!!      color given in hue, lightness, &amp; saturation values.
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
 !!
+!!     subroutine hlsrgb (h,l,s,r,g,b,status)
+!!
+!!      ! hue value in the range of 0 to 360 degrees
+!!      real, intent(in)  :: h
+!!      ! lightness as a percent value from 0 to 100.
+!!      real, intent(in)  :: l
+!!      ! saturation as a percent from 0 to 100.
+!!      real, intent(in)  :: s
+!!      ! red component as a value of 0 to 100.
+!!      real, intent(out) :: r
+!!      ! green component as a value of 0 to 100.
+!!      real, intent(out) :: g
+!!      ! blue component as a value of 0 to 100.
+!!      real, intent(out) :: b
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    HLSRGB(3f) calculates the red, green, & blue components for a
+!!    color given in hue, lightness, & saturation values.
+!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 subroutine hlsrgb(H,L,S,R,G,B,status)
 
 ! ident_9="@(#) M_color hlsrgb(3fp) convert HLS(hue lightness saturation) values to RGB components"
@@ -1229,53 +1029,39 @@ end subroutine hlsrgb
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="HVSRGB">NAME</a> </dt><dd>
-!!     HVSRGB(3fp) - [M_color] calculates the red, green, &amp; blue components for a
-!!      color given in hue, value, &amp; saturation values.
-!!      (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS </dt><dd>
-!!    <pre>
-!!    subroutine hvsrgb</a>(h,v,s,r,g,b,status)
+!!##NAME
+!!    HVSRGB(3fp) - [M_color] calculates the red, green, & blue
+!!    components for a color given in hue, value, & saturation values.
+!!    (LICENSE:PD)
 !!
-!!     ! H is the hue value in the range of 0 to 360 degrees
-!!     real, intent(in)  :: h
-!!     ! V is the "value" as a percent value from 0 to 100.
-!!     real, intent(in)  :: v
-!!     ! S is the saturation as a percent from 0 to 100.
-!!     real, intent(in)  :: s
-!!     ! R is the red component as a value of 0 to 100.
-!!     real, intent(out) :: r
-!!     ! G is the green component as a value of 0 to 100.
-!!     real, intent(out) :: g
-!!     ! B is the blue component as a value of 0 to 100.
-!!     real, intent(out) :: b
-!!     integer           :: status
-!!    </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION </dt><dd>
+!!##SYNOPSIS
 !!
-!!     HVSRGB() calculates the red, green, &amp; blue components for a
-!!      color given in hue, value, &amp; saturation values.
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
 !!
+!!     subroutine hvsrgb(h,v,s,r,g,b,status)
+!!
+!!      ! H is the hue value in the range of 0 to 360 degrees
+!!      real, intent(in)  :: h
+!!      ! V is the "value" as a percent value from 0 to 100.
+!!      real, intent(in)  :: v
+!!      ! S is the saturation as a percent from 0 to 100.
+!!      real, intent(in)  :: s
+!!      ! R is the red component as a value of 0 to 100.
+!!      real, intent(out) :: r
+!!      ! G is the green component as a value of 0 to 100.
+!!      real, intent(out) :: g
+!!      ! B is the blue component as a value of 0 to 100.
+!!      real, intent(out) :: b
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    HVSRGB(3f) calculates the red, green, & blue components for a
+!!    color given in hue, value, & saturation values.
+!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 subroutine hvsrgb(h,v,s,r,g,b,status)
 
 ! ident_10="@(#) M_color hvsrgb(3fp) given hue saturation value calculate red green blue components"
@@ -1329,44 +1115,28 @@ end subroutine hvsrgb
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="YIQRGB">NAME</a> </dt><dd>
-!!    YIQRGB(3fp) - [M_color] Convert luma, orange-blue chrominance, and  purple-green chrominance
-!!    to RGB values.
-!!    (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS  </dt><dd>
-!!    <pre>
-!!    subroutine yiqrgb(y,i,q,r,g,b,status)
+!!##NAME
+!!    YIQRGB(3fp) - [M_color] Convert luma, orange-blue chrominance,
+!!    and purple-green chrominance to RGB values. (LICENSE:PD)
 !!
-!!     real,intent(in)  :: y,i,q
-!!     real,intent(out) :: r,g,b
-!!     integer          :: status
-!!    </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION  </dt><dd>
+!!##SYNOPSIS
 !!
-!!    Convert luma, orange-blue chrominance, and  purple-green chrominance
-!!    to RGB values.
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
+!!     subroutine yiqrgb(y,i,q,r,g,b,status)
 !!
+!!      real,intent(in)  :: y,i,q
+!!      real,intent(out) :: r,g,b
+!!      integer          :: status
+!!
+!!##DESCRIPTION
+!!    Convert luma, orange-blue chrominance, and purple-green
+!!    chrominance to RGB values.
+!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 subroutine yiqrgb(y,i,q,r,g,b,status)
 
 ! ident_11="@(#) M_color yiqrgb(3fp) convert luma orange-blue chrominance purple-green chrominance to RGB"
@@ -1404,40 +1174,28 @@ end subroutine yiqrgb
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
-!! <dl>
-!! <!-- ======================================================================= -->
-!! <dt> <a name="RGBYIQ">NAME</a> </dt><dd>
-!!    RGBYIQ(3fp) - [M_color] Convert RGB values to luma, orange-blue chrominance, and  purple-green chrominance.
-!!    (LICENSE:PD)
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> SYNOPSIS  </dt><dd>
-!!    <pre>
-!!    subroutine rgbyiq(r,g,b,y,i,q,status)
+!!##NAME
+!!    RGBYIQ(3fp) - [M_color] Convert RGB values to luma, orange-blue
+!!    chrominance, and purple-green chrominance. (LICENSE:PD)
 !!
-!!     real,intent(in)  :: r,g,b
-!!     real,intent(out) :: y,i,q
-!!     integer          :: status
-!!    </pre>
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> DESCRIPTION  </dt><dd>
-!!    Convert RGB values to luma, orange-blue chrominance, and  purple-green chrominance.
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> AUTHOR </dt><dd>
+!!##SYNOPSIS
 !!
+!!
+!!     subroutine rgbyiq(r,g,b,y,i,q,status)
+!!
+!!      real,intent(in)  :: r,g,b
+!!      real,intent(out) :: y,i,q
+!!      integer          :: status
+!!
+!!##DESCRIPTION
+!!    Convert RGB values to luma, orange-blue chrominance, and
+!!    purple-green chrominance.
+!!
+!!##AUTHOR
 !!    John S. Urban
 !!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! <dt> LICENSE </dt><dd>
-!!
+!!##LICENSE
 !!    Public Domain
-!!
-!! </dd>
-!! <!-- ======================================================================= -->
-!! </dl>
 subroutine rgbyiq(r,g,b,y,i,q,status)
 
 ! ident_12="@(#) M_color rgbyiq(3fp) convert RGB to luma orange-blue chrominance purple-green chrominance"
@@ -1476,7 +1234,7 @@ end subroutine rgbyiq
 !!     character(len=20),intent(out) :: closestname
 !!
 !!##DESCRIPTION
-!!    closest_color_name() returns the closest name for the given RGB values.
+!!    CLOSEST_COLOR_NAME(3f) returns the closest name for the given RGB values.
 !!    Most X11 Windows color names are supported.
 !!
 !!##OPTIONS
@@ -1485,7 +1243,7 @@ end subroutine rgbyiq
 !!    B   blue component, range of 0 to 100
 !!
 !!##RETURNS
-!!    CLOSESTNAME   name of color found closest to given RGB value</li>
+!!    CLOSESTNAME   name of color found closest to given RGB value
 !!
 !!##EXAMPLE
 !!
@@ -1562,9 +1320,23 @@ end subroutine closest_color_name
 !!     character(len=20),intent(out)  :: echoname
 !!
 !!##DESCRIPTION
-!!    COLOR_NAME2RGB() returns the RGB values in the range 0 to 100
+!!    COLOR_NAME2RGB(3f) returns the RGB values in the range 0 to 100
 !!    for a given known color name. Most X11 Windows color names are
-!!    supported. If the name is not found, ECHONAME is set to "Unknown".
+!!    supported. If the name is not found ECHONAME is set to "Unknown".
+!!
+!!    Note that an integer converted to a string can be used to go
+!!    sequentially thru the names until ECHONAME="Unknown"
+!!##OPTIONS
+!!      name      The name of the color to resolve to RGB values
+!!                It may also be an integer from 1 to N, where N+1
+!!                will return echoname="Unknown"
+!!##RETURNS
+!!      r,g,b     Integer values in the range of 0 to 100 representing
+!!                the colors in terms of Red, Green, and Blue component
+!!                values.
+!!      echoname  returns color name in ECHONAME. This is usually not useful
+!!                as it just echoes the input name unless the input name was
+!!                a numeric string.
 !!
 !!##EXAMPLE
 !!
@@ -1581,8 +1353,7 @@ end subroutine closest_color_name
 !!     real              :: red,green,blue
 !!     integer           :: i
 !!     TRYALL: do i=1,10000
-!!        ! weird little thing where the color names have aliases
-!!        ! that are numeric strings
+!!        ! color names may be numeric strings from 1 to N
 !!        write(name,'(i0)')i
 !!        ! get the RGB values and English name of the color
 !!        call color_name2rgb(name,red,green,blue,echoname)
@@ -2179,7 +1950,7 @@ character(len=20)                      :: newname
    if(present(echoname)) then
       echoname = newname
    endif
-   r=r/2.55; g=g/2.55; b=b/2.55 ! take values from range of 0 to 255 to 0 to 100
+   r=r/2.55; g=g/2.55; b=b/2.55 ! reduce values from range of 0 to 255 to 0 to 100
 end subroutine color_name2rgb
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

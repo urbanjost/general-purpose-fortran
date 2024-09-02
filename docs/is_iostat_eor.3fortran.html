@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>is_iostat_eor (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>is_iostat_eor (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>is_iostat_eor(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is_iostat_eor(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 IS_IOSTAT_EOR(3) - [STATE:INQUIRY] Test for end-of-record value
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ IS_IOSTAT_EOR(3) - [STATE:INQUIRY] Test for end-of-record value
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = is_iostat_eor(i)
 <P>
 <PRE>
-           elemental integer function is_iostat_eor(i)
+         elemental integer function is_iostat_eor(i)
 <P>
-            integer(kind=KIND),intent(in) :: i
+          integer(kind=KIND),intent(in) :: i
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = is_iostat_eor(i)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,9 +103,11 @@ the return value is a default logical
 
 </A>
 <BLOCKQUOTE>
-IS_IOSTAT_EOR(3) tests whether a variable has the value of the I/O status
-"end of record". The function is equivalent to comparing the variable with
-the IOSTAT_EOR parameter of the intrinsic module ISO_FORTRAN_ENV.
+<P>
+IS_IOSTAT_EOR(3) tests whether a variable has the value of the I/O
+status "end of record". The function is equivalent to comparing the
+variable with the IOSTAT_EOR parameter of the intrinsic module
+ISO_FORTRAN_ENV.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -119,6 +115,7 @@ the IOSTAT_EOR parameter of the intrinsic module ISO_FORTRAN_ENV.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -132,62 +129,59 @@ I : The value to test as indicating "end of record".
 
 </A>
 <BLOCKQUOTE>
-Returns .true. if and only if I has the value which indicates an end-of-
-<TABLE cellpadding=3><!-- tsb: Returns .true. if and only if I has the value which indicates an end-of-
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>record condition for iostat= specifiers, and is .false.</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<P>
+Returns .true. if and only if I has the value which indicates an
+end-of-record condition for iostat= specifiers, and is .false.
 otherwise.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
 <A name=6>
 
      <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_is_iostat_eor
-      use iso_fortran_env, only : iostat_eor
-      implicit none
-      integer :: inums(5), lun, ios
+    program demo_is_iostat_eor
+    use iso_fortran_env, only : iostat_eor
+    implicit none
+    integer :: inums(5), lun, ios
 <P>
-        ! create a test file to read from
-         open(newunit=lun, form=&#146;formatted&#146;,status=&#146;scratch&#146;)
-         write(lun, &#146;(a)&#146;) &#146;10 20 30&#146;
-         write(lun, &#146;(a)&#146;) &#146;40 50 60 70&#146;
-         write(lun, &#146;(a)&#146;) &#146;80 90&#146;
-         write(lun, &#146;(a)&#146;) &#146;100&#146;
-         rewind(lun)
+      ! create a test file to read from
+       open(newunit=lun, form=&#146;formatted&#146;,status=&#146;scratch&#146;)
+       write(lun, &#146;(a)&#146;) &#146;10 20 30&#146;
+       write(lun, &#146;(a)&#146;) &#146;40 50 60 70&#146;
+       write(lun, &#146;(a)&#146;) &#146;80 90&#146;
+       write(lun, &#146;(a)&#146;) &#146;100&#146;
+       rewind(lun)
 <P>
-         do
-            read(lun, *, iostat=ios) inums
-            write(*,*)&#146;iostat=&#146;,ios
-            if(is_iostat_eor(ios)) then
-               stop &#146;end of record&#146;
-            elseif(is_iostat_end(ios)) then
-               print *,&#146;end of file&#146;
-               exit
-            elseif(ios.ne.0)then
-               print *,&#146;I/O error&#146;,ios
-               exit
-            endif
-         enddo
+       do
+          read(lun, *, iostat=ios) inums
+          write(*,*)&#146;iostat=&#146;,ios
+          if(is_iostat_eor(ios)) then
+             stop &#146;end of record&#146;
+          elseif(is_iostat_end(ios)) then
+             print *,&#146;end of file&#146;
+             exit
+          elseif(ios.ne.0)then
+             print *,&#146;I/O error&#146;,ios
+             exit
+          endif
+       enddo
 <P>
-         close(lun,iostat=ios,status=&#146;delete&#146;)
+       close(lun,iostat=ios,status=&#146;delete&#146;)
 <P>
-      end program demo_is_iostat_eor
+    end program demo_is_iostat_eor
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;  iostat=           0
-       &gt;  iostat=          -1
-       &gt;  end of file
+     &gt;  iostat=           0
+     &gt;  iostat=          -1
+     &gt;  end of file
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -197,6 +191,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -205,16 +200,13 @@ Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 ****(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022       is_iostat_eor(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>is_iostat_eor (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a8ec2e1c-8130-4762-aeef-c9a24f96b49b using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>is_iostat_eor (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 78817f6b-ffd4-42c0-8148-7cc3d3d4e0c3 using man macros.</FONT>
 <br><br><center><img src="images/is_iostat_eor.3fortran.gif"></center>
 </div>
 </div>

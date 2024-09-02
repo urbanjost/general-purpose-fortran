@@ -44,37 +44,37 @@ subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
 '       qsort(1f) - [FUNIX] sort a file',&
-'       (LICENSE:PD)',&
-'',&
-'SYNOPSIS',&
+'       (LICENSE:PD)                   ',&
+'                                      ',&
+'SYNOPSIS                              ',&
 '   qsort INPUT_FILE(S) [ --help][ --version]',&
-'',&
-'DESCRIPTION',&
+'                                            ',&
+'DESCRIPTION                                 ',&
 '   Sort lines in a file by reading into memory and sorting',&
 '   alphabetically. Case and non-alphanumeric characters are ignored.',&
-'',&
+'                                                                    ',&
 '   This is a simple use of the M_sort(3f) module and reads the files',&
-'   into memory, which could cause a machine to run out of memory if',&
-'   input files are large.',&
-'',&
-'OPTIONS',&
-'       INPUT_FILE(s)  input file(s)',&
-'       --help         display help text and exit',&
-'       --version      display version information and exit',&
-'',&
-'AUTHOR',&
-'   John S. Urban',&
-'',&
-'LICENSE',&
-'   Public Domain',&
+'   into memory, which could cause a machine to run out of memory if ',&
+'   input files are large.                                           ',&
+'                                                                    ',&
+'OPTIONS                                                             ',&
+'       INPUT_FILE(s)  input file(s)                                 ',&
+'       --help         display help text and exit                    ',&
+'       --version      display version information and exit          ',&
+'                                                                    ',&
+'AUTHOR                                                              ',&
+'   John S. Urban                                                    ',&
+'                                                                    ',&
+'LICENSE                                                             ',&
+'   Public Domain                                                    ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&
-'PROGRAM:        qsort(1f)',&
-'DESCRIPTION:    sort lines in a file',&
-'VERSION:        1.0, 2021-01-10',&
-'AUTHOR:         John S. Urban',&
-'HOME PAGE:      http://www.urbanjost.altervista.org/index.html',&
+'PROGRAM:        qsort(1f)                                           ',&
+'DESCRIPTION:    sort lines in a file                                ',&
+'VERSION:        1.0, 2021-01-10                                     ',&
+'AUTHOR:         John S. Urban                                       ',&
+'HOME PAGE:      http://www.urbanjost.altervista.org/index.html      ',&
 '']
 end subroutine setup
 end program qsort

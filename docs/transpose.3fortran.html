@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>transpose (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>transpose (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>transpose(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-transpose(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 TRANSPOSE(3) - [ARRAY:MANIPULATION] Transpose an array of rank two
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ TRANSPOSE(3) - [ARRAY:MANIPULATION] Transpose an array of rank two
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = transpose(matrix)
 <P>
 <PRE>
-           function transpose(matrix)
+         function transpose(matrix)
 <P>
-            type(TYPE(kind=KIND)            :: transpose(N,M)
-            type(TYPE(kind=KIND),intent(in) :: matrix(M,N)
+          type(TYPE(kind=KIND))            :: transpose(N,M)
+          type(TYPE(kind=KIND)),intent(in) :: matrix(M,N)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = transpose(matrix)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -111,11 +105,12 @@ shape of the input array
 
 </A>
 <BLOCKQUOTE>
+<P>
 TRANSPOSE(3) transposes an array of rank two.
 <P>
-An array is transposed by interchanging the rows and columns of the given
-matrix. That is, element (i,j) of the result has the value of element (j,i)
-of the input for all (i,j).
+An array is transposed by interchanging the rows and columns of the
+given matrix. That is, element (i,j) of the result has the value of
+element (j,i) of the input for all (i,j).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -123,6 +118,7 @@ of the input for all (i,j).
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -136,8 +132,9 @@ MATRIX : The array to transpose
 
 </A>
 <BLOCKQUOTE>
-The transpose of the input array. The result has the same type as MATRIX,
-and has shape [ m, n ] if MATRIX has shape [ n, m ].
+<P>
+The transpose of the input array. The result has the same type as
+MATRIX, and has shape [ m, n ] if MATRIX has shape [ n, m ].
 </BLOCKQUOTE>
 <A name=6>
 
@@ -145,58 +142,59 @@ and has shape [ m, n ] if MATRIX has shape [ n, m ].
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_transpose
-      implicit none
-      integer,save :: xx(3,5)= reshape([&
-          1,  2,  3,  4,  5,    &
-         10, 20, 30, 40, 50,    &
-         11, 22, 33, 44, -1055  &
-       ],shape(xx),order=[2,1])
+    program demo_transpose
+    implicit none
+    integer,save :: xx(3,5)= reshape([&
+        1,  2,  3,  4,  5,    &
+       10, 20, 30, 40, 50,    &
+       11, 22, 33, 44, -1055  &
+     ],shape(xx),order=[2,1])
 <P>
-      call print_matrix_int(&#146;xx array:&#146;,xx)
-      call print_matrix_int(&#146;xx array transposed:&#146;,transpose(xx))
+    call print_matrix_int(&#146;xx array:&#146;,xx)
+    call print_matrix_int(&#146;xx array transposed:&#146;,transpose(xx))
 <P>
-      contains
+    contains
 <P>
-      subroutine print_matrix_int(title,arr)
-      ! print small 2d integer arrays in row-column format
-      implicit none
-      character(len=*),intent(in)  :: title
-      integer,intent(in)           :: arr(:,:)
-      integer                      :: i
-      character(len=:),allocatable :: biggest
-         write(*,*)trim(title)  ! print title
-         biggest=&#146;           &#146;  ! make buffer to write integer into
-         ! find how many characters to use for integers
-         write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
-         ! use this format to write a row
-         biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
-         ! print one row of array at a time
-         do i=1,size(arr,dim=1)
-            write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
-            write(*,&#146;(" ]")&#146;)
-         enddo
-      end subroutine print_matrix_int
+    subroutine print_matrix_int(title,arr)
+    ! print small 2d integer arrays in row-column format
+    implicit none
+    character(len=*),intent(in)  :: title
+    integer,intent(in)           :: arr(:,:)
+    integer                      :: i
+    character(len=:),allocatable :: biggest
+       write(*,*)trim(title)  ! print title
+       biggest=&#146;           &#146;  ! make buffer to write integer into
+       ! find how many characters to use for integers
+       write(biggest,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2
+       ! use this format to write a row
+       biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
+       ! print one row of array at a time
+       do i=1,size(arr,dim=1)
+          write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+          write(*,&#146;(" ]")&#146;)
+       enddo
+    end subroutine print_matrix_int
 <P>
-      end program demo_transpose
+    end program demo_transpose
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          xx array:
-          &gt; [     1,     2,     3,     4,     5 ]
-          &gt; [    10,    20,    30,    40,    50 ]
-          &gt; [    11,    22,    33,    44, -1055 ]
-          xx array transposed:
-          &gt; [     1,    10,    11 ]
-          &gt; [     2,    20,    22 ]
-          &gt; [     3,    30,    33 ]
-          &gt; [     4,    40,    44 ]
-          &gt; [     5,    50, -1055 ]
+        xx array:
+        &gt; [     1,     2,     3,     4,     5 ]
+        &gt; [    10,    20,    30,    40,    50 ]
+        &gt; [    11,    22,    33,    44, -1055 ]
+        xx array transposed:
+        &gt; [     1,    10,    11 ]
+        &gt; [     2,    20,    22 ]
+        &gt; [     3,    30,    33 ]
+        &gt; [     4,    40,    44 ]
+        &gt; [     5,    50, -1055 ]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -206,6 +204,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -214,6 +213,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -236,13 +236,9 @@ o
 UNPACK(3) - Scatter the elements of a vector
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022           transpose(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>transpose (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bf1fd959-c98b-492f-9153-d346b80faa15 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>transpose (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9ee088eb-181f-4c85-a63d-a653d575cf13 using man macros.</FONT>
 <br><br><center><img src="images/transpose.3fortran.gif"></center>
 </div>
 </div>

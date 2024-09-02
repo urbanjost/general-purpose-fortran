@@ -1,8 +1,10 @@
        program demo_strgar3
        use M_hybrid,     only : strgar3
        use M_calculator, only : rnum0
+       implicit none
        character(len=90) :: string
        real              :: values(10,4)
+       integer           :: ios, inums, ierr
        do
           values(:,:)=-123
           write(*,*)'*strgar3* Enter string like 10:1 20 30 40:50'

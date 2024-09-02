@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>abs (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>abs (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>abs(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-abs(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 ABS(3) - [NUMERIC] Absolute value
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ ABS(3) - [NUMERIC] Absolute value
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = abs(a)
 <P>
 <PRE>
-           elemental TYPE(kind=KIND) function abs(a)
+         elemental TYPE(kind=KIND) function abs(a)
 <P>
-            TYPE(kind=KIND),intent(in) :: a
+          TYPE(kind=KIND),intent(in) :: a
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ result = abs(a)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -100,8 +94,8 @@ A may be any real, integer, or complex value.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If A is complex the returned value will be a real with the same kind as
-A.
+If A is complex the returned value will be a real with the same kind
+as A.
 <P>
 Otherwise the returned type and kind is the same as for A.
 </TD></TR>
@@ -112,15 +106,16 @@ Otherwise the returned type and kind is the same as for A.
 
 </A>
 <BLOCKQUOTE>
+<P>
 ABS(3) computes the absolute value of numeric argument A.
 <P>
-In mathematics, the absolute value or modulus of a real number X, denoted
-|X|, is the magnitude of X without regard to its sign.
+In mathematics, the absolute value or modulus of a real number X,
+denoted |X|, is the magnitude of X without regard to its sign.
 <P>
-The absolute value of a number may be thought of as its distance from zero.
-So for a complex value the absolute value is a real number with magnitude
-SQRT(X%RE**2,X%IM**2), as if the real component is the x value and the
-imaginary value is the y value for the point &lt;x,y&gt;.
+The absolute value of a number may be thought of as its distance from
+zero. So for a complex value the absolute value is a real number with
+magnitude SQRT(X%RE**2,X%IM**2), as if the real component is the x value
+and the imaginary value is the y value for the point &lt;x,y&gt;.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -128,6 +123,7 @@ imaginary value is the y value for the point &lt;x,y&gt;.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -141,6 +137,7 @@ A : The value to compute the absolute value of.
 
 </A>
 <BLOCKQUOTE>
+<P>
 If A is of type integer or real, the value of the result is the absolute
 value |A| and of the same type and kind as the input argument.
 <P>
@@ -148,18 +145,18 @@ If A is complex with value (X, Y), the result is a real equal to a
 processor-dependent approximation to
 <P>
 <PRE>
-              sqrt(x**2 + y**2)
+            sqrt(x**2 + y**2)
 <P>
 </PRE>
-computed without undue overflow or underflow (that means the computation of
-the result can overflow the allowed magnitude of the real value returned,
-and that very small values can produce underflows if they are squared while
-calculating the returned value, for example).
+computed without undue overflow or underflow (that means the computation
+of the result can overflow the allowed magnitude of the real value
+returned, and that very small values can produce underflows if they are
+squared while calculating the returned value, for example).
 <P>
-That is, if you think of non-complex values as being complex values on the
-x-axis and complex values as being x-y points &lt;x%re,x%im&gt; the result of
-ABS(3) is the (positive) magnitude of the distance of the value from the
-origin.
+That is, if you think of non-complex values as being complex values on
+the x-axis and complex values as being x-y points &lt;x%re,x%im&gt; the result
+of ABS(3) is the (positive) magnitude of the distance of the value from
+the origin.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -167,75 +164,76 @@ origin.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_abs
-      implicit none
-      integer,parameter :: dp=kind(0.0d0)
+    program demo_abs
+    implicit none
+    integer,parameter :: dp=kind(0.0d0)
 <P>
-      integer           :: i = -1
-      real              :: x = -1.0
-      complex           :: z = (-3.0,-4.0)
-      doubleprecision   :: rr = -45.78_dp
+    integer           :: i = -1
+    real              :: x = -1.0
+    complex           :: z = (-3.0,-4.0)
+    doubleprecision   :: rr = -45.78_dp
 <P>
-      character(len=*),parameter :: &
-         ! some formats
-         frmt  =  &#146;(1x,a15,1x," In: ",g0,            T51," Out: ",g0)&#146;, &
-         frmtc = &#146;(1x,a15,1x," In: (",g0,",",g0,")",T51," Out: ",g0)&#146;,  &
-         g     = &#146;(*(g0,1x))&#146;
+    character(len=*),parameter :: &
+       ! some formats
+       frmt  =  &#146;(1x,a15,1x," In: ",g0,            T51," Out: ",g0)&#146;, &
+       frmtc = &#146;(1x,a15,1x," In: (",g0,",",g0,")",T51," Out: ",g0)&#146;,  &
+       g     = &#146;(*(g0,1x))&#146;
 <P>
-        ! basic usage
-          ! any integer, real, or complex type
-          write(*, frmt)  &#146;integer         &#146;,  i, abs(i)
-          write(*, frmt)  &#146;real            &#146;,  x, abs(x)
-          write(*, frmt)  &#146;doubleprecision &#146;, rr, abs(rr)
-          write(*, frmtc) &#146;complex         &#146;,  z, abs(z)
+      ! basic usage
+        ! any integer, real, or complex type
+        write(*, frmt)  &#146;integer         &#146;,  i, abs(i)
+        write(*, frmt)  &#146;real            &#146;,  x, abs(x)
+        write(*, frmt)  &#146;doubleprecision &#146;, rr, abs(rr)
+        write(*, frmtc) &#146;complex         &#146;,  z, abs(z)
 <P>
-        ! You can take the absolute value of any value whose positive value
-        ! is representable with the same type and kind.
-          write(*, *) &#146;abs range test : &#146;, abs(huge(0)), abs(-huge(0))
-          write(*, *) &#146;abs range test : &#146;, abs(huge(0.0)), abs(-huge(0.0))
-          write(*, *) &#146;abs range test : &#146;, abs(tiny(0.0)), abs(-tiny(0.0))
-          ! A dusty corner is that abs(-huge(0)-1) of an integer would be
-          ! a representable negative value on most machines but result in a
-          ! positive value out of range.
+      ! You can take the absolute value of any value whose positive value
+      ! is representable with the same type and kind.
+        write(*, *) &#146;abs range test : &#146;, abs(huge(0)), abs(-huge(0))
+        write(*, *) &#146;abs range test : &#146;, abs(huge(0.0)), abs(-huge(0.0))
+        write(*, *) &#146;abs range test : &#146;, abs(tiny(0.0)), abs(-tiny(0.0))
+        ! A dusty corner is that abs(-huge(0)-1) of an integer would be
+        ! a representable negative value on most machines but result in a
+        ! positive value out of range.
 <P>
-        ! elemental
-          write(*, g) &#146; abs is elemental:&#146;, abs([20,  0,  -1,  -3,  100])
+      ! elemental
+        write(*, g) &#146; abs is elemental:&#146;, abs([20,  0,  -1,  -3,  100])
 <P>
-        ! COMPLEX input produces REAL output
-          write(*, g)&#146; complex input produces real output&#146;, &
-          & abs(cmplx(30.0_dp,40.0_dp,kind=dp))
-          ! dusty corner: "kind=dp" is required or the value returned by
-          ! CMPLX() is a default real instead of double precision
+      ! COMPLEX input produces REAL output
+        write(*, g)&#146; complex input produces real output&#146;, &
+        & abs(cmplx(30.0_dp,40.0_dp,kind=dp))
+        ! dusty corner: "kind=dp" is required or the value returned by
+        ! CMPLX() is a default real instead of double precision
 <P>
-        ! the returned value for complex input can be thought of as the
-        ! distance from the origin &lt;0,0&gt;
-          write(*, g) &#146; distance of (&#146;, z, &#146;) from zero is&#146;, abs( z )
-          write(*, g) &#146; so beware of overflow with complex values&#146;
-          write(*, g) abs(cmplx( huge(0.0), huge(0.0) ))
-          write(*, g) &#146; because the biggest default real is&#146;,huge(0.0)
+      ! the returned value for complex input can be thought of as the
+      ! distance from the origin &lt;0,0&gt;
+        write(*, g) &#146; distance of (&#146;, z, &#146;) from zero is&#146;, abs( z )
+        write(*, g) &#146; so beware of overflow with complex values&#146;
+        !write(*, g) abs(cmplx( huge(0.0), huge(0.0) ))
+        write(*, g) &#146; because the biggest default real is&#146;,huge(0.0)
 <P>
-      end program demo_abs
+    end program demo_abs
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          integer          In: -1                     Out: 1
-          real             In: -1.000000              Out: 1.000000
-          doubleprecision  In: -45.78000000000000     Out: 45.78000000000000
-          complex          In: (-3.000000,-4.000000)  Out: 5.000000
-          abs range test :   2147483647  2147483647
-          abs range test :   3.4028235E+38  3.4028235E+38
-          abs range test :   1.1754944E-38  1.1754944E-38
-          abs is elemental: 20 0 1 3 100
-          complex input produces real output 50.00000000000000
-          distance of ( -3.000000 -4.000000 ) from zero is 5.000000
-          so beware of overflow with complex values
-          Inf
-          because the biggest default real is .3402823E+39
+        integer          In: -1                     Out: 1
+        real             In: -1.000000              Out: 1.000000
+        doubleprecision  In: -45.78000000000000     Out: 45.78000000000000
+        complex          In: (-3.000000,-4.000000)  Out: 5.000000
+        abs range test :   2147483647  2147483647
+        abs range test :   3.4028235E+38  3.4028235E+38
+        abs range test :   1.1754944E-38  1.1754944E-38
+        abs is elemental: 20 0 1 3 100
+        complex input produces real output 50.00000000000000
+        distance of ( -3.000000 -4.000000 ) from zero is 5.000000
+        so beware of overflow with complex values
+        Inf
+        because the biggest default real is .3402823E+39
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -245,6 +243,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -253,16 +252,13 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 SIGN(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 abs(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>abs (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 93940ebb-622e-4ede-9ee1-f3566003093a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>abs (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 72c5a7c3-1824-4e43-8dcf-a458a24b3d7e using man macros.</FONT>
 <br><br><center><img src="images/abs.3fortran.gif"></center>
 </div>
 </div>

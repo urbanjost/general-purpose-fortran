@@ -275,7 +275,7 @@ use :: M_pixel, only : hershey         ! [M_pixel] draw text string as Hershey s
 use :: M_pixel, only : justfy          ! [M_pixel] return lengths used to justify a string when calling hershey
 use :: M_pixel, only : polyline2       ! [M_pixel] connect points with lines
 
-use :: M_writegif,        only : writegif
+use :: M_pixel__writegif,        only : writegif
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! ident_2="@(#) pixel(3fp) parse M_pixel(3fm) module routines in shell(1)"
 integer :: ifound
@@ -492,204 +492,204 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   shell(1f) - shell for demonstrating major modules in libGPF.a                                                                ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   shell expression| --help| --version|[ -replay][ -read FILENAME]                                                              ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'    Example command line interface with command line history, numeric                                                           ',&
-'    expressions, if/else/elseif/endif logic, and Unix-like command                                                              ',&
-'    parsing.                                                                                                                    ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'   --help      display this help and exit                                                                                       ',&
-'   --version   output version information and exit                                                                              ',&
-'                                                                                                                                ',&
-'USAGE                                                                                                                           ',&
-'                                                                                                                                ',&
-' At the command prompt the following example commands may be used:                                                              ',&
-'                                                                                                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  | command                     |exercises       | description                 |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  | r                           | M_HISTORY      | enter history editor;       |                                                ',&
-'  |                             |                | ? will produce help         |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  | today format [-help]        | M_TIME         | display current time using  |                                                ',&
-'  |                             |                | fmtdate(3f)                 |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  | if/else/elseif expression   | M_LOGIC        | conditionally process input |                                                ',&
-'  |                             |                | lines                       |                                                ',&
-'  | endif                       | M_LOGIC        | end IF block                |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  | set dump                    | M_CALCULATOR   | dump currently defined      |                                                ',&
-'  |                             |                | variable names              |                                                ',&
-'  | set funcs                   | M_CALCULATOR   | describe functions available|                                                ',&
-'  |                             |                | in expressions              |                                                ',&
-'  | set nc()                    | JUOWN1/CALC_NC | display list of ncurses()   |                                                ',&
-'  |                             |                | functions                   |                                                ',&
-'  | set expression [-q]         | M_CALCULATOR   | anything else is assumed to |                                                ',&
-'  |                             |                | be a numeric expression     |                                                ',&
-'  | set                         | M_CALCULATOR   | If no expression switch to  |                                                ',&
-'  |                             |                | calculator mode till "." is |                                                ',&
-'  |                             |                | entered.                    |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  | read file [-q]              | M_KRACKEN      | read from another input file|                                                ',&
-'  | test1 -x -y --help --version| M_KRACKEN      | test of DISSECT(3f)         |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  |                             | M_PIXEL        | pixel graphics              |                                                ',&
-'  |prefsize:        specify size of pixel array                                                                                 ',&
-'  |vinit:           initialize pixel array drawing module                                                                       ',&
-'  |                                                                                                                             ',&
-'  |rect:            draw line rectangle given two opposite corners                                                              ',&
-'  |line:            draw line between two points applying line width and color                                                  ',&
-'  |polyline:        draw lines between points                                                                                   ',&
-'  |rmove2:          relative move                                                                                               ',&
-'  |move2:           move current position                                                                                       ',&
-'  |rdraw2:          relative draw                                                                                               ',&
-'  |draw2:           draw a line from current position to specified point                                                        ',&
-'  |                                                                                                                             ',&
-'  |point2:          Draw a point at x, y                                                                                        ',&
-'  |                                                                                                                             ',&
-'  |arc:             draw a arc using current line width and color                                                               ',&
-'  |circle:          draw a circle using current line width and color                                                            ',&
-'  |circleprecision: set number of line segments making up a circle                                                              ',&
-'  |                                                                                                                             ',&
-'  |drawchar:        draw text at the current position                                                                           ',&
-'  |drawstr:         draw text at the current position                                                                           ',&
-'  |                                                                                                                             ',&
-'  |linewidth:       set line width for lines drawn in pixel image                                                               ',&
-'  |color:           set current color for lines drawn in pixel image                                                            ',&
-'  |textsize:        set text size in world units                                                                                ',&
-'  |ycentertext:     set text centering mode on for drawstr(3f) and drawc(3f) in Y direction                                     ',&
-'  |xcentertext:     set text centering mode for drawstr(3f) and drawc(3f) in X direction                                        ',&
-'  |centertext:      set text centering mode for drawstr(3f) and drawc(3f)                                                       ',&
-'  |textang:         set angle in degrees to draw text at using drawstr(3f)                                                      ',&
-'  |                                                                                                                             ',&
-'  |mapcolor:        set a color index using RGB values                                                                          ',&
-'  |                                                                                                                             ',&
-'  |strlength:       length of string using current font size                                                                    ',&
-'  |getviewport:     return viewport in screen pixel coordinates                                                                 ',&
-'  |getdisplaysize:  Returns the width and height of the device in pixels                                                        ',&
-'  |state:           print graphics state of M_pixel graphics module                                                             ',&
-'  |getgp2:          get current graphics position                                                                               ',&
-'  |                                                                                                                             ',&
-'  |viewport:        Specify which part of the screen to draw in.                                                                ',&
-'  |ortho2:          define the area of the virtual world coordinates to map to the viewport                                     ',&
-'  |ortho2_biggest:  given a window size, find and set to largest accommodating viewport                                         ',&
-'  |                                                                                                                             ',&
-'  |print_ppm:       print pixel array as a P3 PPM file                                                                          ',&
-'  |print_ascii:     print pixel array as an ASCII block of text                                                                 ',&
-'  |                                                                                                                             ',&
-'  |clear:           set background color all to specified color index                                                           ',&
-'  |                                                                                                                             ',&
-'  |vexit:           exit pixel array drawing module                                                                             ',&
-'  |                             |                |                             |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  | help                        |                | display this information    |                                                ',&
-'  |                             |                | this information            |                                                ',&
-'  | quit|.                      |                | exit program                |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'  | anything_else               | execute as system command                    |                                                ',&
-'  #----------------------------------------------------------------------------#                                                ',&
-'                                                                                                                                ',&
-' It can be confusing if you make variables that are command names.                                                              ',&
-' An expression on the command line is evaluated and then the program exits.                                                     ',&
-'                                                                                                                                ',&
-'EXAMPLE                                                                                                                         ',&
-'                                                                                                                                ',&
-'Sample input file                                                                                                               ',&
-'                                                                                                                                ',&
-'   today year-month-day hour:minute:second                                                                                      ',&
-'   today                                                                                                                        ',&
-'   set A=10                                                                                                                     ',&
-'   set b=20                                                                                                                     ',&
-'   if lt(A,b)                                                                                                                   ',&
-'     echo A is less than B                                                                                                      ',&
-'     set C=sin(sqrt(2))                                                                                                         ',&
-'   elseif eq(b,10)                                                                                                              ',&
-'     echo did not expect to get here                                                                                            ',&
-'   else                                                                                                                         ',&
-'     echo did not expect to get here either                                                                                     ',&
-'   endif                                                                                                                        ',&
-'                                                                                                                                ',&
-'   #################### calculator mode                                                                                         ',&
-'   set                                                                                                                          ',&
-'   x=A+b+C                                                                                                                      ',&
-'   y=cos(A)/sin(b)+C                                                                                                            ',&
-'   z=max(A,b,C)                                                                                                                 ',&
-'   $A="This is a string"                                                                                                        ',&
-'   .                                                                                                                            ',&
-'   ####################                                                                                                         ',&
-'                                                                                                                                ',&
-'   set dump # display available functions                                                                                       ',&
-'   set funcs                                                                                                                    ',&
-'                                                                                                                                ',&
-'   set $str($A," function call")                                                                                                ',&
-'   ######################## set up PIXEL display                                                                                ',&
-'   prefsize 500 500                                                                                                             ',&
-'   vinit                                                                                                                        ',&
-'   ortho2 -100 100 -100 100                                                                                                     ',&
-'   ######################## draw some shapes                                                                                    ',&
-'   color 6                                                                                                                      ',&
-'   makepoly                                                                                                                     ',&
-'   rect -100 -100 0 0                                                                                                           ',&
-'   closepoly                                                                                                                    ',&
-'                                                                                                                                ',&
-'   color 3                                                                                                                      ',&
-'   makepoly                                                                                                                     ',&
-'   rect -100  100 0 0                                                                                                           ',&
-'   closepoly                                                                                                                    ',&
-'                                                                                                                                ',&
-'   makepoly                                                                                                                     ',&
-'   color 4                                                                                                                      ',&
-'   rect 0 0 100 100                                                                                                             ',&
-'   closepoly                                                                                                                    ',&
-'                                                                                                                                ',&
-'   makepoly                                                                                                                     ',&
-'   color 5                                                                                                                      ',&
-'   rect 0 0 100 -100                                                                                                            ',&
-'   closepoly                                                                                                                    ',&
-'                                                                                                                                ',&
-'   color 2                                                                                                                      ',&
-'   linewidth 400                                                                                                                ',&
-'   circleprecision 128                                                                                                          ',&
-'   circle 0 0 100                                                                                                               ',&
-'   circle 0 0 50                                                                                                                ',&
-'   ######################## Draw X                                                                                              ',&
-'   color 1                                                                                                                      ',&
-'   linewidth 500                                                                                                                ',&
-'   set x=100                                                                                                                    ',&
-'   move2 0-x 0-x                                                                                                                ',&
-'   draw2   x   x                                                                                                                ',&
-'   move2 0-x   x                                                                                                                ',&
-'   draw2   x 0-x                                                                                                                ',&
-'   ######################## draw some text                                                                                      ',&
-'   linewidth 90                                                                                                                 ',&
-'   color 7                                                                                                                      ',&
-'   textsize 10 10                                                                                                               ',&
-'   centertext .T.                                                                                                               ',&
-'   move2 0 0                                                                                                                    ',&
-'   textang 45                                                                                                                   ',&
-'   drawstr Hello World!                                                                                                         ',&
-'   centertext .F.                                                                                                               ',&
-'   ########################                                                                                                     ',&
-'   print_ppm sample.ppm                                                                                                         ',&
-'   clear                                                                                                                        ',&
-'   vexit                                                                                                                        ',&
-'   ########################                                                                                                     ',&
-'   # assuming you have imagemagick installed                                                                                    ',&
-'   display sample.ppm                                                                                                           ',&
-'   ########################                                                                                                     ',&
-'   quit                                                                                                                         ',&
-'                                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   shell(1f) - shell for demonstrating major modules in libGPF.a                ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   shell expression| --help| --version|[ -replay][ -read FILENAME]              ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'    Example command line interface with command line history, numeric           ',&
+'    expressions, if/else/elseif/endif logic, and Unix-like command              ',&
+'    parsing.                                                                    ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'   --help      display this help and exit                                       ',&
+'   --version   output version information and exit                              ',&
+'                                                                                ',&
+'USAGE                                                                           ',&
+'                                                                                ',&
+' At the command prompt the following example commands may be used:              ',&
+'                                                                                ',&
+'  #----------------------------------------------------------------------------#',&
+'  | command                     |exercises       | description                 |',&
+'  #----------------------------------------------------------------------------#',&
+'  | r                           | M_HISTORY      | enter history editor;       |',&
+'  |                             |                | ? will produce help         |',&
+'  #----------------------------------------------------------------------------#',&
+'  | today format [-help]        | M_TIME         | display current time using  |',&
+'  |                             |                | fmtdate(3f)                 |',&
+'  #----------------------------------------------------------------------------#',&
+'  | if/else/elseif expression   | M_LOGIC        | conditionally process input |',&
+'  |                             |                | lines                       |',&
+'  | endif                       | M_LOGIC        | end IF block                |',&
+'  #----------------------------------------------------------------------------#',&
+'  | set dump                    | M_CALCULATOR   | dump currently defined      |',&
+'  |                             |                | variable names              |',&
+'  | set funcs                   | M_CALCULATOR   | describe functions available|',&
+'  |                             |                | in expressions              |',&
+'  | set nc()                    | JUOWN1/CALC_NC | display list of ncurses()   |',&
+'  |                             |                | functions                   |',&
+'  | set expression [-q]         | M_CALCULATOR   | anything else is assumed to |',&
+'  |                             |                | be a numeric expression     |',&
+'  | set                         | M_CALCULATOR   | If no expression switch to  |',&
+'  |                             |                | calculator mode till "." is |',&
+'  |                             |                | entered.                    |',&
+'  #----------------------------------------------------------------------------#',&
+'  | read file [-q]              | M_KRACKEN      | read from another input file|',&
+'  | test1 -x -y --help --version| M_KRACKEN      | test of DISSECT(3f)         |',&
+'  #----------------------------------------------------------------------------#',&
+'  |                             | M_PIXEL        | pixel graphics              |',&
+'  |prefsize:        specify size of pixel array                                 ',&
+'  |vinit:           initialize pixel array drawing module                       ',&
+'  |                                                                             ',&
+'  |rect:            draw line rectangle given two opposite corners              ',&
+'  |line:            draw line between two points applying line width and color  ',&
+'  |polyline:        draw lines between points                                   ',&
+'  |rmove2:          relative move                                               ',&
+'  |move2:           move current position                                       ',&
+'  |rdraw2:          relative draw                                               ',&
+'  |draw2:           draw a line from current position to specified point        ',&
+'  |                                                                             ',&
+'  |point2:          Draw a point at x, y                                        ',&
+'  |                                                                             ',&
+'  |arc:             draw a arc using current line width and color               ',&
+'  |circle:          draw a circle using current line width and color            ',&
+'  |circleprecision: set number of line segments making up a circle              ',&
+'  |                                                                             ',&
+'  |drawchar:        draw text at the current position                           ',&
+'  |drawstr:         draw text at the current position                           ',&
+'  |                                                                             ',&
+'  |linewidth:       set line width for lines drawn in pixel image               ',&
+'  |color:           set current color for lines drawn in pixel image            ',&
+'  |textsize:        set text size in world units                                ',&
+'  |ycentertext:     set text centering mode on for drawstr(3f) and drawc(3f) in Y direction',&
+'  |xcentertext:     set text centering mode for drawstr(3f) and drawc(3f) in X direction',&
+'  |centertext:      set text centering mode for drawstr(3f) and drawc(3f)       ',&
+'  |textang:         set angle in degrees to draw text at using drawstr(3f)      ',&
+'  |                                                                             ',&
+'  |mapcolor:        set a color index using RGB values                          ',&
+'  |                                                                             ',&
+'  |strlength:       length of string using current font size                    ',&
+'  |getviewport:     return viewport in screen pixel coordinates                 ',&
+'  |getdisplaysize:  Returns the width and height of the device in pixels        ',&
+'  |state:           print graphics state of M_pixel graphics module             ',&
+'  |getgp2:          get current graphics position                               ',&
+'  |                                                                             ',&
+'  |viewport:        Specify which part of the screen to draw in.                ',&
+'  |ortho2:          define the area of the virtual world coordinates to map to the viewport',&
+'  |ortho2_biggest:  given a window size, find and set to largest accommodating viewport',&
+'  |                                                                             ',&
+'  |print_ppm:       print pixel array as a P3 PPM file                          ',&
+'  |print_ascii:     print pixel array as an ASCII block of text                 ',&
+'  |                                                                             ',&
+'  |clear:           set background color all to specified color index           ',&
+'  |                                                                             ',&
+'  |vexit:           exit pixel array drawing module                             ',&
+'  |                             |                |                             |',&
+'  #----------------------------------------------------------------------------#',&
+'  | help                        |                | display this information    |',&
+'  |                             |                | this information            |',&
+'  | quit|.                      |                | exit program                |',&
+'  #----------------------------------------------------------------------------#',&
+'  | anything_else               | execute as system command                    |',&
+'  #----------------------------------------------------------------------------#',&
+'                                                                                ',&
+' It can be confusing if you make variables that are command names.              ',&
+' An expression on the command line is evaluated and then the program exits.     ',&
+'                                                                                ',&
+'EXAMPLE                                                                         ',&
+'                                                                                ',&
+'Sample input file                                                               ',&
+'                                                                                ',&
+'   today year-month-day hour:minute:second                                      ',&
+'   today                                                                        ',&
+'   set A=10                                                                     ',&
+'   set b=20                                                                     ',&
+'   if lt(A,b)                                                                   ',&
+'     echo A is less than B                                                      ',&
+'     set C=sin(sqrt(2))                                                         ',&
+'   elseif eq(b,10)                                                              ',&
+'     echo did not expect to get here                                            ',&
+'   else                                                                         ',&
+'     echo did not expect to get here either                                     ',&
+'   endif                                                                        ',&
+'                                                                                ',&
+'   #################### calculator mode                                         ',&
+'   set                                                                          ',&
+'   x=A+b+C                                                                      ',&
+'   y=cos(A)/sin(b)+C                                                            ',&
+'   z=max(A,b,C)                                                                 ',&
+'   $A="This is a string"                                                        ',&
+'   .                                                                            ',&
+'   ####################                                                         ',&
+'                                                                                ',&
+'   set dump # display available functions                                       ',&
+'   set funcs                                                                    ',&
+'                                                                                ',&
+'   set $str($A," function call")                                                ',&
+'   ######################## set up PIXEL display                                ',&
+'   prefsize 500 500                                                             ',&
+'   vinit                                                                        ',&
+'   ortho2 -100 100 -100 100                                                     ',&
+'   ######################## draw some shapes                                    ',&
+'   color 6                                                                      ',&
+'   makepoly                                                                     ',&
+'   rect -100 -100 0 0                                                           ',&
+'   closepoly                                                                    ',&
+'                                                                                ',&
+'   color 3                                                                      ',&
+'   makepoly                                                                     ',&
+'   rect -100  100 0 0                                                           ',&
+'   closepoly                                                                    ',&
+'                                                                                ',&
+'   makepoly                                                                     ',&
+'   color 4                                                                      ',&
+'   rect 0 0 100 100                                                             ',&
+'   closepoly                                                                    ',&
+'                                                                                ',&
+'   makepoly                                                                     ',&
+'   color 5                                                                      ',&
+'   rect 0 0 100 -100                                                            ',&
+'   closepoly                                                                    ',&
+'                                                                                ',&
+'   color 2                                                                      ',&
+'   linewidth 400                                                                ',&
+'   circleprecision 128                                                          ',&
+'   circle 0 0 100                                                               ',&
+'   circle 0 0 50                                                                ',&
+'   ######################## Draw X                                              ',&
+'   color 1                                                                      ',&
+'   linewidth 500                                                                ',&
+'   set x=100                                                                    ',&
+'   move2 0-x 0-x                                                                ',&
+'   draw2   x   x                                                                ',&
+'   move2 0-x   x                                                                ',&
+'   draw2   x 0-x                                                                ',&
+'   ######################## draw some text                                      ',&
+'   linewidth 90                                                                 ',&
+'   color 7                                                                      ',&
+'   textsize 10 10                                                               ',&
+'   centertext .T.                                                               ',&
+'   move2 0 0                                                                    ',&
+'   textang 45                                                                   ',&
+'   drawstr Hello World!                                                         ',&
+'   centertext .F.                                                               ',&
+'   ########################                                                     ',&
+'   print_ppm sample.ppm                                                         ',&
+'   clear                                                                        ',&
+'   vexit                                                                        ',&
+'   ########################                                                     ',&
+'   # assuming you have imagemagick installed                                    ',&
+'   display sample.ppm                                                           ',&
+'   ########################                                                     ',&
+'   quit                                                                         ',&
+'                                                                                ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -915,7 +915,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 18:39:12 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:58:30 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

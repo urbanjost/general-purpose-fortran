@@ -1,33 +1,57 @@
-     program demo_hatchang
-     use M_drawplus, only : draw_interpret
-     character(len=:),allocatable :: draw_cmds(:)
+        program demo_hatchang
+        use M_draw
+        implicit none
+        real :: b
+        integer :: idum
+           call prefsize(1000,200)
+           call vinit(' ')
+           b = 0.4
+           call page(-25.0 - b, 25.0 + b, -5.0 - b, 5.0 + b)
+           call color(0)
+           call clear()
+           call textsize(0.6, 0.7)
+           call font('futura.l')
+           call centertext(.true.)
+           call leftjustify()
+           call linewidth(50)
+           call polyhatch(.true.)
+           call hatchpitch(1.0/2.0)
+           ! draw circles with hatching
+           call drawc(ang=  90.1, col=7, x=-20.0, label='90 degrees')
+           call drawc(ang=  45.0, col=2, x=-10.0, label='45 degrees')
+           call drawc(ang=   0.0, col=6, x=  0.0, label='0 degrees')
+           call drawc(ang= -45.0, col=5, x= 10.0, label='-45 degrees')
+           call drawc(ang= -90.0, col=4, x= 20.0, label='-90 degrees')
 
-     DRAW_CMDS=[ CHARACTER(LEN=128) :: &
-     'prefsize 1000 200; vinit                                     ',&
-     'set b=.4; page -25-b 25+b -5-b 5+b; color 0;clear            ',&
-     'textsize .6 .7;font futura.l;centertext .true.               ',&
-     'leftjustify; linewidth 50; polyhatch .true.; hatchpitch 1/2  ',&
-     '# draw circles with hatching                                 ',&
-     'linewidth 90;hatchang  90.1; color  7;  circle X=-20  Y=0  5 ',&
-     'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr  90 degrees ',&
-     'linewidth 90;hatchang  45  ; color  2;  circle X=-10  Y=0  5 ',&
-     'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr  45 degrees ',&
-     'linewidth 90;hatchang   0  ; color  6;  circle X=-0   Y=0  5 ',&
-     'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr   0 degrees ',&
-     'linewidth 90;hatchang -45  ; color  5;  circle X=10   Y=0  5 ',&
-     'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr -45 degrees ',&
-     'linewidth 90;hatchang -90  ; color  4;  circle X=20   Y=0  5 ',&
-     'move2  X-4.9 Y=-4.9;color 7;linewidth 60;drawstr -90 degrees ',&
-     'linewidth 130                                                ',&
-     'move2 0 0;draw2 -5 0                                         ',&
-     'move2 -5 0;draw2 -4.4  0.3                                   ',&
-     'move2 -5 0;draw2 -4.4 -0.3                                   ',&
-     'rightjustify                                                 ',&
-     'linewidth 60                                                 ',&
-     'move2 -5 0;drawstr 0 degrees                                 ',&
-     'getkey                                                       ',&
-     'vexit                                                        ',&
-     '']
+           call linewidth(130)
+           call move2(0.0, 0.0)
+           call draw2(-5.0, 0.0)
+           call move2(-5.0, 0.0)
+           call draw2(-4.4, 0.3)
+           call move2(-5.0, 0.0)
+           call draw2(-4.4, - 0.3)
+           call rightjustify()
+           call linewidth(60)
+           call move2(-5.0,0.0)
+           call drawstr('0 degrees')
+           idum = getkey()
+           call vexit()
+        contains
+           subroutine drawc(ang,col,x,label)
+           real,intent(in) :: ang, x
+           integer,intent(in) :: col
+           character(len=*),intent(in) :: label
+           real :: y
+           y=0.0
+           call linewidth(90)
+           call hatchang(ang)
+           call color(col)
+           call circle(X, Y, 5.0)
+           y = -4.9
+           call move2(X - 4.9, Y)
+           call color(7)
+           call linewidth(60)
+           call drawstr(label)
+           end subroutine drawc
 
-     call draw_interpret(DRAW_CMDS,delimiters=';')
-     end program demo_hatchang
+        end program demo_hatchang

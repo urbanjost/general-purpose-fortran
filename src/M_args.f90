@@ -3,7 +3,7 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!    M_args(3fm) - [ARGUMENTS::M_args::INTRO] - define a NAMELIST in a module template to provide command line argument parsing
+!!    M_args(3fm) - [ARGUMENTS::M_args::INTRO] define a NAMELIST in a module template to provide command line argument parsing
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -19,7 +19,7 @@
 !!      use M_args, only : oneline
 !!
 !!##DESCRIPTION
-!!    Use the M_arguments(3fp) module template in the following example
+!!    Use the M_args__arguments(3fp) module template in the following example
 !!    program to allow for command line parsing much like standard
 !!    Unix command line parsing. Just change the variables defined in
 !!    the NAMELIST. There are further details in the documentation for
@@ -43,7 +43,7 @@
 !!   Sample program
 !!
 !!    !program demo_M_args
-!!    module M_arguments
+!!    module M_args__arguments
 !!    use M_args,    only : get_namelist, print_dictionary, unnamed, oneline
 !!
 !!    ! >>> CHANGE THIS
@@ -75,11 +75,11 @@
 !!             stop 1
 !!          endif
 !!       end subroutine get_args
-!!    end module M_arguments
+!!    end module M_args__arguments
 !!
 !!    program short
-!!    use M_arguments, only : get_args, unnamed
-!!    use M_arguments  ! make user variables available
+!!    use M_args__arguments, only : get_args, unnamed
+!!    use M_args__arguments  ! make user variables available
 !!    implicit none
 !!    integer :: i
 !!       call get_args()  ! crack command line options
@@ -106,7 +106,7 @@
 !!##LICENSE
 !!    Public Domain
 module M_args
-use M_journal, only : journal
+use M_framework__journal, only : journal
 use M_list,    only : insert, locate, replace, remove
 use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT,stdin=>INPUT_UNIT    ! access computing environment
 use M_strings, only : isupper, lower, quote, upper
@@ -206,7 +206,7 @@ iargs=command_argument_count()
       endif
    enddo GET_LONGEST
    allocate(character(len=ilongest) :: args(iargs))
-   args=''
+   args(:)=''
    GET_ARGS: do i=1,command_argument_count()                                             ! copy array of arguments
       call get_command_argument(number=i,value=args(i),length=ilength,status=istatus)    ! get next argument
       if(istatus /= 0) then                                                              ! stop program on error
@@ -241,7 +241,7 @@ end function get_command_arguments_stack
 !!   Sample usage
 !!
 !!    program demo_get_command_arguments_string
-!!    use M_journal, only : journal
+!!    use M_framework__journal, only : journal
 !!    use M_args, only : get_command_arguments_string
 !!    implicit none
 !!    integer :: ier

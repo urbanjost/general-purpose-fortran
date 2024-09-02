@@ -277,105 +277,105 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'     topic(1) - [HELP] Display specially formatted help text files.                                                             ',&
-'SYNOPSIS                                                                                                                        ',&
-'     topic [TOPIC | -t| -e SEARCH_STRING] [ -f INPUT_FILE]]|[ -all| -topics| -summaries]                                        ',&
-'     (LICENSE:PD)                                                                                                               ',&
-'DESCRIPTION                                                                                                                     ',&
-'   This utility program is used to read topics from a specially formatted                                                       ',&
-'   help text file. It is often called from a program as a subprocess.                                                           ',&
-'                                                                                                                                ',&
-'   start at the beginning of the description file and read until the                                                            ',&
-'   desired topic is reached; then display help until another topic begins                                                       ',&
-'                                                                                                                                ',&
-'   format of file is                                                                                                            ',&
-'                                                                                                                                ',&
-'      TOPIC:topic                                                                                                               ',&
-'      TOPIC:other optional topic line(s)                                                                                        ',&
-'      syntax line(s) (assumed not to exist if first letter of topic is uppercase)                                               ',&
-'                                                                                                                                ',&
-'      detailed topic description for commands displayed as-is until a new TOPIC:                                                ',&
-'      line is encountered.                                                                                                      ',&
-'                                                                                                                                ',&
-'      and then repeat starting with TOPIC: line                                                                                 ',&
-'         :                                                                                                                      ',&
-'         :                                                                                                                      ',&
-'         :                                                                                                                      ',&
-'                                                                                                                                ',&
-'   EXAMPLE FILE:                                                                                                                ',&
-'                                                                                                                                ',&
-'      TOPIC:COLORS                                                                                                              ',&
-'                                                                                                                                ',&
-'      The color-related commands background(1) and foreground(1) are                                                            ',&
-'      used to define plot page colors                                                                                           ',&
-'                                                                                                                                ',&
-'      TOPIC: background                                                                                                         ',&
-'      background -name color                                                                                                    ',&
-'                                                                                                                                ',&
-'         This command sets the background color                                                                                 ',&
-'                                                                                                                                ',&
-'      TOPIC: foreground                                                                                                         ',&
-'      foreground -name color                                                                                                    ',&
-'                                                                                                                                ',&
-'         This command sets the foreground color                                                                                 ',&
-'                                                                                                                                ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-' TOPIC  The name of the topic to get help for                                                                                   ',&
-'                                                                                                                                ',&
-'        * if topic is ? show all topic lines                                                                                    ',&
-'          topics all in caps go on new line                                                                                     ',&
-'          display other topics three to a line in a table, like:                                                                ',&
-'                                                                                                                                ',&
-'           #--------------------------------------------------------------------#                                               ',&
-'           | INTRO                                                              |                                               ',&
-'           #--------------------------------------------------------------------#                                               ',&
-'           | STARTING UP USH                                                    |                                               ',&
-'           | SUMMARY of basic USH |                                             |                                               ',&
-'           #--------------------------------------------------------------------#                                               ',&
-'           | COMMANDS                                                           |                                               ',&
-'           | novice               | aspect               | attach               |                                               ',&
-'           | dirf                 | exact                | f                    |                                               ',&
-'           #--------------------------------------------------------------------#                                               ',&
-'           | CALCULATOR                                                         |                                               ',&
-'           | ANSI functions       | String functions     | Bessel functions     |                                               ',&
-'           | Operators            | intg()               | dif()                |                                               ',&
-'           | convert()            |                                             |                                               ',&
-'           #--------------------------------------------------------------------#                                               ',&
-'           | CHANGE REQUEST                                                     |                                               ',&
-'           | version2 changes     | version3 changes     | version3.02 changes  |                                               ',&
-'           | version4 changes     | V4 Obsolete Usage    | version5 changes     |                                               ',&
-'           |                      |                                             |                                               ',&
-'           #--------------------------------------------------------------------#                                               ',&
-'                                                                                                                                ',&
-'        * if topic is ?? show all topic lines and syntax lines                                                                  ',&
-'        * if topic is ??? show all lines                                                                                        ',&
-'                                                                                                                                ',&
-' -all               list entire help file                                                                                       ',&
-' -topics            list topics found in help file                                                                              ',&
-' -summaries         list summaries for each topic                                                                               ',&
-' -t SEARCH_STRING   find topics that contain the specified string.                                                              ',&
-' -e REGULAR_EXPRESSION   find topics that contain the specified                                                                 ',&
-'                         regular expression                                                                                     ',&
-' -f INPUT_FILE   Set the filename to read descriptions from. The                                                                ',&
-'                 default input file is the value of the environment                                                             ',&
-'                 variable $USHHELP if it is set. The built-in                                                                   ',&
-'                 default is /usr/share/ush/help.txt                                                                             ',&
-'                                                                                                                                ',&
-'EXAMPLES                                                                                                                        ',&
-'   topic -topics | more     # show all topic names                                                                              ',&
-'   topic -summaries | more  # Show all topics and short abstracts                                                               ',&
-'   topic -all | more        # display entire help file                                                                          ',&
-'                                                                                                                                ',&
-'DEPENDENCIES                                                                                                                    ',&
-'  * M_strings(3f)                                                                                                               ',&
-'  * M_regexp(3f)                                                                                                                ',&
-'  * M_kracken(3f)                                                                                                               ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'     topic(1) - [HELP] Display specially formatted help text files.             ',&
+'SYNOPSIS                                                                        ',&
+'     topic [TOPIC | -t| -e SEARCH_STRING] [ -f INPUT_FILE]]|[ -all| -topics| -summaries]',&
+'     (LICENSE:PD)                                                               ',&
+'DESCRIPTION                                                                     ',&
+'   This utility program is used to read topics from a specially formatted       ',&
+'   help text file. It is often called from a program as a subprocess.           ',&
+'                                                                                ',&
+'   start at the beginning of the description file and read until the            ',&
+'   desired topic is reached; then display help until another topic begins       ',&
+'                                                                                ',&
+'   format of file is                                                            ',&
+'                                                                                ',&
+'      TOPIC:topic                                                               ',&
+'      TOPIC:other optional topic line(s)                                        ',&
+'      syntax line(s) (assumed not to exist if first letter of topic is uppercase)',&
+'                                                                                ',&
+'      detailed topic description for commands displayed as-is until a new TOPIC:',&
+'      line is encountered.                                                      ',&
+'                                                                                ',&
+'      and then repeat starting with TOPIC: line                                 ',&
+'         :                                                                      ',&
+'         :                                                                      ',&
+'         :                                                                      ',&
+'                                                                                ',&
+'   EXAMPLE FILE:                                                                ',&
+'                                                                                ',&
+'      TOPIC:COLORS                                                              ',&
+'                                                                                ',&
+'      The color-related commands background(1) and foreground(1) are            ',&
+'      used to define plot page colors                                           ',&
+'                                                                                ',&
+'      TOPIC: background                                                         ',&
+'      background -name color                                                    ',&
+'                                                                                ',&
+'         This command sets the background color                                 ',&
+'                                                                                ',&
+'      TOPIC: foreground                                                         ',&
+'      foreground -name color                                                    ',&
+'                                                                                ',&
+'         This command sets the foreground color                                 ',&
+'                                                                                ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+' TOPIC  The name of the topic to get help for                                   ',&
+'                                                                                ',&
+'        * if topic is ? show all topic lines                                    ',&
+'          topics all in caps go on new line                                     ',&
+'          display other topics three to a line in a table, like:                ',&
+'                                                                                ',&
+'           #--------------------------------------------------------------------#',&
+'           | INTRO                                                              |',&
+'           #--------------------------------------------------------------------#',&
+'           | STARTING UP USH                                                    |',&
+'           | SUMMARY of basic USH |                                             |',&
+'           #--------------------------------------------------------------------#',&
+'           | COMMANDS                                                           |',&
+'           | novice               | aspect               | attach               |',&
+'           | dirf                 | exact                | f                    |',&
+'           #--------------------------------------------------------------------#',&
+'           | CALCULATOR                                                         |',&
+'           | ANSI functions       | String functions     | Bessel functions     |',&
+'           | Operators            | intg()               | dif()                |',&
+'           | convert()            |                                             |',&
+'           #--------------------------------------------------------------------#',&
+'           | CHANGE REQUEST                                                     |',&
+'           | version2 changes     | version3 changes     | version3.02 changes  |',&
+'           | version4 changes     | V4 Obsolete Usage    | version5 changes     |',&
+'           |                      |                                             |',&
+'           #--------------------------------------------------------------------#',&
+'                                                                                ',&
+'        * if topic is ?? show all topic lines and syntax lines                  ',&
+'        * if topic is ??? show all lines                                        ',&
+'                                                                                ',&
+' -all               list entire help file                                       ',&
+' -topics            list topics found in help file                              ',&
+' -summaries         list summaries for each topic                               ',&
+' -t SEARCH_STRING   find topics that contain the specified string.              ',&
+' -e REGULAR_EXPRESSION   find topics that contain the specified                 ',&
+'                         regular expression                                     ',&
+' -f INPUT_FILE   Set the filename to read descriptions from. The                ',&
+'                 default input file is the value of the environment             ',&
+'                 variable $USHHELP if it is set. The built-in                   ',&
+'                 default is /usr/share/ush/help.txt                             ',&
+'                                                                                ',&
+'EXAMPLES                                                                        ',&
+'   topic -topics | more     # show all topic names                              ',&
+'   topic -summaries | more  # Show all topics and short abstracts               ',&
+'   topic -all | more        # display entire help file                          ',&
+'                                                                                ',&
+'DEPENDENCIES                                                                    ',&
+'  * M_strings(3f)                                                               ',&
+'  * M_regexp(3f)                                                                ',&
+'  * M_kracken(3f)                                                               ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -502,7 +502,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        2.5, 20130818  Updated and made a seperate program instead of a subroutine>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2023-02-12 18:35:52 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:55:41 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

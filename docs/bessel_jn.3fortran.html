@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bessel_jn (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bessel_jn (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>bessel_jn(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-bessel_jn(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 BESSEL_JN(3) - [MATHEMATICS] Bessel function of the first kind
 <P>
 </BLOCKQUOTE>
@@ -76,15 +68,17 @@ BESSEL_JN(3) - [MATHEMATICS] Bessel function of the first kind
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = bessel_jn(n, x)
 <P>
 <PRE>
-           elemental real(kind=KIND) function bessel_jn(n,x)
+         elemental real(kind=KIND) function bessel_jn(n,x)
 <P>
-            integer(kind=**),intent(in) :: n
-            real(kind=KIND),intent(in) :: x
+          integer(kind=**),intent(in) :: n
+          real(kind=KIND),intent(in) :: x
 <P>
 </PRE>
+</BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -105,13 +99,13 @@ The return value has the same type and kind as X.
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-             result = bessel_jn(n1, n2, x)
+        result = bessel_jn(n1, n2, x)
 <P>
-              real(kind=KIND) function bessel_jn(n1, n2, ,x)
+         real(kind=KIND) function bessel_jn(n1, n2, ,x)
 <P>
-              integer(kind=**),intent(in) :: n1
-              integer(kind=**),intent(in) :: n2
-              real(kind=KIND),intent(in) :: x
+         integer(kind=**),intent(in) :: n1
+         integer(kind=**),intent(in) :: n2
+         real(kind=KIND),intent(in) :: x
 <P>
 </PRE>
 <TABLE width=100% cellpadding=3>
@@ -136,15 +130,15 @@ o
 The return value has the same type and kind as X.
 </TD></TR>
 <TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=2>
+<TR></TR></TABLE><A name=2>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-BESSEL_JN( N, X ) computes the Bessel function of the first kind of order N
-of X.
+<P>
+BESSEL_JN( N, X ) computes the Bessel function of the first kind of
+order N of X.
 <P>
 BESSEL_JN(N1, N2, X) returns an array with the Bessel function|Bessel
 functions of the first kind of the orders N1 to N2.
@@ -155,6 +149,7 @@ functions of the first kind of the orders N1 to N2.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -174,8 +169,8 @@ N2 : a non-negative scalar integer.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-X : Shall be a scalar for BESSEL_JN(N,X) or an array For BESSEL_JN(N1,
-N2, X).
+X : Shall be a scalar for BESSEL_JN(N,X) or an array For
+BESSEL_JN(N1, N2, X).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -184,13 +179,14 @@ N2, X).
 
 </A>
 <BLOCKQUOTE>
-The result value of BESSEL_JN (N, X) is a processor-dependent approximation
-to the Bessel function of the first kind and order N of X.
+<P>
+The result value of BESSEL_JN (N, X) is a processor-dependent
+approximation to the Bessel function of the first kind and order N of X.
 <P>
 The result of BESSEL_JN (N1, N2, X) is a rank-one array with extent MAX
-(N2-N1+1, 0). Element i of the result value of BESSEL_JN (N1, N2, X) is a
-processor-dependent approximation to the Bessel function of the first kind
-and order N1+i-1 of X.
+(N2-N1+1, 0). Element i of the result value of BESSEL_JN (N1, N2, X) is
+a processor-dependent approximation to the Bessel function of the first
+kind and order N1+i-1 of X.
 </BLOCKQUOTE>
 <A name=5>
 
@@ -198,23 +194,24 @@ and order N1+i-1 of X.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_bessel_jn
-      use, intrinsic :: iso_fortran_env, only : real_kinds, &
-         & real32, real64, real128
-      implicit none
-      real(kind=real64) :: x = 1.0_real64
-          x = bessel_jn(5,x)
-          write(*,*)x
-      end program demo_bessel_jn
+    program demo_bessel_jn
+    use, intrinsic :: iso_fortran_env, only : real_kinds, &
+       & real32, real64, real128
+    implicit none
+    real(kind=real64) :: x = 1.0_real64
+        x = bessel_jn(5,x)
+        write(*,*)x
+    end program demo_bessel_jn
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-            2.4975773021123450E-004
+          2.4975773021123450E-004
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -224,6 +221,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=7>
@@ -232,16 +230,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 BESSEL_J0(3), BESSEL_J1(3), BESSEL_Y0(3), BESSEL_Y1(3), BESSEL_YN(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022           bessel_jn(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bessel_jn (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b6d69536-77dd-48c7-ac78-6aa85fa82616 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bessel_jn (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ed727ea9-4663-4ad1-b848-23076141c431 using man macros.</FONT>
 <br><br><center><img src="images/bessel_jn.3fortran.gif"></center>
 </div>
 </div>

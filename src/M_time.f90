@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -16,8 +5,8 @@ module M_time
 use M_strings, only : upper, lower,  substitute, split, adjustc
 use M_strings, only : string_to_values, s2v, v2s
 use M_strings, only : compact, transliterate
-use M_verify, only : stderr
 use, intrinsic :: iso_fortran_env, only : int64
+use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdout=>OUTPUT_UNIT,stdin=>INPUT_UNIT
 implicit none !(external,type)
 
 ! ident_1="@(#) M_time M_time(3f) date and time function module"
@@ -31,39 +20,42 @@ private
 ! EPOCH TIME (UT starts at 0000 on 1 Jan. 1970)
    public date_to_unix   !(dat,UNIXTIME,IERR)                 ! Convert date array to Unix Time
    public unix_to_date   !(unixtime,DAT,IERR)                 ! Convert Unix Time to date array
-   public d2u            !(dat) result (UNIXTIME)             ! Convert date array to Unix Time
-   public u2d            !(unixtime) result (DAT)             ! Convert Unix Time to date array
+   public d2u            !(dat) result(UNIXTIME)              ! Convert date array to Unix Time
+   public u2d            !(unixtime) result(DAT)              ! Convert Unix Time to date array
 ! JULIAN
    public julian_to_date !(julian,DAT,IERR)                   ! Convert Julian Date to date array
    public date_to_julian !(dat,JULIAN,IERR)                   ! Convert date array to Julian Date
-   public d2j            !(dat) result (JULIAN)               ! Convert date array to Julian Date
-   public j2d            !(julian) result (DAT)               ! Convert Julian Date to date array
+   public d2j            !(dat) result(JULIAN)                ! Convert date array to Julian Date
+   public j2d            !(julian) result(DAT)                ! Convert Julian Date to date array
 ! DAY OF WEEK
    public dow            !(dat,[WEEKDAY],[DAY],IERR)          ! Convert date array to day of the week as number(Mon=1) and name
 ! WEEK OF YEAR
-   public d2w  !(dat,ISO_YEAR,ISO_WEEK,ISO_WEEKDAY,ISO_NAME)  ! Calculate iso-8601 Week-numbering year date yyyy-Www-d
-   public w2d  !(iso_year,iso_week,iso_weekday,DAT)           ! given iso-8601 Week-numbering year date yyyy-Www-d calculate date
+   public d2w !(dat,ISO_YEAR,ISO_WEEK,ISO_WEEKDAY,ISO_NAME)   ! Calculate iso-8601 Week numerically and as string "yyyy-Www-d"
+   public w2d !(iso_year,iso_week,iso_weekday,DAT)            ! given iso-8601 Week-numbering year date yyyy-Www-d calculate date
+              !(iso_wee_string,DAT,IERR)
 ! ORDINAL DAY
    public d2o            !(dat) result(ORDINAL)               ! given date array return ordinal day of year, Jan 1st=1
    public o2d            !(ordinal) result(DAT)               ! given ordinal day of year return date array, Jan 1st=1
    public ordinal_to_date!(year,ordinal_day,DAT)              ! given ordinal day of year return date array, Jan 1st=1
    public ordinal_seconds!()                                  ! seconds since the beginning of current year
 ! PRINTING DATES
-   public fmtdate        !(dat,format) result (TIMESTR)       ! Convert date array to string using format
+   public fmtdate        !(dat,format) result(TIMESTR)        ! Convert date array to string using format
    public fmtdate_usage  !(indent)                            ! display macros recognized by fmtdate(3f)
-   public now            !(format) result (NOW)               ! return string representing current time given format
+   public now            !(format) result(NOW)                ! return string representing current time given format
    public box_month      !(dat,CALEN)                         ! print specified month into character array
 ! PRINTING DURATIONS
-   public sec2days       !(seconds) result (dhms)             ! converts seconds to string D-HH:MM:SS
-   public days2sec       !(str) result (seconds)              ! converts string D-HH:MM:SS to seconds from small to large
+   public sec2days       !(seconds) result(dhms)              ! converts seconds to string D-HH:MM:SS
+   public days2sec       !(str) result(seconds)               ! converts string D-HH:MM:SS to seconds from small to large
 ! MONTH NAME
-   public mo2v           !(month_name) result (MONTH_NUMBER)  ! given month name return month number
-   public v2mo           !(month_number) result (MONTH_NAME)  ! given month number return month name
-   public mo2d           !(month_name) result (DAT)           ! given month name and year return date array for 1st day of month
+   public mo2v           !(month_name) result(MONTH_NUMBER)       ! given month name return month number
+   public v2mo           !(month_number,short) result(MONTH_NAME) ! given month number return month name
+   public mo2d           !(month_name,year) result(DAT)           ! given month name and year return date array for 1st day of month
+! LOCALE
+   public locale         !(locale_name,mths,wkds,mths_abbr,wkds_abbr,ierr)  ! user-specified strings to use for month and weekday
 ! ASTROLOGICAL
    public easter         !(year,dat)                          ! calculate month and day Easter falls on for given year
-   public moon_fullness  !(datin) result(FULLNESS)            ! percentage of moon phase from new to full
-   public phase_of_moon  !(datin) result(PHASE)               ! return name for phase of moon for given date
+   public moon_fullness  !(dat) result(FULLNESS)              ! percentage of moon phase from new to full
+   public phase_of_moon  !(dat) result(PHASE)                 ! return name for phase of moon for given date
 !x! public ephemeris      !(dat,planet,DD,DM,DC,AH,AM)         ! ephemeris position of planets for adjusting an equatorial telescope
 ! READING DATES
    public guessdate      !(anot,dat)                          ! Converts a date string to a date array, in various formats
@@ -73,7 +65,7 @@ private
    private call_usleep
 !-----------------------------------------------------------------------------------------------------------------------------------
 integer,parameter          :: dp=kind(0.0d0)
-integer,parameter,public   :: realtime=kind(0.0d0)           ! type for 1 epoch time and julian days
+integer,parameter,public   :: realtime=kind(0.0d0)           ! type for unix epoch time and julian days
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! INTERNAL
 real(kind=realtime),parameter,private :: SECDAY=86400.0_dp    ! 24:00:00 hours as seconds
@@ -88,6 +80,29 @@ real(kind=realtime),public,parameter :: dt_hour=3600.0_dp     ! one hour in seco
 real(kind=realtime),public,parameter :: dt_day=86400.0_dp     ! 24:00:00 hours in seconds
 real(kind=realtime),public,parameter :: dt_week=dt_day*7.0_dp ! one week in seconds
 !-----------------------------------------------------------------------------------------------------------------------------------
+character(len=*),parameter   :: gen='(*(g0,1x))'
+!-----------------------------------------------------------------------------------------------------------------------------------
+character(len=:),save,allocatable,public :: M_time_weekday_names(:)
+character(len=:),save,allocatable,public :: M_time_month_names(:)
+character(len=:),save,allocatable,public :: M_time_weekday_names_abbr(:)
+character(len=:),save,allocatable,public :: M_time_month_names_abbr(:)
+!-----------------------------------------------------------------------------------------------------------------------------------
+character(len=*),parameter   :: G_month_names(12)=[                               &
+   &'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', &
+   &'July     ', 'August   ', 'September', 'October  ', 'November ', 'December ']
+
+character(len=3),parameter   :: G_month_names_abbr(12)=G_month_names(:)(1:3)
+
+character(len=*),parameter   :: G_weekday_names(7)=[character(len=9) :: &
+   & 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ]
+
+character(len=3),parameter   :: G_weekday_names_abbr(7)=G_weekday_names(:)(1:3)
+!-----------------------------------------------------------------------------------------------------------------------------------
+interface w2d
+   module procedure w2d_numeric
+   module procedure w2d_string
+end interface w2d
+!-----------------------------------------------------------------------------------------------------------------------------------
  contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -96,7 +111,7 @@ real(kind=realtime),public,parameter :: dt_week=dt_day*7.0_dp ! one week in seco
 !!##NAME
 !!    date_to_julian(3f) - [M_time:JULIAN] converts DAT date-time array to
 !!    Julian Date
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -153,7 +168,7 @@ real(kind=realtime),public,parameter :: dt_week=dt_day*7.0_dp ! one week in seco
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine date_to_julian(dat,julian,ierr)
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
@@ -215,7 +230,7 @@ end subroutine date_to_julian
 !!##NAME
 !!    julian_to_date(3f) - [M_time:JULIAN] converts a JED(Julian Ephemeris
 !!    Date) to a DAT date-time array.
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -250,10 +265,10 @@ end subroutine date_to_julian
 !!      program demo_julian_to_date
 !!      use M_time, only : julian_to_date, fmtdate, realtime
 !!      implicit none
-!!      integer,parameter :: dp=kind(0.0d0)
-!!      real(kind=realtime)     :: juliandate
-!!      integer                 :: dat(8)
-!!      integer                 :: ierr
+!!      integer,parameter   :: dp=kind(0.0d0)
+!!      real(kind=realtime) :: juliandate
+!!      integer             :: dat(8)
+!!      integer             :: ierr
 !!         ! set sample Julian Date
 !!         juliandate=2457589.129_dp
 !!         ! create DAT array for this date
@@ -277,22 +292,22 @@ end subroutine date_to_julian
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine julian_to_date(julian,dat,ierr)
 
 ! ident_3="@(#) M_time julian_to_date(3f) Converts Julian Date to DAT date-time array"
 
-real(kind=realtime),intent(in)   :: julian            ! Julian Date (non-negative)
-integer,intent(out)              :: dat(8)
-integer,intent(out)              :: ierr              ! 0 for successful execution, otherwise 1
-integer                          :: tz
-real(kind=realtime)              :: second
-integer                          :: year
-integer                          :: month
-integer                          :: day
-integer                          :: hour
-integer                          :: minute
-integer                          :: jalpha,ja,jb,jc,jd,je,ijul
+real(kind=realtime),intent(in) :: julian            ! Julian Date (non-negative)
+integer,intent(out)            :: dat(8)
+integer,intent(out)            :: ierr              ! 0 for successful execution, otherwise 1
+integer                        :: tz
+real(kind=realtime)            :: second
+integer                        :: year
+integer                        :: month
+integer                        :: day
+integer                        :: hour
+integer                        :: minute
+integer                        :: jalpha,ja,jb,jc,jd,je,ijul
 
    if(julian<0.0_dp) then                     ! Negative Julian Date not allowed
       ierr=1
@@ -359,7 +374,7 @@ end subroutine julian_to_date
 !!##NAME
 !!    date_to_unix(3f) - [M_time:UNIX_EPOCH] converts DAT date-time array to Unix
 !!    Epoch Time
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -411,7 +426,7 @@ end subroutine julian_to_date
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine date_to_unix(dat,unixtime,ierr)
 
 ! ident_4="@(#) M_time date_to_unix(3f) Convert DAT date-time array to Unix Epoch Time"
@@ -422,7 +437,7 @@ integer,intent(out)             :: ierr         ! return 0 on success, otherwise
 real(kind=realtime)             :: julian
 real(kind=realtime),save        :: julian_at_epoch
 logical,save                    :: first=.true.
-integer,parameter               :: ref(8)=[1970,1,1,0,0,0,0,0]
+integer,parameter               :: ref(*)=[1970,1,1,0,0,0,0,0]
 !-----------------------------------------------------------------------------------------------------------------------------------
    if (first) then                                    ! Convert zero of Unix Epoch Time to Julian Date and save
       call date_to_julian(ref,julian_at_epoch,ierr)
@@ -442,7 +457,7 @@ end subroutine date_to_unix
 !!    unix_to_date(3f) - [M_time:UNIX_EPOCH] converts Unix Epoch Time to
 !!    DAT date-time
 !!    array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -508,19 +523,19 @@ end subroutine date_to_unix
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine unix_to_date(unixtime,dat,ierr)
 
 ! ident_5="@(#) M_time unix_to_date(3f) Converts Unix Time to DAT date-time array"
 
-class(*),intent(in)              :: unixtime                            ! Unix time (seconds)
-integer,intent(out)              :: dat(8)                              ! date and time array
-integer,intent(out)              :: ierr                                ! 0 for successful execution, otherwise 1
-real(kind=realtime)              :: julian                              ! Unix time converted to a Julian Date
-real(kind=realtime)              :: local_unixtime
-real(kind=realtime),save         :: Unix_Origin_as_Julian               ! start of Unix Time as Julian Date
-logical,save                     :: first=.TRUE.
-integer,parameter               :: ref(8)=[1970,1,1,0,0,0,0,0]
+class(*),intent(in)      :: unixtime                             ! Unix time (seconds)
+integer,intent(out)      :: dat(8)                               ! date and time array
+integer,intent(out)      :: ierr                                 ! 0 for successful execution, otherwise 1
+real(kind=realtime)      :: julian                               ! Unix time converted to a Julian Date
+real(kind=realtime)      :: local_unixtime
+real(kind=realtime),save :: Unix_Origin_as_Julian                ! start of Unix Time as Julian Date
+logical,save             :: first=.TRUE.
+integer,parameter        :: ref(8)=[1970,1,1,0,0,0,0,0]
 !  Notice that the value UNIXTIME can be any of several types ( INTEGER,REAL,REAL(KIND=REALTIME))
    select type(unixtime)
    type is (integer);             local_unixtime=dble(unixtime)
@@ -544,11 +559,11 @@ end subroutine unix_to_date
 !>
 !!##NAME
 !!    d2o(3f) - [M_time:ORDINAL_DAY] converts DAT date-time array to Ordinal day
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function d2o(dat) result (ordinal)
+!!    function d2o(dat) result(ordinal)
 !!
 !!     integer,intent(in),optional :: dat(8)
 !!     integer                     :: ordinal
@@ -611,8 +626,8 @@ end subroutine unix_to_date
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function d2o(dat) result (ordinal)
+!!    MIT
+function d2o(dat) result(ordinal)
 
 ! ident_6="@(#) M_time d2o(3f) Converts DAT date-time array to Ordinal day"
 
@@ -631,7 +646,7 @@ integer                     :: temp_dat(8)
    endif
    call date_to_unix(dat_local,unixtime,ierr)         ! convert date to Unix Epoch Time
    if(ierr/=0)then
-      call stderr('*d2o* bad date array')
+      write(stderr,gen)'<ERROR>*d2o*: bad date array'
       ordinal=-1                                      ! initialize to bad value
    else
       temp_dat=[dat_local(1),1,1,dat_local(4),0,0,0,0]
@@ -645,7 +660,7 @@ end function d2o
 !>
 !!##NAME
 !!    ordinal_seconds(3f) - [M_time:ORDINAL_DAY] seconds since beginning of year
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
 !!    function ordinal_seconds()
@@ -679,7 +694,7 @@ end function d2o
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 integer function ordinal_seconds()
 
 ! ident_7="@(#) M_time ordinal_seconds(3f) seconds since beginning of year"
@@ -699,7 +714,7 @@ end function ordinal_seconds
 !!##NAME
 !!    ordinal_to_date(3f) - [M_time:ORDINAL_DAY] when given a valid year and
 !!    day of the year returns the DAT array for the date
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
 !!      subroutine ordinal_to_date(yyyy, ddd, dat)
@@ -722,9 +737,9 @@ end function ordinal_seconds
 !!     program demo_ordinal_to_date
 !!     use M_time, only : ordinal_to_date
 !!     implicit none
-!!     INTEGER            :: yyyy, ddd, mm, dd, yy
-!!     integer            :: dat(8)
-!!     integer            :: ios
+!!     integer :: yyyy, ddd, mm, dd, yy
+!!     integer :: dat(8)
+!!     integer :: ios
 !!       INFINITE: do
 !!          write(*,'(a)',advance='no')&
 !!          & 'Enter year YYYY and ordinal day of year DD '
@@ -760,11 +775,11 @@ end subroutine ordinal_to_date
 !>
 !!##NAME
 !!    o2d(3f) - [M_time:ORDINAL_DAY] converts Ordinal day to DAT date-time array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function o2d(ordinal,[year]) result (dat)
+!!    function o2d(ordinal,[year]) result(dat)
 !!
 !!     integer,intent(in) :: ordinal  ! the day of the year
 !!     integer,optional   :: year     ! year
@@ -818,16 +833,16 @@ end subroutine ordinal_to_date
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function o2d(ordinal,year) result (dat)
+!!    MIT
+function o2d(ordinal,year) result(dat)
 
 ! ident_9="@(#) M_time o2d(3f) Converts ordinal day to DAT date-time array"
 
-integer                    :: dat(8)                  ! date time array similar to that returned by DATE_AND_TIME
-integer,intent(in)         :: ordinal                 ! the returned number of days
-integer,optional           :: year
-real(kind=realtime)        :: unixtime                ! Unix time (seconds)
-integer                    :: ierr                    ! return 0 on success, otherwise 1 from date_to_unix(3f)
+integer                     :: dat(8)                 ! date time array similar to that returned by DATE_AND_TIME
+integer,intent(in)          :: ordinal                ! the returned number of days
+integer,intent(in),optional :: year
+real(kind=realtime)         :: unixtime               ! Unix time (seconds)
+integer                     :: ierr                   ! return 0 on success, otherwise 1 from date_to_unix(3f)
    if(present(year))then
       dat=[year,1,ordinal,get_timezone(),0,0,0,0]     ! initialize DAT with parameters and set timezone, set HH:MM:SS.XX to zero
    else
@@ -837,7 +852,7 @@ integer                    :: ierr                    ! return 0 on success, oth
    ierr=0
    call date_to_unix(dat,unixtime,ierr)               ! convert date to Unix Epoch Time
    if(ierr/=0)then
-      call stderr('*o2d* bad date array')
+      write(stderr,gen) '<ERROR>*o2d*: bad date array'
    else
       dat=u2d(unixtime)
    endif
@@ -849,14 +864,15 @@ end function o2d
 !!##NAME
 !!    v2mo(3f) - [M_time:MONTH_NAME] returns the month name of a Common
 !!    month number
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function v2mo(imonth) result(month_name)
+!!    function v2mo(imonth,short) result(month_name)
 !!
 !!     integer,intent(in)           :: imonth      ! month number (1-12)
 !!     character(len=:),allocatable :: month_name  ! month name
+!!     logical,intent(in),optional  :: short
 !!
 !!##DESCRIPTION
 !!   Given a Common Calendar month number, return the name of the month
@@ -865,6 +881,7 @@ end function o2d
 !!##OPTIONS
 !!    imonth      Common month number (1-12). If out of the allowable range
 !!                the month name returned will be 'UNKNOWN'.
+!!    short       Flag whether to return short or long name
 !!##RETURNS
 !!    month_name  A string representing a month name or the word 'UNKNOWN'
 !!
@@ -899,22 +916,58 @@ end function o2d
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function v2mo(imonth) result(month_name)
+!!    MIT
+function v2mo(imonth,short) result(month_name)
 
 ! ident_10="@(#) M_time v2mo(3f) returns the month name of a Common month number"
 
 ! JSU 2015-12-13
 character(len=:),allocatable :: month_name                                        ! string containing month name or abbreviation.
 integer,intent(in)           :: imonth                                            ! the number of the month(1-12)
-character(len=*),parameter   :: names(12)=[                                    &
-   &'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', &
-   &'July     ', 'August   ', 'September', 'October  ', 'November ', 'December ']
+logical,intent(in),optional  :: short
+logical                      :: short_
 
-   select case(imonth)
-   case (1:12);        month_name=trim(names(imonth))
-   case default;       month_name='UNKNOWN'
-   end select
+   if(present(short))then
+      short_=short
+   else
+      short_=.false.
+   endif
+
+   if(short_)then ! short names
+      if(allocated(M_time_month_names_abbr))then                                          ! user user-specified month names
+         if(size(M_time_month_names_abbr).ne.12)then
+            write(stderr,gen) '<ERROR>*v2mo*: month name abbr. count not 12:',size(M_time_month_names_abbr)
+            month_name='UNKNOWN'
+         else
+            select case(imonth)
+            case (1:12);     month_name=trim(M_time_month_names_abbr(imonth))
+            case default;    month_name='UNKNOWN'
+            end select
+         endif
+      else
+         select case(imonth)
+         case (1:12);        month_name=trim(G_month_names(imonth)(1:3))
+         case default;       month_name='UNKNOWN'
+         end select
+      endif
+   else  ! long names
+      if(allocated(M_time_month_names))then                                          ! user user-specified month names
+         if(size(M_time_month_names).ne.12)then
+            write(stderr,gen) '<ERROR>*v2mo*: month name count not 12:',size(M_time_month_names)
+            month_name='UNKNOWN'
+         else
+            select case(imonth)
+            case (1:12);     month_name=trim(M_time_month_names(imonth))
+            case default;    month_name='UNKNOWN'
+            end select
+         endif
+      else
+         select case(imonth)
+         case (1:12);        month_name=trim(G_month_names(imonth))
+         case default;       month_name='UNKNOWN'
+         end select
+      endif
+   endif
 
 end function v2mo
 !===================================================================================================================================
@@ -924,11 +977,11 @@ end function v2mo
 !!##NAME
 !!    mo2d(3f) - [M_time:MONTH_NAME] given month name return DAT date-time
 !!    array for beginning of that month in specified year
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!       function mo2d(month_name,year) result (dat)
+!!       function mo2d(month_name,year) result(dat)
 !!
 !!        character(len=*),intent(in) :: month_name
 !!        integer,intent(in),optional :: year
@@ -936,8 +989,8 @@ end function v2mo
 !!
 !!##DESCRIPTION
 !!   Given a Common Calendar month name, return the date as a "DAT" array
-!!   for the 1st day of the month. An optional year may be specified. The
-!!   year defaults to the current year.
+!!   for the 1st day of the month. An optional year that defaults to the
+!!   current year may be specified.
 !!
 !!##OPTIONS
 !!    month_name  A string representing a Common Calendar month name.
@@ -956,19 +1009,19 @@ end function v2mo
 !!     program demo_mo2d
 !!     use M_time, only : mo2d
 !!     implicit none
-!!        write(*,'(*(i0:,":"))')mo2d('March')
+!!        write(*,'("MARCH:",*(i0:,":"))')mo2d('March')
 !!     end program demo_mo2d
 !!
-!!    results:
+!!    Results:
 !!
-!!       2016:3:1:-240:0:0:0:0
+!!          > MARCH:2016:3:1:-240:0:0:0:0
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function mo2d(month_name,year) result (dat)
+!!    MIT
+function mo2d(month_name,year) result(dat)
 
 ! ident_11="@(#) M_time mo2d(3f) month name to DAT date-time array for 1st of that month in specified year"
 
@@ -981,7 +1034,7 @@ integer                     :: dat(8)
    endif
    dat(2)=mo2v(month_name) ! convert given month name to a number
    if(dat(2)<=0)then
-      call stderr('*mo2d* bad month name '//trim(month_name))
+      write(stderr,gen) '<ERROR>*mo2d*: bad month name:',trim(month_name)
       dat(2)=1
    endif
    dat(3)=1  ! set day to first of month
@@ -997,7 +1050,7 @@ end function mo2d
 !!##NAME
 !!    mo2v(3f) - [M_time:MONTH_NAME] given month name return month number
 !!    (1-12) of that month
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -1013,9 +1066,7 @@ end function mo2d
 !!   12 for December.
 !!
 !!##OPTIONS
-!!    month_name  name or abbreviation of month. Case is ignored
-!!                Once enough characters are found to uniquely identify a
-!!                month the rest of the name is ignored.
+!!    month_name  name or abbreviation of month. Case is ignored.
 !!##RETURNS
 !!    imonth      month number returned. If the name is not recognized a -1
 !!                is returned.
@@ -1029,7 +1080,6 @@ end function mo2d
 !!     implicit none
 !!        write(*,*)mo2v("April")
 !!        write(*,*)mo2v('Apr')
-!!        ! NOTE: still matches September, as "SE" was enough
 !!        write(*,*)mo2v('sexember')
 !!        write(*,*)mo2v('unknown')  ! returns -1
 !!     end program demo_mo2v
@@ -1038,46 +1088,41 @@ end function mo2d
 !!
 !!       >  4
 !!       >  4
-!!       >  9
+!!       > -1
 !!       > -1
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-elemental function mo2v(month_name) result(imonth)
+!!    MIT
+elemental impure function mo2v(month_name) result(imonth)
 
 ! ident_12="@(#) M_time mo2v(3f) given month name return month number (1-12) of that month"
 
 ! JSU 2015-12-13
-character(len=*),intent(in):: month_name   ! string containing month name or abbreviation.
-integer                    :: imonth       ! the number of the month(1-12), or -1 if the name could not be recognized.
-character(len=3)           :: string
-  string = upper(month_name)     ! Case is ignored; test string now guaranteed to have three characters
+character(len=*),intent(in)  :: month_name   ! string containing month name or abbreviation.
+integer                      :: imonth       ! the number of the month(1-12), or -1 if the name could not be recognized.
+character(len=:),allocatable :: months(:)
+character(len=:),allocatable :: upper_months(:)
+character(len=:),allocatable :: upper_month_name
+  upper_month_name = upper(month_name)     ! Case is ignored; test string now guaranteed to have three characters
   imonth = 0
-  FIND: select case(string(1:1)) ! The month name has to match up to the unique beginning of a month name, and the rest is ignored.
-  case('F'); imonth=2      ! February
-  case('S'); imonth=9      ! September
-  case('O'); imonth=10     ! October
-  case('N'); imonth=11     ! November
-  case('D'); imonth=12     ! December
-  case default
-     select case(string(1:2))
-     case('JA'); imonth=1    ! JAnuary
-     case('AP'); imonth=4    ! APril
-     case('AU'); imonth=8    ! AUgust
-     case default
-        select case(string(1:3))
-        case('MAR'); imonth=3 ! MARch
-        case('MAY'); imonth=5 ! MAY
-        case('JUN'); imonth=6 ! JUNe
-        case('JUL'); imonth=7 ! JULy
-        case default
-           imonth=-1
-        end select
-     end select
-  end select FIND
+  if(allocated(M_time_month_names))then
+     upper_months=upper(M_time_month_names)
+  else
+     upper_months=upper(G_month_names)
+  endif
+  if(size(upper_months).ne.12)then
+     write(stderr,gen) '<ERROR>*mo2v*: month name count not 12:',size(upper_months)
+     months=['UNKNOWN']
+  else
+     months=pack(upper_months//'',upper_month_name.eq.upper_months(:)(:len_trim(upper_month_name))) ! concatenate for gfortran bug
+     if(size(months).gt.1)months=pack(months//'',upper_month_name.eq.months)
+     if(size(months).eq.0)months=['UNKNOWN']
+  endif
+  imonth=findloc(upper_months//'', months(1)//'',dim=1) ! concatenation avoids gfortran bug
+  if(imonth.eq.0)imonth=-1
 end function mo2v
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -1085,12 +1130,12 @@ end function mo2v
 !>
 !!##NAME
 !!    now(3f) - [M_time:DATE_PRINTING] return string representing current
-!!    time given format
-!!    (LICENSE:PD)
+!!    time given one of many formats to present with
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function now(format) RESULT (timestr)
+!!    function now(format) result(timestr)
 !!
 !!     character(len=*),intent(in)     :: format  ! input format string
 !!     character(len=:),allocatable    :: timestr ! formatted date
@@ -1114,27 +1159,27 @@ end function mo2v
 !!     program demo_now
 !!     use M_time, only : now
 !!     implicit none
-!!        write(*,*)now("The current date is %w, %l %d, %Y %H:%m:%s %N")
-!!        call showme()
-!!     contains
-!!     subroutine showme() ! see all formatting options
-!!     use M_time, only : fmtdate_usage
-!!        call fmtdate_usage() ! see all formatting options
-!!     end subroutine
+!!        write(*,*)now("The current date is &
+!!           &year/month/day hour:minute:second timezone")
+!!        write(*,*)now("The current date is &
+!!           &WEEKDAY at HOUR GOOD, MONTH DAY, year")
+!!        write(*,*)now("The current date is &
+!!           &%w, %l %d, %Y %H:%m:%s %N")
+!!        write(*,*)now("iso")
 !!     end program demo_now
+!! ```
+!! Results:
 !!
-!!    results:
-!!
-!!       The current date is Sun, Jul 17th, 2016 01:21:35 PM
-!!        ::
-!!        :: description of all formatting options will appear here
-!!        ::
+!!  >  The current date is 2024/06/28 14:56:36 -0400
+!!  >  The current date is Friday at 2 PM, June 28th, 2024
+!!  >  The current date is Fri, Jun 28th, 2024 2:56:36 PM
+!!  >  2024-06-28T14:56:36-04:00
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function now(format)
 
 ! ident_13="@(#) M_time now(3f) return string representing current time given format"
@@ -1158,11 +1203,11 @@ end function now
 !!##NAME
 !!    fmtdate(3f) - [M_time:DATE_PRINTING] given DAT date-time array return
 !!    date as string using specified format
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function fmtdate(values,format) RESULT (timestr)
+!!    function fmtdate(values,format) result(timestr)
 !!
 !!     integer,dimension(8),intent(in)      :: values
 !!     character(len=*),intent(in),optional :: format
@@ -1197,28 +1242,18 @@ end function now
 !!     integer :: dat(8)
 !!        call date_and_time(values=dat)
 !!        write(*,*)fmtdate(dat,"current date: %w, %l %d, %Y %H:%m:%s %N")
-!!        call showme()
-!!     contains
-!!     subroutine showme()
-!!        use M_time, only : fmtdate_usage
-!!        call fmtdate_usage() ! see all formatting options
-!!     end subroutine showme
 !!     end program demo_fmtdate
 !!
 !!    results:
 !!
 !!       The current date is Sun, Jul 17th, 2016 01:21:35 PM
-!!        ::
-!!        :: An up-to-date description of all the
-!!        :: formatting options will appear here
-!!        ::
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015-12-19
 !!
 !!##LICENSE
-!!    Public Domain
-function fmtdate(values,format) RESULT (timestr)
+!!    MIT
+function fmtdate(values,format) result(timestr)
 
 ! ident_14="@(#) M_time fmtdate(3f) given DAT date-time array return date as string using format"
 
@@ -1232,7 +1267,7 @@ integer,parameter                    :: longest=4096
 character(len=1)                     :: chara     ! character being looked at in format string
 character(len=10)                    :: iso_name
 character(len=2)                     :: dayend
-character(len=9)                     :: day       ! day of week
+character(len=:),allocatable         :: day       ! day of week
 character(len=:),allocatable         :: local_format
 character(len=longest)               :: text      ! character array
 character(len=longest)               :: xxxx
@@ -1257,12 +1292,19 @@ real(kind=realtime),save             :: unixtime_last
       local_format=' '
    endif
 
+   if(allocated(M_time_weekday_names))then      ! day must be allocated, make sure long enough for user-define names
+      day=repeat(' ',len(M_time_weekday_names))
+   else
+      day=repeat(' ',len(G_weekday_names))
+   endif
+
    select case(local_format)
    case('iso-8601W','isoweek') ; local_format='%I'                    ! 2016-W24-5 (yyyy-Www-d)
    case('iso-8601','iso')      ; local_format='%Y-%M-%DT%h:%m:%s%z'   ! 2006-08-14T02:34:56-0600
    case('sql')       ; local_format='"%Y-%M-%D %h:%m:%s.%x"'          !
    case('sqlday')    ; local_format='"%Y-%M-%D"'                      !
    case('sqltime')   ; local_format='"%h:%m:%s.%x"'                   !
+   case('dash')      ; local_format='%Y-%M-%D'                        !
    case('rfc-2822')  ; local_format='%w, %D %l %Y %h:%m:%s %T'        ! Mon, 14 Aug 2006 02:34:56 -0600
    case('rfc-3339')  ; local_format='%Y-%M-%DT%h:%m:%s%z'             ! 2006-08-14 02:34:56-06:00
    case('suffix')    ; local_format='%Y%D%M%h%m%s'                    ! 20170122210327
@@ -1272,6 +1314,7 @@ real(kind=realtime),save             :: unixtime_last
    case(' ')         ; local_format='%W, %L %d, %Y %H:%m:%s %N UTC%z' ! Friday, June 17th, 2016 06:31:00 PM UTC-04:00
    case('formal')    ; local_format='The %d of %L %Y'                 ! The 9th of November 2014
    case('lord')  ; local_format='the %d day of %L in the year of our Lord %Y' ! the 9th day of November in the year of our Lord 2014
+   case('usage','?','help') ; local_format='%?'                       ! call fmtdate_usage
    case('easter')
       call easter(values(1), valloc)                                  ! given year get month and day Easter falls on
       local_format="Easter day: the %d day of %L in the year of our Lord %Y"
@@ -1292,10 +1335,12 @@ real(kind=realtime),save             :: unixtime_last
          call substitute(xxxx,'month','%M')
          call substitute(xxxx,'MONTH','%L')
          call substitute(xxxx,'Month','%l')
+         call substitute(xxxx,'Mth','%l')
 
          call substitute(xxxx,'weekday','%u')
          call substitute(xxxx,'WEEKDAY','%W')
          call substitute(xxxx,'Weekday','%w')
+         call substitute(xxxx,'wkday','%w')
          call substitute(xxxx,'today','%Y%M%D')
          call substitute(xxxx,'day','%D')
          call substitute(xxxx,'DAY','%d')
@@ -1315,11 +1360,13 @@ real(kind=realtime),save             :: unixtime_last
          call substitute(xxxx,'epoch','%e')
          call substitute(xxxx,'julian','%j')
          call substitute(xxxx,'ordinal','%O')
+         call substitute(xxxx,'AGE','%a')
+         call substitute(xxxx,'age','%A')
 
          if(index(xxxx,'%')==0)then            ! if no % characters change every char to %char if a format macro letter
             do i=65,122
              select case(achar(i))
-             case('B':'E','H':'J','L':'Q','S','T','U','W','Y','Z','b':'e','h':'m','n','o':'q','s':'u','w','x','z')
+             case('A','B':'E','H':'J','L':'Q','S','T','U','W','Y','Z','a','b':'e','h':'m','n','o':'q','s':'u','w','x','z')
                  call substitute(xxxx,achar(i),'%'//achar(i))
              end select
             enddo
@@ -1344,6 +1391,10 @@ real(kind=realtime),save             :: unixtime_last
          select case(chara)
          !=====================================================================================
          case('%'); write(text(iout:),'(A1)')chara                        ! literal percent character
+         !=====================================================================================
+         case('a'); write(text(iout:),'(G0)')sec2days(d2u()-d2u(valloc))  ! time since now in d-h:m:s format
+         !=====================================================================================
+         case('A'); write(text(iout:),'(G0)')(d2u()-d2u(valloc))          ! time since now in seconds
          !=====================================================================================
          case('b'); write(text(iout:),'(A1)')' '                          ! space character
          !=====================================================================================
@@ -1382,10 +1433,10 @@ real(kind=realtime),save             :: unixtime_last
                     endif
                     write(text(iout:),'(I0)')ii
          !=====================================================================================
-         case('i'); call d2w(valloc,iso_year,iso_week,iso_weekday,iso_name) ! ISO week of year
+         case('i'); call d2w(valloc,iso_year,iso_week,iso_weekday,iso_name) ! return ISO-8601 week of year
                     write(text(iout:),'(I0)')iso_week
          !=====================================================================================
-         case('I'); call d2w(valloc,iso_year,iso_week,iso_weekday,iso_name) ! iso-8601 Week-numbering year date
+         case('I'); call d2w(valloc,iso_year,iso_week,iso_weekday,iso_name) ! return ISO-8601 Week as string of form "yyyy-Www-d"
                     write(text(iout:),'(a)')iso_name
          !=====================================================================================
          case('j'); call date_to_julian(valloc,julian,ierr)               ! integer Julian Day (truncated to integer)
@@ -1401,7 +1452,7 @@ real(kind=realtime),save             :: unixtime_last
          case('K'); call system_clock(count=systemclock,count_rate=countrate)  ! system clock count
                     write(text(iout:),'(I0)') systemclock
          !=====================================================================================
-         case('l'); write(text(iout:),'(A3)')v2mo(valloc(2))              ! three characters of the name of the month of the year
+         case('l'); write(text(iout:),'(A)')v2mo(valloc(2),short=.true.)  ! short name of the month of the year
          !=====================================================================================
          case('L'); write(text(iout:),'(A)')v2mo(valloc(2))               ! name of the month of the year
          !=====================================================================================
@@ -1455,16 +1506,26 @@ real(kind=realtime),save             :: unixtime_last
          case('W'); call dow(valloc,weekday,day,ierr)                     ! Return the name of the day of the week
                     write(text(iout:),'(a)')day
          !=====================================================================================
-         case('w'); call dow(valloc,weekday,day,ierr)                     ! Return the first three characters of the day of the week
-                    write(text(iout:),'(A3)')day(1:3)
+         !jsujsu
+         case('w'); call dow(valloc,weekday,day,ierr)                     ! Return the first abbreviation of the day of the week
+                    if(ierr.ne.0)then
+                       text(iout:)='ERROR'
+                    else
+                       if(allocated(M_time_weekday_names_abbr))then
+                          text(iout:)=trim(M_time_weekday_names_abbr(weekday))
+                       else
+                          write(text(iout:),'(A)')trim(G_weekday_names_abbr(weekday))
+                       endif
+                    endif
          !=====================================================================================
          case('x'); write(text(iout:),'(I3.3)')valloc(8)                  ! the milliseconds of the second, in the range 0 to 999
          !=====================================================================================
          case('Y'); write(text(iout:),'(I0.4)')valloc(1)                  ! the year, including the century (for example, 1990)
          !=====================================================================================
-         case('Z'); write(text(iout:),'(SP,I5.4)')valloc(4)               ! time difference with respect to UTC in minutes
+         case('Z'); write(text(iout:),'(SP,I5.4,"m")')valloc(4)           ! time difference with respect to UTC in minutes
          !=====================================================================================
          case('z'); write(text(iout:),'(SP,I3.2,":",SS,I2.2)')int(valloc(4)/60),abs(mod(valloc(4),60)) ! time from UTC as +-hh:mm
+         case('?'); write(text(iout:),'()'); call fmtdate_usage()
          !=====================================================================================
          case default
             write(text(iout:),'(A1)')chara
@@ -1486,7 +1547,7 @@ end function fmtdate
 !!##NAME
 !!    fmtdate_usage(3f) - [M_time:DATE_PRINTING] display macros recognized
 !!    by fmtdate(3f) and now(3f)
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -1528,7 +1589,7 @@ end function fmtdate
 !!     (2) %M -- month of year, 01 to 12                   07
 !!     (3) %D -- day of month, 01 to 31                    29
 !!         %d -- day of month, with suffix (1st, 2nd,...)  29th
-!!     (4) %Z -- minutes from UTC                          -0240
+!!     (4) %Z -- minutes from UTC                          -0240m
 !!         %z -- -+hh:mm from UTC                          -04:00
 !!         %T -- -+hhmm  from UTC                          -0400
 !!     (5) %h -- hours, 00 to 23                           10
@@ -1563,12 +1624,17 @@ end function fmtdate
 !!         %n -- new line (system dependent)
 !!         %q -- single quote (apostrophe)
 !!         %Q -- double quote
+!!      Duration:
+!!         %a -- Time since now as d-h:m:s               1-12:34:30
+!!         %A -- TIme since now as seconds               12810.4500
 !!      Program timing:
 !!         %c -- CPU_TIME(3f) output                     .21875000000000000
 !!         %C -- number of times this routine is used    1
 !!         %S -- seconds since last use of this format   .0000000000000000
 !!         %k -- time in seconds from SYSTEM_CLOCK(3f)   723258.812
 !!         %K -- time in clicks from SYSTEM_CLOCK(3f)    723258812
+!!   Help:
+!!         %? -- call fmtdate_usage
 !!
 !!    If no percent (%) is found in the format one of several
 !!    alternate substitutions occurs.
@@ -1577,23 +1643,51 @@ end function fmtdate
 !!    keywords the following substitutions occur:
 !!
 !!      "iso-8601",
-!!      "iso"        ==> %Y-%M-%DT%h:%m:%s%z
+!!      "iso"           ==> %Y-%M-%DT%h:%m:%s%z
 !!      "iso-8601W",
-!!      "isoweek"    ==> %I 2016-W30-5
-!!      "sql"        ==> "%Y-%M-%D %h:%m:%s.%x"
-!!      "sqlday"     ==> "%Y-%M-%D"
-!!      "sqltime"    ==> "%h:%m:%s.%x"
-!!      "rfc-2822"   ==> %w, %D %l %Y %h:%m:%s %T
-!!      "rfc-3339"   ==> %Y-%M-%DT%h:%m:%s%z
-!!      "date"       ==> %w %l %D %h:%m:%s UTC%z %Y
-!!      "short"      ==> %w, %l %d, %Y %H:%m:%s %N UTC%z
-!!      "long"," "   ==> %W, %L %d, %Y %H:%m:%s %N UTC%z
-!!      "suffix"     ==> %Y%D%M%h%m%s
-!!      "formal"     ==> The %d of %L %Y
-!!      "lord"       ==> the %d day of %L in the year of our Lord %Y
-!!      "easter"     ==> FOR THE YEAR OF THE CURRENT DATE:
+!!      "isoweek"       ==> %I 2016-W30-5
+!!      "sql"           ==> "%Y-%M-%D %h:%m:%s.%x"
+!!      "sqlday"        ==> "%Y-%M-%D"
+!!      "dash"          ==> %Y-%M-%D
+!!      "sqltime"       ==> "%h:%m:%s.%x"
+!!      "rfc-2822"      ==> %w, %D %l %Y %h:%m:%s %T
+!!      "rfc-3339"      ==> %Y-%M-%DT%h:%m:%s%z
+!!      "date"          ==> %w %l %D %h:%m:%s UTC%z %Y
+!!      "short"         ==> %w, %l %d, %Y %H:%m:%s %N UTC%z
+!!      "long"," "      ==> %W, %L %d, %Y %H:%m:%s %N UTC%z
+!!      "suffix"        ==> %Y%D%M%h%m%s
+!!      "formal"        ==> The %d of %L %Y
+!!      "lord"          ==> the %d day of %L in the year of our Lord %Y
+!!      "easter"        ==> FOR THE YEAR OF THE CURRENT DATE:
 !!                       Easter day: the %d day of %L in the year of our Lord %Y
-!!      "all"        ==> A SAMPLE OF DATE FORMATS
+!!      "all"           ==> A SAMPLE OF DATE FORMATS
+!!      "usage|help|?"  ==> %?
+!!
+!!   Examples of single keywords
+!!
+!!    iso-8601
+!!    iso       : 2024-06-29T08:56:48-04:00
+!!    iso-8601W
+!!    isoweek   : 2024-W26-6
+!!    sql       : "2024-06-29 08:56:48.750"
+!!    sqlday    : "2024-06-29"
+!!    dash      : 2024-06-29
+!!    sqltime   : 08:56:48.833
+!!    rfc-2822  : Sat, 29 Jun 2024 08:56:48 -0400
+!!    rfc-3339  : 2024-06-29T08:56:48-04:00
+!!    date      : Sat Jun 29 08:56:48 UTC-04:00 2024
+!!    short     : Sat, Jun 29th, 2024 8:56:48 AM UTC-04:00
+!!    long      : Saturday, June 29th, 2024 8:56:48 AM UTC-04:00
+!!    suffix    : 20242906085648
+!!    formal    : The 29th of June 2024
+!!    lord      : the 29th day of June in the year of our Lord 2024
+!!    easter    : Easter day: the 31st day of March in the year of our Lord 2024
+!!    all       : Civil Calendar: Saturday June 29th
+!!                Civil Date: 2024-06-29 08:56:49 -04:00
+!!                Julian Date: 2460491.0394568751
+!!                Unix Epoch Time: 1719665809.0740056
+!!                Day Of Year: 181
+!!                ISO-8601 week: 2024-W26-6
 !!
 !!    otherwise the following words are replaced with the most
 !!    common macros:
@@ -1612,20 +1706,22 @@ end function fmtdate
 !!       julian   %j  2457599
 !!       ordinal  %O  211
 !!       weekday  %u  5
+!!       age      %A  13238944.3030
 !!
 !!    string values:
 !!
-!!       MONTH    %L  July
-!!       Month    %l  Jul
-!!       WEEKDAY  %W  Thursday
-!!       Weekday  %w  Thu
-!!       DAY      %d  7th
-!!       TIMEZONE %z  -04:00
-!!       Timezone %Z  -240
-!!       GOOD     %N  AM
-!!       HOUR     %H  10
+!!       MONTH          %L  July
+!!       Month|Mth      %l  Jul
+!!       WEEKDAY        %W  Thursday
+!!       Weekday|wkday  %w  Thu
+!!       DAY            %d  7th
+!!       TIMEZONE       %z  -04:00
+!!       Timezone       %Z  -240m
+!!       GOOD           %N  AM
+!!       HOUR           %H  10
+!!       AGE            %a  1200-10:30:40
 !!
-!!    if none of these keywords are found then every letter that
+!!    If none of these keywords are found then every letter that
 !!    is a macro is assumed to have an implied percent in front
 !!    of it. For example:
 !!
@@ -1635,7 +1731,7 @@ end function fmtdate
 !!    John S. Urban, 2015-10-24
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine fmtdate_usage(indent)
 
 ! ident_15="@(#) M_time fmtdate_usage(3f) display macros recognized by fmtdate(3f)"
@@ -1694,65 +1790,74 @@ usage=[ CHARACTER(LEN=128) :: &
 &'     %%n -- new line (system dependent)               %n     ',&
 &'     %%q -- single quote (apostrophe)                 %q     ',&
 &'     %%Q -- double quote                              %Q     ',&
+&'%b Duration:                                                 ',&
+&'     %%a -- Time since now as d-hh:mm:ss              %a     ',&
+&'     %%A -- Time since now as seconds                 %A     ',&
 &'%b Program timing:                                           ',&
 &'     %%c -- CPU_TIME(3f) output                       %c     ',&
 &'     %%C -- number of times this routine is used      %C     ',&
 &'     %%S -- seconds since last use of this format     %S     ',&
 &'     %%k -- time in seconds from SYSTEM_CLOCK(3f)     %k     ',&
 &'     %%K -- time in clicks from SYSTEM_CLOCK(3f)      %K     ',&
+&'%b Help:                                                     ',&
+&'     %%? -- call fmtdate_usage()                             ',&
 &'%b                                                           ',&
 &'%bIf no percent (%%) is found in the format one of several   ',&
 &'%balternate substitutions occurs.                            ',&
 &'%b                                                           ',&
 &'%bIf the format is composed entirely of one of the following ',&
 &'%bkeywords the following substitutions occur:                ',&
-&'%b  "iso-8601",                                              ',&
-&'%b  "iso"        ==> %%Y-%%M-%%DT%%h:%%m:%%s%%z             %Y-%M-%DT%h:%m:%s%z     ',&
-&'%b  "iso-8601W",                                                                    ',&
-&'%b  "isoweek"    ==> %%I                              %I                            ',&
-&'%b  "sql"        ==> "%%Y-%%M-%%D %%h:%%m:%%s.%%x"          "%Y-%M-%D %h:%m:%s.%x"  ',&
-&'%b  "sqlday"     ==> "%%Y-%%M-%%D"                      "%Y-%M-%D"                  ',&
-&'%b  "sqltime"    ==> "%%h:%%m:%%s.%%x"                   "%h:%m:%s.%x"              ',&
-&'%b  "rfc-2822"   ==> %%w, %%D %%l %%Y %%h:%%m:%%s %%T        ',&
-&'%b                   %w, %D %l %Y %h:%m:%s %T                ',&
-&'%b  "rfc-3339"   ==> %%Y-%%M-%%DT%%h:%%m:%%s%%z             %Y-%M-%DT%h:%m:%s%z     ',&
-&'%b  "date"       ==> %%w %%l %%D %%h:%%m:%%s UTC%%z %%Y      ',&
-&'%b                   %w %l %D %h:%m:%s UTC%z %Y              ',&
-&'%b  "short"      ==> %%w, %%l %%d, %%Y %%H:%%m:%%s %%N UTC%%z',&
-&'%b                   %w, %l %d, %Y %H:%m:%s %N UTC%z         ',&
-&'%b  "long"," "   ==> %%W, %%L %%d, %%Y %%H:%%m:%%s %%N UTC%%z',&
-&'%b                   %W, %L %d, %Y %H:%m:%s %N UTC%z         ',&
-&'%b  "suffix"     ==> %%Y%%D%%M%%h%%m%%s                    %Y%D%M%h%m%s             ',&
-&'%b  "formal"     ==> The %%d of %%L %%Y                 The %d of %L %Y             ',&
-&'%b  "lord"       ==> the %%d day of %%L in the year of our Lord %%Y                 ',&
-&'%b                   the %d day of %L in the year of our Lord %Y                    ',&
-&'%b  "easter"     ==> FOR THE YEAR OF THE CURRENT DATE:       ',&
-&'%b                     Easter day: the %%d day of %%L in the year of our Lord %%Y   ',&
-&'%b  "all"        ==> A SAMPLE OF DATE FORMATS                ',&
+&'%b "iso-8601",                                              ',&
+&'%b "iso"          ==> %%Y-%%M-%%DT%%h:%%m:%%s%%z ==> %Y-%M-%DT%h:%m:%s%z   ',&
+&'%b "iso-8601W",                                                                  ',&
+&'%b "isoweek"      ==> %%I ==> %I                          ',&
+&'%b "sql"          ==> "%%Y-%%M-%%D %%h:%%m:%%s.%%x" ==> "%Y-%M-%D %h:%m:%s.%x"',&
+&'%b "sqlday"       ==> "%%Y-%%M-%%D" ==> "%Y-%M-%D"                ',&
+&'%b "sqltime"      ==> "%%h:%%m:%%s.%%x" ==> "%h:%m:%s.%x"            ',&
+&'%b "dash"         ==> %%Y-%%M-%%D ==> %Y-%M-%D                 ',&
+&'%b "rfc-2822"     ==> %%w, %%D %%l %%Y %%h:%%m:%%s %%T      ',&
+&'%b                    %w, %D %l %Y %h:%m:%s %T              ',&
+&'%b "rfc-3339"     ==> %%Y-%%M-%%DT%%h:%%m:%%s%%z ==> %Y-%M-%DT%h:%m:%s%z   ',&
+&'%b "date"         ==> %%w %%l %%D %%h:%%m:%%s UTC%%z %%Y      ',&
+&'%b                    %w %l %D %h:%m:%s UTC%z %Y              ',&
+&'%b "short"        ==> %%w, %%l %%d, %%Y %%H:%%m:%%s %%N UTC%%z',&
+&'%b                    %w, %l %d, %Y %H:%m:%s %N UTC%z         ',&
+&'%b "long"," "     ==> %%W, %%L %%d, %%Y %%H:%%m:%%s %%N UTC%%z',&
+&'%b                    %W, %L %d, %Y %H:%m:%s %N UTC%z         ',&
+&'%b "suffix"       ==> %%Y%%D%%M%%h%%m%%s ==> %Y%D%M%h%m%s           ',&
+&'%b "formal"       ==> The %%d of %%L %%Y ==> The %d of %L %Y           ',&
+&'%b "lord"         ==> the %%d day of %%L in the year of our Lord %%Y               ',&
+&'%b                    the %d day of %L in the year of our Lord %Y                  ',&
+&'%b "easter"       ==> FOR THE YEAR OF THE CURRENT DATE:       ',&
+&'%b                    Easter day: the %%d day of %%L in the year of our Lord %%Y ',&
+&'%b "all"          ==> A SAMPLE OF DATE FORMATS                ',&
+&'%b "usage|help|?" ==> call fmtdate_usage                    ',&
 &'%botherwise the following words are replaced with the most   ',&
 &'%bcommon macros:                                             ',&
-&'%b   year          %%Y  %Y                                   ',&
-&'%b   month         %%M  %M                                   ',&
-&'%b   day           %%D  %D                                   ',&
-&'%b   timezone      %%z  %z                                   ',&
-&'%b   hour          %%h  %h                                   ',&
-&'%b   minute        %%m  %m                                   ',&
-&'%b   second        %%s  %s                                   ',&
-&'%b   millisecond   %%x  %x                                   ',&
-&'%b   epoch         %%e  %e                                   ',&
-&'%b   julian        %%j  %j                                   ',&
-&'%b   ordinal       %%O  %O                                   ',&
-&'%b   weekday       %%u  %u                                   ',&
-&'%b   MONTH         %%L  July                                 ',&
-&'%b   Month         %%l  Jul                                  ',&
-&'%b   DAY           %%d  7th                                  ',&
-&'%b   HOUR          %%H  10                                   ',&
-&'%b   GOOD          %%N  AM                                   ',&
-&'%b   Weekday       %%w  Thu                                  ',&
-&'%b   WEEKDAY       %%W  Thursday                             ',&
-&'%b   Timezone      %%Z  -240                                 ',&
-&'%b   TIMEZONE      %%z  -04:00                               ',&
-&'%bif none of these keywords are found then every letter that ',&
+&'%b   year            %%Y  %Y                                 ',&
+&'%b   month           %%M  %M                                 ',&
+&'%b   day             %%D  %D                                 ',&
+&'%b   timezone        %%z  %z                                 ',&
+&'%b   hour            %%h  %h                                 ',&
+&'%b   minute          %%m  %m                                 ',&
+&'%b   second          %%s  %s                                 ',&
+&'%b   millisecond     %%x  %x                                 ',&
+&'%b   epoch           %%e  %e                                 ',&
+&'%b   julian          %%j  %j                                 ',&
+&'%b   ordinal         %%O  %O                                 ',&
+&'%b   weekday         %%u  %u                                 ',&
+&'%b   MONTH           %%L  July                               ',&
+&'%b   Month|Mth       %%l  Jul                                ',&
+&'%b   DAY             %%d  7th                                ',&
+&'%b   HOUR            %%H  10                                 ',&
+&'%b   GOOD            %%N  AM                                 ',&
+&'%b   Weekday|wkday   %%w  Thu                                ',&
+&'%b   WEEKDAY         %%W  Thursday                           ',&
+&'%b   Timezone        %%Z  -240m                              ',&
+&'%b   TIMEZONE        %%z  -04:00                             ',&
+&'%b   age             %%a  100-22:59:01                       ',&
+&'%b   AGE             %%A  23423008.543                       ',&
+&'%bIf none of these keywords are found then every letter that ',&
 &'%bis a macro is assumed to have an implied percent in front  ',&
 &'%bof it. For example:                                        ',&
 &'%b   YMDhms ==> %%Y%%M%%D%%h%%m%%s ==> %Y%M%D%h%m%s          ',&
@@ -1773,7 +1878,7 @@ end subroutine fmtdate_usage
 !>
 !!##NAME
 !!    guessdate(3f) - [M_time:READING_DATES] reads in a date, in various formats
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -1799,7 +1904,8 @@ end subroutine fmtdate_usage
 !!   ISO_C_BINDING interface.
 !!
 !!##OPTIONS
-!!    anot  A string assumed to represent a date including a year, month and day.
+!!    anot  A string assumed to represent a date including a year, month
+!!          and day.
 !!
 !!    dat   Integer array holding a "DAT" array, similar in structure
 !!          to the array returned by the intrinsic DATE_AND_TIME(3f):
@@ -1853,7 +1959,7 @@ end subroutine fmtdate_usage
 !!     FOR  4th of Jul 2004   GOT Sunday, July 4th, 2004 12:00:00 AM
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine guessdate(datestring,dat,ier)
 
 ! ident_16="@(#) M_time guessdate(3f) Guess format of a date string to create a DAT date-time array"
@@ -1865,7 +1971,6 @@ subroutine guessdate(datestring,dat,ier)
 ! values READ(3f) and parse them directly instead of using this procedure, even though it does a good job with common USA formats.
 !
 !x! REDO more rigorously with regular expressions and recognize standard formats directly
-
 
 ! NOTE : Main constraint is that day is input BEFORE year unless use YYYY-MM-DD and a : implies HH:MM:SS, no timezone names
 !        Not rigorous. Gets most common formats but can easily make errors in all but simple unambiguous common date formats
@@ -1917,7 +2022,7 @@ integer                           :: loops
          temp=temp(3:)
       endif
    endif
-   if(verbose)write(*,*)'*guessdate* a ',temp,'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* a',temp,'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    number=.false.                                        ! when transition from letter to number add a space
    do i=1,len(temp)
@@ -1934,7 +2039,7 @@ integer                           :: loops
    enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
 
-   if(verbose)write(*,*)'*guessdate* b ',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* b',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill
    datestring_local=datestring_local//'                 '  ! pad string so substitute will fit if old string shorter than new string
    !make sure spaces are around month names
    call substitute(datestring_local,'JANUARY',' JAN ')
@@ -1964,7 +2069,6 @@ integer                           :: loops
    call substitute(datestring_local,'NOV',' NOV ')
    call substitute(datestring_local,'DEC',' DEC ')
 
-
    ! assume T[0=9] is from yyyyy-mm-ddThh:mm:ss.xx ISO-8601 format (or SEPTnn,OCTnn AUGUSTnn, where space was added or name changed)
    call substitute(datestring_local,'T0',' 0')
    call substitute(datestring_local,'T1',' 1')
@@ -1980,12 +2084,12 @@ integer                           :: loops
    call substitute(datestring_local,': ',':')
    call substitute(datestring_local,' :',':')
 
-   if(verbose)write(*,*)'*guessdate* A ',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* A ',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    call substitute(datestring_local,'UTC',' ')
 !-----------------------------------------------------------------------------------------------------------------------------------
    call split(datestring_local,scratch,' ;,"''')
-   if(verbose)write(*,*)'*guessdate* B ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* B ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(scratch)                                                       ! a leading +/- is assumed to be a timezone
       if( index("+-",scratch(i)(1:1)) /= 0)then
@@ -2002,7 +2106,7 @@ integer                           :: loops
          scratch(i)=' '
       endif
    enddo
-   if(verbose)write(*,*)'*guessdate* C ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* C ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(scratch)                      ! AM and PM are assumed to only occur significantly (not end of day or month name, ...)
       if(len_trim(scratch(i))>=2)then
@@ -2017,7 +2121,7 @@ integer                           :: loops
          end select
       endif
    enddo
-   if(verbose)write(*,*)'*guessdate* E ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* E ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(scratch)                                                      ! look for HH:MM:SS
       if(index(scratch(i),':')/=0)then
@@ -2032,7 +2136,7 @@ integer                           :: loops
          scratch(i)=' '
       endif
    enddo
-   if(verbose)write(*,*)'*guessdate* F ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* F ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i=1,size(scratch)                                                       ! assume yyyy-mm-dd if found a dash
       if(index(scratch(i),"-")/=0)then
@@ -2051,20 +2155,20 @@ integer                           :: loops
             end select
       endif
    enddo
-   if(verbose)write(*,*)'*guessdate* D ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* D ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    datestring_local=''
    do i=1,size(scratch)
       datestring_local=datestring_local//' '//adjustl(trim(scratch(i)))
    enddo
-   if(verbose)write(*,*)'*guessdate* G ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* G ',(trim(scratch(i)),'|',i=1,size(scratch)),'::',iye,mon,idy,itz,ihr,imi,ise,imill
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(datestring_local==' ')then
      loops=0
    else
      loops=1000
    endif
-   if(verbose)write(*,*)'*guessdate* Ga',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill,loops
+   if(verbose)write(*,gen)'*guessdate* Ga',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill,loops
    INFINITE: do itries=1,loops                              ! give up after 1000 passes
       buff=datestring_local                                 ! copy to buffer
       alpha=.false.
@@ -2108,9 +2212,9 @@ integer                           :: loops
       endif
       exit
    enddo INFINITE
-   if(verbose)write(*,*)'*guessdate* H ',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill
+   if(verbose)write(*,gen)'*guessdate* H ',datestring_local,'::',iye,mon,idy,itz,ihr,imi,ise,imill
    if(itries>=1000)then
-      write(*,*)'*guessdate* ERROR: could not extract date for '//trim(datestring)
+      write(stderr,gen)'<ERROR>*guessdate*: could not extract date for',trim(datestring)
    endif
    dat(1)=iye
    dat(2)=mon
@@ -2129,16 +2233,17 @@ end subroutine guessdate
 !!##NAME
 !!    dow(3f) - [M_time:DAY_OF_WEEK] given a date-time array DAT return
 !!    the day of the week
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine dow(values, weekday, day, ierr)
+!!    subroutine dow(values, weekday, day, ierr, short)
 !!
-!!     integer,intent(in) :: values(8)
-!!     integer,intent(out),optional :: weekday
+!!     integer,intent(in)                    :: values(8)
+!!     integer,intent(out),optional          :: weekday
 !!     character(len=*),intent(out),optional :: day
-!!     integer,intent(out),optional :: ierr
+!!     integer,intent(out),optional          :: ierr
+!!     logical,intent(in),optional           :: short
 !!
 !!##DESCRIPTION
 !!   Given a date array DAT
@@ -2149,6 +2254,9 @@ end subroutine guessdate
 !!             the array returned by the intrinsic DATE_AND_TIME(3f))
 !!             describing the date to be used to calculate the day
 !!             of the week.
+!!
+!!                 dat=[ year,month,day,timezone,hour,&
+!!                  & minutes,seconds,milliseconds]
 !!##RETURNS
 !!    weekday  The numeric day of the week, starting with Monday=1.
 !!             Optional.
@@ -2192,8 +2300,8 @@ end subroutine guessdate
 !!    John S. Urban, 2015-12-19
 !!
 !!##LICENSE
-!!    Public Domain
-subroutine dow(values, weekday, day, ierr)
+!!    MIT
+subroutine dow(values, weekday, day, ierr, short)
 
 ! ident_17="@(#) M_time dow(3f) Given DAT date-time array return the day of the week"
 
@@ -2201,9 +2309,11 @@ integer,intent(in)                    :: values(8) ! date and time array used to
 integer,intent(out),optional          :: weekday   ! The day of the week, 1 = Monday, 7 = Sunday
 character(len=*),intent(out),optional :: day       ! The name of the day of the week, e.g. 'Sunday'. Minimum length = 9
 integer,intent(out),optional          :: ierr      ! Error code,0=correct,-1=invalid input date,-2=neither day nor weekday specified
+logical,intent(in),optional           :: short
 real(kind=realtime)                   :: julian    ! the Julian Date for which the weekday is required,
 integer                               :: iweekday
 integer                               :: ierr_local
+logical                               :: short_
 
    call date_to_julian(values,julian,ierr_local)   ! need Julian Date to calculate day of week for first day of month
    ierr_local = 0
@@ -2222,16 +2332,46 @@ integer                               :: ierr_local
       iweekday = mod(iweekday+5,7)+1  ! change from Sunday=1 to Monday=1
 
       if(present(day)) then
-         select case(iweekday)
-         case(1)     ;day = 'Monday'
-         case(2)     ;day = 'Tuesday'
-         case(3)     ;day = 'Wednesday'
-         case(4)     ;day = 'Thursday'
-         case(5)     ;day = 'Friday'
-         case(6)     ;day = 'Saturday'
-         case(7)     ;day = 'Sunday'
-         case default;day = 'error'
-         end select
+         if(present(short))then
+            short_=short
+         else
+            short_=.false.
+         endif
+         if(short_)then
+            if(allocated(M_time_weekday_names_abbr))then
+               if(size(M_time_weekday_names_abbr).ne.7)then
+                  write(stderr,gen) '<ERROR>*dow*: weekday name abbr. count not 7:',size(M_time_weekday_names_abbr)
+                  day='error'
+               else
+                  select case(iweekday)
+                  case(1:7)   ;day = trim(M_time_weekday_names_abbr(iweekday))
+                  case default;day = 'error'
+                  end select
+               endif
+            else
+               select case(iweekday)
+               case(1:7)   ;day = trim(G_weekday_names_abbr(iweekday))
+               case default;day = 'error'
+               end select
+            endif
+         else
+            if(allocated(M_time_weekday_names))then
+               if(size(M_time_weekday_names).ne.7)then
+                  write(stderr,gen) '<ERROR>*dow*: weekday name count not 7:',size(M_time_weekday_names)
+                  day='error'
+               else
+                  select case(iweekday)
+                  case(1:7)   ;day = M_time_weekday_names(iweekday)
+                  case default;day = 'error'
+                  end select
+               endif
+            else
+               select case(iweekday)
+               case(1:7)   ;day = G_weekday_names(iweekday)
+               case default;day = 'error'
+               end select
+            endif
+         endif
       endif
 
    endif
@@ -2239,7 +2379,7 @@ integer                               :: ierr_local
    if(present(ierr))then
       ierr=ierr_local
    elseif(ierr_local/=0)then
-      write(*,*)'*dow* Unprocessed Error ',ierr_local,' stopping.'
+      write(stderr,gen) '<ERROR>*dow*: Unprocessed Error',ierr_local,'stopping.'
       stop 2
    endif
 
@@ -2253,9 +2393,10 @@ end subroutine dow
 !===================================================================================================================================
 !>
 !!##NAME
-!!    d2w(3f) - [M_time:WEEK_OF_YEAR] calculate iso-8601 Week-numbering
-!!    year date yyyy-Www-d given DAT date-time array
-!!    (LICENSE:PD)
+!!    d2w(3f) - [M_time:WEEK_OF_YEAR] calculate iso-8601 Week, both
+!!    numerically and as a string of the form "yyyy-Wmm-d" given a DAT
+!!    date-time array
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -2273,8 +2414,10 @@ end subroutine dow
 !!##OPTIONS
 !!    dat          "DAT" array (an integer array of the same format as
 !!                 the array returned by the intrinsic DATE_AND_TIME(3f))
-!!                 describing the date, which is the basic time description
-!!                 used by the other M_time(3fm) module procedures.
+!!                 describing the date,
+!!
+!!                     dat=[ year,month,day,timezone,hour,&
+!!                      & minutes,seconds,milliseconds]
 !!##RETURNS
 !!    iso_year     ISO-8601 year number for the given date
 !!    iso_week     ISO-8601 week number for the given date
@@ -2367,7 +2510,7 @@ end subroutine dow
 !!    John S. Urban, 2015-12-19
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine d2w(dat,iso_year,iso_week,iso_weekday,iso_name)
 
 ! ident_18="@(#) M_time d2w(3f) DAT date-time array to iso-8601 Week-numbering year date yyyy-Www-d"
@@ -2417,15 +2560,25 @@ end subroutine d2w
 !>
 !!##NAME
 !!    w2d(3f) - [M_time:WEEK_OF_YEAR] calculate DAT date-time array from iso-8601
-!!    Week-numbering year date yyyy-Www-d
-!!    (LICENSE:PD)
+!!    numeric Week values or from string "yyyy-Www-d"
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine w2d(iso_year,iso_week,iso_weekday,dat)
+!!    either
 !!
-!!     integer,intent(in)      :: iso_year, iso_week, iso_weekday
-!!     integer,intent(out)     :: dat(8)     ! output date array
+!!       subroutine w2d(iso_year,iso_week,iso_weekday,dat)
+!!
+!!        integer,intent(in)      :: iso_year, iso_week, iso_weekday
+!!        integer,intent(out)     :: dat(8)     ! output date array
+!!
+!!    or
+!!
+!!       subroutine w2d(iso_week,dat,ierr)
+!!
+!!        character(len=*),intent(in)  :: iso8601_week
+!!        integer,intent(out)          :: dat(8)     ! output date array
+!!        integer,intent(out),optional :: ierr
 !!
 !!##DESCRIPTION
 !!   Given an ISO-8601 week return a "DAT" array defining a date and time,
@@ -2433,17 +2586,35 @@ end subroutine d2w
 !!   year, week of year and weekday.
 !!
 !!##OPTIONS
-!!    iso_year     ISO-8601 year number for the given date
-!!    iso_week     ISO-8601 week number for the given date
-!!    iso_weekday  ISO-8601 weekday number for the given date
-!!    iso_name     ISO-8601 Week string for the data in the form "yyyy-Www-d".
+!!    iso_year      ISO-8601 year number for the given date
+!!    iso_week      ISO-8601 week number for the given date.
+!!                  Valid values are from 1 to 53.
+!!    iso_weekday   ISO-8601 weekday number for the given date.
+!!                  Valid values are from 1 to 7, where 1 is Monday.
+!!
+!!    iso8601_week  ISO-8601 Week string for the data in the form
+!!                  "yyyy-Www-D", "yyyyWwwD", "yyyy-Www", and "yyyyWww"
+!!                  where yyyy is the year, ww is the iso_week, and D is
+!!                  the weekday.
 !!
 !!##RETURNS
 !!    dat          "DAT" array (an integer array of the same format as
 !!                 the array returned by the intrinsic DATE_AND_TIME(3f))
-!!                 describing the date to be used, which is the basic
-!!                 time description used by the other M_time(3fm) module
-!!                 procedures.
+!!                 describing the date to be used
+!!
+!!                     dat=[ year,month,day,timezone,hour,&
+!!                      & minutes,seconds,milliseconds]
+!!
+!!    ierr         optional error code result. If non-zero an error occurred.
+!!                 If an error occurs and IERR is not present the program
+!!                 terminates.
+!!##NOTES
+!!
+!!   If D is omitted 1 is returned although this does not appear in the
+!!   iso-8601 standard at the current time.
+!!
+!!   The returned dat array is currently always assumed to have the local
+!!   timezone. This might be changed to always assume ZULU time.
 !!
 !!##EXAMPLE
 !!
@@ -2466,6 +2637,21 @@ end subroutine d2w
 !!       write(*,'(a)')&
 !!       & 'Given 27 September 2008 is 2008-W39-6'
 !!       call printit(2008,39,6)
+!!
+!!       string : block
+!!          character(len=*),parameter :: array(4)=[character(len=80) ::  &
+!!          & '2008-W39-6', '2008W396', '2008-W39', '2008W39' ]
+!!          integer  :: dat(8)
+!!          integer  :: i
+!!          do i=1,size(array)
+!!             write(*,'(a)')&
+!!             & 'Given string '//array(i)
+!!             call w2d(array(i),dat)
+!!             write(*,'(a,i0)')'RESULT:          '
+!!             write(*,'(a,*(i0:,","))')'   DAT array        ',dat
+!!             write(*,'(a,/,67("="))')'    '//fmtdate(dat,'long')
+!!          enddo
+!!       endblock string
 !!     contains
 !!     subroutine printit(iso_year,iso_week,iso_weekday)
 !!     ! ISO-8601 Week: 2016-W29-1
@@ -2560,7 +2746,8 @@ end subroutine d2w
 !!     Result: 27 September 2008
 !!
 !!##ISO_NAME
-!!   Week date representations are in the format YYYYWww-D.
+!!   Week date representations are in the format YYYY-Www ,YYYYWww,
+!!   YYYY-Www-D or YYYYWwwD
 !!
 !!     o [YYYY] indicates the ISO week-numbering year which is slightly
 !!       different from the traditional Gregorian calendar year.
@@ -2583,25 +2770,87 @@ end subroutine d2w
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 !-----------------------------------------------------------------------------------------------------------------------------------
-subroutine w2d(iso_year,iso_week,iso_weekday,dat)
+subroutine w2d_numeric(iso_year,iso_week,iso_weekday,dat)
 
-! ident_19="@(#) M_time w2d(3f) convert iso-8601 Week-numbering year date yyyy-Www-d to DAT date-time array"
+! ident_19="@(#) M_time w2d_numeric(3f) convert iso-8601 Week-numbering year date yyyy-Www-d to DAT date-time array"
 
-integer,intent(in)              :: iso_year, iso_week, iso_weekday
-integer,intent(out)             :: dat(8)     ! output date array
-integer                         :: jan4weekday
-integer                         :: correction
-integer                         :: ordinal
-integer                         :: ierr
-integer                         :: temp_dat(8)
+integer,intent(in)  :: iso_year, iso_week, iso_weekday
+integer,intent(out) :: dat(8)     ! output date array
+integer             :: jan4weekday
+integer             :: correction
+integer             :: ordinal
+integer             :: ierr
+integer             :: temp_dat(8)
    temp_dat=[iso_year,1,4,0,12,0,0,0]
    call dow( temp_dat, jan4weekday, ierr=ierr) ! get day of week for January 4th where Sun=1
    correction=jan4weekday+3                      ! calculate correction
    ordinal=iso_week*7+iso_weekday-correction     ! calculate ordinal day
    dat=o2d(ordinal,iso_year)                     ! convert ordinal to DAT (routine works with negative values or days past year end)
-end subroutine w2d
+end subroutine w2d_numeric
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine w2d_string(iso8601_week,dat,ierr)
+
+! ident_20="@(#) or form yyyy-Www-d to DAT date-time array"
+
+character(len=*),intent(in)   :: iso8601_week
+integer                       :: iso_year, iso_week, iso_weekday
+integer,intent(out)           :: dat(8)     ! output date array
+integer,intent(out),optional  :: ierr
+integer                       :: ierr_
+integer                       :: returncode
+character(len=:), allocatable :: array(:)
+character(len=:), allocatable :: stopmessage
+
+! some additional verification with verify() would be in order that of form yyyyWwwd or yyyy-Www-d
+
+   CALL split(iso8601_week, array, delimiters=' wW-')
+   ierr_=1                     ! initialize return to indicate error
+   stopmessage="<ERROR>*w2d_string*: string not of format yyyy-Www-dd:"//iso8601_week
+   dat=-99999
+
+   if(size(array)==2)then       ! assume compact form of yyyyWwwdd where ww is from 01 to 53 and rearrange to three strings
+      if(len_trim(array(2)) > 2)then
+         array=[character(len=len(array)) :: array(1),array(2)(1:2),array(2)(3:)]
+      elseif(len_trim(array(2)) == 2) then
+         array=[character(len=len(array)) :: array(1),array(2),'1']
+      endif
+   endif
+
+   if(size(array)==3)then  ! assume yyyy-Www-d
+      ierr_=0
+
+      iso_year=nint(s2v(array(1),returncode))
+      ierr_=ierr_+abs(returncode)
+
+      iso_week=nint(s2v(array(2),returncode))
+      ierr_=ierr_+abs(returncode)
+      if(iso_week < 1 .or. iso_week > 53 ) then
+         stopmessage="<ERROR>*w2d_string*: week out of bounds {1-53} :"//iso8601_week
+         ierr_=ierr_+abs(returncode)
+      endif
+
+      iso_weekday=nint(s2v(array(3),returncode))
+      ierr_=ierr_+abs(returncode)
+      if(iso_weekday < 1 .or. iso_weekday > 7) then
+         stopmessage="<ERROR>*w2d_string*: day of week out of bounds {1-7} :"//iso8601_week
+         ierr_=ierr_+1
+      endif
+
+   endif
+   if(ierr_ == 0)then
+      call w2d_numeric(iso_year,iso_week,iso_weekday,dat)
+   endif
+
+   if(present(ierr))then
+      ierr=ierr_
+   elseif(ierr_ /= 0)then
+      write(stderr,'(a)') stopmessage
+      stop 4
+   endif
+
+end subroutine w2d_string
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -2609,14 +2858,14 @@ end subroutine w2d
 !!##NAME
 !!    box_month(3f) - [M_time:DATE_PRINTING] create specified month in a
 !!    character array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
 !!    subroutine box_month(dat,calen)
 !!
-!!     integer,intent(in)    :: dat(8)
-!!     character(len=21)     :: calen(8)
+!!     integer,intent(in) :: dat(8)
+!!     character(len=21)  :: calen(8)
 !!
 !!##DESCRIPTION
 !!   box_month(3f) uses a year and month from a date array to populate
@@ -2662,22 +2911,22 @@ end subroutine w2d
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 subroutine box_month(dat,calen)
 
-! ident_20="@(#) M_time box_month(3f) generate month specified by DAT date-time array in character array"
+! ident_21="@(#) M_time box_month(3f) generate month specified by DAT date-time array in character array"
 
-integer,parameter             :: wklen=3*7
+integer,parameter    :: wklen=3*7
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! uses year and month from date array DAT to populate a small character array with a calendar representing the month
-integer,intent(in)            :: dat(8)
-character(len=wklen)          :: calen(8)
+integer,intent(in)   :: dat(8)
+character(len=wklen) :: calen(8)
 !-----------------------------------------------------------------------------------------------------------------------------------
-real(kind=realtime)           :: julian
-integer                       :: weekday
-integer                       :: dat_1st(8)
-integer                       :: dat_nextday(8)
-integer                       :: location,ierr,i
+real(kind=realtime)  :: julian
+integer              :: weekday
+integer              :: dat_1st(8)
+integer              :: dat_nextday(8)
+integer              :: location,ierr,i
 !-----------------------------------------------------------------------------------------------------------------------------------
    calen(:)='                    '                                 ! initialize output array to spaces
    dat_1st=[dat(1),dat(2),1,dat(4),0,0,0,0]                        ! create date array for first day in month specified
@@ -2706,11 +2955,11 @@ end subroutine box_month
 !>
 !!##NAME
 !!    d2j(3f) - [M_time:JULIAN] given DAT date-time array returns Julian Date
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function d2j(dat) result (julian)
+!!    function d2j(dat) result(julian)
 !!
 !!     integer,intent(in)  :: dat(8)
 !!     real(kind=realtime) :: julian
@@ -2751,10 +3000,10 @@ end subroutine box_month
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function d2j(dat) result (julian)
+!!    MIT
+function d2j(dat) result(julian)
 
-! ident_21="@(#) M_time d2j(3f) Given DAT date-time array returns Julian Date"
+! ident_22="@(#) M_time d2j(3f) Given DAT date-time array returns Julian Date"
 
 integer,intent(in),optional :: dat(8)
 real(kind=realtime)         :: julian
@@ -2776,11 +3025,11 @@ end function d2j
 !!##NAME
 !!    j2d(3f) - [M_time:JULIAN] given a JED (Julian Ephemeris Date) returns a
 !!    date-time array DAT.
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function j2d(julian) result (dat)
+!!    function j2d(julian) result(dat)
 !!
 !!     real(kind=realtime),intent(in),optional :: julian
 !!     integer                                 :: dat(8)
@@ -2807,9 +3056,9 @@ end function d2j
 !!     program demo_j2d
 !!     use M_time, only : j2d, d2j, fmtdate, realtime
 !!     implicit none
-!!     integer,parameter :: dp=kind(0.0d0)
+!!     integer,parameter   :: dp=kind(0.0d0)
 !!     real(kind=realtime) :: today
-!!     integer :: dat(8)
+!!     integer             :: dat(8)
 !!        call date_and_time(values=dat) ! get the date using intrinsic
 !!        today=d2j(dat)                  ! convert today to Julian Date
 !!        write(*,*)'Today=',fmtdate(j2d(today))
@@ -2828,10 +3077,10 @@ end function d2j
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function j2d(julian) result (dat)
+!!    MIT
+function j2d(julian) result(dat)
 
-! ident_22="@(#) M_time j2d(3f) Given Julian Date returns DAT date-time array"
+! ident_23="@(#) M_time j2d(3f) Given Julian Date returns DAT date-time array"
 
 real(kind=realtime),intent(in)   :: julian
 integer                          :: dat(8)
@@ -2845,11 +3094,11 @@ end function j2d
 !!##NAME
 !!    d2u(3f) - [M_time:UNIX_EPOCH] given DAT date-time array returns Unix
 !!    Epoch Time (UET starts at 0000 on 1 Jan. 1970, UTC)
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function d2u(dat) result (unixtime)
+!!    function d2u(dat) result(unixtime)
 !!
 !!       integer,intent(in),optional :: dat(8)
 !!       real(kind=realtime)         :: unixtime
@@ -2895,10 +3144,10 @@ end function j2d
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function d2u(dat) result (unixtime)
+!!    MIT
+function d2u(dat) result(unixtime)
 
-! ident_23="@(#) M_time d2u(3f) Given DAT date-time array returns Unix Epoch time"
+! ident_24="@(#) M_time d2u(3f) Given DAT date-time array returns Unix Epoch time"
 
 real(kind=realtime)           :: unixtime
 integer,intent(in),optional   :: dat(8)
@@ -2918,11 +3167,11 @@ end function d2u
 !!##NAME
 !!    u2d(3f) - [M_time:UNIX_EPOCH] given Unix Epoch Time returns DAT
 !!    date-time array
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function u2d(unixtime) result (dat)
+!!    function u2d(unixtime) result(dat)
 !!
 !!     class(*),intent(in),optional      :: unixtime
 !!     ! integer
@@ -2977,10 +3226,10 @@ end function d2u
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function u2d(unixtime) result (dat)
+!!    MIT
+function u2d(unixtime) result(dat)
 
-! ident_24="@(#) M_time u2d(3f) Given Unix Epoch Time returns DAT date-time array"
+! ident_25="@(#) M_time u2d(3f) Given Unix Epoch Time returns DAT date-time array"
 
 class(*),intent(in),optional   :: unixtime
 integer                        :: dat(8)
@@ -2994,11 +3243,10 @@ integer                        :: ierr
       type is (real);                local_unixtime=unixtime
       type is (real(kind=realtime)); local_unixtime=unixtime
       end select
+      call unix_to_date(local_unixtime,dat,ierr)
    else
-      local_unixtime=d2u()
+      dat=getnow() ! current time is placed in array
    endif
-
-   call unix_to_date(local_unixtime,dat,ierr)
 
 end function u2d
 !===================================================================================================================================
@@ -3010,7 +3258,7 @@ integer :: timezone(8)
    timezone=getnow()
    tz=timezone(4)
    if(tz>0)then  ! gfortran bug on new-years
-      write(*,*)'<ERROR>*get_timezone*TZ=',tz
+      write(stderr,gen)'<ERROR>*get_timezone*: TZ=',tz
       tz=mod(tz,1440)-1440
    endif
 end function get_timezone
@@ -3021,7 +3269,7 @@ end function get_timezone
 !!##NAME
 !!    sec2days(3f) - [M_time:DURATION] convert seconds to string of form
 !!    dd-hh:mm:ss
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -3090,32 +3338,32 @@ end function get_timezone
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 function sec2days(seconds,crop) result(dhms)
 use, intrinsic :: iso_fortran_env, only : int64
 
-! ident_25="@(#) M_time sec2days(3f) converts seconds or string of form IId JJh KKm LLs to string showing days of form D-HH MM SS"
+! ident_26="@(#) M_time sec2days(3f) converts seconds or string of form IId JJh KKm LLs to string showing days of form D-HH MM SS"
 
 ! on this platform, (select_int_kind(i),i=1,100) returns
 ! 1:2=1 ,3:4=2 ,5:9=4 ,10:18= 8 ,19:38=16 ,39:=-1
-!integer,parameter        :: k(38)=[(selected_int_kind(i),i=1,38)]
-integer                  :: i
-class(*),intent(in)               :: seconds
-logical,intent(in),optional       :: crop
-character(len=:),allocatable      :: dhms
-real(kind=realtime), parameter    :: units_hl(4)=[ 86400.0_dp, 3600.0_dp, 60.0_dp, 1.0_dp ]
-character(len=40)                 :: scratch
-integer(kind=int64)               :: days, hours, minutes, secsleft
-integer,parameter                 :: one_day=86400
-integer,parameter                 :: one_hour=3600
-integer,parameter                 :: one_minute=60
-logical                           :: crop_local
-integer                           :: iprint
-logical                           :: negative
-integer                           :: ilast
-character(len=:),allocatable      :: strlocal
-character(len=:),allocatable      :: array(:)
-doubleprecision                   :: dtime
+!integer,parameter              :: k(38)=[(selected_int_kind(i),i=1,38)]
+integer                        :: i
+class(*),intent(in)            :: seconds
+logical,intent(in),optional    :: crop
+character(len=:),allocatable   :: dhms
+real(kind=realtime), parameter :: units_hl(4)=[ 86400.0_dp, 3600.0_dp, 60.0_dp, 1.0_dp ]
+character(len=40)              :: scratch
+integer(kind=int64)            :: days, hours, minutes, secsleft
+integer,parameter              :: one_day=86400
+integer,parameter              :: one_hour=3600
+integer,parameter              :: one_minute=60
+logical                        :: crop_local
+integer                        :: iprint
+logical                        :: negative
+integer                        :: ilast
+character(len=:),allocatable   :: strlocal
+character(len=:),allocatable   :: array(:)
+doubleprecision                :: dtime
 
    !  Convert input value to nearest integer
    !  Notice that the value SECONDS can be any of several types ( INTEGER,REAL,REAL(KIND=REALTIME))
@@ -3145,7 +3393,11 @@ doubleprecision                   :: dtime
       call substitute(strlocal,'week','w')
       call substitute(strlocal,'wks','w')
       call substitute(strlocal,'wk','w')
-
+      !do i=2,len_trim(strlocal)
+      ! maybe filter out other characters obviously not part of values?
+      ! if a letter not in smhdw remove but leave numeric values alone. Allow sign and e?
+      ! or parse
+      !enddo
       call substitute(strlocal,'s','s ')          ! assuming only one suffix character and not too many to exceed length of strlocal
       call substitute(strlocal,'m','m ')
       call substitute(strlocal,'h','h ')
@@ -3223,18 +3475,18 @@ end function sec2days
 !!##NAME
 !!    days2sec(3f) - [M_time:DURATION] convert string of form
 !!    [[-]dd-]hh:mm:ss.nn to seconds
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
-!!    function days2sec(str) result(time)
+!!    elemental impure function days2sec(str) result(time)
 !!
-!!     character(len=*),intent(in)       :: str
-!!     real(kind=realtime)               :: time
+!!     character(len=*),intent(in) :: str
+!!     real(kind=realtime)         :: time
 !!
 !!##DESCRIPTION
 !!   Given a string representing a duration of the form
-!!   "[-][[[dd-]hh:]mm:]ss"  or [NNd][NNh][NNm[]NNs][NNw]
+!!   [-][[[dd-]hh:]mm:]ss or [NNd][NNh][NNm[]NNs][NNw]
 !!   return a value representing seconds.
 !!
 !!   If "dd-" is present, units for the numbers are assumed to
@@ -3255,7 +3507,6 @@ end function sec2days
 !!   A decimal fraction is supported on the seconds (Actually,
 !!   any of the numeric values may represent positive floating
 !!   point numbers). Spaces are ignored.
-!!
 !!
 !!   Simple numeric values may also be used with unit suffixes; where
 !!   s,m,h, or d represents seconds, minutes, hours or days and w
@@ -3320,25 +3571,25 @@ end function sec2days
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function days2sec(str) result(time)
+!!    MIT
+elemental impure function days2sec(str) result(time)
 
-! ident_26="@(#) M_time days2sec(3f) convert string [[-]dd-]hh mm ss.nn to seconds or string IId JJh KKm LLs to seconds"
+! ident_27="@(#) M_time days2sec(3f) convert string [[-]dd-]hh mm ss.nn to seconds or string IId JJh KKm LLs to seconds"
 
-character(len=*),intent(in)       :: str
-real(kind=realtime)               :: time
+character(len=*),intent(in)    :: str
+real(kind=realtime)            :: time
 ! Supported input syntax:
 !    [-]dd-hh:mm:ss
 !          hh:mm:ss
 !          mm:ss
 !          ss
 !
-character(len=:),allocatable      :: strlocal
-character(len=:),allocatable      :: array(:)
-real(kind=realtime), parameter    :: units_lh(4)=[ 1.0_dp, 60.0_dp, 3600.0_dp, 86400.0_dp ]
-real(kind=realtime), parameter    :: units_hl(4)=[ 86400.0_dp, 3600.0_dp, 60.0_dp, 1.0_dp ]
-integer                           :: i, icount, iwords, ilast
-logical                           :: negative
+character(len=:),allocatable   :: strlocal
+character(len=:),allocatable   :: array(:)
+real(kind=realtime), parameter :: units_lh(4)=[ 1.0_dp, 60.0_dp, 3600.0_dp, 86400.0_dp ]
+real(kind=realtime), parameter :: units_hl(4)=[ 86400.0_dp, 3600.0_dp, 60.0_dp, 1.0_dp ]
+integer                        :: i, icount, iwords, ilast
+logical                        :: negative
 
    time=0.0_dp
    strlocal=compact(str,'')                              ! remove whitespace
@@ -3401,7 +3652,7 @@ logical                           :: negative
       iwords=size(array)
 
       if(iwords>4)then
-         write(*,*)'*days2sec* error: too many values in '//trim(strlocal)
+         write(stderr,gen)'<ERROR>*days2sec*: too many values in',trim(strlocal)
          iwords=4
       endif
 
@@ -3428,14 +3679,1982 @@ end function days2sec
 !===================================================================================================================================
 !>
 !!##NAME
-!!     phase_of_moon(3f) - [M_time:ASTROLOGICAL] return name for phase of
-!!     moon for given date
-!!     (LICENSE:PD)
+!! locale(3f) - [M_time:DATE_PRINTING] allow for selecting languages to represent
+!!              month and weekday names
+!!    (LICENSE:MIT)
+!!
 !!##SYNOPSIS
 !!
-!!   function phase_of_moon(datin)
+!!    subroutine locale(name,month_names,weekday_names, &
+!!    & month_names_abbr,weekday_names_abbr,IERR)
 !!
-!!    integer,intent(in)            :: datin(8)
+!!     character(len=*),intent(in)           :: name
+!!     character(len=*),intent(in),optional  :: month_names(12)
+!!     character(len=*),intent(in),optional  :: month_names_abbr(12)
+!!     character(len=*),intent(in),optional  :: weekday_names(7)
+!!     character(len=*),intent(in),optional  :: weekday_names_abbr(7)
+!!     integer,intent(out)                   :: ierr
+!!
+!!##DESCRIPTION
+!!   given a pre-defined locale name or strings to substitute for month names
+!!   and weekday names provide some basic support for non-POSIX labels in
+!!   date representation.
+!!
+!!   The parameters are default character types and so may be limited to the
+!!   basic ASCII character set, but are typically limited to the extended
+!!   ASCII set.
+!!
+!!   This is only a basic attempt to support internationalization and
+!!   currently just supports basic substitution of the default POSIX names
+!!   with the alternate strings. As support for UTF-8 grows among Fortran
+!!   compilers something more robust will hopefully emerge to provide full
+!!   internationalization of the date representations.
+!!
+!!##OPTIONS
+!!   name   predefined name or reserved name "user"
+!!
+!!   month_names        12 month names
+!!   weekday_names       7 weekday names
+!!   month_names_abbr   12 month name abbreviations
+!!   weekday_names_abbr  7 weekday name abbreviations
+!!
+!!   ierr               if non-zero an error occurred
+!!
+!! The NAME parameter may be a pre-defined name or the special name "user".
+!! The current pre-defined names are
+!!
+!!    'bokmal','catalan','czech','dansk'/'danish','deutsch'/'german','dutch',
+!!    'eesti'/'estonian','english','finnish','french','galego'/'galician',
+!!    'hrvatski'/'croation','hungarian','icelandic','italian','korean',
+!!    'lithuanian','norwegian','nynorsk','polish','portuguese','romanian',
+!!    'slovak','slovene'/'slovenian','spanish','swedish','turkish'
+!!
+!! These non-ISO-8859 character sets are defined in terms of ISO-8859 but will
+!! not work on most platforms
+!!
+!!    'greek', 'russian','thai', 'hebrew','japanese'
+!!
+!! The remaining reserved names take special actions
+!!
+!!    o POSIX            load POSIX names
+!!    o LANGUAGE         use value of environment variable LANGUAGE
+!!    o user             placeholder indicating to expect at least one of the
+!!                       optional values to be set
+!!    o reset,ISO-8601   reset back to initial defaults
+!!
+!!    o show    print user-defined values to stdout
+!!    o chars   dump characters from chars([(i,i=0,255)])
+!!
+!!##EXAMPLE
+!!
+!!    Sample program:
+!!
+!!     program demo_locale
+!!     use M_time, only : locale, now
+!!     implicit none
+!!        call locale('POSIX')
+!!        write(*,*)now()
+!!        call locale('french')
+!!        write(*,*)now()
+!!        call mine()
+!!        write(*,*)now()
+!!     contains
+!!     subroutine mine()
+!!     character(len=*),parameter :: months(12)=[ character(len=9) :: &
+!!     &'JANUARY','FEBRUARY','MARCH    ','APRIL  ','MAY     ','JUNE    ', &
+!!     &'JULY   ','AUGUST  ','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER']
+!!     character(len=*),parameter :: weekdays(7)=[character(len=9) :: &
+!!     &'MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY']
+!!     character(len=3),parameter :: short_months(12)=months(:)(1:3)
+!!     character(len=3),parameter :: short_weekdays(7)=weekdays(:)(1:3)
+!!     integer :: ierr
+!!       call locale('user',months,short_months,weekdays,short_weekdays,ierr)
+!!     end subroutine mine
+!!     end program demo_locale
+!!
+!!    Results:
+!!
+!!##AUTHOR
+!!    John S. Urban, 2015
+!!
+!!##LICENSE
+!!    MIT
+subroutine locale(name,month_names,weekday_names,month_names_abbr,weekday_names_abbr,IERR)
+character(len=*),intent(in)           :: name
+character(len=*),intent(in),optional  :: month_names(12)
+character(len=*),intent(in),optional  :: month_names_abbr(12)
+character(len=*),intent(in),optional  :: weekday_names(7)
+character(len=*),intent(in),optional  :: weekday_names_abbr(7)
+integer,intent(out),optional          :: ierr
+integer                               :: i
+character(len=:),allocatable          :: name_
+   name_=lower(name)
+   if(name_.eq.'language')then
+      name_=lower(get_env('LANGUAGE',''))
+   endif
+   select case(name_)
+   case('posix','english','en_us');      call  locale_POSIX()
+   case('deutsch','german','de_de');     call  locale_deutsch()
+   case('slovak');               call  locale_slovak()
+   case('czech');                call  locale_czech()
+   case('spanish');              call  locale_spanish()
+   case('slovene','slovenian');  call  locale_slovene()
+   case('dansk','danish');       call  locale_dansk()
+   case('galego','galician');    call  locale_galego()
+   case('eesti','estonian');     call  locale_eesti()
+   case('hrvatski','croation');  call  locale_hrvatski()
+   case('dutch');                call  locale_dutch()
+   case('finnish');              call  locale_finnish()
+   case('icelandic');            call  locale_icelandic()
+   case('hungarian');            call  locale_hungarian()
+   case('swedish');              call  locale_swedish()
+   case('korean');               call  locale_korean()
+   case('nynorsk');              call  locale_nynorsk()
+   case('turkish');              call  locale_turkish()
+   case('romanian');             call  locale_romanian()
+   case('portuguese');           call  locale_portuguese()
+   case('polish');               call  locale_polish()
+   case('lithuanian');           call  locale_lithuanian()
+   case('catalan');              call  locale_catalan()
+   case('italian');              call  locale_italian()
+   case('french','fr_fr');               call  locale_french()
+   case('bokmal');               call  locale_bokmal()
+   case('norwegian');            call  locale_norwegian()
+
+   case('greek');                call  locale_greek()
+   case('russian');              call  locale_russian()
+   case('thai');                 call  locale_thai()
+   case('hebrew');               call  locale_hebrew()
+   case('japanese');             call  locale_japanese()
+
+   case('iso-8601')
+      M_time_month_names=G_month_names
+      M_time_month_names_abbr=G_month_names_abbr
+      M_time_weekday_names=G_weekday_names
+      M_time_weekday_names_abbr=G_weekday_names_abbr
+   case('reset')
+      if(allocated( M_time_month_names))        deallocate(M_time_month_names)
+      if(allocated( M_time_month_names_abbr))   deallocate(M_time_month_names_abbr)
+      if(allocated( M_time_weekday_names))      deallocate(M_time_weekday_names)
+      if(allocated( M_time_weekday_names_abbr)) deallocate(M_time_weekday_names_abbr)
+   case('user','')
+   case('chars')
+      do i=0,255
+         write(stdout,gen)i,char(i)
+      enddo
+   case('show')
+      call printit('Month Names',               M_time_month_names )
+      call printit('Month Names abbreviated',   M_time_month_names_abbr )
+      call printit('Weekday Names',             M_time_weekday_names )
+      call printit('Weekday Names abbreviated', M_time_weekday_names_abbr )
+   end select
+
+   if(present( month_names        )) M_time_month_names        = month_names
+   if(present( month_names_abbr   )) M_time_month_names_abbr   = month_names_abbr
+   if(present( weekday_names      )) M_time_weekday_names      = weekday_names
+   if(present( weekday_names_abbr )) M_time_weekday_names_abbr = weekday_names_abbr
+
+   if(present(ierr))  then
+      ierr=0
+   endif
+contains
+
+subroutine printit(header,strs)
+character(len=*),parameter              :: fmt="(*('""',g0,'""':,','))"
+character(len=*),intent(in)             :: header
+character(len=:),allocatable,intent(in) :: strs(:)
+integer                                 :: i
+   if(allocated(strs))then
+      write(stdout,fmt)header,(trim(strs(i)),i=1,size(strs))
+   else
+      select case(header)
+      case('Month Names')
+         if(allocated(M_time_month_names))then
+            write(stdout,fmt) header,(trim(M_time_month_names(i)),i=1,size(M_time_month_names))
+         else
+            write(stdout,fmt) header,(trim(G_month_names(i)),i=1,size(G_month_names)),"POSIX"
+         endif
+      case('Month Names abbreviated')
+         if(allocated(M_time_month_names_abbr))then
+            write(stdout,fmt) header,(trim(M_time_month_names_abbr(i)),i=1,size(M_time_month_names_abbr))
+         else
+            write(stdout,fmt) header,(trim(G_month_names_abbr(i)),i=1,size(G_month_names_abbr)),"POSIX"
+         endif
+      case('Weekday Names')
+         if(allocated(M_time_weekday_names))then
+            write(stdout,fmt) header,(trim(M_time_weekday_names(i)),i=1,size(M_time_weekday_names))
+         else
+            write(stdout,fmt) header,(trim(G_weekday_names(i)),i=1,size(G_weekday_names)),"POSIX"
+         endif
+      case('Weekday Names abbreviated')
+         if(allocated(M_time_weekday_names_abbr))then
+            write(stdout,fmt) header,(trim(M_time_weekday_names_abbr(i)),i=1,size(M_time_weekday_names_abbr))
+         else
+            write(stdout,fmt) header,(trim(G_weekday_names_abbr(i)),i=1,size(G_weekday_names_abbr)),"POSIX"
+         endif
+      end select
+   endif
+end subroutine printit
+
+end subroutine locale
+!!----------------------------------------------------------------------------------------------------------------------------------
+!include "locale.ffinc"
+subroutine locale_deutsch()
+! LANG=deutsch
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "Mo","Di","Mi","Do","Fr","Sa","So"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "Jan","Feb","Mrz","Apr","Mai","Jun", &
+& "Jul","Aug","Sep","Okt","Nov","Dez" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "Januar","Februar","März","April","Mai","Juni", &
+& "Juli","August","September","Oktober","November","Dezember" ]
+ ! ASCII weekdays
+months(3)(2:2)=char(228)
+ ! ASCII weekdays_abbr
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_deutsch
+
+
+subroutine locale_slovak()
+! LANG=slovak
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "po","ut","st","¹t","pi","so","ne"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "pondelok","utorok","streda","¹tvrtok","piatok","sobota","nedeµa"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan","feb","mar","apr","máj","jún", &
+& "júl","aug","sep","okt","nov","dec" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "január","február","marec","apríl","máj","jún", &
+& "júl","august","september","október","november","december" ]
+weekdays(4)(1:1)=char(185)
+weekdays(7)(5:5)=char(181)
+months(1)(5:5)=char(225)
+months(2)(6:6)=char(225)
+months(4)(4:4)=char(237)
+months(5)(2:2)=char(225)
+months(6)(2:2)=char(250)
+months(7)(2:2)=char(250)
+months(10)(4:4)=char(243)
+weekdays_abbr(4)(1:1)=char(185)
+months_abbr(5)(2:2)=char(225)
+months_abbr(6)(2:2)=char(250)
+months_abbr(7)(2:2)=char(250)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_slovak
+
+
+subroutine locale_czech()
+! LANG=czech
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "po","út","st","èt","pá","so","ne"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "pondìlí","úterý","støeda","ètvrtek","pátek","sobota","nedìle"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "led","úno","bøe","dub","kvì","èvn", &
+& "èvc","srp","záø","øíj","lis","pro" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "leden","únor","bøezen","duben","kvìten","èerven", &
+& "èervenec","srpen","záøí","øíjen","listopad","prosinec" ]
+weekdays(1)(5:5)=char(236)
+weekdays(1)(7:7)=char(237)
+weekdays(2)(1:1)=char(250)
+weekdays(2)(5:5)=char(253)
+weekdays(3)(3:3)=char(248)
+weekdays(4)(1:1)=char(232)
+weekdays(5)(2:2)=char(225)
+weekdays(7)(4:4)=char(236)
+months(2)(1:1)=char(250)
+months(3)(2:2)=char(248)
+months(5)(3:3)=char(236)
+months(6)(1:1)=char(232)
+months(7)(1:1)=char(232)
+months(9)(2:2)=char(225)
+months(9)(3:3)=char(248)
+months(9)(4:4)=char(237)
+months(10)(1:1)=char(248)
+months(10)(2:2)=char(237)
+weekdays_abbr(2)(1:1)=char(250)
+weekdays_abbr(4)(1:1)=char(232)
+weekdays_abbr(5)(2:2)=char(225)
+months_abbr(2)(1:1)=char(250)
+months_abbr(3)(2:2)=char(248)
+months_abbr(5)(3:3)=char(236)
+months_abbr(6)(1:1)=char(232)
+months_abbr(7)(1:1)=char(232)
+months_abbr(9)(2:2)=char(225)
+months_abbr(9)(3:3)=char(248)
+months_abbr(10)(1:1)=char(248)
+months_abbr(10)(2:2)=char(237)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_czech
+
+subroutine locale_catalan()
+! LANG=catalan
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "dl.","dt.","dc.","dj.","dv.","ds.","dg."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "dilluns","dimarts","dimecres","dijous","divendres","dissabte","diumenge"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "gen.","febr.","març","abr.","maig","juny", &
+& "jul.","ag.","set.","oct.","nov.","des." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "gener","febrer","març","abril","maig","juny", &
+& "juliol","agost","setembre","octubre","novembre","desembre" ]
+ ! ASCII weekdays
+months(3)(4:4)=char(231)
+ ! ASCII weekdays_abbr
+months_abbr(3)(4:4)=char(231)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_catalan
+
+
+subroutine locale_spanish()
+! LANG=spanish
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "lu.","ma.","mi.","ju.","vi.","sá.","do."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "lunes","martes","miércoles","jueves","viernes","sábado","domingo"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "ene.","feb.","mar.","abr.","may.","jun.", &
+& "jul.","ago.","sep.","oct.","nov.","dic." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "enero","febrero","marzo","abril","mayo","junio", &
+& "julio","agosto","septiembre","octubre","noviembre","diciembre" ]
+weekdays(3)(3:3)=char(233)
+weekdays(6)(2:2)=char(225)
+ ! ASCII months
+weekdays_abbr(6)(2:2)=char(225)
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_spanish
+
+
+subroutine locale_russian()
+! LANG=russian
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "¿Ý","²â","Áà","Çâ","¿â","ÁÑ","²á"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "ßÞÝÕÔÕÛìÝØÚ","ÒâÞàÝØÚ","áàÕÔÐ","çÕâÒÕàÓ","ßïâÝØæÐ","áãÑÑÞâÐ","ÒÞáÚàÕáÕÝìÕ"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "ïÝÒ","äÕÒ","ÜÐà","Ðßà","ÜÐÙ","ØîÝ", &
+& "ØîÛ","ÐÒÓ","áÕÝ","ÞÚâ","ÝÞï","ÔÕÚ" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "ÏÝÒÐàì","ÄÕÒàÐÛì","¼Ðàâ","°ßàÕÛì","¼ÐÙ","¸îÝì", &
+& "¸îÛì","°ÒÓãáâ","ÁÕÝâïÑàì","¾ÚâïÑàì","½ÞïÑàì","´ÕÚÐÑàì" ]
+weekdays(1)(1:1)=char(223)
+weekdays(1)(2:2)=char(222)
+weekdays(1)(3:3)=char(221)
+weekdays(1)(4:4)=char(213)
+weekdays(1)(5:5)=char(212)
+weekdays(1)(6:6)=char(213)
+weekdays(1)(7:7)=char(219)
+weekdays(1)(8:8)=char(236)
+weekdays(1)(9:9)=char(221)
+weekdays(1)(10:10)=char(216)
+weekdays(1)(11:11)=char(218)
+weekdays(2)(1:1)=char(210)
+weekdays(2)(2:2)=char(226)
+weekdays(2)(3:3)=char(222)
+weekdays(2)(4:4)=char(224)
+weekdays(2)(5:5)=char(221)
+weekdays(2)(6:6)=char(216)
+weekdays(2)(7:7)=char(218)
+weekdays(3)(1:1)=char(225)
+weekdays(3)(2:2)=char(224)
+weekdays(3)(3:3)=char(213)
+weekdays(3)(4:4)=char(212)
+weekdays(3)(5:5)=char(208)
+weekdays(4)(1:1)=char(231)
+weekdays(4)(2:2)=char(213)
+weekdays(4)(3:3)=char(226)
+weekdays(4)(4:4)=char(210)
+weekdays(4)(5:5)=char(213)
+weekdays(4)(6:6)=char(224)
+weekdays(4)(7:7)=char(211)
+weekdays(5)(1:1)=char(223)
+weekdays(5)(2:2)=char(239)
+weekdays(5)(3:3)=char(226)
+weekdays(5)(4:4)=char(221)
+weekdays(5)(5:5)=char(216)
+weekdays(5)(6:6)=char(230)
+weekdays(5)(7:7)=char(208)
+weekdays(6)(1:1)=char(225)
+weekdays(6)(2:2)=char(227)
+weekdays(6)(3:3)=char(209)
+weekdays(6)(4:4)=char(209)
+weekdays(6)(5:5)=char(222)
+weekdays(6)(6:6)=char(226)
+weekdays(6)(7:7)=char(208)
+weekdays(7)(1:1)=char(210)
+weekdays(7)(2:2)=char(222)
+weekdays(7)(3:3)=char(225)
+weekdays(7)(4:4)=char(218)
+weekdays(7)(5:5)=char(224)
+weekdays(7)(6:6)=char(213)
+weekdays(7)(7:7)=char(225)
+weekdays(7)(8:8)=char(213)
+weekdays(7)(9:9)=char(221)
+weekdays(7)(10:10)=char(236)
+weekdays(7)(11:11)=char(213)
+months(1)(1:1)=char(207)
+months(1)(2:2)=char(221)
+months(1)(3:3)=char(210)
+months(1)(4:4)=char(208)
+months(1)(5:5)=char(224)
+months(1)(6:6)=char(236)
+months(2)(1:1)=char(196)
+months(2)(2:2)=char(213)
+months(2)(3:3)=char(210)
+months(2)(4:4)=char(224)
+months(2)(5:5)=char(208)
+months(2)(6:6)=char(219)
+months(2)(7:7)=char(236)
+months(3)(1:1)=char(188)
+months(3)(2:2)=char(208)
+months(3)(3:3)=char(224)
+months(3)(4:4)=char(226)
+months(4)(1:1)=char(176)
+months(4)(2:2)=char(223)
+months(4)(3:3)=char(224)
+months(4)(4:4)=char(213)
+months(4)(5:5)=char(219)
+months(4)(6:6)=char(236)
+months(5)(1:1)=char(188)
+months(5)(2:2)=char(208)
+months(5)(3:3)=char(217)
+months(6)(1:1)=char(184)
+months(6)(2:2)=char(238)
+months(6)(3:3)=char(221)
+months(6)(4:4)=char(236)
+months(7)(1:1)=char(184)
+months(7)(2:2)=char(238)
+months(7)(3:3)=char(219)
+months(7)(4:4)=char(236)
+months(8)(1:1)=char(176)
+months(8)(2:2)=char(210)
+months(8)(3:3)=char(211)
+months(8)(4:4)=char(227)
+months(8)(5:5)=char(225)
+months(8)(6:6)=char(226)
+months(9)(1:1)=char(193)
+months(9)(2:2)=char(213)
+months(9)(3:3)=char(221)
+months(9)(4:4)=char(226)
+months(9)(5:5)=char(239)
+months(9)(6:6)=char(209)
+months(9)(7:7)=char(224)
+months(9)(8:8)=char(236)
+months(10)(1:1)=char(190)
+months(10)(2:2)=char(218)
+months(10)(3:3)=char(226)
+months(10)(4:4)=char(239)
+months(10)(5:5)=char(209)
+months(10)(6:6)=char(224)
+months(10)(7:7)=char(236)
+months(11)(1:1)=char(189)
+months(11)(2:2)=char(222)
+months(11)(3:3)=char(239)
+months(11)(4:4)=char(209)
+months(11)(5:5)=char(224)
+months(11)(6:6)=char(236)
+months(12)(1:1)=char(180)
+months(12)(2:2)=char(213)
+months(12)(3:3)=char(218)
+months(12)(4:4)=char(208)
+months(12)(5:5)=char(209)
+months(12)(6:6)=char(224)
+months(12)(7:7)=char(236)
+weekdays_abbr(1)(1:1)=char(191)
+weekdays_abbr(1)(2:2)=char(221)
+weekdays_abbr(2)(1:1)=char(178)
+weekdays_abbr(2)(2:2)=char(226)
+weekdays_abbr(3)(1:1)=char(193)
+weekdays_abbr(3)(2:2)=char(224)
+weekdays_abbr(4)(1:1)=char(199)
+weekdays_abbr(4)(2:2)=char(226)
+weekdays_abbr(5)(1:1)=char(191)
+weekdays_abbr(5)(2:2)=char(226)
+weekdays_abbr(6)(1:1)=char(193)
+weekdays_abbr(6)(2:2)=char(209)
+weekdays_abbr(7)(1:1)=char(178)
+weekdays_abbr(7)(2:2)=char(225)
+months_abbr(1)(1:1)=char(239)
+months_abbr(1)(2:2)=char(221)
+months_abbr(1)(3:3)=char(210)
+months_abbr(2)(1:1)=char(228)
+months_abbr(2)(2:2)=char(213)
+months_abbr(2)(3:3)=char(210)
+months_abbr(3)(1:1)=char(220)
+months_abbr(3)(2:2)=char(208)
+months_abbr(3)(3:3)=char(224)
+months_abbr(4)(1:1)=char(208)
+months_abbr(4)(2:2)=char(223)
+months_abbr(4)(3:3)=char(224)
+months_abbr(5)(1:1)=char(220)
+months_abbr(5)(2:2)=char(208)
+months_abbr(5)(3:3)=char(217)
+months_abbr(6)(1:1)=char(216)
+months_abbr(6)(2:2)=char(238)
+months_abbr(6)(3:3)=char(221)
+months_abbr(7)(1:1)=char(216)
+months_abbr(7)(2:2)=char(238)
+months_abbr(7)(3:3)=char(219)
+months_abbr(8)(1:1)=char(208)
+months_abbr(8)(2:2)=char(210)
+months_abbr(8)(3:3)=char(211)
+months_abbr(9)(1:1)=char(225)
+months_abbr(9)(2:2)=char(213)
+months_abbr(9)(3:3)=char(221)
+months_abbr(10)(1:1)=char(222)
+months_abbr(10)(2:2)=char(218)
+months_abbr(10)(3:3)=char(226)
+months_abbr(11)(1:1)=char(221)
+months_abbr(11)(2:2)=char(222)
+months_abbr(11)(3:3)=char(239)
+months_abbr(12)(1:1)=char(212)
+months_abbr(12)(2:2)=char(213)
+months_abbr(12)(3:3)=char(218)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_russian
+
+
+subroutine locale_norwegian()
+! LANG=norwegian
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "man.","tir.","ons.","tor.","fre.","lør.","søn."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "mandag","tirsdag","onsdag","torsdag","fredag","lørdag","søndag"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan","feb","mar","apr","mai","jun", &
+& "jul","aug","sep","okt","nov","des" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "januar","februar","mars","april","mai","juni", &
+& "juli","august","september","oktober","november","desember" ]
+weekdays(6)(2:2)=char(248)
+weekdays(7)(2:2)=char(248)
+ ! ASCII months
+weekdays_abbr(6)(2:2)=char(248)
+weekdays_abbr(7)(2:2)=char(248)
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_norwegian
+
+
+subroutine locale_bokmal()
+! LANG=bokmal
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "man.","tir.","ons.","tor.","fre.","lør.","søn."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "mandag","tirsdag","onsdag","torsdag","fredag","lørdag","søndag"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan","feb","mar","apr","mai","jun", &
+& "jul","aug","sep","okt","nov","des" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "januar","februar","mars","april","mai","juni", &
+& "juli","august","september","oktober","november","desember" ]
+
+weekdays(6)(2:2)=char(248)
+weekdays(7)(2:2)=char(248)
+ ! ASCII months
+weekdays_abbr(6)(2:2)=char(248)
+weekdays_abbr(7)(2:2)=char(248)
+ ! ASCII months_abbr
+
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+
+end subroutine locale_bokmal
+
+subroutine locale_dansk()
+! LANG=dansk
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "ma","ti","on","to","fr","lø","sø"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "mandag","tirsdag","onsdag","torsdag","fredag","lørdag","søndag"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan","feb","mar","apr","maj","jun", &
+& "jul","aug","sep","okt","nov","dec" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "januar","februar","marts","april","maj","juni", &
+& "juli","august","september","oktober","november","december" ]
+weekdays(6)(2:2)=char(248)
+weekdays(7)(2:2)=char(248)
+ ! ASCII months
+weekdays_abbr(6)(2:2)=char(248)
+weekdays_abbr(7)(2:2)=char(248)
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_dansk
+
+
+subroutine locale_nynorsk()
+! LANG=nynorsk
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "mån","tys","ons","tor","fre","lau","søn"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "måndag","tysdag","onsdag","torsdag","fredag","laurdag","søndag"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan","feb","mar","apr","mai","jun", &
+& "jul","aug","sep","okt","nov","des" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "januar","februar","mars","april","mai","juni", &
+& "juli","august","september","oktober","november","desember" ]
+weekdays(1)(2:2)=char(229)
+weekdays(7)(2:2)=char(248)
+ ! ASCII months
+weekdays_abbr(1)(2:2)=char(229)
+weekdays_abbr(7)(2:2)=char(248)
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_nynorsk
+
+
+
+subroutine locale_swedish()
+! LANG=swedish
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "mån","tis","ons","tor","fre","lör","sön"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "måndag","tisdag","onsdag","torsdag","fredag","lördag","söndag"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan","feb","mar","apr","maj","jun", &
+& "jul","aug","sep","okt","nov","dec" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "januari","februari","mars","april","maj","juni", &
+& "juli","augusti","september","oktober","november","december" ]
+weekdays(1)(2:2)=char(229)
+weekdays(6)(2:2)=char(246)
+weekdays(7)(2:2)=char(246)
+ ! ASCII months
+weekdays_abbr(1)(2:2)=char(229)
+weekdays_abbr(6)(2:2)=char(246)
+weekdays_abbr(7)(2:2)=char(246)
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_swedish
+
+
+subroutine locale_dutch()
+! LANG=dutch
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "ma","di","wo","do","vr","za","zo"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag","zondag"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan","feb","mrt","apr","mei","jun", &
+& "jul","aug","sep","okt","nov","dec" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "januari","februari","maart","april","mei","juni", &
+& "juli","augustus","september","oktober","november","december" ]
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_dutch
+
+
+subroutine locale_finnish()
+! LANG=finnish
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "ma","ti","ke","to","pe","la","su"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "maanantai","tiistai","keskiviikko","torstai","perjantai","lauantai","sunnuntai"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "tammi","helmi","maalis","huhti","touko","kesä", &
+& "heinä","elo","syys","loka","marras","joulu" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kesäkuu", &
+& "heinäkuu","elokuu","syyskuu","lokakuu","marraskuu","joulukuu" ]
+ ! ASCII weekdays
+months(6)(4:4)=char(228)
+months(7)(5:5)=char(228)
+ ! ASCII weekdays_abbr
+months_abbr(6)(4:4)=char(228)
+months_abbr(7)(5:5)=char(228)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_finnish
+
+
+subroutine locale_french()
+! LANG=french
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "lun.","mar.","mer.","jeu.","ven.","sam.","dim."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "janv.","févr.","mars","avr.","mai","juin", &
+& "juil.","août","sept.","oct.","nov.","déc." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "janvier","février","mars","avril","mai","juin", &
+& "juillet","août","septembre","octobre","novembre","décembre" ]
+ ! ASCII weekdays
+months(2)(2:2)=char(233)
+months(8)(3:3)=char(251)
+months(12)(2:2)=char(233)
+ ! ASCII weekdays_abbr
+months_abbr(2)(2:2)=char(233)
+months_abbr(8)(3:3)=char(251)
+months_abbr(12)(2:2)=char(233)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_french
+
+
+subroutine locale_galego()
+! LANG=galego
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "Luns","Mar.","Mér.","Xov.","Ven.","Sáb.","Dom."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "luns","martes","mércores","xoves","venres","sábado","domingo"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "Xan.","Feb.","Mar.","Abr.","Maio","Xuño", &
+& "Xul.","Ago.","Set.","Out.","Nov.","Dec." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "Xaneiro","Febreiro","Marzo","Abril","Maio","Xuño", &
+& "Xullo","Agosto","Setembro","Outubro","Novembro","Decembro" ]
+weekdays(3)(2:2)=char(233)
+weekdays(6)(2:2)=char(225)
+months(6)(3:3)=char(241)
+weekdays_abbr(3)(2:2)=char(233)
+weekdays_abbr(6)(2:2)=char(225)
+months_abbr(6)(3:3)=char(241)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_galego
+
+subroutine locale_greek()
+! LANG=greek
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "Äåõ","Ôñé","Ôåô","Ðåì","Ðáñ","Óáâ","Êõñ"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "ÄåõôÝñá","Ôñßôç","ÔåôÜñôç","ÐÝìðôç","ÐáñáóêåõÞ","ÓÜââáôï","ÊõñéáêÞ"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "Éáí","Öåâ","Ìáñ","Áðñ","Ìáú","Éïõí", &
+& "Éïõë","Áõã","Óåð","Ïêô","Íïå","Äåê" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "ÉáíïõÜñéïò","ÖåâñïõÜñéïò","ÌÜñôéïò","Áðñßëéïò","ÌÜéïò","Éïýíéïò", &
+& "Éïýëéïò","Áýãïõóôïò","ÓåðôÝìâñéïò","Ïêôþâñéïò","ÍïÝìâñéïò","ÄåêÝìâñéïò" ]
+weekdays(1)(1:1)=char(196)
+weekdays(1)(2:2)=char(229)
+weekdays(1)(3:3)=char(245)
+weekdays(1)(4:4)=char(244)
+weekdays(1)(5:5)=char(221)
+weekdays(1)(6:6)=char(241)
+weekdays(1)(7:7)=char(225)
+weekdays(2)(1:1)=char(212)
+weekdays(2)(2:2)=char(241)
+weekdays(2)(3:3)=char(223)
+weekdays(2)(4:4)=char(244)
+weekdays(2)(5:5)=char(231)
+weekdays(3)(1:1)=char(212)
+weekdays(3)(2:2)=char(229)
+weekdays(3)(3:3)=char(244)
+weekdays(3)(4:4)=char(220)
+weekdays(3)(5:5)=char(241)
+weekdays(3)(6:6)=char(244)
+weekdays(3)(7:7)=char(231)
+weekdays(4)(1:1)=char(208)
+weekdays(4)(2:2)=char(221)
+weekdays(4)(3:3)=char(236)
+weekdays(4)(4:4)=char(240)
+weekdays(4)(5:5)=char(244)
+weekdays(4)(6:6)=char(231)
+weekdays(5)(1:1)=char(208)
+weekdays(5)(2:2)=char(225)
+weekdays(5)(3:3)=char(241)
+weekdays(5)(4:4)=char(225)
+weekdays(5)(5:5)=char(243)
+weekdays(5)(6:6)=char(234)
+weekdays(5)(7:7)=char(229)
+weekdays(5)(8:8)=char(245)
+weekdays(5)(9:9)=char(222)
+weekdays(6)(1:1)=char(211)
+weekdays(6)(2:2)=char(220)
+weekdays(6)(3:3)=char(226)
+weekdays(6)(4:4)=char(226)
+weekdays(6)(5:5)=char(225)
+weekdays(6)(6:6)=char(244)
+weekdays(6)(7:7)=char(239)
+weekdays(7)(1:1)=char(202)
+weekdays(7)(2:2)=char(245)
+weekdays(7)(3:3)=char(241)
+weekdays(7)(4:4)=char(233)
+weekdays(7)(5:5)=char(225)
+weekdays(7)(6:6)=char(234)
+weekdays(7)(7:7)=char(222)
+months(1)(1:1)=char(201)
+months(1)(2:2)=char(225)
+months(1)(3:3)=char(237)
+months(1)(4:4)=char(239)
+months(1)(5:5)=char(245)
+months(1)(6:6)=char(220)
+months(1)(7:7)=char(241)
+months(1)(8:8)=char(233)
+months(1)(9:9)=char(239)
+months(1)(10:10)=char(242)
+months(2)(1:1)=char(214)
+months(2)(2:2)=char(229)
+months(2)(3:3)=char(226)
+months(2)(4:4)=char(241)
+months(2)(5:5)=char(239)
+months(2)(6:6)=char(245)
+months(2)(7:7)=char(220)
+months(2)(8:8)=char(241)
+months(2)(9:9)=char(233)
+months(2)(10:10)=char(239)
+months(2)(11:11)=char(242)
+months(3)(1:1)=char(204)
+months(3)(2:2)=char(220)
+months(3)(3:3)=char(241)
+months(3)(4:4)=char(244)
+months(3)(5:5)=char(233)
+months(3)(6:6)=char(239)
+months(3)(7:7)=char(242)
+months(4)(1:1)=char(193)
+months(4)(2:2)=char(240)
+months(4)(3:3)=char(241)
+months(4)(4:4)=char(223)
+months(4)(5:5)=char(235)
+months(4)(6:6)=char(233)
+months(4)(7:7)=char(239)
+months(4)(8:8)=char(242)
+months(5)(1:1)=char(204)
+months(5)(2:2)=char(220)
+months(5)(3:3)=char(233)
+months(5)(4:4)=char(239)
+months(5)(5:5)=char(242)
+months(6)(1:1)=char(201)
+months(6)(2:2)=char(239)
+months(6)(3:3)=char(253)
+months(6)(4:4)=char(237)
+months(6)(5:5)=char(233)
+months(6)(6:6)=char(239)
+months(6)(7:7)=char(242)
+months(7)(1:1)=char(201)
+months(7)(2:2)=char(239)
+months(7)(3:3)=char(253)
+months(7)(4:4)=char(235)
+months(7)(5:5)=char(233)
+months(7)(6:6)=char(239)
+months(7)(7:7)=char(242)
+months(8)(1:1)=char(193)
+months(8)(2:2)=char(253)
+months(8)(3:3)=char(227)
+months(8)(4:4)=char(239)
+months(8)(5:5)=char(245)
+months(8)(6:6)=char(243)
+months(8)(7:7)=char(244)
+months(8)(8:8)=char(239)
+months(8)(9:9)=char(242)
+months(9)(1:1)=char(211)
+months(9)(2:2)=char(229)
+months(9)(3:3)=char(240)
+months(9)(4:4)=char(244)
+months(9)(5:5)=char(221)
+months(9)(6:6)=char(236)
+months(9)(7:7)=char(226)
+months(9)(8:8)=char(241)
+months(9)(9:9)=char(233)
+months(9)(10:10)=char(239)
+months(9)(11:11)=char(242)
+months(10)(1:1)=char(207)
+months(10)(2:2)=char(234)
+months(10)(3:3)=char(244)
+months(10)(4:4)=char(254)
+months(10)(5:5)=char(226)
+months(10)(6:6)=char(241)
+months(10)(7:7)=char(233)
+months(10)(8:8)=char(239)
+months(10)(9:9)=char(242)
+months(11)(1:1)=char(205)
+months(11)(2:2)=char(239)
+months(11)(3:3)=char(221)
+months(11)(4:4)=char(236)
+months(11)(5:5)=char(226)
+months(11)(6:6)=char(241)
+months(11)(7:7)=char(233)
+months(11)(8:8)=char(239)
+months(11)(9:9)=char(242)
+months(12)(1:1)=char(196)
+months(12)(2:2)=char(229)
+months(12)(3:3)=char(234)
+months(12)(4:4)=char(221)
+months(12)(5:5)=char(236)
+months(12)(6:6)=char(226)
+months(12)(7:7)=char(241)
+months(12)(8:8)=char(233)
+months(12)(9:9)=char(239)
+months(12)(10:10)=char(242)
+weekdays_abbr(1)(1:1)=char(196)
+weekdays_abbr(1)(2:2)=char(229)
+weekdays_abbr(1)(3:3)=char(245)
+weekdays_abbr(2)(1:1)=char(212)
+weekdays_abbr(2)(2:2)=char(241)
+weekdays_abbr(2)(3:3)=char(233)
+weekdays_abbr(3)(1:1)=char(212)
+weekdays_abbr(3)(2:2)=char(229)
+weekdays_abbr(3)(3:3)=char(244)
+weekdays_abbr(4)(1:1)=char(208)
+weekdays_abbr(4)(2:2)=char(229)
+weekdays_abbr(4)(3:3)=char(236)
+weekdays_abbr(5)(1:1)=char(208)
+weekdays_abbr(5)(2:2)=char(225)
+weekdays_abbr(5)(3:3)=char(241)
+weekdays_abbr(6)(1:1)=char(211)
+weekdays_abbr(6)(2:2)=char(225)
+weekdays_abbr(6)(3:3)=char(226)
+weekdays_abbr(7)(1:1)=char(202)
+weekdays_abbr(7)(2:2)=char(245)
+weekdays_abbr(7)(3:3)=char(241)
+months_abbr(1)(1:1)=char(201)
+months_abbr(1)(2:2)=char(225)
+months_abbr(1)(3:3)=char(237)
+months_abbr(2)(1:1)=char(214)
+months_abbr(2)(2:2)=char(229)
+months_abbr(2)(3:3)=char(226)
+months_abbr(3)(1:1)=char(204)
+months_abbr(3)(2:2)=char(225)
+months_abbr(3)(3:3)=char(241)
+months_abbr(4)(1:1)=char(193)
+months_abbr(4)(2:2)=char(240)
+months_abbr(4)(3:3)=char(241)
+months_abbr(5)(1:1)=char(204)
+months_abbr(5)(2:2)=char(225)
+months_abbr(5)(3:3)=char(250)
+months_abbr(6)(1:1)=char(201)
+months_abbr(6)(2:2)=char(239)
+months_abbr(6)(3:3)=char(245)
+months_abbr(6)(4:4)=char(237)
+months_abbr(7)(1:1)=char(201)
+months_abbr(7)(2:2)=char(239)
+months_abbr(7)(3:3)=char(245)
+months_abbr(7)(4:4)=char(235)
+months_abbr(8)(1:1)=char(193)
+months_abbr(8)(2:2)=char(245)
+months_abbr(8)(3:3)=char(227)
+months_abbr(9)(1:1)=char(211)
+months_abbr(9)(2:2)=char(229)
+months_abbr(9)(3:3)=char(240)
+months_abbr(10)(1:1)=char(207)
+months_abbr(10)(2:2)=char(234)
+months_abbr(10)(3:3)=char(244)
+months_abbr(11)(1:1)=char(205)
+months_abbr(11)(2:2)=char(239)
+months_abbr(11)(3:3)=char(229)
+months_abbr(12)(1:1)=char(196)
+months_abbr(12)(2:2)=char(229)
+months_abbr(12)(3:3)=char(234)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_greek
+
+
+subroutine locale_hebrew()
+! LANG=hebrew
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "éåí á","éåí â","éåí ã","éåí ä","éåí å","ùáú","éåí à"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "éåí ùðé","éåí ùìéùé","éåí øáéòé","éåí çîéùé","éåí ùéùé","ùáú","éåí øàùåï"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "éðå","ôáø","îøõ","àôø","îàé","éåð", &
+& "éåì","àåâ","ñôè","àå÷","ðåá","ãöî" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "éðåàø","ôáøåàø","îøõ","àôøéì","îàé","éåðé", &
+& "éåìé","àåâåñè","ñôèîáø","àå÷èåáø","ðåáîáø","ãöîáø" ]
+weekdays(1)(1:1)=char(233)
+weekdays(1)(2:2)=char(229)
+weekdays(1)(3:3)=char(237)
+weekdays(1)(4:4)=char(160)
+weekdays(1)(5:5)=char(249)
+weekdays(1)(6:6)=char(240)
+weekdays(1)(7:7)=char(233)
+weekdays(2)(1:1)=char(233)
+weekdays(2)(2:2)=char(229)
+weekdays(2)(3:3)=char(237)
+weekdays(2)(4:4)=char(160)
+weekdays(2)(5:5)=char(249)
+weekdays(2)(6:6)=char(236)
+weekdays(2)(7:7)=char(233)
+weekdays(2)(8:8)=char(249)
+weekdays(2)(9:9)=char(233)
+weekdays(3)(1:1)=char(233)
+weekdays(3)(2:2)=char(229)
+weekdays(3)(3:3)=char(237)
+weekdays(3)(4:4)=char(160)
+weekdays(3)(5:5)=char(248)
+weekdays(3)(6:6)=char(225)
+weekdays(3)(7:7)=char(233)
+weekdays(3)(8:8)=char(242)
+weekdays(3)(9:9)=char(233)
+weekdays(4)(1:1)=char(233)
+weekdays(4)(2:2)=char(229)
+weekdays(4)(3:3)=char(237)
+weekdays(4)(4:4)=char(160)
+weekdays(4)(5:5)=char(231)
+weekdays(4)(6:6)=char(238)
+weekdays(4)(7:7)=char(233)
+weekdays(4)(8:8)=char(249)
+weekdays(4)(9:9)=char(233)
+weekdays(5)(1:1)=char(233)
+weekdays(5)(2:2)=char(229)
+weekdays(5)(3:3)=char(237)
+weekdays(5)(4:4)=char(160)
+weekdays(5)(5:5)=char(249)
+weekdays(5)(6:6)=char(233)
+weekdays(5)(7:7)=char(249)
+weekdays(5)(8:8)=char(233)
+weekdays(6)(1:1)=char(249)
+weekdays(6)(2:2)=char(225)
+weekdays(6)(3:3)=char(250)
+weekdays(7)(1:1)=char(233)
+weekdays(7)(2:2)=char(229)
+weekdays(7)(3:3)=char(237)
+weekdays(7)(4:4)=char(160)
+weekdays(7)(5:5)=char(248)
+weekdays(7)(6:6)=char(224)
+weekdays(7)(7:7)=char(249)
+weekdays(7)(8:8)=char(229)
+weekdays(7)(9:9)=char(239)
+months(1)(1:1)=char(233)
+months(1)(2:2)=char(240)
+months(1)(3:3)=char(229)
+months(1)(4:4)=char(224)
+months(1)(5:5)=char(248)
+months(2)(1:1)=char(244)
+months(2)(2:2)=char(225)
+months(2)(3:3)=char(248)
+months(2)(4:4)=char(229)
+months(2)(5:5)=char(224)
+months(2)(6:6)=char(248)
+months(3)(1:1)=char(238)
+months(3)(2:2)=char(248)
+months(3)(3:3)=char(245)
+months(4)(1:1)=char(224)
+months(4)(2:2)=char(244)
+months(4)(3:3)=char(248)
+months(4)(4:4)=char(233)
+months(4)(5:5)=char(236)
+months(5)(1:1)=char(238)
+months(5)(2:2)=char(224)
+months(5)(3:3)=char(233)
+months(6)(1:1)=char(233)
+months(6)(2:2)=char(229)
+months(6)(3:3)=char(240)
+months(6)(4:4)=char(233)
+months(7)(1:1)=char(233)
+months(7)(2:2)=char(229)
+months(7)(3:3)=char(236)
+months(7)(4:4)=char(233)
+months(8)(1:1)=char(224)
+months(8)(2:2)=char(229)
+months(8)(3:3)=char(226)
+months(8)(4:4)=char(229)
+months(8)(5:5)=char(241)
+months(8)(6:6)=char(232)
+months(9)(1:1)=char(241)
+months(9)(2:2)=char(244)
+months(9)(3:3)=char(232)
+months(9)(4:4)=char(238)
+months(9)(5:5)=char(225)
+months(9)(6:6)=char(248)
+months(10)(1:1)=char(224)
+months(10)(2:2)=char(229)
+months(10)(3:3)=char(247)
+months(10)(4:4)=char(232)
+months(10)(5:5)=char(229)
+months(10)(6:6)=char(225)
+months(10)(7:7)=char(248)
+months(11)(1:1)=char(240)
+months(11)(2:2)=char(229)
+months(11)(3:3)=char(225)
+months(11)(4:4)=char(238)
+months(11)(5:5)=char(225)
+months(11)(6:6)=char(248)
+months(12)(1:1)=char(227)
+months(12)(2:2)=char(246)
+months(12)(3:3)=char(238)
+months(12)(4:4)=char(225)
+months(12)(5:5)=char(248)
+weekdays_abbr(1)(1:1)=char(233)
+weekdays_abbr(1)(2:2)=char(229)
+weekdays_abbr(1)(3:3)=char(237)
+weekdays_abbr(1)(4:4)=char(160)
+weekdays_abbr(1)(5:5)=char(225)
+weekdays_abbr(2)(1:1)=char(233)
+weekdays_abbr(2)(2:2)=char(229)
+weekdays_abbr(2)(3:3)=char(237)
+weekdays_abbr(2)(4:4)=char(160)
+weekdays_abbr(2)(5:5)=char(226)
+weekdays_abbr(3)(1:1)=char(233)
+weekdays_abbr(3)(2:2)=char(229)
+weekdays_abbr(3)(3:3)=char(237)
+weekdays_abbr(3)(4:4)=char(160)
+weekdays_abbr(3)(5:5)=char(227)
+weekdays_abbr(4)(1:1)=char(233)
+weekdays_abbr(4)(2:2)=char(229)
+weekdays_abbr(4)(3:3)=char(237)
+weekdays_abbr(4)(4:4)=char(160)
+weekdays_abbr(4)(5:5)=char(228)
+weekdays_abbr(5)(1:1)=char(233)
+weekdays_abbr(5)(2:2)=char(229)
+weekdays_abbr(5)(3:3)=char(237)
+weekdays_abbr(5)(4:4)=char(160)
+weekdays_abbr(5)(5:5)=char(229)
+weekdays_abbr(6)(1:1)=char(249)
+weekdays_abbr(6)(2:2)=char(225)
+weekdays_abbr(6)(3:3)=char(250)
+weekdays_abbr(7)(1:1)=char(233)
+weekdays_abbr(7)(2:2)=char(229)
+weekdays_abbr(7)(3:3)=char(237)
+weekdays_abbr(7)(4:4)=char(160)
+weekdays_abbr(7)(5:5)=char(224)
+months_abbr(1)(1:1)=char(233)
+months_abbr(1)(2:2)=char(240)
+months_abbr(1)(3:3)=char(229)
+months_abbr(2)(1:1)=char(244)
+months_abbr(2)(2:2)=char(225)
+months_abbr(2)(3:3)=char(248)
+months_abbr(3)(1:1)=char(238)
+months_abbr(3)(2:2)=char(248)
+months_abbr(3)(3:3)=char(245)
+months_abbr(4)(1:1)=char(224)
+months_abbr(4)(2:2)=char(244)
+months_abbr(4)(3:3)=char(248)
+months_abbr(5)(1:1)=char(238)
+months_abbr(5)(2:2)=char(224)
+months_abbr(5)(3:3)=char(233)
+months_abbr(6)(1:1)=char(233)
+months_abbr(6)(2:2)=char(229)
+months_abbr(6)(3:3)=char(240)
+months_abbr(7)(1:1)=char(233)
+months_abbr(7)(2:2)=char(229)
+months_abbr(7)(3:3)=char(236)
+months_abbr(8)(1:1)=char(224)
+months_abbr(8)(2:2)=char(229)
+months_abbr(8)(3:3)=char(226)
+months_abbr(9)(1:1)=char(241)
+months_abbr(9)(2:2)=char(244)
+months_abbr(9)(3:3)=char(232)
+months_abbr(10)(1:1)=char(224)
+months_abbr(10)(2:2)=char(229)
+months_abbr(10)(3:3)=char(247)
+months_abbr(11)(1:1)=char(240)
+months_abbr(11)(2:2)=char(229)
+months_abbr(11)(3:3)=char(225)
+months_abbr(12)(1:1)=char(227)
+months_abbr(12)(2:2)=char(246)
+months_abbr(12)(3:3)=char(238)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_hebrew
+
+
+subroutine locale_hrvatski()
+! LANG=hrvatski
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "pon","uto","sri","èet","pet","sub","ned"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "ponedjeljak","utorak","srijeda","èetvrtak","petak","subota","nedjelja"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "sij","vlj","o¾u","tra","svi","lip", &
+& "srp","kol","ruj","lis","stu","pro" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "sijeèanj","veljaèa","o¾ujak","travanj","svibanj","lipanj", &
+& "srpanj","kolovoz","rujan","listopad","studeni","prosinac" ]
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+weekdays(4)(1:1)=char(232)
+months(1)(5:5)=char(232)
+months(2)(6:6)=char(232)
+months(3)(2:2)=char(190)
+weekdays_abbr(4)(1:1)=char(232)
+months_abbr(3)(2:2)=char(190)
+
+end subroutine locale_hrvatski
+
+
+subroutine locale_hungarian()
+! LANG=hungarian
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "H","K","Sze","Cs","P","Szo","V"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "hétfõ","kedd","szerda","csütörtök","péntek","szombat","vasárnap"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan.","febr.","márc.","ápr.","máj.","jún.", &
+& "júl.","aug.","szept.","okt.","nov.","dec." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "január","február","március","április","május","június", &
+& "július","augusztus","szeptember","október","november","december" ]
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+weekdays(1)(2:2)=char(233)
+weekdays(1)(5:5)=char(245)
+weekdays(4)(3:3)=char(252)
+weekdays(4)(5:5)=char(246)
+weekdays(4)(8:8)=char(246)
+weekdays(5)(2:2)=char(233)
+weekdays(7)(4:4)=char(225)
+months(1)(5:5)=char(225)
+months(2)(6:6)=char(225)
+months(3)(2:2)=char(225)
+months(4)(1:1)=char(225)
+months(5)(2:2)=char(225)
+months(6)(2:2)=char(250)
+months(7)(2:2)=char(250)
+months(10)(4:4)=char(243)
+ ! ASCII weekdays_abbr
+months_abbr(3)(2:2)=char(225)
+months_abbr(4)(1:1)=char(225)
+months_abbr(5)(2:2)=char(225)
+months_abbr(6)(2:2)=char(250)
+months_abbr(7)(2:2)=char(250)
+end subroutine locale_hungarian
+
+
+subroutine locale_icelandic()
+! LANG=icelandic
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "mán.","þri.","mið.","fim.","fös.","lau.","sun."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "mánudagur","þriðjudagur","miðvikudagur","fimmtudagur","föstudagur","laugardagur","sunnudagur"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan.","feb.","mar.","apr.","maí","jún.", &
+& "júl.","ágú.","sep.","okt.","nóv.","des." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "janúar","febrúar","mars","apríl","maí","júní", &
+& "júlí","ágúst","september","október","nóvember","desember" ]
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+weekdays(1)(2:2)=char(225)
+weekdays(2)(1:1)=char(254)
+weekdays(2)(4:4)=char(240)
+weekdays(3)(3:3)=char(240)
+weekdays(5)(2:2)=char(246)
+months(1)(4:4)=char(250)
+months(2)(5:5)=char(250)
+months(4)(4:4)=char(237)
+months(5)(3:3)=char(237)
+months(6)(2:2)=char(250)
+months(6)(4:4)=char(237)
+months(7)(2:2)=char(250)
+months(7)(4:4)=char(237)
+months(8)(1:1)=char(225)
+months(8)(3:3)=char(250)
+months(10)(4:4)=char(243)
+months(11)(2:2)=char(243)
+weekdays_abbr(1)(2:2)=char(225)
+weekdays_abbr(2)(1:1)=char(254)
+weekdays_abbr(3)(3:3)=char(240)
+weekdays_abbr(5)(2:2)=char(246)
+months_abbr(5)(3:3)=char(237)
+months_abbr(6)(2:2)=char(250)
+months_abbr(7)(2:2)=char(250)
+months_abbr(8)(1:1)=char(225)
+months_abbr(8)(3:3)=char(250)
+months_abbr(11)(2:2)=char(243)
+end subroutine locale_icelandic
+
+
+subroutine locale_italian()
+! LANG=italian
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "lun","mar","mer","gio","ven","sab","dom"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "lunedì","martedì","mercoledì","giovedì","venerdì","sabato","domenica"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "gen","feb","mar","apr","mag","giu", &
+& "lug","ago","set","ott","nov","dic" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "gennaio","febbraio","marzo","aprile","maggio","giugno", &
+& "luglio","agosto","settembre","ottobre","novembre","dicembre" ]
+weekdays(1)(6:6)=char(236)
+weekdays(2)(7:7)=char(236)
+weekdays(3)(9:9)=char(236)
+weekdays(4)(7:7)=char(236)
+weekdays(5)(7:7)=char(236)
+ ! ASCII months
+ ! ASCII weekdays_abbr
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_italian
+
+
+subroutine locale_japanese()
+! LANG=japanese
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "·î","²Ð","¿å","ÌÚ","¶â","ÅÚ","Æü"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "·îÍËÆü","²ÐÍËÆü","¿åÍËÆü","ÌÚÍËÆü","¶âÍËÆü","ÅÚÍËÆü","ÆüÍËÆü"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "1·î","2·î","3·î","4·î","5·î","6·î", &
+& "7·î","8·î","9·î","10·î","11·î","12·î" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "1·î","2·î","3·î","4·î","5·î","6·î", &
+& "7·î","8·î","9·î","10·î","11·î","12·î" ]
+weekdays(1)(1:1)=char(183)
+weekdays(1)(2:2)=char(238)
+weekdays(1)(3:3)=char(205)
+weekdays(1)(4:4)=char(203)
+weekdays(1)(5:5)=char(198)
+weekdays(1)(6:6)=char(252)
+weekdays(2)(1:1)=char(178)
+weekdays(2)(2:2)=char(208)
+weekdays(2)(3:3)=char(205)
+weekdays(2)(4:4)=char(203)
+weekdays(2)(5:5)=char(198)
+weekdays(2)(6:6)=char(252)
+weekdays(3)(1:1)=char(191)
+weekdays(3)(2:2)=char(229)
+weekdays(3)(3:3)=char(205)
+weekdays(3)(4:4)=char(203)
+weekdays(3)(5:5)=char(198)
+weekdays(3)(6:6)=char(252)
+weekdays(4)(1:1)=char(204)
+weekdays(4)(2:2)=char(218)
+weekdays(4)(3:3)=char(205)
+weekdays(4)(4:4)=char(203)
+weekdays(4)(5:5)=char(198)
+weekdays(4)(6:6)=char(252)
+weekdays(5)(1:1)=char(182)
+weekdays(5)(2:2)=char(226)
+weekdays(5)(3:3)=char(205)
+weekdays(5)(4:4)=char(203)
+weekdays(5)(5:5)=char(198)
+weekdays(5)(6:6)=char(252)
+weekdays(6)(1:1)=char(197)
+weekdays(6)(2:2)=char(218)
+weekdays(6)(3:3)=char(205)
+weekdays(6)(4:4)=char(203)
+weekdays(6)(5:5)=char(198)
+weekdays(6)(6:6)=char(252)
+weekdays(7)(1:1)=char(198)
+weekdays(7)(2:2)=char(252)
+weekdays(7)(3:3)=char(205)
+weekdays(7)(4:4)=char(203)
+weekdays(7)(5:5)=char(198)
+weekdays(7)(6:6)=char(252)
+months(1)(2:2)=char(183)
+months(1)(3:3)=char(238)
+months(2)(2:2)=char(183)
+months(2)(3:3)=char(238)
+months(3)(2:2)=char(183)
+months(3)(3:3)=char(238)
+months(4)(2:2)=char(183)
+months(4)(3:3)=char(238)
+months(5)(2:2)=char(183)
+months(5)(3:3)=char(238)
+months(6)(2:2)=char(183)
+months(6)(3:3)=char(238)
+months(7)(2:2)=char(183)
+months(7)(3:3)=char(238)
+months(8)(2:2)=char(183)
+months(8)(3:3)=char(238)
+months(9)(2:2)=char(183)
+months(9)(3:3)=char(238)
+months(10)(3:3)=char(183)
+months(10)(4:4)=char(238)
+months(11)(3:3)=char(183)
+months(11)(4:4)=char(238)
+months(12)(3:3)=char(183)
+months(12)(4:4)=char(238)
+weekdays_abbr(1)(1:1)=char(183)
+weekdays_abbr(1)(2:2)=char(238)
+weekdays_abbr(2)(1:1)=char(178)
+weekdays_abbr(2)(2:2)=char(208)
+weekdays_abbr(3)(1:1)=char(191)
+weekdays_abbr(3)(2:2)=char(229)
+weekdays_abbr(4)(1:1)=char(204)
+weekdays_abbr(4)(2:2)=char(218)
+weekdays_abbr(5)(1:1)=char(182)
+weekdays_abbr(5)(2:2)=char(226)
+weekdays_abbr(6)(1:1)=char(197)
+weekdays_abbr(6)(2:2)=char(218)
+weekdays_abbr(7)(1:1)=char(198)
+weekdays_abbr(7)(2:2)=char(252)
+months_abbr(1)(2:2)=char(183)
+months_abbr(1)(3:3)=char(238)
+months_abbr(2)(2:2)=char(183)
+months_abbr(2)(3:3)=char(238)
+months_abbr(3)(2:2)=char(183)
+months_abbr(3)(3:3)=char(238)
+months_abbr(4)(2:2)=char(183)
+months_abbr(4)(3:3)=char(238)
+months_abbr(5)(2:2)=char(183)
+months_abbr(5)(3:3)=char(238)
+months_abbr(6)(2:2)=char(183)
+months_abbr(6)(3:3)=char(238)
+months_abbr(7)(2:2)=char(183)
+months_abbr(7)(3:3)=char(238)
+months_abbr(8)(2:2)=char(183)
+months_abbr(8)(3:3)=char(238)
+months_abbr(9)(2:2)=char(183)
+months_abbr(9)(3:3)=char(238)
+months_abbr(10)(3:3)=char(183)
+months_abbr(10)(4:4)=char(238)
+months_abbr(11)(3:3)=char(183)
+months_abbr(11)(4:4)=char(238)
+months_abbr(12)(3:3)=char(183)
+months_abbr(12)(4:4)=char(238)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_japanese
+
+
+subroutine locale_korean()
+! LANG=korean
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "¿ù","È­","¼ö","¸ñ","±Ý","Åä","ÀÏ"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "¿ù¿äÀÏ","È­¿äÀÏ","¼ö¿äÀÏ","¸ñ¿äÀÏ","±Ý¿äÀÏ","Åä¿äÀÏ","ÀÏ¿äÀÏ"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "1¿ù","2¿ù","3¿ù","4¿ù","5¿ù","6¿ù", &
+& "7¿ù","8¿ù","9¿ù","10¿ù","11¿ù","12¿ù" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "1¿ù","2¿ù","3¿ù","4¿ù","5¿ù","6¿ù", &
+& "7¿ù","8¿ù","9¿ù","10¿ù","11¿ù","12¿ù" ]
+weekdays(1)(1:1)=char(191)
+weekdays(1)(2:2)=char(249)
+weekdays(1)(3:3)=char(191)
+weekdays(1)(4:4)=char(228)
+weekdays(1)(5:5)=char(192)
+weekdays(1)(6:6)=char(207)
+weekdays(2)(1:1)=char(200)
+weekdays(2)(2:2)=char(173)
+weekdays(2)(3:3)=char(191)
+weekdays(2)(4:4)=char(228)
+weekdays(2)(5:5)=char(192)
+weekdays(2)(6:6)=char(207)
+weekdays(3)(1:1)=char(188)
+weekdays(3)(2:2)=char(246)
+weekdays(3)(3:3)=char(191)
+weekdays(3)(4:4)=char(228)
+weekdays(3)(5:5)=char(192)
+weekdays(3)(6:6)=char(207)
+weekdays(4)(1:1)=char(184)
+weekdays(4)(2:2)=char(241)
+weekdays(4)(3:3)=char(191)
+weekdays(4)(4:4)=char(228)
+weekdays(4)(5:5)=char(192)
+weekdays(4)(6:6)=char(207)
+weekdays(5)(1:1)=char(177)
+weekdays(5)(2:2)=char(221)
+weekdays(5)(3:3)=char(191)
+weekdays(5)(4:4)=char(228)
+weekdays(5)(5:5)=char(192)
+weekdays(5)(6:6)=char(207)
+weekdays(6)(1:1)=char(197)
+weekdays(6)(2:2)=char(228)
+weekdays(6)(3:3)=char(191)
+weekdays(6)(4:4)=char(228)
+weekdays(6)(5:5)=char(192)
+weekdays(6)(6:6)=char(207)
+weekdays(7)(1:1)=char(192)
+weekdays(7)(2:2)=char(207)
+weekdays(7)(3:3)=char(191)
+weekdays(7)(4:4)=char(228)
+weekdays(7)(5:5)=char(192)
+weekdays(7)(6:6)=char(207)
+months(1)(2:2)=char(191)
+months(1)(3:3)=char(249)
+months(2)(2:2)=char(191)
+months(2)(3:3)=char(249)
+months(3)(2:2)=char(191)
+months(3)(3:3)=char(249)
+months(4)(2:2)=char(191)
+months(4)(3:3)=char(249)
+months(5)(2:2)=char(191)
+months(5)(3:3)=char(249)
+months(6)(2:2)=char(191)
+months(6)(3:3)=char(249)
+months(7)(2:2)=char(191)
+months(7)(3:3)=char(249)
+months(8)(2:2)=char(191)
+months(8)(3:3)=char(249)
+months(9)(2:2)=char(191)
+months(9)(3:3)=char(249)
+months(10)(3:3)=char(191)
+months(10)(4:4)=char(249)
+months(11)(3:3)=char(191)
+months(11)(4:4)=char(249)
+months(12)(3:3)=char(191)
+months(12)(4:4)=char(249)
+weekdays_abbr(1)(1:1)=char(191)
+weekdays_abbr(1)(2:2)=char(249)
+weekdays_abbr(2)(1:1)=char(200)
+weekdays_abbr(2)(2:2)=char(173)
+weekdays_abbr(3)(1:1)=char(188)
+weekdays_abbr(3)(2:2)=char(246)
+weekdays_abbr(4)(1:1)=char(184)
+weekdays_abbr(4)(2:2)=char(241)
+weekdays_abbr(5)(1:1)=char(177)
+weekdays_abbr(5)(2:2)=char(221)
+weekdays_abbr(6)(1:1)=char(197)
+weekdays_abbr(6)(2:2)=char(228)
+weekdays_abbr(7)(1:1)=char(192)
+weekdays_abbr(7)(2:2)=char(207)
+months_abbr(1)(2:2)=char(191)
+months_abbr(1)(3:3)=char(249)
+months_abbr(2)(2:2)=char(191)
+months_abbr(2)(3:3)=char(249)
+months_abbr(3)(2:2)=char(191)
+months_abbr(3)(3:3)=char(249)
+months_abbr(4)(2:2)=char(191)
+months_abbr(4)(3:3)=char(249)
+months_abbr(5)(2:2)=char(191)
+months_abbr(5)(3:3)=char(249)
+months_abbr(6)(2:2)=char(191)
+months_abbr(6)(3:3)=char(249)
+months_abbr(7)(2:2)=char(191)
+months_abbr(7)(3:3)=char(249)
+months_abbr(8)(2:2)=char(191)
+months_abbr(8)(3:3)=char(249)
+months_abbr(9)(2:2)=char(191)
+months_abbr(9)(3:3)=char(249)
+months_abbr(10)(3:3)=char(191)
+months_abbr(10)(4:4)=char(249)
+months_abbr(11)(3:3)=char(191)
+months_abbr(11)(4:4)=char(249)
+months_abbr(12)(3:3)=char(191)
+months_abbr(12)(4:4)=char(249)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_korean
+
+
+subroutine locale_lithuanian()
+! LANG=lithuanian
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "pr","an","tr","kt","pn","ðt","sk"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "pirmadienis","antradienis","treèiadienis","ketvirtadienis","penktadienis","ðeðtadienis","sekmadienis"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "saus.","vas.","kov.","bal.","geg.","birþ.", &
+& "liep.","rugp.","rugs.","spal.","lapkr.","gruod." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "sausis","vasaris","kovas","balandis","geguþë","birþelis", &
+& "liepa","rugpjûtis","rugsëjis","spalis","lapkritis","gruodis" ]
+weekdays(3)(4:4)=char(232)
+weekdays(6)(1:1)=char(240)
+weekdays(6)(3:3)=char(240)
+months(5)(5:5)=char(254)
+months(5)(6:6)=char(235)
+months(6)(4:4)=char(254)
+months(8)(6:6)=char(251)
+months(9)(5:5)=char(235)
+weekdays_abbr(6)(1:1)=char(240)
+months_abbr(6)(4:4)=char(254)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_lithuanian
+
+
+subroutine locale_polish()
+! LANG=polish
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "pon.","wt.","¶r.","czw.","pt.","sob.","niedz."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "poniedzia³ek","wtorek","¶roda","czwartek","pi±tek","sobota","niedziela"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "sty","lut","mar","kwi","maj","cze", &
+& "lip","sie","wrz","pa¼","lis","gru" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "styczeñ","luty","marzec","kwiecieñ","maj","czerwiec", &
+& "lipiec","sierpieñ","wrzesieñ","pa¼dziernik","listopad","grudzieñ" ]
+weekdays(1)(10:10)=char(179)
+weekdays(3)(1:1)=char(182)
+weekdays(5)(3:3)=char(177)
+months(1)(7:7)=char(241)
+months(4)(8:8)=char(241)
+months(8)(8:8)=char(241)
+months(9)(8:8)=char(241)
+months(10)(3:3)=char(188)
+months(12)(8:8)=char(241)
+weekdays_abbr(3)(1:1)=char(182)
+months_abbr(10)(3:3)=char(188)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_polish
+
+
+subroutine locale_portuguese()
+! LANG=portuguese
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "seg","ter","qua","qui","sex","sáb","dom"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "segunda-feira","terça-feira","quarta-feira","quinta-feira","sexta-feira","sábado","domingo"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan","fev","mar","abr","mai","jun", &
+& "jul","ago","set","out","nov","dez" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "janeiro","fevereiro","março","abril","maio","junho", &
+& "julho","agosto","setembro","outubro","novembro","dezembro" ]
+weekdays(2)(4:4)=char(231)
+weekdays(6)(2:2)=char(225)
+months(3)(4:4)=char(231)
+weekdays_abbr(6)(2:2)=char(225)
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_portuguese
+
+
+subroutine locale_romanian()
+! LANG=romanian
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "lun.","mar.","mie.","joi","vin.","sâm.","dum."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "luni","mari","miercuri","joi","vineri","sâmbãtã","duminicã"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "ian.","feb.","mar.","apr.","mai","iun.", &
+& "iul.","aug.","sept.","oct.","nov.","dec." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "ianuarie","februarie","martie","aprilie","mai","iunie", &
+& "iulie","august","septembrie","octombrie","noiembrie","decembrie" ]
+weekdays(6)(2:2)=char(226)
+weekdays(6)(5:5)=char(227)
+weekdays(6)(7:7)=char(227)
+weekdays(7)(8:8)=char(227)
+ ! ASCII months
+weekdays_abbr(6)(2:2)=char(226)
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_romanian
+
+
+subroutine locale_slovene()
+! LANG=slovene
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "pon.","tor.","sre.","èet.","pet.","sob.","ned."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "ponedeljek","torek","sreda","èetrtek","petek","sobota","nedelja"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jan.","feb.","mar.","apr.","maj","jun.", &
+& "jul.","avg.","sep.","okt.","nov.","dec." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "januar","februar","marec","april","maj","junij", &
+& "julij","avgust","september","oktober","november","december" ]
+weekdays(4)(1:1)=char(232)
+ ! ASCII months
+weekdays_abbr(4)(1:1)=char(232)
+ ! ASCII months_abbr
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_slovene
+
+
+subroutine locale_thai()
+! LANG=thai
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "¨.","Í.","¾.","¾Ä.","È.","Ê.","ÍÒ."]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "¨Ñ¹·Ãì","ÍÑ§¤ÒÃ","¾Ø¸","¾ÄËÑÊº´Õ","ÈØ¡Ãì","àÊÒÃì","ÍÒ·ÔµÂì"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "Á.¤.","¡.¾.","ÁÕ.¤.","àÁ.Â.","¾.¤.","ÁÔ.Â.", &
+& "¡.¤.","Ê.¤.","¡.Â.","µ.¤.","¾.Â.","¸.¤." ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "Á¡ÃÒ¤Á","¡ØÁÀÒ¾Ñ¹¸ì","ÁÕ¹Ò¤Á","àÁÉÒÂ¹","¾ÄÉÀÒ¤Á","ÁÔ¶Ø¹ÒÂ¹", &
+& "¡Ã¡®Ò¤Á","ÊÔ§ËÒ¤Á","¡Ñ¹ÂÒÂ¹","µØÅÒ¤Á","¾ÄÈ¨Ô¡ÒÂ¹","¸Ñ¹ÇÒ¤Á" ]
+weekdays(1)(1:1)=char(168)
+weekdays(1)(2:2)=char(209)
+weekdays(1)(3:3)=char(185)
+weekdays(1)(4:4)=char(183)
+weekdays(1)(5:5)=char(195)
+weekdays(1)(6:6)=char(236)
+weekdays(2)(1:1)=char(205)
+weekdays(2)(2:2)=char(209)
+weekdays(2)(3:3)=char(167)
+weekdays(2)(4:4)=char(164)
+weekdays(2)(5:5)=char(210)
+weekdays(2)(6:6)=char(195)
+weekdays(3)(1:1)=char(190)
+weekdays(3)(2:2)=char(216)
+weekdays(3)(3:3)=char(184)
+weekdays(4)(1:1)=char(190)
+weekdays(4)(2:2)=char(196)
+weekdays(4)(3:3)=char(203)
+weekdays(4)(4:4)=char(209)
+weekdays(4)(5:5)=char(202)
+weekdays(4)(6:6)=char(186)
+weekdays(4)(7:7)=char(180)
+weekdays(4)(8:8)=char(213)
+weekdays(5)(1:1)=char(200)
+weekdays(5)(2:2)=char(216)
+weekdays(5)(3:3)=char(161)
+weekdays(5)(4:4)=char(195)
+weekdays(5)(5:5)=char(236)
+weekdays(6)(1:1)=char(224)
+weekdays(6)(2:2)=char(202)
+weekdays(6)(3:3)=char(210)
+weekdays(6)(4:4)=char(195)
+weekdays(6)(5:5)=char(236)
+weekdays(7)(1:1)=char(205)
+weekdays(7)(2:2)=char(210)
+weekdays(7)(3:3)=char(183)
+weekdays(7)(4:4)=char(212)
+weekdays(7)(5:5)=char(181)
+weekdays(7)(6:6)=char(194)
+weekdays(7)(7:7)=char(236)
+months(1)(1:1)=char(193)
+months(1)(2:2)=char(161)
+months(1)(3:3)=char(195)
+months(1)(4:4)=char(210)
+months(1)(5:5)=char(164)
+months(1)(6:6)=char(193)
+months(2)(1:1)=char(161)
+months(2)(2:2)=char(216)
+months(2)(3:3)=char(193)
+months(2)(4:4)=char(192)
+months(2)(5:5)=char(210)
+months(2)(6:6)=char(190)
+months(2)(7:7)=char(209)
+months(2)(8:8)=char(185)
+months(2)(9:9)=char(184)
+months(2)(10:10)=char(236)
+months(3)(1:1)=char(193)
+months(3)(2:2)=char(213)
+months(3)(3:3)=char(185)
+months(3)(4:4)=char(210)
+months(3)(5:5)=char(164)
+months(3)(6:6)=char(193)
+months(4)(1:1)=char(224)
+months(4)(2:2)=char(193)
+months(4)(3:3)=char(201)
+months(4)(4:4)=char(210)
+months(4)(5:5)=char(194)
+months(4)(6:6)=char(185)
+months(5)(1:1)=char(190)
+months(5)(2:2)=char(196)
+months(5)(3:3)=char(201)
+months(5)(4:4)=char(192)
+months(5)(5:5)=char(210)
+months(5)(6:6)=char(164)
+months(5)(7:7)=char(193)
+months(6)(1:1)=char(193)
+months(6)(2:2)=char(212)
+months(6)(3:3)=char(182)
+months(6)(4:4)=char(216)
+months(6)(5:5)=char(185)
+months(6)(6:6)=char(210)
+months(6)(7:7)=char(194)
+months(6)(8:8)=char(185)
+months(7)(1:1)=char(161)
+months(7)(2:2)=char(195)
+months(7)(3:3)=char(161)
+months(7)(4:4)=char(174)
+months(7)(5:5)=char(210)
+months(7)(6:6)=char(164)
+months(7)(7:7)=char(193)
+months(8)(1:1)=char(202)
+months(8)(2:2)=char(212)
+months(8)(3:3)=char(167)
+months(8)(4:4)=char(203)
+months(8)(5:5)=char(210)
+months(8)(6:6)=char(164)
+months(8)(7:7)=char(193)
+months(9)(1:1)=char(161)
+months(9)(2:2)=char(209)
+months(9)(3:3)=char(185)
+months(9)(4:4)=char(194)
+months(9)(5:5)=char(210)
+months(9)(6:6)=char(194)
+months(9)(7:7)=char(185)
+months(10)(1:1)=char(181)
+months(10)(2:2)=char(216)
+months(10)(3:3)=char(197)
+months(10)(4:4)=char(210)
+months(10)(5:5)=char(164)
+months(10)(6:6)=char(193)
+months(11)(1:1)=char(190)
+months(11)(2:2)=char(196)
+months(11)(3:3)=char(200)
+months(11)(4:4)=char(168)
+months(11)(5:5)=char(212)
+months(11)(6:6)=char(161)
+months(11)(7:7)=char(210)
+months(11)(8:8)=char(194)
+months(11)(9:9)=char(185)
+months(12)(1:1)=char(184)
+months(12)(2:2)=char(209)
+months(12)(3:3)=char(185)
+months(12)(4:4)=char(199)
+months(12)(5:5)=char(210)
+months(12)(6:6)=char(164)
+months(12)(7:7)=char(193)
+weekdays_abbr(1)(1:1)=char(168)
+weekdays_abbr(2)(1:1)=char(205)
+weekdays_abbr(3)(1:1)=char(190)
+weekdays_abbr(4)(1:1)=char(190)
+weekdays_abbr(4)(2:2)=char(196)
+weekdays_abbr(5)(1:1)=char(200)
+weekdays_abbr(6)(1:1)=char(202)
+weekdays_abbr(7)(1:1)=char(205)
+weekdays_abbr(7)(2:2)=char(210)
+months_abbr(1)(1:1)=char(193)
+months_abbr(1)(3:3)=char(164)
+months_abbr(2)(1:1)=char(161)
+months_abbr(2)(3:3)=char(190)
+months_abbr(3)(1:1)=char(193)
+months_abbr(3)(2:2)=char(213)
+months_abbr(3)(4:4)=char(164)
+months_abbr(4)(1:1)=char(224)
+months_abbr(4)(2:2)=char(193)
+months_abbr(4)(4:4)=char(194)
+months_abbr(5)(1:1)=char(190)
+months_abbr(5)(3:3)=char(164)
+months_abbr(6)(1:1)=char(193)
+months_abbr(6)(2:2)=char(212)
+months_abbr(6)(4:4)=char(194)
+months_abbr(7)(1:1)=char(161)
+months_abbr(7)(3:3)=char(164)
+months_abbr(8)(1:1)=char(202)
+months_abbr(8)(3:3)=char(164)
+months_abbr(9)(1:1)=char(161)
+months_abbr(9)(3:3)=char(194)
+months_abbr(10)(1:1)=char(181)
+months_abbr(10)(3:3)=char(164)
+months_abbr(11)(1:1)=char(190)
+months_abbr(11)(3:3)=char(194)
+months_abbr(12)(1:1)=char(184)
+months_abbr(12)(3:3)=char(164)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_thai
+
+
+subroutine locale_turkish()
+! LANG=turkish
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "Pzt","Sal","Çar","Per","Cum","Cmt","Paz"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "Pazartesi","Salý","Çarþamba","Perþembe","Cuma","Cumartesi","Pazar"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "Oca","Þub","Mar","Nis","May","Haz", &
+& "Tem","Aðu","Eyl","Eki","Kas","Ara" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "Ocak","Þubat","Mart","Nisan","Mayýs","Haziran", &
+& "Temmuz","Aðustos","Eylül","Ekim","Kasým","Aralýk" ]
+weekdays(2)(4:4)=char(253)
+weekdays(3)(1:1)=char(199)
+weekdays(3)(4:4)=char(254)
+weekdays(4)(4:4)=char(254)
+months(2)(1:1)=char(222)
+months(5)(4:4)=char(253)
+months(8)(2:2)=char(240)
+months(9)(4:4)=char(252)
+months(11)(4:4)=char(253)
+months(12)(5:5)=char(253)
+weekdays_abbr(3)(1:1)=char(199)
+months_abbr(2)(1:1)=char(222)
+months_abbr(8)(2:2)=char(240)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_turkish
+
+
+subroutine locale_POSIX()
+! LANG=POSIX
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "Jan","Feb","Mar","Apr","May","Jun", &
+& "Jul","Aug","Sep","Oct","Nov","Dec" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "January","February","March","April","May","June", &
+& "July","August","September","October","November","December" ]
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_POSIX
+
+
+subroutine locale_eesti()
+! LANG=eesti
+! AM= PM=
+character(len=20),save :: weekdays_abbr(7)=[character(len=20) :: &
+& "E","T","K","N","R","L","P"]
+character(len=20),save :: weekdays(7)=[character(len=20) :: &
+& "esmaspäev","teisipäev","kolmapäev","neljapäev","reede","laupäev","pühapäev"]
+character(len=20),save :: months_abbr(12)=[character(len=20) :: &
+& "jaan","veebr","märts","apr","mai","juuni", &
+& "juuli","aug","sept","okt","nov","dets" ]
+character(len=20),save :: months(12)=[character(len=20) :: &
+& "jaanuar","veebruar","märts","aprill","mai","juuni", &
+& "juuli","august","september","oktoober","november","detsember" ]
+weekdays(1)(7:7)=char(228)
+weekdays(2)(7:7)=char(228)
+weekdays(3)(7:7)=char(228)
+weekdays(4)(7:7)=char(228)
+weekdays(6)(5:5)=char(228)
+weekdays(7)(2:2)=char(252)
+weekdays(7)(6:6)=char(228)
+months(3)(2:2)=char(228)
+ ! ASCII weekdays_abbr
+months_abbr(3)(2:2)=char(228)
+   call locale("user",months,weekdays,months_abbr,weekdays_abbr)
+end subroutine locale_eesti
+function get_env(name,default) result(value)
+! a function that makes calling get_environment_variable(3) simple
+implicit none
+character(len=*),intent(in)          :: name
+character(len=*),intent(in),optional :: default
+character(len=:),allocatable         :: value
+integer                              :: howbig
+integer                              :: stat
+integer                              :: length
+   length=0
+   value=''
+   if(name.ne.'')then
+      call get_environment_variable( name, &
+      & length=howbig,status=stat,trim_name=.true.)
+      select case (stat)
+      case (1)
+         !print *, name, " is not defined in the environment. Strange..."
+         value=''
+      case (2)
+         !print *, "This processor does not support environment variables. Boooh!"
+         value=''
+      case default
+         ! make string of sufficient size to hold value
+         if(allocated(value))deallocate(value)
+         allocate(character(len=max(howbig,1)) :: value)
+         ! get value
+         call get_environment_variable( &
+         & name,value,status=stat,trim_name=.true.)
+         if(stat.ne.0)value=''
+      end select
+   endif
+   if(value.eq.''.and.present(default))value=default
+end function get_env
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!     phase_of_moon(3f) - [M_time:ASTROLOGICAL] return name for phase of
+!!     moon for given date
+!!     (LICENSE:MIT)
+!!##SYNOPSIS
+!!
+!!   function phase_of_moon(dat)
+!!
+!!    integer,intent(in)            :: dat(8)
 !!    character(len=:),allocatable  :: phase_of_moon
 !!
 !!##DESCRIPTION
@@ -3499,12 +5718,12 @@ end function days2sec
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function phase_of_moon(datin)
+!!    MIT
+function phase_of_moon(dat)
 
-! ident_27="@(#) M_time phase_of_moon(3f) return name for phase of moon for given date"
+! ident_28="@(#) M_time phase_of_moon(3f) return name for phase of moon for given date"
 
-integer,intent(in)            :: datin(8)
+integer,intent(in)            :: dat(8)
 character(len=:),allocatable  :: phase_of_moon
 
 real(kind=realtime),parameter :: syndonic_month=29.530588853_realtime ! average period of a lunar cycle, or days per lunation
@@ -3517,7 +5736,7 @@ real(kind=realtime),parameter :: phase_length=syndonic_month/8_realtime  ! days 
 integer                       :: phase
 real(kind=realtime)           :: days
 
-days= d2j(datin)-d2j(reference)                               ! days between reference date and input date
+days= d2j(dat)-d2j(reference)                               ! days between reference date and input date
 days = mod(days + phase_length/2.0_dp, syndonic_month)        ! modulo calculation of which phase rounding up
 if(days<0)days=days+syndonic_month                         ! correct for days before reference date
 phase = int( days * ( size(phase_names) / syndonic_month ))+1 ! index into phase names
@@ -3531,13 +5750,13 @@ end function phase_of_moon
 !!##NAME
 !!     moon_fullness(3f) - [M_time:ASTROLOGICAL] return percentage of moon phase
 !!     from new to full
-!!     (LICENSE:PD)
+!!     (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!   function moon_fullness(datin)
+!!   function moon_fullness(dat)
 !!
-!!    integer,intent(in)            :: datin(8)
-!!    integer                       :: moon_fullness
+!!    integer,intent(in) :: dat(8)
+!!    integer            :: moon_fullness
 !!
 !!##DESCRIPTION
 !!
@@ -3551,12 +5770,12 @@ end function phase_of_moon
 !!
 !!##OPTIONS
 !!
-!!  datin      DAT Date array describing input date
+!!    dat    DAT Date array describing input date
 !!
 !!##RESULTS
 !!
-!!     moon_fullness  0 is a new or dark moon, 100 is a full moon, + for waxing
-!!                    and - for waning.
+!!    moon_fullness  0 is a new or dark moon, 100 is a full moon, + for waxing
+!!                   and - for waning.
 !!
 !!##EXAMPLES
 !!
@@ -3591,19 +5810,19 @@ end function phase_of_moon
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
-function moon_fullness(datin)
+!!    MIT
+function moon_fullness(dat)
 
-! ident_28="@(#) M_time moon_fullness(3f) return percentage of moon phase from new to full"
+! ident_29="@(#) M_time moon_fullness(3f) return percentage of moon phase from new to full"
 
-integer,intent(in)            :: datin(8)
+integer,intent(in)            :: dat(8)
 integer                       :: moon_fullness
 
 real(kind=realtime),parameter :: syndonic_month=29.530588853_realtime  ! average period of a lunar cycle, or days per lunation
 integer,parameter             :: reference(*)= [2000,1,6,0,18,14,0,0]  ! new moon of January 2000 was January 6, 18:14 UTC.
 real(kind=realtime)           :: days_into_cycle
 
-days_into_cycle = mod(d2j(datin)-d2j(reference) , syndonic_month)      ! number of days into lunar cycle
+days_into_cycle = mod(d2j(dat)-d2j(reference) , syndonic_month)      ! number of days into lunar cycle
 if(days_into_cycle<0)days_into_cycle=days_into_cycle+syndonic_month ! correct for input date being before reference date
 
 if(days_into_cycle<=syndonic_month/2.0_realtime)then                 ! if waxing from new to full report as 0% to 100%
@@ -3619,7 +5838,7 @@ end function moon_fullness
 !>
 !!##NAME
 !!    easter(3f) - [M_time:ASTROLOGICAL] calculate date for Easter given a year
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
 !!
@@ -3691,7 +5910,7 @@ end function moon_fullness
 !!   Latest revision 8 April 2002
 SUBROUTINE Easter(year, dat)
 
-! ident_29="@(#) M_time easter(3f) calculate date for Easter given a year"
+! ident_30="@(#) M_time easter(3f) calculate date for Easter given a year"
 
 integer,intent(in)    :: year
 integer,intent(out)   :: dat(8) ! year,month,day,tz,hour,minute,second,millisecond
@@ -3736,7 +5955,7 @@ end subroutine Easter
 !!##NAME
 !!    system_sleep(3f) - [M_time:C_INTERFACE] call C sleep(3c) or usleep(3c)
 !!    procedure
-!!    (LICENSE:PD)
+!!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
 !!    subroutine system_sleep(wait_seconds)
@@ -3765,17 +5984,17 @@ end subroutine Easter
 !!        !
 !!        write(*,'(a)')"Time before integer call is: ",now()
 !!        call system_sleep(4)
-!!        write(*,'(a)')"Time after  integer call is: ",now()
+!!        write(*,'(a)')"Time after integer call is: ",now()
 !!        !
 !!        write(*,'(a)')"Time before real call is: ",now()
 !!        call system_sleep(4.0)
-!!        write(*,'(a)')"Time after  real call is: ",now()
+!!        write(*,'(a)')"Time after real call is: ",now()
 !!        !
 !!        write(*,'(a)')"Time before loop is: ",now()
 !!        do i=1,1000
 !!           call system_sleep(4.0/1000.0)
 !!        enddo
-!!        write(*,'(a)')"Time after loop  is: ",now()
+!!        write(*,'(a)')"Time after loop is: ",now()
 !!        !
 !!     end program demo_system_sleep
 !!
@@ -3787,25 +6006,25 @@ end subroutine Easter
 !!      Sunday, July 17th, 2016 2:29:49 AM UTC-0240
 !!      Time before real call is:
 !!      Sunday, July 17th, 2016 2:29:49 AM UTC-0240
-!!      Time after  real call is:
+!!      Time after real call is:
 !!      Sunday, July 17th, 2016 2:29:53 AM UTC-0240
 !!      Time before loop is:
 !!      Sunday, July 17th, 2016 2:29:53 AM UTC-0240
-!!      Time after loop  is:
+!!      Time after loop is:
 !!      Sunday, July 17th, 2016 2:30:09 AM UTC-0240
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
 !!
 !!##LICENSE
-!!    Public Domain
+!!    MIT
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine system_sleep(seconds)
 use,intrinsic                 :: iso_c_binding, only: c_int
 
-! ident_30="@(#) M_time system_sleep(3f) call sleep(3c) or usleep(3c)"
+! ident_31="@(#) M_time system_sleep(3f) call sleep(3c) or usleep(3c)"
 
 class(*),intent(in)           :: seconds
 integer(kind=c_int)           :: cint
@@ -3821,7 +6040,7 @@ end SUBROUTINE system_sleep
 subroutine call_sleep(wait_seconds)
 use,intrinsic                   :: iso_c_binding, only: c_int
 
-! ident_31="@(#) M_time call_sleep(3fp) call sleep(3c)"
+! ident_32="@(#) M_time call_sleep(3fp) call sleep(3c)"
 
 integer(kind=c_int),intent(in)  :: wait_seconds
 integer(kind=c_int)             :: how_long
@@ -3839,46 +6058,57 @@ end subroutine call_sleep
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-subroutine call_usleep(wait_seconds)
+subroutine call_usleep(milliseconds)
+
+! ident_33="@(#) M_time call_usleep(3fp) call usleep(3c)"
+
 use,intrinsic                   :: iso_c_binding, only: c_int
-
-! ident_32="@(#) M_time call_usleep(3fp) call usleep(3c)"
-
-integer(kind=c_int),intent(in)  :: wait_seconds
-integer(kind=c_int)             :: how_long
+integer(kind=c_int),intent(in)  :: milliseconds
+integer(kind=c_int)             :: status
 interface
-   function c_usleep(seconds) bind (C,name="usleep")
+   function c_usleep(mseconds) bind (C,name="usleep")
       import
       integer(c_int)       :: c_usleep ! should be unsigned int (not available in Fortran). OK until highest bit gets set.
-      integer(c_int), intent(in), VALUE :: seconds
+      integer(c_int), intent(in), VALUE :: mseconds
    end function c_usleep
 end interface
-   if(wait_seconds>0)then
-      how_long=c_usleep(wait_seconds)
+   if(milliseconds>0)then
+      status=c_usleep(milliseconds)
    endif
 end subroutine call_usleep
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-function getnow() result(values)
+function getnow() result(dat)
 
-! ident_33="@(#) M_time getnow(3f) get DAT for current time or value of SOURCE_DATE_EPOCH"
+! ident_34="@(#) M_time getnow(3f) get DAT for current time or value of SOURCE_DATE_EPOCH"
 
-integer :: values(8)
-   call date_and_time(values=values)
+integer :: dat(8)
+   call date_and_time(values=dat)
+   ! VALUES : An array of at least eight elements. If there is no data
+   ! available for a value it is set to -HUGE(VALUES). Otherwise, it contains:
+   !    â€¢  VALUES(1) : The year, including the century.
+   !    â€¢  VALUES(2) : The month of the year
+   !    â€¢  VALUES(3) : The day of the month
+   !    â€¢  VALUES(4) : Time difference in minutes between the reported time and UTC time.
+   !    â€¢  VALUES(5) : The hour of the day, in the range 0 to 23.
+   !    â€¢  VALUES(6) : The minutes of the hour, in the range 0 to 59
+   !    â€¢  VALUES(7) : The seconds of the minute, in the range 0 to 60
+   !    â€¢  VALUES(8) : The milliseconds of the second, in the range 0 to 999.
+   if(any(dat == -huge(0)))then
+      write(stderr,"('<ERROR>*getnow*: date_and_time(3f) contains unsupported values')")
+      stop 3
+   endif
 end function getnow
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 end module M_time
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-! M_time calls now_ex as a regular procedure to prevent a dependency loop
+! M_time calls now_ex as a regular procedure t)o prevent a dependency loop
 function now_ex(format)
 use M_time, only: now
 
-! ident_34="@(#) M_time now_ex(3f) use of now(3f) outside of a module"
+! ident_35="@(#) M_time now_ex(3f) use of now(3f) outside of a module"
 
 character(len=*),intent(in),optional :: format
 character(len=:),allocatable         :: now_ex

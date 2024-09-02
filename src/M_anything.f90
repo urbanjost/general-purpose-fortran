@@ -13,6 +13,9 @@
 ! This module and the example function squarei() that uses it shows how you
 ! can use polymorphism to allow arguments of different types generically by casting
 !===================================================================================================================================
+
+
+
 !===================================================================================================================================
 !>
 !!##NAME
@@ -55,7 +58,7 @@
 !!
 !!   Sample program
 !!
-!!     program demo_anyscalar_to_double
+!!     program demo_M_anything
 !!     use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 !!     use, intrinsic :: iso_fortran_env, only : real32, real64, real128
 !!     implicit none
@@ -78,7 +81,7 @@
 !!        dvalue=invalue_local*invalue_local
 !!     end function squareall
 !!
-!!     end program demo_anyscalar_to_double
+!!     end program demo_M_anything
 !!
 !!   Results:
 !!
@@ -119,6 +122,11 @@ interface anything_to_bytes
    module procedure anything_to_bytes_arr
    module procedure anything_to_bytes_scalar
 end interface anything_to_bytes
+
+interface bytes_to_anything
+   module procedure bytes_to_anything_arr
+   module procedure bytes_to_anything_scalar
+end interface bytes_to_anything
 
 interface get_type
    module procedure get_type_arr
@@ -270,42 +278,136 @@ contains
 !!
 !!   Sample program
 !!
-!!      program demo_bytes_to_anything
-!!      use M_anything,      only : bytes_to_anything
-!!      use M_anything,      only : anything_to_bytes
-!!      implicit none
-!!      character(len=1),allocatable :: chars(:)
-!!      integer :: ints(10)
-!!      integer :: i
-!!         chars=anything_to_bytes([(i*i,i=1,size(ints))])
-!!         write(*,'(/,4(1x,z2.2))')chars
-!!         call bytes_to_anything(chars,ints)
-!!         write(*,'(*(g0,1x))')ints
-!!      end program demo_bytes_to_anything
+!!       program demo_bytes_to_anything
+!!       use, intrinsic :: ISO_FORTRAN_ENV, only: &
+!!            CSZ => CHARACTER_STORAGE_SIZE, &
+!!            stderr => error_unit
+!!       use :: M_anything, only : bytes_to_anything, anything_to_bytes
+!!       implicit none
+!!       character(len=1), allocatable :: chars(:)
+!!       character(len=:), allocatable :: line
+!!       character(len=:), allocatable :: lines(:)
+!!       integer :: ints(10)
+!!       integer :: i, int
+!!       integer,allocatable :: somesize(:)
+!!
+!!       call header('integer array to bytes')
+!!       chars = anything_to_bytes([(i*i, i=1, size(ints))])
+!!       write (*, '(/,4(1x,z2.2))') chars
+!!       call bytes_to_anything(chars, ints)
+!!       write(*,*)'and bytes back to integer array'
+!!       write (*, '(/,*(g0,1x))') ints
+!!
+!!       call header('integer scalar to bytes')
+!!       chars = anything_to_bytes(1234)
+!!       write (*, '(/,"CHARS=",*(1x,z2.2))') chars
+!!       call bytes_to_anything(chars, int)
+!!       write(*,*)'and bytes back to integer scalar'
+!!       write (*, '(/,"INT=",*(g0,1x))') int
+!!
+!!       call header('a string')
+!!       chars = anything_to_bytes('this is a string')
+!!       write (*, '(/,"CHARS=",*(1x,z2.2))') chars
+!!       write (*, '(/,"CHARS=",*(g0,1x))') chars
+!!       ! string must be long enough to hold chars
+!!       line=repeat(' ',size(chars))
+!!       call bytes_to_anything(chars, line)
+!!       write (*, '(/,"LINE=",*(g0,1x))') line
+!!
+!!       call header(&
+!!       'a string array (have to know length or size you wish to return to)')
+!!       chars = anything_to_bytes([character(len=4) :: 'a', 'bb', 'ccc' ])
+!!       write (*, '(/,"CHARS=",*(1x,z2.2))') chars
+!!       write (*, '(/,"CHARS=",*(g0,1x))') chars
+!!       ! string must be long enough to hold chars, and have enough elements
+!!       ! can just return as a scalar string if unknown length
+!!       lines=[repeat(' ',size(chars))]
+!!       ! of for that matter just work with the chars(1) array,
+!!       ! but assuming know length in this case
+!!       lines=[(repeat('#',4),i=1,3)]
+!!       call bytes_to_anything(chars, lines)
+!!       write (*, '(/,"LINES=",*("[",g0,"]",1x:))') lines
+!!
+!!       call header('calculating size to allocate for non-string types')
+!!       ! make sure array is of sufficient size to hold results
+!!       chars = anything_to_bytes([11,22,33,44])
+!!       write (*, '(/,"CHARS=",*(1x,z2.2))') chars
+!!       allocate(somesize(size(chars)/(storage_size(0)/CSZ)))
+!!       call bytes_to_anything(chars, somesize)
+!!       write (*, '(/,"SOMESIZE=",*("[",g0,"]",1x:))') somesize
+!!       contains
+!!       subroutine header(line)
+!!       character(len=*),intent(in) :: line
+!!       write(*,'(*(a))')'#',repeat('=',len(line)+2),'#'
+!!       write(*,'("|",1x,a,1x,"|")') line
+!!       write(*,'(*(a))')'#',repeat('=',len(line)+2),'#'
+!!       end subroutine header
+!!       end program demo_bytes_to_anything
 !!
 !! Results:
-!!  >
-!!  >  01 00 00 00
-!!  >  04 00 00 00
-!!  >  09 00 00 00
-!!  >  10 00 00 00
-!!  >  19 00 00 00
-!!  >  24 00 00 00
-!!  >  31 00 00 00
-!!  >  40 00 00 00
-!!  >  51 00 00 00
-!!  >  64 00 00 00
-!!  >  1     4     9    16    25    36    49    64    81   100
+!!
+!!     > #========================#
+!!     > | integer array to bytes |
+!!     > #========================#
+!!     >
+!!     >  01 00 00 00
+!!     >  04 00 00 00
+!!     >  09 00 00 00
+!!     >  10 00 00 00
+!!     >  19 00 00 00
+!!     >  24 00 00 00
+!!     >  31 00 00 00
+!!     >  40 00 00 00
+!!     >  51 00 00 00
+!!     >  64 00 00 00
+!!     >  and bytes back to integer array
+!!     >
+!!     > 1 4 9 16 25 36 49 64 81 100
+!!     > #=========================#
+!!     > | integer scalar to bytes |
+!!     > #=========================#
+!!     >
+!!     > CHARS= D2 04 00 00
+!!     >  and bytes back to integer scalar
+!!     >
+!!     > INT=1234
+!!     > #==========#
+!!     > | a string |
+!!     > #==========#
+!!     >
+!!     > CHARS= 74 68 69 73 20 69 73 20 61 20 73 74 72 69 6E 67
+!!     >
+!!     > CHARS=t h i s   i s   a   s t r i n g
+!!     >
+!!     > LINE=this is a string
+!!     > #====================================================================#
+!!     > | a string array (have to know length or size you wish to return to) |
+!!     > #====================================================================#
+!!     >
+!!     > CHARS= 61 20 20 20 62 62 20 20 63 63 63 20
+!!     >
+!!     > CHARS=a       b b     c c c
+!!     >
+!!     > LINES=[a   ] [bb  ] [ccc ]
+!!     > #===================================================#
+!!     > | calculating size to allocate for non-string types |
+!!     > #===================================================#
+!!     >
+!!     > CHARS= 0B 00 00 00 16 00 00 00 21 00 00 00 2C 00 00 00
+!!     >
+!!     > SOMESIZE=[11] [22] [33] [44]
+!!
 !!
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
 !!    MIT
-subroutine bytes_to_anything(chars,anything)
-   character(len=1),allocatable :: chars(:)
-   class(*) :: anything(:)
+subroutine bytes_to_anything_arr(chars,anything)
+   character(len=1),intent(in) :: chars(:)
+   class(*),intent(out) :: anything(:)
    select type(anything)
-    type is (character(len=*));     anything=transfer(chars,anything)
+    type is (character(len=*));
+            anything=transfer(chars,anything)
     type is (complex);              anything=transfer(chars,anything)
     type is (complex(kind=dp));     anything=transfer(chars,anything)
     type is (integer(kind=int8));   anything=transfer(chars,anything)
@@ -317,9 +419,37 @@ subroutine bytes_to_anything(chars,anything)
     type is (real(kind=real128));   anything=transfer(chars,anything)
     type is (logical);              anything=transfer(chars,anything)
     class default
+      !anything=transfer(chars,anything)
       stop 'crud. bytes_to_anything(1) does not know about this type'
    end select
-end subroutine bytes_to_anything
+end subroutine bytes_to_anything_arr
+
+subroutine bytes_to_anything_scalar(chars,anything)
+   character(len=1),intent(in):: chars(:)
+   class(*),intent(out) :: anything
+   select type(anything)
+    ! caller must ensure string passed in is long enough for results
+    type is (character(len=*));     anything=transfer(chars,repeat('x',size(chars)))
+       if(len(anything).lt.size(chars))then
+          write(stderr,*) '<ERROR> *bytes_to_anything* crud. string not long enough to hold results. cannot put',size(chars),&
+                  'bytes in string of length',len(anything)
+          stop
+       endif
+    type is (complex);              anything=transfer(chars,anything)
+    type is (complex(kind=dp));     anything=transfer(chars,anything)
+    type is (integer(kind=int8));   anything=transfer(chars,anything)
+    type is (integer(kind=int16));  anything=transfer(chars,anything)
+    type is (integer(kind=int32));  anything=transfer(chars,anything)
+    type is (integer(kind=int64));  anything=transfer(chars,anything)
+    type is (real(kind=real32));    anything=transfer(chars,anything)
+    type is (real(kind=real64));    anything=transfer(chars,anything)
+    type is (real(kind=real128));   anything=transfer(chars,anything)
+    type is (logical);              anything=transfer(chars,anything)
+    class default
+      !anything=transfer(chars,anything)
+      stop 'crud. bytes_to_anything(1) does not know about this type'
+   end select
+end subroutine bytes_to_anything_scalar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -398,6 +528,7 @@ end subroutine bytes_to_anything
 !!##LICENSE
 !!    MIT
 function anything_to_bytes_arr(anything) result(chars)
+! this seems like it should just be a call to transfer(), but seems to need the select type on at least several compilers
 
 ! ident_1="@(#) M_anything anything_to_bytes_arr(3fp) any vector of intrinsics to bytes (an array of CHARACTER(LEN=1) variables)"
 
@@ -420,8 +551,8 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
       !stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
    end select
 
 end function anything_to_bytes_arr
@@ -449,7 +580,6 @@ character(len=1),allocatable :: chars(:)
     type is (logical);              chars=transfer(anything,chars)
     class default
       chars=transfer(anything,chars) ! should work for everything, does not with some compilers
-      !stop 'crud. anything_to_bytes_scalar(1) does not know about this type'
    end select
 
 end function  anything_to_bytes_scalar
@@ -822,7 +952,7 @@ end function anyscalar_to_real
 !!    MIT
 impure elemental function anyscalar_to_int64(valuein) result(ii38)
 
-! ident_6="@(#) M_anything anyscalar_to_int64(3f) convert integer parameter of any kind to 64-bit integer"
+! ident_6="@(#) M_anything anyscalar_to_int64(3f) convert parameter of any intrinsic kind to 64-bit integer"
 
 class(*),intent(in)    :: valuein
    integer(kind=int64) :: ii38
@@ -844,7 +974,7 @@ class(*),intent(in)    :: valuein
          stop 2
       endif
    class default
-      write(stderr,*)'*anyscalar_to_int64* ERROR: unknown integer type'
+      write(stderr,*)'*anyscalar_to_int64* ERROR: unknown input type'
       stop 3
    end select
 end function anyscalar_to_int64

@@ -1,8 +1,9 @@
 program nc_scanw
 !(LICENSE:PD)
    use M_ncurses
-   real,parameter ::  UNI=4.5
-   integer        ::  pieces
+   real,parameter :: UNI=4.5
+   integer        :: pieces
+   integer        :: ierr
    
    stdscr=initscr()
    

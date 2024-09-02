@@ -156,95 +156,90 @@ Sample program:
    program demo_split
    use M_strings, only: split
    implicit none
-   integer :: i
-   character(len=*),parameter     :: line=&
+   integer                      :: i
+   character(len=*),parameter   :: title=&#146;(80("="),t1,a)&#146;
+   character(len=*),parameter   :: line=&
    &#146;  aBcdef   ghijklmnop qrstuvwxyz  1:|:2     333|333 a B cc    &#146;
    character(len=:),allocatable :: array(:) ! output array of tokens
       write(*,*)&#146;INPUT LINE:[&#146;//line//&#146;]&#146;
-      write(*,&#146;(70("="))&#146;)
-      write(*,*)&#146;typical call:&#146;
+      !
+      write(*,title)&#146;typical call: &#146;
       call split(line,array)
-      write(*,&#146;(i0," ==&gt; ",a)&#146;)(i,trim(array(i)),i=1,size(array))
-      write(*,*)&#146;SIZE:&#146;,size(array)
-      write(*,&#146;(70("-"))&#146;)
-      write(*,*)&#146;custom list of delimiters (colon and vertical line):&#146;
+      call printme()
+      !
+      write(*,title)&#146;custom delimiters=":|" : &#146;
       call split(line,array,delimiters=&#146;:|&#146;,&
       & order=&#146;sequential&#146;,nulls=&#146;ignore&#146;)
-      write(*,&#146;(i0," ==&gt; ",a)&#146;)(i,trim(array(i)),i=1,size(array))
-      write(*,*)&#146;SIZE:&#146;,size(array)
-      write(*,&#146;(70("-"))&#146;)
-      write(*,*) &#146;custom list of delimiters, &
-      &reverse array order and count null fields:&#146;
+      call printme()
+      !
+      write(*,title)&
+      &#146;delimiters=":|",reverse array order and count null fields:&#146;
       call split(line,array,delimiters=&#146;:|&#146;,&
-      &order=&#146;reverse&#146;,nulls=&#146;return&#146;)
+      & order=&#146;reverse&#146;,nulls=&#146;return&#146;)
+      call printme()
+      !
+      write(*,title)&
+      &#146;default delimiters, reverse array order and return null fields:&#146;
+      call split(line,array,delimiters=&#146;&#146;,&
+      & order=&#146;reverse&#146;,nulls=&#146;return&#146;)
+      call printme()
+   contains
+   subroutine printme()
       write(*,&#146;(i0," ==&gt; ",a)&#146;)(i,trim(array(i)),i=1,size(array))
       write(*,*)&#146;SIZE:&#146;,size(array)
-      write(*,&#146;(70("-"))&#146;)
-      write(*,*)&#146;INPUT LINE:[&#146;//line//&#146;]&#146;
-      write(*,*) &#146;default delimiters and reverse array order &
-      &and return null fields:&#146;
-      call split(line,array,delimiters=&#146;&#146;,order=&#146;reverse&#146;,nulls=&#146;return&#146;)
-      write(*,&#146;(i0," ==&gt; ",a)&#146;)(i,trim(array(i)),i=1,size(array))
-      write(*,*)&#146;SIZE:&#146;,size(array)
+   end subroutine printme
    end program demo_split
 <P>
 </PRE>
-Output
+Results:
 <P>
 <PRE>
-  &gt;INPUT LINE:[  aBcdef   ghijklmnop qrstuvwxyz  1:|:2     333|
-  333 a B cc    ]
-  &gt;=================================================================
-  &gt; typical call:
-  &gt;1 ==&gt; aBcdef
-  &gt;2 ==&gt; ghijklmnop
-  &gt;3 ==&gt; qrstuvwxyz
-  &gt;4 ==&gt; 1:|:2
-  &gt;5 ==&gt; 333|333
-  &gt;6 ==&gt; a
-  &gt;7 ==&gt; B
-  &gt;8 ==&gt; cc
-  &gt; SIZE:           8
-  &gt;----------------------------------------------------------------
-  &gt; custom list of delimiters (colon and vertical line):
-  &gt;1 ==&gt;   aBcdef   ghijklmnop qrstuvwxyz  1
-  &gt;2 ==&gt; 2     333
-  &gt;3 ==&gt; 333 a B cc
-  &gt; SIZE:           3
-  &gt;----------------------------------------------------------------
-  &gt; custom list of delimiters, reverse array order and
-  return null fields:
-  &gt;1 ==&gt; 333 a B cc
-  &gt;2 ==&gt; 2     333
-  &gt;3 ==&gt;
-  &gt;4 ==&gt;
-  &gt;5 ==&gt;   aBcdef   ghijklmnop qrstuvwxyz  1
-  &gt; SIZE:           5
-  &gt;----------------------------------------------------------------
-  &gt; INPUT LINE:[  aBcdef   ghijklmnop qrstuvwxyz  1:|:2     333|
-  333 a B cc    ]
-  &gt; default delimiters and reverse array order and count null fields:
-  &gt;1 ==&gt;
-  &gt;2 ==&gt;
-  &gt;3 ==&gt;
-  &gt;4 ==&gt; cc
-  &gt;5 ==&gt; B
-  &gt;6 ==&gt; a
-  &gt;7 ==&gt; 333|333
-  &gt;8 ==&gt;
-  &gt;9 ==&gt;
-  &gt;10 ==&gt;
-  &gt;11 ==&gt;
-  &gt;12 ==&gt; 1:|:2
-  &gt;13 ==&gt;
-  &gt;14 ==&gt; qrstuvwxyz
-  &gt;15 ==&gt; ghijklmnop
-  &gt;16 ==&gt;
-  &gt;17 ==&gt;
-  &gt;18 ==&gt; aBcdef
-  &gt;19 ==&gt;
-  &gt;20 ==&gt;
-  &gt; SIZE:          20
+ &gt; INPUT LINE:
+ &gt; [  aBcdef   ghijklmnop qrstuvwxyz  1:|:2     333|333 a B cc    ]
+ &gt; typical call: ========================================================
+ &gt; 1 ==&gt; aBcdef
+ &gt; 2 ==&gt; ghijklmnop
+ &gt; 3 ==&gt; qrstuvwxyz
+ &gt; 4 ==&gt; 1:|:2
+ &gt; 5 ==&gt; 333|333
+ &gt; 6 ==&gt; a
+ &gt; 7 ==&gt; B
+ &gt; 8 ==&gt; cc
+ &gt;  SIZE:           8
+ &gt; custom delimiters=":|" : =============================================
+ &gt; 1 ==&gt;   aBcdef   ghijklmnop qrstuvwxyz  1
+ &gt; 2 ==&gt; 2     333
+ &gt; 3 ==&gt; 333 a B cc
+ &gt;  SIZE:           3
+ &gt; delimiters=":|",reverse array order and count null fields:============
+ &gt; 1 ==&gt; 333 a B cc
+ &gt; 2 ==&gt; 2     333
+ &gt; 3 ==&gt;
+ &gt; 4 ==&gt;
+ &gt; 5 ==&gt;   aBcdef   ghijklmnop qrstuvwxyz  1
+ &gt;  SIZE:           5
+ &gt; default delimiters, reverse array order and return null fields:=======
+ &gt; 1 ==&gt;
+ &gt; 2 ==&gt;
+ &gt; 3 ==&gt;
+ &gt; 4 ==&gt; cc
+ &gt; 5 ==&gt; B
+ &gt; 6 ==&gt; a
+ &gt; 7 ==&gt; 333|333
+ &gt; 8 ==&gt;
+ &gt; 9 ==&gt;
+ &gt; 10 ==&gt;
+ &gt; 11 ==&gt;
+ &gt; 12 ==&gt; 1:|:2
+ &gt; 13 ==&gt;
+ &gt; 14 ==&gt; qrstuvwxyz
+ &gt; 15 ==&gt; ghijklmnop
+ &gt; 16 ==&gt;
+ &gt; 17 ==&gt;
+ &gt; 18 ==&gt; aBcdef
+ &gt; 19 ==&gt;
+ &gt; 20 ==&gt;
+ &gt;  SIZE:          20
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -265,7 +260,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>split (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0b9c9c50-5e7d-4faa-9a8e-6a65e3258669 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>split (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dcfacbae-9c21-40db-a910-6e09672d205c using man macros.</FONT>
 <br><br><center><img src="images/split.3m_strings.gif"></center>
 </div>
 </div>

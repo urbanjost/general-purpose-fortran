@@ -1,5 +1,6 @@
       program demo_color
       use M_draw
+      implicit none
       real    :: b=0.5
       real    :: y1,y2,ym,x1,x2
       real    :: width=50.0/8.0,width2

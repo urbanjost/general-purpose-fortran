@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sum (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sum (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>sum(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-sum(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SUM(3) - [ARRAY:REDUCTION] Sum the elements of an array
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ SUM(3) - [ARRAY:REDUCTION] Sum the elements of an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = sum(array [,dim[,mask]] | [mask] )
 <P>
 <PRE>
-           TYPE(kind=KIND) function sum(array, dim, mask)
+         TYPE(kind=KIND) function sum(array, dim, mask)
 <P>
-            TYPE(kind=KIND),intent(in) :: array(..)
-            integer(kind=**),intent(in),optional :: dim
-            logical(kind=**),intent(in),optional :: mask(..)
+          TYPE(kind=KIND),intent(in) :: array(..)
+          integer(kind=**),intent(in),optional :: dim
+          logical(kind=**),intent(in),optional :: mask(..)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = sum(array [,dim[,mask]] | [mask] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -117,8 +111,8 @@ MASK is logical and conformable with ARRAY.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The result is of the same type and kind as ARRAY. It is scalar if DIM is
-not present or ARRAY is a vector, else it is an array.
+The result is of the same type and kind as ARRAY. It is scalar if
+DIM is not present or ARRAY is a vector, else it is an array.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -127,11 +121,12 @@ not present or ARRAY is a vector, else it is an array.
 
 </A>
 <BLOCKQUOTE>
+<P>
 SUM(3) adds the elements of ARRAY.
 <P>
-When only ARRAY is specified all elements are summed, but groups of sums may
-be returned along the dimension specified by DIM and/or elements to add may
-be selected by a logical mask.
+When only ARRAY is specified all elements are summed, but groups of sums
+may be returned along the dimension specified by DIM and/or elements to
+add may be selected by a logical mask.
 <P>
 No method is designated for how the sum is conducted, so whether or not
 accumulated error is compensated for is processor-dependent.
@@ -142,6 +137,7 @@ accumulated error is compensated for is processor-dependent.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -152,15 +148,15 @@ ARRAY : an array containing the elements to add
 o
 </TD><TD>
 DIM : a value in the range from 1 to n, where n equals the rank (the
-number of dimensions) of ARRAY. DIM designates the dimension along which
-to create sums. When absent a scalar sum of the elements optionally
-selected by MASK is returned.
+number of dimensions) of ARRAY. DIM designates the dimension along
+which to create sums. When absent a scalar sum of the elements
+optionally selected by MASK is returned.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : an array of the same shape as ARRAY that designates which elements
-to add. If absent all elements are used in the sum(s).
+MASK : an array of the same shape as ARRAY that designates which
+elements to add. If absent all elements are used in the sum(s).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -169,11 +165,12 @@ to add. If absent all elements are used in the sum(s).
 
 </A>
 <BLOCKQUOTE>
-If DIM is absent, a scalar with the sum of all selected elements in ARRAY is
-returned. Otherwise, an array of rank n-1, where n equals the rank of ARRAY,
-and a shape similar to that of ARRAY with dimension DIM dropped is returned.
-Since a vector has a rank of one, the result is a scalar (if n==1, n-1 is
-zero; and a rank of zero means a scalar).
+<P>
+If DIM is absent, a scalar with the sum of all selected elements in
+ARRAY is returned. Otherwise, an array of rank n-1, where n equals the
+rank of ARRAY, and a shape similar to that of ARRAY with dimension DIM
+dropped is returned. Since a vector has a rank of one, the result is a
+scalar (if n==1, n-1 is zero; and a rank of zero means a scalar).
 </BLOCKQUOTE>
 <A name=6>
 
@@ -181,141 +178,142 @@ zero; and a rank of zero means a scalar).
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_sum
-      implicit none
-      integer :: vector(5) , matrix(3,4), box(5,6,7)
+    program demo_sum
+    implicit none
+    integer :: vector(5) , matrix(3,4), box(5,6,7)
 <P>
-         vector = [ 1, 2, -3, 4, 5 ]
+       vector = [ 1, 2, -3, 4, 5 ]
 <P>
-         matrix(1,:)=[  -1,   2,    -3,   4    ]
-         matrix(2,:)=[  10,   -20,  30,   -40  ]
-         matrix(3,:)=[  100,  200, -300,  400  ]
+       matrix(1,:)=[  -1,   2,    -3,   4    ]
+       matrix(2,:)=[  10,   -20,  30,   -40  ]
+       matrix(3,:)=[  100,  200, -300,  400  ]
 <P>
-         box=11
+       box=11
 <P>
-        ! basics
-         print *, &#146;sum all elements:&#146;,sum(vector)
-         print *, &#146;real :&#146;,sum([11.0,-5.0,20.0])
-         print *, &#146;complex :&#146;,sum([(1.1,-3.3),(4.0,5.0),(8.0,-6.0)])
-        ! with MASK option
-         print *, &#146;sum odd elements:&#146;,sum(vector, mask=mod(vector, 2)==1)
-         print *, &#146;sum positive values:&#146;, sum(vector, mask=vector&gt;0)
+      ! basics
+       print *, &#146;sum all elements:&#146;,sum(vector)
+       print *, &#146;real :&#146;,sum([11.0,-5.0,20.0])
+       print *, &#146;complex :&#146;,sum([(1.1,-3.3),(4.0,5.0),(8.0,-6.0)])
+      ! with MASK option
+       print *, &#146;sum odd elements:&#146;,sum(vector, mask=mod(vector, 2)==1)
+       print *, &#146;sum positive values:&#146;, sum(vector, mask=vector&gt;0)
 <P>
-         call printi(&#146;the input array&#146;, matrix )
-         call printi(&#146;sum of all elements in matrix&#146;, sum(matrix) )
-         call printi(&#146;sum of positive elements&#146;, sum(matrix,matrix&gt;=0) )
-        ! along dimensions
-         call printi(&#146;sum along rows&#146;, sum(matrix,dim=1) )
-         call printi(&#146;sum along columns&#146;, sum(matrix,dim=2) )
-         call printi(&#146;sum of a vector is always a scalar&#146;, sum(vector,dim=1) )
-         call printi(&#146;sum of a volume by row&#146;, sum(box,dim=1) )
-         call printi(&#146;sum of a volume by column&#146;, sum(box,dim=2) )
-         call printi(&#146;sum of a volume by depth&#146;, sum(box,dim=3) )
+       call printi(&#146;the input array&#146;, matrix )
+       call printi(&#146;sum of all elements in matrix&#146;, sum(matrix) )
+       call printi(&#146;sum of positive elements&#146;, sum(matrix,matrix&gt;=0) )
+      ! along dimensions
+       call printi(&#146;sum along rows&#146;, sum(matrix,dim=1) )
+       call printi(&#146;sum along columns&#146;, sum(matrix,dim=2) )
+       call printi(&#146;sum of a vector is always a scalar&#146;, sum(vector,dim=1) )
+       call printi(&#146;sum of a volume by row&#146;, sum(box,dim=1) )
+       call printi(&#146;sum of a volume by column&#146;, sum(box,dim=2) )
+       call printi(&#146;sum of a volume by depth&#146;, sum(box,dim=3) )
 <P>
-      contains
-      ! CONVENIENCE ROUTINE; NOT DIRECTLY CONNECTED TO SPREAD(3)
-      subroutine printi(title,a)
-      use, intrinsic :: iso_fortran_env, only : stderr=&gt;ERROR_UNIT,&
-       & stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
-      implicit none
+    contains
+    ! CONVENIENCE ROUTINE; NOT DIRECTLY CONNECTED TO SPREAD(3)
+    subroutine printi(title,a)
+    use, intrinsic :: iso_fortran_env, only : stderr=&gt;ERROR_UNIT,&
+     & stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
+    implicit none
 <P>
-      !@(#) print small 2d integer scalar, vector, matrix in row-column format
+    !@(#) print small 2d integer scalar, vector, matrix in row-column format
 <P>
-      character(len=*),intent(in)  :: title
-      integer,intent(in)           :: a(..)
+    character(len=*),intent(in)  :: title
+    integer,intent(in)           :: a(..)
 <P>
-      character(len=*),parameter   :: all=&#146;(" ",*(g0,1x))&#146;
-      character(len=20)            :: row
-      integer,allocatable          :: b(:,:)
-      integer                      :: i
-         write(*,all,advance=&#146;no&#146;)trim(title)
-         ! copy everything to a matrix to keep code simple
-         select rank(a)
-         rank (0); write(*,&#146;(a)&#146;)&#146; (a scalar)&#146;; b=reshape([a],[1,1])
-         rank (1); write(*,&#146;(a)&#146;)&#146; (a vector)&#146;; b=reshape(a,[size(a),1])
-         rank (2); write(*,&#146;(a)&#146;)&#146; (a matrix)&#146;; b=a
-         rank default; stop &#146;*printi* unexpected rank&#146;
-         end select
-         ! find how many characters to use for integers
-         write(row,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(b)))))+2
-         ! use this format to write a row
-         row=&#146;(" &gt; [",*(i&#146;//trim(row)//&#146;:,","))&#146;
-         do i=1,size(b,dim=1)
-            write(*,fmt=row,advance=&#146;no&#146;)b(i,:)
-            write(*,&#146;(" ]")&#146;)
-         enddo
-         write(*,all) &#146;&gt;shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
-         write(*,*)
-      end subroutine printi
-      end program demo_sum
+    character(len=*),parameter   :: all=&#146;(" ",*(g0,1x))&#146;
+    character(len=20)            :: row
+    integer,allocatable          :: b(:,:)
+    integer                      :: i
+       write(*,all,advance=&#146;no&#146;)trim(title)
+       ! copy everything to a matrix to keep code simple
+       select rank(a)
+       rank (0); write(*,&#146;(a)&#146;)&#146; (a scalar)&#146;; b=reshape([a],[1,1])
+       rank (1); write(*,&#146;(a)&#146;)&#146; (a vector)&#146;; b=reshape(a,[size(a),1])
+       rank (2); write(*,&#146;(a)&#146;)&#146; (a matrix)&#146;; b=a
+       rank default; stop &#146;*printi* unexpected rank&#146;
+       end select
+       ! find how many characters to use for integers
+       write(row,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(b))))))+2
+       ! use this format to write a row
+       row=&#146;(" &gt; [",*(i&#146;//trim(row)//&#146;:,","))&#146;
+       do i=1,size(b,dim=1)
+          write(*,fmt=row,advance=&#146;no&#146;)b(i,:)
+          write(*,&#146;(" ]")&#146;)
+       enddo
+       write(*,all) &#146;&gt;shape=&#146;,shape(a),&#146;,rank=&#146;,rank(a),&#146;,size=&#146;,size(a)
+       write(*,*)
+    end subroutine printi
+    end program demo_sum
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          sum all elements:           9
-          real :   26.00000
-          complex : (13.10000,-4.300000)
-          sum odd elements:           6
-          sum positive values:          12
-          the input array  (a matrix)
-          &gt; [   -1,    2,   -3,    4 ]
-          &gt; [   10,  -20,   30,  -40 ]
-          &gt; [  100,  200, -300,  400 ]
-          &gt;shape= 3 4 ,rank= 2 ,size= 12
+        sum all elements:           9
+        real :   26.00000
+        complex : (13.10000,-4.300000)
+        sum odd elements:           6
+        sum positive values:          12
+        the input array  (a matrix)
+        &gt; [   -1,    2,   -3,    4 ]
+        &gt; [   10,  -20,   30,  -40 ]
+        &gt; [  100,  200, -300,  400 ]
+        &gt;shape= 3 4 ,rank= 2 ,size= 12
 <P>
-          sum of all elements in matrix  (a scalar)
-          &gt; [  382 ]
-          &gt;shape= ,rank= 0 ,size= 1
+        sum of all elements in matrix  (a scalar)
+        &gt; [  382 ]
+        &gt;shape= ,rank= 0 ,size= 1
 <P>
-          sum of positive elements  (a scalar)
-          &gt; [  746 ]
-          &gt;shape= ,rank= 0 ,size= 1
+        sum of positive elements  (a scalar)
+        &gt; [  746 ]
+        &gt;shape= ,rank= 0 ,size= 1
 <P>
-          sum along rows  (a vector)
-          &gt; [  109 ]
-          &gt; [  182 ]
-          &gt; [ -273 ]
-          &gt; [  364 ]
-          &gt;shape= 4 ,rank= 1 ,size= 4
+        sum along rows  (a vector)
+        &gt; [  109 ]
+        &gt; [  182 ]
+        &gt; [ -273 ]
+        &gt; [  364 ]
+        &gt;shape= 4 ,rank= 1 ,size= 4
 <P>
-          sum along columns  (a vector)
-          &gt; [    2 ]
-          &gt; [  -20 ]
-          &gt; [  400 ]
-          &gt;shape= 3 ,rank= 1 ,size= 3
+        sum along columns  (a vector)
+        &gt; [    2 ]
+        &gt; [  -20 ]
+        &gt; [  400 ]
+        &gt;shape= 3 ,rank= 1 ,size= 3
 <P>
-          sum of a vector is always a scalar  (a scalar)
-          &gt; [  9 ]
-          &gt;shape= ,rank= 0 ,size= 1
+        sum of a vector is always a scalar  (a scalar)
+        &gt; [  9 ]
+        &gt;shape= ,rank= 0 ,size= 1
 <P>
-          sum of a volume by row  (a matrix)
-          &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-          &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-          &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-          &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-          &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-          &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-          &gt;shape= 6 7 ,rank= 2 ,size= 42
+        sum of a volume by row  (a matrix)
+        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+        &gt;shape= 6 7 ,rank= 2 ,size= 42
 <P>
-          sum of a volume by column  (a matrix)
-          &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-          &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-          &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-          &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-          &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-          &gt;shape= 5 7 ,rank= 2 ,size= 35
+        sum of a volume by column  (a matrix)
+        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+        &gt;shape= 5 7 ,rank= 2 ,size= 35
 <P>
-          sum of a volume by depth  (a matrix)
-          &gt; [  77,  77,  77,  77,  77,  77 ]
-          &gt; [  77,  77,  77,  77,  77,  77 ]
-          &gt; [  77,  77,  77,  77,  77,  77 ]
-          &gt; [  77,  77,  77,  77,  77,  77 ]
-          &gt; [  77,  77,  77,  77,  77,  77 ]
-          &gt;shape= 5 6 ,rank= 2 ,size= 30
+        sum of a volume by depth  (a matrix)
+        &gt; [  77,  77,  77,  77,  77,  77 ]
+        &gt; [  77,  77,  77,  77,  77,  77 ]
+        &gt; [  77,  77,  77,  77,  77,  77 ]
+        &gt; [  77,  77,  77,  77,  77,  77 ]
+        &gt; [  77,  77,  77,  77,  77,  77 ]
+        &gt;shape= 5 6 ,rank= 2 ,size= 30
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -325,6 +323,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -333,6 +332,7 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -342,7 +342,8 @@ ALL(3) - Determines if all the values are true
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ANY(3) - Determines if any of the values in the logical array are true.
+ANY(3) - Determines if any of the values in the logical array are
+true.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -370,13 +371,9 @@ o
 MERGE(3) - Merge variables
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 sum(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sum (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 53420cf0-4c43-4d10-9758-c227e5d4960f using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sum (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from feb5a22e-0bb3-4b0a-a29c-6ccdbf59cea1 using man macros.</FONT>
 <br><br><center><img src="images/sum.3fortran.gif"></center>
 </div>
 </div>

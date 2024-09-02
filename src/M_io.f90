@@ -44,6 +44,7 @@ public separator
 public lookfor
 public which
 public get_env
+public is_hidden_file
 public getname
 
 ! ident_1="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
@@ -238,7 +239,7 @@ logical                     :: create_local
       inquire(file=uniq,exist=around)                 ! see if this filename already exists
       if(.not.around)then                             ! found an unused name
          if(verbose_local)then
-            call journal('c',trim('*uniq* name='//trim(uniq))) ! write out message reporting name used
+            call journal('c','*uniq* name='//trim(uniq)) ! write out message reporting name used
          endif
          if(create_local)then
             open(newunit=iscr,file=uniq,iostat=ios,status='new')
@@ -464,36 +465,6 @@ end subroutine print_inquire
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function separator() result(sep)
-!>
-!!##NAME
-!!    separator(3f) - [M_io:QUERY] try to determine pathname directory separator character
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    function separator() result(sep)
-!!
-!!     character(len=1) :: sep
-!!
-!!##DESCRIPTION
-!!   First testing for the existence of "/.",  then if that fails a list
-!!   of variable names assumed to contain directory paths {PATH|HOME} are
-!!   examined first for a backslash, then a slash. Assuming basically the
-!!   choice is a ULS or MSWindows system, and users can do weird things like
-!!   put a backslash in a ULS path and break it.
-!!
-!!   Therefore can be very system dependent. If the queries fail the
-!!   default returned is "/".
-!!
-!!##EXAMPLE
-!!
-!!   sample usage
-!!
-!!    program demo_separator
-!!    use M_io, only : separator
-!!    implicit none
-!!       write(*,*)'separator=',separator()
-!!    end program demo_separator
 
 ! use the pathname returned as arg0 to determine pathname separator
 implicit none
@@ -784,7 +755,7 @@ end subroutine read_table_r
 !===================================================================================================================================
 !>
 !!##NAME
-!!    fileread(3f) - [M_io:READ] read a file into a string array
+!!    fileread(3f) - [M_io:READ] read (ie. slurp) a file into a string array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -807,7 +778,7 @@ end subroutine read_table_r
 !!
 !!##OPTIONS
 !!    filename   filename to read into memory, or LUN (Fortran Logical
-!!               Unit Number).  If filename is a LUN, file must be opened
+!!               Unit Number). If filename is a LUN, file must be opened
 !!               with
 !!
 !!                  form='unformatted',access='stream'
@@ -818,6 +789,10 @@ end subroutine read_table_r
 !!                 & action="read", iomsg=message,        &
 !!                 & form="unformatted", access="stream", &
 !!                 & status='old',iostat=ios)
+!!
+!!               An exception is that although stdin cannot currently
+!!               generally be treated as a stream file file the data
+!!               will be read from stdin if the filename is '-'.
 !!
 !!    pageout    array of characters to hold file
 !!
@@ -948,7 +923,7 @@ end subroutine fileread
 !===================================================================================================================================
 !>
 !!##NAME
-!!    filebyte(3f) - [M_io:READ] read a file into a character array
+!!    filebyte(3f) - [M_io:READ] read (ie. slurp) a file into a character array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -983,6 +958,10 @@ end subroutine fileread
 !!                    & action="read", iomsg=message,        &
 !!                    & form="unformatted", access="stream", &
 !!                    & status='old',iostat=ios)
+!!
+!!                  An exception is that although stdin cannot currently
+!!                  generally be treated as a stream file file the data
+!!                  will be read from stdin if the filename is '-'.
 !!
 !!       text       array of characters to hold file
 !!       length     returns length of longest line read(Optional).
@@ -1586,11 +1565,13 @@ character(len=maxlen)                :: bname
 character(len=maxlen)                :: extension
 character(len=1)                 :: sep
    sep=separator()
+   ! trim trailing separators
    iend=len_trim(filename)
    do i=iend,1,-1
       if(filename(i:i) /= sep)exit
       iend=iend-1
    enddo
+   !
    call splitpath(filename(:iend),name=name,basename=bname,ext=extension)
    if(present(suffix))then
       leaf=merge(bname,name,suffix == extension)
@@ -2483,19 +2464,20 @@ integer                                  :: lun_local
       lun_local=stdin
    endif
 
-   INFINITE: do                                                      ! read characters from line and append to result
-      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for files
-                                                                     ! other than stdin so system line limit is not limiting
-      if(isize > 0)line_local=line_local//buffer(:isize)            ! append what was read to result
-      if(is_iostat_eor(ier))then                                     ! if hit EOR reading is complete unless backslash ends the line
-         ier=0                                                       ! hitting end of record is not an error for this routine
-         exit INFINITE                                               ! end of reading line
-     elseif(ier /= 0)then                                            ! end of file or error
+   INFINITE: do                                                   ! read characters from line and append to result
+      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no', &
+      & size=isize,iomsg=message) buffer                          ! read next buffer (might use stream I/O for files
+                                                                  ! other than stdin so system line limit is not limiting
+      if(isize > 0)line_local=line_local//buffer(:isize)          ! append what was read to result
+      if(is_iostat_eor(ier))then                                  ! if hit EOR reading is complete unless backslash ends the line
+         ier=0                                                    ! hitting end of record is not an error for this routine
+         exit INFINITE                                            ! end of reading line
+     elseif(ier /= 0)then                                         ! end of file or error
         line=trim(message)
         exit INFINITE
      endif
    enddo INFINITE
-   line=line_local                                                   ! trim line
+   line=line_local                                                ! trim line
    if(present(iostat))iostat=ier
 end function getline
 !===================================================================================================================================
@@ -2685,7 +2667,7 @@ function get_tmp() result(tname)
 
 character(len=:),allocatable :: tname
 integer                      :: lngth
-character(len=10),parameter  :: names(4)=["TMPDIR    ","TEMP      ","TEMPDIR   ","TMP       "]
+character(len=10),parameter  :: names(*)=["TMPDIR    ","TEMP      ","TEMPDIR   ","TMP       "]
 integer                      :: i
 character(len=1)             :: sep
    sep=separator()
@@ -2722,27 +2704,29 @@ end function get_tmp
 !!      character(len=*),intent(in),optional :: prefix
 !!##DESCRIPTION
 !!
-!!    Fortran supports non-retainable scratch files via
-!!    OPEN(STATUS='SCRATCH',...) . There are circumstances where a file with
-!!    a unique name is required instead. Specifying the pathname of a file
-!!    can be required for performance reasons, file space limitations, or
-!!    to support the ability for other processes or subprocesses to access
-!!    the file.
+!!    Fortran supports non-retainable automatically deleted scratch files
+!!    via OPEN(STATUS='SCRATCH',...). However, there are circumstances
+!!    where a file with a unique name is required instead.
 !!
-!!    SCRATCH(3f) Return the name of a scratch file in the scratch directory
-!!    set by the most common environment variables used to designate a
-!!    scratch directory unless the prefix contains the character "/" or "\".
+!!    Specifying the pathname of a file can be required for performance
+!!    reasons, file space limitations, or to support the ability for other
+!!    processes or subprocesses to access the file.
 !!
-!!    $TMPDIR is the canonical environment variable in Unix and POSIX[1]
-!!    used to specify a temporary directory for scratch space. If $TMPDIR
-!!    is not set, $TEMP, $TEMPDIR, and $TMP are examined in that order. If
-!!    nothing is set "/tmp/" is used.
+!!    By default SCRATCH(3f) Returns a unique filename for a scratch file
+!!    in the directory pointed to by the most common environment variables
+!!    used to designate a scratch directory.
+!!
+!!    The environment variables queried are $TMPDIR (the canonical
+!!    environment variable in Unix and POSIX used to specify a temporary
+!!    directory for scratch space) . If $TMPDIR is not set, $TEMP, $TEMPDIR,
+!!    and $TMP are examined in that order. If nothing is set "/tmp/" is used.
 !!
 !!##OPTIONS
-!!    prefix  an optional prefix for the leaf of the filename. A suffix
-!!            created by genuuid(3) is used to make the name unique. The
-!!            prefix is used as-is if it contains the character "/" or
-!!            "\". Otherwise, the prefix is prefixed by the first value
+!!    prefix  an optional prefix for the leaf of the filename.
+!!            The prefix is used as-is if it contains the character "/" or "\".
+!!            A suffix
+!!            created by genuuid(3) is used to make the name unique.
+!!            Otherwise, the prefix is prefixed by the first value
 !!            that is not blank from the set
 !!            {$TMPDIR, $TEMP, $TEMPDIR, $TMP, /tmp}.
 !!
@@ -2750,6 +2734,23 @@ end function get_tmp
 !!            called the procedure (the name trimmed of directories and
 !!            anything from the right-most period in the name to the end
 !!            of the name).
+!!##RETURNS
+!!   + If a prefix is not supplied:
+!!
+!!       a filename whose basename is the current program followed by a UUID
+!!       ( Universal Unique IDentifier) with the prefix ".scr" in the current
+!!       temporary directory.
+!!
+!!   + if the prefix contains a slash or backslash:
+!!
+!!       The same as if a prefix is not supplied accept the prefix is assumed to
+!!       be a directory in which to create a file
+!!
+!!   + A prefix not containing a slash or backslash:
+!!
+!!       The same as if a prefix is not supplied accept the basename begins with
+!!       the given string instead of the current program name.
+!!
 !!##EXAMPLE
 !!
 !!   Sample:
@@ -2769,7 +2770,7 @@ end function get_tmp
 !!     if(present(NAME))then
 !!        write(*,'(a,t20,a)')NAME,scratch(NAME)
 !!     else
-!!        write(*,'(a,t20,a)')'*NOT PRESENT*',scratch()
+!!        write(*,'(a,t20,a)')'*OT PRESENT*',scratch()
 !!     endif
 !!     end subroutine printit
 !!     end program demo_scratch
@@ -3228,7 +3229,7 @@ contains
 logical function exists(filename) result(r)
 character(len=*), intent(in) :: filename
     inquire(file=filename, exist=r)
-end function
+end function exists
 end function which
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3355,37 +3356,110 @@ end function lookfor
 !!
 !!##LICENSE
 !!    Public Domain
-function get_env(NAME,DEFAULT) result(VALUE)
+function get_env(NAME, DEFAULT) result(VALUE)
 implicit none
-character(len=*),intent(in)          :: NAME
-character(len=*),intent(in),optional :: DEFAULT
-character(len=:),allocatable         :: VALUE
-integer                              :: howbig
-integer                              :: stat
-integer                              :: length
-   ! get length required to hold value
-   length=0
-   if(NAME /= '')then
-      call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
+character(len=*), intent(in)           :: NAME
+character(len=*), intent(in), optional :: DEFAULT
+character(len=:), allocatable          :: VALUE
+integer                                :: howbig
+integer                                :: stat
+   if (NAME /= '') then
+      call get_environment_variable(NAME, length=howbig, status=stat, trim_name=.true.) ! get length required to hold value
       select case (stat)
-      case (1)
-         !*!print *, NAME, " is not defined in the environment. Strange..."
-         VALUE=''
-      case (2)
-         !*!print *, "This processor doesn't support environment variables. Boooh!"
-         VALUE=''
+      case (1); VALUE = '' ! NAME is not defined in the environment
+      case (2); VALUE = '' ! This processor doesn't support environment variables. Boooh!
       case default
-         ! make string to hold value of sufficient size
-         allocate(character(len=max(howbig,1)) :: VALUE)
-         ! get value
-         call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
-         if(stat /= 0)VALUE=''
+         allocate (character(len=max(howbig, 1)) :: VALUE)                         ! make string to hold value of sufficient size
+         call get_environment_variable(NAME, VALUE, status=stat, trim_name=.true.) ! get value
+         if (stat /= 0) VALUE = ''
       end select
    else
-      VALUE=''
-   endif
-   if(VALUE == ''.and.present(DEFAULT))VALUE=DEFAULT
+      VALUE = ''
+   end if
+   if (VALUE == '' .and. present(DEFAULT)) VALUE = DEFAULT
 end function get_env
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!   is_hidden_file(3f) - [M_io:QUERY]  determine if a pathname points to a
+!!   hidden file, which is defined as a file basename starting with a period.
+!!   (LICENSE:PD)
+!!
+!!##SYNTAX
+!!     impure elemental function is_hidden_file(PATH) result(YESNO)
+!!
+!!      character(len=*),intent(in) :: PATH
+!!      logical                     :: YESNO
+!!
+!!##DESCRIPTION
+!!    Given a pathname determine if it is a hidden file. This is simply
+!!    assumed to be a basename that does not begin with a period and is not
+!!    a single or double period, assumed to represent the current directory
+!!    and parent directory.
+!!
+!!##LIMITATIONS
+!!    Pathnames are not expanded to a canonical form, so if the basename is
+!!    '.' or '..' and those point to a hidden directory name the return
+!!    value will still be .FALSE. . Filenames are assumed to not contain
+!!    leading or trailing spaces.
+!!
+!!##OPTIONS
+!!    PATH     pathname to classify. It need not exist.
+!!
+!!##RETURNS
+!!    YESNO    true if pathname points to a hidden file, otherwise it
+!!             is false.
+!!
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!       program demo_is_hidden_file
+!!       use M_io, only : is_hidden_file, basename
+!!          call showit('.abc')
+!!          call showit('./.')
+!!          call showit('..')
+!!          call showit('...')
+!!          call showit('/abc/def/notes.txt')
+!!          call showit('/abc/def/.hide')
+!!       contains
+!!       subroutine showit(path)
+!!       character(len=*),intent(in) :: path
+!!          write(*,*)is_hidden_file(path), &
+!!           & ' ,path=',path
+!!       end subroutine showit
+!!       end program demo_is_hidden_file
+!!
+!!    Results:
+!!
+!!     >  T  ,path=.abc
+!!     >  F  ,path=./.
+!!     >  F  ,path=..
+!!     >  T  ,path=...
+!!     >  F  ,path=/abc/def/notes.txt
+!!     >  T  ,path=/abc/def/.hide
+!!
+!!##SEE ALSO
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+impure elemental function is_hidden_file(path) result(yesno)
+character(*), intent(in) :: path
+logical :: yesno
+character(len=:), allocatable :: base
+
+   base = basename(path,suffix=char(0))//'  '
+   select case (base)
+   case ('.', '..');  yesno = .false.
+   case default;      yesno = merge(.true., .false., base(1:1) == '.')
+   end select
+
+end function is_hidden_file
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3515,9 +3589,6 @@ end subroutine get_next_char
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 !>
 !!##NAME
 !!    notopen(3f) - [M_io:FILENAME] generate a filename containing a number
@@ -3536,7 +3607,7 @@ end subroutine get_next_char
 !!##DESCRIPTION
 !!
 !!    Generate a filename containing a representation of the specified
-!!    whole number.  This is useful for generating a series of filenames
+!!    whole number. This is useful for generating a series of filenames
 !!    differing by a number such as "file1.txt", "file2.txt",
 !!    ... .
 !!

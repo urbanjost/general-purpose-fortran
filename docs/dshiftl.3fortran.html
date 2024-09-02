@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>dshiftl (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>dshiftl (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>dshiftl(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-dshiftl(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 DSHIFTL(3) - [BIT:COPY] Combined left shift of the bits of two integers
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ DSHIFTL(3) - [BIT:COPY] Combined left shift of the bits of two integers
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = dshiftl(i, j, shift)
 <P>
 <PRE>
-           elemental integer(kind=KIND) function dshiftl(i, j, shift)
+         elemental integer(kind=KIND) function dshiftl(i, j, shift)
 <P>
-            integer(kind=KIND),intent(in) :: i
-            integer(kind=KIND),intent(in) :: j
-            integer(kind=**),intent(in) :: shift
+          integer(kind=KIND),intent(in) :: i
+          integer(kind=KIND),intent(in) :: j
+          integer(kind=**),intent(in) :: shift
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,20 +86,21 @@ result = dshiftl(i, j, shift)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-the kind of I, J, and the return value are the same. An exception is that
-one of I and J may be a BOZ literal constant (A BOZ literal constant is a
-binary, octal or hex constant).
+the kind of I, J, and the return value are the same. An exception is
+that one of I and J may be a BOZ literal constant (A BOZ literal
+constant is a binary, octal or hex constant).
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If either I or J is a BOZ-literal-constant (but not both), it is first
-converted as if by the intrinsic function INT(3) to type integer with the
-kind type parameter of the other.
+If either I or J is a BOZ-literal-constant (but not both), it is
+first converted as if by the intrinsic function INT(3) to type
+integer with the kind type parameter of the other.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -120,23 +114,24 @@ a kind designated as ** may be any supported kind for the type
 
 </A>
 <BLOCKQUOTE>
-DSHIFTL(3) combines bits of I and J. The rightmost SHIFT bits of the result
-are the leftmost SHIFT bits of J, and the remaining bits are the rightmost
-BITSIZE(I)<B>-SHIFT</B> of I.
 <P>
-Hence DSHIFTL is designated as a "combined left shift", because it is like
-we appended I and J together, shifted it SHIFT bits to the left, and then
-kept the same number of bits as I or J had.
+DSHIFTL(3) combines bits of I and J. The rightmost SHIFT bits of the
+result are the leftmost SHIFT bits of J, and the remaining bits are the
+rightmost BITSIZE(I)<B>-SHIFT</B> of I.
+<P>
+Hence DSHIFTL is designated as a "combined left shift", because it is
+like we appended I and J together, shifted it SHIFT bits to the left,
+and then kept the same number of bits as I or J had.
 <P>
 For example, for two 16-bit values if SHIFT=6
 <P>
 <PRE>
-            SHIFT=6
-            I =             1111111111111111
-            J =             0000000000000000
-            COMBINED        11111111111111110000000000000000
-            DROP LEFT BITS  11111111110000000000000000
-            KEEP LEFT 16    1111111111000000
+          SHIFT=6
+          I =             1111111111111111
+          J =             0000000000000000
+          COMBINED        11111111111111110000000000000000
+          DROP LEFT BITS  11111111110000000000000000
+          KEEP LEFT 16    1111111111000000
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -146,23 +141,24 @@ For example, for two 16-bit values if SHIFT=6
 
 </A>
 <BLOCKQUOTE>
+<P>
 This is equivalent to
 <P>
 <PRE>
-           ior( shiftl(i, shift), shiftr(j, bit_size(j) - shift) )
+         ior( shiftl(i, shift), shiftr(j, bit_size(j) - shift) )
 <P>
 </PRE>
 Also note that using this last representation of the operation is can be
 derived that when both I and J have the same value as in
 <P>
 <PRE>
-            dshiftl(i, i, shift)
+          dshiftl(i, i, shift)
 <P>
 </PRE>
 the result has the same value as a circular shift:
 <P>
 <PRE>
-            ishftc(i, shift)
+          ishftc(i, shift)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -172,6 +168,7 @@ the result has the same value as a circular shift:
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -186,9 +183,9 @@ J : used for the right pattern of bits in the combined pattern
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-SHIFT : shall be nonnegative and less than or equal to the number of bits
-in an integer input value (ie. the bit size of either one that is not a
-BOZ literal constant).
+SHIFT : shall be nonnegative and less than or equal to the number of
+bits in an integer input value (ie. the bit size of either one that
+is not a BOZ literal constant).
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -197,8 +194,9 @@ BOZ literal constant).
 
 </A>
 <BLOCKQUOTE>
-The leftmost SHIFT bits of J are copied to the rightmost bits of the result,
-and the remaining bits are the rightmost bits of I.
+<P>
+The leftmost SHIFT bits of J are copied to the rightmost bits of the
+result, and the remaining bits are the rightmost bits of I.
 </BLOCKQUOTE>
 <A name=7>
 
@@ -206,60 +204,61 @@ and the remaining bits are the rightmost bits of I.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_dshiftl
-      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      implicit none
-      integer(kind=int32) :: i, j
-      integer             :: shift
+    program demo_dshiftl
+    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    implicit none
+    integer(kind=int32) :: i, j
+    integer             :: shift
 <P>
-        ! basic usage
-         write(*,*) dshiftl (1, 2**30, 2) ! int32 values on little-endian =&gt; 5
+      ! basic usage
+       write(*,*) dshiftl (1, 2**30, 2) ! int32 values on little-endian =&gt; 5
 <P>
-        ! print some simple calls as binary to better visual the results
-         i=-1
-         j=0
-         shift=5
-         call printit()
+      ! print some simple calls as binary to better visual the results
+       i=-1
+       j=0
+       shift=5
+       call printit()
 <P>
-         ! the leftmost SHIFT bits of J are copied to the rightmost result bits
-         j=int(b"11111000000000000000000000000000")
-         ! and the other bits are the rightmost bits of I
-         i=int(b"00000000000000000000000000000000")
-         call printit()
+       ! the leftmost SHIFT bits of J are copied to the rightmost result bits
+       j=int(b"11111000000000000000000000000000")
+       ! and the other bits are the rightmost bits of I
+       i=int(b"00000000000000000000000000000000")
+       call printit()
 <P>
-         j=int(b"11111000000000000000000000000000")
-         i=int(b"00000111111111111111111111111111")
-         ! result should be all 1s
-         call printit()
+       j=int(b"11111000000000000000000000000000")
+       i=int(b"00000111111111111111111111111111")
+       ! result should be all 1s
+       call printit()
 <P>
-      contains
-      subroutine printit()
-         ! print i,j,shift and then i,j, and the result as binary values
-          write(*,&#146;(*(g0))&#146;)&#146;I=&#146;,i,&#146; J=&#146;,j,&#146; SHIFT=&#146;,shift
-          write(*,&#146;(b32.32)&#146;) i,j, dshiftl (i, j, shift)
-      end subroutine printit
+    contains
+    subroutine printit()
+       ! print i,j,shift and then i,j, and the result as binary values
+        write(*,&#146;(*(g0))&#146;)&#146;I=&#146;,i,&#146; J=&#146;,j,&#146; SHIFT=&#146;,shift
+        write(*,&#146;(b32.32)&#146;) i,j, dshiftl (i, j, shift)
+    end subroutine printit
 <P>
-      end program demo_dshiftl
+    end program demo_dshiftl
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         &gt; I=-1 J=0 SHIFT=5
-         &gt; 11111111111111111111111111111111
-         &gt; 00000000000000000000000000000000
-         &gt; 11111111111111111111111111100000
-         &gt; I=0 J=-134217728 SHIFT=5
-         &gt; 00000000000000000000000000000000
-         &gt; 11111000000000000000000000000000
-         &gt; 00000000000000000000000000011111
-         &gt; I=134217727 J=-134217728 SHIFT=5
-         &gt; 00000111111111111111111111111111
-         &gt; 11111000000000000000000000000000
-         &gt; 11111111111111111111111111111111
+       &gt; I=-1 J=0 SHIFT=5
+       &gt; 11111111111111111111111111111111
+       &gt; 00000000000000000000000000000000
+       &gt; 11111111111111111111111111100000
+       &gt; I=0 J=-134217728 SHIFT=5
+       &gt; 00000000000000000000000000000000
+       &gt; 11111000000000000000000000000000
+       &gt; 00000000000000000000000000011111
+       &gt; I=134217727 J=-134217728 SHIFT=5
+       &gt; 00000111111111111111111111111111
+       &gt; 11111000000000000000000000000000
+       &gt; 11111111111111111111111111111111
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -269,6 +268,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=9>
@@ -277,16 +277,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 DSHIFTR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022             dshiftl(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dshiftl (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 171c5f8b-ec22-471e-9c5c-bb3679d53cee using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>dshiftl (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b7188ba1-a367-4da0-890d-72fad177a1ab using man macros.</FONT>
 <br><br><center><img src="images/dshiftl.3fortran.gif"></center>
 </div>
 </div>

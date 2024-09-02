@@ -298,7 +298,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    display a TUI definition and return values>',&
 '@(#)VERSION:        1.0, 20150508>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2023-02-12 18:34:49 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:53:58 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -314,38 +314,38 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'    fixedfrom(1f) - [FUNIX] read in a TUI definition and return values from screen panel                                        ',&
-'    (LICENSE:PD)                                                                                                                ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'    fixedform [file|-demo]|[ --help| --version]                                                                                 ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'    fixedform(1) reads in a TUI screen form definition and displays it and returns                                              ',&
-'    the values used to fill out the screen.                                                                                     ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'    file       name of file containing TUI definition                                                                           ',&
-'    -loop      continue reading and displaying the the form unit a ''q'' is entered                                             ',&
-'    --help     display this help and exit                                                                                       ',&
-'    --version  output version information and exit                                                                              ',&
-'    --demo                                                                                                                      ',&
-'                                                                                                                                ',&
-'EXAMPLES                                                                                                                        ',&
-'    Sample commands                                                                                                             ',&
-'                                                                                                                                ',&
-'       fixedform  FILE1                                                                                                         ',&
-'                                                                                                                                ',&
-'REPORTING BUGS                                                                                                                  ',&
-'    Report fixedform bugs to <http://www.urbanjost.altervista.org/index.html>                                                   ',&
-'                                                                                                                                ',&
-'SEE ALSO                                                                                                                        ',&
-'    yes(1), repeat(1), xargs(1)                                                                                                 ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'    fixedfrom(1f) - [FUNIX] read in a TUI definition and return values from screen panel',&
+'    (LICENSE:PD)                                                                ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'    fixedform [file|-demo]|[ --help| --version]                                 ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'    fixedform(1) reads in a TUI screen form definition and displays it and returns',&
+'    the values used to fill out the screen.                                     ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'    file       name of file containing TUI definition                           ',&
+'    -loop      continue reading and displaying the the form unit a ''q'' is entered',&
+'    --help     display this help and exit                                       ',&
+'    --version  output version information and exit                              ',&
+'    --demo                                                                      ',&
+'                                                                                ',&
+'EXAMPLES                                                                        ',&
+'    Sample commands                                                             ',&
+'                                                                                ',&
+'       fixedform  FILE1                                                         ',&
+'                                                                                ',&
+'REPORTING BUGS                                                                  ',&
+'    Report fixedform bugs to <http://www.urbanjost.altervista.org/index.html>   ',&
+'                                                                                ',&
+'SEE ALSO                                                                        ',&
+'    yes(1), repeat(1), xargs(1)                                                 ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop

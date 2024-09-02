@@ -1,7 +1,9 @@
-     program demo_example_text_justification   !      demonstrate still more features of text
+     program demo_example_text_justification
+     ! demonstrate still more features of text
      use M_draw
+     implicit none
      character(len=20) :: dev
-     integer           :: ios
+     integer           :: ios, idum
 
      write(*,'(a)',advance='no')'Enter device: '
      read(*, '(a)',iostat=ios) dev
@@ -35,8 +37,9 @@
      call vexit()
      contains
 
-     subroutine drawstuff
+     subroutine drawstuff()
      use M_draw
+     integer :: idum
 
      call color(D_BLACK)
      !call polyfill(1)
@@ -92,6 +95,8 @@
 
      subroutine drawstuff2(ang)
      use M_draw
+     real :: ang
+     integer :: idum
 
      call color(D_BLACK)
      call rect(0.1, 0.1, 0.9, 0.9)

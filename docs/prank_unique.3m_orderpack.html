@@ -1,0 +1,254 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>prank_unique (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+prank_unique(3f) - [M_orderpack:RANK:PARTIAL:UNIQUE] partially ranks
+an array removing duplicates
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>Maintainer</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+Subroutine Prank_Unique (INVALS, IRNGT, NORD)
+<P>
+<PRE>
+     ${TYPE} (kind=${KIND}), Intent (In) :: INVALS(:)
+     Integer, Intent (Out)               :: IRNGT(:)
+     Integer, Intent (InOut)             :: NORD
+<P>
+</PRE>
+Where ${TYPE}(kind=${KIND}) may be
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Where ${TYPE}(kind=${KIND}) may be
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Real(kind=real32)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Real(kind=real64)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Integer(kind=int16)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Integer(kind=int32)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Integer(kind=int64)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Partially rank INVALS() up to order NORD at most, removing duplicate
+entries.
+<P>
+Internally, this routine uses a pivoting strategy such as the one of
+finding the median based on the quick-sort algorithm, but we skew the
+pivot choice to try to bring it to NORD as quickly as possible. It
+uses two temporary arrays, where it stores the indices of the values
+smaller than the pivot (ILOWT), and the indices of values larger
+than the pivot that we might still need later on (IHIGT). It iterates
+until it can bring the number of values in ILOWT to exactly NORD, and
+then uses an insertion sort to rank this set, since it is supposedly
+small. At all times, the NORD first values in ILOWT correspond to
+distinct values of the input array.
+</BLOCKQUOTE>
+<P>
+<P>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>INVALS</B> </TD><TD valign=bottom>
+array to partially sort
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IRNGT</B> </TD><TD valign=bottom>
+indices returned that point to lowest values
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>NORD</B> </TD><TD valign=bottom>
+number of sorted values to determine before
+eliminating duplicates
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_prank_unique
+   ! ranks array, removing duplicates
+   use M_orderpack, only : prank_unique
+   implicit none
+   character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
+   integer,allocatable :: INVALS(:)
+   integer,allocatable :: irngt(:)
+   integer :: nord
+   !
+   write(*,g)&#146;If enough values are unique, will return NORD indices&#146;
+   INVALS=[10,5,7,1,4,5,6,8,9,10,1]
+   nord=5
+   call printme()
+   !
+   write(*,g)&#146;If not enough values are unique, will change NORD&#146;
+   INVALS=[-1,0,-1,0,-1,0,-1]
+   nord=5
+   if(allocated(irngt))deallocate(irngt)
+   allocate(irngt(nord))
+   call printme()
+   !
+   contains
+   subroutine printme()
+      write(*,g)&#146;ORIGINAL:&#146;,INVALS
+      write(*,g)&#146;NUMBER OF INDICES TO SORT:&#146;,nord
+      if(allocated(irngt))deallocate(irngt)
+      allocate(irngt(nord))
+      call prank_unique(INVALS,irngt,nord)
+      write(*,g)&#146;NUMBER OF INDICES RETURNED:&#146;,nord
+      write(*,g)&#146;RETURNED INDICES:&#146;,irngt(:nord)
+      write(*,g)nord,&#146;SMALLEST UNIQUE VALUES:&#146;,INVALS(irngt(:nord))
+   end subroutine
+   end program demo_prank_unique
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   If enough values are unique, will return NORD indices
+   ORIGINAL: 10 5 7 1 4 5 6 8 9 10 1
+   NUMBER OF INDICES TO SORT: 5
+   NUMBER OF INDICES RETURNED: 5
+   RETURNED INDICES: 11 5 2 7 3
+   5 SMALLEST UNIQUE VALUES: 1 4 5 6 7
+   If not enough values are unique, will change NORD
+   ORIGINAL: -1 0 -1 0 -1 0 -1
+   NUMBER OF INDICES TO SORT: 5
+   NUMBER OF INDICES RETURNED: 2
+   RETURNED INDICES: 1 2
+   2 SMALLEST UNIQUE VALUES: -1 0
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+Michel Olagnon - Feb. 2000
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>MAINTAINER</H3>
+
+</A>
+<BLOCKQUOTE>
+John Urban, 2022.04.16
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+CC0-1.0
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>prank_unique (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e6f3caf1-e3ff-4708-bf2d-ce3fa048a2e7 using man macros.</FONT>
+<br><br><center><img src="images/prank_unique.3m_orderpack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

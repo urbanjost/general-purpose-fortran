@@ -1,6 +1,6 @@
      program demo_arc
      use M_pixel
-     use M_writegif, only : writegif
+     use M_pixel__writegif, only : writegif
      implicit none
      integer  :: transparent=0
         call prefsize(600,240)
@@ -12,6 +12,6 @@
         call color(2)
         call arc(44.0,12.0,12.0,-90.0,90.0)
         ! write gif with a transparent background
-        call writegif('arc.3m_pixel.gif',P_pixel,P_ColorMap,transparent)
+        call writegif('arc.3M_pixel.gif',P_pixel,P_ColorMap,transparent)
         call vexit()
      end program demo_arc

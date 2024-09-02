@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>index (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>index (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>index(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-index(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 INDEX(3) - [CHARACTER:SEARCH] Position of a substring within a string
 <P>
 </BLOCKQUOTE>
@@ -76,15 +68,16 @@ INDEX(3) - [CHARACTER:SEARCH] Position of a substring within a string
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = index( string, substring [,back] [,kind] )
 <P>
 <PRE>
-       elemental integer(kind=KIND) function index(string,substring,back,kind)
+     elemental integer(kind=KIND) function index(string,substring,back,kind)
 <P>
-        character(len=*,kind=KIND),intent(in) :: string
-        character(len=*,kind=KIND),intent(in) :: substring
-        logical(kind=**),intent(in),optional :: back
-        integer(kind=**),intent(in),optional :: kind
+      character(len=*,kind=KIND),intent(in) :: string
+      character(len=*,kind=KIND),intent(in) :: substring
+      logical(kind=**),intent(in),optional :: back
+      integer(kind=**),intent(in),optional :: kind
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -94,6 +87,7 @@ result = index( string, substring [,back] [,kind] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -122,9 +116,10 @@ KIND is a scalar integer constant expression.
 
 </A>
 <BLOCKQUOTE>
+<P>
 INDEX(3) returns the position of the start of the leftmost or rightmost
-occurrence of string SUBSTRING in STRING, counting from one. If SUBSTRING is
-not present in STRING, zero is returned.
+occurrence of string SUBSTRING in STRING, counting from one. If
+SUBSTRING is not present in STRING, zero is returned.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -132,6 +127,7 @@ not present in STRING, zero is returned.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -146,15 +142,15 @@ SUBSTRING : string to attempt to locate in STRING
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-BACK : If the BACK argument is present and true, the return value is the
-start of the rightmost occurrence rather than the leftmost.
+BACK : If the BACK argument is present and true, the return value is
+the start of the rightmost occurrence rather than the leftmost.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : if KIND is present, the kind type parameter is that specified by
-the value of KIND; otherwise the kind type parameter is that of default
-integer type.
+KIND : if KIND is present, the kind type parameter is that specified
+by the value of KIND; otherwise the kind type parameter is that of
+default integer type.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -163,19 +159,20 @@ integer type.
 
 </A>
 <BLOCKQUOTE>
-The result is the starting position of the first substring SUBSTRING found
-in STRING.
+<P>
+The result is the starting position of the first substring SUBSTRING
+found in STRING.
 <P>
 If the length of SUBSTRING is longer than STRING the result is zero.
 <P>
 If the substring is not found the result is zero.
 <P>
-If BACK is .true. the greatest starting position is returned (that is, the
-position of the right-most match). Otherwise, the smallest position starting
-a match (ie. the left-most match) is returned.
+If BACK is .true. the greatest starting position is returned (that is,
+the position of the right-most match). Otherwise, the smallest position
+starting a match (ie. the left-most match) is returned.
 <P>
-The position returned is measured from the left with the first character of
-STRING being position one.
+The position returned is measured from the left with the first character
+of STRING being position one.
 <P>
 Otherwise, if no match is found zero is returned.
 </BLOCKQUOTE>
@@ -185,21 +182,22 @@ Otherwise, if no match is found zero is returned.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Example program
 <P>
 <PRE>
-      program demo_index
-      implicit none
-      character(len=*),parameter :: str=&
-         &#146;Search this string for this expression&#146;
-         !1234567890123456789012345678901234567890
-         write(*,*)&
-            index(str,&#146;this&#146;).eq.8,              &
-            ! return value is counted from the left end even if BACK=.TRUE.
-            index(str,&#146;this&#146;,back=.true.).eq.24, &
-            ! INDEX is case-sensitive
-            index(str,&#146;This&#146;).eq.0
-      end program demo_index
+    program demo_index
+    implicit none
+    character(len=*),parameter :: str=&
+       &#146;Search this string for this expression&#146;
+       !1234567890123456789012345678901234567890
+       write(*,*)&
+          index(str,&#146;this&#146;).eq.8,              &
+          ! return value is counted from the left end even if BACK=.TRUE.
+          index(str,&#146;this&#146;,back=.true.).eq.24, &
+          ! INDEX is case-sensitive
+          index(str,&#146;This&#146;).eq.0
+    end program demo_index
 <P>
 </PRE>
 Expected Results:
@@ -209,6 +207,7 @@ Expected Results:
     <H4>&nbsp; &nbsp; T T T</H4>
 </A>
 <BLOCKQUOTE>
+<P>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -216,6 +215,7 @@ Expected Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77 , with KIND argument Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -224,9 +224,10 @@ FORTRAN 77 , with KIND argument Fortran 2003
 
 </A>
 <BLOCKQUOTE>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+<P>
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -240,13 +241,9 @@ o
 NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022               index(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>index (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a93cefb0-6bc6-4bfe-8f2f-04017f6f7f67 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>index (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from df06a67f-8da9-47e1-b1ea-83bbef7823a1 using man macros.</FONT>
 <br><br><center><img src="images/index.3fortran.gif"></center>
 </div>
 </div>

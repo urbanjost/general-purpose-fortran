@@ -20,7 +20,8 @@
 
          ! create a format on the fly
          biggest=huge(0)
-         frmt=msg('(*(i',int(log10(real(biggest))),':,1x))',sep='')
+         ! +0 for gfortran-11 bug
+         frmt=msg('(*(i',int(log10(real(biggest)))+0,':,1x))',sep='')
          write(*,*)'format=',frmt
 
          ! although it will often work, using msg(3f) in an I/O statement

@@ -2700,735 +2700,735 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   ufpp(1) - [DEVELOPER] pre-process FORTRAN source files                                                                       ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   ufpp  [[-D] define_list]                                                                                                     ',&
-'         [-I include_directories]                                                                                               ',&
-'         [-i input_file(s)]                                                                                                     ',&
-'         [-o output_file]                                                                                                       ',&
-'         [-html]                                                                                                                ',&
-'         [-system]                                                                                                              ',&
-'         [-q]                                                                                                                   ',&
-'         [-verbose]                                                                                                             ',&
-'         [-header text_for_first_line]                                                                                          ',&
-'         [-ident]                                                                                                               ',&
-'         [-prefix character_ADE]                                                                                                ',&
-'         [-keeptabs]                                                                                                            ',&
-'         [-header text_for_first_line]                                                                                          ',&
-'         [-noenv]                                                                                                               ',&
-'         [-width n]                                                                                                             ',&
-'         [-debug]                                                                                                               ',&
-'         [-d ignore|remove|blank]                                                                                               ',&
-'         [-cstyle default|doxygen]                                                                                              ',&
-'         [-allow_links]                                                                                                         ',&
-'         [-version]                                                                                                             ',&
-'         [-help [-html]]                                                                                                        ',&
-'OPTIONS                                                                                                                         ',&
-'   define_list, -D define_list  An optional space-delimited list of expressions                                                 ',&
-'                                used to define variables before file processing                                                 ',&
-'                                commences.                                                                                      ',&
-'   -i input_files               The default input file is stdin. Filenames are                                                  ',&
-'                                space-delimited. In a list, @ represents stdin.                                                 ',&
-'   -o output_file               The default output file is stdout.                                                              ',&
-'   -I include_directories       The directories to search for files specified on                                                ',&
-'                                $INCLUDE directives.                                                                            ',&
-'   -prefix ADE|letter  The default directive prefix character is "$".                                                           ',&
-'                       Alternatives may be specified by providing an                                                            ',&
-'                       ASCII Decimal Equivalent (Common values are 37=%                                                         ',&
-'                       42=* 35=# 36=$ 64=@). If the value is not numeric                                                        ',&
-'                       t is assumed to be a literal character.                                                                  ',&
-'   -html        Assumes the input file is HTML that follows the following                                                       ',&
-'                rules:                                                                                                          ',&
-'                 1. Input lines are not output until a simple                                                                   ',&
-'                    <XMP> directive is found.                                                                                   ',&
-'                 2. Output stops when a simple </XMP>                                                                           ',&
-'                    directive is encountered.                                                                                   ',&
-'                This allows code to be maintained as part of an HTML                                                            ',&
-'                document.                                                                                                       ',&
-'                                                                                                                                ',&
-'   -help [-html]    Display documentation and exit. If "-html" is present,                                                      ',&
-'                    write documentation as basic HTML, instead of as a text                                                     ',&
-'                    file.                                                                                                       ',&
-'   -verbose     All commands on a $SYSTEM directive are echoed                                                                  ',&
-'                to stderr with a + prefix. Text following the                                                                   ',&
-'                string "@(#)" is printed to stderr similar to                                                                   ',&
-'                the Unix command what(1) but is otherwise                                                                       ',&
-'                treated as other text input.                                                                                    ',&
-'                                                                                                                                ',&
-'   -noenv       The $IFDEF and $IFNDEF directives test for an                                                                   ',&
-'                internal ufpp(1) variable and then an                                                                           ',&
-'                environment variable by default. This option                                                                    ',&
-'                turns off testing for environment variables.                                                                    ',&
-'   -ident       The output of the $IDENT directive is in the form of a                                                          ',&
-'                comment by default. If this flag is set the output is                                                           ',&
-'                of the form                                                                                                     ',&
-'                                                                                                                                ',&
-'                 character(len=*),parameter :: ident_NNN="@(#) string"                                                          ',&
-'                                                                                                                                ',&
-'                so executables and object code contain the metadata                                                             ',&
-'                for use with the what(1) command. This generates an                                                             ',&
-'                unused variable with some compilers might optimized                                                             ',&
-'                away depending on what options are used.                                                                        ',&
-'                                                                                                                                ',&
-'   -system      Allow system commands on $SYSTEM directives to                                                                  ',&
-'                be executed.                                                                                                    ',&
-'   -q           Quiet mode. Output is initially off and only turned                                                             ',&
-'                on if in a conditional block.                                                                                   ',&
-'   -keeptabs    By default tab characters are expanded assuming                                                                 ',&
-'                a stop has been set every eight columns; and                                                                    ',&
-'                trailing carriage-return characters are removed.                                                                ',&
-'                Use this flag to prevent this processing from                                                                   ',&
-'                occurring.                                                                                                      ',&
-'   -header      text_for_first_line                                                                                             ',&
-'   -allow_links     If $UFPP_DOCUMENT_DIR is set the $FILTER -file option                                                       ',&
-'                    will write input to a file under the specified directory                                                    ',&
-'                    in a subdirectory called doc/ that by default is not                                                        ',&
-'                    permitted to have a link. To allow it to have a link                                                        ',&
-'                    add this switch.                                                                                            ',&
-'   -cstyle      try to style comments generated in $FILTER blocks                                                               ',&
-'                for other utilities such as doxygen. Default is to                                                              ',&
-'                prefix lines with ''! ''. Allowed keywords are                                                                  ',&
-'                currently "default", "doxygen".                                                                                 ',&
-'   -d ignore|remove|blank  Enable special treatment for lines beginning                                                         ',&
-'                           with "d" or "D" The letter will be left as-is                                                        ',&
-'                           (the default); removed; or replaced with a blank                                                     ',&
-'                           character. This non-standard syntax has been                                                         ',&
-'                           used to support the optional compilation of                                                          ',&
-'                           "debug" code by many Fortran compilers when                                                          ',&
-'                           compiling fixed-format Fortran source.                                                               ',&
-'   -debug [.false.]  Dee''d lines as controlled by the -d option are traditionally                                              ',&
-'                     used with fixed-format sources. This is an alternative to                                                  ',&
-'                     use for free-format sources.                                                                               ',&
-'                                                                                                                                ',&
-'                     NOTE: It has no effect unless the environment variable                                                     ',&
-'                     DEBUGVERSION is set to T|F, which activates the mode and                                                   ',&
-'                     sets the default for the -d switch.                                                                        ',&
-'                                                                                                                                ',&
-'                     assuming DEBUGVERSION is set use the following syntax                                                      ',&
-'                                                                                                                                ',&
-'                      DEBUGVERSION: block                                                                                       ',&
-'                         ! the block of debug statements                                                                        ',&
-'                         write(*,*) ''debug @@@'',@@@                                                                           ',&
-'                      endblock DEBUGVERSION                                                                                     ',&
-'                                                                                                                                ',&
-'                     These blocks are now removed when the debug mode                                                           ',&
-'                     is .false.. If the debug mode is on they are written                                                       ',&
-'                     with the following rules where nnn is an incrementing                                                      ',&
-'                     count of the number of "DEBUGVERSION:" strings:                                                            ',&
-'                                                                                                                                ',&
-'                       o The string "DEBUGVERSION" is replaced with D_nnn                                                       ',&
-'                       o "@@@" is replaced with nnn                                                                             ',&
-'                       o do NOT use the string "DEBUGVERSION" except to start                                                   ',&
-'                         or end the block of debug statements                                                                   ',&
-'                                                                                                                                ',&
-'                     NB.: IMPORTANT!! This means when this mode is                                                              ',&
-'                     activated by the DEBUGVERSION environment variable                                                         ',&
-'                     being set the string DEBUGVERSION is a magic string                                                        ',&
-'                     and should not be used in input files unless the                                                           ',&
-'                     input file starts with "$DEBUG never".                                                                     ',&
-'                                                                                                                                ',&
-'   -version     Display version and exit                                                                                        ',&
-'   -width n     Maximum line length of the output file. Default                                                                 ',&
-'                is 1024. Typically used to trim fixed-format                                                                    ',&
-'                FORTRAN code that contains comments or "ident"                                                                  ',&
-'                labels past column 72 when compiling                                                                            ',&
-'                fixed-format Fortran code.                                                                                      ',&
-'DEFINITION                                                                                                                      ',&
-'                                                                                                                                ',&
-'   By default the stand-alone pre-processor ufpp(1) will interpret lines with                                                   ',&
-'   "$" in column one, and will output no such lines. Other input is                                                             ',&
-'   conditionally written to the output file based on the directives encountered                                                 ',&
-'   in the input.                                                                                                                ',&
-'                                                                                                                                ',&
-'   The syntax for the control lines is as follows:                                                                              ',&
-'                                                                                                                                ',&
-'     $DEFINE   variable_name[=expression]                 [! comment ]                                                          ',&
-'     $ERROR    message_to_stderr                          [! comment ]                                                          ',&
-'     $IF       {constant LOGICAL expression}              [! comment ]                                                          ',&
-'      or                                                                                                                        ',&
-'     $IFDEF    {variable_name}                            [! comment ]                                                          ',&
-'      or                                                                                                                        ',&
-'     $IFNDEF   {variable_name}                            [! comment ]                                                          ',&
-'               { sequence of source statements}                                                                                 ',&
-'     [$ELSEIF  {constant LOGICAL expression}              [! comment ]                                                          ',&
-'               { sequence of source statements}]                                                                                ',&
-'     [$ELSE                                               [! comment ]                                                          ',&
-'               { sequence of source statements}]                                                                                ',&
-'     $ENDIF                                               [! comment ]                                                          ',&
-'     $IDENT    metadata                                   [! comment ]                                                          ',&
-'     $@(#)     metadata                                   [! comment ]                                                          ',&
-'     $INCLUDE  filename                                   [! comment ]                                                          ',&
-'     $OUTPUT   filename  [-append]                        [! comment ]                                                          ',&
-'     $FILTER   [comment|write|help|version] |                                                                                   ',&
-'               [shell [-cmd NAME]] |                                                                                            ',&
-'               [variable [-varname NAME]]                                                                                       ',&
-'               [-file NAME [-append]]                     [! comment ]                                                          ',&
-'     $DOCUMENT and $FILTER are synonyms for $BLOCK                                                                              ',&
-'     $PRINTENV predefined_name|environment_variable_name  [! comment ]                                                          ',&
-'     $SHOW                                                [! comment ]                                                          ',&
-'     $STOP {stop_value}                                   [! comment ]                                                          ',&
-'     $SYSTEM system_command                               [! comment ]                                                          ',&
-'     $DEBUG ON|OFF|NEVER                                  [! comment ]                                                          ',&
-'     $UNDEFINE variable_name                              [! comment ]                                                          ',&
-'     $WARNING  message_to_stderr                          [! comment ]                                                          ',&
-'     $MESSAGE  message_to_stderr                          [! comment ]                                                          ',&
-'     $ASSERT   insert call to ASSERT(3f) to print         [! comment ]                                                          ',&
-'               filename,linenumber,message to stderr and                                                                        ',&
-'               end program. Filename and linenumber are                                                                         ',&
-'               taken from file being processed by ufpp(1)                                                                       ',&
-'                                                                                                                                ',&
-'   Compiler directives are specified by a "$" in column one, followed by a                                                      ',&
-'   keyword.                                                                                                                     ',&
-'                                                                                                                                ',&
-'   An exclamation character on a valid directive begins an in-line comment                                                      ',&
-'   that is terminated by an end-of-line.                                                                                        ',&
-'                                                                                                                                ',&
-'   Any LOGICAL expression composed of integer constants, parameters                                                             ',&
-'   and operators, is valid. Operators are                                                                                       ',&
-'                                                                                                                                ',&
-'     .NOT.  .AND.  .OR.  .EQV.  .NEQV.  .EQ.  .NE.  .GE.                                                                        ',&
-'     .GT.   .LE.   .LT.  +      -       *     /     (                                                                           ',&
-'     )      **                                                                                                                  ',&
-'                                                                                                                                ',&
-'   DIRECTIVES                                                                                                                   ',&
-'                                                                                                                                ',&
-'   $ASSERT expression [,values]                                                                                                 ',&
-'                                                                                                                                ',&
-'   If debug mode is activated then input line                                                                                   ',&
-'                                                                                                                                ',&
-'      $ASSERT i .gt. 10, ''I='', i, ''bigger than'', 10                                                                         ',&
-'                                                                                                                                ',&
-'   becomes                                                                                                                      ',&
-'                                                                                                                                ',&
-'      call assert(filename, linenumber, i.gt.10, ''I='', ''bigger than'', 10)                                                   ',&
-'                                                                                                                                ',&
-'   and if "I" were 2000, would produce the output                                                                               ',&
-'                                                                                                                                ',&
-'      ERROR:filename: xx.ff :line number: 32070 : I= 2000 bigger than 10                                                        ',&
-'      STOP 1                                                                                                                    ',&
-'                                                                                                                                ',&
-'   The manpage for ASSERT(3f) describes the meaning of the parameters in                                                        ',&
-'   greater detail, but the filename will be the name of the file that                                                           ',&
-'   was processed by ufpp(1), the line number will be the linenumber                                                             ',&
-'   of the file processed by ufpp, and everything else on the $ASSERT                                                            ',&
-'   directive is passed directly to ASSERT(3f). Note that the first                                                              ',&
-'   parameter passed on $ASSERT must be a logical expression.                                                                    ',&
-'                                                                                                                                ',&
-'   The ASSERT(3f) procedure must be in the load path and the "call assert"                                                      ',&
-'   must be written to the ufpp(1) output file in a scope where                                                                  ',&
-'                                                                                                                                ',&
-'      use, M_verify, only : assert                                                                                              ',&
-'                                                                                                                                ',&
-'   has made the assert(3f) procedure available.                                                                                 ',&
-'                                                                                                                                ',&
-'   NOTE                                                                                                                         ',&
-'                                                                                                                                ',&
-'   The $ASSERT directive will not be written to the output file unless                                                          ',&
-'   the environment variable DEBUGVERSION=T and the -debug switch is                                                             ',&
-'   present on the ufpp.                                                                                                         ',&
-'                                                                                                                                ',&
-'      program demo_assert_directive                                                                                             ',&
-'      use M_verify, only : assert                                                                                               ',&
-'         a=2000                                                                                                                 ',&
-'      $ASSERT  a .le. 10, a,''bigger than'',10                                                                                  ',&
-'      end program demo_assert_directive                                                                                         ',&
-'                                                                                                                                ',&
-'      #!/bin/bash                                                                                                               ',&
-'      export DEBUGVERSION=T                                                                                                     ',&
-'      ufpp -debug -i xx.ff -o xx.f90                                                                                            ',&
-'      cat xx.f90                                                                                                                ',&
-'      f90 xx.f90 -o xx                                                                                                          ',&
-'      ./xx                                                                                                                      ',&
-'                                                                                                                                ',&
-'   The $ASSERT directive becomes:                                                                                               ',&
-'                                                                                                                                ',&
-'      call assert( "xx.ff", 4 , a .le. 10, a,''bigger than'',10 )                                                               ',&
-'                                                                                                                                ',&
-'   Sample output:                                                                                                               ',&
-'                                                                                                                                ',&
-'      ERROR:filename: xx.ff :line number: 4 : 2000.00000 bigger than 10                                                         ',&
-'      STOP 1                                                                                                                    ',&
-'                                                                                                                                ',&
-'   $DEFINE variable_name [=expression]                                                                                          ',&
-'                                                                                                                                ',&
-'   A $DEFINE may appear anywhere in a source file. If the value is ".TRUE."                                                     ',&
-'   or ".FALSE." then the parameter is of type LOGICAL, otherwise the                                                            ',&
-'   parameter is of type INTEGER and the value must be an INTEGER. If no                                                         ',&
-'   value is supplied, the parameter is of type INTEGER and is given the                                                         ',&
-'   value 1.                                                                                                                     ',&
-'                                                                                                                                ',&
-'   Constant parameters are defined from the point they are encountered in a                                                     ',&
-'   $DEFINE directive until program termination unless explicitly                                                                ',&
-'   undefined with a $UNDEFINE directive.                                                                                        ',&
-'                                                                                                                                ',&
-'   Example:                                                                                                                     ',&
-'                                                                                                                                ',&
-'    $define A=1                                                                                                                 ',&
-'    $define B=1                                                                                                                 ',&
-'    $define C=2                                                                                                                 ',&
-'    $if ( A + B ) / C .eq. 1                                                                                                    ',&
-'       (a+b)/c is one                                                                                                           ',&
-'    $endif                                                                                                                      ',&
-'                                                                                                                                ',&
-'   $ERROR message                                                                                                               ',&
-'                                                                                                                                ',&
-'   Write message to stderr and display program condition and exit program.                                                      ',&
-'                                                                                                                                ',&
-'   $IF/$ELSEIF/$ELSE/$ENDIF directives                                                                                          ',&
-'                                                                                                                                ',&
-'   Each of the control lines delineates a block of FORTRAN source. If the                                                       ',&
-'   expression following the $IF is ".TRUE.", then the lines of FORTRAN                                                          ',&
-'   source following are output. If it is ".FALSE.", and an $ELSEIF                                                              ',&
-'   follows, the expression is evaluated and treated the same as the $IF. If                                                     ',&
-'   the $IF and all $ELSEIF expressions are ".FALSE.", then the lines of                                                         ',&
-'   source following the $ELSE are output. A matching $ENDIF ends the                                                            ',&
-'   conditional block.                                                                                                           ',&
-'                                                                                                                                ',&
-'   $IFDEF/$IFNDEF directives                                                                                                    ',&
-'                                                                                                                                ',&
-'   $IFDEF and $IFNDEF are special forms of the $IF directive that simply test                                                   ',&
-'   if a variable name is defined or not. Essentially, these are equivalent:                                                     ',&
-'                                                                                                                                ',&
-'     $IFDEF varname  ==> $IF DEFINED(varname)                                                                                   ',&
-'     $IFNDEF varname ==> $IF .NOT. DEFINED(varname)                                                                             ',&
-'                                                                                                                                ',&
-'   except that environment variables are tested as well if the -noenv option                                                    ',&
-'   is not specified.                                                                                                            ',&
-'                                                                                                                                ',&
-'   $IDENT metadata [-language fortran|c|shell]                                                                                  ',&
-'                                                                                                                                ',&
-'   Writes a line using SCCS-metadata format of the following forms:                                                             ',&
-'                                                                                                                                ',&
-'     LANGUAGE                                                                                                                   ',&
-'     fortran   If the commandline option -ident is set                                                                          ',&
-'                                                                                                                                ',&
-'                  character(len=*),parameter::ident_NNN="@(#)metadata"                                                          ',&
-'               else                                                                                                             ',&
-'                                                                                                                                ',&
-'                  ! ident_NNN="@(#)metadata"                                                                                    ',&
-'                                                                                                                                ',&
-'     c         #ident "@(#)metadata"                                                                                            ',&
-'                                                                                                                                ',&
-'     shell     #@(#) metadata                                                                                                   ',&
-'                                                                                                                                ',&
-'   This string is generally included for use with the what(1) command.                                                          ',&
-'                                                                                                                                ',&
-'   The default language is fortran. Depending on your compiler, the                                                             ',&
-'   optimization level used when compiling, these strings may or may not                                                         ',&
-'   remain in the object files and executables created.                                                                          ',&
-'                                                                                                                                ',&
-'   Do not use the characters double-quote, greater-than, backslash (">\)                                                        ',&
-'   in the metadata; do not use strings starting with " -" either.                                                               ',&
-'                                                                                                                                ',&
-'   $INCLUDE filename                                                                                                            ',&
-'                                                                                                                                ',&
-'   Nested read of specified input file. Fifty (50) nesting levels are allowed.                                                  ',&
-'                                                                                                                                ',&
-'   $OUTPUT filename [-append]                                                                                                   ',&
-'                                                                                                                                ',&
-'   Specify the output file to write to. Overrides the initial output file                                                       ',&
-'   specified with command line options. If no output filename is given                                                          ',&
-'   revert back to initial output file. @ is a synonym for stdout.                                                               ',&
-'                                                                                                                                ',&
-'      -append [.true.|.false]                                                                                                   ',&
-'                                                                                                                                ',&
-'   Named files open at the beginning by default. Use the -append switch to                                                      ',&
-'   append to the end of an existing file instead of overwriting it.                                                             ',&
-'                                                                                                                                ',&
-'   $PRINTENV name                                                                                                               ',&
-'                                                                                                                                ',&
-'   If the name of an uppercase environment variable is given the value                                                          ',&
-'   of the variable will be placed in the output file. If the value is a                                                         ',&
-'   null string or if the variable is undefined output will be stopped.                                                          ',&
-'   This allows the system shell to generate code lines. This is usually                                                         ',&
-'   used to pass in information about the compiler environment. For                                                              ',&
-'   example:                                                                                                                     ',&
-'                                                                                                                                ',&
-'     # If the following command were executed in the bash(1) shell...                                                           ',&
-'                                                                                                                                ',&
-'      export STAMP="      write(*,*)''''COMPILED ON:`uname -s`;AT `date`''''"                                                   ',&
-'                                                                                                                                ',&
-'   the environment variable STAMP would be set to something like                                                                ',&
-'                                                                                                                                ',&
-'     write(*,*)''''COMPILED ON:Eureka;AT Wed, Jun 12, 2013  8:12:06 PM''''                                                      ',&
-'                                                                                                                                ',&
-'   A version number would be another possibility                                                                                ',&
-'                                                                                                                                ',&
-'     export VERSION="      program_version=2.2"                                                                                 ',&
-'                                                                                                                                ',&
-'   Special predefined variable names are:                                                                                       ',&
-'                                                                                                                                ',&
-'     Variable Name      Output                                                                                                  ',&
-'     UFPP_DATE  ......  UFPP_DATE="12:58 14Jun2013"                                                                             ',&
-'     Where code is assumed to have defined UFPP_DATE as CHARACTER(LEN=15)                                                       ',&
-'     UFPP_FILE  ......  UFPP_FILE="current filename"                                                                            ',&
-'     Where code is assumed to have defined UFPP_FILE as CHARACTER(LEN=1024)                                                     ',&
-'     UFPP_LINE  ......  UFPP_LINE=    nnnnnn                                                                                    ',&
-'     Where code is assumed to have defined UFPP_LINE as INTEGER                                                                 ',&
-'                                                                                                                                ',&
-'   This example shows one way how an environment variable can be turned                                                         ',&
-'   into a write statement                                                                                                       ',&
-'                                                                                                                                ',&
-'     $filter write                                                                                                              ',&
-'     $ifdef HOME                                                                                                                ',&
-'     $printenv HOME                                                                                                             ',&
-'     $else                                                                                                                      ',&
-'        HOME not defined                                                                                                        ',&
-'     $endif                                                                                                                     ',&
-'     $filter end                                                                                                                ',&
-'                                                                                                                                ',&
-'   Sample output                                                                                                                ',&
-'                                                                                                                                ',&
-'     write(io,''(a)'')''/home/urbanjs/V600''                                                                                    ',&
-'                                                                                                                                ',&
-'   $FILTER [comment|write|help|version|shell[ -cmd COMMAND]] [-file NAME][! comment]                                            ',&
-'   $FILTER VARIABLE -varname NAME                                                                                               ',&
-'                                                                                                                                ',&
-'      COMMENT:   write text prefixed by an exclamation and a space                                                              ',&
-'      WRITE:     write text as Fortran WRITE(3f) statements                                                                     ',&
-'      HELP:      write text as a subroutine called HELP_USAGE                                                                   ',&
-'      VERSION:   write text as a subroutine called HELP_VERSION                                                                 ',&
-'                 prefixing lines with @(#) for use with the what(1) command.                                                    ',&
-'      NULL:      Do not write to output file                                                                                    ',&
-'      SHELL:     run text in block as a shell and replace with the stdout                                                       ',&
-'                 generated by the shell. The shell may be specified by the -cmd                                                 ',&
-'                 option. The default shell is bash(1).                                                                          ',&
-'      VARIABLE:  write as a text variable. The name may be defined using the                                                    ',&
-'                 -varname switch. Default name is "textblock".                                                                  ',&
-'      END:       End block of documentation                                                                                     ',&
-'                                                                                                                                ',&
-'   Causes documentation to be altered in output so it is easily maintained as                                                   ',&
-'   plain text. This is useful for keeping help text or man pages as part of a                                                   ',&
-'   source file.                                                                                                                 ',&
-'                                                                                                                                ',&
-'   It is assumed the output will not generate lines over 132 columns. FORTRAN is                                                ',&
-'   currently the only language supported. A blank value resumes normal                                                          ',&
-'   output processing. The Fortran generated is free-format Fortran 2003.                                                        ',&
-'                                                                                                                                ',&
-'   So the text can easily be processed by other utilities such as markdown(1)                                                   ',&
-'   or txt2man(1) to produce man(1) pages and HTML documents the file can be                                                     ',&
-'   written as-is to $UFPP_DOCUMENT_DIR/doc/NAME with the -file parameter. If the                                                ',&
-'   environment variable $UFPP_DOCUMENT_DIR is not set the option is ignored.                                                    ',&
-'                                                                                                                                ',&
-'                                                                                                                                ',&
-'   $SHOW                                                                                                                        ',&
-'                                                                                                                                ',&
-'   Shows current state of ufpp(1); including variable names and values; and                                                     ',&
-'   the name of the current input files. All output is preceded by an                                                            ',&
-'   exclamation character.                                                                                                       ',&
-'                                                                                                                                ',&
-'   Example:                                                                                                                     ',&
-'                                                                                                                                ',&
-'    ufpp A=10 B C D -o paper                                                                                                    ',&
-'    $define z=22                                                                                                                ',&
-'    $show                                                                                                                       ',&
-'    $stop                                                                                                                       ',&
-'                                                                                                                                ',&
-'    !======================================================================                                                     ',&
-'    ! *ufpp* CURRENT STATE                                                                                                      ',&
-'    ! *ufpp*    TOTAL LINES READ ............          2                                                                        ',&
-'    ! *ufpp*    CONDITIONAL_NESTING_LEVEL....   0                                                                               ',&
-'    ! *ufpp*    DATE......................... 11:18 21Jun2013                                                                   ',&
-'    ! *ufpp*    ARGUMENTS ................... A=10 B C D -o paper                                                               ',&
-'    ! *ufpp* VARIABLES:                                                                                                         ',&
-'    ! *ufpp*    ! A                               !          10                                                                 ',&
-'    ! *ufpp*    ! B                               !           1                                                                 ',&
-'    ! *ufpp*    ! C                               !           1                                                                 ',&
-'    ! *ufpp*    ! D                               !           1                                                                 ',&
-'    ! *ufpp*    ! Z                               !          22                                                                 ',&
-'    ! *ufpp* OPEN FILES:                                                                                                        ',&
-'    ! *ufpp*    ! ---- ! UNIT ! LINE NUMBER ! FILENAME                                                                          ',&
-'    ! *ufpp*    !    1 !    5 !           2 !                                                                                   ',&
-'    !======================================================================                                                     ',&
-'                                                                                                                                ',&
-'   $STOP stop_value                                                                                                             ',&
-'                                                                                                                                ',&
-'   Stops input file processing. An optional integer value of 0 to 20                                                            ',&
-'   will be returned as a status value to the system where supported. A                                                          ',&
-'   value of two ("2") is returned if no value is specified. Any value                                                           ',&
-'   from one ("1") to twenty ("20") also causes an implicit execution of                                                         ',&
-'   the "$SHOW" directive before the program is stopped.                                                                         ',&
-'                                                                                                                                ',&
-'   $SYSTEM system_command                                                                                                       ',&
-'                                                                                                                                ',&
-'   If system command processing is enabled using the -system switch system                                                      ',&
-'   commands can be executed to create files to be read or to execute test                                                       ',&
-'   programs, for example. $SYSTEM directives are ignored by default; as you                                                     ',&
-'   clearly need to ensure the input file is trusted before allowing commands                                                    ',&
-'   to be executed.                                                                                                              ',&
-'                                                                                                                                ',&
-'   Examples:                                                                                                                    ',&
-'                                                                                                                                ',&
-'    $! build variable definitions using GNU/Linux commands                                                                      ',&
-'    $SYSTEM echo system=`hostname` > compiled.h                                                                                 ',&
-'    $SYSTEM echo compile_time="`date`" >> compiled.h                                                                            ',&
-'    $INCLUDE compiled.h                                                                                                         ',&
-'                                                                                                                                ',&
-'    $! obtain up-to-date copy of source file from HTTP server:                                                                  ',&
-'    $SYSTEM wget http://repository.net/src/func.F90 -O -|                                                                       ',&
-'    cpp -P -C -traditional >_tmp.f90                                                                                            ',&
-'    $INCLUDE _tmp.f90                                                                                                           ',&
-'    $SYSTEM  rm _tmp.f90                                                                                                        ',&
-'                                                                                                                                ',&
-'   $UNDEFINE variable_name                                                                                                      ',&
-'                                                                                                                                ',&
-'   A symbol defined with $DEFINE can be removed with the $UNDEFINE                                                              ',&
-'   directive.                                                                                                                   ',&
-'                                                                                                                                ',&
-'   DEFINED(variable_name)                                                                                                       ',&
-'                                                                                                                                ',&
-'   A special function called DEFINED() may appear only in a $IF or $ELSEIF.                                                     ',&
-'   If "variable_name" has been defined at that point in the source code,                                                        ',&
-'   then the function value is ".TRUE.", otherwise it is ".FALSE.". A name is                                                    ',&
-'   defined only if it has appeared in the source previously in a $DEFINE                                                        ',&
-'   directive or been declared on the command line.                                                                              ',&
-'   The names used in compiler directives are district from names in the                                                         ',&
-'   FORTRAN source, which means that "a" in a $DEFINE and "a" in a FORTRAN                                                       ',&
-'   source statement are totally unrelated.                                                                                      ',&
-'   The DEFINED() parameter is NOT valid in a $DEFINE directive.                                                                 ',&
-'                                                                                                                                ',&
-'   Example:                                                                                                                     ',&
-'                                                                                                                                ',&
-'    >        Program test                                                                                                       ',&
-'    > $IF .NOT. DEFINED (inc)                                                                                                   ',&
-'    >        INCLUDE ''''comm.inc''''                                                                                           ',&
-'    > $ELSE                                                                                                                     ',&
-'    >        INCLUDE ''''comm2.inc''''                                                                                          ',&
-'    > $ENDIF                                                                                                                    ',&
-'    >        END                                                                                                                ',&
-'                                                                                                                                ',&
-'   The file, "comm.inc" will be INCLUDEd in the source if the parameter,                                                        ',&
-'   "inc", has not been previously defined, while INCLUDE "comm2.inc" will                                                       ',&
-'   be included in the source if "inc" has been previously defined. This is                                                      ',&
-'   useful for setting up a default inclusion.                                                                                   ',&
-'                                                                                                                                ',&
-'   $WARNING message                                                                                                             ',&
-'                                                                                                                                ',&
-'   Write message to stderr of form "WARNING message"                                                                            ',&
-'                                                                                                                                ',&
-'   $MESSAGE message                                                                                                             ',&
-'                                                                                                                                ',&
-'   Write message to stderr of form "message"                                                                                    ',&
-'                                                                                                                                ',&
-'   $DEBUG option                                                                                                                ',&
-'                                                                                                                                ',&
-'   NEVER    allows for designating a file does not contain                                                                      ',&
-'            any "DEBUGVERSION" strings that should be processed                                                                 ',&
-'            as conditionally inserted lines.                                                                                    ',&
-'                                                                                                                                ',&
-'   Even if the environment variable DEBUGVERSION is no set to T|F:                                                              ',&
-'                                                                                                                                ',&
-'      ON    Change the default set by the environment variable                                                                  ',&
-'            DEBUGVERSION or set by the -debug switch                                                                            ',&
-'            and turn debug processing on.                                                                                       ',&
-'                                                                                                                                ',&
-'      OFF   Change the default set by the environment variable                                                                  ',&
-'            DEBUGVERSION or set by the -debug switch                                                                            ',&
-'            and turn debug processing off.                                                                                      ',&
-'                                                                                                                                ',&
-'LIMITATIONS                                                                                                                     ',&
-'                                                                                                                                ',&
-'   $IF constructs can be nested up to 20 levels deep. Note that using                                                           ',&
-'   more than two levels typically makes input files less readable.                                                              ',&
-'                                                                                                                                ',&
-'   $FILTER END is required after a $FILTER or -file FILENAME is not written                                                     ',&
-'   and output of a shell is not read.                                                                                           ',&
-'                                                                                                                                ',&
-'   Nesting of $FILTER sections not allowed.                                                                                     ',&
-'                                                                                                                                ',&
-'   Messages for $MESSAGE, $WARNING, $ERROR cannot contain an exclamation                                                        ',&
-'                                                                                                                                ',&
-'  Input files                                                                                                                   ',&
-'                                                                                                                                ',&
-'   o lines are limited to 1024 columns. Text past column 1024 is ignored.                                                       ',&
-'   o files currently opened cannot be opened again.                                                                             ',&
-'   o a maximum of 50 files can be nested by $INCLUDE                                                                            ',&
-'   o filenames cannot contain spaces on the command line.                                                                       ',&
-'                                                                                                                                ',&
-' Variable names                                                                                                                 ',&
-'                                                                                                                                ',&
-'   o cannot be redefined unless first undefined.                                                                                ',&
-'   o are limited to 31 characters.                                                                                              ',&
-'   o must start with a letter (A-Z).                                                                                            ',&
-'   o are composed of the letters A-Z, digits 0-9 and _ and $.                                                                   ',&
-'   o 2048 variable names may be defined at a time.                                                                              ',&
-'                                                                                                                                ',&
-'Major cpp(1) features not present in ufpp(1):                                                                                   ',&
-'                                                                                                                                ',&
-'   There are no predefined preprocessor symbols. Use a directive input file                                                     ',&
-'   instead. The predefined variables such as UFPP_DATE can be used as a                                                         ',&
-'   substitute in some cases.                                                                                                    ',&
-'                                                                                                                                ',&
-'   This program does not provide string (macro) substitution in output                                                          ',&
-'   lines. See cpp(1) and m4(1) and related utilities if macro expansion is                                                      ',&
-'   required.                                                                                                                    ',&
-'                                                                                                                                ',&
-'   While cpp(1) is the de-facto standard for preprocessing Fortran code,                                                        ',&
-'   Part 3 of the Fortran 95 standard (ISO/IEC 1539-3:1998) defines                                                              ',&
-'   Conditional Compilation, but it is (currently) not widely                                                                    ',&
-'   supported (See coco(1)).                                                                                                     ',&
-'                                                                                                                                ',&
-'EXAMPLES                                                                                                                        ',&
-'                                                                                                                                ',&
-'   Define variables on command line:                                                                                            ',&
-'                                                                                                                                ',&
-'   Typically, variables are defined on the command line when ufpp(1) is invoked                                                 ',&
-'   or are grouped together into small files that are included with a $INCLUDE                                                   ',&
-'   or as input files.                                                                                                           ',&
-'                                                                                                                                ',&
-'     ufpp HP size=64 -i hp_directives.dirs @ test.F90 -o test_out.f90                                                           ',&
-'                                                                                                                                ',&
-'   defines variables HP and SIZE as if the expressions had been on a $DEFINE                                                    ',&
-'   and reads file "hp_directives.dirs" and then stdin and then test.F90.                                                        ',&
-'   Output is directed to test_out.f90                                                                                           ',&
-'                                                                                                                                ',&
-'  Basic conditionals:                                                                                                           ',&
-'                                                                                                                                ',&
-'   >$! set value of variable "a" if it is not specified on the ufpp(1) command.                                                 ',&
-'   >$IF .NOT.DEFINED(A)                                                                                                         ',&
-'   >$DEFINE a=1  ! define only the first version of SUB1(3f)                                                                    ',&
-'   >$ENDIF                                                                                                                      ',&
-'   >program conditional_compile                                                                                                 ',&
-'   >   use M_kracken, only : kracken, lget                                                                                      ',&
-'   >   ! use M_kracken module to crack command line arguments                                                                   ',&
-'   >   call kracken("cmd","-help .false. -version .false.")                                                                     ',&
-'   >   ! call routine generated by $FILTER HELP                                                                                 ',&
-'   >   call help_usage(lget("cmd_help"))                                                                                        ',&
-'   >   ! call routine generated by $FILTER VERSION                                                                              ',&
-'   >   call help_version(lget("cmd_version"))                                                                                   ',&
-'   >   call sub1()                                                                                                              ',&
-'   >end program conditional_compile                                                                                             ',&
-'   >! select a version of SUB1 depending on the value of ufpp(1) variable "a"                                                   ',&
-'   >$IF a .EQ. 1                                                                                                                ',&
-'   >subroutine sub1                                                                                                             ',&
-'   >   print*, "This is the first SUB1"                                                                                         ',&
-'   >end subroutine sub1                                                                                                         ',&
-'   >$ELSEIF a .eq. 2                                                                                                            ',&
-'   >subroutine sub1                                                                                                             ',&
-'   >   print*, "This is the second SUB1"                                                                                        ',&
-'   >end subroutine sub1                                                                                                         ',&
-'   >$ELSE                                                                                                                       ',&
-'   >subroutine sub1                                                                                                             ',&
-'   >   print*, "This is the third SUB1"                                                                                         ',&
-'   >end subroutine sub1                                                                                                         ',&
-'   >$ENDIF                                                                                                                      ',&
-'   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                ',&
-'   >$! generate help_usage() procedure (and file to run thru txt2man(1) or other                                                ',&
-'   >$! filters to make man(1) page if $UFPP_DOCUMENT_DIR is set).                                                               ',&
-'   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                ',&
-'   >$FILTER HELP -file conditional_compile.man                                                                                  ',&
-'   >NAME                                                                                                                        ',&
-'   >    conditional_compile - basic example for ufpp(1) pre-processor.                                                          ',&
-'   >SYNOPSIS                                                                                                                    ',&
-'   >    conditional_example [--help] [--version]                                                                                ',&
-'   >DESCRIPTION                                                                                                                 ',&
-'   >    This is a basic example program showing how documentation can be used                                                   ',&
-'   >    to generate program help text                                                                                           ',&
-'   >OPTIONS                                                                                                                     ',&
-'   >       --help                                                                                                               ',&
-'   >              display this help and exit                                                                                    ',&
-'   >       --version                                                                                                            ',&
-'   >              output version information and exit                                                                           ',&
-'   >$FILTER END                                                                                                                 ',&
-'   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                ',&
-'   >$! generate help_version() procedure                                                                                        ',&
-'   >$FILTER VERSION                                                                                                             ',&
-'   >DESCRIPTION: example program showing conditional compilation with ufpp(1)                                                   ',&
-'   >PROGRAM:     conditional_compile                                                                                            ',&
-'   >VERSION:     1.0, 20160703                                                                                                  ',&
-'   >AUTHOR:      John S. Urban                                                                                                  ',&
-'   >$FILTER END                                                                                                                 ',&
-'   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                ',&
-'                                                                                                                                ',&
-' An example using the magic string "DEBUGVERSION" assuming the environment                                                      ',&
-' variable DEBUGVERSION has been set to T or F. Given the source file:                                                           ',&
-'                                                                                                                                ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'   module M_d                                                                                                                   ',&
-'      implicit none                                                                                                             ',&
-'   contains                                                                                                                     ',&
-'      subroutine proc(r)                                                                                                        ',&
-'         integer,intent(inout) :: r(:)                                                                                          ',&
-'         debugversion: block                                                                                                    ',&
-'            integer :: i                                                                                                        ',&
-'            write(*,''(*(g0))'')"*proc* message",@@@                                                                            ',&
-'            write(*,''("*proc* ",*(i0,"[",g0,"]"))'')(i,r(i),i=1,size(r))                                                       ',&
-'         endblock debugversion                                                                                                  ',&
-'         r=r**2                                                                                                                 ',&
-'         debugversion: block                                                                                                    ',&
-'            integer :: i                                                                                                        ',&
-'            write(*,''("*proc* LOCATION @@@:",*(i0,"[",g0,"]"))'')(i,r(i),i=1,size(r))                                          ',&
-'         endblock debugversion                                                                                                  ',&
-'      end subroutine proc                                                                                                       ',&
-'   end module M_d                                                                                                               ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'   program run                                                                                                                  ',&
-'      use M_d                                                                                                                   ',&
-'      integer :: arr(5)=[(i*10,i=1,size(arr))]                                                                                  ',&
-'      DEBUGVERSION: block                                                                                                       ',&
-'         write(*,''(a)'')''THIS IS A DEBUG VERSION''                                                                            ',&
-'      endblock DEBUGVERSION                                                                                                     ',&
-'      call proc(arr)                                                                                                            ',&
-'   end program run                                                                                                              ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'                                                                                                                                ',&
-'  Expected output if debug mode is on                                                                                           ',&
-'                                                                                                                                ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'   module M_d                                                                                                                   ',&
-'      implicit none                                                                                                             ',&
-'   contains                                                                                                                     ',&
-'      subroutine proc(r)                                                                                                        ',&
-'         integer,intent(inout) :: r(:)                                                                                          ',&
-'         DEBUG_1: block                                                                                                         ',&
-'            integer :: i                                                                                                        ',&
-'            write(*,''(*(g0))'')"*proc* message",1                                                                              ',&
-'            write(*,''("*proc* ",*(i0,"[",g0,"]"))'')(i,r(i),i=1,size(r))                                                       ',&
-'         endblock DEBUG_1                                                                                                       ',&
-'         r=r**2                                                                                                                 ',&
-'         DEBUG_2: block                                                                                                         ',&
-'            integer :: i                                                                                                        ',&
-'            write(*,''("*proc* LOCATION 2:",*(i0,"[",g0,"]"))'')(i,r(i),i=1,size(r))                                            ',&
-'         endblock DEBUG_2                                                                                                       ',&
-'      end subroutine proc                                                                                                       ',&
-'   end module M_d                                                                                                               ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'   program run                                                                                                                  ',&
-'      use M_d                                                                                                                   ',&
-'      integer :: arr(5)=[(i*10,i=1,size(arr))]                                                                                  ',&
-'      DEBUG_3: block                                                                                                            ',&
-'         write(*,''(a)'')''THIS IS A DEBUG VERSION''                                                                            ',&
-'      endblock DEBUG_3                                                                                                          ',&
-'      call proc(arr)                                                                                                            ',&
-'   end program run                                                                                                              ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'                                                                                                                                ',&
-'  Expected output if debug mode is off:                                                                                         ',&
-'                                                                                                                                ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'   module M_d                                                                                                                   ',&
-'      implicit none                                                                                                             ',&
-'   contains                                                                                                                     ',&
-'      subroutine proc(r)                                                                                                        ',&
-'         integer,intent(inout) :: r(:)                                                                                          ',&
-'         r=r**2                                                                                                                 ',&
-'      end subroutine proc                                                                                                       ',&
-'   end module M_d                                                                                                               ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'   program run                                                                                                                  ',&
-'      use M_d                                                                                                                   ',&
-'      integer :: arr(5)=[(i*10,i=1,size(arr))]                                                                                  ',&
-'      call proc(arr)                                                                                                            ',&
-'   end program run                                                                                                              ',&
-'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                                                                 ',&
-'                                                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   ufpp(1) - [DEVELOPER] pre-process FORTRAN source files                       ',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   ufpp  [[-D] define_list]                                                     ',&
+'         [-I include_directories]                                               ',&
+'         [-i input_file(s)]                                                     ',&
+'         [-o output_file]                                                       ',&
+'         [-html]                                                                ',&
+'         [-system]                                                              ',&
+'         [-q]                                                                   ',&
+'         [-verbose]                                                             ',&
+'         [-header text_for_first_line]                                          ',&
+'         [-ident]                                                               ',&
+'         [-prefix character_ADE]                                                ',&
+'         [-keeptabs]                                                            ',&
+'         [-header text_for_first_line]                                          ',&
+'         [-noenv]                                                               ',&
+'         [-width n]                                                             ',&
+'         [-debug]                                                               ',&
+'         [-d ignore|remove|blank]                                               ',&
+'         [-cstyle default|doxygen]                                              ',&
+'         [-allow_links]                                                         ',&
+'         [-version]                                                             ',&
+'         [-help [-html]]                                                        ',&
+'OPTIONS                                                                         ',&
+'   define_list, -D define_list  An optional space-delimited list of expressions ',&
+'                                used to define variables before file processing ',&
+'                                commences.                                      ',&
+'   -i input_files               The default input file is stdin. Filenames are  ',&
+'                                space-delimited. In a list, @ represents stdin. ',&
+'   -o output_file               The default output file is stdout.              ',&
+'   -I include_directories       The directories to search for files specified on',&
+'                                $INCLUDE directives.                            ',&
+'   -prefix ADE|letter  The default directive prefix character is "$".           ',&
+'                       Alternatives may be specified by providing an            ',&
+'                       ASCII Decimal Equivalent (Common values are 37=%         ',&
+'                       42=* 35=# 36=$ 64=@). If the value is not numeric        ',&
+'                       t is assumed to be a literal character.                  ',&
+'   -html        Assumes the input file is HTML that follows the following       ',&
+'                rules:                                                          ',&
+'                 1. Input lines are not output until a simple                   ',&
+'                    <XMP> directive is found.                                   ',&
+'                 2. Output stops when a simple </XMP>                           ',&
+'                    directive is encountered.                                   ',&
+'                This allows code to be maintained as part of an HTML            ',&
+'                document.                                                       ',&
+'                                                                                ',&
+'   -help [-html]    Display documentation and exit. If "-html" is present,      ',&
+'                    write documentation as basic HTML, instead of as a text     ',&
+'                    file.                                                       ',&
+'   -verbose     All commands on a $SYSTEM directive are echoed                  ',&
+'                to stderr with a + prefix. Text following the                   ',&
+'                string "@(#)" is printed to stderr similar to                   ',&
+'                the Unix command what(1) but is otherwise                       ',&
+'                treated as other text input.                                    ',&
+'                                                                                ',&
+'   -noenv       The $IFDEF and $IFNDEF directives test for an                   ',&
+'                internal ufpp(1) variable and then an                           ',&
+'                environment variable by default. This option                    ',&
+'                turns off testing for environment variables.                    ',&
+'   -ident       The output of the $IDENT directive is in the form of a          ',&
+'                comment by default. If this flag is set the output is           ',&
+'                of the form                                                     ',&
+'                                                                                ',&
+'                 character(len=*),parameter :: ident_NNN="@(#) string"          ',&
+'                                                                                ',&
+'                so executables and object code contain the metadata             ',&
+'                for use with the what(1) command. This generates an             ',&
+'                unused variable with some compilers might optimized             ',&
+'                away depending on what options are used.                        ',&
+'                                                                                ',&
+'   -system      Allow system commands on $SYSTEM directives to                  ',&
+'                be executed.                                                    ',&
+'   -q           Quiet mode. Output is initially off and only turned             ',&
+'                on if in a conditional block.                                   ',&
+'   -keeptabs    By default tab characters are expanded assuming                 ',&
+'                a stop has been set every eight columns; and                    ',&
+'                trailing carriage-return characters are removed.                ',&
+'                Use this flag to prevent this processing from                   ',&
+'                occurring.                                                      ',&
+'   -header      text_for_first_line                                             ',&
+'   -allow_links     If $UFPP_DOCUMENT_DIR is set the $FILTER -file option       ',&
+'                    will write input to a file under the specified directory    ',&
+'                    in a subdirectory called doc/ that by default is not        ',&
+'                    permitted to have a link. To allow it to have a link        ',&
+'                    add this switch.                                            ',&
+'   -cstyle      try to style comments generated in $FILTER blocks               ',&
+'                for other utilities such as doxygen. Default is to              ',&
+'                prefix lines with ''! ''. Allowed keywords are                  ',&
+'                currently "default", "doxygen".                                 ',&
+'   -d ignore|remove|blank  Enable special treatment for lines beginning         ',&
+'                           with "d" or "D" The letter will be left as-is        ',&
+'                           (the default); removed; or replaced with a blank     ',&
+'                           character. This non-standard syntax has been         ',&
+'                           used to support the optional compilation of          ',&
+'                           "debug" code by many Fortran compilers when          ',&
+'                           compiling fixed-format Fortran source.               ',&
+'   -debug [.false.]  Dee''d lines as controlled by the -d option are traditionally',&
+'                     used with fixed-format sources. This is an alternative to  ',&
+'                     use for free-format sources.                               ',&
+'                                                                                ',&
+'                     NOTE: It has no effect unless the environment variable     ',&
+'                     DEBUGVERSION is set to T|F, which activates the mode and   ',&
+'                     sets the default for the -d switch.                        ',&
+'                                                                                ',&
+'                     assuming DEBUGVERSION is set use the following syntax      ',&
+'                                                                                ',&
+'                      DEBUGVERSION: block                                       ',&
+'                         ! the block of debug statements                        ',&
+'                         write(*,*) ''debug @@@'',@@@                           ',&
+'                      endblock DEBUGVERSION                                     ',&
+'                                                                                ',&
+'                     These blocks are now removed when the debug mode           ',&
+'                     is .false.. If the debug mode is on they are written       ',&
+'                     with the following rules where nnn is an incrementing      ',&
+'                     count of the number of "DEBUGVERSION:" strings:            ',&
+'                                                                                ',&
+'                       o The string "DEBUGVERSION" is replaced with D_nnn       ',&
+'                       o "@@@" is replaced with nnn                             ',&
+'                       o do NOT use the string "DEBUGVERSION" except to start   ',&
+'                         or end the block of debug statements                   ',&
+'                                                                                ',&
+'                     NB.: IMPORTANT!! This means when this mode is              ',&
+'                     activated by the DEBUGVERSION environment variable         ',&
+'                     being set the string DEBUGVERSION is a magic string        ',&
+'                     and should not be used in input files unless the           ',&
+'                     input file starts with "$DEBUG never".                     ',&
+'                                                                                ',&
+'   -version     Display version and exit                                        ',&
+'   -width n     Maximum line length of the output file. Default                 ',&
+'                is 1024. Typically used to trim fixed-format                    ',&
+'                FORTRAN code that contains comments or "ident"                  ',&
+'                labels past column 72 when compiling                            ',&
+'                fixed-format Fortran code.                                      ',&
+'DEFINITION                                                                      ',&
+'                                                                                ',&
+'   By default the stand-alone pre-processor ufpp(1) will interpret lines with   ',&
+'   "$" in column one, and will output no such lines. Other input is             ',&
+'   conditionally written to the output file based on the directives encountered ',&
+'   in the input.                                                                ',&
+'                                                                                ',&
+'   The syntax for the control lines is as follows:                              ',&
+'                                                                                ',&
+'     $DEFINE   variable_name[=expression]                 [! comment ]          ',&
+'     $ERROR    message_to_stderr                          [! comment ]          ',&
+'     $IF       {constant LOGICAL expression}              [! comment ]          ',&
+'      or                                                                        ',&
+'     $IFDEF    {variable_name}                            [! comment ]          ',&
+'      or                                                                        ',&
+'     $IFNDEF   {variable_name}                            [! comment ]          ',&
+'               { sequence of source statements}                                 ',&
+'     [$ELSEIF  {constant LOGICAL expression}              [! comment ]          ',&
+'               { sequence of source statements}]                                ',&
+'     [$ELSE                                               [! comment ]          ',&
+'               { sequence of source statements}]                                ',&
+'     $ENDIF                                               [! comment ]          ',&
+'     $IDENT    metadata                                   [! comment ]          ',&
+'     $@(#)     metadata                                   [! comment ]          ',&
+'     $INCLUDE  filename                                   [! comment ]          ',&
+'     $OUTPUT   filename  [-append]                        [! comment ]          ',&
+'     $FILTER   [comment|write|help|version] |                                   ',&
+'               [shell [-cmd NAME]] |                                            ',&
+'               [variable [-varname NAME]]                                       ',&
+'               [-file NAME [-append]]                     [! comment ]          ',&
+'     $DOCUMENT and $FILTER are synonyms for $BLOCK                              ',&
+'     $PRINTENV predefined_name|environment_variable_name  [! comment ]          ',&
+'     $SHOW                                                [! comment ]          ',&
+'     $STOP {stop_value}                                   [! comment ]          ',&
+'     $SYSTEM system_command                               [! comment ]          ',&
+'     $DEBUG ON|OFF|NEVER                                  [! comment ]          ',&
+'     $UNDEFINE variable_name                              [! comment ]          ',&
+'     $WARNING  message_to_stderr                          [! comment ]          ',&
+'     $MESSAGE  message_to_stderr                          [! comment ]          ',&
+'     $ASSERT   insert call to ASSERT(3f) to print         [! comment ]          ',&
+'               filename,linenumber,message to stderr and                        ',&
+'               end program. Filename and linenumber are                         ',&
+'               taken from file being processed by ufpp(1)                       ',&
+'                                                                                ',&
+'   Compiler directives are specified by a "$" in column one, followed by a      ',&
+'   keyword.                                                                     ',&
+'                                                                                ',&
+'   An exclamation character on a valid directive begins an in-line comment      ',&
+'   that is terminated by an end-of-line.                                        ',&
+'                                                                                ',&
+'   Any LOGICAL expression composed of integer constants, parameters             ',&
+'   and operators, is valid. Operators are                                       ',&
+'                                                                                ',&
+'     .NOT.  .AND.  .OR.  .EQV.  .NEQV.  .EQ.  .NE.  .GE.                        ',&
+'     .GT.   .LE.   .LT.  +      -       *     /     (                           ',&
+'     )      **                                                                  ',&
+'                                                                                ',&
+'   DIRECTIVES                                                                   ',&
+'                                                                                ',&
+'   $ASSERT expression [,values]                                                 ',&
+'                                                                                ',&
+'   If debug mode is activated then input line                                   ',&
+'                                                                                ',&
+'      $ASSERT i .gt. 10, ''I='', i, ''bigger than'', 10                         ',&
+'                                                                                ',&
+'   becomes                                                                      ',&
+'                                                                                ',&
+'      call assert(filename, linenumber, i.gt.10, ''I='', ''bigger than'', 10)   ',&
+'                                                                                ',&
+'   and if "I" were 2000, would produce the output                               ',&
+'                                                                                ',&
+'      ERROR:filename: xx.ff :line number: 32070 : I= 2000 bigger than 10        ',&
+'      STOP 1                                                                    ',&
+'                                                                                ',&
+'   The manpage for ASSERT(3f) describes the meaning of the parameters in        ',&
+'   greater detail, but the filename will be the name of the file that           ',&
+'   was processed by ufpp(1), the line number will be the linenumber             ',&
+'   of the file processed by ufpp, and everything else on the $ASSERT            ',&
+'   directive is passed directly to ASSERT(3f). Note that the first              ',&
+'   parameter passed on $ASSERT must be a logical expression.                    ',&
+'                                                                                ',&
+'   The ASSERT(3f) procedure must be in the load path and the "call assert"      ',&
+'   must be written to the ufpp(1) output file in a scope where                  ',&
+'                                                                                ',&
+'      use, M_verify, only : assert                                              ',&
+'                                                                                ',&
+'   has made the assert(3f) procedure available.                                 ',&
+'                                                                                ',&
+'   NOTE                                                                         ',&
+'                                                                                ',&
+'   The $ASSERT directive will not be written to the output file unless          ',&
+'   the environment variable DEBUGVERSION=T and the -debug switch is             ',&
+'   present on the ufpp.                                                         ',&
+'                                                                                ',&
+'      program demo_assert_directive                                             ',&
+'      use M_verify, only : assert                                               ',&
+'         a=2000                                                                 ',&
+'      $ASSERT  a .le. 10, a,''bigger than'',10                                  ',&
+'      end program demo_assert_directive                                         ',&
+'                                                                                ',&
+'      #!/bin/bash                                                               ',&
+'      export DEBUGVERSION=T                                                     ',&
+'      ufpp -debug -i xx.ff -o xx.f90                                            ',&
+'      cat xx.f90                                                                ',&
+'      f90 xx.f90 -o xx                                                          ',&
+'      ./xx                                                                      ',&
+'                                                                                ',&
+'   The $ASSERT directive becomes:                                               ',&
+'                                                                                ',&
+'      call assert( "xx.ff", 4 , a .le. 10, a,''bigger than'',10 )               ',&
+'                                                                                ',&
+'   Sample output:                                                               ',&
+'                                                                                ',&
+'      ERROR:filename: xx.ff :line number: 4 : 2000.00000 bigger than 10         ',&
+'      STOP 1                                                                    ',&
+'                                                                                ',&
+'   $DEFINE variable_name [=expression]                                          ',&
+'                                                                                ',&
+'   A $DEFINE may appear anywhere in a source file. If the value is ".TRUE."     ',&
+'   or ".FALSE." then the parameter is of type LOGICAL, otherwise the            ',&
+'   parameter is of type INTEGER and the value must be an INTEGER. If no         ',&
+'   value is supplied, the parameter is of type INTEGER and is given the         ',&
+'   value 1.                                                                     ',&
+'                                                                                ',&
+'   Constant parameters are defined from the point they are encountered in a     ',&
+'   $DEFINE directive until program termination unless explicitly                ',&
+'   undefined with a $UNDEFINE directive.                                        ',&
+'                                                                                ',&
+'   Example:                                                                     ',&
+'                                                                                ',&
+'    $define A=1                                                                 ',&
+'    $define B=1                                                                 ',&
+'    $define C=2                                                                 ',&
+'    $if ( A + B ) / C .eq. 1                                                    ',&
+'       (a+b)/c is one                                                           ',&
+'    $endif                                                                      ',&
+'                                                                                ',&
+'   $ERROR message                                                               ',&
+'                                                                                ',&
+'   Write message to stderr and display program condition and exit program.      ',&
+'                                                                                ',&
+'   $IF/$ELSEIF/$ELSE/$ENDIF directives                                          ',&
+'                                                                                ',&
+'   Each of the control lines delineates a block of FORTRAN source. If the       ',&
+'   expression following the $IF is ".TRUE.", then the lines of FORTRAN          ',&
+'   source following are output. If it is ".FALSE.", and an $ELSEIF              ',&
+'   follows, the expression is evaluated and treated the same as the $IF. If     ',&
+'   the $IF and all $ELSEIF expressions are ".FALSE.", then the lines of         ',&
+'   source following the $ELSE are output. A matching $ENDIF ends the            ',&
+'   conditional block.                                                           ',&
+'                                                                                ',&
+'   $IFDEF/$IFNDEF directives                                                    ',&
+'                                                                                ',&
+'   $IFDEF and $IFNDEF are special forms of the $IF directive that simply test   ',&
+'   if a variable name is defined or not. Essentially, these are equivalent:     ',&
+'                                                                                ',&
+'     $IFDEF varname  ==> $IF DEFINED(varname)                                   ',&
+'     $IFNDEF varname ==> $IF .NOT. DEFINED(varname)                             ',&
+'                                                                                ',&
+'   except that environment variables are tested as well if the -noenv option    ',&
+'   is not specified.                                                            ',&
+'                                                                                ',&
+'   $IDENT metadata [-language fortran|c|shell]                                  ',&
+'                                                                                ',&
+'   Writes a line using SCCS-metadata format of the following forms:             ',&
+'                                                                                ',&
+'     LANGUAGE                                                                   ',&
+'     fortran   If the commandline option -ident is set                          ',&
+'                                                                                ',&
+'                  character(len=*),parameter::ident_NNN="@(#)metadata"          ',&
+'               else                                                             ',&
+'                                                                                ',&
+'                  ! ident_NNN="@(#)metadata"                                    ',&
+'                                                                                ',&
+'     c         #ident "@(#)metadata"                                            ',&
+'                                                                                ',&
+'     shell     #@(#) metadata                                                   ',&
+'                                                                                ',&
+'   This string is generally included for use with the what(1) command.          ',&
+'                                                                                ',&
+'   The default language is fortran. Depending on your compiler, the             ',&
+'   optimization level used when compiling, these strings may or may not         ',&
+'   remain in the object files and executables created.                          ',&
+'                                                                                ',&
+'   Do not use the characters double-quote, greater-than, backslash (">\)        ',&
+'   in the metadata; do not use strings starting with " -" either.               ',&
+'                                                                                ',&
+'   $INCLUDE filename                                                            ',&
+'                                                                                ',&
+'   Nested read of specified input file. Fifty (50) nesting levels are allowed.  ',&
+'                                                                                ',&
+'   $OUTPUT filename [-append]                                                   ',&
+'                                                                                ',&
+'   Specify the output file to write to. Overrides the initial output file       ',&
+'   specified with command line options. If no output filename is given          ',&
+'   revert back to initial output file. @ is a synonym for stdout.               ',&
+'                                                                                ',&
+'      -append [.true.|.false]                                                   ',&
+'                                                                                ',&
+'   Named files open at the beginning by default. Use the -append switch to      ',&
+'   append to the end of an existing file instead of overwriting it.             ',&
+'                                                                                ',&
+'   $PRINTENV name                                                               ',&
+'                                                                                ',&
+'   If the name of an uppercase environment variable is given the value          ',&
+'   of the variable will be placed in the output file. If the value is a         ',&
+'   null string or if the variable is undefined output will be stopped.          ',&
+'   This allows the system shell to generate code lines. This is usually         ',&
+'   used to pass in information about the compiler environment. For              ',&
+'   example:                                                                     ',&
+'                                                                                ',&
+'     # If the following command were executed in the bash(1) shell...           ',&
+'                                                                                ',&
+'      export STAMP="      write(*,*)''''COMPILED ON:`uname -s`;AT `date`''''"   ',&
+'                                                                                ',&
+'   the environment variable STAMP would be set to something like                ',&
+'                                                                                ',&
+'     write(*,*)''''COMPILED ON:Eureka;AT Wed, Jun 12, 2013  8:12:06 PM''''      ',&
+'                                                                                ',&
+'   A version number would be another possibility                                ',&
+'                                                                                ',&
+'     export VERSION="      program_version=2.2"                                 ',&
+'                                                                                ',&
+'   Special predefined variable names are:                                       ',&
+'                                                                                ',&
+'     Variable Name      Output                                                  ',&
+'     UFPP_DATE  ......  UFPP_DATE="12:58 14Jun2013"                             ',&
+'     Where code is assumed to have defined UFPP_DATE as CHARACTER(LEN=15)       ',&
+'     UFPP_FILE  ......  UFPP_FILE="current filename"                            ',&
+'     Where code is assumed to have defined UFPP_FILE as CHARACTER(LEN=1024)     ',&
+'     UFPP_LINE  ......  UFPP_LINE=    nnnnnn                                    ',&
+'     Where code is assumed to have defined UFPP_LINE as INTEGER                 ',&
+'                                                                                ',&
+'   This example shows one way how an environment variable can be turned         ',&
+'   into a write statement                                                       ',&
+'                                                                                ',&
+'     $filter write                                                              ',&
+'     $ifdef HOME                                                                ',&
+'     $printenv HOME                                                             ',&
+'     $else                                                                      ',&
+'        HOME not defined                                                        ',&
+'     $endif                                                                     ',&
+'     $filter end                                                                ',&
+'                                                                                ',&
+'   Sample output                                                                ',&
+'                                                                                ',&
+'     write(io,''(a)'')''/home/urbanjs/V600''                                    ',&
+'                                                                                ',&
+'   $FILTER [comment|write|help|version|shell[ -cmd COMMAND]] [-file NAME][! comment]',&
+'   $FILTER VARIABLE -varname NAME                                               ',&
+'                                                                                ',&
+'      COMMENT:   write text prefixed by an exclamation and a space              ',&
+'      WRITE:     write text as Fortran WRITE(3f) statements                     ',&
+'      HELP:      write text as a subroutine called HELP_USAGE                   ',&
+'      VERSION:   write text as a subroutine called HELP_VERSION                 ',&
+'                 prefixing lines with @(#) for use with the what(1) command.    ',&
+'      NULL:      Do not write to output file                                    ',&
+'      SHELL:     run text in block as a shell and replace with the stdout       ',&
+'                 generated by the shell. The shell may be specified by the -cmd ',&
+'                 option. The default shell is bash(1).                          ',&
+'      VARIABLE:  write as a text variable. The name may be defined using the    ',&
+'                 -varname switch. Default name is "textblock".                  ',&
+'      END:       End block of documentation                                     ',&
+'                                                                                ',&
+'   Causes documentation to be altered in output so it is easily maintained as   ',&
+'   plain text. This is useful for keeping help text or man pages as part of a   ',&
+'   source file.                                                                 ',&
+'                                                                                ',&
+'   It is assumed the output will not generate lines over 132 columns. FORTRAN is',&
+'   currently the only language supported. A blank value resumes normal          ',&
+'   output processing. The Fortran generated is free-format Fortran 2003.        ',&
+'                                                                                ',&
+'   So the text can easily be processed by other utilities such as markdown(1)   ',&
+'   or txt2man(1) to produce man(1) pages and HTML documents the file can be     ',&
+'   written as-is to $UFPP_DOCUMENT_DIR/doc/NAME with the -file parameter. If the',&
+'   environment variable $UFPP_DOCUMENT_DIR is not set the option is ignored.    ',&
+'                                                                                ',&
+'                                                                                ',&
+'   $SHOW                                                                        ',&
+'                                                                                ',&
+'   Shows current state of ufpp(1); including variable names and values; and     ',&
+'   the name of the current input files. All output is preceded by an            ',&
+'   exclamation character.                                                       ',&
+'                                                                                ',&
+'   Example:                                                                     ',&
+'                                                                                ',&
+'    ufpp A=10 B C D -o paper                                                    ',&
+'    $define z=22                                                                ',&
+'    $show                                                                       ',&
+'    $stop                                                                       ',&
+'                                                                                ',&
+'    !======================================================================     ',&
+'    ! *ufpp* CURRENT STATE                                                      ',&
+'    ! *ufpp*    TOTAL LINES READ ............          2                        ',&
+'    ! *ufpp*    CONDITIONAL_NESTING_LEVEL....   0                               ',&
+'    ! *ufpp*    DATE......................... 11:18 21Jun2013                   ',&
+'    ! *ufpp*    ARGUMENTS ................... A=10 B C D -o paper               ',&
+'    ! *ufpp* VARIABLES:                                                         ',&
+'    ! *ufpp*    ! A                               !          10                 ',&
+'    ! *ufpp*    ! B                               !           1                 ',&
+'    ! *ufpp*    ! C                               !           1                 ',&
+'    ! *ufpp*    ! D                               !           1                 ',&
+'    ! *ufpp*    ! Z                               !          22                 ',&
+'    ! *ufpp* OPEN FILES:                                                        ',&
+'    ! *ufpp*    ! ---- ! UNIT ! LINE NUMBER ! FILENAME                          ',&
+'    ! *ufpp*    !    1 !    5 !           2 !                                   ',&
+'    !======================================================================     ',&
+'                                                                                ',&
+'   $STOP stop_value                                                             ',&
+'                                                                                ',&
+'   Stops input file processing. An optional integer value of 0 to 20            ',&
+'   will be returned as a status value to the system where supported. A          ',&
+'   value of two ("2") is returned if no value is specified. Any value           ',&
+'   from one ("1") to twenty ("20") also causes an implicit execution of         ',&
+'   the "$SHOW" directive before the program is stopped.                         ',&
+'                                                                                ',&
+'   $SYSTEM system_command                                                       ',&
+'                                                                                ',&
+'   If system command processing is enabled using the -system switch system      ',&
+'   commands can be executed to create files to be read or to execute test       ',&
+'   programs, for example. $SYSTEM directives are ignored by default; as you     ',&
+'   clearly need to ensure the input file is trusted before allowing commands    ',&
+'   to be executed.                                                              ',&
+'                                                                                ',&
+'   Examples:                                                                    ',&
+'                                                                                ',&
+'    $! build variable definitions using GNU/Linux commands                      ',&
+'    $SYSTEM echo system=`hostname` > compiled.h                                 ',&
+'    $SYSTEM echo compile_time="`date`" >> compiled.h                            ',&
+'    $INCLUDE compiled.h                                                         ',&
+'                                                                                ',&
+'    $! obtain up-to-date copy of source file from HTTP server:                  ',&
+'    $SYSTEM wget http://repository.net/src/func.F90 -O -|                       ',&
+'    cpp -P -C -traditional >_tmp.f90                                            ',&
+'    $INCLUDE _tmp.f90                                                           ',&
+'    $SYSTEM  rm _tmp.f90                                                        ',&
+'                                                                                ',&
+'   $UNDEFINE variable_name                                                      ',&
+'                                                                                ',&
+'   A symbol defined with $DEFINE can be removed with the $UNDEFINE              ',&
+'   directive.                                                                   ',&
+'                                                                                ',&
+'   DEFINED(variable_name)                                                       ',&
+'                                                                                ',&
+'   A special function called DEFINED() may appear only in a $IF or $ELSEIF.     ',&
+'   If "variable_name" has been defined at that point in the source code,        ',&
+'   then the function value is ".TRUE.", otherwise it is ".FALSE.". A name is    ',&
+'   defined only if it has appeared in the source previously in a $DEFINE        ',&
+'   directive or been declared on the command line.                              ',&
+'   The names used in compiler directives are district from names in the         ',&
+'   FORTRAN source, which means that "a" in a $DEFINE and "a" in a FORTRAN       ',&
+'   source statement are totally unrelated.                                      ',&
+'   The DEFINED() parameter is NOT valid in a $DEFINE directive.                 ',&
+'                                                                                ',&
+'   Example:                                                                     ',&
+'                                                                                ',&
+'    >        Program test                                                       ',&
+'    > $IF .NOT. DEFINED (inc)                                                   ',&
+'    >        INCLUDE ''''comm.inc''''                                           ',&
+'    > $ELSE                                                                     ',&
+'    >        INCLUDE ''''comm2.inc''''                                          ',&
+'    > $ENDIF                                                                    ',&
+'    >        END                                                                ',&
+'                                                                                ',&
+'   The file, "comm.inc" will be INCLUDEd in the source if the parameter,        ',&
+'   "inc", has not been previously defined, while INCLUDE "comm2.inc" will       ',&
+'   be included in the source if "inc" has been previously defined. This is      ',&
+'   useful for setting up a default inclusion.                                   ',&
+'                                                                                ',&
+'   $WARNING message                                                             ',&
+'                                                                                ',&
+'   Write message to stderr of form "WARNING message"                            ',&
+'                                                                                ',&
+'   $MESSAGE message                                                             ',&
+'                                                                                ',&
+'   Write message to stderr of form "message"                                    ',&
+'                                                                                ',&
+'   $DEBUG option                                                                ',&
+'                                                                                ',&
+'   NEVER    allows for designating a file does not contain                      ',&
+'            any "DEBUGVERSION" strings that should be processed                 ',&
+'            as conditionally inserted lines.                                    ',&
+'                                                                                ',&
+'   Even if the environment variable DEBUGVERSION is no set to T|F:              ',&
+'                                                                                ',&
+'      ON    Change the default set by the environment variable                  ',&
+'            DEBUGVERSION or set by the -debug switch                            ',&
+'            and turn debug processing on.                                       ',&
+'                                                                                ',&
+'      OFF   Change the default set by the environment variable                  ',&
+'            DEBUGVERSION or set by the -debug switch                            ',&
+'            and turn debug processing off.                                      ',&
+'                                                                                ',&
+'LIMITATIONS                                                                     ',&
+'                                                                                ',&
+'   $IF constructs can be nested up to 20 levels deep. Note that using           ',&
+'   more than two levels typically makes input files less readable.              ',&
+'                                                                                ',&
+'   $FILTER END is required after a $FILTER or -file FILENAME is not written     ',&
+'   and output of a shell is not read.                                           ',&
+'                                                                                ',&
+'   Nesting of $FILTER sections not allowed.                                     ',&
+'                                                                                ',&
+'   Messages for $MESSAGE, $WARNING, $ERROR cannot contain an exclamation        ',&
+'                                                                                ',&
+'  Input files                                                                   ',&
+'                                                                                ',&
+'   o lines are limited to 1024 columns. Text past column 1024 is ignored.       ',&
+'   o files currently opened cannot be opened again.                             ',&
+'   o a maximum of 50 files can be nested by $INCLUDE                            ',&
+'   o filenames cannot contain spaces on the command line.                       ',&
+'                                                                                ',&
+' Variable names                                                                 ',&
+'                                                                                ',&
+'   o cannot be redefined unless first undefined.                                ',&
+'   o are limited to 31 characters.                                              ',&
+'   o must start with a letter (A-Z).                                            ',&
+'   o are composed of the letters A-Z, digits 0-9 and _ and $.                   ',&
+'   o 2048 variable names may be defined at a time.                              ',&
+'                                                                                ',&
+'Major cpp(1) features not present in ufpp(1):                                   ',&
+'                                                                                ',&
+'   There are no predefined preprocessor symbols. Use a directive input file     ',&
+'   instead. The predefined variables such as UFPP_DATE can be used as a         ',&
+'   substitute in some cases.                                                    ',&
+'                                                                                ',&
+'   This program does not provide string (macro) substitution in output          ',&
+'   lines. See cpp(1) and m4(1) and related utilities if macro expansion is      ',&
+'   required.                                                                    ',&
+'                                                                                ',&
+'   While cpp(1) is the de-facto standard for preprocessing Fortran code,        ',&
+'   Part 3 of the Fortran 95 standard (ISO/IEC 1539-3:1998) defines              ',&
+'   Conditional Compilation, but it is (currently) not widely                    ',&
+'   supported (See coco(1)).                                                     ',&
+'                                                                                ',&
+'EXAMPLES                                                                        ',&
+'                                                                                ',&
+'   Define variables on command line:                                            ',&
+'                                                                                ',&
+'   Typically, variables are defined on the command line when ufpp(1) is invoked ',&
+'   or are grouped together into small files that are included with a $INCLUDE   ',&
+'   or as input files.                                                           ',&
+'                                                                                ',&
+'     ufpp HP size=64 -i hp_directives.dirs @ test.F90 -o test_out.f90           ',&
+'                                                                                ',&
+'   defines variables HP and SIZE as if the expressions had been on a $DEFINE    ',&
+'   and reads file "hp_directives.dirs" and then stdin and then test.F90.        ',&
+'   Output is directed to test_out.f90                                           ',&
+'                                                                                ',&
+'  Basic conditionals:                                                           ',&
+'                                                                                ',&
+'   >$! set value of variable "a" if it is not specified on the ufpp(1) command. ',&
+'   >$IF .NOT.DEFINED(A)                                                         ',&
+'   >$DEFINE a=1  ! define only the first version of SUB1(3f)                    ',&
+'   >$ENDIF                                                                      ',&
+'   >program conditional_compile                                                 ',&
+'   >   use M_kracken, only : kracken, lget                                      ',&
+'   >   ! use M_kracken module to crack command line arguments                   ',&
+'   >   call kracken("cmd","-help .false. -version .false.")                     ',&
+'   >   ! call routine generated by $FILTER HELP                                 ',&
+'   >   call help_usage(lget("cmd_help"))                                        ',&
+'   >   ! call routine generated by $FILTER VERSION                              ',&
+'   >   call help_version(lget("cmd_version"))                                   ',&
+'   >   call sub1()                                                              ',&
+'   >end program conditional_compile                                             ',&
+'   >! select a version of SUB1 depending on the value of ufpp(1) variable "a"   ',&
+'   >$IF a .EQ. 1                                                                ',&
+'   >subroutine sub1                                                             ',&
+'   >   print*, "This is the first SUB1"                                         ',&
+'   >end subroutine sub1                                                         ',&
+'   >$ELSEIF a .eq. 2                                                            ',&
+'   >subroutine sub1                                                             ',&
+'   >   print*, "This is the second SUB1"                                        ',&
+'   >end subroutine sub1                                                         ',&
+'   >$ELSE                                                                       ',&
+'   >subroutine sub1                                                             ',&
+'   >   print*, "This is the third SUB1"                                         ',&
+'   >end subroutine sub1                                                         ',&
+'   >$ENDIF                                                                      ',&
+'   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'   >$! generate help_usage() procedure (and file to run thru txt2man(1) or other',&
+'   >$! filters to make man(1) page if $UFPP_DOCUMENT_DIR is set).               ',&
+'   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'   >$FILTER HELP -file conditional_compile.man                                  ',&
+'   >NAME                                                                        ',&
+'   >    conditional_compile - basic example for ufpp(1) pre-processor.          ',&
+'   >SYNOPSIS                                                                    ',&
+'   >    conditional_example [--help] [--version]                                ',&
+'   >DESCRIPTION                                                                 ',&
+'   >    This is a basic example program showing how documentation can be used   ',&
+'   >    to generate program help text                                           ',&
+'   >OPTIONS                                                                     ',&
+'   >       --help                                                               ',&
+'   >              display this help and exit                                    ',&
+'   >       --version                                                            ',&
+'   >              output version information and exit                           ',&
+'   >$FILTER END                                                                 ',&
+'   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'   >$! generate help_version() procedure                                        ',&
+'   >$FILTER VERSION                                                             ',&
+'   >DESCRIPTION: example program showing conditional compilation with ufpp(1)   ',&
+'   >PROGRAM:     conditional_compile                                            ',&
+'   >VERSION:     1.0, 20160703                                                  ',&
+'   >AUTHOR:      John S. Urban                                                  ',&
+'   >$FILTER END                                                                 ',&
+'   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
+'                                                                                ',&
+' An example using the magic string "DEBUGVERSION" assuming the environment      ',&
+' variable DEBUGVERSION has been set to T or F. Given the source file:           ',&
+'                                                                                ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'   module M_d                                                                   ',&
+'      implicit none                                                             ',&
+'   contains                                                                     ',&
+'      subroutine proc(r)                                                        ',&
+'         integer,intent(inout) :: r(:)                                          ',&
+'         debugversion: block                                                    ',&
+'            integer :: i                                                        ',&
+'            write(*,''(*(g0))'')"*proc* message",@@@                            ',&
+'            write(*,''("*proc* ",*(i0,"[",g0,"]"))'')(i,r(i),i=1,size(r))       ',&
+'         endblock debugversion                                                  ',&
+'         r=r**2                                                                 ',&
+'         debugversion: block                                                    ',&
+'            integer :: i                                                        ',&
+'            write(*,''("*proc* LOCATION @@@:",*(i0,"[",g0,"]"))'')(i,r(i),i=1,size(r))',&
+'         endblock debugversion                                                  ',&
+'      end subroutine proc                                                       ',&
+'   end module M_d                                                               ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'   program run                                                                  ',&
+'      use M_d                                                                   ',&
+'      integer :: arr(5)=[(i*10,i=1,size(arr))]                                  ',&
+'      DEBUGVERSION: block                                                       ',&
+'         write(*,''(a)'')''THIS IS A DEBUG VERSION''                            ',&
+'      endblock DEBUGVERSION                                                     ',&
+'      call proc(arr)                                                            ',&
+'   end program run                                                              ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'                                                                                ',&
+'  Expected output if debug mode is on                                           ',&
+'                                                                                ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'   module M_d                                                                   ',&
+'      implicit none                                                             ',&
+'   contains                                                                     ',&
+'      subroutine proc(r)                                                        ',&
+'         integer,intent(inout) :: r(:)                                          ',&
+'         DEBUG_1: block                                                         ',&
+'            integer :: i                                                        ',&
+'            write(*,''(*(g0))'')"*proc* message",1                              ',&
+'            write(*,''("*proc* ",*(i0,"[",g0,"]"))'')(i,r(i),i=1,size(r))       ',&
+'         endblock DEBUG_1                                                       ',&
+'         r=r**2                                                                 ',&
+'         DEBUG_2: block                                                         ',&
+'            integer :: i                                                        ',&
+'            write(*,''("*proc* LOCATION 2:",*(i0,"[",g0,"]"))'')(i,r(i),i=1,size(r))',&
+'         endblock DEBUG_2                                                       ',&
+'      end subroutine proc                                                       ',&
+'   end module M_d                                                               ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'   program run                                                                  ',&
+'      use M_d                                                                   ',&
+'      integer :: arr(5)=[(i*10,i=1,size(arr))]                                  ',&
+'      DEBUG_3: block                                                            ',&
+'         write(*,''(a)'')''THIS IS A DEBUG VERSION''                            ',&
+'      endblock DEBUG_3                                                          ',&
+'      call proc(arr)                                                            ',&
+'   end program run                                                              ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'                                                                                ',&
+'  Expected output if debug mode is off:                                         ',&
+'                                                                                ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'   module M_d                                                                   ',&
+'      implicit none                                                             ',&
+'   contains                                                                     ',&
+'      subroutine proc(r)                                                        ',&
+'         integer,intent(inout) :: r(:)                                          ',&
+'         r=r**2                                                                 ',&
+'      end subroutine proc                                                       ',&
+'   end module M_d                                                               ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'   program run                                                                  ',&
+'      use M_d                                                                   ',&
+'      integer :: arr(5)=[(i*10,i=1,size(arr))]                                  ',&
+'      call proc(arr)                                                            ',&
+'   end program run                                                              ',&
+'   !zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz                                 ',&
+'                                                                                ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -4182,7 +4182,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        4.0: 20170502>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
-'@(#)COMPILED:       2023-02-12 18:37:58 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:57:21 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

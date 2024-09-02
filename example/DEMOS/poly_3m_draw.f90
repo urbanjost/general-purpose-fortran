@@ -1,5 +1,6 @@
      program demo_poly
      use M_draw
+     implicit none
      ! Using polygons, hatching, and filling.
      integer           :: ios
      character(len=50) :: device
@@ -48,6 +49,7 @@
         call vexit()
      contains
      subroutine drawpoly()
+        integer :: idum
         real parray(3,4)                   ! An array of points for a polygon
         data parray/ -8.0, -8.0, 0.0,  &
                    & -5.0, -8.0, 0.0,  &

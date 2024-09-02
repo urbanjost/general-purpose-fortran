@@ -1,8 +1,10 @@
      program demo_regerror
      use M_regex, only: regex_type, regcomp, regexec, regmatch, regfree, regerror
+     implicit none
      type(regex_type)             :: regex
      integer,parameter            :: maxmatch=10
      integer                      :: matches(2,maxmatch)
+     integer                      :: i, istat
 
      character(len=:),allocatable :: input_line
      character(len=:),allocatable :: expression

@@ -1,5 +1,7 @@
       program demo_is_even
       use M_units, only : is_even
+      implicit none
+      integer :: i
          write(*,*)is_even(0)
          write(*,*)is_even(-1)
          write(*,*)is_even(-2)

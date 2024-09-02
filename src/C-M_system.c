@@ -95,7 +95,7 @@ void my_mkdir (char *dir, int mode, int *ier) {
 
    snprintf(buf, sizeof(buf), "%s", dir);
    len = strlen (buf);
-   if (buf[len - 1] == '/') {
+   if(buf[len - 1] == '/') {
       buf[len - 1] = 0;
    }
    for (p = buf + 1; *p; p++) {
@@ -145,7 +145,7 @@ void my_readdir(DIR *dirp, char *filename, int *ierr){
    *ierr = 0;
    length = 0;
 
-   if ((dp = readdir (dirp)) != NULL) {
+   if((dp = readdir (dirp)) != NULL) {
       length=(int)strlen(dp->d_name)+1;
       strncpy(filename,dp->d_name,length);
    }else{
@@ -200,7 +200,7 @@ void my_readenv(char *variable){
 size_t length_in;
 size_t length_out;
 size_t length_copy;
-   if ( *ep == NULL ){
+   if( *ep == NULL ){
       strncpy(variable,"",1);
       /*
       fprintf(stdout,"%s [%s]\n","REWIND TABLE",variable);
@@ -221,7 +221,7 @@ struct group *grp;
 
    errno = 0;
 
-   if ( (grp = getgrgid((gid_t)id) ) != NULL) {
+   if( (grp = getgrgid((gid_t)id) ) != NULL) {
       strcpy(groupname,grp->gr_name);
    } else {
       strncpy(groupname,"",1);
@@ -235,7 +235,7 @@ struct passwd *pwd;
 
    errno = 0;
 
-   if ( (pwd = getpwuid((uid_t)id) ) != NULL) {
+   if( (pwd = getpwuid((uid_t)id) ) != NULL) {
       strcpy(username,pwd->pw_name);
    } else {
       strncpy(username,"",1);
@@ -277,7 +277,7 @@ void system_unbuffer() {
 void my_uname (char *which, char *string, int *stringlen) {
    struct utsname name;
    int j;
-   if (uname (&name) == -1) {
+   if(uname (&name) == -1) {
       fprintf (stderr, "*my_uname* cannot get system name\n");
       strncpy (string, "UNKNOWN", *stringlen);
    } else {
@@ -381,7 +381,7 @@ int my_issock(const char *path){
 int my_islnk(const char *fname) {
   struct stat statbuf;
 
-  if (lstat(fname, &statbuf)) {
+  if(lstat(fname, &statbuf)) {
     return 0;
   } else {
     return S_ISLNK(statbuf.st_mode);
@@ -413,7 +413,7 @@ static char local_buff[17] = { 0 };
 int i;
 
    errno = 0;                                                              /* always set errno to zero first. */
-   if (stat (file, buf) != 0) {
+   if(stat (file, buf) != 0) {
    perror (file);                                                          /* if stat does not work, print a diagnostic. */
       *ierr=1;
       return;
@@ -512,12 +512,12 @@ int i;
    printf ("Owner ID ........................ %-8d\n", buf->st_uid);
 
                                                                           /* Print out owner name if found using getpwuid(). */
-   if ((pwd = getpwuid (buf->st_uid)) != NULL){                           /* st_uid          The User ID for the file. */
+   if((pwd = getpwuid (buf->st_uid)) != NULL){                           /* st_uid          The User ID for the file. */
       printf ("Owner ........................... %-8s\n", pwd->pw_name);
    }
    printf ("Owner ID ........................ %-8d\n", buf->st_uid);
                                                                           /* Print out group name if found using getgrgid(). */
-   if ((grp = getgrgid (buf->st_gid)) != NULL){                           /* st_gid          The Group ID for the file. */
+   if((grp = getgrgid (buf->st_gid)) != NULL){                           /* st_gid          The Group ID for the file. */
       printf ("Group name ...................... %-8s\n", grp->gr_name);
    }
    printf ("Group ID ........................ %-8d\n", buf->st_gid);
@@ -556,14 +556,14 @@ char ftype = '?';
 mode_t mode;
 
    mode=(mode_t) imode;
-   if (S_ISREG(mode))  ftype = '-';
-   if (S_ISLNK(mode))  ftype = 'l';
-   if (S_ISDIR(mode))  ftype = 'd';
-   if (S_ISBLK(mode))  ftype = 'b';
-   if (S_ISCHR(mode))  ftype = 'c';
-   if (S_ISFIFO(mode)) ftype = 'p';
+   if(S_ISREG(mode))  ftype = '-';
+   if(S_ISLNK(mode))  ftype = 'l';
+   if(S_ISDIR(mode))  ftype = 'd';
+   if(S_ISBLK(mode))  ftype = 'b';
+   if(S_ISCHR(mode))  ftype = 'c';
+   if(S_ISFIFO(mode)) ftype = 'p';
 #ifdef S_ISDOOR
-   if (S_ISDOOR(mode)) ftype = 'D'; /* Solaris 2.6, etc. */
+   if(S_ISDOOR(mode)) ftype = 'D'; /* Solaris 2.6, etc. */
 #endif
 
    sprintf(perms_buff, "%c%c%c%c%c%c%c%c%c%c %c%c%c",

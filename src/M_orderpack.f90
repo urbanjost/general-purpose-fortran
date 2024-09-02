@@ -1,37 +1,39 @@
 module M_orderpack
-use M_refsor, only : sort=>refsor             ! [SORT] Sorts array (Quicksort)
-use M_inssor, only : sort_special=>inssor     ! [SORT] Sorts array (Insertion sort, generally for small or nearly sorted arrays)
-use M_inspar, only : psort=>inspar            ! [SORT:PARTIAL] partially sorts an array
+use M_orderpack__refsor, only : sort=>refsor         ! [SORT] Sorts array (Quick-sort)
+use M_orderpack__inssor, only : sort_special=>inssor ! [SORT] Sorts array (Insertion sort, generally for small or nearly sorted
+                                                    !        arrays)
+use M_orderpack__inspar, only : psort=>inspar        ! [SORT:PARTIAL] partially sorts an array
 
-use M_mrgrnk, only : rank=>mrgrnk             ! [RANK] ranks array (optimized merge-sort)
-use M_mrgref, only : rank_basic=>mrgref       ! [RANK] ranks array (basic merge-sort)
-use M_uniinv, only : rank_decreasing=>uniinv  ! [RANK:UNIQUE] inverse ranks an array,
-use M_unirnk, only : rank_unique=>unirnk      ! [RANK:UNIQUE] ranks an array, with removal of duplicate entries.(MergSort)
-                                              ! with duplicate entries assigned the same rank.(MergSort-like)
+use M_orderpack__mrgrnk, only : rank=>mrgrnk             ! [RANK] ranks array (optimized merge-sort)
+use M_orderpack__mrgref, only : rank_basic=>mrgref       ! [RANK] ranks array (basic merge-sort)
+use M_orderpack__uniinv, only : rank_decreasing=>uniinv  ! [RANK:UNIQUE] inverse ranks an array,
+use M_orderpack__unirnk, only : rank_unique=>unirnk      ! [RANK:UNIQUE] ranks an array, with removal of duplicate entries.(MergSort)
+                                                        ! with duplicate entries assigned the same rank.(MergSort-like)
 
-use M_rnkpar, only : prank=>rnkpar            ! [RANK:PARTIAL] partially ranks array (Optimized Quick-Sort)
-use M_refpar, only : prank_basic=>refpar      ! [RANK:PARTIAL] partially ranks array (Quick-Sort)
-use M_rinpar, only : prank_special=>rinpar    ! [RANK:PARTIAL] partially ranks array
-! PRANK_DECREASING_UNIQUE
-use M_rapknr, only : prank_decreasing=>rapknr ! [RANK:PARTIAL] partially rank array in DECREASING order and equal ranks for a value
+use M_orderpack__rnkpar, only : prank=>rnkpar            ! [RANK:PARTIAL] partially ranks array (Optimized Quick-Sort)
+use M_orderpack__refpar, only : prank_basic=>refpar      ! [RANK:PARTIAL] partially ranks array (Quick-Sort)
+use M_orderpack__rinpar, only : prank_special=>rinpar    ! [RANK:PARTIAL] partially ranks array
+                                                        ! PRANK_DECREASING_UNIQUE
+use M_orderpack__rapknr, only : prank_decreasing=>rapknr ! [RANK:PARTIAL] partially rank array in DECREASING order and equal ranks
+                                                        ! for a value
 
-use M_unipar, only : prank_unique=>unipar     ! [RANK:PARTIAL:UNIQUE] partially rank an array removing duplicates
+use M_orderpack__unipar, only : prank_unique=>unipar ! [RANK:PARTIAL:UNIQUE] partially rank an array removing duplicates
 
-use M_median, only : median                   ! [MEDIAN] Calculate median value. If number of elements is even, return average
-                                              !          of the central values
-use M_valmed, only : medianval=>valmed        ! [MEDIAN] Find VALUE of median element.
-use M_indmed, only : medianloc=>indmed        ! [MEDIAN] Find INDEX of median element.
+use M_orderpack__median, only : median               ! [MEDIAN] Calculate median value. If number of elements is even, return average
+                                                    !          of the central values
+use M_orderpack__valmed, only : medianval=>valmed    ! [MEDIAN] Find VALUE of median element.
+use M_orderpack__indmed, only : medianloc=>indmed    ! [MEDIAN] Find INDEX of median element.
 
-use M_indnth, only : orderloc=>indnth         ! [FRACTILE] Return INDEX of Nth ordered element ,
-                                              !            i.e fractile of order N/SIZE(array) (QuickSort-like)
-use M_valnth, only : orderval=>valnth         ! [FRACTILE] Return VALUE of Nth element of array,
-                                              !            i.e fractile of order N/SIZE(array) (QuickSort-like)
-use M_fndnth, only : orderval_special=>fndnth ! [FRACTILE] Return VALUE of Nth ordered elements ,
-                                              !            i.e. fractile of order N/SIZE(array) (Insert-like)
+use M_orderpack__indnth, only : orderloc=>indnth     ! [FRACTILE] Return INDEX of Nth ordered element ,
+                                                    !            i.e fractile of order N/SIZE(array) (Quick-Sort-like)
+use M_orderpack__valnth, only : orderval=>valnth     ! [FRACTILE] Return VALUE of Nth element of array,
+                                                    !            i.e fractile of order N/SIZE(array) (Quick-Sort-like)
+use M_orderpack__fndnth, only : orderval_special=>fndnth ! [FRACTILE] Return VALUE of Nth ordered elements ,
+                                                    !            i.e. fractile of order N/SIZE(array) (Insert-like)
 
-use M_unista, only : unique=>unista           ! [UNIQUE] Removes duplicates from an array otherwise retaining original order
-use M_mulcnt, only : occurrences=>mulcnt      ! [MULTIPLICITY] gives number of times that each value appears in the input
-use M_ctrper, only : perturb=>ctrper          ! [PERMUTATION] perturbs an array leaving elements close to initial locations
+use M_orderpack__unista, only : unique=>unista       ! [UNIQUE] Removes duplicates from an array otherwise retaining original order
+use M_orderpack__mulcnt, only : occurrences=>mulcnt  ! [MULTIPLICITY] gives number of times that each value appears in the input
+use M_orderpack__ctrper, only : perturb=>ctrper      ! [PERMUTATION] perturbs an array leaving elements close to initial locations
 
 ! BUG: without explicitly adding this section ifort(1) fails
 private
@@ -46,7 +48,7 @@ public occurrences
 public perturb
 !>
 !!##NAME
-!!    M_orderpack(3f) - [orderpack::INTRO]General and Specialized Ranking
+!!    M_orderpack(3f) - [M_orderpack::INTRO]General and Specialized Ranking
 !!                      and Sorting Routines
 !!##SYNOPSIS
 !!
@@ -84,33 +86,33 @@ public perturb
 !!    as well, one per module:
 !!
 !!     ! previous ORDERPACK2.0 name ! ORDERPACK 2.1 name
-!!     use M_refsor, only : refsor  ! Sort
-!!     use M_inssor, only : inssor  ! Sort_special
-!!     use M_inspar, only : inspar  ! psort
-!!     use M_mrgrnk, only : mrgrnk  ! rank
-!!     use M_mrgref, only : mrgref  ! rank_basic
-!!     use M_uniinv, only : uniinv  ! rank_decreasing
-!!     use M_unirnk, only : unirnk  ! rank_unique
-!!     use M_rnkpar, only : rnkpar  ! prank
-!!     use M_refpar, only : refpar  ! prank_basic
-!!     use M_rapknr, only : rapknr  ! prank_decreasing
-!!     use M_rinpar, only : rinpar  ! prank_special
-!!     use M_unipar, only : unipar  ! prank_unique
-!!     use M_median, only : median  ! median
-!!     use M_valmed, only : valmed  ! medianval
-!!     use M_indmed, only : indmed  ! medianloc
-!!     use M_valnth, only : valnth  ! orderval
-!!     use M_indnth, only : indnth  ! orderloc
-!!     use M_fndnth, only : fndnth  ! orderval_special
-!!     use M_mulcnt, only : mulcnt  ! occurrences
-!!     use M_unista, only : unista  ! unique
-!!     use M_ctrper, only : ctrper  ! perturb
+!!     use M_orderpack__refsor, only : refsor  ! Sort
+!!     use M_orderpack__inssor, only : inssor  ! Sort_special
+!!     use M_orderpack__inspar, only : inspar  ! psort
+!!     use M_orderpack__mrgrnk, only : mrgrnk  ! rank
+!!     use M_orderpack__mrgref, only : mrgref  ! rank_basic
+!!     use M_orderpack__uniinv, only : uniinv  ! rank_decreasing
+!!     use M_orderpack__unirnk, only : unirnk  ! rank_unique
+!!     use M_orderpack__rnkpar, only : rnkpar  ! prank
+!!     use M_orderpack__refpar, only : refpar  ! prank_basic
+!!     use M_orderpack__rapknr, only : rapknr  ! prank_decreasing
+!!     use M_orderpack__rinpar, only : rinpar  ! prank_special
+!!     use M_orderpack__unipar, only : unipar  ! prank_unique
+!!     use M_orderpack__median, only : median  ! median
+!!     use M_orderpack__valmed, only : valmed  ! medianval
+!!     use M_orderpack__indmed, only : indmed  ! medianloc
+!!     use M_orderpack__valnth, only : valnth  ! orderval
+!!     use M_orderpack__indnth, only : indnth  ! orderloc
+!!     use M_orderpack__fndnth, only : fndnth  ! orderval_special
+!!     use M_orderpack__mulcnt, only : mulcnt  ! occurrences
+!!     use M_orderpack__unista, only : unista  ! unique
+!!     use M_orderpack__ctrper, only : ctrper  ! perturb
 !!
 !!##DESCRIPTION
-!!    ORDERPACK 2.1 - Unconditional, Unique and Partial Ranking, Sorting,
+!!    M_ORDERPACK 2.1 - Unconditional, Unique and Partial Ranking, Sorting,
 !!                    and Permutation
 !!
-!!    ORDERPACK 2.1 performs both conventional sorting and ranking as well as
+!!    M_ORDERPACK 2.1 performs both conventional sorting and ranking as well as
 !!    the rarer specialized ordering tasks such as partial sorting, partial
 !!    ranking, unique sorting, unique ranking, inverse unique ranking, and
 !!    more. These partial sort and ranking routines can greatly accelerate
@@ -132,13 +134,13 @@ public perturb
 !!
 !!##SORTING
 !!     FULL SORTING
-!!        Sort          Sorts array into ascending order (Quicksort)
+!!        Sort          Sorts array into ascending order (Quick-sort)
 !!        Sort_Special  Sorts array into ascending order (Insertion sort,
 !!                      generally for small or nearly sorted arrays)
 !!     PARTIAL SORTING
 !!        Psort             partially sorts an array
 !!        Orderval          Return VALUE of Nth lowest value of array
-!!                          (QuickSort)
+!!                          (Quick-Sort)
 !!        Orderval_Special  Return Nth lowest value of an array
 !!                          (Insert-sort, generally for small or nearly
 !!                          sorted arrays))
@@ -150,14 +152,14 @@ public perturb
 !!        Rank        ranks array (optimized merge-sort)
 !!        Rank_Basic  ranks array (basic merge-sort)
 !!     PARTIAL RANKING
-!!        Prank             partially ranks array (Optimized QuickSort)
+!!        Prank             partially ranks array (Optimized Quick-Sort)
 !!        Prank_Basic       partially ranks array
 !!        Prank_Decreasing  partially ranks array in DECREASING order
 !!        Prank_Special     partially ranks array (Basic Insert-Sort)
-!!        Orderloc          Return INDEX of Nth value of array (QuickSort-like)
+!!        Orderloc          Return INDEX of Nth value of array (Quick-Sort-like)
 !!        MedianLoc         Returns INDEX of median value of an array.
 !!     UNIQUE RANKING
-!!        Rank_Unique       performs a MergeSort ranking of an array,
+!!        Rank_Unique       performs a Merge-Sort ranking of an array,
 !!                          with removal of duplicate entries.
 !!        Rank_Decreasing   an inverse ranking of an array,
 !!                          with duplicate entries assigned the same rank.
@@ -175,7 +177,7 @@ public perturb
 !!
 !!    While Fortran 90 and later variants have made life much easier for
 !!    scientific programmers than Fortran 77, the language still lacks
-!!    depth in public domain utilities. The following package, ORDERPACK
+!!    depth in public domain utilities. The following package, M_ORDERPACK
 !!    2.1, provides important but uncommon routines needed to complete the
 !!    Fortran programming environment.
 !!
@@ -193,25 +195,25 @@ public perturb
 !!    of a mass of discrete data. Many times the frequency of the unique
 !!    values proves interesting (e.g., empirical distributions).
 !!
-!!    ORDERPACK handles all of these ordering needs.
+!!    M_ORDERPACK handles all of these ordering needs.
 !!
-!!    Also, ORDERPACK contains a partial unique ranking routine. Such a
+!!    Also, M_ORDERPACK contains a partial unique ranking routine. Such a
 !!    routine would prove useful in finding a limited number of unique
 !!    values in an array.
 !!
 !!    Inversion of orderings becomes difficult when duplicates exist (not
-!!    a one-to-one relation). The ORDERPACK inverse ranking routine handles
+!!    a one-to-one relation). The M_ORDERPACK inverse ranking routine handles
 !!    this difficult case.
 !!
-!!    As an added bonus ORDERPACK provides an unusual routine which allows
+!!    As an added bonus M_ORDERPACK provides an unusual routine which allows
 !!    user controllable partial random permutation of arrays.
 !!
-!!    ORDERPACK of course contains conventional or unconditional sorting
+!!    M_ORDERPACK of course contains conventional or unconditional sorting
 !!    routines as well.
 !!
 !!    Finally, many Fortran sorting or ranking routines do not take advantage
 !!    of available memory and cache to maximize performance. The routines
-!!    in ORDERPACK have been designed to take advantage of modern machines.
+!!    in M_ORDERPACK have been designed to take advantage of modern machines.
 !!
 !!##RANKING VERSUS SORTING
 !!

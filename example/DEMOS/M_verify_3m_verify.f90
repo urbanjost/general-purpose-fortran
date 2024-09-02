@@ -1,5 +1,5 @@
       !!program demo_unit_tests
-      module M_demo
+      module M_msg__demo
       private
       public one !! regular routines
       public two !! regular routines
@@ -77,10 +77,10 @@
 
       end subroutine test_suite_M_demo
 
-      end module M_demo
+      end module M_msg__demo
 
       program demo_M_verify
-      use M_demo,  only: test_suite_M_demo
+      use M_msg__demo,  only: test_suite_M_demo
       use M_verify, only: unit_check_command, unit_check_keep_going,unit_check_level
       unit_check_command=''
       unit_check_keep_going=.true.

@@ -81,7 +81,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 12:23:46 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:50:58 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -97,31 +97,53 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'       fmt-(1f) - [FUNIX:FILE EDIT] simple text formatter                                                                       ',&
-'       (LICENSE:PD)                                                                                                             ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'       fmt- [OPTION]...                                                                                                         ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   Reformat each paragraph on standard input, writing to standard output. A                                                     ',&
-'   paragraph ends when a blank line is encountered or the left margin                                                           ',&
-'   changes.                                                                                                                     ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'       -w, WIDTH               maximum line width (default of 75 columns)                                                       ',&
-'       --help                  display this help and exit                                                                       ',&
-'       --version               output version information and exit                                                              ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'       fmt-(1f) - [FUNIX:FILE EDIT] simple text formatter                       ',&
+'       (LICENSE:PD)                                                             ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'       fmt- [OPTION]...                                                         ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   Reformat each paragraph on standard input, writing to standard output. A     ',&
+'   paragraph ends when a blank line is encountered or the left margin           ',&
+'   changes.                                                                     ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'       -w, WIDTH               maximum line width (default of 75 columns)       ',&
+'       --help                  display this help and exit                       ',&
+'       --version               output version information and exit              ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!        fmt-(1f) - [FUNIX:FILE EDIT] simple text formatter
+!!        (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!        fmt- [OPTION]...
+!!
+!!##DESCRIPTION
+!!    Reformat each paragraph on standard input, writing to standard output. A
+!!    paragraph ends when a blank line is encountered or the left margin
+!!    changes.
+!!
+!!##OPTIONS
+!!        -w, WIDTH               maximum line width (default of 75 columns)
+!!        --help                  display this help and exit
+!!        --version               output version information and exit
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 end program demo_fmt
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

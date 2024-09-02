@@ -770,8 +770,8 @@ end function sha256b
 ! Author: Mikael Leetmaa
 ! Date:   05 Jan 2014
 subroutine test_suite_sha256()
-use M_verify, only : unit_check, unit_check_start, unit_check_done
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check, unit_check_start, unit_check_done
+use M_framework__verify, only : unit_check_level
 
 implicit none
 
@@ -1459,9 +1459,9 @@ end function luhn_checksum
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_luhn_checksum()
 use M_strings, only : transliterate
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
-use M_msg,   only : str
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
+use M_framework__msg,   only : str
 implicit none
    character(len=:),allocatable :: ccards(:), string, buff
    call unit_check_start('luhn_checksum',msg='')

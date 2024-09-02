@@ -458,10 +458,10 @@ integer                              :: ierr
                open(newunit=temp_lun,file=response,status='new',iostat=ios,iomsg=errmsg) ! open help file
                if(ios == 0)then
                   write(temp_lun,'(a)',iostat=ios)( trim(help_text(k)),k=1,howbig )
-                  call journal('sc','<INFO> user guide is on file',trim(response) )
+                  call journal('sc','<INFO> user guide is on file',response )
                   close(unit=temp_lun,iostat=ios)
                else
-                  call journal(trim(errmsg))
+                  call journal(errmsg)
                endif
             endblock WRITEFILE
             i=max(1,i-1)
@@ -602,9 +602,9 @@ character(len=3),save        :: nan_string='NaN'
    read(local_chars,fmt=frmt,iostat=ierr,iomsg=msg)valu   ! try to read value from string
    if(ierr /= 0)then                                         ! if an error occurred ierr will be non-zero.
       read(nan_string,'(g3.3)')valu
-      call journal('sc','*a2d* - cannot produce number from string ['//trim(chars)//']')
+      call journal('sc','*a2d* - cannot produce number from string [',chars,']')
       if(msg /= '')then
-         call journal('sc','*a2d* - ['//trim(msg)//']')
+         call journal('sc','*a2d* - [',msg,']')
       endif
    endif
 end subroutine a2d

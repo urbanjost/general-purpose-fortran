@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>real (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>real (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>real(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-real(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 REAL(3) - [TYPE:NUMERIC] Convert to real type
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ REAL(3) - [TYPE:NUMERIC] Convert to real type
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = real(x [,kind])
 <P>
 <PRE>
-         elemental real(kind=KIND) function real(x,KIND)
+       elemental real(kind=KIND) function real(x,KIND)
 <P>
-          TYPE(kind=**),intent(in) :: x
-          integer(kind=**),intent(in),optional :: KIND
+        TYPE(kind=**),intent(in) :: x
+        integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,17 +85,13 @@ result = real(x [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-a kind designated as ** may be any supported kind for the type
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-the type of X may be integer, real, or complex; or a BOZ-literal-
-constant.
+the type of X may be integer, real, or complex; or a
+BOZ-literal-constant.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -126,15 +115,24 @@ if KIND is not present
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-when X is complex the result is a real of the same kind as X.
+when X is complex the result is a real of the same kind as
+X.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-when X is real or integer the result is a real of default kind
+when X is real or integer the result is a real of default
+kind
 </TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .IP \(bu 3 -->
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+a kind designated as ** may be any supported kind for the type
+</TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
 
@@ -142,15 +140,16 @@ when X is real or integer the result is a real of default kind
 
 </A>
 <BLOCKQUOTE>
+<P>
 REAL(3) converts its argument X to a real type.
 <P>
 The real part of a complex value is returned. For complex values this is
-similar to the modern complex-part-designator %RE which also designates the
-real part of complex a value.
+similar to the modern complex-part-designator %RE which also designates
+the real part of a complex value.
 <P>
 <PRE>
-            z=(3.0,4.0)     ! if z is a complex value
-            print *, z%re == real(z) ! these expressions are equivalent
+          z=(3.0,4.0)     ! if z is a complex value
+          print *, z%re == real(z) ! these expressions are equivalent
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -160,16 +159,18 @@ real part of complex a value.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-X : A integer, real, or complex value to convert to real.
+X : An integer, real, or complex value to convert to real.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : When present the value of KIND defines the kind of the result.
+KIND : When present the value of KIND defines the kind of the
+result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -178,6 +179,7 @@ KIND : When present the value of KIND defines the kind of the result.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=4%>
 1.
@@ -188,14 +190,15 @@ variable.
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-REAL(X) converts a complex value to a real type with the magnitude of
-the real component of the input with kind type parameter the same as X.
+REAL(X) converts a complex value to a real type with the magnitude
+of the real component of the input with kind type parameter the same
+as X.
 </TD></TR>
 <TR valign=top><TD width=4%>
 3.
 </TD><TD>
-REAL(X, KIND) is converted to a real type with kind type parameter KIND
-if X is a complex, integer, or real variable.
+REAL(X, KIND) is converted to a real type with kind type parameter
+KIND if X is a complex, integer, or real variable.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=6>
@@ -204,29 +207,30 @@ if X is a complex, integer, or real variable.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_real
-      use,intrinsic :: iso_fortran_env, only : dp=&gt;real64
-      implicit none
-      complex              :: zr = (1.0, 2.0)
-      doubleprecision      :: xd=huge(3.0d0)
-      complex(kind=dp) :: zd=cmplx(4.0e0_dp,5.0e0_dp,kind=dp)
+    program demo_real
+    use,intrinsic :: iso_fortran_env, only : dp=&gt;real64
+    implicit none
+    complex              :: zr = (1.0, 2.0)
+    doubleprecision      :: xd=huge(3.0d0)
+    complex(kind=dp) :: zd=cmplx(4.0e0_dp,5.0e0_dp,kind=dp)
 <P>
-         print *, real(zr), aimag(zr)
-         print *, dble(zd), aimag(zd)
+       print *, real(zr), aimag(zr)
+       print *, dble(zd), aimag(zd)
 <P>
-         write(*,*)xd,real(xd,kind=kind(0.0d0)),dble(xd)
-      end program demo_real
+       write(*,*)xd,real(xd,kind=kind(0.0d0)),dble(xd)
+    end program demo_real
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       1.00000000       2.00000000
-       4.0000000000000000       5.0000000000000000
-       1.7976931348623157E+308  1.7976931348623157E+308  1.7976931348623157E+308
+     1.00000000       2.00000000
+     4.0000000000000000       5.0000000000000000
+     1.7976931348623157E+308  1.7976931348623157E+308  1.7976931348623157E+308
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -236,6 +240,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -244,6 +249,7 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -264,20 +270,16 @@ CONJG(3) - Complex conjugate function
 that take or produce complex values in addition to algebraic and logical
 expressions:
 <P>
-ABS(3), ACOSH(3), ACOS(3), ASINH(3), ASIN(3), ATAN2(3), ATANH(3), ATAN(3),
-COSH(3), COS(3), CO_SUM(3), DBLE(3), DOT_PRODUCT(3), EXP(3), INT(3),
-IS_CONTIGUOUS(3), KIND(3), LOG(3), MATMUL(3), PRECISION(3), PRODUCT(3),
-RANGE(3), RANK(3), SINH(3), SIN(3), SQRT(3), STORAGE_SIZE(3), SUM(3),
-TANH(3), TAN(3), UNPACK(3),
+ABS(3), ACOSH(3), ACOS(3), ASINH(3), ASIN(3), ATAN2(3), ATANH(3),
+ATAN(3), COSH(3), COS(3), CO_SUM(3), DBLE(3), DOT_PRODUCT(3), EXP(3),
+INT(3), IS_CONTIGUOUS(3), KIND(3), LOG(3), MATMUL(3), PRECISION(3),
+PRODUCT(3), RANGE(3), RANK(3), SINH(3), SIN(3), SQRT(3),
+STORAGE_SIZE(3), SUM(3), TANH(3), TAN(3), UNPACK(3),
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                real(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>real (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9600068b-4d2d-4554-b69f-289b0e781a9c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>real (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4e31d902-c0ef-4baf-9455-db55669eaacb using man macros.</FONT>
 <br><br><center><img src="images/real.3fortran.gif"></center>
 </div>
 </div>

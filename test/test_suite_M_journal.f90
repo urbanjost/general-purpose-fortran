@@ -4,9 +4,6 @@ use M_msg
 use M_verify
 use M_journal
 implicit none
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
 !! setup
    call test_flush_trail()
    call test_set_stdout_lun()

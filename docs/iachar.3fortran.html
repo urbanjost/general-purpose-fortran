@@ -50,22 +50,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iachar (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iachar (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>iachar(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-iachar(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-IACHAR(3) - [CHARACTER:CONVERSION] Return integer ASCII code of a character
+<P>
+IACHAR(3) - [CHARACTER:CONVERSION] Return integer ASCII code of a
+character
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -76,13 +69,14 @@ IACHAR(3) - [CHARACTER:CONVERSION] Return integer ASCII code of a character
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = iachar(c [,kind])
 <P>
 <PRE>
-           elemental integer(kind=KIND) function iachar(c,kind)
+         elemental integer(kind=KIND) function iachar(c,kind)
 <P>
-            character(len=1),intent(in) :: c
-            integer(kind=**),intent(in),optional :: KIND
+          character(len=1),intent(in) :: c
+          integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +86,7 @@ result = iachar(c [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -101,8 +96,8 @@ C is a single character
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The return value is of type integer and of kind KIND. If KIND is absent,
-the return value is of default integer kind.
+The return value is of type integer and of kind KIND. If KIND is
+absent, the return value is of default integer kind.
 </TD></TR>
 <TR></TR></TABLE>NOTE: : a kind designated as ** may be any supported kind for the type
 </BLOCKQUOTE>
@@ -112,8 +107,9 @@ the return value is of default integer kind.
 
 </A>
 <BLOCKQUOTE>
-IACHAR(3) returns the code for the ASCII character in the first character
-position of C.
+<P>
+IACHAR(3) returns the code for the ASCII character in the first
+character position of C.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -121,18 +117,19 @@ position of C.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-C : A character to determine the ASCII code of. : A common extension is
-to allow strings but all but the first character is then ignored.
+C : A character to determine the ASCII code of. : A common extension
+is to allow strings but all but the first character is then ignored.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : A constant initialization expression indicating the kind parameter
-of the result.
+KIND : A constant initialization expression indicating the kind
+parameter of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -141,6 +138,7 @@ of the result.
 
 </A>
 <BLOCKQUOTE>
+<P>
 the result is the position of the character C in the ASCII collating
 sequence. It is nonnegative and less than or equal to 127.
 <P>
@@ -151,9 +149,9 @@ The value of the result is processor dependent if C is not in the ASCII
 collating sequence.
 <P>
 The results are consistent with the LGE(3), LGT(3), LLE(3), and LLT(3)
-comparison functions. For example, if LLE(C, D) is true, IACHAR(C) &lt;= IACHAR
-(D) is true where C and D are any two characters representable by the
-processor.
+comparison functions. For example, if LLE(C, D) is true, IACHAR(C) &lt;=
+IACHAR (D) is true where C and D are any two characters representable by
+the processor.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -161,46 +159,47 @@ processor.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_iachar
-      implicit none
-         ! basic usage
-          ! just does a string one character long
-          write(*,*)iachar(&#146;A&#146;)
-          ! elemental: can do an array of letters
-          write(*,*)iachar([&#146;A&#146;,&#146;Z&#146;,&#146;a&#146;,&#146;z&#146;])
+    program demo_iachar
+    implicit none
+       ! basic usage
+        ! just does a string one character long
+        write(*,*)iachar(&#146;A&#146;)
+        ! elemental: can do an array of letters
+        write(*,*)iachar([&#146;A&#146;,&#146;Z&#146;,&#146;a&#146;,&#146;z&#146;])
 <P>
-         ! convert all characters to lowercase
-          write(*,&#146;(a)&#146;)lower(&#146;abcdefg ABCDEFG&#146;)
-      contains
-      !
-      pure elemental function lower(str) result (string)
-      ! Changes a string to lowercase
-      character(*), intent(In)     :: str
-      character(len(str))          :: string
-      integer                      :: i
-         string = str
-         ! step thru each letter in the string in specified range
-         do i = 1, len(str)
-            select case (str(i:i))
-            case (&#146;A&#146;:&#146;Z&#146;) ! change letter to miniscule
-               string(i:i) = char(iachar(str(i:i))+32)
-            case default
-            end select
-         end do
-      end function lower
-      !
-      end program demo_iachar
+       ! convert all characters to lowercase
+        write(*,&#146;(a)&#146;)lower(&#146;abcdefg ABCDEFG&#146;)
+    contains
+    !
+    pure elemental function lower(str) result (string)
+    ! Changes a string to lowercase
+    character(*), intent(In)     :: str
+    character(len(str))          :: string
+    integer                      :: i
+       string = str
+       ! step thru each letter in the string in specified range
+       do i = 1, len(str)
+          select case (str(i:i))
+          case (&#146;A&#146;:&#146;Z&#146;) ! change letter to miniscule
+             string(i:i) = char(iachar(str(i:i))+32)
+          case default
+          end select
+       end do
+    end function lower
+    !
+    end program demo_iachar
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         65
-         65          90          97         122
-         abcdefg abcdefg
+       65
+       65          90          97         122
+       abcdefg abcdefg
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -210,6 +209,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 , with KIND argument - Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -218,14 +218,15 @@ Fortran 95 , with KIND argument - Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 ACHAR(3), CHAR(3), ICHAR(3)
 <P>
-See ICHAR(3) in particular for a discussion of converting between numerical
-values and formatted string representations.
+See ICHAR(3) in particular for a discussion of converting between
+numerical values and formatted string representations.
 <P>
-Functions that perform operations on character strings, return lengths of
-arguments, and search for certain arguments:
-<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths of
+Functions that perform operations on character strings, return lengths
+of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return lengths
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -239,13 +240,9 @@ o
 NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
 </TD></TR>
 <TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022              iachar(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iachar (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a6a77dc5-94a3-4f0f-8ad3-86bb60e77275 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iachar (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 071c20cc-3a92-4980-865d-cb7725d1060e using man macros.</FONT>
 <br><br><center><img src="images/iachar.3fortran.gif"></center>
 </div>
 </div>

@@ -1,11 +1,11 @@
       program demo_isnumber
       use M_strings, only : isnumber
       implicit none
-      character(len=256) :: line
-      real               :: value
-      integer            :: ios1, ios2
-      integer            :: answer
-      character(len=256) :: message
+      character(len=256)           :: line
+      real                         :: value
+      integer                      :: ios1, ios2
+      integer                      :: answer
+      character(len=256)           :: message
       character(len=:),allocatable :: description
          write(*,*)'Begin entering values, one per line'
          do

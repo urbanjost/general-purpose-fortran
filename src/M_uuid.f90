@@ -11,7 +11,7 @@
 
 !>
 !! generate_uuid(3f) was originally derived from the xmlf90 codebase, (c)
-!! Alberto Garcia & Jon Wakelin, 2003-2004.  It also calls RNG routines from
+!! Alberto Garcia & Jon Wakelin, 2003-2004. It also calls RNG routines from
 !! Scott Ladd <scott.ladd@coyotegulch.com>, and the libFoX modules. Although
 !! some sections have been replaced, generate_uuid(3f) was originally based
 !! on the libFoX version, with licensing as follows:
@@ -56,12 +56,17 @@ module M_uuid
 !!
 !!##SYNOPSIS
 !!
-!!    use M_uuid, only : generate_uuid
+!!  public entities:
 !!
-!!##QUOTE
-!!    Remember you are unique, just like everyone else.
+!!      use M_uuid, only : generate_uuid
+!!      !
+!!      function generate_uuid(version) result(uuid)
+!!      integer, intent(in), optional :: version
+!!      character(len=36) :: uuid
 !!
 !!##DESCRIPTION
+!!
+!!    Remember you are unique, just like everyone else.
 !!
 !!    A universally unique identifier (UUID) is a 128-bit number used to
 !!    identify information in computer systems.
@@ -91,9 +96,35 @@ module M_uuid
 !!
 !! -- Wikipedia
 !!
-!!##PROCEDURES
+!!##EXAMPLE
 !!
-!!    generate_uuid(version)   generate 36-character UUID string
+!!    Sample program:
+!!
+!!     program demo_M_uuid
+!!     ! generate 36-character UUID string
+!!     use M_uuid, only : generate_uuid
+!!     implicit none
+!!     character(len=36)   :: uuid
+!!     character(len=4096) :: filename
+!!        ! version 1 (time-based UUID)
+!!        write(*,'(a36)') generate_uuid(version=1)
+!!        ! version 4 (pseudo-RNG-based), default
+!!        write(*,'(a36)') generate_uuid(version=4)
+!!        ! RFC 4122 defines a UUID Uniform Resource Name (URN) namespace
+!!        write(*,'("urn:uuid:",a36)') generate_uuid(version=4)
+!!        ! a good scratch file name
+!!        open(file='/tmp/scratch_'//generate_uuid(),unit=10)
+!!        inquire(unit=10,name=filename)
+!!        write(*,'(*(g0))') trim(filename)
+!!        close(unit=10,status='delete')
+!!     end program demo_M_uuid
+!!
+!!  Results:
+!!
+!!     > 7bc99c22-65ae-11ef-5143-11d1be3150ff
+!!     > dcdb2c0f-918f-4267-79f6-1612b35ef28b
+!!     > urn:uuid:fe86c986-31ae-4b34-4e2e-beaed6f7391b
+!!     > /tmp/scratch_fee7cac1-5756-4195-4102-2d34fd966af9
 !===================================================================================================================================
 use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, dp=>real128
 use M_random, only : mtprng_state, mtprng_init, mtprng_rand64
@@ -104,7 +135,7 @@ private
 
 ! ident_1="@(#) M_uuid M_uid(3fm) generate UUIDs according to RFC 4122"
 
-! Only versions  0(Nil), 1 (time-based) and 4 (pseudo-RNG-based) are implemented.
+! Only versions 0(Nil), 1 (time-based) and 4 (pseudo-RNG-based) are implemented.
 
 integer, parameter       :: i4b = selected_int_kind(9)
 integer, parameter       :: i8b = selected_int_kind(18)
@@ -127,10 +158,11 @@ contains
 !!
 !!##SYNOPSIS
 !!
-!!    function generate_uuid(version) result(uuid)
+!!    interface:
 !!
-!!     integer, intent(in), optional :: version
-!!     character(len=36) :: uuid
+!!        function generate_uuid(version) result(uuid)
+!!        integer, intent(in), optional :: version
+!!        character(len=36) :: uuid
 !!
 !!##DESCRIPTION
 !!    A universally unique identifier (UUID) is a 128-bit number used to
@@ -160,28 +192,37 @@ contains
 !!
 !!   Sample usage:
 !!
-!!    program demo_generate_uuid
-!!    use M_uuid, only : generate_uuid
-!!    implicit none
-!!    character(len=36) :: uuid
-!!       !
-!!       uuid=generate_uuid(1)  ! version 1 (time-based UUID)
-!!       write(*,'(a36)')uuid
-!!       !
-!!       uuid=generate_uuid(4)  ! version 4 (pseudo-RNG-based), default
-!!       !
-!!       ! RFC 4122 defines a Uniform Resource Name (URN) namespace for UUIDs.
-!!       write(*,'("urn:uuid:",a36)')uuid
-!!       !
-!!       ! a good scratch file name
-!!       open(file='/tmp/scratch_'//uuid,unit=10)
-!!       !
-!!    end program demo_generate_uuid
+!!      program demo_generate_uuid
+!!      ! generate 36-character UUID string
+!!      use M_uuid, only : generate_uuid
+!!      implicit none
+!!      character(len=36)   :: uuid
+!!      character(len=4096) :: filename
+!!         !
+!!         ! version 1 (time-based UUID)
+!!         uuid=generate_uuid(version=1)
+!!         write(*,'(a36)')uuid
+!!         !
+!!         ! version 4 (pseudo-RNG-based), default
+!!         uuid=generate_uuid(version=4)
+!!         write(*,'(a36)')uuid
+!!         !
+!!         ! RFC 4122 defines a Uniform Resource Name (URN) namespace for UUIDs.
+!!         write(*,'("urn:uuid:",a36)')uuid
+!!         !
+!!         ! a good scratch file name
+!!         open(file='/tmp/scratch_'//uuid,unit=10)
+!!         inquire(unit=10,name=filename)
+!!         write(*,'(*(g0))') trim(filename)
+!!         close(unit=10,status='delete')
+!!      end program demo_generate_uuid
 !!
-!!   Typical output:
+!! Results:
 !!
-!!     e769adf4-4af7-11e8-7421-3c9dfbfe9aab
-!!     urn:uuid:5b0946b8-0eb4-4966-619d-047b7f7e2056
+!!    > afa6bfb4-65a3-11ef-7251-52dbfec73ce6
+!!    > 717b923d-c12f-4d99-6446-21b4fbed1337
+!!    > urn:uuid:717b923d-c12f-4d99-6446-21b4fbed1337
+!!    > /tmp/scratch_717b923d-c12f-4d99-6446-21b4fbed1337
 function generate_uuid(version) result(uuid)
 
 ! ident_2="@(#) M_uuid generate_uuid(3f) generate(approximately) a UUID (Universally Unique IDentifier) string per RFC 4122"

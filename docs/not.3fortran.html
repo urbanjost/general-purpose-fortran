@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>not (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>not (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>not(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-not(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 NOT(3) - [BIT:LOGICAL] Logical negation; flips all bits in an integer
 <P>
 </BLOCKQUOTE>
@@ -76,12 +68,13 @@ NOT(3) - [BIT:LOGICAL] Logical negation; flips all bits in an integer
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = not(i)
 <P>
 elemental integer(kind=KIND) function not(i)
 <P>
 <PRE>
-           integer(kind=KIND), intent(in) :: i
+         integer(kind=KIND), intent(in) :: i
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -91,6 +84,7 @@ elemental integer(kind=KIND) function not(i)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -109,11 +103,12 @@ The returned integer is of the same kind as the argument I.
 
 </A>
 <BLOCKQUOTE>
-NOT(3) returns the bitwise Boolean inverse of I. This is also known as the
-"Bitwise complement" or "Logical negation" of the value.
 <P>
-If an input bit is a one, that position is a zero on output. Conversely any
-input bit that is zero is a one on output.
+NOT(3) returns the bitwise Boolean inverse of I. This is also known as
+the "Bitwise complement" or "Logical negation" of the value.
+<P>
+If an input bit is a one, that position is a zero on output. Conversely
+any input bit that is zero is a one on output.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -121,6 +116,7 @@ input bit that is zero is a one on output.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -134,14 +130,15 @@ I : The value to flip the bits of.
 
 </A>
 <BLOCKQUOTE>
-The result has the value obtained by complementing I bit-by-bit according to
-the following truth table:
+<P>
+The result has the value obtained by complementing I bit-by-bit
+according to the following truth table:
 <P>
 <PRE>
-         &gt;    I   |  NOT(I)
-         &gt;    ----#----------
-         &gt;    1   |   0
-         &gt;    0   |   1
+       &gt;    I   |  NOT(I)
+       &gt;    ----#----------
+       &gt;    1   |   0
+       &gt;    0   |   1
 <P>
 </PRE>
 That is, every input bit is flipped.
@@ -152,39 +149,40 @@ That is, every input bit is flipped.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program
 <P>
 <PRE>
-      program demo_not
-      implicit none
-      integer :: i
-        ! basics
-         i=-13741
-         print *,&#146;the input value&#146;,i,&#146;represented in bits is&#146;
-         write(*,&#146;(1x,b32.32,1x,i0)&#146;) i, i
-         i=not(i)
-         print *,&#146;on output it is&#146;,i
-         write(*,&#146;(1x,b32.32,1x,i0)&#146;) i, i
-         print *, " on a two&#146;s complement machine flip the bits and add 1"
-         print *, " to get the value with the sign changed, for example."
-         print *, 1234, not(1234)+1
-         print *, -1234, not(-1234)+1
-         print *, " of course &#146;x=-x&#146; works just fine and more generally."
-      end program demo_not
+    program demo_not
+    implicit none
+    integer :: i
+      ! basics
+       i=-13741
+       print *,&#146;the input value&#146;,i,&#146;represented in bits is&#146;
+       write(*,&#146;(1x,b32.32,1x,i0)&#146;) i, i
+       i=not(i)
+       print *,&#146;on output it is&#146;,i
+       write(*,&#146;(1x,b32.32,1x,i0)&#146;) i, i
+       print *, " on a two&#146;s complement machine flip the bits and add 1"
+       print *, " to get the value with the sign changed, for example."
+       print *, 1234, not(1234)+1
+       print *, -1234, not(-1234)+1
+       print *, " of course &#146;x=-x&#146; works just fine and more generally."
+    end program demo_not
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          the input value      -13741 represented in bits is
-          11111111111111111100101001010011 -13741
-          on output it is       13740
-          00000000000000000011010110101100 13740
-           on a two&#146;s complement machine flip the bits and add 1
-           to get the value with the sign changed, for example.
-                 1234       -1234
-                -1234        1234
-           of course &#146;x=-x&#146; works just fine and more generally.
+        the input value      -13741 represented in bits is
+        11111111111111111100101001010011 -13741
+        on output it is       13740
+        00000000000000000011010110101100 13740
+         on a two&#146;s complement machine flip the bits and add 1
+         to get the value with the sign changed, for example.
+               1234       -1234
+              -1234        1234
+         of course &#146;x=-x&#146; works just fine and more generally.
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -194,6 +192,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95
 </BLOCKQUOTE>
 <A name=8>
@@ -202,18 +201,15 @@ Fortran 95
 
 </A>
 <BLOCKQUOTE>
+<P>
 IAND(3), IOR(3), IEOR(3), IBITS(3), IBSET(3),
 <P>
 IBCLR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 not(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>not (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b7ea97ad-d935-4eab-944e-2c4ed56af4f9 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>not (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 78649371-df5a-4df0-b3d7-810adc7fb347 using man macros.</FONT>
 <br><br><center><img src="images/not.3fortran.gif"></center>
 </div>
 </div>

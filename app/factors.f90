@@ -68,59 +68,59 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'       factors(1f) - [NUMBERS] display prime factors of numbers                                                                 ',&
-'       (LICENSE:PD)                                                                                                             ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'       factors [NUMBER]...                                                                                                      ',&
-'       factors -start N -end M                                                                                                  ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   Print the prime factors of each specified integer NUMBER. If none are                                                        ',&
-'   specified on the command line, read them from standard input.                                                                ',&
-'                                                                                                                                ',&
-'   Typically, the numbers must be positive integers where                                                                       ',&
-'                                                                                                                                ',&
-'      2 <= NUMBER <= (2**31)-1 or 2147483647.                                                                                   ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'       -start N   if specified factor a range of numbers starting with this                                                     ',&
-'                  value. If -end is specified defaults to 2.                                                                    ',&
-'       -end M     if specified factor a range of numbers ending with this                                                       ',&
-'                  value. If -start is specified defaults to huge(0).                                                            ',&
-'       --help     display this help and exit                                                                                    ',&
-'       --version  output version information and exit                                                                           ',&
-'       --verbose  verbose output                                                                                                ',&
-'EXAMPLE                                                                                                                         ',&
-' Sample Usage:                                                                                                                  ',&
-'                                                                                                                                ',&
-'  factors 512                                                                                                                   ',&
-'  512: 2 2 2 2 2 2 2 2 2                                                                                                        ',&
-'                                                                                                                                ',&
-'  factors 512 -verbose                                                                                                          ',&
-'  512 factors as (2**9)                                                                                                         ',&
-'                                                                                                                                ',&
-'  factors 202023 2147483647 -verbose                                                                                            ',&
-'  202023 factors as (3**2)*22447                                                                                                ',&
-'  2147483647 IS A PRIME NUMBER                                                                                                  ',&
-'                                                                                                                                ',&
-'  factors -start 2 -end 12 -verbose                                                                                             ',&
-'  2 IS A PRIME NUMBER                                                                                                           ',&
-'  3 IS A PRIME NUMBER                                                                                                           ',&
-'  4 factors as (2**2)                                                                                                           ',&
-'  5 IS A PRIME NUMBER                                                                                                           ',&
-'  6 factors as 2*3                                                                                                              ',&
-'  7 IS A PRIME NUMBER                                                                                                           ',&
-'  8 factors as (2**3)                                                                                                           ',&
-'  9 factors as (3**2)                                                                                                           ',&
-'  10 factors as 2*5                                                                                                             ',&
-'  11 IS A PRIME NUMBER                                                                                                          ',&
-'  12 factors as (2**2)*3                                                                                                        ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'       factors(1f) - [NUMBERS] display prime factors of numbers                 ',&
+'       (LICENSE:PD)                                                             ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'       factors [NUMBER]...                                                      ',&
+'       factors -start N -end M                                                  ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   Print the prime factors of each specified integer NUMBER. If none are        ',&
+'   specified on the command line, read them from standard input.                ',&
+'                                                                                ',&
+'   Typically, the numbers must be positive integers where                       ',&
+'                                                                                ',&
+'      2 <= NUMBER <= (2**31)-1 or 2147483647.                                   ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'       -start N   if specified factor a range of numbers starting with this     ',&
+'                  value. If -end is specified defaults to 2.                    ',&
+'       -end M     if specified factor a range of numbers ending with this       ',&
+'                  value. If -start is specified defaults to huge(0).            ',&
+'       --help     display this help and exit                                    ',&
+'       --version  output version information and exit                           ',&
+'       --verbose  verbose output                                                ',&
+'EXAMPLE                                                                         ',&
+' Sample Usage:                                                                  ',&
+'                                                                                ',&
+'  factors 512                                                                   ',&
+'  512: 2 2 2 2 2 2 2 2 2                                                        ',&
+'                                                                                ',&
+'  factors 512 -verbose                                                          ',&
+'  512 factors as (2**9)                                                         ',&
+'                                                                                ',&
+'  factors 202023 2147483647 -verbose                                            ',&
+'  202023 factors as (3**2)*22447                                                ',&
+'  2147483647 IS A PRIME NUMBER                                                  ',&
+'                                                                                ',&
+'  factors -start 2 -end 12 -verbose                                             ',&
+'  2 IS A PRIME NUMBER                                                           ',&
+'  3 IS A PRIME NUMBER                                                           ',&
+'  4 factors as (2**2)                                                           ',&
+'  5 IS A PRIME NUMBER                                                           ',&
+'  6 factors as 2*3                                                              ',&
+'  7 IS A PRIME NUMBER                                                           ',&
+'  8 factors as (2**3)                                                           ',&
+'  9 factors as (3**2)                                                           ',&
+'  10 factors as 2*5                                                             ',&
+'  11 IS A PRIME NUMBER                                                          ',&
+'  12 factors as (2**2)*3                                                        ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
@@ -200,7 +200,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2023-02-12 18:35:23 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:55:01 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

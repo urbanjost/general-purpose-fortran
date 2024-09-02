@@ -1,7 +1,8 @@
   program demo_system_stat
 
      use M_system, only : system_stat, system_getpwuid, system_getgrgid
-     use M_time, only :   fmtdate, u2d
+     use M_system, only : epoch_to_calendar
+     !use M_time, only :   fmtdate, u2d
      use, intrinsic :: iso_fortran_env, only : int32, int64
      implicit none
 
@@ -30,7 +31,7 @@
 
      CALL SYSTEM_STAT("/etc/hosts", buff, status)
 
-     if (status == 0) then
+     if(status == 0) then
         write (*, FMT="('Device ID(hex/decimal):',      &
         & T30, Z0,'h/',I0,'d')") buff(1),buff(1)
         write (*, FMT="('Inode number:',                &
@@ -48,11 +49,14 @@
         write (*, FMT="('File size(bytes):',            &
         & T30, I0)") buff(8)
         write (*, FMT="('Last access time:',            &
-        & T30, I0,1x, A)") buff(9), fmtdate(u2d(int(buff(9))),fmt_date)
+        & T30, I0,1x, A)") buff(9),  epoch_to_calendar(buff(9))
+        !& T30, I0,1x, A)") buff(9), fmtdate(u2d(int(buff(9))),fmt_date)
         write (*, FMT="('Last modification time:',      &
-        & T30, I0,1x, A)") buff(10),fmtdate(u2d(int(buff(10))),fmt_date)
+        & T30, I0,1x, A)") buff(10), epoch_to_calendar(buff(10))
+        !& T30, I0,1x, A)") buff(10),fmtdate(u2d(int(buff(10))),fmt_date)
         write (*, FMT="('Last status change time:',     &
-        & T30, I0,1x, A)") buff(11),fmtdate(u2d(int(buff(11))),fmt_date)
+        & T30, I0,1x, A)") buff(11), epoch_to_calendar(buff(11))
+        !& T30, I0,1x, A)") buff(11),fmtdate(u2d(int(buff(11))),fmt_date)
         write (*, FMT="('Preferred block size(bytes):', &
         & T30, I0)") buff(12)
         write (*, FMT="('No. of blocks allocated:',     &

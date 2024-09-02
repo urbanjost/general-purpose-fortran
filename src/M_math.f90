@@ -55,6 +55,8 @@ private
   public skekurx        ! skew and kurtosis variant
   public skekur1        ! skew and kurtosis variant
   public stddev         ! standard deviation
+
+  public nextp          ! next permutation of a previously sorted integer array
   ! SCALES AND RANGES
   public scale1         ! given xmin,xmax,n, find new range xminp xmaxp divisible into approximately n linear intervals of size dist
   public scale3         ! find nice log range, typically for an axis
@@ -257,7 +259,7 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine julfit(x,y,ixn,itype,a,b,r2)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 ! ident_2="@(#) M_math julfit(3f) linear least squares curve fits destroys input arrays"
 integer,intent(in) :: ixn
 real               :: x(ixn)
@@ -1029,7 +1031,7 @@ end subroutine lowest
 !===================================================================================================================================
 SUBROUTINE SPLIFT(X,Y,YP,YPP,N,ierr,a1,b1,an,bn)
 !-----------------------------------------------------------------------------------------------------------------------------------
-use M_journal, only : journal
+use M_framework__journal, only : journal
 ! ident_5="@(#) M_math splift(3f) fits a spline to the n data points given in x and y"
 integer,intent(in)            :: N
 real,intent(in)               :: X(N),Y(N)
@@ -1437,7 +1439,7 @@ END SUBROUTINE linearint
 !!##LICENSE
 !!    Public Domain
 subroutine gcsgau1(n,a,b)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 integer,parameter  :: dp=kind(0.0d0)
 integer,intent(in) :: n
@@ -1579,7 +1581,7 @@ end subroutine gcsgau1
 !!##LICENSE
 !! Public Domain
 subroutine glstsq(ideg,x,y,n0,d)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit doubleprecision(a-h,o-z)
 
 integer             :: ideg       !* ideg is  desired degree of least square fit and test
@@ -1706,7 +1708,7 @@ end subroutine glstsq
 !!##LICENSE
 !!    Public Domain
 subroutine gcsgau2(n,a,b)
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit doubleprecision(a-h,o-z)
 integer      :: n
 real         :: a(11,11)
@@ -2374,7 +2376,7 @@ data  co(1,1), co(2,1), co(3,1), co(4,1), co(1,2), co(2,2),   &
 !
 subroutine ju_xermsg (librar, subrou, messg, nerr, level)
 !***PURPOSE  Process error messages for SLATEC and other libraries.
-use m_journal, only : journal
+use M_framework__journal, only : journal
 character(len=*),intent(in)  :: librar
 character(len=*),intent(in)  :: subrou
 character(len=*),intent(in)  :: messg
@@ -2912,7 +2914,7 @@ end subroutine trapezoidal_integral
 !!      >
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine citer(a,r,h,s,c,dadh)
-use m_journal, only : journal
+use M_framework__journal, only : journal
 ! ident_9="@(#) M_math citer(3f) determine various geometric properties of circle segment given radius and area of the segment."
 !
 ! COPYRIGHT (C) John S. Urban, 08/31/1995
@@ -4276,8 +4278,8 @@ integer                         :: ind(1)
 end function closest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_closest()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
    call unit_check_start('closest',msg='')
    !*!call unit_check('closest', 0.eq.0, 'checking',100)
    call unit_check_done('closest',msg='')
@@ -4361,7 +4363,9 @@ end function hypot
 !!
 !!    program demo_extremum
 !!    use M_math, only : extremum
+!!    implicit none
 !!    real,allocatable :: arr(:)
+!!    real :: small, big
 !!    arr=[-10.0,8.8,-5.0,0.0,5.0,10.0,-0.3]
 !!    call extremum(arr,small,big)
 !!    write(*,*)'ARRAY=',arr
@@ -5087,7 +5091,7 @@ end function stddev
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine scale1(xmin0, xmax0, n0, xminp, xmaxp, dist)
 !-----------------------------------------------------------------------------------------------------------------------------------
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 ! ident_22="@(#) M_math scale1(3f) given xmin xmax n find new range xminp xmaxp divisible into approximately n linear intervals of size dist"
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -5254,7 +5258,7 @@ end subroutine scale1
 subroutine scale3(xmin0, xmax0, n0 , xminp, xmaxp, dist)
 !-----------------------------------------------------------------------------------------------------------------------------------
 !-----------------------------------------------------------------------------------------------------------------------------------
-use M_journal, only : journal
+use M_framework__journal, only : journal
 implicit none
 ! ident_23="@(#) M_math scale3(3f) find nice log range."
 
@@ -5648,6 +5652,129 @@ end subroutine iswap
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
+
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!>
+!!##NAME
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!   subroutine nextp(n,a)
+!!
+!!    integer,parameter     :: dp=kind(0.0d0)
+!!    integer,intent(in)    :: n
+!!    integer,intent(inout) :: a(:)
+!!##DESCRIPTION
+!!    Permutation generation in lexicographic order
+!!
+!!    There are many ways to systematically generate all permutations of
+!!    a given sequence. One classic, simple, and flexible algorithm is
+!!    based upon finding the next permutation in lexicographic ordering, if it
+!!    exists. It can handle repeated values, for which case it generates each
+!!    distinct multiset permutation once. Even for ordinary permutations it is
+!!    significantly more efficient than generating values for the Lehmer code
+!!    in lexicographic order (possibly using the factorial number system) and
+!!    converting those to permutations. It begins by sorting the sequence in
+!!    (weakly) increasing order (which gives its lexicographically minimal
+!!    permutation), and then repeats advancing to the next permutation as
+!!    long as one is found. The method goes back to Narayana Pandita in 14th
+!!    century India, and has been rediscovered frequently.[45]
+!!
+!!    The following algorithm generates the next permutation lexicographically
+!!    after a given permutation. It changes the given permutation in-place.
+!!
+!!     * Find the largest index k such that a[k] < a[k + 1]. If no such index
+!!       exists, the permutation is the last permutation.
+!!     * Find the largest index l greater than k such that a[k] < a[l].
+!!     * Swap the value of a[k] with that of a[l].
+!!     * Reverse the sequence from a[k + 1] up to and including the final
+!!       element a[n].
+!!
+!!    For example, given the sequence [10, 20, 30, 40] (which is in increasing
+!!    order), and given that the index is one-based, the steps are as follows:
+!!
+!!    1) Index k = 3, because 30 is placed at an index that satisfies condition
+!!       of being the largest index that is still less than a[k + 1] which is 40.
+!!       if no such index exists no more permutations exist
+!!
+!!    2) Index l = 4, because 40 is the only value in the sequence that is greater
+!!       than 30 in order to satisfy the condition a[k] < a[l].
+!!
+!!    3) The values of a[3] and a[4] are swapped to form the new sequence
+!!       [10,20,40,30].
+!!
+!!    4) The sequence after k-index a[3] to the final element is reversed. Because
+!!       only one value lies after this index (the 30), the sequence remains
+!!       unchanged in this instance. Thus the lexicographic successor of the
+!!       initial state is permuted: [10,20,40,30].
+!!
+!!    5) Following this algorithm, the next lexicographic permutation will be
+!!       [10,30,20,40], and the 24th permutation will be [40,30,20,10] at which point a[k]
+!!       < a[k + 1] does not exist, indicating that this is the last permutation.
+!!
+!!    This method uses about 3 comparisons and 1.5 swaps per permutation,
+!!    amortized over the whole sequence, not counting the initial sort.
+!!##EXAMPLE
+!!
+!!
+!! Sample program:
+!!
+!!       program demo_nextp
+!!       use M_math, only : nextp
+!!       integer,parameter :: n=4
+!!       integer i,a(n)
+!!       a=[(i,i=1,n)]  ! Must be sorted from smallest to largest
+!!       do
+!!          print *,(a(i),i=1,n)
+!!          if(.not.nextp(n,a)) exit
+!!       enddo
+!!       end program demo_nextp
+!!
+!!##REFERENCES
+!!    Wikipedia
+!!
+!!##WRITTEN BY
+!!
+!!##LICENSE
+!!    Public Domain
+function nextp(n,a)
+implicit none
+integer n , a , i , j , k , t
+logical nextp
+dimension a(n)
+   i = n - 1
+   do while ( a(i)>=a(i+1) )
+      i = i - 1
+      if ( i==0 ) exit
+   enddo
+   j = i + 1
+   k = n
+   do
+      t = a(j)
+      a(j) = a(k)
+      a(k) = t
+      j = j + 1
+      k = k - 1
+      if ( j>=k ) then
+         j = i
+         if ( j==0 ) exit
+         do
+            j = j + 1
+            if ( a(j)>=a(i) ) then
+               t = a(i)
+               a(i) = a(j)
+               a(j) = t
+               nextp = .true.
+               goto 99999
+            endif
+         enddo
+      endif
+   enddo
+   nextp = .false.
+   return
+99999 end function nextp
 
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

@@ -45,25 +45,42 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'     mv-(1f) - [FUNIX:FILESYSTEM] rename file                                                                                   ',&
-'     (LICENSE:PD)                                                                                                               ',&
-'SYNOPSIS                                                                                                                        ',&
-'     mv- SOURCE DEST                                                                                                            ',&
-'DESCRIPTION                                                                                                                     ',&
-'       Rename file SOURCE to DEST                                                                                               ',&
-'                                                                                                                                ',&
-'EXAMPLE                                                                                                                         ',&
-'     mv- file.text /tmp/file.txt                                                                                                ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'     mv-(1f) - [FUNIX:FILESYSTEM] rename file                                   ',&
+'     (LICENSE:PD)                                                               ',&
+'SYNOPSIS                                                                        ',&
+'     mv- SOURCE DEST                                                            ',&
+'DESCRIPTION                                                                     ',&
+'       Rename file SOURCE to DEST                                               ',&
+'                                                                                ',&
+'EXAMPLE                                                                         ',&
+'     mv- file.text /tmp/file.txt                                                ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!      mv-(1f) - [FUNIX:FILESYSTEM] rename file
+!!      (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!      mv- SOURCE DEST
+!!##DESCRIPTION
+!!        Rename file SOURCE to DEST
+!!
+!!##EXAMPLE
+!!
+!!      mv- file.text /tmp/file.txt
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 
 subroutine help_version(l_version)
 implicit none
@@ -85,7 +102,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
 '@(#)COMPILED:       Sun, Nov 27th, 2016 10:47:13 PM>',&
-'@(#)COMPILED:       2023-02-12 12:23:15 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:51:39 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

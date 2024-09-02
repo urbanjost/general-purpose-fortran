@@ -1,7 +1,7 @@
      program demo_linewidth
      use M_pixel,    only : prefsize, vinit, ortho2, clear, P_pixel, P_colormap
      use M_pixel,    only : move2, draw2, vexit, color, linewidth
-     use M_writegif, only : writegif
+     use M_pixel__writegif, only : writegif
      use M_pixel,    only : d2r, polar_to_cartesian
      implicit none
      integer :: i
@@ -28,6 +28,6 @@
            call linewidth(i/5/3)
            call draw2(x,y)
         enddo
-        call writegif('linewidth.3m_pixel.gif',P_pixel,P_colormap)
+        call writegif('linewidth.3M_pixel.gif',P_pixel,P_colormap)
         call vexit()
      end program demo_linewidth

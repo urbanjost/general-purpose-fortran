@@ -113,10 +113,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <!-- =========================================================================================================================== -->
 <dt><b> CONSTANTS </b></dt><dd>
 <pre>
-
-   The variables used to hold the X,Y,$X
-   $Y, ... arrays and the dictionaries of variable names and
-   string names and their associated values:
+   The variables used to hold the X,Y,$X, $Y, ... arrays and the
+   dictionaries of variable names and string names and their associated
+   values:
 
 <blockquote>
 <ul>
@@ -188,7 +187,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
           on spaces. Therefore, it is generally good practice to assume
           unquoted white-space ends an expression.
      </li>
-     <li> All numeric values are treated as FORTRAN type REAL variables.
+     <li> All numeric values are treated as FORTRAN type DOUBLEPRECISION variables.
      </li>
      <li> Input lines should not normally be over 255 characters long,
      </li>
@@ -763,21 +762,22 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    ctrl-D
 </pre>
 <pre>
+Sample program:
 <!--FORTRAN90--><xmp>
-      program demo_M_calculator
-         !     line mode calculator that calls calculator
-         !
-         use M_calculator, only: calculator,iclen_calc
-         use M_calculator, only : rnum0
-         use M_calculator, only : set_mysub, set_myfunc
-         implicit none
-         integer, parameter        :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
-         character(len=iclen_calc) :: event, line
-         character(len=iclen_calc) :: outlin
-         integer                   :: ios
-         integer                   :: ierr
-         real(kind=k_dbl)          :: rvalue
-         character(len=80)         :: string
+     program demo_M_calculator
+      ! line mode calculator that calls calculator
+      !
+      use M_calculator, only: calculator,iclen_calc
+      use M_calculator, only : rnum0
+      use M_calculator, only : set_mysub, set_myfunc
+      implicit none
+      integer, parameter        :: dp = SELECTED_REAL_KIND(15,300) ! real*8
+      character(len=iclen_calc) :: event, line
+      character(len=iclen_calc) :: outlin
+      integer                   :: ios
+      integer                   :: ierr
+      real(kind=dp)             :: rvalue
+      character(len=80)         :: string
          INFINITE: do
             read(*,'(a)',iostat=ios)line
             if(ios.ne.0)exit INFINITE
@@ -819,73 +819,70 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
          !
          call set_mysub(my_functions)
          call set_myfunc(c)
-         contains
-         subroutine my_functions(func,iflen,args,iargstp,n,fval,ctmp,ier)
-         ! extend functions available to the calculator routine
-         !
-         !  if the function ownmode(1) is called this subroutine
-         !  will be accessed to do user-written functions.
-         !
-         !  func(iend-1)=procedure name. func should not be changed.
-         !  iflen=length of procedure name.
-         !  args=array of 100 elements containing procedure arguments.
-         !  iargstp=type of argument(1=numeric value,2=position of string value)
-         !  n=integer number of parameters
-         !  x=array of 55555 x values
-         !  y=array of 55555 y values
-         !  fval=value to replace function call
-         !  ctmp=string to return when returning a string value
-         !  ier=returned error flag value.
-         !      set to -1 if an error occurs.
-         !      set to  0 if a number is returned
-         !      set to  2 if a string is returned
-         !
-         use M_calculator, only: x,y,values,values_len,iclen_calc
-         integer, parameter           :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
-         ! values: the values of string variables
-         ! values_len: the lengths of the string variable values
-         character(len=*),intent(in)  :: func
-         integer,intent(in)           :: iflen
-         real(kind=k_dbl),intent(in)  :: args(100)
-         integer,intent(in)           :: iargstp(100)
-         integer,intent(in)           :: n
-         real(kind=k_dbl)             :: fval
-         character(len=*)             :: ctmp
-         integer                      :: ier
-         !
-         integer                      :: iwhich
-         integer                      :: i10
-         integer                      :: ilen
-         character(len=iclen_calc)    :: temp1
-            fval=0.0d0
-         !-----------------------------------------------------------------------
-            write(*,*)'*my_functions* unknown function ', func(1:iflen)
-            write(*,*)'function name length is..',iflen
-            write(*,*)'number of arguments .....',n
-            do i10=1,n
-               if(iargstp(i10).eq.0)then
-                  write(*,*)i10,' VALUE=',args(i10)
-               elseif(iargstp(i10).eq.2)then
-                  iwhich=int(args(i10))
-                  ilen=values_len(iwhich)
-                  write(*,*)i10,' STRING='//values(iwhich)(:ilen)
-               else
-                  write(*,*)'unknown parameter type is ',iargstp(i10)
-               endif
-            enddo
-         end subroutine my_functions
-         !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-         real function c(fval,n)
-         implicit none
-         !  a built-in calculator function called c must be satisfied.
-         !  write whatever you want here as a function
-         integer, parameter          :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
-         integer,intent(in)          :: n
-         real(kind=k_dbl),intent(in) :: fval(n)
-            c=0.0_k_dbl
-         end function c
-         !ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-         end program demo_M_calculator
+      contains
+      subroutine my_functions(func,iflen,args,iargstp,n,fval,ctmp,ier)
+      ! extend functions available to the calculator routine
+      !
+      !  if the function ownmode(1) is called this subroutine
+      !  will be accessed to do user-written functions.
+      !
+      !  func(iend-1)=procedure name. func should not be changed.
+      !  iflen=length of procedure name.
+      !  args=array of 100 elements containing procedure arguments.
+      !  iargstp=type of argument(1=numeric value,2=position of string value)
+      !  n=integer number of parameters
+      !  x=array of 55555 x values
+      !  y=array of 55555 y values
+      !  fval=value to replace function call
+      !  ctmp=string to return when returning a string value
+      !  ier=returned error flag value.
+      !      set to -1 if an error occurs.
+      !      set to  0 if a number is returned
+      !      set to  2 if a string is returned
+      !
+      use M_calculator, only: x,y,values,values_len,iclen_calc
+      ! values: the values of string variables
+      ! values_len: the lengths of the string variable values
+      character(len=*),intent(in)  :: func
+      integer,intent(in)           :: iflen
+      real(kind=dp),intent(in)     :: args(100)
+      integer,intent(in)           :: iargstp(100)
+      integer,intent(in)           :: n
+      real(kind=dp)                :: fval
+      character(len=*)             :: ctmp
+      integer                      :: ier
+      !
+      integer                      :: iwhich
+      integer                      :: i10
+      integer                      :: ilen
+      character(len=iclen_calc)    :: temp1
+         fval=0.0d0
+         write(*,*)'*my_functions* unknown function ', func(1:iflen)
+         write(*,*)'function name length is..',iflen
+         write(*,*)'number of arguments .....',n
+         do i10=1,n
+            if(iargstp(i10).eq.0)then
+               write(*,*)i10,' VALUE=',args(i10)
+            elseif(iargstp(i10).eq.2)then
+               iwhich=int(args(i10))
+               ilen=values_len(iwhich)
+               write(*,*)i10,' STRING='//values(iwhich)(:ilen)
+            else
+               write(*,*)'unknown parameter type is ',iargstp(i10)
+            endif
+         enddo
+      end subroutine my_functions
+      !
+      real function c(fval,n)
+      implicit none
+      !  a built-in calculator function called c must be satisfied.
+      !  write whatever you want here as a function
+      integer,intent(in)          :: n
+      real(kind=dp),intent(in) :: fval(n)
+         c=0.0_dp
+      end function c
+      !
+     end program demo_M_calculator
 </xmp>
 </pre>
 </dd>

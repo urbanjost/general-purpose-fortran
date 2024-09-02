@@ -664,11 +664,15 @@
 !!
 !!    program demo_M_calcomp
 !!    use M_calcomp
+!!    implicit none
 !!    ! 07/30/69
 !!    real              :: x(104), y(104)
 !!    character(len=40) :: msg
 !!    integer,parameter :: kin = 50
 !!    equivalence(x(1),xl),(y(1),yl)
+!!    real :: a, d, di, dx, dy, f, h, w, rf, rma, rmi, ro, sl, sn
+!!    real :: th0, thf, tho, xl, yl
+!!    integer :: i, inc, ipen, ipn, j, j1, j2, nc, npts, nrec, nx, ny
 !!    9007 format(7(1X,F9.3),F7.1)
 !!       call make_c_qa4()   ! create datafile
 !!       f = 1.0
@@ -1292,10 +1296,13 @@ end subroutine circl
 !!
 !!    program demo_dashl
 !!    use m_calcomp
+!!    implicit none
 !!    character(len=28) :: ichr1
 !!    character(len=26) :: ichr2
 !!    character(len=10) :: lbcd1,lbcd2
-!!    dimension xarray(62),yarray(62)
+!!    real :: xarray(62),yarray(62)
+!!    real :: deltax
+!!    integer :: j, inteq
 !!    ichr1='PLOTTED ON A CALCOMP PLOTTER'
 !!    ichr2='USING  Y = X -0.7*X +0.1*X'
 !!    lbcd1='X-ABSCISSA'
@@ -4674,10 +4681,14 @@ end subroutine smoot
 !!
 !!    program demo_axis
 !!    use M_calcomp
+!!    implicit none
 !!    character(len=28) :: ichr1
 !!    character(len=26) :: ichr2
 !!    character(len=10) :: lbcd1,lbcd2
+!!    real :: xarray, yarray
 !!    dimension xarray(62),yarray(62)
+!!    real deltax
+!!    integer :: i, j, inteq
 !!    ICHR1='PLOTTED ON A CALCOMP PLOTTER'
 !!    ICHR2='USING  Y = X -0.7*X +0.1*X'
 !!    LBCD1='X-ABSCISSA'
@@ -4878,6 +4889,7 @@ end subroutine axis
 !!    use M_calcomp, only : plots, plot, number, symbol, newpen
 !!    use M_calcomp, only : nframe, factor, rect
 !!    use M_calcomp, only : MOVE, END, DRAW
+!!    implicit none
 !!    call plots(0.0,10.0,0.0,10.0)
 !!    call draw_car_prices()
 !!    call nframe()
@@ -4892,6 +4904,8 @@ end subroutine axis
 !!       character(len=21) :: ichr6
 !!       character(len=19) :: ichr7
 !!       character(len=17) :: ichr8
+!!       real :: x, y, value, age
+!!       integer :: i, j, inteq
 !!       ichr6='CAR MODEL AGE (YEARS)'
 !!       ichr7='CAR VALUE (DOLLARS)'
 !!       ichr8='AVERAGE CAR VALUE'
@@ -4963,7 +4977,7 @@ subroutine mset(mode)
 ! DATE: 3/85
 !
    character(len=*),intent(in) :: mode
-   character l_mode*8
+   character(len=8) :: l_mode
 !
    l_mode=mode
 !
@@ -5088,6 +5102,7 @@ end subroutine mpset
 !!
 !!    program demo_line
 !!    use M_calcomp
+!!    implicit none
 !!    call plots(0.0,30.0,0.0,30.0)
 !!    call drawplot(0) ! solid line
 !!    call plot( 0.0,15.0,-MOVE)
@@ -5097,10 +5112,15 @@ end subroutine mpset
 !!    call plot(0.0,0.0,999)
 !!    contains
 !!    subroutine drawplot(linetype)
+!!    implicit none
+!!    integer :: linetype
+!!    real :: deltax
 !!    character(len=28) :: ichr1
 !!    character(len=26) :: ichr2
 !!    character(len=10) :: lbcd1,lbcd2
+!!    real :: xarray, yarray
 !!    dimension xarray(62),yarray(62)
+!!    integer :: inteq, j
 !!    ichr1='PLOTTED ON A CALCOMP PLOTTER'
 !!    ichr2='USING  Y = X -0.7*X +0.1*X'
 !!    lbcd1='X-ABSCISSA'
@@ -5327,9 +5347,12 @@ end subroutine width
 !!
 !!    program demo_newpen
 !!    use M_calcomp
+!!    implicit none
 !!    character(len= 4)  :: ICHR3='ANG='
 !!    character(len= 4)  :: ICHR4=', H='
 !!    character(len= 19) :: ICHR5='ANGULAR LETTER TEST'
+!!    real :: angle, height, xx, yy, rad
+!!    integer :: i, inteq
 !!    call plots(0.0,10.0,0.0,10.0)
 !!    ! PLOT ANGULAR LETTER TEST
 !!    call plot(4.5,5.5,-3)
@@ -6289,45 +6312,48 @@ end subroutine plots
 !!
 !!    program demo_scale
 !!    use M_calcomp
-!!
-!!    character * 28 ichr1
-!!    character * 26 ichr2
-!!    character * 10 lbcd1,lbcd2
-!!    dimension xarray(62),yarray(62)
-!!    ICHR1='PLOTTED ON A CALCOMP PLOTTER'
-!!    ICHR2='USING  Y = X -0.7*X +0.1*X'
-!!    LBCD1='X-ABSCISSA'
-!!    LBCD2='Y-ORDINATE'
-!!    call plots(0.0,10.0,0.0,10.0)
+!!    implicit none
+!!    character(len=28) :: ichr1
+!!    character(len=26) :: ichr2
+!!    character(len=10) :: lbcd1, lbcd2
+!!    real :: xarray, yarray
+!!    dimension xarray(62), yarray(62)
+!!    real :: deltax
+!!    integer :: i, j, inteq
+!!    ICHR1 = 'PLOTTED ON A CALCOMP PLOTTER'
+!!    ICHR2 = 'USING  Y = X -0.7*X +0.1*X'
+!!    LBCD1 = 'X-ABSCISSA'
+!!    LBCD2 = 'Y-ORDINATE'
+!!    call plots(0.0, 10.0, 0.0, 10.0)
 !!    ! PLOT THREE GRAPHS ILLUSTRATING SCALE, AXIS, AND LINE
-!!    deltax=0.04
-!!    i=1
+!!    deltax = 0.04
+!!    i = 1
 !!    ! AXIS DRAWS LABELS AS MUCH AS 0.4 INCHES TO THE NEGATIVE OF AXIS CENTER;
 !!    ! EITHER USE AN ORIGIN OFFSET OF AT LEAST THIS VALUE OR DO NOT USE AN
 !!    ! ORIGIN VALUE OF LESS THAN 0.4 OR CLIPPING WILL OCCUR
-!!    call plot(0.4,0.4,-3)
-!!    deltax=2.0*deltax
-!!    xarray(1)=deltax
-!!    do j=1,60
-!!       yarray(j)=xarray(j)**2-0.7*xarray(j)**3+0.1*xarray(j)**4
-!!       xarray(j+1)=xarray(j)+deltax
-!!    enddo
-!!    call scale(xarray(1), 6.5,60,1)
-!!    call scale(yarray(1),10.0,60,1)
-!!    call axis(0.0,0.0,lbcd1,-10, 6.5, 0.0,xarray(61),xarray(62))
-!!    call axis(0.0,0.0,lbcd2, 10,10.0,90.0,yarray(61),yarray(62))
+!!    call plot(0.4, 0.4, -3)
+!!    deltax = 2.0*deltax
+!!    xarray(1) = deltax
+!!    do j = 1, 60
+!!       yarray(j) = xarray(j)**2 - 0.7*xarray(j)**3 + 0.1*xarray(j)**4
+!!       xarray(j + 1) = xarray(j) + deltax
+!!    end do
+!!    call scale(xarray(1), 6.5, 60, 1)
+!!    call scale(yarray(1), 10.0, 60, 1)
+!!    call axis(0.0, 0.0, lbcd1, -10, 6.5, 0.0, xarray(61), xarray(62))
+!!    call axis(0.0, 0.0, lbcd2, 10, 10.0, 90.0, yarray(61), yarray(62))
 !!    call newpen(i)
-!!    call line(xarray(1),yarray(1),60,1,2*(i-2),i)
+!!    call line(xarray(1), yarray(1), 60, 1, 2*(i - 2), i)
 !!    call newpen(1)
-!!    call symbol(1.3,10.,.14,ichr1,inteq,0.0,28)
-!!    call symbol(1.3,9.7,.14,ichr2,inteq,0.0,26)
-!!    call number(2.98,9.8,.1,2.0,0.,-1)
-!!    call number(3.96,9.8,.1,3.0,0.,-1)
-!!    call number(4.94,9.8,.1,4.0,0.,-1)
+!!    call symbol(1.3, 10., .14, ichr1, inteq, 0.0, 28)
+!!    call symbol(1.3, 9.7, .14, ichr2, inteq, 0.0, 26)
+!!    call number(2.98, 9.8, .1, 2.0, 0., -1)
+!!    call number(3.96, 9.8, .1, 3.0, 0., -1)
+!!    call number(4.94, 9.8, .1, 4.0, 0., -1)
 !!
 !!    !call plot(10.0,0.0,-3)
-!!    call plot(0.0,0.0,999)
-!!    end program demo_scale
+!!    call plot(0.0, 0.0, 999)
+!! end program demo_scale
 !!
 !!##LICENSE
 !!    Public Domain
@@ -6498,7 +6524,7 @@ end subroutine scale
 !!  For example, the following call to SYMBOL will result in the characters TITLE
 !!  10 being output beginning at the X and Y coordinates of 1.0 .
 !!
-!!     character grlbl*8
+!!     character(len=8) :: grlbl
 !!     grlbl='title 10'
 !!     call symbol(1.0,1.0,0.14,grlbl,999,0.0,8)
 !!
@@ -6555,6 +6581,7 @@ end subroutine scale
 !!
 !!    program demo_symbol
 !!    use M_calcomp
+!!    implicit none
 !!
 !!    ! produce a symbol table which shows the characters
 !!    ! available in the symbol(3f) routine.
@@ -6564,7 +6591,7 @@ end subroutine scale
 !!    character(len= 60),parameter :: ichr3='INTEGER FOR USE IN SYMBOL CALL SHOWN TO LEFT OF EACH SYMBOL'
 !!    character(len= 1 )           :: ibcd
 !!    integer                      :: ia,ib
-!!    integer                      :: m
+!!    integer                      :: m, inteq
 !!    real                         :: z, xs, ys, x, y
 !!       call plots(0.0,10.0,0.0,10.0)
 !!       call plot(0.8,0.8,1001)
@@ -7300,7 +7327,7 @@ subroutine cntour (am,xx,yy,totx,toty,hgt,cv,cvn,tab,ndimyy)
 ! ident_31="@(#) m_calcomp cntour(3f) draw a contour plot"
 
 integer xx,yy,cvn
-character encxde*9
+character(len=9) :: encxde
 integer :: ndimyy
 real am(ndimyy,*),totx(*),toty(*),cv(*),hgt
 logical tab

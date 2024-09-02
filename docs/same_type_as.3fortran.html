@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>same_type_as (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>same_type_as (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>same_type_as(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-same_type_as(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 SAME_TYPE_AS(3) - [STATE:INQUIRY] Query dynamic types for equality
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ SAME_TYPE_AS(3) - [STATE:INQUIRY] Query dynamic types for equality
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = same_type_as(a, b)
 <P>
 <PRE>
-           logical same_type_as(a, b)
+         logical same_type_as(a, b)
 <P>
-            type(TYPE(kind=KIND),intent(in) :: a
-            type(TYPE(kind=KIND),intent(in) :: b
+          type(TYPE(kind=KIND)),intent(in) :: a
+          type(TYPE(kind=KIND)),intent(in) :: b
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = same_type_as(a, b)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -114,6 +108,7 @@ undefined association status.
 
 </A>
 <BLOCKQUOTE>
+<P>
 SAME_TYPE_AS(3) queries the dynamic types of objects for equality.
 </BLOCKQUOTE>
 <A name=4>
@@ -122,6 +117,7 @@ SAME_TYPE_AS(3) queries the dynamic types of objects for equality.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -140,12 +136,14 @@ B : object to be compared to for equality of type
 
 </A>
 <BLOCKQUOTE>
-If the dynamic type of A or B is extensible, the result is true if and only
-if the dynamic type of A is the same as the dynamic type of B. If neither A
-nor B has extensible dynamic type, the result is processor dependent.
+<P>
+If the dynamic type of A or B is extensible, the result is true if and
+only if the dynamic type of A is the same as the dynamic type of B. If
+neither A nor B has extensible dynamic type, the result is processor
+dependent.
 <P>
 <PRE>
-      NOTE1
+    NOTE1
 <P>
 </PRE>
 The dynamic type of a disassociated pointer or unallocated allocatable
@@ -153,84 +151,84 @@ variable is its declared type. An unlimited polymorphic entity has no
 declared type.
 <P>
 <PRE>
-      NOTE2
+    NOTE2
 <P>
 </PRE>
-The test performed by SAME_TYPE_AS is not the same as the test performed by
-the type guard TYPE IS. The test performed by SAME_TYPE_AS does not consider
-kind type parameters.
+The test performed by SAME_TYPE_AS is not the same as the test performed
+by the type guard TYPE IS. The test performed by SAME_TYPE_AS does not
+consider kind type parameters.
 <P>
 Sample program:
 <P>
 <PRE>
-        ! program demo_same_type_as
-        module M_ether
-        implicit none
-        private
+      ! program demo_same_type_as
+      module M_ether
+      implicit none
+      private
 <P>
-        type   :: dot
-          real :: x=0
-          real :: y=0
-        end type dot
+      type   :: dot
+        real :: x=0
+        real :: y=0
+      end type dot
 <P>
-        type, extends(dot) :: point
-          real :: z=0
-        end type point
+      type, extends(dot) :: point
+        real :: z=0
+      end type point
 <P>
-        type something_else
-        end type something_else
+      type something_else
+      end type something_else
 <P>
-        public :: dot
-        public :: point
-        public :: something_else
+      public :: dot
+      public :: point
+      public :: something_else
 <P>
-        end module M_ether
+      end module M_ether
 <P>
-        program demo_same_type_as
-        use M_ether, only : dot, point, something_else
-        implicit none
-        type(dot) :: dad, mom
-        type(point) :: me
-        type(something_else) :: alien
+      program demo_same_type_as
+      use M_ether, only : dot, point, something_else
+      implicit none
+      type(dot) :: dad, mom
+      type(point) :: me
+      type(something_else) :: alien
 <P>
-         write(*,*)same_type_as(me,dad),&#146;I am descended from Dad, but equal?&#146;
-         write(*,*)same_type_as(me,me) ,&#146;I am what I am&#146;
-         write(*,*)same_type_as(dad,mom) ,&#146;what a pair!&#146;
+       write(*,*)same_type_as(me,dad),&#146;I am descended from Dad, but equal?&#146;
+       write(*,*)same_type_as(me,me) ,&#146;I am what I am&#146;
+       write(*,*)same_type_as(dad,mom) ,&#146;what a pair!&#146;
 <P>
-         write(*,*)same_type_as(dad,me),&#146;no paradox here&#146;
-         write(*,*)same_type_as(dad,alien),&#146;no relation&#146;
+       write(*,*)same_type_as(dad,me),&#146;no paradox here&#146;
+       write(*,*)same_type_as(dad,alien),&#146;no relation&#146;
 <P>
-         call pointers()
-         contains
-         subroutine pointers()
-         ! Given the declarations and assignments
-         type t1
-            real c
-         end type
-         type, extends(t1) :: t2
-         end type
-         class(t1), pointer :: p, q, r
-            allocate (p, q)
-            allocate (t2 :: r)
-            ! the result of SAME_TYPE_AS (P, Q) will be true, and the result
-            ! of SAME_TYPE_AS (P, R) will be false.
-            write(*,*)&#146;(P,Q)&#146;,same_type_as(p,q),"mind your P&#146;s and Q&#146;s"
-            write(*,*)&#146;(P,R)&#146;,same_type_as(p,r)
-         end subroutine pointers
+       call pointers()
+       contains
+       subroutine pointers()
+       ! Given the declarations and assignments
+       type t1
+          real c
+       end type
+       type, extends(t1) :: t2
+       end type
+       class(t1), pointer :: p, q, r
+          allocate (p, q)
+          allocate (t2 :: r)
+          ! the result of SAME_TYPE_AS (P, Q) will be true, and the result
+          ! of SAME_TYPE_AS (P, R) will be false.
+          write(*,*)&#146;(P,Q)&#146;,same_type_as(p,q),"mind your P&#146;s and Q&#146;s"
+          write(*,*)&#146;(P,R)&#146;,same_type_as(p,r)
+       end subroutine pointers
 <P>
-        end program demo_same_type_as
+      end program demo_same_type_as
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          F I am descended from Dad, but equal?
-          T I am what I am
-          T what a pair!
-          F no paradox here
-          F no relation
-          (P,Q) T mind your P&#146;s and Q&#146;s
-          (P,R) F
+        F I am descended from Dad, but equal?
+        T I am what I am
+        T what a pair!
+        F no paradox here
+        F no relation
+        (P,Q) T mind your P&#146;s and Q&#146;s
+        (P,R) F
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -240,6 +238,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2003
 </BLOCKQUOTE>
 <A name=7>
@@ -248,16 +247,13 @@ Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 EXTENDS_TYPE_OF(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022        same_type_as(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>same_type_as (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 040fbdc4-9ce6-4307-81a6-3786f9961130 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>same_type_as (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f4cb9010-ec35-4fe6-b879-83e00e978d7d using man macros.</FONT>
 <br><br><center><img src="images/same_type_as.3fortran.gif"></center>
 </div>
 </div>

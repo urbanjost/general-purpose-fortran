@@ -4,10 +4,10 @@
      !  on files up to 1024 characters wide
      use M_strings, only : notabs
      character(len=1024) :: in,out
-     integer             :: ios,iout
+     integer             :: iostat,iout
         do
-           read(*,'(A)',iostat=ios)in
-           if(ios /= 0) exit
+           read(*,'(A)',iostat=iostat)in
+           if(iostat /= 0) exit
            call notabs(in,out,iout)
            write(*,'(a)')out(:iout)
         enddo

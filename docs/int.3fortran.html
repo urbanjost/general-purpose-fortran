@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>int (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>int (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>int(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-int(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 INT(3) - [TYPE:NUMERIC] Truncate towards zero and convert to integer
 <P>
 </BLOCKQUOTE>
@@ -76,13 +68,14 @@ INT(3) - [TYPE:NUMERIC] Truncate towards zero and convert to integer
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = int(a [,kind])
 <P>
 <PRE>
-           elemental integer(kind=KIND) function int(a, KIND )
+         elemental integer(kind=KIND) function int(a, KIND )
 <P>
-            TYPE(kind=**),intent(in) :: a
-            integer,optional :: KIND
+          TYPE(kind=**),intent(in) :: a
+          integer,optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,6 +85,7 @@ result = int(a [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -101,7 +95,8 @@ a kind designated as ** may be any supported kind for the type
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-A shall be of type integer, real, or complex, or a boz-literal-constant.
+A shall be of type integer, real, or complex, or a
+boz-literal-constant.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -115,6 +110,7 @@ KIND shall be a scalar integer constant expression.
 
 </A>
 <BLOCKQUOTE>
+<P>
 INT(3) truncates towards zero and return an integer.
 </BLOCKQUOTE>
 <A name=4>
@@ -123,6 +119,7 @@ INT(3) truncates towards zero and return an integer.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -132,8 +129,8 @@ A : is the value to truncate towards zero
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : indicates the kind parameter of the result. If not present the
-returned type is that of default integer type.
+KIND : indicates the kind parameter of the result. If not present
+the returned type is that of default integer type.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -142,6 +139,7 @@ returned type is that of default integer type.
 
 </A>
 <BLOCKQUOTE>
+<P>
 returns an integer variable applying the following rules:
 <P>
 CASE:
@@ -157,8 +155,8 @@ If A is of type integer, INT(a) = a
 2.
 </TD><TD>
 If A is of type real and |A| &lt; 1, INT(A) equals 0. If |A| &gt;= 1, then
-INT(A) equals the integer whose magnitude does not exceed A and whose
-sign is the same as the sign of A.
+INT(A) equals the integer whose magnitude does not exceed A and
+whose sign is the same as the sign of A.
 </TD></TR>
 <TR valign=top><TD width=4%>
 3.
@@ -171,11 +169,11 @@ If A is of type complex, rule 2 is applied to the real part of A.
 If a is a boz-literal constant, it is treated as an integer with the
 kind specified.
 <P>
-The interpretation of a bit sequence whose most significant bit is 1 is
-processor dependent.
+The interpretation of a bit sequence whose most significant bit is 1
+is processor dependent.
 </TD></TR>
-<TR></TR></TABLE>The result is undefined if it cannot be represented in the specified integer
-type.
+<TR></TR></TABLE>The result is undefined if it cannot be represented in the specified
+integer type.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -183,66 +181,67 @@ type.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_int
-      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      implicit none
-      integer :: i = 42
-      complex :: z = (-3.7, 1.0)
-      real :: x=-10.5, y=10.5
+    program demo_int
+    use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    implicit none
+    integer :: i = 42
+    complex :: z = (-3.7, 1.0)
+    real :: x=-10.5, y=10.5
 <P>
-         print *, int(x), int(y)
+       print *, int(x), int(y)
 <P>
-         print *, int(i)
+       print *, int(i)
 <P>
-         print *, int(z), int(z,8)
-         ! elemental
-         print *, int([-10.9,-10.5,-10.3,10.3,10.5,10.9])
-         ! note int(3) truncates towards zero
+       print *, int(z), int(z,8)
+       ! elemental
+       print *, int([-10.9,-10.5,-10.3,10.3,10.5,10.9])
+       ! note int(3) truncates towards zero
 <P>
-         ! CAUTION:
-         ! a number bigger than a default integer can represent
-         ! produces an incorrect result and is not required to
-         ! be detected by the program.
-         x=real(huge(0))+1000.0
-         print *, int(x),x
-         ! using a larger kind
-         print *, int(x,kind=int64),x
+       ! CAUTION:
+       ! a number bigger than a default integer can represent
+       ! produces an incorrect result and is not required to
+       ! be detected by the program.
+       x=real(huge(0))+1000.0
+       print *, int(x),x
+       ! using a larger kind
+       print *, int(x,kind=int64),x
 <P>
-         print *, int(&
-         & B"111111111111111111111111111111111111111111111111111111111111111",&
-         & kind=int64)
-         print *, int(O"777777777777777777777",kind=int64)
-         print *, int(Z"7FFFFFFFFFFFFFFF",kind=int64)
+       print *, int(&
+       & B"111111111111111111111111111111111111111111111111111111111111111",&
+       & kind=int64)
+       print *, int(O"777777777777777777777",kind=int64)
+       print *, int(Z"7FFFFFFFFFFFFFFF",kind=int64)
 <P>
-         ! elemental
-         print *
-         print *,int([ &
-         &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &
-         &  0.0,   &
-         &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])
+       ! elemental
+       print *
+       print *,int([ &
+       &  -2.7,  -2.5, -2.2, -2.0, -1.5, -1.0, -0.5, &
+       &  0.0,   &
+       &  +0.5,  +1.0, +1.5, +2.0, +2.2, +2.5, +2.7  ])
 <P>
-      end program demo_int
+    end program demo_int
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;          -10   10
-       &gt;           42
-       &gt;           -3  -3
-       &gt;          -10  -10  -10   10   10  10
-       &gt;  -2147483648   2.14748467E+09
-       &gt;   2147484672   2.14748467E+09
-       &gt;   9223372036854775807
-       &gt;   9223372036854775807
-       &gt;   9223372036854775807
-       &gt;
-       &gt;  -2          -2          -2          -2          -1
-       &gt;  -1           0           0           0           1
-       &gt;   1           2           2           2           2
+     &gt;          -10   10
+     &gt;           42
+     &gt;           -3  -3
+     &gt;          -10  -10  -10   10   10  10
+     &gt;  -2147483648   2.14748467E+09
+     &gt;   2147484672   2.14748467E+09
+     &gt;   9223372036854775807
+     &gt;   9223372036854775807
+     &gt;   9223372036854775807
+     &gt;
+     &gt;  -2          -2          -2          -2          -1
+     &gt;  -1           0           0           0           1
+     &gt;   1           2           2           2           2
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -252,6 +251,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77
 </BLOCKQUOTE>
 <A name=8>
@@ -260,16 +260,13 @@ FORTRAN 77
 
 </A>
 <BLOCKQUOTE>
+<P>
 AINT(3), ANINT(3), NINT(3), SELECTED_INT_KIND(3), CEILING(3), FLOOR(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022                 int(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>int (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4a2c2af9-a351-4c3b-85ee-e1f9eba0e48e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>int (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b4fc1e7c-cce7-48b9-9ed6-efab71b7c222 using man macros.</FONT>
 <br><br><center><img src="images/int.3fortran.gif"></center>
 </div>
 </div>

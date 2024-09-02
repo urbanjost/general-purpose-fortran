@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cmplx (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cmplx (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>cmplx(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-cmplx(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 CMPLX(3) - [TYPE:NUMERIC] Conversion to a complex type
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ CMPLX(3) - [TYPE:NUMERIC] Conversion to a complex type
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = cmplx(x [,kind]) | cmplx(x [,y] [,kind])
 <P>
 <PRE>
-           elemental complex(kind=KIND) function cmplx( x, y, kind )
+         elemental complex(kind=KIND) function cmplx( x, y, kind )
 <P>
-            type(TYPE(kind=**)),intent(in)          :: x
-            type(TYPE(kind=**)),intent(in),optional :: y
-            integer(kind=**),intent(in),optional    :: KIND
+          type(TYPE(kind=**)),intent(in)          :: x
+          type(TYPE(kind=**)),intent(in),optional :: y
+          integer(kind=**),intent(in),optional    :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = cmplx(x [,kind]) | cmplx(x [,y] [,kind])
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -107,18 +101,19 @@ Y may be integer or real. Y is allowed only if X is not complex.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND is a constant integer initialization expression indicating the kind
-parameter of the result.
+KIND is a constant integer initialization expression indicating the
+kind parameter of the result.
 </TD></TR>
-<TR></TR></TABLE>The type of the arguments does not affect the kind of the result except for
-a complex X value.
-<TABLE cellpadding=3><!-- tsb: The type of the arguments does not affect the kind of the result except for
+<TR></TR></TABLE>The type of the arguments does not affect the kind of the result except
+for a complex X value.
+<TABLE cellpadding=3><!-- tsb: The type of the arguments does not affect the kind of the result except
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-if KIND is not present and X is complex the result is of the kind of X.
+if KIND is not present and X is complex the result is of the kind of
+X.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -134,34 +129,35 @@ complex kind.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The CMPLX(3) function converts numeric values to a complex value.
 <P>
-Even though constants can be used to define a complex variable using syntax
-like
+Even though constants can be used to define a complex variable using
+syntax like
 <P>
 <PRE>
-            z = (1.23456789, 9.87654321)
+          z = (1.23456789, 9.87654321)
 <P>
 </PRE>
 this will not work for variables. So you cannot enter
 <P>
 <PRE>
-            z = (a, b)  ! NO ! (unless a and b are constants, not variables)
+          z = (a, b)  ! NO ! (unless a and b are constants, not variables)
 <P>
 </PRE>
-so to construct a complex value using non-complex values you must use the
-CMPLX(3) function:
+so to construct a complex value using non-complex values you must use
+the CMPLX(3) function:
 <P>
 <PRE>
-            z = cmplx(a, b)
+          z = cmplx(a, b)
 <P>
 </PRE>
-or assign values separately to the imaginary and real components using the
-%IM and %RE designators:
+or assign values separately to the imaginary and real components using
+the %IM and %RE designators:
 <P>
 <PRE>
-            z%re = a
-            z%im = b
+          z%re = a
+          z%im = b
 <P>
 </PRE>
 If X is complex Y is not allowed and CMPLX essentially returns the input
@@ -170,44 +166,47 @@ passing a value to a procedure that requires the arguments to have a
 different kind (and does not return an altered value):
 <P>
 <PRE>
-            call something(cmplx(z,kind=real64))
+          call something(cmplx(z,kind=real64))
 <P>
 </PRE>
-would pass a copy of a value with kind=real64 even if z had a different kind
+would pass a copy of a value with kind=real64 even if z had a different
+kind
 <P>
 but otherwise is equivalent to a simple assign. So if z1 and z2 were
 complex:
 <P>
 <PRE>
-            z2 = z1        ! equivalent statements
-            z2 = cmplx(z1)
+          z2 = z1        ! equivalent statements
+          z2 = cmplx(z1)
 <P>
 </PRE>
 If X is not complex X is only used to define the real component of the
-result but Y is still optional -- the imaginary part of the result will just
-be assigned a value of zero.
+result but Y is still optional -- the imaginary part of the result will
+just be assigned a value of zero.
 <P>
 If Y is present it is converted to the imaginary component.
 <P>
 CMPLX(3) AND DOUBLE PRECISION
 <P>
-Primarily in order to maintain upward compatibility you need to be careful
-when working with complex values of higher precision that the default.
+Primarily in order to maintain upward compatibility you need to be
+careful when working with complex values of higher precision that the
+default.
 <P>
 It was necessary for Fortran to continue to specify that CMPLX(3) always
-return a result of the default kind if the KIND option is absent, since that
-is the behavior mandated by FORTRAN 77.
+return a result of the default kind if the KIND option is absent, since
+that is the behavior mandated by FORTRAN 77.
 <P>
-It might have been preferable to use the highest precision of the arguments
-for determining the return kind, but that is not the case. So with arguments
-with greater precision than default values you are required to use the KIND
-argument or the greater precision values will be reduced to default
-precision.
+It might have been preferable to use the highest precision of the
+arguments for determining the return kind, but that is not the case. So
+with arguments with greater precision than default values you are
+required to use the KIND argument or the greater precision values will
+be reduced to default precision.
 <P>
-This means CMPLX(D1,D2), where D1 and D2 are doubleprecision, is treated as:
+This means CMPLX(D1,D2), where D1 and D2 are doubleprecision, is treated
+as:
 <P>
 <PRE>
-            cmplx(sngl(d1), sngl(d2))
+          cmplx(sngl(d1), sngl(d2))
 <P>
 </PRE>
 which looses precision.
@@ -216,60 +215,60 @@ So Fortran 90 extends the CMPLX(3) intrinsic by adding an extra argument
 used to specify the desired kind of the complex result.
 <P>
 <PRE>
-            integer,parameter :: dp=kind(0.0d0)
-            complex(kind=dp) :: z8
+          integer,parameter :: dp=kind(0.0d0)
+          complex(kind=dp) :: z8
 </PRE>
-! wrong ways to specify constant values ! note this was stored with default
-<TABLE cellpadding=3><!-- tsb:             integer,parameter :: dp=kind(0.0d0)
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>real precision !</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+! wrong ways to specify constant values
+! note this was stored with default real precision !
 z8 = cmplx(1.2345678901234567d0, 1.2345678901234567d0)
 print *, &#146;NO, Z8=&#146;,z8,real(z8),aimag(z8)
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-    z8 = cmplx(1.2345678901234567e0_dp, 1.2345678901234567e0_dp) ! again, note
-    output components are just real print *, &#146;NO, Z8=&#146;,z8,real(z8),aimag(z8) !
-    ! YES !  ! kind= makes it work z8 = cmplx(1.2345678901234567d0,
-    1.2345678901234567d0,kind=dp) print *, &#146;YES, Z8=&#146;,z8,real(z8),aimag(z8)
+<BLOCKQUOTE>
 <P>
-</PRE>
+z8 = cmplx(1.2345678901234567e0_dp, 1.2345678901234567e0_dp)
+! again, note output components are just real
+print *, &#146;NO, Z8=&#146;,z8,real(z8),aimag(z8)
+!
+! YES
+!
+! kind= makes it work
+z8 = cmplx(1.2345678901234567d0, 1.2345678901234567d0,kind=dp)
+print *, &#146;YES, Z8=&#146;,z8,real(z8),aimag(z8)
+</BLOCKQUOTE>
+<P>
 A more recent alternative to using CMPLX(3) is "F2018 component syntax"
 where real and imaginary parts of a complex entity can be accessed
 independently:
 <P>
 <PRE>
-      value%RE     ! %RE specifies the real part
-      or
-      value%IM     ! %IM specifies the imaginary part
+    value%RE     ! %RE specifies the real part
+    or
+    value%IM     ! %IM specifies the imaginary part
 <P>
 </PRE>
 Where the designator value is of course of complex type.
 <P>
-The type of a complex-part-designator is real, and its kind and shape are
-those of the designator. That is, you retain the precision of the complex
-value by default, unlike with CMPLX.
+The type of a complex-part-designator is real, and its kind and shape
+are those of the designator. That is, you retain the precision of the
+complex value by default, unlike with CMPLX.
 <P>
 The following are examples of complex part designators:
 <P>
 <PRE>
-             impedance%re           !-- Same value as _real_(impedance)
-             fft%im                 !-- Same value as AIMAG(fft)
-             x%im = 0.0             !-- Sets the imaginary part of x to zero
-             x(1:2)%re=[10,20]      !-- even if x is an array
+           impedance%re           !-- Same value as real(impedance)
+           fft%im                 !-- Same value as AIMAG(fft)
+           x%im = 0.0             !-- Sets the imaginary part of x to zero
+           x(1:2)%re=[10,20]      !-- even if x is an array
 <P>
 </PRE>
 NOTE for I/O
 <P>
-Note that if format statements are specified a complex value is treated as
-two real values.
+Note that if format statements are specified a complex value is treated
+as two real values.
 <P>
 For list-directed I/O (ie. using an asterisk for a format) and NAMELIST
 output the values are expected to be delimited by "(" and ")" and of the
-form "(real_part,imaginary_part)". For NAMELIST input parenthesized values
-or lists of multiple real values are acceptable.
+form "(real_part,imaginary_part)". For NAMELIST input parenthesized
+values or lists of multiple real values are acceptable.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -277,18 +276,19 @@ or lists of multiple real values are acceptable.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-X : The value assigned to the real component of the result when X is not
-complex.
+X : The value assigned to the real component of the result when X is
+not complex.
 <P>
-If X is complex, the result is the same as if the real part of the input
-was passed as X and the imaginary part as Y.
+If X is complex, the result is the same as if the real part of the
+input was passed as X and the imaginary part as Y.
 <P>
 <PRE>
-              result = CMPLX (REAL (X), AIMAG (X), KIND).
+         result = CMPLX (REAL (X), AIMAG (X), KIND).
 <P>
 </PRE>
 That is, a complex X value is copied to the result value with a possible
@@ -297,15 +297,15 @@ change of kind.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-Y : Y is only allowed if X is not complex. Its value is assigned to the
-imaginary component of the result and defaults to a value of zero if
-absent.
+Y : Y is only allowed if X is not complex. Its value is assigned to
+the imaginary component of the result and defaults to a value of
+zero if absent.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : An integer initialization expression indicating the kind parameter
-of the result.
+KIND : An integer initialization expression indicating the kind
+parameter of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -314,6 +314,7 @@ of the result.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The return value is of complex type, with magnitudes determined by the
 values X and Y.
 <P>
@@ -322,8 +323,8 @@ result is assigned the value of X and the imaginary part is zero or the
 value of Y if Y is present.
 <P>
 When X is complex Y is not allowed and the result is the same value as X
-with a possible change of kind. That is, the real part is REAL(X, KIND) and
-the imaginary part is REAL(Y, KIND).
+with a possible change of kind. That is, the real part is REAL(X, KIND)
+and the imaginary part is REAL(Y, KIND).
 </BLOCKQUOTE>
 <A name=6>
 
@@ -331,66 +332,67 @@ the imaginary part is REAL(Y, KIND).
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_aimag
-      implicit none
-      integer,parameter :: dp=kind(0.0d0)
-      real(kind=dp)     :: precise
-      complex(kind=dp)  :: z8
-      complex           :: z4, zthree(3)
-         precise=1.2345678901234567d0
+    program demo_aimag
+    implicit none
+    integer,parameter :: dp=kind(0.0d0)
+    real(kind=dp)     :: precise
+    complex(kind=dp)  :: z8
+    complex           :: z4, zthree(3)
+       precise=1.2345678901234567d0
 <P>
-        ! basic
-         z4 = cmplx(-3)
-         print *, &#146;Z4=&#146;,z4
-         z4 = cmplx(1.23456789, 1.23456789)
-         print *, &#146;Z4=&#146;,z4
-         ! with a format treat a complex as two real values
-         print &#146;(1x,g0,1x,g0,1x,g0)&#146;,&#146;Z4=&#146;,z4
+      ! basic
+       z4 = cmplx(-3)
+       print *, &#146;Z4=&#146;,z4
+       z4 = cmplx(1.23456789, 1.23456789)
+       print *, &#146;Z4=&#146;,z4
+       ! with a format treat a complex as two real values
+       print &#146;(1x,g0,1x,g0,1x,g0)&#146;,&#146;Z4=&#146;,z4
 <P>
-        ! working with higher precision values
-         ! using kind=dp makes it keep DOUBLEPRECISION precision
-         ! otherwise the result would be of default kind
-         z8 = cmplx(precise, -precise )
-         print *, &#146;lost precision Z8=&#146;,z8
-         z8 = cmplx(precise, -precise ,kind=dp)
-         print *, &#146;kept precision Z8=&#146;,z8
+      ! working with higher precision values
+       ! using kind=dp makes it keep DOUBLEPRECISION precision
+       ! otherwise the result would be of default kind
+       z8 = cmplx(precise, -precise )
+       print *, &#146;lost precision Z8=&#146;,z8
+       z8 = cmplx(precise, -precise ,kind=dp)
+       print *, &#146;kept precision Z8=&#146;,z8
 <P>
-        ! assignment of constant values does not require cmplx(3)00
-         ! The following is intuitive and works without calling cmplx(3)
-         ! but does not work for variables just constants
-         z8 = (1.1111111111111111d0, 2.2222222222222222d0 )
-         print *, &#146;Z8 defined with constants=&#146;,z8
+      ! assignment of constant values does not require cmplx(3)00
+       ! The following is intuitive and works without calling cmplx(3)
+       ! but does not work for variables just constants
+       z8 = (1.1111111111111111d0, 2.2222222222222222d0 )
+       print *, &#146;Z8 defined with constants=&#146;,z8
 <P>
-        ! what happens when you assign a complex to a real?
-         precise=z8
-         print *, &#146;LHS=&#146;,precise,&#146;RHS=&#146;,z8
+      ! what happens when you assign a complex to a real?
+       precise=z8
+       print *, &#146;LHS=&#146;,precise,&#146;RHS=&#146;,z8
 <P>
-        ! elemental
-         zthree=cmplx([10,20,30],-1)
-         print *, &#146;zthree=&#146;,zthree
+      ! elemental
+       zthree=cmplx([10,20,30],-1)
+       print *, &#146;zthree=&#146;,zthree
 <P>
-        ! descriptors are an alternative
-         zthree(1:2)%re=[100,200]
-         print *, &#146;zthree=&#146;,zthree
+      ! descriptors are an alternative
+       zthree(1:2)%re=[100,200]
+       print *, &#146;zthree=&#146;,zthree
 <P>
-      end program demo_aimag
+    end program demo_aimag
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-          Z4= (-3.000000,0.0000000E+00)
-          Z4= (1.234568,1.234568)
-          Z4= 1.234568 1.234568
-          lost precision Z8= (1.23456788063049,-1.23456788063049)
-          kept precision Z8= (1.23456789012346,-1.23456789012346)
-          Z8 defined with constants= (1.11111111111111,2.22222222222222)
-          LHS=   1.11111111111111      RHS= (1.11111111111111,2.22222222222222)
-          zthree= (10.00000,-1.000000) (20.00000,-1.000000) (30.00000,-1.000000)
-          zthree= (100.0000,-1.000000) (200.0000,-1.000000) (30.00000,-1.000000)
+        Z4= (-3.000000,0.0000000E+00)
+        Z4= (1.234568,1.234568)
+        Z4= 1.234568 1.234568
+        lost precision Z8= (1.23456788063049,-1.23456788063049)
+        kept precision Z8= (1.23456789012346,-1.23456789012346)
+        Z8 defined with constants= (1.11111111111111,2.22222222222222)
+        LHS=   1.11111111111111      RHS= (1.11111111111111,2.22222222222222)
+        zthree= (10.00000,-1.000000) (20.00000,-1.000000) (30.00000,-1.000000)
+        zthree= (100.0000,-1.000000) (200.0000,-1.000000) (30.00000,-1.000000)
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -400,6 +402,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 FORTRAN 77, KIND added in Fortran 90.
 </BLOCKQUOTE>
 <A name=8>
@@ -408,6 +411,7 @@ FORTRAN 77, KIND added in Fortran 90.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -428,20 +432,16 @@ REAL(3) - Convert to real type
 that take or produce complex values in addition to algebraic and logical
 expressions:
 <P>
-ABS(3), ACOSH(3), ACOS(3), ASINH(3), ASIN(3), ATAN2(3), ATANH(3), ATAN(3),
-COSH(3), COS(3), CO_SUM(3), DBLE(3), DOT_PRODUCT(3), EXP(3), INT(3),
-IS_CONTIGUOUS(3), KIND(3), LOG(3), MATMUL(3), PRECISION(3), PRODUCT(3),
-RANGE(3), RANK(3), SINH(3), SIN(3), SQRT(3), STORAGE_SIZE(3), SUM(3),
-TANH(3), TAN(3), UNPACK(3),
+ABS(3), ACOSH(3), ACOS(3), ASINH(3), ASIN(3), ATAN2(3), ATANH(3),
+ATAN(3), COSH(3), COS(3), CO_SUM(3), DBLE(3), DOT_PRODUCT(3), EXP(3),
+INT(3), IS_CONTIGUOUS(3), KIND(3), LOG(3), MATMUL(3), PRECISION(3),
+PRODUCT(3), RANGE(3), RANK(3), SINH(3), SIN(3), SQRT(3),
+STORAGE_SIZE(3), SUM(3), TANH(3), TAN(3), UNPACK(3),
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               cmplx(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cmplx (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 20203f53-b150-409d-b2a0-5faeb40cb06d using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cmplx (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from acad6981-4c9a-4381-9535-01ea96f8ab4d using man macros.</FONT>
 <br><br><center><img src="images/cmplx.3fortran.gif"></center>
 </div>
 </div>

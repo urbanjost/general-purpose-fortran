@@ -1,6 +1,5 @@
 PROGRAM TEST_M_display
-use M_verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad
-use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
+use M_framework__verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad
 
   ! MAIN TEST PROGRAM FOR M_display. SEE ALSO test_M_display_fpp.F90
 
@@ -26,16 +25,13 @@ use M_verify, only : unit_check_command, unit_check_keep_going, unit_check_level
   !                                  ! (most likely)
   integer, parameter :: logikind = kind(.false.)        ! Run for logikind = 1 (probably) for test of 1 byte logicals
   integer, parameter :: sik = selected_int_kind(irange) ! Usually either 0, 1, 2, 3 or 1, 2, 4, 8
-  integer, parameter :: srk = kind(0.0)                 ! Run (at least) for srk = kind(0.0) and kind(0d0) 
-  
+  integer, parameter :: srk = kind(0.0)                 ! Run (at least) for srk = kind(0.0) and kind(0d0)
+
   integer :: compare_no = 0
   character(30) :: assert_string = ''
   character(3)  :: adv = 'no'
   character(90) :: fmt = '("  Testing M_display, int kind=",I0,", real kind=",I0,", logical kind=",I0,"...")'
 
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
    write(*,'(a)')'STARTED M_display'
   ! Use goodbad(1) to indicate the test sequence was begun
    call unit_check_start('M_display',' &
@@ -223,7 +219,7 @@ CONTAINS
     s7a(1) = 'ab=   5  5000'
     !
     s8(1) = 'abc'
-    s8(2) = '500'    
+    s8(2) = '500'
     !
     ! Tests with default format
     call disp_set(unit=8)
@@ -324,7 +320,7 @@ CONTAINS
     call disp(r1, digmax=4, style = 'LEFT', sep = '  ');   call compare(s1, 'ok-1')
     call disp('AB', r2, trim = 'no');                      call compare(s2, 'ok-2')
     call disp('AB', r2(1,:), trim = 'no', orient = 'row'); call compare(s2, 'ok-3')
-    call disp('A = ', r3, style = 'left');                 
+    call disp('A = ', r3, style = 'left');
     if (rrng <= 99)                                        call compare(s3, 'ok-4')
     if (rrng >  99)                                        call compare(s3a,'ok-4')
     call disp('Longtitle', r4, style = 'underline');       call compare(s4, 'ok-6')
@@ -434,11 +430,11 @@ CONTAINS
   subroutine test_zeroas
     ! Test various features of using zeroas
     real(srk)     :: d1(3,2) = reshape((/2.146_srk, -1.231_srk, 1._srk, 0._srk, 20.33_srk, 0._srk/), (/3,2/))
-    real(srk)     :: d2(2)   = (/0._srk, 0._srk/)    
+    real(srk)     :: d2(2)   = (/0._srk, 0._srk/)
     real(srk)     :: d3(2)   = (/12e20_srk, 0._srk/)
     real(srk)     :: d4      = 0._srk
     real(srk)     :: r1(3,2) = reshape((/2.146_srk, -1.231_srk, 1._srk, 0._srk, 20.33_srk, 0._srk/), (/3,2/))
-    real(srk)     :: r2(2)   = (/0._srk, 0._srk/)    
+    real(srk)     :: r2(2)   = (/0._srk, 0._srk/)
     integer(sik)  :: i1(4)   = (/1,0,11,0/)
     integer(sik)  :: i2(2,2) = reshape((/0,0,11,12/), (/2,2/))
     character(12) :: s1a(3), s1b(3), s1c(3), s1d(3), s1e(3), s1f(3)
@@ -523,10 +519,10 @@ CONTAINS
     s1(2) = '-1.23 - 2.46i  20.33 + 40.66i'
     !
     s1a(1) = ' 2.1460 + 4.3i   0.0080 +  0.0i'
-    s1a(2) = '-1.2310 - 2.5i  20.3300 + 40.7i'  
+    s1a(2) = '-1.2310 - 2.5i  20.3300 + 40.7i'
     !
     s1b(1) = ' 2.1 + 4.2920i   0.0 +  0.0160i'
-    s1b(2) = '-1.2 - 2.4620i  20.3 + 40.6600i'  
+    s1b(2) = '-1.2 - 2.4620i  20.3 + 40.6600i'
     !
     s2(1) = '---------------AB--------------'
     s2(2) = '12.0 + 12.0i, -1234.6 - 1234.6i'
@@ -545,7 +541,7 @@ CONTAINS
     call disp('AB', c2, orient = 'row');                  call compare(s2)
     call disp(c3);                                        call compare(s3)
     call disp_set_factory
-  end subroutine test_complex 
+  end subroutine test_complex
 !===================================================================================================================================
   subroutine test_char
     ! Check that disp works for outputting character strings with explicit or default format
@@ -663,7 +659,7 @@ CONTAINS
          '2.71828E+0  7.38906E+0  2.00855E+1  5.45981E+1', &
          '7.38906E+0  5.45981E+1  4.03429E+2  2.98096E+3', &
          '2.00855E+1  4.03429E+2  8.10308E+3  1.62755E+5', &
-         '5.45981E+1  2.98096E+3  1.62755E+5  8.88611E+6' /)   
+         '5.45981E+1  2.98096E+3  1.62755E+5  8.88611E+6' /)
     XYshouldbe = (/ &
          'X = 7  8  3   Y = 11', &
          '    4  0  2        2', &
@@ -733,7 +729,7 @@ CONTAINS
     ! SECTION 3.2:
     !
     ! INTRODUCTION
-    CALL DISP('X=', (/12.3, 16.78/), DIGMAX=3, ORIENT='row') 
+    CALL DISP('X=', (/12.3, 16.78/), DIGMAX=3, ORIENT='row')
     call compare((/'X=12.3  16.8'/), '3-D')
     !
     ! FMT_IMAG
@@ -754,7 +750,7 @@ CONTAINS
     call compare(shouldbe_A)
     !
     ! SEP
-    CALL DISP(reshape((/-1,5,5,10/),(/2,2/)), SEP=', ') 
+    CALL DISP(reshape((/-1,5,5,10/),(/2,2/)), SEP=', ')
     call compare((/'-1,  5', ' 5, 10'/), '3-E')
     !
     ! STYLE
@@ -804,7 +800,7 @@ CONTAINS
     call disp_set(style='left', sep=' ')
     call disp('X=', x, 'es7.1e1', trim='yes')
     call compare((/'X=1.2E+5 -4.1E-2','  2.3E-3  8.6E+1'/), '3-I')
-    call disp('X=', x, 'es7.1e1', trim='no' ) 
+    call disp('X=', x, 'es7.1e1', trim='no' )
     call compare((/'X= 1.2E+5 -4.1E-2','   2.3E-3  8.6E+1'/), '3-J')
     call disp_set_factory; call disp_set(unit = 8)
     !
@@ -817,7 +813,7 @@ CONTAINS
          '        0      0  1.000  0.500        .      .     1.000  0.500', &
          '        0      0      0  1.000        .      .      .     1.000' /)
     call disp('A = ', B, 'F0.3', zeroas = '0', advance='no')
-    call disp('B = ', B, 'F0.3', zeroas='.') 
+    call disp('B = ', B, 'F0.3', zeroas='.')
     call compare(shouldbe_zas, '3-ZAS')
     call disp_set_factory; call disp_set(unit=8)
     !
@@ -1018,7 +1014,7 @@ CONTAINS
     ivec = 0; i02mat = 0; i20mat = 0
     call msg2('...empty integer')
     call disp('v=', ivec)
-    call disp('v=', ivec, 'I3') 
+    call disp('v=', ivec, 'I3')
     call disp('v', ivec, style='pad')
     call disp('v', ivec, 'I3', style='pad')
     call disp('*', advance='yes')
@@ -1241,7 +1237,7 @@ CONTAINS
   subroutine open_8
     open(8, file = 'testtmp.dat', status = 'replace')
   end subroutine open_8
-  
+
   subroutine close_8
     close(8)
   end subroutine close_8

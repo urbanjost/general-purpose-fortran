@@ -1,6 +1,3 @@
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 program rename
 use M_strings, only : replace
 use M_kracken, only : kracken, lget, sget, sgets
@@ -61,46 +58,84 @@ logical                        :: stopit=.false.
 stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                                                                            ',&
-'   rename-(1f) - [FUNIX:FILESYSTEM] rename files by replacing first occurrence of a string in a filename with new string        ',&
-'   (LICENSE:PD)                                                                                                                 ',&
-'                                                                                                                                ',&
-'SYNOPSIS                                                                                                                        ',&
-'   rename- old new file... [ -verbose][ -dryrun]|[ -help|-version]                                                              ',&
-'                                                                                                                                ',&
-'DESCRIPTION                                                                                                                     ',&
-'   rename-(1f) will rename the specified files by replacing the                                                                 ',&
-'   first occurrence of expression in their name by replacement.                                                                 ',&
-'                                                                                                                                ',&
-'EXAMPLES                                                                                                                        ',&
-'   Given the files foo1, ..., foo9, foo10, ..., foo278, the commands                                                            ',&
-'                                                                                                                                ',&
-'      rename- foo foo0 foo?                                                                                                     ',&
-'      rename- foo foo0 foo??                                                                                                    ',&
-'                                                                                                                                ',&
-'   will turn them into foo001, ..., foo009, foo010, ..., foo278. And                                                            ',&
-'                                                                                                                                ',&
-'      rename- .htm .html *.htm                                                                                                  ',&
-'                                                                                                                                ',&
-'   will fix the extension of *.htm files.                                                                                       ',&
-'                                                                                                                                ',&
-'OPTIONS                                                                                                                         ',&
-'    old        represents a string to change in filenames                                                                       ',&
-'    new        the replacement string for EXPRESSION.                                                                           ',&
-'    -verbose   Print information about what the program does.                                                                   ',&
-'    --help     Display a help message and exit.                                                                                 ',&
-'    --version  Display version information and exit.                                                                            ',&
-'    --dryrun   Does all file operations except for moving the                                                                   ',&
-'               changed file back to the original. Implies --version.                                                            ',&
-'AUTHOR                                                                                                                          ',&
-'   John S. Urban                                                                                                                ',&
-'LICENSE                                                                                                                         ',&
-'   Public Domain                                                                                                                ',&
+'NAME                                                                            ',&
+'   rename-(1f) - [FUNIX:FILESYSTEM] rename files by replacing first occurrence of a string in a filename with new string',&
+'   (LICENSE:PD)                                                                 ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'   rename- old new file... [ -verbose][ -dryrun]|[ -help|-version]              ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+'   rename-(1f) will rename the specified files by replacing the                 ',&
+'   first occurrence of expression in their name by replacement.                 ',&
+'                                                                                ',&
+'EXAMPLES                                                                        ',&
+'   Given the files foo1, ..., foo9, foo10, ..., foo278, the commands            ',&
+'                                                                                ',&
+'      rename- foo foo0 foo?                                                     ',&
+'      rename- foo foo0 foo??                                                    ',&
+'                                                                                ',&
+'   will turn them into foo001, ..., foo009, foo010, ..., foo278. And            ',&
+'                                                                                ',&
+'      rename- .htm .html *.htm                                                  ',&
+'                                                                                ',&
+'   will fix the extension of *.htm files.                                       ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'    old        represents a string to change in filenames                       ',&
+'    new        the replacement string for EXPRESSION.                           ',&
+'    -verbose   Print information about what the program does.                   ',&
+'    --help     Display a help message and exit.                                 ',&
+'    --version  Display version information and exit.                            ',&
+'    --dryrun   Does all file operations except for moving the                   ',&
+'               changed file back to the original. Implies --version.            ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public Domain                                                                ',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    rename-(1f) - [FUNIX:FILESYSTEM] rename files by replacing first occurrence of a string in a filename with new string
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    rename- old new file... [ -verbose][ -dryrun]|[ -help|-version]
+!!
+!!##DESCRIPTION
+!!    rename-(1f) will rename the specified files by replacing the
+!!    first occurrence of expression in their name by replacement.
+!!
+!!##EXAMPLES
+!!
+!!    Given the files foo1, ..., foo9, foo10, ..., foo278, the commands
+!!
+!!       rename- foo foo0 foo?
+!!       rename- foo foo0 foo??
+!!
+!!    will turn them into foo001, ..., foo009, foo010, ..., foo278. And
+!!
+!!       rename- .htm .html *.htm
+!!
+!!    will fix the extension of *.htm files.
+!!
+!!##OPTIONS
+!!     old        represents a string to change in filenames
+!!     new        the replacement string for EXPRESSION.
+!!     -verbose   Print information about what the program does.
+!!     --help     Display a help message and exit.
+!!     --version  Display version information and exit.
+!!     --dryrun   Does all file operations except for moving the
+!!                changed file back to the original. Implies --version.
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -119,7 +154,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2023-02-12 12:23:52 UTC-300>',&
+'@(#)COMPILED:       2024-06-29 21:51:58 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

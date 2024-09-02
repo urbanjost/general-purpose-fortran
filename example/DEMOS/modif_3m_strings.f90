@@ -2,7 +2,7 @@
      use M_strings, only : modif
      implicit none
      character(len=256)           :: line
-     integer                      :: ios
+     integer                      :: iostat
      integer                      :: count
      integer                      :: COMMAND_LINE_LENGTH
      character(len=:),allocatable :: COMMAND_LINE
@@ -19,8 +19,8 @@
         ! remove command name
         COMMAND_LINE=adjustl(COMMAND_LINE(COUNT+2:))
         INFINITE: do
-           read(*,'(a)',iostat=ios)line
-           if(ios /= 0)exit
+           read(*,'(a)',iostat=iostat)line
+           if(iostat /= 0)exit
            call modif(line,COMMAND_LINE)
            write(*,'(a)')trim(line)
         enddo INFINITE

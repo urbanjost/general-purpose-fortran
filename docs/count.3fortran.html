@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>count (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>count (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>count(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-count(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 COUNT(3) - [ARRAY:REDUCTION] Count true values in an array
 <P>
 </BLOCKQUOTE>
@@ -76,14 +68,15 @@ COUNT(3) - [ARRAY:REDUCTION] Count true values in an array
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = count(mask [,dim] [,kind] )
 <P>
 <PRE>
-           integer(kind=KIND) function count(mask, dim, KIND )
+         integer(kind=KIND) function count(mask, dim, KIND )
 <P>
-            logical(kind=**),intent(in) :: mask(..)
-            integer(kind=**),intent(in),optional :: dim
-            integer(kind=**),intent(in),optional :: KIND
+          logical(kind=**),intent(in) :: mask(..)
+          integer(kind=**),intent(in),optional :: dim
+          integer(kind=**),intent(in),optional :: KIND
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = count(mask [,dim] [,kind] )
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -113,13 +107,14 @@ removed.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND is a scalar integer constant expression valid as an integer kind
+KIND is a scalar integer constant expression valid as an integer
+kind
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The return value is of default integer type unless KIND is specified to
-declare the kind of the result.
+The return value is of default integer type unless KIND is specified
+to declare the kind of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -128,10 +123,11 @@ declare the kind of the result.
 
 </A>
 <BLOCKQUOTE>
-COUNT(3) counts the number of .true. elements in a logical MASK, or, if the
-DIM argument is supplied, counts the number of elements along each row of
-the array in the DIM direction. If the array has zero size or all of the
-elements of MASK are false, then the result is 0.
+<P>
+COUNT(3) counts the number of .true. elements in a logical MASK, or, if
+the DIM argument is supplied, counts the number of elements along each
+row of the array in the DIM direction. If the array has zero size or all
+of the elements of MASK are false, then the result is 0.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -139,6 +135,7 @@ elements of MASK are false, then the result is 0.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -148,11 +145,11 @@ MASK : an array to count the number of .true. values in
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-DIM : specifies to remove this dimension from the result and produce an
-array of counts of .true. values along the removed dimension. If not
-present, the result is a scalar count of the true elements in MASK the
-value must be in the range 1 &lt;= dim &lt;= n, where n is the rank(number of
-dimensions) of MASK.
+DIM : specifies to remove this dimension from the result and produce
+an array of counts of .true. values along the removed dimension. If
+not present, the result is a scalar count of the true elements in
+MASK the value must be in the range 1 &lt;= dim &lt;= n, where n is the
+rank(number of dimensions) of MASK.
 <P>
 The corresponding actual argument shall not be an optional dummy
 argument, a disassociated pointer, or an unallocated allocatable.
@@ -160,8 +157,8 @@ argument, a disassociated pointer, or an unallocated allocatable.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND : An integer initialization expression indicating the kind parameter
-of the result.
+KIND : An integer initialization expression indicating the kind
+parameter of the result.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -170,13 +167,14 @@ of the result.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The return value is the number of .true. values in MASK if DIM is not
 present.
 <P>
-If DIM is present, the result is an array with a rank one less than the rank
-of the input array MASK, and a size corresponding to the shape of ARRAY with
-the DIM dimension removed, with the remaining elements containing the number
-of .true. elements along the removed dimension.
+If DIM is present, the result is an array with a rank one less than the
+rank of the input array MASK, and a size corresponding to the shape of
+ARRAY with the DIM dimension removed, with the remaining elements
+containing the number of .true. elements along the removed dimension.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -184,164 +182,165 @@ of .true. elements along the removed dimension.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_count
-      implicit none
-      character(len=*),parameter :: ints=&#146;(*(i2,1x))&#146;
-      ! two arrays and a mask all with the same shape
-      integer, dimension(2,3) :: a, b
-      logical, dimension(2,3) :: mymask
-      integer :: i
-      integer :: c(2,3,4)
+    program demo_count
+    implicit none
+    character(len=*),parameter :: ints=&#146;(*(i2,1x))&#146;
+    ! two arrays and a mask all with the same shape
+    integer, dimension(2,3) :: a, b
+    logical, dimension(2,3) :: mymask
+    integer :: i
+    integer :: c(2,3,4)
 <P>
-         print *,&#146;the numeric arrays we will compare&#146;
-         a = reshape( [ 1, 2, 3, 4, 5, 6 ], [ 2, 3 ])
-         b = reshape( [ 0, 7, 3, 4, 5, 8 ], [ 2, 3 ])
-         c = reshape( [( i,i=1,24)], [ 2, 3 ,4])
-         print &#146;(3i3)&#146;, a(1,:)
-         print &#146;(3i3)&#146;, a(2,:)
-         print *
-         print &#146;(3i3)&#146;, b(1,:)
-         print &#146;(3i3)&#146;, b(2,:)
-<P>
-        ! basic calls
-         print *, &#146;count a few basic things creating a mask from an expression&#146;
-         print *, &#146;count a&gt;b&#146;,count(a&gt;b)
-         print *, &#146;count b&lt;a&#146;,count(a&lt;b)
-         print *, &#146;count b==a&#146;,count(a==b)
-         print *, &#146;check sum = &#146;,count(a&gt;b) + &
-                               & count(a&lt;b) + &
-                               & count(a==b).eq.size(a)
-<P>
-         ! The common usage is just getting a count, but if you want
-         ! to specify the DIM argument and get back reduced arrays
-         ! of counts this is easier to visualize if we look at a mask.
-         print *, &#146;make a mask identifying unequal elements &#46;&#46;&#46;&#146;
-         mymask = a.ne.b
-         print *, &#146;the mask generated from a.ne.b&#146;
-         print &#146;(3l3)&#146;, mymask(1,:)
-         print &#146;(3l3)&#146;, mymask(2,:)
-<P>
-         print *,&#146;count total and along rows and columns &#46;&#46;&#46;&#146;
-<P>
-         print &#146;(a)&#146;, &#146;number of elements not equal&#146;
-         print &#146;(a)&#146;, &#146;(ie. total true elements in the mask)&#146;
-         print &#146;(3i3)&#146;, count(mymask)
-<P>
-         print &#146;(a)&#146;, &#146;count of elements not equal in each column&#146;
-         print &#146;(a)&#146;, &#146;(ie. total true elements in each column)&#146;
-         print &#146;(3i3)&#146;, count(mymask, dim=1)
-<P>
-         print &#146;(a)&#146;, &#146;count of elements not equal in each row&#146;
-         print &#146;(a)&#146;, &#146;(ie. total true elements in each row)&#146;
-         print &#146;(3i3)&#146;, count(mymask, dim=2)
-<P>
-         ! working with rank=3 &#46;&#46;&#46;
-         print *, &#146;lets try this with c(2,3,4)&#146;
-         print *,&#146;  taking the result of the modulo   &#146;
-         print *,&#146;   z=1      z=2      z=3      z=4   &#146;
-         print *,&#146;  1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |&#146;
-         print *,&#146;  2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |&#146;
-         print *,&#146;                                    &#146;
-         print *,&#146;  would result in the mask ..       &#146;
-         print *,&#146;  F F T || F F F || F T F || F F F |&#146;
-         print *,&#146;  F F F || F T F || F F F || T F F |&#146;
-         print *,&#146;                                    &#146;
-         print *,&#146; the total number of .true.values is&#146;
-         print ints, count(modulo(c,5).eq.0)
-         call printi(&#146;counting up along a row and removing rows&#146;,&
-         count(modulo(c,5).eq.0,dim=1))
-         call printi(&#146;counting up along a column and removing columns&#146;,&
-         count(modulo(c,5).eq.0,dim=2))
-         call printi(&#146;counting up along a depth and removing depths&#146;,&
-         count(modulo(c,5).eq.0,dim=3))
-<P>
-      contains
-<P>
-         ! CONVENIENCE ROUTINE FOR PRINTING SMALL INTEGER MATRICES
-         subroutine printi(title,arr)
-         implicit none
-<P>
-         !@(#) print small 2d integer arrays in row-column format
-<P>
-         character(len=*),parameter :: all=&#146;(*(g0,1x))&#146; ! a handy format
-         character(len=*),intent(in)  :: title
-         integer,intent(in)           :: arr(:,:)
-         integer                      :: i
-         character(len=:),allocatable :: biggest
-<P>
-            print all
-            print all, trim(title),&#146;:(&#146;,shape(arr),&#146;)&#146;  ! print title
-            biggest=&#146;           &#146;  ! make buffer to write integer into
-            ! find how many characters to use for integers
-            write(biggest,&#146;(i0)&#146;)ceiling(log10(real(maxval(abs(arr)))))+2
-            ! use this format to write a row
-            biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
-            ! print one row of array at a time
-            do i=1,size(arr,dim=1)
-               write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
-               write(*,&#146;(" ]")&#146;)
-            enddo
-<P>
-         end subroutine printi
-      end program demo_count
+    print *,&#146;the numeric arrays we will compare&#146;
+    a = reshape( [ 1, 2, 3, 4, 5, 6 ], [ 2, 3 ])
+    b = reshape( [ 0, 7, 3, 4, 5, 8 ], [ 2, 3 ])
+    c = reshape( [( i,i=1,24)], [ 2, 3 ,4])
+    print &#146;(3i3)&#146;, a(1,:)
+    print &#146;(3i3)&#146;, a(2,:)
+    print *
+    print &#146;(3i3)&#146;, b(1,:)
+    print &#146;(3i3)&#146;, b(2,:)
+    !
+    ! basic calls
+    print *, &#146;count a few basic things creating a mask from an expression&#146;
+    print *, &#146;count a&gt;b&#146;,count(a&gt;b)
+    print *, &#146;count b&lt;a&#146;,count(a&lt;b)
+    print *, &#146;count b==a&#146;,count(a==b)
+    print *, &#146;check sum = &#146;,count(a&gt;b) + &
+                          & count(a&lt;b) + &
+                          & count(a==b).eq.size(a)
+    !
+    ! The common usage is just getting a count, but if you want
+    ! to specify the DIM argument and get back reduced arrays
+    ! of counts this is easier to visualize if we look at a mask.
+    print *, &#146;make a mask identifying unequal elements &#46;&#46;&#46;&#146;
+    mymask = a.ne.b
+    print *, &#146;the mask generated from a.ne.b&#146;
+    print &#146;(3l3)&#146;, mymask(1,:)
+    print &#146;(3l3)&#146;, mymask(2,:)
+    !
+    print *,&#146;count total and along rows and columns &#46;&#46;&#46;&#146;
+    !
+    print &#146;(a)&#146;, &#146;number of elements not equal&#146;
+    print &#146;(a)&#146;, &#146;(ie. total true elements in the mask)&#146;
+    print &#146;(3i3)&#146;, count(mymask)
+    !
+    print &#146;(a)&#146;, &#146;count of elements not equal in each column&#146;
+    print &#146;(a)&#146;, &#146;(ie. total true elements in each column)&#146;
+    print &#146;(3i3)&#146;, count(mymask, dim=1)
+    !
+    print &#146;(a)&#146;, &#146;count of elements not equal in each row&#146;
+    print &#146;(a)&#146;, &#146;(ie. total true elements in each row)&#146;
+    print &#146;(3i3)&#146;, count(mymask, dim=2)
+    !
+    ! working with rank=3 &#46;&#46;&#46;
+    print *, &#146;lets try this with c(2,3,4)&#146;
+    print *,&#146;  taking the result of the modulo   &#146;
+    print *,&#146;   z=1      z=2      z=3      z=4   &#146;
+    print *,&#146;  1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |&#146;
+    print *,&#146;  2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |&#146;
+    print *,&#146;                                    &#146;
+    print *,&#146;  would result in the mask ..       &#146;
+    print *,&#146;  F F T || F F F || F T F || F F F |&#146;
+    print *,&#146;  F F F || F T F || F F F || T F F |&#146;
+    print *,&#146;                                    &#146;
+    print *,&#146; the total number of .true.values is&#146;
+    print ints, count(modulo(c,5).eq.0)
+    call printi(&#146;counting up along a row and removing rows&#146;,&
+    count(modulo(c,5).eq.0,dim=1))
+    call printi(&#146;counting up along a column and removing columns&#146;,&
+    count(modulo(c,5).eq.0,dim=2))
+    call printi(&#146;counting up along a depth and removing depths&#146;,&
+    count(modulo(c,5).eq.0,dim=3))
+    !
+    contains
+    !
+    ! CONVENIENCE ROUTINE FOR PRINTING SMALL INTEGER MATRICES
+    subroutine printi(title,arr)
+    implicit none
+    !
+    !@(#) print small 2d integer arrays in row-column format
+    !
+    character(len=*),parameter :: all=&#146;(*(g0,1x))&#146; ! a handy format
+    character(len=*),intent(in)  :: title
+    integer,intent(in)           :: arr(:,:)
+    integer                      :: i
+    character(len=:),allocatable :: biggest
+       !
+       print all
+       print all, trim(title),&#146;:(&#146;,shape(arr),&#146;)&#146;  ! print title
+       biggest=&#146;           &#146;  ! make buffer to write integer into
+       ! find how many characters to use for integers
+       write(biggest,&#146;(i0)&#146;)ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2
+       ! use this format to write a row
+       biggest=&#146;(" &gt; [",*(i&#146;//trim(biggest)//&#146;:,","))&#146;
+       ! print one row of array at a time
+       do i=1,size(arr,dim=1)
+          write(*,fmt=biggest,advance=&#146;no&#146;)arr(i,:)
+          write(*,&#146;(" ]")&#146;)
+       enddo
+       !
+    end subroutine printi
+    end program demo_count
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-       &gt;   the numeric arrays we will compare
-       &gt;    1  3  5
-       &gt;    2  4  6
-       &gt;
-       &gt;    0  3  5
-       &gt;    7  4  8
-       &gt;   count a few basic things creating a mask from an expression
-       &gt;   count a&gt;b           1
-       &gt;   count b&lt;a           2
-       &gt;   count b==a           3
-       &gt;   check sum =  T
-       &gt;   make a mask identifying unequal elements &#46;&#46;&#46;
-       &gt;   the mask generated from a.ne.b
-       &gt;    T  F  F
-       &gt;    T  F  T
-       &gt;   count total and along rows and columns &#46;&#46;&#46;
-       &gt;  number of elements not equal
-       &gt;  (ie. total true elements in the mask)
-       &gt;    3
-       &gt;  count of elements not equal in each column
-       &gt;  (ie. total true elements in each column)
-       &gt;    2  0  1
-       &gt;  count of elements not equal in each row
-       &gt;  (ie. total true elements in each row)
-       &gt;    1  2
-       &gt;   lets try this with c(2,3,4)
-       &gt;     taking the result of the modulo
-       &gt;      z=1      z=2      z=3      z=4
-       &gt;     1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |
-       &gt;     2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |
-       &gt;
-       &gt;     would result in the mask ..
-       &gt;     F F T || F F F || F T F || F F F |
-       &gt;     F F F || F T F || F F F || T F F |
-       &gt;
-       &gt;    the total number of .true.values is
-       &gt;   4
-       &gt;
-       &gt;  counting up along a row and removing rows :( 3 4 )
-       &gt;   &gt; [ 0, 0, 0, 1 ]
-       &gt;   &gt; [ 0, 1, 1, 0 ]
-       &gt;   &gt; [ 1, 0, 0, 0 ]
-       &gt;
-       &gt;  counting up along a column and removing columns :( 2 4 )
-       &gt;   &gt; [ 1, 0, 1, 0 ]
-       &gt;   &gt; [ 0, 1, 0, 1 ]
-       &gt;
-       &gt;  counting up along a depth and removing depths :( 2 3 )
-       &gt;   &gt; [ 0, 1, 1 ]
-       &gt;   &gt; [ 1, 1, 0 ]
+     &gt;   the numeric arrays we will compare
+     &gt;    1  3  5
+     &gt;    2  4  6
+     &gt;
+     &gt;    0  3  5
+     &gt;    7  4  8
+     &gt;   count a few basic things creating a mask from an expression
+     &gt;   count a&gt;b           1
+     &gt;   count b&lt;a           2
+     &gt;   count b==a           3
+     &gt;   check sum =  T
+     &gt;   make a mask identifying unequal elements &#46;&#46;&#46;
+     &gt;   the mask generated from a.ne.b
+     &gt;    T  F  F
+     &gt;    T  F  T
+     &gt;   count total and along rows and columns &#46;&#46;&#46;
+     &gt;  number of elements not equal
+     &gt;  (ie. total true elements in the mask)
+     &gt;    3
+     &gt;  count of elements not equal in each column
+     &gt;  (ie. total true elements in each column)
+     &gt;    2  0  1
+     &gt;  count of elements not equal in each row
+     &gt;  (ie. total true elements in each row)
+     &gt;    1  2
+     &gt;   lets try this with c(2,3,4)
+     &gt;     taking the result of the modulo
+     &gt;      z=1      z=2      z=3      z=4
+     &gt;     1 3 0 || 2 4 1 || 3 0 2 || 4 1 3 |
+     &gt;     2 4 1 || 3 0 2 || 4 1 3 || 0 2 4 |
+     &gt;
+     &gt;     would result in the mask ..
+     &gt;     F F T || F F F || F T F || F F F |
+     &gt;     F F F || F T F || F F F || T F F |
+     &gt;
+     &gt;    the total number of .true.values is
+     &gt;   4
+     &gt;
+     &gt;  counting up along a row and removing rows :( 3 4 )
+     &gt;   &gt; [ 0, 0, 0, 1 ]
+     &gt;   &gt; [ 0, 1, 1, 0 ]
+     &gt;   &gt; [ 1, 0, 0, 0 ]
+     &gt;
+     &gt;  counting up along a column and removing columns :( 2 4 )
+     &gt;   &gt; [ 1, 0, 1, 0 ]
+     &gt;   &gt; [ 0, 1, 0, 1 ]
+     &gt;
+     &gt;  counting up along a depth and removing depths :( 2 3 )
+     &gt;   &gt; [ 0, 1, 1 ]
+     &gt;   &gt; [ 1, 1, 0 ]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -351,6 +350,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 95 , with KIND argument - Fortran 2003
 </BLOCKQUOTE>
 <A name=8>
@@ -359,16 +359,13 @@ Fortran 95 , with KIND argument - Fortran 2003
 
 </A>
 <BLOCKQUOTE>
+<P>
 ANY(3), ALL(3), SUM(3),
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               count(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>count (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2b323ac2-6f70-49a7-abc8-0f0876436673 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>count (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6a7726ff-4a0c-4afa-853b-c92cda87ce19 using man macros.</FONT>
 <br><br><center><img src="images/count.3fortran.gif"></center>
 </div>
 </div>

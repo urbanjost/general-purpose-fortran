@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>hypot (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>hypot (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>hypot(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-hypot(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 HYPOT(3) - [MATHEMATICS] Returns the Euclidean distance - the distance
 between a point and the origin.
 <P>
@@ -77,13 +69,14 @@ between a point and the origin.
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = hypot(x, y)
 <P>
 <PRE>
-           elemental real(kind=KIND) function hypot(x,y)
+         elemental real(kind=KIND) function hypot(x,y)
 <P>
-            real(kind=KIND),intent(in) :: x
-            real(kind=KIND),intent(in) :: y
+          real(kind=KIND),intent(in) :: x
+          real(kind=KIND),intent(in) :: y
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,6 +86,7 @@ result = hypot(x, y)
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -106,16 +100,18 @@ X,Y and the result shall all be real and of the same KIND.
 
 </A>
 <BLOCKQUOTE>
-HYPOT(3) is referred to as the Euclidean distance function. It is equal to
+<P>
+HYPOT(3) is referred to as the Euclidean distance function. It is equal
+to
 <P>
 <PRE>
-      sqrt(x**2+y**2)
+    sqrt(x**2+y**2)
 <P>
 </PRE>
 without undue underflow or overflow.
 <P>
-In mathematics, the Euclidean distance between two points in Euclidean space
-is the length of a line segment between two points.
+In mathematics, the Euclidean distance between two points in Euclidean
+space is the length of a line segment between two points.
 <P>
 HYPOT(X,Y) returns the distance between the point &lt;X,Y&gt; and the origin.
 </BLOCKQUOTE>
@@ -125,6 +121,7 @@ HYPOT(X,Y) returns the distance between the point &lt;X,Y&gt; and the origin.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -143,10 +140,11 @@ Y : The type and kind type parameter shall be the same as X.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The return value has the same type and kind type parameter as X.
 <P>
-The result is the positive magnitude of the distance of the point &lt;X,Y&gt; from
-the origin &lt;0.0,0.0&gt; .
+The result is the positive magnitude of the distance of the point &lt;X,Y&gt;
+from the origin &lt;0.0,0.0&gt; .
 </BLOCKQUOTE>
 <A name=6>
 
@@ -154,55 +152,56 @@ the origin &lt;0.0,0.0&gt; .
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_hypot
-      use, intrinsic :: iso_fortran_env, only : &
-       & real_kinds, real32, real64, real128
-      implicit none
-      real(kind=real32) :: x, y
-      real(kind=real32),allocatable :: xs(:), ys(:)
-      integer :: i
-      character(len=*),parameter :: f=&#146;(a,/,SP,*(3x,g0,1x,g0:,/))&#146;
+    program demo_hypot
+    use, intrinsic :: iso_fortran_env, only : &
+     & real_kinds, real32, real64, real128
+    implicit none
+    real(kind=real32) :: x, y
+    real(kind=real32),allocatable :: xs(:), ys(:)
+    integer :: i
+    character(len=*),parameter :: f=&#146;(a,/,SP,*(3x,g0,1x,g0:,/))&#146;
 <P>
-         x = 1.e0_real32
-         y = 0.5e0_real32
+       x = 1.e0_real32
+       y = 0.5e0_real32
 <P>
-         write(*,*)
-         write(*,&#146;(*(g0))&#146;)&#146;point &lt;&#146;,x,&#146;,&#146;,y,&#146;&gt; is &#146;,hypot(x,y)
-         write(*,&#146;(*(g0))&#146;)&#146;units away from the origin&#146;
-         write(*,*)
+       write(*,*)
+       write(*,&#146;(*(g0))&#146;)&#146;point &lt;&#146;,x,&#146;,&#146;,y,&#146;&gt; is &#146;,hypot(x,y)
+       write(*,&#146;(*(g0))&#146;)&#146;units away from the origin&#146;
+       write(*,*)
 <P>
-         ! elemental
-         xs=[  x,  x**2,  x*10.0,  x*15.0, -x**2  ]
-         ys=[  y,  y**2, -y*20.0,  y**2,   -y**2  ]
+       ! elemental
+       xs=[  x,  x**2,  x*10.0,  x*15.0, -x**2  ]
+       ys=[  y,  y**2, -y*20.0,  y**2,   -y**2  ]
 <P>
-         write(*,f)"the points",(xs(i),ys(i),i=1,size(xs))
-         write(*,f)"have distances from the origin of ",hypot(xs,ys)
-         write(*,f)"the closest is",minval(hypot(xs,ys))
+       write(*,f)"the points",(xs(i),ys(i),i=1,size(xs))
+       write(*,f)"have distances from the origin of ",hypot(xs,ys)
+       write(*,f)"the closest is",minval(hypot(xs,ys))
 <P>
-      end program demo_hypot
+    end program demo_hypot
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         point &lt;1.00000000,0.500000000&gt; is 1.11803401
-         units away from the origin
+       point &lt;1.00000000,0.500000000&gt; is 1.11803401
+       units away from the origin
 <P>
-         the points
-            +1.00000000 +0.500000000
-            +1.00000000 +0.250000000
-            +10.0000000 -10.0000000
-            +15.0000000 +0.250000000
-            -1.00000000 -0.250000000
-         have distances from the origin of
-            +1.11803401 +1.03077638
-            +14.1421356 +15.0020828
-            +1.03077638
-         the closest is
-            +1.03077638
+       the points
+          +1.00000000 +0.500000000
+          +1.00000000 +0.250000000
+          +10.0000000 -10.0000000
+          +15.0000000 +0.250000000
+          -1.00000000 -0.250000000
+       have distances from the origin of
+          +1.11803401 +1.03077638
+          +14.1421356 +15.0020828
+          +1.03077638
+       the closest is
+          +1.03077638
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -212,6 +211,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=8>
@@ -220,16 +220,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 ****(3)
 <P>
 fortran-lang intrinsic descriptions (license: MIT) @urbanjost
-<P>
-<PRE>
-                               November 07, 2022               hypot(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>hypot (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fd2bf87a-0f37-4d4f-a1ef-5050f6ef6b60 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>hypot (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 46a47eed-e6cf-425a-b2f7-410120c964d1 using man macros.</FONT>
 <br><br><center><img src="images/hypot.3fortran.gif"></center>
 </div>
 </div>

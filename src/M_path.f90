@@ -137,7 +137,7 @@
 !!         write (*,"(9x,'No. of blocks allocated:', T40, I0)")&
 !!         & buff(13)
 !!        else
-!!         write (*,*) '*path%stat* error: ',file%name,' status= ',status
+!!         write (*,*) '*path%stat* error: ',file%name,' status= ',buff(14)
 !!        endif
 !!        write(*,*)
 !!       enddo

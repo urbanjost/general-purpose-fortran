@@ -65,10 +65,11 @@ M_strings(3f) - [M_strings::INTRO] Fortran string module
 <A HREF=#2>Synopsis</A><BR>
 <A HREF=#3>See Also</A><BR>
 <A HREF=#4>Examples</A><BR>
-<A HREF=#5>Author</A><BR>
-<A HREF=#6>License</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>DESCRIPTION</H3>
 
@@ -80,8 +81,8 @@ for parsing, tokenizing, changing case, substituting new strings for
 substrings, locating strings with simple wildcard expressions, removing
 tabs and line terminators and other string manipulations are included.
 <P>
-M_strings_oop(3fm) is a companion module that provides an OOP interface
-to the M_strings module.
+M_strings__oop(3fm) is a companion module that provides an OOP
+interface to the M_strings module.
 </BLOCKQUOTE>
 <A name=2>
 
@@ -92,13 +93,13 @@ to the M_strings module.
 public entities:
 <P>
 <PRE>
-     use M_strings,only : split, sep, delim, chomp, strtok
+     use M_strings,only : split, slice, sep, delim, chomp, strtok
      use M_strings,only : split2020, find_field
      use M_strings,only : substitute, change, modif, transliterate, &
              & reverse, squeeze
      use M_strings,only : replace, join
      use M_strings,only : upper, lower, upper_quoted
-     use M_strings,only : rotate13
+     use M_strings,only : rotate13, percent_encode, percent_decode
      use M_strings,only : adjustc, compact, nospace, indent
      use M_strings,only : crop, clip, unquote, quote, matching_delimiter
      use M_strings,only : len_white, pad, lpad, cpad, rpad, zpad, &
@@ -109,7 +110,7 @@ public entities:
      use M_strings,only : string_to_value, string_to_values, s2v, s2vs
      use M_strings,only : int, real, dble, nint
      use M_strings,only : atoi, atol, aton
-     use M_strings,only : value_to_string, v2s, msg
+     use M_strings,only : value_to_string, v2s, str, fmt
      use M_strings,only : listout, getvals
      use M_strings,only : glob, ends_with
      use M_strings,only : paragraph
@@ -142,9 +143,14 @@ and stores tokens into an array
 function interface to split(3f)
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
+<B>slice</B> </TD><TD valign=bottom>
+subroutine parses string using specified delimiter characters
+and stores beginning and ending positions in arrays
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
 <B>delim</B> </TD><TD valign=bottom>
 subroutine parses string using specified delimiter characters
-and store tokens into an array
+and store tokens into an array and records beginning and end
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>chomp</B> </TD><TD valign=bottom>
@@ -154,7 +160,10 @@ string using specified delimiters
 <TR valign=top><TD colspan=2>
 <B>paragraph</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 convert a string into a paragraph
-strtok tokenize a string like C strtok(3c) routine
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>strtok</B> </TD><TD valign=bottom>
+tokenize a string like C strtok(3c) routine
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -221,6 +230,14 @@ separator
 <TR valign=top><TD colspan=2>
 <B>rotate13</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 apply trivial encryption algorithm ROT13 to a string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>percent_encode</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+apply percent-encryption (aka. URL encryption) to characters
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>percent_decode</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+apply percent-decryption (aka. URL decryption) to characters
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>squeeze</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
@@ -329,7 +346,8 @@ characters
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>clip</B> </TD><TD valign=bottom>
-function trims leading and trailing spaces
+trim leading and trailings spaces or set of characters
+from string
 </TD></TR>
 <TR></TR></TABLE>See Also: squeeze
 </BLOCKQUOTE>
@@ -350,7 +368,7 @@ remove quotes from string as if read with list-directed input
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>quote</B> </TD><TD valign=bottom>
-add quotes to string as if written with list-directed input
+add quotes to string as if written with list-directed output
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
@@ -457,8 +475,15 @@ function returns INTEGER(kind=int64)  from a string
 changes string to numeric value
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B>msg</B> </TD><TD valign=bottom>
-append the values of up to nine values into a string
+<B>str</B> </TD><TD valign=bottom>
+append the values of up to twenty values into
+a string, including user-specified separator
+and a CSV-style option
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>fmt</B> </TD><TD valign=bottom>
+return string from generic  intrinsic value
+using optionally specified format.
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>value_to_string</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
@@ -609,11 +634,13 @@ decodebase convert whole number in base 10 to string in base [2-36]
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
 <B>bundle</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-return up to twenty strings of arbitrary length as an array
+return up to twenty strings of arbitrary length as
+an array
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>describe</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-returns a string describing the name of a single character
+returns a string describing the name of a single
+character
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>edit_distance</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
@@ -669,7 +696,7 @@ operator, as well as a number of intrinsic string routines:
 </A>
 <BLOCKQUOTE>
 <P>
-The M_strings_oop(3fm) module (included with the M_strings(3fm)
+The M_strings__oop(3fm) module (included with the M_strings(3fm)
 module) provides an OOP (Object-Oriented Programming) interface to
 the M_strings(3fm) module.
 </BLOCKQUOTE>
@@ -690,49 +717,75 @@ expression library (M_regex).
 
 </A>
 <BLOCKQUOTE>
-Each of the procedural functions includes an example program in the
-corresponding man(1) page for the function. The object-oriented
-interface does not have individual man(1) pages, but is instead
-demonstrated using the following example program:
-<P>
-<PRE>
-    program demo_M_strings
-    use M_strings,only : split, sep, delim, chomp, strtok
-    use M_strings,only : split2020, find_field
-    use M_strings,only : substitute, change, modif, transliterate, &
-            & reverse, squeeze
-    use M_strings,only : replace, join
-    use M_strings,only : upper, lower, upper_quoted
-    use M_strings,only : rotate13
-    use M_strings,only : adjustc, compact, nospace, indent
-    use M_strings,only : crop, clip, unquote, quote, matching_delimiter
-    use M_strings,only : len_white, pad, lpad, cpad, rpad, zpad, &
-            & stretch, lenset, merge_str
-    use M_strings,only : switch, s2c, c2s
-    use M_strings,only : noesc, notabs, dilate, expand, visible
-    use M_strings,only : longest_common_substring
-    use M_strings,only : string_to_value, string_to_values, s2v, s2vs
-    use M_strings,only : int, real, dble, nint
-    use M_strings,only : atoi, atol, aton
-    use M_strings,only : value_to_string, v2s, msg
-    use M_strings,only : listout, getvals
-    use M_strings,only : glob, ends_with
-    use M_strings,only : paragraph
-    use M_strings,only : base, decodebase, codebase, base2
-    use M_strings,only : isalnum, isalpha, iscntrl, isdigit
-    use M_strings,only : isgraph, islower, isprint, ispunct
-    use M_strings,only : isspace, isupper, isascii, isblank, isxdigit
-    use M_strings,only : isnumber
-    use M_strings,only : fortran_name
-    use M_strings,only : describe
-    use M_strings,only : edit_distance
-    use M_strings,only : bundle
-    end program demo_M_strings
-<P>
-</PRE>
-Expected output
+Each of the procedures includes an [example](example/) program in
+the corresponding man(1) page for the function.
 </BLOCKQUOTE>
 <A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+     program demo_M_strings
+     use M_strings,only : SPLIT, slice, sep, delim, chomp, strtok
+     use M_strings,only : split2020, find_field
+     use M_strings,only : substitute, change, modif, transliterate, &
+             & reverse, squeeze
+     use M_strings,only : REPLACE, join
+     use M_strings,only : UPPER, LOWER, upper_quoted
+     use M_strings,only : rotate13, percent_encode, percent_decode
+     use M_strings,only : adjustc, compact, nospace, indent
+     use M_strings,only : crop, clip, unquote, quote, matching_delimiter
+     use M_strings,only : len_white, pad, lpad, cpad, rpad, zpad, &
+             & stretch, lenset, merge_str
+     use M_strings,only : switch, s2c, c2s
+     use M_strings,only : noesc, notabs, dilate, expand, visible
+     use M_strings,only : longest_common_substring
+     use M_strings,only : string_to_value, string_to_values, s2v, s2vs
+     use M_strings,only : int, real, dble, nint
+     use M_strings,only : atoi, atol, aton
+     use M_strings,only : value_to_string, v2s, str, fmt
+     use M_strings,only : listout, getvals
+     use M_strings,only : glob, ends_with
+     use M_strings,only : paragraph
+     use M_strings,only : base, decodebase, codebase, base2
+     use M_strings,only : isalnum, isalpha, iscntrl, isdigit
+     use M_strings,only : isgraph, islower, isprint, ispunct
+     use M_strings,only : isspace, isupper, isascii, isblank, isxdigit
+     use M_strings,only : isnumber
+     use M_strings,only : fortran_name
+     use M_strings,only : describe
+     use M_strings,only : edit_distance
+     use M_strings,only : bundle
+     character(len=:),allocatable :: string
+     character(len=:),allocatable :: array(:) ! output array of tokens
+     character(len=*),parameter   :: gen=&#146;(*(g0))&#146;
+     character(len=*),parameter   :: genx=&#146;(*("[",g0,"] ":))&#146;
+     string=&#146;abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 01234567890&#146;
+     write(*,gen)string
+     write(*,gen)upper(string)
+     write(*,gen)lower(string)
+     call split(string,array)
+     write(*,genx)array
+     write(*,gen)replace(string,&#146;qrs&#146;,&#146;--RePlace--&#146;,ignorecase=.true.)
+     end program demo_M_strings
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+ &gt; abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 01234567890
+ &gt; ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ 01234567890
+ &gt; abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz 01234567890
+ &gt; [abcdefghijklmnopqrstuvwxyz] [ABCDEFGHIJKLMNOPQRSTUVWXYZ] [01234567890               ]
+ &gt; abcdefghijklmnop--RePlace--tuvwxyz ABCDEFGHIJKLMNOP--RePlace--TUVWXYZ 01234567890
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
 
      <H3>AUTHOR</H3>
 
@@ -740,7 +793,7 @@ Expected output
 <BLOCKQUOTE>
 John S. Urban
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>LICENSE</H3>
 
@@ -749,7 +802,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_strings (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 584b9cd9-acd3-47eb-ba61-794edda15ff8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_strings (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8ab2cfc3-6f24-472d-8eed-0483b011a5f8 using man macros.</FONT>
 <br><br><center><img src="images/M_strings.3m_strings.gif"></center>
 </div>
 </div>

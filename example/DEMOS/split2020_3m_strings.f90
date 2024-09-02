@@ -35,14 +35,14 @@
       block
         character (len=:), allocatable :: string
         character (len=*),parameter :: set = " ,"
-        integer :: p, istart, iend
+        integer :: p, ibegin, iend
         string = " one,   last  example  "
         do while (p < len(string))
-          istart = p + 1
+          ibegin = p + 1
           call split2020 (string, set, p)
           iend=p-1
-          if(iend > istart)then
-             print '(t3,a,1x,i0,1x,i0)', string (istart:iend),istart,iend
+          if(iend > ibegin)then
+             print '(t3,a,1x,i0,1x,i0)', string (ibegin:iend),ibegin,iend
           endif
         enddo
       endblock

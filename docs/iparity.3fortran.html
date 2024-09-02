@@ -50,21 +50,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iparity (3)</NOBR><HR></H1>
 </CENTER>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>iparity (3)</NOBR><HR></H1>
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>iparity(3fortran)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-iparity(3fortran)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 IPARITY(3) - [BIT:LOGICAL] Bitwise exclusive OR of array elements
 <P>
 </BLOCKQUOTE>
@@ -76,16 +68,18 @@ IPARITY(3) - [BIT:LOGICAL] Bitwise exclusive OR of array elements
 
 </A>
 <BLOCKQUOTE>
+<P>
 result = iparity( array [,mask] ) | iparity( array, dim [,mask] )
 <P>
 <PRE>
-           integer(kind=KIND) function iparity(array, dim, mask )
+         integer(kind=KIND) function iparity(array, dim, mask )
 <P>
-            integer(kind=KIND),intent(in) :: array(..)
-            logical(kind=**),intent(in),optional :: dim
-            logical(kind=**),intent(in),optional :: mask(..)
+          integer(kind=KIND),intent(in) :: array(..)
+          logical(kind=**),intent(in),optional :: dim
+          logical(kind=**),intent(in),optional :: mask(..)
 <P>
 </PRE>
+</BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -105,13 +99,13 @@ o
 MASK - logical conformable with ARRAY.
 </TD></TR>
 <TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=2>
+<TR></TR></TABLE><A name=2>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 IPARITY(3) reduces with bitwise xor (exclusive or) the elements of ARRAY
 along dimension DIM if the corresponding element in MASK is .true..
 </BLOCKQUOTE>
@@ -121,6 +115,7 @@ along dimension DIM if the corresponding element in MASK is .true..
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
@@ -135,8 +130,8 @@ DIM a value from 1 to the rank of ARRAY.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-MASK : a logical mask either a scalar or an array of the same shape as
-ARRAY.
+MASK : a logical mask either a scalar or an array of the same shape
+as ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -145,29 +140,32 @@ ARRAY.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The result is of the same type as ARRAY.
 <P>
-If DIM is absent, a scalar with the bitwise xor of all elements in ARRAY is
-returned. Otherwise, an array of rank N-1, where N equals the rank of ARRAY,
-and a shape similar to that of ARRAY with dimension DIM dropped is returned.
+If DIM is absent, a scalar with the bitwise xor of all elements in ARRAY
+is returned. Otherwise, an array of rank N-1, where N equals the rank of
+ARRAY, and a shape similar to that of ARRAY with dimension DIM dropped
+is returned.
 <P>
 Case (i): The result of IPARITY (ARRAY) has a value equal to the bitwise
-exclusive OR of all the elements of ARRAY. If ARRAY has size zero the result
-has the value zero.
+exclusive OR of all the elements of ARRAY. If ARRAY has size zero the
+result has the value zero.
 <P>
 Case (ii): The result of IPARITY (ARRAY, MASK=MASK) has a value equal to
 that of
 <P>
 <PRE>
-                     IPARITY (PACK (ARRAY, MASK)).
+                   IPARITY (PACK (ARRAY, MASK)).
 <P>
 </PRE>
-Case (iii): The result of IPARITY (ARRAY, DIM=DIM [, MASK=MASK]) has a value
-equal to that of IPARITY (ARRAY [, MASK=MASK]) if ARRAY has rank one.
+Case (iii): The result of IPARITY (ARRAY, DIM=DIM [, MASK=MASK]) has a
+value equal to that of IPARITY (ARRAY [, MASK=MASK]) if ARRAY has rank
+one.
 <P>
 <PRE>
-                 Otherwise, an array of values reduced along the dimension
-                 **dim** is returned.
+               Otherwise, an array of values reduced along the dimension
+               **dim** is returned.
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -177,22 +175,23 @@ equal to that of IPARITY (ARRAY [, MASK=MASK]) if ARRAY has rank one.
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-      program demo_iparity
-      implicit none
-      integer, dimension(2) :: a
-        a(1) = int(b&#146;00100100&#146;)
-        a(2) = int(b&#146;01101010&#146;)
-        print &#146;(b8.8)&#146;, iparity(a)
-      end program demo_iparity
+    program demo_iparity
+    implicit none
+    integer, dimension(2) :: a
+      a(1) = int(b&#146;00100100&#146;)
+      a(2) = int(b&#146;01101010&#146;)
+      print &#146;(b8.8)&#146;, iparity(a)
+    end program demo_iparity
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-         01001110
+       01001110
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -202,6 +201,7 @@ Results:
 
 </A>
 <BLOCKQUOTE>
+<P>
 Fortran 2008
 </BLOCKQUOTE>
 <A name=7>
@@ -210,16 +210,13 @@ Fortran 2008
 
 </A>
 <BLOCKQUOTE>
+<P>
 IANY(3), IALL(3), IEOR(3), PARITY(3)
 <P>
 fortran-lang intrinsic descriptions
-<P>
-<PRE>
-                               November 07, 2022             iparity(3fortran)
-</PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iparity (3)</TD> <TD align=right width=33%><I>February 12, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 788c2f0d-8e1a-499c-901c-c7f28d7780e8 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>iparity (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a8e0f29c-1345-4bcb-8384-07361ea5221d using man macros.</FONT>
 <br><br><center><img src="images/iparity.3fortran.gif"></center>
 </div>
 </div>

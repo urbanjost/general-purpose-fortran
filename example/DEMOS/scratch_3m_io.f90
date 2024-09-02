@@ -13,7 +13,7 @@
       if(present(NAME))then
          write(*,'(a,t20,a)')NAME,scratch(NAME)
       else
-         write(*,'(a,t20,a)')'*NOT PRESENT*',scratch()
+         write(*,'(a,t20,a)')'*OT PRESENT*',scratch()
       endif
       end subroutine printit
       end program demo_scratch

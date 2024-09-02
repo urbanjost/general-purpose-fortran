@@ -1,0 +1,204 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>is_hidden_file (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+is_hidden_file(3f) - [M_io:QUERY] determine if a pathname points to a
+hidden file, which is defined as a file basename starting with a period.
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Limitations</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Returns</A><BR>
+<A HREF=#6>Example</A><BR>
+<A HREF=#7>See Also</A><BR>
+<A HREF=#8>Author</A><BR>
+<A HREF=#9>License</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+impure elemental function is_hidden_file(PATH) result(YESNO)
+<P>
+<PRE>
+     character(len=*),intent(in) :: PATH
+     logical                     :: YESNO
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Given a pathname determine if it is a hidden file. This is simply
+assumed to be a basename that does not begin with a period and is not
+a single or double period, assumed to represent the current directory
+and parent directory.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>LIMITATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+Pathnames are not expanded to a canonical form, so if the basename is
+value will still be .FALSE. . Filenames are assumed to not contain
+leading or trailing spaces.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>PATH</B> </TD><TD valign=bottom>
+pathname to classify. It need not exist.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>YESNO</B> </TD><TD valign=bottom>
+true if pathname points to a hidden file, otherwise it
+is false.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+      program demo_is_hidden_file
+      use M_io, only : is_hidden_file, basename
+         call showit(&#146;.abc&#146;)
+         call showit(&#146;./.&#146;)
+         call showit(&#146;..&#146;)
+         call showit(&#146;&#46;&#46;&#46;&#146;)
+         call showit(&#146;/abc/def/notes.txt&#146;)
+         call showit(&#146;/abc/def/.hide&#146;)
+      contains
+      subroutine showit(path)
+      character(len=*),intent(in) :: path
+         write(*,*)is_hidden_file(path), &
+          & &#146; ,path=&#146;,path
+      end subroutine showit
+      end program demo_is_hidden_file
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &gt;  T  ,path=.abc
+    &gt;  F  ,path=./.
+    &gt;  F  ,path=..
+    &gt;  T  ,path=&#46;&#46;&#46;
+    &gt;  F  ,path=/abc/def/notes.txt
+    &gt;  T  ,path=/abc/def/.hide
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>is_hidden_file (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 85ecb80c-59a9-4584-a9d7-daa427f53133 using man macros.</FONT>
+<br><br><center><img src="images/is_hidden_file.3m_io.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
