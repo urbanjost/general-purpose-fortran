@@ -1,0 +1,266 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>help_command (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+help_command(3f) - [M_framework__help] uses a specially formatted
+text array to
+provide a HELP interface
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Example</A><BR>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+Syntax:
+<P>
+<PRE>
+     function help_command(text_array,topic,position)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+This routine, when given a CHARACTER array displays the text
+interactively. The special topics "manual","topics", and "search"
+are reserved. "manual" causes the entire array to be displayed.
+"topics" displays all lines not beginning with a space or three or
+more equal signs, and "search" must be followed by a string to search
+for in the manual.
+<P>
+A line beginning with a non-blank character in column one is a topic
+<P>
+A topic with the preceding line beginning with "===" is a special
+topic that will be displayed up to the next line beginning with "==="
+<P>
+The special topic "manual" displays the entire help text
+<P>
+The help text is paged based on the values in the position() array. The
+first value is the current line count on the current page, and the
+second value is how many lines should be displayed as a page before
+a paging prompt is produced. POSITION(2) is typically set to 23.
+POSITION(1) can be set to zero, especially if the calling page is
+not tracking paging itself.
+<P>
+Entering a "q" at the prompt exits the help text. To see other options
+enter an "h" at the prompt.
+<P>
+<PRE>
+      h
+      #----------------------------------------------------# PAGING
+      | f|SPACE b  forward or backward one page            |
+      | u d        redraw up or down one-half page         |
+      | r          refresh page                            |
+      | e y | j k  refresh page moving up or down one line |
+      #----------------------------------------------------# JUMPING
+      | g          go to top of manual                     |
+      | NNN        go to line number NNN. Use a sign (+-)  |
+      |            for a relative move.                    |
+      | .          toggle line numbering                   |
+      #----------------------------------------------------# SEARCHING
+      | /STRING    advance to next line containing string  |
+      | ?STRING    search for string above current line    |
+      | n N        find next occurrence up or down in file |
+      | \STRING    show all lines with specified string.   |
+      | t          displays topic lines.                   |
+      #----------------------------------------------------#
+      | w FILENAME write entire user guide to local file   |
+      | h          display this help                       |
+      | q          quit                                    |
+      #----------------------------------------------------#
+      Anything else is ignored.
+      Line count is 25 out of 54 . Page size is 23 (see "lines")
+      continue ..
+<P>
+<P>
+</PRE>
+A normal topic is displayed until another topic line (line beginning
+with a non-blank) is encountered
+<P>
+The help text must begin with a line starting with "==="
+<P>
+If a line is preceded by an "===" line it is considered a section
+instead of a topic, and all lines between that line and the next line
+beginning with "===" are displayed.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>help_text</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+The block of text to treat as the input document
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>topic</B> </TD><TD valign=bottom>
+What topic or section to search for (case sensitive). A blank
+is equivalent to "SUMMARY". There are several reserved names.
+"manual" means the entire help text, and "topics" shows only
+lines not beginning with a blank, and "search" does a
+case-insensitive search for a string.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>position</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+A small array with two values. The second value is the size
+of the page to be used between pauses. The first one indicates
+how many lines on the current page have been displayed.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program:
+<P>
+<PRE>
+   program demo_help_command
+   use M_framework__help, only : help_command
+   character(len=:),allocatable :: help_text(:)
+   integer                      :: position(2)
+   position=[0,23]
+   help_text=[character(len=80) :: &
+   &#146;==============================================&#146;,&
+   &#146;   A sample help text file.                   &#146;,&
+   &#146;   Note the first line MUST start with "==="  &#146;,&
+   &#146;==============================================&#146;,&
+   &#146;SUMMARY                                       &#146;,&
+   &#146;  This is usually a crib sheet                &#146;,&
+   &#146;==============================================&#146;,&
+   &#146;SECTION1                                      &#146;,&
+   &#146;topic1                                        &#146;,&
+   &#146;   A description of topic 1                   &#146;,&
+   &#146;                                              &#146;,&
+   &#146;   and any general text you want              &#146;,&
+   &#146;                                              &#146;,&
+   &#146;topic2  A description of topic 2              &#146;,&
+   &#146;topic3                                        &#146;,&
+   &#146;   A description of topic 3                   &#146;,&
+   &#146;   more  description of topic 3               &#146;,&
+   &#146;   and more description of topic 3 a          &#146;,&
+   &#146;   and more description of topic 3 b          &#146;,&
+   &#146;   and more description of topic 3 c          &#146;,&
+   &#146;   and more description of topic 3 d          &#146;,&
+   &#146;   and more description of topic 3 e          &#146;,&
+   &#146;   and more description of topic 3 f          &#146;,&
+   &#146;   and more description of topic 3 g          &#146;,&
+   &#146;   and more description of topic 3 h          &#146;,&
+   &#146;   and more description of topic 3 i          &#146;,&
+   &#146;   and more description of topic 3 j          &#146;,&
+   &#146;   and more description of topic 3 k          &#146;,&
+   &#146;   and more description of topic 3 l          &#146;,&
+   &#146;   and more description of topic 3 m          &#146;,&
+   &#146;   and more description of topic 3 n          &#146;,&
+   &#146;   and more description of topic 3 o          &#146;,&
+   &#146;   and more description of topic 3 p          &#146;,&
+   &#146;   and more description of topic 3 q          &#146;,&
+   &#146;   and more description of topic 3 r          &#146;,&
+   &#146;   and more description of topic 3 s          &#146;,&
+   &#146;   and more description of topic 3 t          &#146;,&
+   &#146;   and more description of topic 3 u          &#146;,&
+   &#146;   and more description of topic 3 v          &#146;,&
+   &#146;   and more description of topic 3 w          &#146;,&
+   &#146;   and more description of topic 3 x          &#146;,&
+   &#146;   and more description of topic 3 y          &#146;,&
+   &#146;   and more description of topic 3 z          &#146;,&
+   &#146;==============================================&#146;,&
+   &#146;SECTION2                                      &#146;,&
+   &#146;topic4  A description of topic 4              &#146;,&
+   &#146;   this is the last part of SECTION1          &#146;,&
+   &#146;topic5                                        &#146;,&
+   &#146;  This is all about the fifth topic and is    &#146;,&
+   &#146;  just displayed as-is. The text cannot start &#146;,&
+   &#146;  in column one or it will be seen as the     &#146;,&
+   &#146;  beginning of a topic.                       &#146;,&
+   &#146;==============================================&#146;,&
+   &#146;                                              &#146; ]
+<P>
+   write(*,*)&#146;&gt;&gt;&gt;&gt;&gt;&#146;
+   call help_command(help_text,&#146;&#146;,position)
+   write(*,*)&#146;&gt;&gt;&gt;&gt;&gt;topic1&#146;
+   call help_command(help_text,&#146;topic1&#146;,position)
+   write(*,*)&#146;&gt;&gt;&gt;&gt;&gt;topics&#146;
+   call help_command(help_text,&#146;topics&#146;,position)
+   write(*,*)&#146;&gt;&gt;&gt;&gt;&gt;manual&#146;
+   call help_command(help_text,&#146;manual&#146;,position)
+   end program demo_help_command
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>help_command (3)</TD> <TD align=right width=33%><I>July 22, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 71c56a82-49c4-4bdb-a31f-ed2c772332f7 using man macros.</FONT>
+<br><br><center><img src="images/help_command.3m_framework__help.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
