@@ -21,7 +21,10 @@ public :: mulcnt
 !!
 !!       o Real(kind=real32)
 !!       o Real(kind=real64)
+!!       o Integer(kind=int8)
+!!       o Integer(kind=int16)
 !!       o Integer(kind=int32)
+!!       o Integer(kind=int64)
 !!       o Character(kind=selected_char_kind("DEFAULT"),len=*)
 !!
 !!##DESCRIPTION
@@ -76,7 +79,7 @@ public :: mulcnt
 !!##LICENSE
 !!    CC0-1.0
 interface mulcnt
-  module procedure real64_mulcnt, real32_mulcnt, int32_mulcnt, f_char_mulcnt
+  module procedure real64_mulcnt, real32_mulcnt, int8_mulcnt, int16_mulcnt, int32_mulcnt, int64_mulcnt, f_char_mulcnt
 end interface mulcnt
 contains
 Subroutine real64_mulcnt (INVALS, IMULT)
@@ -117,6 +120,44 @@ Subroutine real32_mulcnt (INVALS, IMULT)
       End Do
 !
 End Subroutine real32_mulcnt
+Subroutine int8_mulcnt (INVALS, IMULT)
+! __________________________________________________________
+      Integer (kind=int8), Dimension (:), Intent (In) :: INVALS
+      Integer, Dimension (:), Intent (Out) :: IMULT
+! __________________________________________________________
+      Integer, Dimension (Size(INVALS)) :: IWRKT
+      Integer, Dimension (Size(INVALS)) :: ICNTT
+      Integer :: ICRS
+! __________________________________________________________
+      Call UNIINV (INVALS, IWRKT)
+      ICNTT = 0
+      Do ICRS = 1, Size(INVALS)
+            ICNTT(IWRKT(ICRS)) = ICNTT(IWRKT(ICRS)) + 1
+      End Do
+      Do ICRS = 1, Size(INVALS)
+            IMULT(ICRS) = ICNTT(IWRKT(ICRS))
+      End Do
+!
+End Subroutine int8_mulcnt
+Subroutine int16_mulcnt (INVALS, IMULT)
+! __________________________________________________________
+      Integer (kind=int16), Dimension (:), Intent (In) :: INVALS
+      Integer, Dimension (:), Intent (Out) :: IMULT
+! __________________________________________________________
+      Integer, Dimension (Size(INVALS)) :: IWRKT
+      Integer, Dimension (Size(INVALS)) :: ICNTT
+      Integer :: ICRS
+! __________________________________________________________
+      Call UNIINV (INVALS, IWRKT)
+      ICNTT = 0
+      Do ICRS = 1, Size(INVALS)
+            ICNTT(IWRKT(ICRS)) = ICNTT(IWRKT(ICRS)) + 1
+      End Do
+      Do ICRS = 1, Size(INVALS)
+            IMULT(ICRS) = ICNTT(IWRKT(ICRS))
+      End Do
+!
+End Subroutine int16_mulcnt
 Subroutine int32_mulcnt (INVALS, IMULT)
 ! __________________________________________________________
       Integer (kind=int32), Dimension (:), Intent (In) :: INVALS
@@ -136,6 +177,25 @@ Subroutine int32_mulcnt (INVALS, IMULT)
       End Do
 !
 End Subroutine int32_mulcnt
+Subroutine int64_mulcnt (INVALS, IMULT)
+! __________________________________________________________
+      Integer (kind=int64), Dimension (:), Intent (In) :: INVALS
+      Integer, Dimension (:), Intent (Out) :: IMULT
+! __________________________________________________________
+      Integer, Dimension (Size(INVALS)) :: IWRKT
+      Integer, Dimension (Size(INVALS)) :: ICNTT
+      Integer :: ICRS
+! __________________________________________________________
+      Call UNIINV (INVALS, IWRKT)
+      ICNTT = 0
+      Do ICRS = 1, Size(INVALS)
+            ICNTT(IWRKT(ICRS)) = ICNTT(IWRKT(ICRS)) + 1
+      End Do
+      Do ICRS = 1, Size(INVALS)
+            IMULT(ICRS) = ICNTT(IWRKT(ICRS))
+      End Do
+!
+End Subroutine int64_mulcnt
 Subroutine f_char_mulcnt (INVALS, IMULT)
 ! __________________________________________________________
       character (kind=f_char,len=*), Dimension (:), Intent (In) :: INVALS

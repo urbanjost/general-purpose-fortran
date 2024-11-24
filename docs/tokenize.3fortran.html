@@ -1,0 +1,354 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>tokenize (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+TOKENIZE(3) - [CHARACTER:PARSE] Parse a string into tokens.
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+TOKEN form (returns array of strings)
+<P>
+<PRE>
+        subroutine tokenize(string, set, tokens [, separator])
+<P>
+         character(len=*),intent(in) :: string
+         character(len=*),intent(in) :: set
+         character(len=:),allocatable,intent(out) :: tokens(:)
+         character(len=1),allocatable,intent(out),optional :: separator(:)
+<P>
+</PRE>
+ARRAY BOUNDS form (returns arrays defining token positions)
+<P>
+<PRE>
+        subroutine tokenize (string, set, first, last)
+<P>
+         character(len=*),intent(in) :: string
+         character(len=*),intent(in) :: set
+         integer,allocatable,intent(out) :: first(:)
+         integer,allocatable,intent(out) :: last(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING - a scalar of type character. It is an INTENT(IN) argument.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SET - a scalar of type character with the same kind type parameter
+as STRING. It is an INTENT(IN) argument.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SEPARATOR - (optional) shall be of type character with the same kind
+type parameter as STRING. It is an INTENT(OUT)argument. It shall not
+be a coarray or a coindexed object.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+TOKENS - of type character with the same kind type parameter as
+STRING. It is an INTENT(OUT) argument. It shall not be a coarray or
+a coindexed object.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FIRST,LAST - an allocatable array of type integer and rank one. It
+is an INTENT(OUT) argument. It shall not be a coarray or a coindexed
+object.
+</TD></TR>
+<TR></TR></TABLE>To reiterate, STRING, SET, TOKENS and SEPARATOR must all be of the same
+CHARACTER kind type parameter.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+TOKENIZE(3) parses a string into tokens. There are two forms of the
+subroutine TOKENIZE(3).
+<TABLE cellpadding=3><!-- tsb: TOKENIZE(3) parses a string into tokens. There are two forms of the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The token form returns an array with one token per element, all of
+the same length as the longest token.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The array bounds form returns two integer arrays. One contains the
+beginning position of the tokens and the other the end positions.
+</TD></TR>
+<TR></TR></TABLE>Since the token form pads all the tokens to the same length the original
+number of trailing spaces of each token accept for the longest is lost.
+<P>
+The array bounds form retains information regarding the exact token
+length even when padded by spaces.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING : The string to parse into tokens.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SET : Each character in SET is a token delimiter. A sequence of zero
+or more characters in STRING delimited by any token delimiter, or
+the beginning or end of STRING, comprise a token. Thus, two
+consecutive token delimiters in STRING, or a token delimiter in the
+first or last character of STRING, indicate a token with zero
+length.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+TOKENS : It shall be an allocatable array of rank one with deferred
+length. It is allocated with the lower bound equal to one and the
+upper bound equal to the number of tokens in STRING, and with
+character length equal to the length of the longest token.
+<P>
+The tokens in STRING are assigned in the order found, as if by
+intrinsic assignment, to the elements of TOKENS, in array element
+order.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+FIRST : shall be an allocatable array of type integer and rank one.
+It is an INTENT(OUT) argument. It shall not be a coarray or a
+coindexed object.
+<P>
+It is allocated with the lower bound equal to one and the upper
+bound equal to the number of tokens in STRING. Each element is
+assigned, in array element order, the starting position of each
+token in STRING, in the order found.
+<P>
+If a token has zero length, the starting position is equal to one if
+the token is at the beginning of STRING, and one greater than the
+position of the preceding delimiter otherwise.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+LAST : It is allocated with the lower bound equal to one and the
+upper bound equal to the number of tokens in STRING. Each element is
+assigned, in array element order, the ending position of each token
+in STRING, in the order found.
+<P>
+If a token has zero length, the ending position is one less than the
+starting position.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample of uses
+<P>
+<PRE>
+        program demo_tokenize
+        !use M_strings, only : tokenize=&gt;split2020
+        implicit none
+        ! some useful formats
+        character(len=*),parameter :: brackets=&#146;(*("[",g0,"]":,","))&#146;
+        character(len=*),parameter :: a_commas=&#146;(a,*(g0:,","))&#146;
+        character(len=*),parameter :: space=&#146;(*(g0:,1x))&#146;
+        character(len=*),parameter :: gen=&#146;(*(g0))&#146;
+<P>
+        ! Execution of TOKEN form (return array of tokens)
+<P>
+        block
+           character (len=:), allocatable :: string
+           character (len=:), allocatable :: tokens(:)
+           character (len=:), allocatable :: kludge(:)
+           integer                        :: i
+           string = &#146;  first,second ,third       &#146;
+           call tokenize(string, set=&#146;;,&#146;, tokens=tokens )
+           write(*,brackets)tokens
+<P>
+           string = &#146;  first , second ,third       &#146;
+           call tokenize(string, set=&#146; ,&#146;, tokens=tokens )
+           write(*,brackets)(trim(tokens(i)),i=1,size(tokens))
+           ! remove blank tokens
+           ! &lt;&lt;&lt;
+           !tokens=pack(tokens, tokens /= &#146;&#146; )
+           ! gfortran 13.1.0 bug -- concatenate //&#146;&#146; and use scratch
+           ! variable KLUDGE. JSU: 2024-08-18
+           kludge=pack(tokens//&#146;&#146;, tokens /= &#146;&#146; )
+           ! &gt;&gt;&gt;
+           write(*,brackets)kludge
+<P>
+        endblock
+<P>
+        ! Execution of BOUNDS form (return position of tokens)
+<P>
+        block
+           character (len=:), allocatable :: string
+           character (len=*),parameter :: set = " ,"
+           integer, allocatable        :: first(:), last(:)
+           write(*,gen)repeat(&#146;1234567890&#146;,6)
+           string = &#146;first,second,,fourth&#146;
+           write(*,gen)string
+           call tokenize (string, set, first, last)
+           write(*,a_commas)&#146;FIRST=&#146;,first
+           write(*,a_commas)&#146;LAST=&#146;,last
+           write(*,a_commas)&#146;HAS LENGTH=&#146;,last-first.gt.0
+        endblock
+<P>
+        end program demo_tokenize
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+     &gt; [  first     ],[second      ],[third       ]
+     &gt; [],[first],[],[],[second],[],[third],[],[],[],[],[]
+     &gt; [first ],[second],[third ]
+     &gt; 123456789012345678901234567890123456789012345678901234567890
+     &gt; first,second,,fourth
+     &gt; FIRST=1,7,14,15
+     &gt; LAST=5,12,13,20
+     &gt; HAS LENGTH=T,T,F,T
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Fortran 2023
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SPLIT(3) - return tokens from a string, one at a time
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+INDEX(3) - Position of a substring within a string
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SCAN(3) - Scan a string for the presence of a set of characters
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VERIFY(3) - Position of a character in a string of characters that
+does not appear in a given set of characters.
+</TD></TR>
+<TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>tokenize (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6bb71e32-55c5-4796-97c8-8246213a13a8 using man macros.</FONT>
+<br><br><center><img src="images/tokenize.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -32,7 +32,7 @@
            movie(ii,:,:)=P_pixel
            LIGHTNESS=LIGHTNESS+LIGHTSTEP
         enddo
-        call write_animated_gif('mapcolor.3M_pixel.gif',movie,P_colormap,delay=40)
+        call write_animated_gif('mapcolor.3m_pixel.gif',movie,P_colormap,delay=40)
         call vexit()
      contains
      subroutine wheel() ! draw an entire wheel

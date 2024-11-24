@@ -50,31 +50,34 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>close (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-CLOSE(7f) - [FORTRAN:IO] terminate the connection of a specified unit
-to an external file.
+<P>
+close(7f) - [IO] terminate the connection of a specified unit to an
+external file.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 CLOSE ( [UNIT= ] file-unit-number,
 <P>
 <PRE>
-    [IOSTAT= scalar-int-variable,]
-    [IOMSG= iomsg-variable,]
-    [ERR= label,]
-    [STATUS= scalar-default-char-expr]
+        [IOSTAT= scalar-int-variable,]
+        [IOMSG= iomsg-variable,]
+        [ERR= label,]
+        [STATUS= scalar-default-char-expr]
 </PRE>
 )
 </BLOCKQUOTE>
@@ -88,22 +91,22 @@ CLOSE ( [UNIT= ] file-unit-number,
 The CLOSE statement is used to terminate the connection of a specified
 unit to an external file.
 <P>
-Execution of a CLOSE statement for a unit may occur in any program
-unit of a program and need not occur in the same program unit as the
+Execution of a CLOSE statement for a unit may occur in any program unit
+of a program and need not occur in the same program unit as the
 execution of an OPEN statement referring to that unit.
 <P>
-Execution of a CLOSE statement performs a wait operation for any
-pending asynchronous data transfer operations for the specified unit.
+Execution of a CLOSE statement performs a wait operation for any pending
+asynchronous data transfer operations for the specified unit.
 <P>
 Execution of a CLOSE statement specifying a unit that does not exist or
 has no file connected to it is permitted and affects no file or unit.
 <P>
-After a unit has been disconnected by execution of a CLOSE statement,
-it may be connected again within the same program, either to the same
-file or to a different file. After a named file has been disconnected
-by execution of a CLOSE statement, it may be connected again within
-the same program, either to the same unit or to a different unit,
-provided that the file still exists.
+After a unit has been disconnected by execution of a CLOSE statement, it
+may be connected again within the same program, either to the same file
+or to a different file. After a named file has been disconnected by
+execution of a CLOSE statement, it may be connected again within the
+same program, either to the same unit or to a different unit, provided
+that the file still exists.
 <P>
 The input/output statements are the OPEN, CLOSE, READ, WRITE, PRINT,
 BACKSPACE, ENDFILE, REWIND, FLUSH, WAIT, and INQUIRE statements.
@@ -111,39 +114,32 @@ BACKSPACE, ENDFILE, REWIND, FLUSH, WAIT, and INQUIRE statements.
 OPEN, CLOSE, BACKSPACE, ENDFILE, and REWIND statements shall not be
 executed while a parent data transfer statement is active.
 <P>
-A pure subprogram shall not contain a print-stmt, open-stmt,
-close-stmt, backspace-stmt, endfile-stmt, rewind-stmt, flush-stmt,
-wait-stmt, or inquire-stmt.
+A pure subprogram shall not contain a print-stmt, open-stmt, close-stmt,
+backspace-stmt, endfile-stmt, rewind-stmt, flush-stmt, wait-stmt, or
+inquire-stmt.
 <P>
-The READ statement is a data transfer input statement. The
-WRITE statement and the PRINT statement are data transfer output
-statements. The OPEN statement and the CLOSE statement are file
-connection statements. The INQUIRE statement is a file inquiry
-statement. The BACKSPACE, ENDFILE, and REWIND statements are file
-positioning statements.
+The READ statement is a data transfer input statement. The WRITE
+statement and the PRINT statement are data transfer output statements.
+The OPEN statement and the CLOSE statement are file connection
+statements. The INQUIRE statement is a file inquiry statement. The
+BACKSPACE, ENDFILE, and REWIND statements are file positioning
+statements.
 <P>
 All input/output statements may refer to files that exist. An INQUIRE,
-OPEN, CLOSE, WRITE, PRINT, REWIND, FLUSH, or ENDFILE statement
-also may refer to a file that does not exist. Execution of a WRITE,
-PRINT, or ENDFILE statement referring to a preconnected file that
-does not exist creates the file. This file is a different file from
-one preconnected on any other image.
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; AT PROGRAM TERMINATION</H4>
-</A>
-<BLOCKQUOTE>
-During the completion step of termination of execution of a program,
-all units that are connected are closed. Each unit is closed with
-status KEEP unless the file status prior to termination of execution
-was SCRATCH, in which case the unit is closed with status DELETE.
+OPEN, CLOSE, WRITE, PRINT, REWIND, FLUSH, or ENDFILE statement also may
+refer to a file that does not exist. Execution of a WRITE, PRINT, or
+ENDFILE statement referring to a preconnected file that does not exist
+creates the file. This file is a different file from one preconnected on
+any other image.
 <P>
-<PRE>
-     The effect is as though a CLOSE statement without a STATUS=
-     specifier were executed on each connected unit.
+AT PROGRAM TERMINATION During the completion step of termination of
+execution of a program, all units that are connected are closed. Each
+unit is closed with status KEEP unless the file status prior to
+termination of execution was SCRATCH, in which case the unit is closed
+with status DELETE.
 <P>
-</PRE>
+The effect is as though a CLOSE statement without a STATUS= specifier
+were executed on each connected unit.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -151,98 +147,80 @@ was SCRATCH, in which case the unit is closed with status DELETE.
 
 </A>
 <BLOCKQUOTE>
-No specifier shall appear more than once in a given close-spec-list.
-<TABLE cellpadding=3><!-- tsb: No specifier shall appear more than once in a given close-spec-list.
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>UNIT=file-unit-number</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-A file-unit-number shall be specified
-in a close-spec-list; if the
-optional characters UNIT= are omitted,
-the file-unit-number shall be the
-first item in the close-spec-list.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>IOSTAT=scalar-int-variable</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-0 means no error occurred
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>IOMSG=iomsg-variable</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Character variable to hold message
-if an error occurred.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>ERR=label</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The label used in the ERR= specifier
-shall be the statement label of a
-branch target statement that appears
-in the same scoping unit as the
-CLOSE statement.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>STATUS=scalar-default-char-expr</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The expression has a limited list of
-character values. Any trailing blanks
-are ignored. The value specified is
-without regard to case.
 <P>
-The scalar-default-char-expr shall
-evaluate to KEEP or DELETE. The
-STATUS= specifier determines the
-disposition of the file that is
-connected to the specified unit. KEEP
-shall not be specified for a file
-whose status prior to execution of a
-CLOSE statement is SCRATCH. If KEEP
-is specified for a file that exists,
-the file continues to exist after the
-execution of a CLOSE statement. If KEEP
-is specified for a file that does not
-exist, the file will not exist after
-the execution of a CLOSE statement. If
-DELETE is specified, the file will
-not exist after the execution of a
-CLOSE statement. If this specifier
-is omitted, the default value is
-KEEP, unless the file status prior
-to execution of the CLOSE statement
-is SCRATCH, in which case the default
-value is DELETE.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+No specifier shall appear more than once in a given close-spec-list.
+<P>
+UNIT=file-unit-number : A file-unit-number shall be specified in a
+close-spec-list; if the optional characters UNIT= are omitted, the
+file-unit-number shall be the first item in the close-spec-list.
+IOSTAT=scalar-int-variable : 0 means no error occurred
+IOMSG=iomsg-variable : Character variable to hold message if an error
+occurred. ERR=label : The label used in the ERR= specifier shall be the
+statement label of a branch target statement that appears in the same
+scoping unit as the CLOSE statement. STATUS=scalar-default-char-expr :
+The expression has a limited list of character values. Any trailing
+blanks are ignored. The value specified is without regard to case.
+<P>
+<PRE>
+    The scalar-default-char-expr shall evaluate to KEEP or DELETE. The
+    STATUS= specifier determines the disposition of the file that
+    is connected to the specified unit. KEEP shall not be specified
+    for a file whose status prior to execution of a CLOSE statement
+    is SCRATCH. If KEEP is specified for a file that exists, the file
+    continues to exist after the execution of a CLOSE statement. If KEEP
+    is specified for a file that does not exist, the file will not exist
+    after the execution of a CLOSE statement. If DELETE is specified,
+    the file will not exist after the execution of a CLOSE statement. If
+    this specifier is omitted, the default value is KEEP, unless the
+    file status prior to execution of the CLOSE statement is SCRATCH,
+    in which case the default value is DELETE.
+<P>
+</PRE>
+</BLOCKQUOTE>
 <A name=4>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 sample program:
 <P>
 <PRE>
-   program demo_close
-   implicit none
-   character(len=256) :: message
-   integer            :: ios
-      open (10, file=&#146;employee.names&#146;, action=&#146;read&#146;, iostat=ios,iomsg=message)
-      if (ios &lt; 0) then
-         ! perform end-of-file processing on the file connected to unit 10.
+        program demo_close
+        implicit none
+        character(len=256) :: message
+        integer            :: ios
+           open (10, file=&#146;employee.names&#146;, action=&#146;read&#146;, &
+           & iostat=ios,iomsg=message)
+           if (ios &lt; 0) then
+              ! perform error processing on the unit 10 file.
+              close (10, status=&#146;keep&#146;,iostat=ios,iomsg=message)
+              if(ios.ne.0)then
+                 write(*,&#146;(*(a))&#146;)&#146;*demo_close* close error: &#146;,trim(message)
+                 stop 1
+              endif
+           elseif (ios &gt; 0) then
+              ! perform error processing on open
+              write(*,&#146;(*(a))&#146;)&#146;*demo_close* open error: &#146;,trim(message)
+              stop 2
+           endif
+        end program demo_close
 <P>
-         close (10, status=&#146;keep&#146;,iostat=ios,iomsg=message)
-         if(ios.ne.0)then
-            write(*,&#146;(*(a))&#146;)&#146;*demo_close* close error: &#146;,trim(message)
-            stop 1
-         endif
-      elseif (ios &gt; 0) then
-         ! perform error processing on open
-         write(*,&#146;(*(a))&#146;)&#146;*demo_close* open error: &#146;,trim(message)
-         stop 2
-      endif
-   end program demo_close
 </PRE>
 </BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7),
+PRINT(7), READ(7), REWIND(7), WAIT(7), WRITE(7)
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>close (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0f8f85f6-7933-4ebd-8acf-9b12a045f67c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>close (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 55fa0341-5847-48de-b593-dbbc725b695f using man macros.</FONT>
 <br><br><center><img src="images/close.7fortran.gif"></center>
 </div>
 </div>

@@ -59,6 +59,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
       use M_io, only : fileopen, fileclose, filedelete, filewrite, fileread, filebyte
       use M_io, only : number_of_lines
       use M_io, only : get_env, is_hidden_file
+      use M_io, only : putchar, getchar
       </pre>
    </dd>
    <dt> DESCRIPTION </dt><dd>
@@ -106,7 +107,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
          </li>
          <li> SYSTEM NAMES AND ATTRIBUTES
             <li><a href="separator.3m_io.html"> SEPARATOR </a> - try to determine pathname directory separator</li>
-            <li><a href="getname.3m_io.html"> GETNAME </a> - a pathname to the current executable</li>
+            <li><a href="getname.3m_io.html"> GETNAME </a> - return a pathname to the current executable</li>
             <li><a href="which.3m_io.html"> WHICH </a> - return a pathname for a command name found with the environment variable
             <li><a href="lookfor.3m_io.html"> LOOKFOR </a> - return a pathname for a file basename found with the directories in the
             <li><a href="is_hidden_file.3m_io.html"> IS_HIDDEN_FILE </a> - classify a pathname as a hidden file pathname or not</li>
@@ -115,6 +116,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
             <li><a href="notopen.3m_io.html"> NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>
             <li><a href="filename_generator.3m_io.html"> FILENAME_GENERATOR </a> - create filename containing a whole number</li>
             <li><a href="print_inquire.3m_io.html"> PRINT_INQUIRE </a> - run INQUIRE(3f) on a file by name or number and print results</li>
+            <li><a href="get_env.html"> GET_ENV </a> - function to get environment variable</li>
          </ul>
          </li>
 

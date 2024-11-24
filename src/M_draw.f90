@@ -10334,7 +10334,7 @@ end function s2c
 !!       endif
 !!       call vexit()
 !!    end program demo_invokeobj
-!!##AUTHOR
+!!##AUTHO
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain

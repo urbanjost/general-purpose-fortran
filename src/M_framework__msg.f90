@@ -307,7 +307,7 @@ integer :: i
       type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
       !type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
-      type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",1x))') (trim(generic(i)),i=1,size(generic))
+      type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",:,1x))') (trim(generic(i)),i=1,size(generic))
       type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic
       class default
          !error_stop 'unknown type in *print_generic*'

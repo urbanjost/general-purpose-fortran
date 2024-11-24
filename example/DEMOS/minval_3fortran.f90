@@ -1,6 +1,7 @@
       program demo_minval
       implicit none
       integer :: i
+      character(len=:),allocatable :: strs(:)
       character(len=*),parameter :: g='(3x,*(g0,1x))'
 
       integer,save :: ints(3,5)= reshape([&
@@ -43,6 +44,11 @@
          write(*,*)'a scalar answer for everything false is huge()'
          write(*,g) minval(ints, mask = .false.)
          write(*,g) minval([integer ::], mask = .false.)
+
+         print *, 'if zero-size character array all dels if ASCII'
+         strs=[character(len=5)::]
+         strs=minval(strs)
+         print g, ichar([(strs(i),i=1,len(strs))])
 
          write(*,*)'some calls with three dimensions'
          write(*,g) minval(box, mask = .true. )

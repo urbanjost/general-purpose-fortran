@@ -1,9 +1,10 @@
       program demo_gamma
-      use, intrinsic :: iso_fortran_env, only : wp=>real64
+      use, intrinsic :: iso_fortran_env, only : wp=>real64, int64
       implicit none
       real :: x, xa(4)
-      integer :: i
+      integer :: i, j
 
+         ! basic usage
          x = gamma(1.0)
          write(*,*)'gamma(1.0)=',x
 
@@ -12,35 +13,35 @@
          write(*,*)xa
          write(*,*)
 
-         ! gamma(3) is related to the factorial function
-         do i=1,20
+         ! gamma() is related to the factorial function
+         do i = 1, 171
             ! check value is not too big for default integer type
-            if(factorial(i).gt.huge(0))then
-               write(*,*)i,factorial(i)
+            if (factorial(i)  <=  huge(0)) then
+               write(*,*) i, nint(factorial(i)), 'integer'
+            elseif (factorial(i)  <=  huge(0_int64)) then
+               write(*,*) i, nint(factorial(i),kind=int64),'integer(kind=int64)'
             else
-               write(*,*)i,factorial(i),int(factorial(i))
+               write(*,*) i, factorial(i) , 'user factorial function'
+               write(*,*) i, product([(real(j, kind=wp), j=1, i)]), 'product'
+               write(*,*) i, gamma(real(i + 1, kind=wp)), 'gamma directly'
             endif
          enddo
-         ! more factorials
-         FAC: block
-         integer,parameter :: n(*)=[0,1,5,11,170]
-         integer :: j
-            do j=1,size(n)
-               write(*,'(*(g0,1x))')'factorial of', n(j),' is ', &
-                & product([(real(i,kind=wp),i=1,n(j))]),  &
-                & gamma(real(n(j)+1,kind=wp))
-            enddo
-         endblock FAC
 
-         contains
-         function factorial(i) result(f)
-         integer,parameter :: dp=kind(0d0)
-         integer,intent(in) :: i
-         real :: f
-            if(i.le.0)then
-               write(*,'(*(g0))')'<ERROR> gamma(3) function value ',i,' <= 0'
-               stop      '<STOP> bad value in gamma function'
-            endif
-            f=gamma(real(i+1))
-         end function factorial
+      contains
+      function factorial(i) result(f)
+      !  GAMMA(X) computes Gamma of X. For positive whole number values of N the
+      !  Gamma function can be used to calculate factorials, as (N-1)! ==
+      !  GAMMA(REAL(N)). That is
+      !
+      !      n! == gamma(real(n+1))
+      !
+      integer, intent(in) :: i
+      real(kind=wp) :: f
+         if (i  <=  0) then
+            write(*,'(*(g0))') '<ERROR> gamma(3) function value ', i, ' <= 0'
+            stop '<STOP> bad value in gamma function'
+         endif
+         f = anint(gamma(real(i + 1,kind=wp)))
+      end function factorial
+
       end program demo_gamma

@@ -50,24 +50,27 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>return (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-return(7f) - [FORTRAN:STATEMENT] completes execution of the instance
-of the subprogram in which it appears
+<P>
+return(7f) - [STATEMENT] completes execution of the instance of the
+subprogram in which it appears
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 RETURN [scalar-int-expr]
 </BLOCKQUOTE>
 <A name=2>
@@ -76,13 +79,14 @@ RETURN [scalar-int-expr]
 
 </A>
 <BLOCKQUOTE>
-Execution of the RETURN statement completes execution of the instance
-of the subprogram in which it appears.
 <P>
-It is generally considered good practice to avoid having multiple
-RETURN statements in a single subprogram. A RETURN is not required
-in a subprogram as reaching the end of the subprogram is equivalent
-to execution of a RETURN statement with no expression.
+Execution of the RETURN statement completes execution of the instance of
+the subprogram in which it appears.
+<P>
+It is generally considered good practice to avoid having multiple RETURN
+statements in a single subprogram. A RETURN is not required in a
+subprogram as reaching the end of the subprogram is equivalent to
+execution of a RETURN statement with no expression.
 <P>
 The RETURN statement must appear in the scoping unit of a function or
 subroutine subprogram.
@@ -93,116 +97,118 @@ subroutine subprogram.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>scalar-int-expr</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Alternate returns are deprecated!
-If the expression appears and has a value n between
-1 and the number of asterisks in the dummy argument
-list, the CALL statement that invoked the subroutine
-transfers control to the statement identified by
-the nth alternate return specifier in the actual
-argument list of the referenced procedure. If the
-expression is omitted or has a value outside the
-required range, there is no transfer of control to
-an alternate return.
 <P>
-The scalar-int-expr is allowed only in the scoping
-unit of a subroutine subprogram.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+scalar-int-expr Alternate returns are deprecated!
+<P>
+<PRE>
+                    If the expression appears and has a value n between
+                    1 and the number of asterisks in the dummy argument
+                    list, the CALL statement that invoked the subroutine
+                    transfers control to the statement identified by
+                    the nth alternate return specifier in the actual
+                    argument list of the referenced procedure. If the
+                    expression is omitted or has a value outside the
+                    required range, there is no transfer of control to
+                    an alternate return.
+<P>
+                    The scalar-int-expr is allowed only in the scoping
+                    unit of a subroutine subprogram.
+<P>
+</PRE>
+</BLOCKQUOTE>
 <A name=4>
 
      <H3>EXAMPLE</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program
 <P>
 <PRE>
-   program demo_return
-      call tryreturn(1)
-      call tryreturn(10)
-   contains
-      subroutine tryreturn(i)
-         integer,intent(in) :: i
-         select case(i)
-          case(1)
-            write(*,*)&#146;*one*&#146;
-            return
-          case(2)
-            write(*,*)&#146;*two*&#146;
-            return
-          case default
-            write(*,*)&#146;*default*&#146;
-            return
-         end select
-         write(*,*)&#146;*cannot get here*&#146;
-         return
-      end subroutine tryreturn
-   end program demo_return
+        program demo_return
+           call tryreturn(1)
+           write(*,*)&#146;back at main program:1&#146;
+           call tryreturn(10)
+           write(*,*)&#146;back at main program:10&#146;
+        contains
+        subroutine tryreturn(i)
+        integer,intent(in) :: i
+           select case(i)
+           case(1)
+              write(*,*)&#146;*one*&#146;
+              return
+           case(2)
+              write(*,*)&#146;*two*&#146;
+              return
+           case default
+              write(*,*)&#146;*unexpected value*&#146;
+           end select
+           write(*,*)&#146;*&lt;ERROR&gt; should not get here*&#146;
+        end subroutine tryreturn
+        end program demo_return
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-    *one*
-    *default*
+     &gt;  *one*
+     &gt;  back at main program:1
+     &gt;  *unexpected value*
+     &gt;  *&lt;ERROR&gt; should not get here*
+     &gt;  back at main program:10
 <P>
 </PRE>
-Sample program using alternate returns. Alternate returns are
-an obsolescent feature.
+Sample program using alternate returns. Alternate returns are an
+obsolescent feature.
 <P>
 <PRE>
-   program alt_return
-   implicit none
-      call one(2,*10,*20,*30)
-      write(*,*)&#146;did not select alternate return&#146;
-      goto 999
-   10 continue
-      write(*,*)&#146;picked first alternate return&#146;
-      goto 999
-   20 continue
-      write(*,*)&#146;picked second alternate return&#146;
-      goto 999
-   30 continue
-      write(*,*)&#146;picked third alternate return&#146;
-      goto 999
-   999 continue
-   end program alt_return
-   subroutine one(ipick,*,*,*)
-   implicit none
-   integer :: ipick
-      select case(ipick)
-       case(1)
-         write(*,*)&#146;first alternate return selected&#146;
-         return 1
-       case(2)
-         write(*,*)&#146;second alternate return selected&#146;
-         return 2
-       case(3)
-         write(*,*)&#146;third alternate return selected&#146;
-         return 3
-      end select
-      write(*,*)&#146;no alternate return selected&#146;
-   end subroutine one
+       program alt_return
+       implicit none
+          call one(2,*10,*20,*30)
+          write(*,*)&#146;did not select alternate return&#146;
+          goto 999
+       10 continue
+          write(*,*)&#146;picked first alternate return&#146;
+          goto 999
+       20 continue
+          write(*,*)&#146;picked second alternate return&#146;
+          goto 999
+       30 continue
+          write(*,*)&#146;picked third alternate return&#146;
+          goto 999
+       999 continue
+       contains
+       subroutine one(ipick,*,*,*)
+       implicit none
+       integer :: ipick
+          select case(ipick)
+           case(1)
+             write(*,*)&#146;first alternate return selected&#146;
+             return 1
+           case(2)
+             write(*,*)&#146;second alternate return selected&#146;
+             return 2
+           case(3)
+             write(*,*)&#146;third alternate return selected&#146;
+             return 3
+          end select
+          write(*,*)&#146;no alternate return selected&#146;
+       end subroutine one
+       end program alt_return
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-    second alternate return selected
-    picked second alternate return
+     &gt;  second alternate return selected
+     &gt;  picked second alternate return
+<P>
 </PRE>
-</BLOCKQUOTE>
-<A name=5>
-
-    <H4>&nbsp; &nbsp; JSU</H4>
-</A>
-<BLOCKQUOTE>
+Fortran statement descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>return (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e394f7df-9ce1-4fc5-a7d4-52eab286a33e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>return (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7db3934c-63a3-43db-94a6-152d4f695871 using man macros.</FONT>
 <br><br><center><img src="images/return.7fortran.gif"></center>
 </div>
 </div>

@@ -4,6 +4,7 @@ append("M_verify.3m_verify.html");
 append("accdig.3m_verify.html");
 append("almost.3m_verify.html");
 append("assert.3m_verify.html");
+append("dp_accdig.3m_verify.html");
 append("fstop.3m_verify.html");
 append("in_margin.3m_verify.html");
 append("pdec.3m_verify.html");

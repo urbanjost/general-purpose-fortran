@@ -50,13 +50,16 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>namelist (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-NAMELIST(7f) - [FORTRAN:STATEMENT] specify a group of data to be referred to by a single name in data input/output
+<P>
+namelist(7f) - [STATEMENT] specify a group of data to be referred
+to by a single name in data input/output
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -67,6 +70,7 @@ NAMELIST(7f) - [FORTRAN:STATEMENT] specify a group of data to be referred to by 
 
 </A>
 <BLOCKQUOTE>
+<P>
 NAMELIST /namelist-group-name/ namelist-group-object-list [[,] /namelist-group-name/
 namelist-group-object-list ] &#46;&#46;&#46;
 <BLOCKQUOTE>
@@ -81,13 +85,13 @@ namelist-group-object is variable-name
 </A>
 <BLOCKQUOTE>
 <P>
-A NAMELIST statement specifies a group of named data objects, which
-may be referred to by a single name for the purpose of data transfer.
+A NAMELIST statement specifies a group of named data objects, which may
+be referred to by a single name for the purpose of data transfer.
 <P>
-The order in which the variables are specified in the NAMELIST
-statement determines the order in which the values appear on output.
+The order in which the variables are specified in the NAMELIST statement
+determines the order in which the values appear on output.
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: The order in which the variables are specified in the NAMELIST
+<TABLE cellpadding=3><!-- tsb: The order in which the variables are specified in the NAMELIST statement
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -110,49 +114,74 @@ the namelist-group-name has the PUBLIC attribute.
 <P>
 Any namelist-group-name may occur more than once in the NAMELIST
 statements in a scoping unit. The namelist-group-object-list following
-each successive appearance of the same namelist-group-name in a
-scoping unit is treated as a continuation of the list for that
+each successive appearance of the same namelist-group-name in a scoping
+unit is treated as a continuation of the list for that
 namelist-group-name.
 <P>
-A namelist group object may be a member of more than one namelist
-group.
+A namelist group object may be a member of more than one namelist group.
 <P>
 A namelist group object shall either be accessed by use or host
-association or shall have its type, type parameters, and shape
-specified by previous specification statements or the procedure heading
-in the same scoping unit or by the implicit typing rules in effect for
-the scoping unit. If a namelist group object is typed by the implicit
-typing rules, its appearance in any subsequent type declaration
-statement shall confirm the implied type and type parameters.
+association or shall have its type, type parameters, and shape specified
+by previous specification statements or the procedure heading in the
+same scoping unit or by the implicit typing rules in effect for the
+scoping unit. If a namelist group object is typed by the implicit typing
+rules, its appearance in any subsequent type declaration statement shall
+confirm the implied type and type parameters.
 <P>
-The specification-part of a BLOCK construct shall not contain a
-NAMELIST statement.
+The specification-part of a BLOCK construct shall not contain a NAMELIST
+statement.
 <P>
-Why is NAMELIST not allowed in a BLOCK unit?
-Would be handy for quick writes, like list-directed output
+Why is NAMELIST not allowed in a BLOCK unit? Would be handy for quick
+writes, like list-directed output
 <P>
 <PRE>
-    block
-       namelist /nlist/ a,b,c,d
-       write(*,nlist)
-    endblock
+        block
+           namelist /nlist/ a,b,c,d
+           write(*,nlist)
+        endblock
 <P>
 </PRE>
 Input for a namelist input statement consists of
-<P>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Input for a namelist input statement consists of
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+optional blanks and namelist comments,
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+the character & followed immediately by the namelist-group-name
+as specified in the NAMELIST statement,
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+one or more blanks,
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+a sequence of zero or more name-value subsequences separated by
+value separators, and
+</TD></TR>
+<TR valign=top><TD width=4%>
+5.
+</TD><TD>
+a slash to terminate the namelist input.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
 <PRE>
-      1) optional blanks and namelist comments,
-      2) the character & followed immediately by the namelist-group-name as specified in the NAMELIST
-         statement,
-      3) one or more blanks,
-      4) a sequence of zero or more name-value subsequences separated by value separators, and
-      5) a slash to terminate the namelist input.
-<P>
-         A slash encountered in a namelist input record causes the input statement to terminate. A slash cannot be
-         used to separate two values in a namelist input statement.
+        A slash encountered in a namelist input record causes the input
+        statement to terminate. A slash cannot be used to separate two
+        values in a namelist input statement.
 <P>
 </PRE>
 A group name or object name is without regard to case.
+</BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=3>
 
@@ -160,194 +189,133 @@ A group name or object name is without regard to case.
 
 </A>
 <BLOCKQUOTE>
+<P>
 An example of a NAMELIST statement is:
 <P>
 <PRE>
-     NAMELIST /NLIST/ A, B, C
+         NAMELIST /NLIST/ A, B, C
 <P>
 </PRE>
-or a group may be defined by multiple statements using the same group name in a scoping unit:
+or a group may be defined by multiple statements using the same group
+name in a scoping unit:
 <P>
 <PRE>
-     NAMELIST /NLIST/ A, B
-     NAMELIST /NLIST/ C
+         NAMELIST /NLIST/ A, B
+         NAMELIST /NLIST/ C
 <P>
-     ! READ/WRITE EXAMPLES: [ NML = ] namelist-group-name
-     READ(*,NML=NLIST)
-     WRITE(*,NLIST)
-     WRITE(*,NML=NLIST)
+         ! READ/WRITE EXAMPLES: [ NML = ] namelist-group-name
+         READ(*,NML=NLIST)
+         WRITE(*,NLIST)
+         WRITE(*,NML=NLIST)
 <P>
-      program sample_namelist
-      implicit none
-      logical           :: l=.true.
-      character(len=10) :: c=&#146;XXXXXXXXXX&#146;
-      real              :: r=12.3456
-      integer           :: i=789
-      complex           :: x=(12345.6789,9876.54321)
-      doubleprecision   :: d= 123456789.123456789d0
-      namelist /nlist/ l,c,r,i,x,d
-         write(*,nlist)
-      end program sample_namelist
+          program sample_namelist
+          implicit none
+          logical           :: l=.true.
+          character(len=10) :: c=&#146;XXXXXXXXXX&#146;
+          real              :: r=12.3456
+          integer           :: i=789
+          complex           :: x=(12345.6789,9876.54321)
+          doubleprecision   :: d= 123456789.123456789d0
+          namelist /nlist/ l,c,r,i,x,d
+             write(*,nlist)
+          end program sample_namelist
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-      &NLIST
-       L=T,
-       C="XXXXXXXXXX",
-       R=  12.3456001    ,
-       I=        789,
-       X=(  12345.6787    ,  9876.54297    ),
-       D=  123456789.12345679     ,
-       /
+       &gt; &NLIST
+       &gt;  L=T,
+       &gt;  C="XXXXXXXXXX",
+       &gt;  R=  12.3456001    ,
+       &gt;  I=        789,
+       &gt;  X=(  12345.6787    ,  9876.54297    ),
+       &gt;  D=  123456789.12345679     ,
+       &gt;  /
 <P>
 </PRE>
 Longer example:
 <P>
 <PRE>
-      program demo_namelist
-      implicit none
-      integer           :: lun
+          program demo_namelist
+          implicit none
+          integer           :: lun
 <P>
-      ! create a namelist and initialize the values
-      logical           :: l=.true.
-      character(len=10) :: c=&#146;XXXXXXXXXX&#146;
-      real              :: r=12.3456
-      integer           :: i=789
-      complex           :: x=(12345.6789,9876.54321)
-      doubleprecision   :: d= 123456789.123456789d0
-      integer           :: a(5)=[1,2,3,4,5]
-      type point
-       integer           :: x=0
-       integer           :: y=0
-       character(len=10) :: color=&#146;red&#146;
-      endtype point
-      type(point) :: dot
-      namelist /nlist/ l,c,r,i,x,d,a,dot
+          ! create a namelist and initialize the values
+          logical           :: l=.true.
+          character(len=10) :: c=&#146;XXXXXXXXXX&#146;
+          real              :: r=12.3456
+          integer           :: i=789
+          complex           :: x=(12345.6789,9876.54321)
+          doubleprecision   :: d= 123456789.123456789d0
+          integer           :: a(5)=[1,2,3,4,5]
+          type point
+           integer           :: x=0
+           integer           :: y=0
+           character(len=10) :: color=&#146;red&#146;
+          endtype point
+          type(point) :: dot
+          namelist /nlist/ l,c,r,i,x,d,a,dot
 <P>
-      open(file=&#146;_tmp_&#146;,newunit=lun)
+          open(file=&#146;_tmp_&#146;,newunit=lun,action=&#146;readwrite&#146;)
 <P>
-         write(*,*)&#146;initial nlist&#146;
-         write(*,nlist)
-         write(lun,nlist)
+             write(*,*)&#146;initial nlist&#146;
+             write(*,nlist)
+             write(lun,nlist)
 <P>
-         write(*,*)&#146;change values and print nlist again&#146;
-         a=[10,20,30,40,50]
-         dot%color=&#146;orange&#146;
-         write(lun,nlist)
+             write(*,*)&#146;change values and print nlist again&#146;
+             a=[10,20,30,40,50]
+             dot%color=&#146;orange&#146;
+             write(lun,nlist)
 <P>
-         write(*,*)&#146;read back values. Can have multiple sets in a file&#146;
-         rewind(lun)
-         read(lun,nlist)
-         read(lun,nlist)
-         write(*,nlist)
+             write(*,*)&#146;read back values. Can have multiple sets in a file&#146;
+             rewind(lun)
+             read(lun,nlist)
+             read(lun,nlist)
+             write(*,nlist)
 <P>
-      end program demo_namelist
+          end program demo_namelist
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-    initial nlist
-</PRE>
-&NLIST
-L=T,
-C="XXXXXXXXXX",
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:     initial nlist
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>R=</B> </TD><TD valign=bottom>
-12.3456001    ,
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>I=</B> </TD><TD valign=bottom>
-789,
-X=(12345.6787,9876.54297),
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>D=</B> </TD><TD valign=bottom>
-123456789.12345679     ,
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>A=</B> </TD><TD valign=bottom>
-1,          2,          3,          4,          5,
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DOT%X=</B> </TD><TD valign=bottom>
-0,
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DOT%Y=</B> </TD><TD valign=bottom>
-0,
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>DOT%COLOR=red</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-",
-/
-change values and print nlist again
-read back values. Can have multiple sets in a file
-&NLIST
-L=T,
-C="XXXXXXXXXX",
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>R=</B> </TD><TD valign=bottom>
-12.3456001    ,
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>I=</B> </TD><TD valign=bottom>
-789,
-X=(12345.6787,9876.54297),
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>D=</B> </TD><TD valign=bottom>
-123456789.12345679     ,
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>A=</B> </TD><TD valign=bottom>
-10,         20,         30,         40,         50,
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DOT%X=</B> </TD><TD valign=bottom>
-0,
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DOT%Y=</B> </TD><TD valign=bottom>
-0,
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>DOT%COLOR=orange</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-",
-/
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-Scanning on input till group name is found
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-reading partial lists
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-string quoting
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-NAMELIST in internal read and write. See
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-    ./arguments/namelist
+       &gt;  initial nlist
+       &gt; &NLIST
+       &gt;  L=T,
+       &gt;  C="XXXXXXXXXX",
+       &gt;  R=  12.3456001    ,
+       &gt;  I=        789,
+       &gt;  X=(12345.6787,9876.54297),
+       &gt;  D=  123456789.12345679     ,
+       &gt;  A=          1,          2,          3,          4,          5,
+       &gt;
+       &gt;  DOT%X=          0,
+       &gt;  DOT%Y=          0,
+       &gt;  DOT%COLOR="red       ",
+       &gt;  /
+       &gt;  change values and print nlist again
+       &gt; read back values. Can have multiple sets in a file
+       &gt; &NLIST
+       &gt;  L=T,
+       &gt;  C="XXXXXXXXXX",
+       &gt;  R=  12.3456001    ,
+       &gt;  I=        789,
+       &gt;  X=(12345.6787,9876.54297),
+       &gt;  D=  123456789.12345679     ,
+       &gt;  A=         10,         20,         30,         40,         50,
+       &gt;
+       &gt;  DOT%X=          0,
+       &gt;  DOT%Y=          0,
+       &gt;  DOT%COLOR="orange    ",
+       &gt;  /
+<P>
+       o Scanning on input till group name is found
+       o reading partial lists
+       o string quoting
+       o NAMELIST in internal read and write. See
+<P>
+        ./arguments/namelist
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -358,90 +326,73 @@ NAMELIST in internal read and write. See
 </A>
 <BLOCKQUOTE>
 <P>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>C915</B> </TD><TD valign=bottom>
-(R913) A namelist-group-name shall be the name of a namelist group.
+C915 (R913) A namelist-group-name shall be the name of a namelist group.
+<P>
+C916 (R913) A namelist-group-name shall not appear if a REC= specifier,
+format, input-item-list, or an output-item-list appears in the data
+transfer statement. C917 (R913) An io-control-spec-list shall not
+contain both a format and a namelist-group-name. C919 (R913) If
+namelist-group-name appears without a preceding NML=, it shall be the
+second item in the io-control-spec-list and the first item shall be
+io-unit. C928 (R913) If a DECIMAL=, BLANK=, PAD=, SIGN=, or ROUND=
+specifier appears, a format or namelist-group-name shall also appear.
+C929 (R913) If a DELIM= specifier appears, either format shall be an
+asterisk or namelist-group-name shall appear. 3. If the data transfer
+statement contains a format or namelist-group-name, the statement is a
+formatted input/output statement; otherwise, it is an unformatted
+input/output statement.
+<TABLE cellpadding=3><!-- tsb: C916 (R913) A namelist-group-name shall not appear if a REC= specifier,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+The NML= specifier supplies the namelist-group-name (5.6). This name
+identifies a particular collection of data objects on which transfer
+is to be performed.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>C916</B> </TD><TD valign=bottom>
-(R913) A namelist-group-name shall not appear if a REC= specifier, format, input-item-list, or an
-output-item-list appears in the data transfer statement.
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+If a namelist-group-name appears, the statement is a namelist
+input/output statement.
 </TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>C917</B> </TD><TD valign=bottom>
-(R913) An io-control-spec-list shall not contain both a format and a namelist-group-name.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>C919</B> </TD><TD valign=bottom>
-(R913) If namelist-group-name appears without a preceding NML=, it shall be the second item in the
-io-control-spec-list and the first item shall be io-unit.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>C928</B> </TD><TD valign=bottom>
-(R913) If a DECIMAL=, BLANK=, PAD=, SIGN=, or ROUND= specifier appears, a format or
-namelist-group-name shall also appear.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>C929</B> </TD><TD valign=bottom>
-(R913) If a DELIM= specifier appears, either format shall be an asterisk or namelist-group-name shall
-appear.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<TABLE cellpadding=3>
 <TR valign=top><TD width=4%>
 3.
 </TD><TD>
-If the data transfer statement contains a format or namelist-group-name, the statement is a formatted
-input/output statement; otherwise, it is an unformatted input/output statement.
-<TABLE width=100% cellpadding=3><!-- tsb: If the data transfer statement contains a format or namelist-group-name, the statement is a formatted
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-The NML= specifier supplies the namelist-group-name (5.6). This name identifies a particular collection of data
-objects on which transfer is to be performed.
-</TD></TR>
-<TR valign=top><TD width=4%>
-2.
-</TD><TD>
-If a namelist-group-name appears, the statement is a namelist input/output statement.
-</TD></TR>
-<TR valign=top><TD width=4%>
-4.
-</TD><TD>
-All values following the name= part of the namelist entity (10.11) within the input records are transmitted to
-the matching entity specified in the namelist-group-object-list prior to processing any succeeding entity within
-the input record for namelist input statements. If an entity is specified more than once within the input record
-during a namelist formatted data transfer input statement, the last occurrence of the entity specifies the value or
+All values following the name= part of the namelist entity (10.11)
+within the input records are transmitted to the matching entity
+specified in the namelist-group-object-list prior to processing any
+succeeding entity within the input record for namelist input
+statements. If an entity is specified more than once within the
+input record during a namelist formatted data transfer input
+statement, the last occurrence of the entity specifies the value or
 values to be used for that entity.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>9.6.4.6</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Namelist formatting
-<TABLE width=100% cellpadding=3><!-- tsb: Namelist formatting
+<TR></TR></TABLE>9.6.4.6 Namelist formatting
+<TABLE cellpadding=3><!-- tsb: 9.6.4.6 Namelist formatting
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-If namelist formatting has been established, editing is performed as described in 10.11.
+If namelist formatting has been established, editing is performed as
+described in 10.11.
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-Every allocatable namelist-group-object in the namelist group shall be allocated and every namelist-group-object
-that is a pointer shall be associated with a target. If a namelist-group-object is polymorphic or has an ultimate
-component that is allocatable or a pointer, that object shall be processed by a defined input/output procedure
-(9.6.4.7).
+Every allocatable namelist-group-object in the namelist group shall
+be allocated and every namelist-group-object that is a pointer shall
+be associated with a target. If a namelist-group-object is
+polymorphic or has an ultimate component that is allocatable or a
+pointer, that object shall be processed by a defined input/output
+procedure (9.6.4.7).
 </TD></TR>
-<TR></TR></TABLE><!-- .TP -->
-</TD></TR>
-<TR valign=top><TD width=4% nowrap>
-<B>9.6.5</B> </TD><TD valign=bottom>
-Termination of data transfer statements
-</TD></TR>
+<TR></TR></TABLE>9.6.5 Termination of data transfer statements
+<TABLE cellpadding=3><!-- tsb: 9.6.5 Termination of data transfer statements
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
@@ -449,34 +400,37 @@ Termination of an input/output data transfer statement occurs when
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-        format processing encounters a colon or data edit descriptor and there are no remaining elements in the
-        input-item-list or output-item-list,
-        unformatted or list-directed data transfer exhausts the input-item-list or output-item-list,
-        namelist output exhausts the namelist-group-object-list,
-        an error condition occurs,
-        an end-of-file condition occurs,
+    format processing encounters a colon or data edit descriptor and
+    there are no remaining elements in the input-item-list or
+    output-item-list,
 <P>
-        a slash (/) is encountered as a value separator (10.10, 10.11) in the record being read during list-directed
-        or namelist input, or
-        an end-of-record condition occurs during execution of a nonadvancing input statement (9.11).
+    unformatted or list-directed data transfer exhausts the
+    input-item-list or output-item-list, namelist output exhausts the
+    namelist-group-object-list,
+<P>
+    an error condition occurs,
+<P>
+    an end-of-file condition occurs,
+<P>
+    a slash (/) is encountered as a value separator (10.10, 10.11) in
+    the record being read during list-directed or namelist input, or an
+    end-of-record condition occurs during execution of a nonadvancing
+    input statement (9.11).
+<P>
 </PRE>
-<TABLE width=100% cellpadding=3><!-- tsb:         a slash (/) is encountered as a value separator (10.10, 10.11) in the record being read during list-directed
- -->
-<TR></TR><TR></TR>
+<TABLE cellpadding=3>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-If an error condition occurs during execution of an input/output statement that contains neither an ERR= nor
-IOSTAT= specifier, error termination of the program is initiated. If an error condition occurs during execution
-of an input/output statement that contains either an ERR= specifier or an IOSTAT= specifier then:
-<TABLE width=100% cellpadding=3><!-- tsb: If an error condition occurs during execution of an input/output statement that contains neither an ERR= nor
+If an error condition occurs during execution of an input/output
+statement that contains neither an ERR= nor IOSTAT= specifier, error
+termination of the program is initiated. If an error condition
+occurs during execution of an input/output statement that contains
+either an ERR= specifier or an IOSTAT= specifier then: 1. processing
+of the input/output list, if any, terminates;
+<TABLE width=100% cellpadding=3><!-- tsb: If an error condition occurs during execution of an input/output
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-processing of the input/output list, if any, terminates;
-</TD></TR>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
@@ -513,47 +467,41 @@ initiated the transfer become undefined;
 if an ERR= specifier appears, a branch to the statement labeled by the label in the ERR= specifier
 occurs.
 </TD></TR>
-<TR></TR></TABLE><!-- .IP 8. 4 -->
+<TR></TR></TABLE><!-- .IP 3. 4 -->
 </TD></TR>
 <TR valign=top><TD width=4%>
-8.
+3.
 </TD><TD>
-In a data transfer statement, the variable specified in an IOSTAT=, IOMSG=, or SIZE= specifier, if any, shall
-not be associated with any entity in the data transfer input/output list (9.6.3) or namelist-group-object-list, nor
-with a do-variable of an io-implied-do in the data transfer input/output list.
+In a data transfer statement, the variable specified in an IOSTAT=,
+IOMSG=, or SIZE= specifier, if any, shall not be associated with any
+entity in the data transfer input/output list (9.6.3) or
+namelist-group-object-list, nor with a do-variable of an
+io-implied-do in the data transfer input/output list. 10.11 Namelist
+formatting 10.11.1 General
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Namelist formatting
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+Namelist input/output allows data editing with NAME=value
+subsequences. This facilitates documentation of input and output
+files and more flexibility on input.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.1</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-General
-<TABLE width=100% cellpadding=3><!-- tsb: General
+<TR></TR></TABLE>10.11.2 Name-value subsequences
+<TABLE cellpadding=3><!-- tsb: 10.11.2 Name-value subsequences
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-Namelist input/output allows data editing with NAME=value subsequences. This facilitates documentation of
-input and output files and more flexibility on input.
-</TD></TR>
-<TR></TR></TABLE><!-- .TP -->
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.2</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Name-value subsequences
-<TABLE width=100% cellpadding=3><!-- tsb: Name-value subsequences
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-The characters in one or more namelist records constitute a sequence of name-value subsequences, each of
-which consists of an object designator followed by an equals and followed by one or more values and value
-separators. The equals may optionally be preceded or followed by one or more contiguous blanks. The end of a
-record has the same effect as a blank character, unless it is within a character constant. Any sequence of two or
-more consecutive blanks is treated as a single blank, unless it is within a character constant.
+The characters in one or more namelist records constitute a sequence
+of name-value subsequences, each of which consists of an object
+designator followed by an equals and followed by one or more values
+and value separators. The equals may optionally be preceded or
+followed by one or more contiguous blanks. The end of a record has
+the same effect as a blank character, unless it is within a
+character constant. Any sequence of two or more consecutive blanks
+is treated as a single blank, unless it is within a character
+constant.
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
@@ -563,199 +511,225 @@ The name may be any name in the namelist-group-object-list (5.6).
 <TR valign=top><TD width=4%>
 3.
 </TD><TD>
-A value separator for namelist formatting is the same as for list-directed formatting (10.10).
+A value separator for namelist formatting is the same as for
+list-directed formatting (10.10).
 </TD></TR>
-<TR></TR></TABLE><!-- .TP -->
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.3</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Namelist input
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.3.1</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Overall syntax
-<TABLE width=100% cellpadding=3><!-- tsb: Overall syntax
+<TR></TR></TABLE>10.11.3 Namelist input 10.11.3.1 Overall syntax
+<TABLE cellpadding=3><!-- tsb: 10.11.3 Namelist input 10.11.3.1 Overall syntax
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-In each name-value subsequence, the name shall be the name of a namelist group object list item with an optional
-qualification and the name with the optional qualification shall not be a zero-sized array, a zero-sized array section,
-or a zero-length character string. The optional qualification, if any, shall not contain a vector subscript.
+In each name-value subsequence, the name shall be the name of a
+namelist group object list item with an optional qualification and
+the name with the optional qualification shall not be a zero-sized
+array, a zero-sized array section, or a zero-length character
+string. The optional qualification, if any, shall not contain a
+vector subscript.
 </TD></TR>
-<TR></TR></TABLE><!-- .TP -->
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.3.2</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Namelist group object names
-</TD></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-Within the input data, each name shall correspond to a particular namelist group object name. Subscripts,
-strides, and substring range expressions used to qualify group object names shall be optionally signed integer
-literal constants with no kind type parameters specified. If a namelist group object is an array, the input record
-corresponding to it may contain either the array name or the designator of a subobject of that array, using the
-syntax of object designators (R601). If the namelist group object name is the name of a variable of derived type,
-the name in the input record may be either the name of the variable or the designator of one of its components,
-indicated by qualifying the variable name with the appropriate component name. Successive qualifications may
-be applied as appropriate to the shape and type of the variable represented.
-</TD></TR>
-<TR valign=top><TD width=4%>
-2.
-</TD><TD>
-The order of names in the input records need not match the order of the namelist group object items. The input
-records need not contain all the names of the namelist group object items. The definition status of any names
-from the namelist-group-object-list that do not occur in the input record remains unchanged. In the input record,
-each object name or subobject designator may be preceded and followed by one or more optional blanks but shall
-not contain embedded blanks.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.3.3</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Namelist group object list items
-</TD></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-The name-value subsequences are evaluated serially, in left-to-right order. A namelist group object designator
-may appear in more than one name-value sequence.
-</TD></TR>
-<TR valign=top><TD width=4%>
-2.
-</TD><TD>
-When the name in the input record represents an array variable or a variable of derived type, the effect is as
-if the variable represented were expanded into a sequence of scalar list items, in the same way that formatted
-input/output list items are expanded (9.6.3). Each input value following the equals shall then be acceptable to
-format specifications for the type of the list item in the corresponding position in the expanded sequence, except
-as noted in this subclause. The number of values following the equals shall not exceed the number of list items
-in the expanded sequence, but may be less; in the latter case, the effect is as if sufficient null values had been
-appended to match any remaining list items in the expanded sequence.
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-        NOTE 10.35
-        For example, if the name in the input record is the name of an integer array of size 100, at most 100 values,
-        each of which is either a digit string or a null value, may follow the equals; these values would then be
-        assigned to the elements of the array in array element order.
-<P>
-</PRE>
-<TABLE width=100% cellpadding=3>
-<TR valign=top><TD width=4%>
-3.
-</TD><TD>
-A slash encountered as a value separator during the execution of a namelist input statement causes termination
-of execution of that input statement after transference of the previous value. If there are additional items in the
-namelist group object being transferred, the effect is as if null values had been supplied for them.
-</TD></TR>
-<TR valign=top><TD width=4%>
-4.
-</TD><TD>
-A namelist comment may appear after any value separator except a slash. A namelist comment is also permitted
-to start in the first nonblank position of an input record except within a character literal constant.
-</TD></TR>
-<TR valign=top><TD width=4%>
-5.
-</TD><TD>
-Successive namelist records are read by namelist input until a slash is encountered; the remainder of the record
-is ignored and need not follow the rules for namelist input values.
-<TABLE width=100% cellpadding=3><!-- tsb: Successive namelist records are read by namelist input until a slash is encountered; the remainder of the record
+<TR></TR></TABLE>10.11.3.2 Namelist group object names
+<TABLE cellpadding=3><!-- tsb: 10.11.3.2 Namelist group object names
  -->
 <TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.3.4</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Namelist input values
-</TD></TR>
-<TR></TR></TABLE><!-- .IP 1. 4 -->
-</TD></TR>
-<TR valign=top><TD width=6%>
+<TR valign=top><TD width=4%>
 1.
 </TD><TD>
-Each value is either a null value (10.11.3.5), c, r *c, or r *, where c is a literal constant, optionally signed if integer
-or real, and r is an unsigned, nonzero, integer literal constant. A kind type parameter shall not be specified for c
-or r. The constant c is interpreted as though it had the same kind type parameter as the corresponding effective
-item. The r *c form is equivalent to r successive appearances of the constant c, and the r * form is equivalent to
-r successive null values. Neither of these forms may contain embedded blanks, except where permitted within
-the constant c.
+Within the input data, each name shall correspond to a particular
+namelist group object name. Subscripts, strides, and substring range
+expressions used to qualify group object names shall be optionally
+signed integer literal constants with no kind type parameters
+specified. If a namelist group object is an array, the input record
+corresponding to it may contain either the array name or the
+designator of a subobject of that array, using the syntax of object
+designators (R601). If the namelist group object name is the name of
+a variable of derived type, the name in the input record may be
+either the name of the variable or the designator of one of its
+components, indicated by qualifying the variable name with the
+appropriate component name. Successive qualifications may be applied
+as appropriate to the shape and type of the variable represented.
 </TD></TR>
-<TR valign=top><TD width=6%>
+<TR valign=top><TD width=4%>
 2.
 </TD><TD>
-The datum c (10.11) is any input value acceptable to format specifications for a given type, except for a restriction
-on the form of input values corresponding to list items of types logical, integer, and character as specified in this
-subclause. The form of a real or complex value is dependent on the decimal edit mode in effect (10.6). The form
-<P>
-of an input value shall be acceptable for the type of the namelist group object list item. The number and forms
-of the input values that may follow the equals in a name-value subsequence depend on the shape and type of
-the object represented by the name in the input record. When the name in the input record is that of a scalar
-variable of an intrinsic type, the equals shall not be followed by more than one value. Blanks are never used
-as zeros, and embedded blanks are not permitted in constants except within character constants and complex
-constants as specified in this subclause.
+The order of names in the input records need not match the order of
+the namelist group object items. The input records need not contain
+all the names of the namelist group object items. The definition
+status of any names from the namelist-group-object-list that do not
+occur in the input record remains unchanged. In the input record,
+each object name or subobject designator may be preceded and
+followed by one or more optional blanks but shall not contain
+embedded blanks.
 </TD></TR>
-<TR valign=top><TD width=6%>
+<TR></TR></TABLE>10.11.3.3 Namelist group object list items
+<TABLE cellpadding=3><!-- tsb: 10.11.3.3 Namelist group object list items
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+The name-value subsequences are evaluated serially, in left-to-right
+order. A namelist group object designator may appear in more than
+one name-value sequence.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+When the name in the input record represents an array variable or a
+variable of derived type, the effect is as if the variable
+represented were expanded into a sequence of scalar list items, in
+the same way that formatted input/output list items are expanded
+(9.6.3). Each input value following the equals shall then be
+acceptable to format specifications for the type of the list item in
+the corresponding position in the expanded sequence, except as noted
+in this subclause. The number of values following the equals shall
+not exceed the number of list items in the expanded sequence, but
+may be less; in the latter case, the effect is as if sufficient null
+values had been appended to match any remaining list items in the
+expanded sequence.
+<P>
+NOTE 10.35 For example, if the name in the input record is the name
+of an integer array of size 100, at most 100 values, each of which
+is either a digit string or a null value, may follow the equals;
+these values would then be assigned to the elements of the array in
+array element order.
+</TD></TR>
+<TR valign=top><TD width=4%>
 3.
 </TD><TD>
-When the next effective item is of type real, the input form of the input value is that of a numeric input field. A
-numeric input field is a field suitable for F editing (10.7.2.3.2) that is assumed to have no fractional digits unless
-a decimal symbol appears within the field.
+A slash encountered as a value separator during the execution of a
+namelist input statement causes termination of execution of that
+input statement after transference of the previous value. If there
+are additional items in the namelist group object being transferred,
+the effect is as if null values had been supplied for them.
 </TD></TR>
-<TR valign=top><TD width=6%>
+<TR valign=top><TD width=4%>
 4.
 </TD><TD>
-When the next effective item is of type complex, the input form of the input value consists of a left parenthesis
-followed by an ordered pair of numeric input fields separated by a comma (if the decimal edit mode is POINT) or
-a semicolon (if the decimal edit mode is COMMA), and followed by a right parenthesis. The first numeric input
-field is the real part of the complex constant and the second part is the imaginary part. Each of the numeric
-input fields may be preceded or followed by any number of blanks and ends of records. The end of a record may
-occur between the real part and the comma or semicolon, or between the comma or semicolon and the imaginary
-part.
+A namelist comment may appear after any value separator except a
+slash. A namelist comment is also permitted to start in the first
+nonblank position of an input record except within a character
+literal constant.
 </TD></TR>
-<TR valign=top><TD width=6%>
+<TR valign=top><TD width=4%>
 5.
 </TD><TD>
-When the next effective item is of type logical, the input form of the input value shall not include equals or value
-separators among the optional characters permitted for L editing (10.7.3).
+Successive namelist records are read by namelist input until a slash
+is encountered; the remainder of the record is ignored and need not
+follow the rules for namelist input values.
+<P>
+10.11.3.4 Namelist input values
 </TD></TR>
-<TR valign=top><TD width=6%>
+<TR valign=top><TD width=4%>
 6.
 </TD><TD>
-When the next effective item is of type integer, the value in the input record is interpreted as if an Iw edit
-descriptor with a suitable value of w were used.
+Each value is either a null value (10.11.3.5), c, r*c, or r*, where
+c is a literal constant, optionally signed if integer or real, and r
+is an unsigned, nonzero, integer literal constant. A kind type
+parameter shall not be specified for c or r. The constant c is
+interpreted as though it had the same kind type parameter as the
+corresponding effective item. The r*c form is equivalent to r
+successive appearances of the constant c, and the r * form is
+equivalent to r successive null values. Neither of these forms may
+contain embedded blanks, except where permitted within the
+constant c.
 </TD></TR>
-<TR valign=top><TD width=6%>
+<TR valign=top><TD width=4%>
 7.
 </TD><TD>
-When the next effective item is of type character, the input form consists of a delimited sequence of zero or more
-rep-char s whose kind type parameter is implied by the kind of the corresponding list item. Such a sequence
-may be continued from the end of one record to the beginning of the next record, but the end of record shall
-not occur between a doubled apostrophe in an apostrophe-delimited sequence, nor between a doubled quote in a
-quote-delimited sequence. The end of the record does not cause a blank or any other character to become part
-of the sequence. The sequence may be continued on as many records as needed. The characters blank, comma,
-semicolon, and slash may appear in such character sequences.
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-          NOTE 10.36
-          A character sequence corresponding to a namelist input item of character type shall be delimited either with
-          apostrophes or with quotes. The delimiter is required to avoid ambiguity between undelimited character
-          sequences and object names. The value of the DELIM= specifier, if any, in the OPEN statement for an
-          external file is ignored during namelist input (9.5.6.8).
+The datum c (10.11) is any input value acceptable to format
+specifications for a given type, except for a restriction on the
+form of input values corresponding to list items of types logical,
+integer, and character as specified in this subclause. The form of a
+real or complex value is dependent on the decimal edit mode in
+effect (10.6). The form
 <P>
-</PRE>
-<TABLE width=100% cellpadding=3>
+of an input value shall be acceptable for the type of the namelist
+group object list item. The number and forms of the input values
+that may follow the equals in a name-value subsequence depend on the
+shape and type of the object represented by the name in the input
+record. When the name in the input record is that of a scalar
+variable of an intrinsic type, the equals shall not be followed by
+more than one value. Blanks are never used as zeros, and embedded
+blanks are not permitted in constants except within character
+constants and complex constants as specified in this subclause.
+</TD></TR>
 <TR valign=top><TD width=4%>
 8.
 </TD><TD>
-Let len be the length of the next effective item, and let w be the length of the character sequence. If len is less
-than or equal to w, the leftmost len characters of the sequence are transmitted to the next effective item. If len
-is greater than w, the constant is transmitted to the leftmost w characters of the next effective item and the
-remaining len-w characters of the next effective item are filled with blanks. The effect is as though the sequence
-were assigned to the next effective item in an intrinsic assignment statement (7.2.1.3).
+When the next effective item is of type real, the input form of the
+input value is that of a numeric input field. A numeric input field
+is a field suitable for F editing (10.7.2.3.2) that is assumed to
+have no fractional digits unless a decimal symbol appears within the
+field.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.3.5</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Null values
+<TR valign=top><TD width=4%>
+9.
+</TD><TD>
+When the next effective item is of type complex, the input form of
+the input value consists of a left parenthesis followed by an
+ordered pair of numeric input fields separated by a comma (if the
+decimal edit mode is POINT) or a semicolon (if the decimal edit mode
+is COMMA), and followed by a right parenthesis. The first numeric
+input field is the real part of the complex constant and the second
+part is the imaginary part. Each of the numeric input fields may be
+preceded or followed by any number of blanks and ends of records.
+The end of a record may occur between the real part and the comma or
+semicolon, or between the comma or semicolon and the imaginary part.
 </TD></TR>
+<TR valign=top><TD width=4%>
+10.
+</TD><TD>
+When the next effective item is of type logical, the input form of
+the input value shall not include equals or value separators among
+the optional characters permitted for L editing (10.7.3).
+</TD></TR>
+<TR valign=top><TD width=4%>
+11.
+</TD><TD>
+When the next effective item is of type integer, the value in the
+input record is interpreted as if an Iw edit descriptor with a
+suitable value of w were used.
+</TD></TR>
+<TR valign=top><TD width=4%>
+12.
+</TD><TD>
+When the next effective item is of type character, the input form
+consists of a delimited sequence of zero or more rep-char s whose
+kind type parameter is implied by the kind of the corresponding list
+item. Such a sequence may be continued from the end of one record to
+the beginning of the next record, but the end of record shall not
+occur between a doubled apostrophe in an apostrophe-delimited
+sequence, nor between a doubled quote in a quote-delimited sequence.
+The end of the record does not cause a blank or any other character
+to become part of the sequence. The sequence may be continued on as
+many records as needed. The characters blank, comma, semicolon, and
+slash may appear in such character sequences.
+<P>
+NOTE 10.36 A character sequence corresponding to a namelist input
+item of character type shall be delimited either with apostrophes or
+with quotes. The delimiter is required to avoid ambiguity between
+undelimited character sequences and object names. The value of the
+DELIM= specifier, if any, in the OPEN statement for an external file
+is ignored during namelist input (9.5.6.8).
+</TD></TR>
+<TR valign=top><TD width=4%>
+13.
+</TD><TD>
+Let len be the length of the next effective item, and let w be the
+length of the character sequence. If len is less than or equal to w,
+the leftmost len characters of the sequence are transmitted to the
+next effective item. If len is greater than w, the constant is
+transmitted to the leftmost w characters of the next effective item
+and the remaining len-w characters of the next effective item are
+filled with blanks. The effect is as though the sequence were
+assigned to the next effective item in an intrinsic assignment
+statement (7.2.1.3).
+</TD></TR>
+<TR></TR></TABLE>10.11.3.5 Null values
+<TABLE cellpadding=3><!-- tsb: 10.11.3.5 Null values
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
@@ -763,127 +737,113 @@ A null value is specified by
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-          the r * form,
-          blanks between two consecutive nonblank value separators following an equals,
-          zero or more blanks preceding the first value separator and following an equals, or
-          two consecutive nonblank value separators.
+    the r * form,
+<P>
+    blanks between two consecutive nonblank value separators following
+    an equals,
+<P>
+    zero or more blanks preceding the first value separator and
+    following an equals, or two consecutive nonblank value separators.
 <P>
 </PRE>
-<TABLE width=100% cellpadding=3>
+<TABLE cellpadding=3>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-A null value has no effect on the definition status of the corresponding input list item. If the namelist group
-object list item is defined, it retains its previous value; if it is undefined, it remains undefined. A null value shall
+A null value has no effect on the definition status of the
+corresponding input list item. If the namelist group object list
+item is defined, it retains its previous value; if it is undefined,
+it remains undefined. A null value shall
 <P>
-not be used as either the real or imaginary part of a complex constant, but a single null value may represent an
-entire complex constant.
+not be used as either the real or imaginary part of a complex
+constant, but a single null value may represent an entire complex
+constant.
 <P>
-NOTE 10.37
-The end of a record following a value separator, with or without intervening blanks, does not specify a null
-value in namelist input.
+NOTE 10.37 The end of a record following a value separator, with or
+without intervening blanks, does not specify a null value in
+namelist input.
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.3.6</B> </TD></TR><TR valign=top><TD width=4%>&nbsp;</TD><TD>
-Blanks
-</TD></TR>
+<TR></TR></TABLE>10.11.3.6 Blanks
+<TABLE cellpadding=3><!-- tsb: 10.11.3.6 Blanks
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-All blanks in a namelist input record are considered to be part of some value separator except for
-<TABLE width=100% cellpadding=3><!-- tsb: All blanks in a namelist input record are considered to be part of some value separator except for
+All blanks in a namelist input record are considered to be part of
+some value separator except for
+<TABLE width=100% cellpadding=3><!-- tsb: All blanks in a namelist input record are considered to be part of
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-blanks embedded in a character constant,
+blanks embedded in a character constant, o embedded blanks
+surrounding the real or imaginary part of a complex constant, o
+leading blanks following the equals unless followed immediately by a
+slash or comma, or a semicolon if the o decimal edit mode is comma,
+and o blanks between a name and the following equals.
 </TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-embedded blanks surrounding the real or imaginary part of a complex constant,
+<TR></TR></TABLE><!-- .PP -->
 </TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-leading blanks following the equals unless followed immediately by a slash or comma, or a semicolon if the
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-decimal edit mode is comma, and
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-blanks between a name and the following equals.
-</TD></TR>
-<TR></TR></TABLE><!-- .TP -->
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.3.7</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-Namelist Comments
-</TD></TR>
-<TR valign=top><TD width=3%>
+<TR></TR></TABLE>10.11.3.7 Namelist Comments
+<TABLE cellpadding=3><!-- tsb: 10.11.3.7 Namelist Comments
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
 1.
 </TD><TD>
-Except within a character literal constant, a "!" character after a value separator or in the first nonblank position
-of a namelist input record initiates a comment. The comment extends to the end of the current input record and
-may contain any graphic character in the processor-dependent character set. The comment is ignored. A slash
-within the namelist comment does not terminate execution of the namelist input statement. Namelist comments
-are not allowed in stream input because comments depend on record structure.
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
+Except within a character literal constant, a "!" character after a
+value separator or in the first nonblank position of a namelist
+input record initiates a comment. The comment extends to the end of
+the current input record and may contain any graphic character in
+the processor-dependent character set. The comment is ignored. A
+slash within the namelist comment does not terminate execution of
+the namelist input statement. Namelist comments are not allowed in
+stream input because comments depend on record structure.
+<P>
+NOTE 10.38 Namelist input example:
+<P>
 <PRE>
-        NOTE 10.38
-        Namelist input example:
+       INTEGER I; REAL X (8); CHARACTER (11) P; COMPLEX Z;
+       LOGICAL :: G
+       NAMELIST / TODAY / G, I, P, Z, X
+       READ (*, NML = TODAY)
 <P>
-        INTEGER I; REAL X (8); CHARACTER (11) P; COMPLEX Z;
-        LOGICAL :: G
-        NAMELIST / TODAY / G, I, P, Z, X
-        READ (*, NML = TODAY)
+</PRE>
+The input data records are:
 <P>
-        The input data records are:
-<P>
-        &TODAY I = 12345, X(1) = 12345, X(3:4) = 2*1.5, I=6, ! This is a comment.
+<PRE>
+       &TODAY I = 12345, X(1) = 12345, X(3:4) = 2*1.5,
+        I=6, ! This is a comment.
         P = &#146;&#146;ISN&#146;T_BOB&#146;S&#146;&#146;, Z = (123,0)/
 <P>
         The results stored are:
 <P>
-                Variable                         Value
-                I                                6
-                X (1)                            12345.0
-                X (2)                            unchanged
-                X (3)                            1.5
-                X (4)                            1.5
-                X (5)   X (8)                    unchanged
-                P                                ISN&#146;T BOB&#146;S
-                Z                                (123.0,0.0)
-                G                                unchanged
+                 Variable                         Value
+                   I                                6
+                   X (1)                            12345.0
+                   X (2)                            unchanged
+                   X (3)                            1.5
+                   X (4)                            1.5
+                   X (5)   X (8)                    unchanged
+                   P                                ISN&#146;T BOB&#146;S
+                   Z                                (123.0,0.0)
+                   G                                unchanged
 <P>
 </PRE>
-<TABLE width=100% cellpadding=3>
-<TR><TD width=6%>&nbsp;</TD><TD>
-<TABLE width=100% cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>10.11.4</B> </TD><TD valign=bottom>
-Namelist output
+10.11.4 Namelist output 10.11.4.1 Form of namelist output
 </TD></TR>
-<TR valign=top><TD colspan=2>
-<B>10.11.4.1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Form of namelist output
-</TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE><!-- .IP 1. 4 -->
-<TABLE width=100% cellpadding=3>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-The form of the output produced is the same as that required for input, except for the forms of real, character,
-and logical values. The name in the output is in upper case. With the exception of adjacent undelimited character
-values, the values are separated by one or more blanks or by a comma, or a semicolon if the decimal edit mode
-is COMMA, optionally preceded by one or more blanks and optionally followed by one or more blanks.
+The form of the output produced is the same as that required for
+input, except for the forms of real, character, and logical values.
+The name in the output is in upper case. With the exception of
+adjacent undelimited character values, the values are separated by
+one or more blanks or by a comma, or a semicolon if the decimal edit
+mode is COMMA, optionally preceded by one or more blanks and
+optionally followed by one or more blanks.
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
@@ -893,59 +853,55 @@ Namelist output shall not include namelist comments.
 <TR valign=top><TD width=4%>
 3.
 </TD><TD>
-The processor may begin new records as necessary. However, except for complex constants and character values,
-the end of a record shall not occur within a constant, character value, or name, and blanks shall not appear
-within a constant, character value, or name.
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-        NOTE 10.39
-        The length of the output records is not specified exactly and may be processor dependent.
+The processor may begin new records as necessary. However, except
+for complex constants and character values, the end of a record
+shall not occur within a constant, character value, or name, and
+blanks shall not appear within a constant, character value, or name.
 <P>
-</PRE>
-<TABLE width=100% cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>10.11.4.2</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Namelist output editing
+NOTE 10.39 The length of the output records is not specified exactly
+and may be processor dependent.
 </TD></TR>
-<TR></TR></TABLE><TABLE width=100% cellpadding=3>
+<TR></TR></TABLE>10.11.4.2 Namelist output editing
+<TABLE cellpadding=3><!-- tsb: 10.11.4.2 Namelist output editing
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-Values in namelist output records are edited as for list-directed output (10.10.4).
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-        NOTE 10.40
-        Namelist output records produced with a DELIM= specifier with a value of NONE and which contain a
-        character sequence might not be acceptable as namelist input records.
+Values in namelist output records are edited as for list-directed
+output (10.10.4).
 <P>
-</PRE>
-<TABLE width=100% cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>10.11.4.3</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Namelist output records
+NOTE 10.40 Namelist output records produced with a DELIM= specifier
+with a value of NONE and which contain a character sequence might
+not be acceptable as namelist input records.
 </TD></TR>
-<TR></TR></TABLE><TABLE width=100% cellpadding=3>
+<TR></TR></TABLE>10.11.4.3 Namelist output records
+<TABLE cellpadding=3><!-- tsb: 10.11.4.3 Namelist output records
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-If two or more successive values for the same namelist group item in an output record produced have identical
-values, the processor has the option of producing a repeated constant of the form r *c instead of the sequence of
-identical values.
+If two or more successive values for the same namelist group item in
+an output record produced have identical values, the processor has
+the option of producing a repeated constant of the form r *c instead
+of the sequence of identical values.
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-The name of each namelist group object list item is placed in the output record followed by an equals and a list
-of values of the namelist group object list item.
+The name of each namelist group object list item is placed in the
+output record followed by an equals and a list of values of the
+namelist group object list item.
 </TD></TR>
 <TR valign=top><TD width=4%>
 3.
 </TD><TD>
-An ampersand character followed immediately by a namelist-group-name will be produced by namelist formatting
-at the start of the first output record to indicate which particular group of data objects is being output. A slash
-is produced by namelist formatting to indicate the end of the namelist formatting.
+An ampersand character followed immediately by a namelist-group-name
+will be produced by namelist formatting at the start of the first
+output record to indicate which particular group of data objects is
+being output. A slash is produced by namelist formatting to indicate
+the end of the namelist formatting.
 </TD></TR>
 <TR valign=top><TD width=4%>
 4.
@@ -955,14 +911,13 @@ A null value is not produced by namelist formatting.
 <TR valign=top><TD width=4%>
 5.
 </TD><TD>
-Except for new records created by explicit formatting within a defined output procedure or by continuation of
-delimited character sequences, each output record begins with a blank character.
+Except for new records created by explicit formatting within a
+defined output procedure or by continuation of delimited character
+sequences, each output record begins with a blank character.
 </TD></TR>
-<TR></TR></TABLE><!-- .PP -->
-</TD></TR>
-<TR></TR></TABLE><P>
+<TR></TR></TABLE></BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>namelist (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2507da9f-26e5-4b53-857f-c0e0a88747fa using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>namelist (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 85f59615-48a8-48bd-9c6a-320316d2f7b9 using man macros.</FONT>
 <br><br><center><img src="images/namelist.7fortran.gif"></center>
 </div>
 </div>

@@ -32,6 +32,6 @@
      enddo
      call vexit()
      !! write to file and display with display(1)
-     call write_animated_gif('drawchar.3M_pixel.gif',movie,P_colormap)
-     call execute_command_line('display drawchar.3M_pixel.gif')
+     call write_animated_gif('drawchar.3m_pixel.gif',movie,P_colormap)
+     call execute_command_line('display drawchar.3m_pixel.gif')
      end program demo_drawchar

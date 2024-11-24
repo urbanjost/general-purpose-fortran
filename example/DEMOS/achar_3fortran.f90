@@ -9,7 +9,7 @@
          write(*,'("octal       =",o0)')achar(i)
          write(*,'("hexadecimal =",z0)')achar(i)
 
-         write(*,'(8(i3,1x,a,1x),/)')(i,achar(i), i=32,126)
+         write(*,'(8(i3,1x,a,1x))')(i,achar(i), i=32,126)
 
          write(*,'(a)')upper('Mixed Case')
       contains
@@ -17,7 +17,7 @@
 
       pure elemental function upper(str) result (string)
       !
-      !$@(#) upper(3f): function to return a trimmed uppercase-only string
+      !$@(#) upper(3): function to return a trimmed uppercase-only string
       !
       ! input string to convert to all uppercase
       character(*), intent(in)      :: str

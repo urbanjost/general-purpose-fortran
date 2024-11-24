@@ -12,6 +12,7 @@
 !===================================================================================================================================
 MODULE M_io
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
+use,intrinsic     :: iso_c_binding,   only : c_int, c_char
 use M_strings, only : merge_str, lower, notabs, s2v, isnumber, decodebase, s2vs, split, substitute, noesc, crop
 use M_uuid,    only : generate_uuid
 use M_journal, only : journal
@@ -47,6 +48,9 @@ public get_env
 public is_hidden_file
 public getname
 
+public putchar
+public getchar
+
 ! ident_1="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
 interface rd
    module procedure rd_character
@@ -68,14 +72,48 @@ interface filedelete
    module procedure filedelete_lun
 end interface
 
+character(len=*),parameter,private :: gen='(*(g0,1x))'
+
+interface get_env
+   module procedure get_env_integer
+   module procedure get_env_real
+   module procedure get_env_double
+   module procedure get_env_character
+   module procedure get_env_logical
+end interface get_env
+
+type :: force_keywd_hack  ! force keywords, using @awvwgk method
+end type force_keywd_hack
+! so then any argument that comes afer "force_keywd" is a compile time error
+! if not done with a keyword unless someone "breaks" it by passing something
+! of this type:
+!    type(force_keywd_hack), optional, intent(in) :: force_keywd
 !-----------------------------------
 ! old names
 interface swallow;  module procedure fileread;  end interface
 interface gulp;     module procedure fileread;  end interface
 interface slurp;    module procedure filebyte;  end interface
+interface readenv
+   module procedure get_env_integer
+   module procedure get_env_real
+   module procedure get_env_double
+   module procedure get_env_character
+   module procedure get_env_logical
+end interface readenv
+public readenv
 !-----------------------------------
-character(len=*),parameter,private :: gen='(*(g0,1x))'
+interface
+   integer(kind=c_int) function system_putchar(ichar) bind (C,name="putchar")
+      import c_int
+      integer(kind=c_int),intent(in),value :: ichar
+   end function system_putchar
+end interface
 
+interface
+   integer(kind=c_int) function system_getchar() bind (C,name="getchar")
+      import c_int
+   end function system_getchar
+end interface
 CONTAINS
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -791,7 +829,7 @@ end subroutine read_table_r
 !!                 & status='old',iostat=ios)
 !!
 !!               An exception is that although stdin cannot currently
-!!               generally be treated as a stream file file the data
+!!               generally be treated as a stream file the data
 !!               will be read from stdin if the filename is '-'.
 !!
 !!    pageout    array of characters to hold file
@@ -960,7 +998,7 @@ end subroutine fileread
 !!                    & status='old',iostat=ios)
 !!
 !!                  An exception is that although stdin cannot currently
-!!                  generally be treated as a stream file file the data
+!!                  generally be treated as a stream file the data
 !!                  will be read from stdin if the filename is '-'.
 !!
 !!       text       array of characters to hold file
@@ -976,6 +1014,7 @@ end subroutine fileread
 !!     implicit none
 !!     character(len=1),allocatable :: text(:) ! array to hold file in memory
 !!     character(len=*),parameter :: FILENAME='inputfile' ! file to read
+!!     integer :: length,lines
 !!
 !!     ! create test file
 !!     open(file=FILENAME,unit=10,action='write')
@@ -984,13 +1023,19 @@ end subroutine fileread
 !!     write(10,'(a)') 'elif elpmas a si sihT'
 !!     close(unit=10)
 !!
-!!     call filebyte(FILENAME,text) ! allocate character array and copy file into it
+!!     call filebyte(FILENAME,text,length,lines) ! allocate character array and copy file into it
 !!
 !!     if(.not.allocated(text))then
 !!        write(*,*)'*rever* failed to load file '//FILENAME
 !!     else
+!!        write(*,'(*(g0))')'lines=',lines,' length=',length
+!!        write(*,'(a)')repeat('=',80)
+!!        ! write file
+!!        write(*,'(*(a:))',advance='no')text
+!!        write(*,'(a)')repeat('=',80)
 !!        ! write file reversed to stdout
 !!        write(*,'(*(a:))',advance='no')text(size(text):1:-1)
+!!        write(*,'(a)')repeat('=',80)
 !!        deallocate(text)  ! release memory
 !!     endif
 !!
@@ -1026,22 +1071,23 @@ character(len=4096) :: label
 character(len=:),allocatable :: line
    length_local=0
    lines_local=0
+   label=''
    message=''
    select type(FILENAME)
     type is (character(len=*))
-       if(filename /= '-') then
+       if(filename /= '-'.and.filename /= '' ) then
           open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
            &form="unformatted", access="stream",status='old',iostat=ios)
           label=filename
        else ! copy stdin to a scratch file
-          call copystdin()
+          call copystdin_C()
        endif
     type is (integer)
        if(filename /= stdin) then
           rewind(unit=filename,iostat=ios,iomsg=message)
           igetunit=filename
        else ! copy stdin to a scratch file
-          call copystdin()
+          call copystdin_C()
        endif
        write(label,'("unit ",i0)')filename
    end select
@@ -1086,17 +1132,68 @@ character(len=:),allocatable :: line
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
+subroutine copystdin_C()
+integer            :: iostat
+character(len=1)   :: byte
+character(len=255) :: iomsg
+   open(newunit=igetunit, iomsg=iomsg,&
+      &form="unformatted", access="stream",status='scratch',iostat=iostat)
+   open(unit=stdin,pad='yes')
+   if(iostat.eq.0)then
+      do while (getchar(byte).ge.0)
+         write(igetunit,iostat=iostat,iomsg=iomsg)byte
+         if(iostat.ne.0)exit
+      enddo
+   endif
+   if(iostat.ne.0)then
+      call stderr_local('<ERROR>*copystdin* '//trim(iomsg))
+   endif
+   rewind(igetunit,iostat=iostat,iomsg=iomsg)
+end subroutine copystdin_C
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine copystdin()
+integer            :: iostat
+character(len=256) :: iomsg
+character(len=1)   :: byte
+   open(newunit=igetunit, iomsg=iomsg,&
+      &form="unformatted", access="stream",status='scratch',iostat=iostat)
+   open(unit=stdin,pad='yes')
+      if(iostat.eq.0)then
+      INFINITE: do
+         read(stdin,'(a1)',iostat=iostat,advance='no')byte
+         if(is_iostat_eor(iostat)) then
+            byte=new_line('a')
+         elseif(is_iostat_end(iostat)) then
+            iostat=0
+            exit
+         elseif(iostat.ne.0)then
+            exit
+         endif
+         write(igetunit,iostat=iostat,iomsg=iomsg)byte
+         if(iostat.ne.0)exit
+      enddo INFINITE
+   endif
+   if(iostat.ne.0)then
+      call stderr_local('<ERROR>*copystdin* '//trim(iomsg))
+   endif
+   rewind(igetunit,iostat=iostat,iomsg=iomsg)
+end subroutine copystdin
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine copystdin_ascii()
 integer :: iostat
    open(newunit=igetunit, iomsg=message,&
    &form="unformatted", access="stream",status='scratch',iostat=iostat)
    open(unit=stdin,pad='yes')
    INFINITE: do while (getline(line,iostat=iostat)==0)
-      write(igetunit)line//new_line('a')
+      if(is_iostat_eor(iostat))then
+         ! EOR does not imply NEW_LINE so could add NEW_LINE to end of file
+         write(igetunit)line,new_line('a')
+      else
+         write(igetunit)line
+      endif
    enddo INFINITE
    rewind(igetunit,iostat=iostat,iomsg=message)
-end subroutine copystdin
+end subroutine copystdin_ascii
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine stderr_local(message)
 character(len=*) :: message
@@ -2448,6 +2545,7 @@ character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
 integer,intent(out),optional             :: iostat
 integer                                  :: ier
+integer                                  :: iostat_local
 character(len=4096)                      :: message
 
 integer,parameter                        :: buflen=1024
@@ -2455,30 +2553,30 @@ character(len=:),allocatable             :: line_local
 character(len=buflen)                    :: buffer
 integer                                  :: isize
 integer                                  :: lun_local
-
    line_local=''
    ier=0
+   iostat_local=huge(0)
    if(present(lun))then
       lun_local=lun
    else
       lun_local=stdin
    endif
-
    INFINITE: do                                                   ! read characters from line and append to result
-      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no', &
+      read(lun_local,pad='yes',iostat=iostat_local,fmt='(a)',advance='no', &
       & size=isize,iomsg=message) buffer                          ! read next buffer (might use stream I/O for files
+      ier=iostat_local
                                                                   ! other than stdin so system line limit is not limiting
       if(isize > 0)line_local=line_local//buffer(:isize)          ! append what was read to result
-      if(is_iostat_eor(ier))then                                  ! if hit EOR reading is complete unless backslash ends the line
+      if(is_iostat_eor(iostat_local))then                         ! if hit EOR reading is complete
          ier=0                                                    ! hitting end of record is not an error for this routine
          exit INFINITE                                            ! end of reading line
-     elseif(ier /= 0)then                                         ! end of file or error
+     elseif(iostat_local /= 0)then                                ! end of file or error
         line=trim(message)
         exit INFINITE
      endif
    enddo INFINITE
    line=line_local                                                ! trim line
-   if(present(iostat))iostat=ier
+   if(present(iostat))iostat=iostat_local
 end function getline
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3312,72 +3410,290 @@ end function lookfor
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
-!!    function get_env(NAME,DEFAULT) result(VALUE)
+!!    function get_env(NAME,DEFAULT,IERR=IERR) result(VALUE)
 !!
-!!     character(len=*),intent(in)          :: NAME
-!!     character(len=*),intent(in),optional :: DEFAULT
-!!     character(len=:),allocatable         :: VALUE
+!!     character(len=*),intent(in)            :: NAME
 !!
+!!     ! ONE OF ...
+!!     o character(len=*),intent(in),optional :: DEFAULT
+!!     o real,intent(in),optional             :: DEFAULT
+!!     o integer,intent(in),optional          :: DEFAULT
+!!     o doubleprecision,intent(in),optional  :: DEFAULT
+!!     o logical,intent(in),optional          :: DEFAULT
+!!
+!!     integer,intent(out),optional           :: IERR
+!!
+!!     ! ONE OF THE FOLLOWING, MATCHING TYPE OF DEFAULT
+!!     o character(len=:),allocatable         :: VALUE
+!!     o integer                              :: VALUE
+!!     o real                                 :: VALUE
+!!     o doubleprecision                      :: VALUE
+!!     o logical                              :: VALUE
 !!
 !!##DESCRIPTION
 !!     Get the value of an environment variable or optionally return a
-!!     default value if the returned value would be a blank string.
+!!     default value when the environment variable is not set or is set
+!!     to a blank string.
 !!
-!!     This is a duplicate of system_getenv(3m_system) used to avoid
-!!     some interdependencies.
+!!     The type returned is the same as the type of the default value.
+!!
 !!
 !!##OPTIONS
 !!    NAME     name of environment variable
 !!    DEFAULT  value to return if environment variable is not set or set
-!!             to an empty string
+!!             to an empty string. May be CHARACTER, REAL, INTEGER,
+!!             LOGICAL or DOUBLEPRECISION. Defaults to a null CHARACTER value.
 !!##RETURNS
-!!    VALUE    the value of the environment variable or the default
+!!    VALUE    the value of the environment variable or the default.
+!!             The type is the same as DEFAULT. If an error occurs and it
+!!             is numeric, huge(0|0.0|0.0d0) is returned.
+!!
+!!             For a LOGICAL type, Any environment variable value starting
+!!             with F,f,N or n is .FALSE. and any value starting with
+!!             Y,y,T or t is true. A leading period (".") is ignored.
+!!             Anything else returns .false. .
+!!
+!!    IERR     return error code. Must be specified with a keyword.
+!!             It is zero if no error occurred.
 !!
 !!##EXAMPLE
 !!
 !!   Sample program:
 !!
-!!       program demo_get_env
-!!       use M_io, only : get_env
-!!       character(len=:),allocatable :: HOME
-!!          HOME=get_env('HOME','UNKNOWN')
-!!          write(*,'(a)')HOME,get_env('PATH')
-!!          write(*,'(a)')get_env('HOME'),get_env('PATH')
-!!       end program demo_get_env
+!!    program demo_get_env
+!!    use M_io, only : get_env, getname
+!!    character(len=*),parameter :: g='(*(g0))'
+!!    integer :: ierr
+!!    character(len=:),allocatable :: HOME
+!!      !Basics
+!!       HOME=get_env('HOME','UNKNOWN')
+!!       write(*,'(a)')HOME
+!!       write(*,'(a)')Get_env('PATH')
+!!
+!!      !call this program setting STOP=RUN unless STOP=RUN
+!!      !otherwise print various environment variable values
+!!      !converted to various types
+!!       if(get_env('STOP').eq.'RUN')then
+!!          write(*,g)repeat('-',80)
+!!          write(*,g)get_env('CHARACTER','string')
+!!          write(*,g)get_env('INTEGER',100)
+!!          write(*,g)get_env('REAL',200.0)
+!!          write(*,g)get_env('DOUBLE',300.0d0)
+!!          write(*,g)get_env('LOGICAL',.true.)
+!!
+!!          write(*,g)repeat('-',80)
+!!          write(*,g)get_env('CHARACTER','string',ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('INTEGER',100,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('REAL',200.0,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('DOUBLE',300.0d0,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('LOGICAL',.true.)
+!!          write(*,*)'ierr=',ierr
+!!
+!!          write(*,g)repeat('-',80)
+!!          write(*,g)get_env('CHARACTER')
+!!          write(*,g)get_env('HOME')
+!!        else
+!!          write(*,g)repeat('-',80)
+!!          call execute_command_line('env STOP=RUN '//getname())
+!!          call execute_command_line('env STOP=RUN CHARACTER=aaaa &
+!!          & INTEGER=1 REAL=2.3 DOUBLE=444444444444 '//getname())
+!!          call execute_command_line('env STOP=RUN CHARACTER=bbbb &
+!!          & INTEGER=1 REAL=2.3 DOUBLE=44.555 '//getname())
+!!          call execute_command_line('env STOP=RUN CHARACTER=cccc &
+!!          & INTEGER=asdf REAL=asdf DOUBLE=adsf '//getname())
+!!          write(*,g)repeat('-',80)
+!!          stop
+!!       endif
+!!
+!!    end program demo_get_env
 !!
 !!##SEE ALSO
+!!    This duplicates system_getenv(3m_system) in most respects but avoids
+!!    some interdependencies as M_system(3) currently requires a POSIX
+!!    programming environment.
+!!
 !!    get_environment_variable(3fortran), system_getenv(3m_system),
 !!    set_environment_variable(3m_system), system_putenv(3m_system),
 !!    system_clearenv(3m_system), system_initenv(3m_system),
-!!    system_readenv(3m_system), system_unsetenv(3m_system)
+!!    system_getenv(3m_system), system_unsetenv(3m_system)
 !!
 !!##AUTHOR
 !!    John S. Urban
 !!
 !!##LICENSE
 !!    Public Domain
-function get_env(NAME, DEFAULT) result(VALUE)
+function get_env_character(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
 implicit none
-character(len=*), intent(in)           :: NAME
-character(len=*), intent(in), optional :: DEFAULT
-character(len=:), allocatable          :: VALUE
-integer                                :: howbig
-integer                                :: stat
-   if (NAME /= '') then
-      call get_environment_variable(NAME, length=howbig, status=stat, trim_name=.true.) ! get length required to hold value
+character(len=*),intent(in)                :: NAME
+character(len=*),intent(in),optional       :: DEFAULT
+type(force_keywd_hack),optional,intent(in) :: force_keywd
+integer,intent(out),optional               :: ierr
+character(len=:),allocatable               :: VALUE
+
+character(len=255)                         :: errmsg
+integer                                    :: howbig
+integer                                    :: stat
+integer                                    :: length
+   ! get length required to hold value
+   length=0
+   errmsg=''
+   stat=0
+   if(NAME.ne.'')then
+      call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
       select case (stat)
-      case (1); VALUE = '' ! NAME is not defined in the environment
-      case (2); VALUE = '' ! This processor doesn't support environment variables. Boooh!
+      case (1)
+         !*!print *, NAME, " is not defined in the environment. Strange..."
+         VALUE=''
+         stat=0
+      case (2)
+         !*!print *, "This processor doesn't support environment variables. Boooh!"
+         VALUE=''
       case default
-         allocate (character(len=max(howbig, 1)) :: VALUE)                         ! make string to hold value of sufficient size
-         call get_environment_variable(NAME, VALUE, status=stat, trim_name=.true.) ! get value
-         if (stat /= 0) VALUE = ''
+         ! make string to hold value of sufficient size
+         allocate(character(len=max(howbig,1)) :: VALUE)
+         ! get value
+         call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
+         if(stat.ne.0)VALUE=''
       end select
    else
-      VALUE = ''
-   end if
-   if (VALUE == '' .and. present(DEFAULT)) VALUE = DEFAULT
-end function get_env
+      VALUE=''
+   endif
+   if(VALUE.eq.''.and.present(DEFAULT))VALUE=DEFAULT
+   if(present(ierr))then
+      ierr=stat
+   elseif(stat.ne.0)then
+      !write(stderr,'(a)')trim(errmsg)
+   endif
+end function get_env_character
+
+function get_env_real(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+character(len=*),intent(in)   :: NAME
+real,intent(in)               :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional :: ierr
+real                          :: VALUE
+character(len=:),allocatable  :: STRING
+integer                       :: iostat
+character(len=255)            :: iomsg, fmt
+   STRING=get_env_character(NAME,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+   else
+      write(fmt,'(*(g0))')'(g',max(1,len(string)),'.0)'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0.0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*get_env* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_env_real
+
+function get_env_double(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+character(len=*),intent(in)   :: NAME
+doubleprecision,intent(in)    :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional :: ierr
+doubleprecision               :: VALUE
+character(len=:),allocatable  :: STRING
+integer                       :: iostat
+character(len=255)            :: iomsg, fmt
+   STRING=get_env_character(NAME,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+   else
+      write(fmt,'(*(g0))')'(g',max(1,len(string)),'.0)'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0.0d0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*get_env* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_env_double
+
+function get_env_integer(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+character(len=*),intent(in)   :: NAME
+integer,intent(in)            :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional :: ierr
+integer                       :: VALUE
+character(len=:),allocatable  :: STRING
+integer                       :: iostat
+character(len=255)            :: iomsg, fmt
+   STRING=get_env_character(NAME,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+      iostat=0
+   else
+      write(fmt,'(*(g0))')'(i',max(1,len(string)),')'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*get_env* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_env_integer
+
+function get_env_logical(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+character(len=*),intent(in)   :: NAME
+logical,intent(in)            :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional :: ierr
+logical                       :: VALUE
+character(len=:),allocatable  :: STRING
+integer                       :: iostat
+character(len=255)            :: iomsg, fmt
+character(len=1)              :: ch
+   STRING=get_env_character(NAME,'',ierr=iostat)
+   if(iostat.ne.0)then
+      VALUE=.false.
+   elseif(STRING.eq.'')then
+      VALUE=DEFAULT
+      iostat=0
+   else
+      string=string//'  '
+      ch=string(1:1)
+      if(ch.eq.'.')ch=string(2:2)
+      select case(ch)
+      case('t','T','y','Y')
+         value=.true.
+      case('f','F','n','N')
+         value=.false.
+       case default
+         value=.false.
+      end select
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*get_env* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_env_logical
+
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3675,6 +3991,104 @@ integer                      :: local_lenlimit
    write(filename(:),fmt) trim(adjustl(head)), num, trim(adjustl(tail))
    filename=trim(filename)
 end function filename_generator
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    putchar(3f) - [M_io:QUERY] write a single-byte character to stdout via C interface
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function putchar() result(ch)
+!!
+!!     character(len=1),intent(in) :: ch
+!!     integer :: putchar
+!!##DESCRIPTION
+!!    Write a single character to stdout using the C interface
+!!##OPTIONS
+!!    ch  A single character to place on stdout
+!!##RETURNS
+!!    A integer value for the ADE (ASCII Decimal Equivalent) of the
+!!    character, or a negative value if an error occurs.
+!!
+!!##EXAMPLE
+!!
+!!   sample usage
+!!
+!!    program demo_putchar
+!!    use M_io, only : getchar, putchar
+!!    implicit none
+!!    character(len=1) :: byte
+!!    integer :: istat
+!!       ! copy stdin to stdout as a stream one byte at a time
+!!       do while (getchar(byte).ge.0)
+!!          istat=putchar(byte)
+!!       enddo
+!!    end program demo_putchar
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+function putchar(ch)
+character(len=1),intent(in) :: ch
+integer :: putchar
+   putchar=system_putchar(ichar(ch,kind=c_int))
+end function putchar
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    getchar(3f) - [M_io:QUERY] read a single-byte character from stdin via C interface
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function getchar() result(ch)
+!!
+!!     character(len=1),intent(in) :: ch
+!!     integer :: getchar
+!!##DESCRIPTION
+!!    Read a single character from stdin using the C interface
+!!##OPTIONS
+!!    ch  A single character to read from stdin
+!!##RETURNS
+!!    A integer value for the ADE (ASCII Decimal Equivalent) of the
+!!    character, or a negative value if an error occurs.
+!!
+!!##EXAMPLE
+!!
+!!   sample usage
+!!
+!!    program demo_getchar
+!!    use M_io, only : getchar, putchar
+!!    implicit none
+!!    character(len=1) :: byte
+!!    integer :: istat
+!!       ! copy stdin to stdout as a stream one byte at a time
+!!       do while (getchar(byte).ge.0)
+!!          istat=putchar(byte)
+!!       enddo
+!!    end program demo_getchar
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+function getchar(ch)
+character(len=1),intent(out) :: ch
+integer :: getchar
+integer(kind=c_int) :: ich
+   ich=system_getchar()
+   if(ich.ge.0)then
+      ch=char(ich)
+   else
+      ch=char(0)
+   endif
+   getchar=ich
+end function getchar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

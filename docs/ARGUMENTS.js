@@ -34,6 +34,7 @@ append("commandline.3m_cli.html");
 append("print_dictionary.3m_cli.html");
 append("specified.3m_cli.html");
 append("M_args.3m_args.html");
+append("get_arg.3m_args.html");
 append("get_command_arguments_stack.3m_args.html");
 append("get_command_arguments_string.3m_args.html");
 append("get_namelist.3m_args.html");

@@ -50,25 +50,40 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>use (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-use(7f) - [FORTRAN] gives a program unit access to public entities in a module.
+<P>
+use(7f) - [FORTRAN] gives a program unit access to public entities in a
+module.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=8>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-USE [, mode-nature ::] namespace [, rename-list]
-USE [, mode-nature ::] namespace [,ONLY: only-list]
+<P>
+There are two forms. One loads all public entities optionally renaming
+selected entities:
+<P>
+<PRE>
+        USE [, nature ::] module_name [, rename-list]
+<P>
+</PRE>
+The other makes accessible only explicitly named entities
+<P>
+<PRE>
+        USE [, nature ::] module_name, ONLY: only-list
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -76,87 +91,65 @@ USE [, mode-nature ::] namespace [,ONLY: only-list]
 
 </A>
 <BLOCKQUOTE>
-The USE statement makes the specified namespace accessible to the
-current scoping unit. It also provides a means of renaming or limiting
-the accessibility of entities in the namespace.
 <P>
-If more than one USE statement appears in a scoping unit, the rename-lists
-and only-lists are treated as one concatenated rename-list.
+The USE statement makes the entities in the specified module accessible
+to the current scoping unit. It also provides a means of renaming those
+entities with a rename-list and/or only importing a subset of the public
+entities from the module with an only-list.
 <P>
-WHERE:
-<TABLE cellpadding=3><!-- tsb: WHERE:
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>mode-nature</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Is INTRINSIC or NON_INTRINSIC. If INTRINSIC is used, namespace
-must be the name of an intrinsic module. If NON_INTRINSIC is used,
-namespace must be the name of an nonintrinsic module. If mod-nature is
-not specified, namespace must be the name of an intrinsic or nonintrinsic
-module. If both are provided, the nonintrinsic module is used. It is an
-error to specify a user module and an intrinsic module of the same name
-in the same program unit.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>namespace</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is a publicly accessible namespace; ie. it is the name of a module.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>rename-list</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is a comma-separated list of local-name =&gt; use-name
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>only-list</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is a comma-separated list of access-id or [local-name =&gt; use-name]
-</TD></TR>
-<TR></TR></TABLE>A USE statement with ONLY provides access only to those entities that
-appear in the only-list.
+The entities accessed from the module may be named data objects,
+nonintrinsic types, procedures, abstract interfaces, generic
+identifiers, and namelist groups
+<P>
+If more than one USE statement appears in a scoping unit, the
+rename-lists are treated as one rename-list and the only-lists are
+treated as one concatenated only-list.
+<P>
+At the time a USE statement is processed, the public portions of the
+specified module shall be available. That is, the module typically needs
+to be compiled and found in the current search directories or previously
+in the current source files.
+<P>
+A module shall not reference itself, either directly or indirectly.
 <P>
 A USE statement without ONLY provides access to all PUBLIC entities in
-the specified namespace.
+the specified namespace. This is true even if renamed entities are
+specified, but the renamed entities will only be available with the
+specified local name unless also explicitity requested with the original
+name. This is particularly useful behavior when there would otherwise be
+name conflicts.
 <P>
-where
-<P>
-<PRE>
-         local-name      is the local name for the entity specified by use-name
-                         Is the name of the entity in the program unit using the module or is
-                         "OPERATOR (op-name)", where op-name is the name of a defined operator
-                         in the program unit using the module.
-         use-name        is the name of a public entity in the specified namespace
-         access-id       is use-name or generic-spec
-         generic-spec    is generic-name
-                         or OPERATOR (defined-operator)
-                         or ASSIGNMENT (=)
-<P>
-         generic-name is the name of a generic procedure
-<P>
-         defined-operator is one of the intrinsic operators
-<P>
-         or .op-name.
-<P>
-         .op-name. is a user-defined name for the operation
-<P>
-</PRE>
+A USE statement with ONLY provides access only to those entities that
+appear in the only-list. It does not otherwise affect what is public due
+to a statement without ONLY.
 </BLOCKQUOTE>
-<A name=>
+<A name=3>
 
-    <H4>&nbsp; &nbsp; REMARKS</H4>
+     <H3>REMARKS</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-rename-list and ONLY: only-list may only appear if the namespace being
-used was implemented with Fortran for .NET
-</BLOCKQUOTE>
+A use-associated variable is considered to have been previously
+declared; any other use-associated entity is considered to have been
+previously defined.
 <P>
+So accessed entities have their attributes (TYPE,KIND,&#46;&#46;&#46;) specified via
+the module, except that an accessed entity may have a different
+accessibility attribute (eg. be declared PRIVATE or PUBLIC), it may be
+given the ASYNCHRONOUS attribute even if the associated module entity
+does not, and if it is not a coarray it may have the VOLATILE attribute
+specified even if the associated entity from the module does not.
 <P>
-<BLOCKQUOTE>
 If two or more generic interfaces that are accessible in the same
-scoping unit have the same name, same operator, or are assignments,
-they are interpreted as a single generic interface.
+scoping unit have the same name, same operator, or are assignments, they
+are interpreted as a single generic interface (that is, if there are no
+conflicts they are merged).
 <P>
-Two or more accessible entities, other than generic interfaces, can
-have the same name only if no entity is referenced by this name in the
-scoping unit.
+Two or more accessible entities, other than generic interfaces, can have
+the same name only if no entity is referenced by this name in the
+scoping unit. That is, there can be no other conflicts unless the
+entities are not used.
 <P>
 If local-name is absent, the use-name is available by use association.
 <P>
@@ -169,63 +162,246 @@ in a PUBLIC or PRIVATE statement in the scoping unit of a module.
 Forward references to modules are not allowed. That is, if a module is
 used in the same source file in which it resides, the module program
 unit must appear before its use.
+<P>
+Definability of module entities can be controlled by the PROTECTED
+attribute.
+<TABLE cellpadding=3><!-- tsb: Definability of module entities can be controlled by the PROTECTED
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+OPERATOR (use-defined-operator) shall not identify a type-bound
+generic interface.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The generic-spec shall not identify a type-bound generic interface.
+</TD></TR>
+<TR></TR></TABLE>These Constraints do not prevent accessing a generic-spec that is
+declared by an interface block, even if a type-bound generic interface
+has the same generic-spec.
+<TABLE cellpadding=3><!-- tsb: These Constraints do not prevent accessing a generic-spec that is
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+An only-use-name shall be a nongeneric name.
+</TD></TR>
+<TR></TR></TABLE>A USE statement with the ONLY option provides access only to those
+entities that appear as generic-specs, use-names, or
+use-deﬁned-operators in the only-list.
+<P>
+There is no prohibition against a use-name or use-deﬁned-operator
+appearing multiple times in one USE state- ment or in multiple USE
+statements involving the same module. As a result, it is possible for
+one use-associated entity to be accessible by more than one local
+identiﬁer.
+<P>
+An entity in a scoping unit that is accessed by use association through
+more than one use path, has the ASYN- CHRONOUS or VOLATILE attribute in
+any of those use paths, and is not given that attribute in that scoping
+unit, shall have that attribute in all use paths.
+<P>
+the local-name is prohibited from appearing in a COMMON BLOCK or an
+EQUIVALENCE statement or a namelist-group-name in a NAMELIST statement,
+respectively. There is no prohibition against the local-name appearing
+as a common-block-name or a namelist-group-object.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NATURE : Is INTRINSIC or NON_INTRINSIC. If INTRINSIC is used,
+namespace must be the name of an intrinsic module. If NON_INTRINSIC
+is used, namespace must be the name of an nonintrinsic module. If
+NATURE is not specified, a module of name namespace must be
+accessible. If both an intrinsic and non-intrinsic module of the
+same name exist and nature is not specified, the non-intrinsic
+module is used.
+<P>
+It is an error to specify a user module and an intrinsic module of
+the same name in the same program unit.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MODULE_NAME : is a publicly accessible namespace; ie. it is the name
+of a module.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+RENAME-LIST : is a comma-separated list of local-name =&gt; use-name.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ONLY-LIST : is a comma-separated list of access-ids or [local-name
+=&gt; use-name]
+<P>
+where
+<P>
+<PRE>
+          local-name     Is the local name for the entity in the
+                         program unit using the module or is
+                         "OPERATOR (op-name)", where op-name is
+                         the name of a defined operator in the
+                         program unit using the module.
+          use-name       is the name of a public entity in the
+                         specified namespace
+          access-id      is use-name or generic-spec
+          generic-spec   is generic-name
+                         or OPERATOR (defined-operator)
+                         or ASSIGNMENT (=)
+<P>
+</PRE>
+GENERIC-NAME is the name of a generic procedure
+<P>
+DEFINED-OPERATOR is one of the intrinsic operators or .OP-NAME.
+<P>
+[char46]OP-NAME. is a user-defined name for the operation
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
 
      <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Samples:
 <P>
 <PRE>
-   module example ! example is the namespace name
+       ! program demo_use and module examples
+       module example ! example is the namespace name
+       use,intrinsic :: iso_fortran_env , only : real64
 <P>
-      type type1 ! type1 is the class prototype name
-      contains
-         procedure, nopass :: static_method1
-      end type type1
+          type type1 ! type1 is the class prototype name
+          contains
+             procedure, nopass :: static_method1
+          end type type1
 <P>
-      type type2 ! type1 is the class prototype name
-      contains
-         procedure, nopass :: static_method2
-      end type type2
+          type type2 ! type1 is the class prototype name
+          contains
+             procedure, nopass :: static_method2
+          end type type2
 <P>
-   contains
+          real(kind=real64),parameter :: &
+          pi  = 3.1415926535897932_real64
+          ! Napier&#146;s constant is the base of the natural logarithm
+          ! system. It is often denoted by "e" in honor of Euler.
+          real(kind=real64),parameter :: &
+          Napier_constant = 2.71828182845904523_real64
 <P>
-      subroutine static_method1(arg)
-         integer :: arg
-         ! code to implement method goes here
-      end subroutine static_method1
+       contains
 <P>
-      subroutine static_method2(arg)
-         integer :: arg
-         ! code to implement method goes here
-      end subroutine static_method2
+          subroutine static_method1(arg)
+             integer :: arg
+             ! code to implement method goes here
+          end subroutine static_method1
 <P>
-   end module example
-   !==============================================================
-   use example ! all public objects in namespace example available
-   !==============================================================
-   use example, only: type1 ! class prototype type1 available,
-                            ! class prototype type2 not available
-   !==============================================================
-   ! within this scoping unit, type1 is referred to as "mytype"
-   use example, mytype =&gt; type1
-   !==============================================================
+          subroutine static_method2(arg)
+             integer :: arg
+             ! code to implement method goes here
+          end subroutine static_method2
+<P>
+       end module example
+       program demo_use
+       use example, only: type1 ! class prototype type1 available,
+                                ! but nothing else is made available by this
+                                !
+       ! (additionally) within this scoping unit, type1 is referred to
+       ! as "mytype"
+       use example, mytype =&gt; type1
+       !
+       ! only: is recommended but for long lists importing everything
+       !       without listing it is supported:
+       use example ! all public objects in namespace example available
+       !
+       ! some popular intrinsic entities
+       !
+       use,intrinsic :: iso_fortran_env, only : &
+       stderr=&gt;ERROR_UNIT, stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
+       ! specifying INTRINSIC or NON_INTRINSIC is typically optional but
+       ! indicating INTRINSIC when it is so is the norm.
+       use :: iso_fortran_env, only : integer_kinds,int8,int16,int32,int64
+       use iso_fortran_env, only : real_kinds,real32,real64,real128
+       ! duplicates are OK
+       use,intrinsic :: iso_fortran_env, only : sp=&gt;real32,dp=&gt;real64
+       use,intrinsic :: iso_fortran_env, only : integer_kinds
+       use,intrinsic :: iso_fortran_env, only : compiler_version
+       use,intrinsic :: iso_fortran_env, only : compiler_options
+       use,intrinsic :: iso_fortran_env, only : iostat_eor, iostat_end
+       end program demo_use
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=4>
+<A name=6>
+
+     <H3>SUBTLE ISSUES WITH MULTIPLE STATEMENTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+As stated previously,
+<P>
+<PRE>
+       If more than one USE statement appears in a scoping unit, the
+       rename-lists and only-lists are treated as one concatenated
+       rename-list.
+<P>
+</PRE>
+That is, all the non-only statements are treated as one statement So
+this
+<P>
+<PRE>
+       use,intrinsic :: iso_fortran_env ! by itself would import all entities
+       use,intrinsic :: iso_fortran_env, sp=&gt;real32, dp=&gt;real64
+<P>
+</PRE>
+is treated like this
+<P>
+<PRE>
+       use,intrinsic :: iso_fortran_env, sp=&gt;real32, dp=&gt;real64
+<P>
+</PRE>
+so the names REAL32 and REAL64 are not available. If you wanted both
+names you would have to add
+<P>
+<PRE>
+       use,intrinsic :: iso use,intrinsic , real32=&gt;real32, real64=&gt;real64
+<P>
+</PRE>
+or
+<P>
+<PRE>
+       use,intrinsic :: iso use,intrinsic , only: real32, real64
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
+PRIVATE(3), PUBLIC(3), MODULE(3)
+<P>
+Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7b3bd2dd-76f4-46b6-a495-098244524c24 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f334c256-afa1-4049-aed1-bbbf6c829008 using man macros.</FONT>
 <br><br><center><img src="images/use.7fortran.gif"></center>
 </div>
 </div>

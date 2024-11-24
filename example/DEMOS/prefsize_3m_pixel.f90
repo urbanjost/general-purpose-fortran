@@ -8,14 +8,14 @@
           call prefsize(60*2,40*2)
           call vinit()
           call picture()
-          call writegif('prefsize.3M_pixel.gif',P_pixel,P_colormap)
+          call writegif('prefsize.3m_pixel.gif',P_pixel,P_colormap)
           call vexit()
 
           ! make second file with another size
           call prefsize(60*3,40*3)
           call vinit()
           call picture()
-          call writegif('prefsize_B.3M_pixel.gif',P_pixel,P_colormap)
+          call writegif('prefsize_B.3m_pixel.gif',P_pixel,P_colormap)
           call vexit()
        contains
        subroutine picture

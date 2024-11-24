@@ -28,6 +28,6 @@
            call linewidth(i/5/3)
            call draw2(x,y)
         enddo
-        call writegif('linewidth.3M_pixel.gif',P_pixel,P_colormap)
+        call writegif('linewidth.3m_pixel.gif',P_pixel,P_colormap)
         call vexit()
      end program demo_linewidth

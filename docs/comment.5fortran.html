@@ -1,0 +1,231 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>File Formats &nbsp;-&nbsp;</I><NOBR>comment (5)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+COMMENT(5) - [SYNTAX] code annotation
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Free Form Commentary</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Fixed and Free comments
+<P>
+<PRE>
+        C fixed-format comment
+        ! free-format comment
+           ! free-format comment
+        CODE_LINE ! free-format comment
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+In free-format files The character "!" initiates a comment except when
+it appears in a character context as part of a literal string.
+<P>
+The comment extends to the end of the line.
+<P>
+If the first nonblank character on a line is an "!", the line is a
+"comment line". Lines containing only blanks or containing no characters
+are also comment lines.
+<P>
+"comment lines" may appear anywhere. There are a few restrictions on
+comments trailing statements or continued statements though.
+<P>
+Comments may appear anywhere in a program unit and may precede the first
+statement of a program unit or follow the last statement of a program
+unit.
+<P>
+Comments have no effect on the interpretation of the program unit.
+<P>
+A continued line ending in an ampersand can additionally be followed by
+an exclamation and remarks unless a literal string is being continued.
+<P>
+Comment lines cannot be continued with an ampersand. An ampersand
+appearing in a comment has no special effect and is merely a regular
+character.
+<P>
+The standard does not restrict the number of consecutive comment lines.
+<P>
+FIXED-FORMAT SOURCE FILES
+<P>
+Additionally, in fixed-format source files a "C" in column 1 indicates
+the remainder of the line is a comment. An asterisk "*" in column 1
+beginning a comment is a common extension as well.
+<P>
+There is a conflict in fixed-format files that can occur with the
+otherwise universal rule that at exclamation outside of a literal string
+begins a comment -- If the first non-blank character in a line is in
+column 6 in a fixed-format file it is a continuation line, not a
+comment. This rule includes an exclamation character as well.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>FREE FORM COMMENTARY</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+A comment is explanatory text embedded in program source intended to
+help human readers understand it.
+<P>
+Code completely without comments is often hard to read, but code with
+too many comments is also bad, especially if the comments are not kept
+up-to-date with changes to the code.
+<P>
+Too much commenting may mean that the code is over-complicated.
+<P>
+A good rule is to comment everything that needs it but write code that
+doesn&#146;t need much of it.
+<P>
+Comments that explain WHY something is done and how the code relates to
+its environment are useful.
+<P>
+A particularly irksome form of over-commenting explains exactly what
+each statement does, even when it is obvious to any reasonably competant
+programmer.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+    program demo_comment
+    integer :: values(8)
+    character(len=:),allocatable :: string
+    character(len=1),parameter   :: dash=&#146;-&#146;,colon=&#146;:&#146;,dot=&#146;.&#146;
+    real :: x=3.0, y=4.0
+       ! comments may appear on a continued line
+       ! blank lines are comment lines
+       call date_and_time(values=values)
+       associate( &
+<P>
+        ! DATE
+        YR=&gt;values(1),      & ! The year
+        MO=&gt;values(2),      & ! The month
+        DY=&gt;values(3),      & ! The day of the month
+<P>
+        ! TIME
+        UTC=&gt;values(4),     & ! Time difference with UTC in minutes
+        HR=&gt;values(5),      & ! The hour of the day
+        MIN=&gt;values(6),     & ! The minutes of the hour
+        SEC=&gt;values(7),     & ! The seconds of the minute
+        MILLI=&gt;values(8) )    ! The milliseconds of the second
+<P>
+        write(*,&#146;(*(g0))&#146;)YR,dash,MO,dash,DY,&#146;T&#146;, &
+        & HR,colon,MIN,colon,SEC,dot,MILLI
+       end associate
+<P>
+       string=&#146;no comment allowed &
+          &on the end of a continued string &
+          ! keep going &#46;&#46;&#46;
+          & but comment lines are allowed between &#146; ! but can go on the end
+<P>
+       ! the next exclamation is part of a literal string, and so has
+       ! nothing to do with comments
+       print *, &#146;Hello World! X=&#146;,x,&#146;Y=&#146;,y
+<P>
+    end program demo_comment
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+  2024-10-13T0:7:25.283 Hello World! X= 4.59107416E-41 Y= 2.76724564E-36
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+CONTINUATION(5),
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>comment (5)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from de7ddbac-73d2-48f3-875a-71696d771da7 using man macros.</FONT>
+<br><br><center><img src="images/comment.5fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

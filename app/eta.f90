@@ -1,5 +1,5 @@
-program character_frequency ! count frequency of occurrence of characters in an ASCII file
-use :: M_io,      only : slurp
+program character_frequency    ! count frequency of occurrence of characters in an ASCII file
+use :: M_io,      only : filebyte ! note the file could be read sequentially as far less cost in memory.
 use :: M_CLI2,    only : set_args, lget, filenames=>unnamed
 use :: M_sort,    only : sort_quick_rx
 use :: M_strings, only : describe, lower
@@ -15,7 +15,7 @@ integer,allocatable          :: lets(:)
       if(filenames(j).eq.'-'.or.filenames(j).eq.'stdin')then
          write(*,*)'*eta* cannot read from stdin'
       else
-         call slurp(filenames(j),txt) ! allocate character array and copy file into it
+         call filebyte(filenames(j),txt) ! allocate character array and copy file into it
       endif
       if(.not.allocated(txt))then
          write(*,*)'*eta* failed to load file '//filenames(j)

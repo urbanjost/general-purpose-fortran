@@ -1,0 +1,198 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>endfile (7)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+ENDFILE(7) - [NUMERIC] Absolute value
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+endfile unit_number
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+An ENDFILE(7f) ends or truncates a file at the current record.
+<P>
+Execution of an ENDFILE(7F) statement for a file connected for
+SEQUENTIAL ACCESS writes an endfile record as the next record of the
+file. The file is then positioned after the endfile record, which
+becomes the last record of the file.
+<TABLE cellpadding=3><!-- tsb: Execution of an ENDFILE(7F) statement for a file connected for
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SEQUENTIAL ACCESS : After execution of an ENDFILE(7F) statement for
+a file connected for sequential access, a BACKSPACE(7F) or
+REWIND(7F) statement shall be used to reposition the file prior to
+execution of any data transfer input/output statement or ENDFILE(7F)
+statement.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIRECT ACCESS : For a file connected for DIRECT ACCESS, only those
+records before the endfile record are considered to have been
+written. Thus, only those records or additional records subsequently
+written shall be read during subsequent direct access connections to
+the file.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STREAM ACCESS : Execution of an ENDFILE(7F) statement for a file
+connected for STREAM ACCESS causes the terminal point of the file to
+become equal to the current file position. Only file storage units
+before the current position are considered to have been written;
+thus only those file storage units shall be subsequently read.
+Subsequent stream output statements may be used to write further
+data to the file.
+</TD></TR>
+<TR></TR></TABLE>Execution of an ENDFILE(7F) statement for a file that is connected but
+does not exist creates the file; if the file is connected for sequential
+access, it is created prior to writing the endfile record.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>LUN</B> </TD><TD valign=bottom>
+A unit number of a connected file
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+An example of an ENDFILE(7f) statement is:
+<P>
+<PRE>
+        program demo_endfile
+        implicit none
+        integer :: lun, i, j, iostat
+        integer,parameter:: isz=10
+           !
+           ! create a little scratch file
+           open(newunit=lun,file=&#146;_scr.txt&#146;,  &
+           & form=&#146;formatted&#146;,                &
+           & action=&#146;readwrite&#146;)
+           write(lun,&#146;(i0)&#146;)(100+i,i=1,isz)
+           !
+           ! write end of file after reading half of file
+           rewind(lun)
+           write(*,*)&#146;rewind and read&#146;,isz/2,&#146;lines&#146;
+           read(lun,*)(j,i=1,isz/2)
+           endfile lun ! will truncate line at current position
+           !
+           ! NOTE: backspace before writing any addition lines
+           !       once an ENDFILE(7f) statement is executed
+           ! backspace(lun)
+           !
+           ! rewind and echo remaining file
+           rewind(lun)
+           j=0
+           do i=1,huge(0)-1
+              read(lun,*,iostat=iostat)j
+              if(iostat.ne.0)exit
+              write(*,*)i,j
+           enddo
+           write(*,*)&#146;number of lines in file was &#146;,isz,&#146;, is now &#146;,i-1
+           close(unit=lun,status=&#146;delete&#146;)
+        end program demo_endfile
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7),
+PRINT(7), READ(7), REWIND(7), WAIT(7), WRITE(7)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>endfile (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6d395f44-5a66-493d-806f-f9b87f867d40 using man macros.</FONT>
+<br><br><center><img src="images/endfile.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

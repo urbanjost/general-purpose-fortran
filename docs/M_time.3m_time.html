@@ -238,16 +238,16 @@ first day of given month name in specified year</td></tr>
 <dd>
 
 <p>
-   You can easily use Julian Ephemeris Dates and Unix Epoch Times to add
+   You can easily use Julian Dates and Unix Epoch Times to add
    and subtract times from dates or to calculate the interval
    between dates. But JEDs and UETs and even the Gregorian Calendar
    arrays in the DAT arrays are not the way we typically describe a
-   date   on the Civilian Calendar. So the fmtdate(3f) routine lets us
+   date on the Civilian Calendar. So the fmtdate(3f) routine lets us
    print a DAT array in a variety of familiar styles.
 </p>
 
 <p>
-   The fmtdate(3f)  and now(3f) procedures let you display a Gregorian date using
+   The fmtdate(3f) and now(3f) procedures let you display a Gregorian date using
    either keywords for standard formats or using macros in a user-specified
    formatting string. A formatting string may contain the following macros:
 </p>
@@ -272,7 +272,7 @@ Description                                        Example
  Conversions:
       %E -- Unix Epoch time                           1469669062.5129952
       %e -- integer value of Unix Epoch time          1469669063
-      %J -- Julian  date                              2457597.559
+      %J -- Julian date                               2457597.559
       %j -- integer value of Julian Date(Julian Day)  2457597
       %O -- Ordinal day (day of year)                 209
       %o -- whole days since Unix Epoch date          17009
@@ -522,8 +522,8 @@ of it. For example:
 </p>
 
 <p>
-   A  <b>JED</b>  is defined as a <b>Julian Ephemeris Date</b>. JED days start
-   at noon (not at midnight). 4713-01-01 BC at noon is defined as JED 0.0.
+   A  <b>JD</b>  is defined as a <b>Julian Date</b>. JD days start
+   at noon (not at midnight). 4713-01-01 BC at noon is defined as JD 0.0.
 </p>
 
 <p>

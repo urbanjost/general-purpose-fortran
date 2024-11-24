@@ -4,7 +4,7 @@
 !-----------------------------------------------------------------------------------------------------------------------------------
 program display_date
 use M_kracken95, only : kracken, lget, retrev, sget, dget     ! command line parameter cracking module
-use M_time,    only : now,fmtdate_usage,fmtdate,days2sec,d2u,u2d,realtime,guessdate,j2d
+use M_time,    only : now,fmtdate_usage,fmtdate,days2sec,d2u,u2d,realtime,guessdate,j2d,locale
 use m_strings, only : string_to_values, isdigit, isspace, switch
 implicit none
 character(len=*),parameter     :: ident="@(#)now(1f): writes timestamp using specified syntax"
@@ -14,8 +14,9 @@ real(kind=realtime)            :: duration=0
 character(len=:),allocatable   :: output
 !character(len=1),allocatable   :: chars(:)
 integer                        :: ierr, inums
+   call locale('LANGUAGE')
 !- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-   call kracken('now',' -help .F. -version .F. -dat -date -jed -uet -test .false. -delta')  ! crack command line
+   call kracken('now',' -help .F. -version .F. -dat -date -jd -uet -test .false. -delta')  ! crack command line
    call help_version(lget('now_version'))                                    ! display version number if --version is present
 !- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    if(lget('now_help'))then                                        ! display help text and exit if --help is present
@@ -30,8 +31,8 @@ integer                        :: ierr, inums
 !- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    if (sget('now_uet') /= ' ')then
       dat=u2d(dget('now_uet'))                                     ! convert command option to UET number, convert to dat
-   elseif (sget('now_jed') /= ' ')then
-      dat=j2d(dget('now_jed'))                                     ! convert command option to JED number, convert to dat
+   elseif (sget('now_jd') /= ' ')then
+      dat=j2d(dget('now_jd'))                                     ! convert command option to JD number, convert to dat
    elseif (sget('now_dat') /= ' ')then
       dat=u2d()                                                    ! initialize DAT with current date and time to get time zone
       dat=[dat(1),1,1,dat(4),0,0,0,0]                              ! default is Jan 1st in current year and timezone 00:00:00
@@ -72,7 +73,7 @@ text=[ character(len=len(text(1))) ::                                           
 &'   (LICENSE:PD)                                                                 ',&
 &'                                                                                ',&
 &'SYNOPSIS                                                                        ',&
-&'  now [Format [ -date date_str|-ued Unix_time|-jed Julian_Date|-dat date_vector]',&
+&'  now [Format [ -date date_str|-ued Unix_time|-jd Julian_Date|-dat date_vector] ',&
 &'      [ -delta dd-hh:mm:ss]]|--help |--version|-test]                           ',&
 &'                                                                                ',&
 &'DESCRIPTION                                                                     ',&
@@ -102,8 +103,8 @@ text=[ character(len=len(text(1))) ::                                           
 &'      is then adjusted using any -delta value and then printed using            ',&
 &'      the specified format.                                                     ',&
 &'                                                                                ',&
-&'   -jed Julian_Date  :                                                          ',&
-&'      When present a value is used as the Julian Ephemeris Date.                ',&
+&'   -jd Julian_Date  :                                                           ',&
+&'      When present a value is used as the Julian Date.                          ',&
 &'                                                                                ',&
 &'   -delta dd-hh:mm:ss  :                                                        ',&
 &'      Add the specified duration to the date.                                   ',&
@@ -205,7 +206,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      Copyright (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-06-29 21:53:47 UTC-240>',&
+'@(#)COMPILED:       2024-11-24 04:44:40 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

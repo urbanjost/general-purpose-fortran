@@ -22,8 +22,8 @@
            call drawstr('aA')
         enddo
         ! write plot as GIF file
-        call writegif('textsize.3M_pixel.gif',P_pixel,P_colormap)
+        call writegif('textsize.3m_pixel.gif',P_pixel,P_colormap)
         call vexit()
         ! use system to display GIF file
-        call execute_command_line('display textsize.3M_pixel.gif')
+        call execute_command_line('display textsize.3m_pixel.gif')
      end program demo_textsize

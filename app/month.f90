@@ -3,7 +3,7 @@
 !===================================================================================================================================
 program month_exe
 use M_kracken95, only : kracken,iget,lget,sget                       ! command line parsing
-use M_time,    only : box_month, mo2v                                ! date and time
+use M_time,    only : box_month, mo2v, locale                        ! date and time
 implicit none
 character(len=*),parameter :: ident="@(#)month(1f):print calendar"
 character(len=21)       :: calen(8)='                    '           ! character array to hold month
@@ -16,6 +16,7 @@ character(len=21)       :: cscr
    call kracken('month',' -year -month 0 -help .f. -version .f.')    ! crack command line arguments
    call help_usage(lget('month_help'))                               ! print help information and stop if requested
    call help_version(lget('month_version'))                          ! print version information and stop if requested
+   call locale('LANGUAGE')
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! use user-specified year date instead of current year. Try reading year from two places (-oo and -year) on command line
    if(sget('month_year') /= ' ')then                                 ! check -year option for a year value
@@ -165,7 +166,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-06-29 21:53:53 UTC-240>',&
+'@(#)COMPILED:       2024-11-24 04:44:41 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -22,6 +22,7 @@ public :: ctrper
 !!       o Real(kind=real32)
 !!       o Real(kind=real64)
 !!       o Integer(kind=int32)
+!!       o Integer(kind=int64)
 !!       o Character(kind=selected_char_kind("DEFAULT"),len=*)
 !!
 !!##DESCRIPTION
@@ -188,6 +189,25 @@ Subroutine int32_CTRPER (INOUTVALS, CLOSENESS)
       INOUTVALS = INOUTVALS (JWRKT)
 !
 End Subroutine int32_CTRPER
+Subroutine int64_CTRPER (INOUTVALS, CLOSENESS)
+! _________________________________________________________
+      Integer (kind=int64), Dimension (:), Intent (InOut) :: INOUTVALS
+      Real, Intent (In) :: CLOSENESS
+! __________________________________________________________
+!
+      Real, Dimension (Size(INOUTVALS)) :: XINDT
+      Integer, Dimension (Size(INOUTVALS)) :: JWRKT
+      Real :: PWRK
+      Integer :: I
+!
+      Call Random_Number (XINDT(:))
+      PWRK = Min (Max (0.0, CLOSENESS), 1.0)
+      XINDT = Real(Size(INOUTVALS)) * XINDT
+      XINDT = PWRK*XINDT + (1.0-PWRK)*[ (Real(I), I=1,size(INOUTVALS)) ]
+      Call MRGRNK (XINDT, JWRKT)
+      INOUTVALS = INOUTVALS (JWRKT)
+!
+End Subroutine int64_CTRPER
 Subroutine f_char_CTRPER (INOUTVALS, CLOSENESS)
 ! _________________________________________________________
       character (kind=f_char,len=*), Dimension (:), Intent (InOut) :: INOUTVALS

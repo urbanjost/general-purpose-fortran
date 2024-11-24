@@ -78,13 +78,26 @@ an environment variable
 
 </A>
 <BLOCKQUOTE>
-function get_env(NAME,DEFAULT) result(VALUE)
+function get_env(NAME,DEFAULT,IERR=IERR) result(VALUE)
 <P>
 <PRE>
-    character(len=*),intent(in)          :: NAME
-    character(len=*),intent(in),optional :: DEFAULT
-    character(len=:),allocatable         :: VALUE
+    character(len=*),intent(in)            :: NAME
 <P>
+    ! ONE OF &#46;&#46;&#46;
+    o character(len=*),intent(in),optional :: DEFAULT
+    o real,intent(in),optional             :: DEFAULT
+    o integer,intent(in),optional          :: DEFAULT
+    o doubleprecision,intent(in),optional  :: DEFAULT
+    o logical,intent(in),optional          :: DEFAULT
+<P>
+    integer,intent(out),optional           :: IERR
+<P>
+    ! ONE OF THE FOLLOWING, MATCHING TYPE OF DEFAULT
+    o character(len=:),allocatable         :: VALUE
+    o integer                              :: VALUE
+    o real                                 :: VALUE
+    o doubleprecision                      :: VALUE
+    o logical                              :: VALUE
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -95,10 +108,10 @@ function get_env(NAME,DEFAULT) result(VALUE)
 </A>
 <BLOCKQUOTE>
 Get the value of an environment variable or optionally return a
-default value if the returned value would be a blank string.
+default value when the environment variable is not set or is set
+to a blank string.
 <P>
-This is a duplicate of system_getenv(3m_system) used to avoid
-some interdependencies.
+The type returned is the same as the type of the default value.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -114,7 +127,8 @@ name of environment variable
 <TR valign=top><TD colspan=2>
 <B>DEFAULT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 value to return if environment variable is not set or set
-to an empty string
+to an empty string. May be CHARACTER, REAL, INTEGER,
+LOGICAL or DOUBLEPRECISION. Defaults to a null CHARACTER value.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
@@ -126,7 +140,19 @@ to an empty string
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>VALUE</B> </TD><TD valign=bottom>
-the value of the environment variable or the default
+the value of the environment variable or the default.
+The type is the same as DEFAULT. If an error occurs and it
+is numeric, huge(0|0.0|0.0d0) is returned.
+<P>
+For a LOGICAL type, Any environment variable value starting
+with F,f,N or n is .FALSE. and any value starting with
+Y,y,T or t is true. A leading period (".") is ignored.
+Anything else returns .false. .
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IERR</B> </TD><TD valign=bottom>
+return error code. Must be specified with a keyword.
+It is zero if no error occurred.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -138,13 +164,56 @@ the value of the environment variable or the default
 Sample program:
 <P>
 <PRE>
-      program demo_get_env
-      use M_io, only : get_env
-      character(len=:),allocatable :: HOME
-         HOME=get_env(&#146;HOME&#146;,&#146;UNKNOWN&#146;)
-         write(*,&#146;(a)&#146;)HOME,get_env(&#146;PATH&#146;)
-         write(*,&#146;(a)&#146;)get_env(&#146;HOME&#146;),get_env(&#146;PATH&#146;)
-      end program demo_get_env
+   program demo_get_env
+   use M_io, only : get_env, getname
+   character(len=*),parameter :: g=&#146;(*(g0))&#146;
+   integer :: ierr
+   character(len=:),allocatable :: HOME
+     !Basics
+      HOME=get_env(&#146;HOME&#146;,&#146;UNKNOWN&#146;)
+      write(*,&#146;(a)&#146;)HOME
+      write(*,&#146;(a)&#146;)Get_env(&#146;PATH&#146;)
+<P>
+     !call this program setting STOP=RUN unless STOP=RUN
+     !otherwise print various environment variable values
+     !converted to various types
+      if(get_env(&#146;STOP&#146;).eq.&#146;RUN&#146;)then
+         write(*,g)repeat(&#146;-&#146;,80)
+         write(*,g)get_env(&#146;CHARACTER&#146;,&#146;string&#146;)
+         write(*,g)get_env(&#146;INTEGER&#146;,100)
+         write(*,g)get_env(&#146;REAL&#146;,200.0)
+         write(*,g)get_env(&#146;DOUBLE&#146;,300.0d0)
+         write(*,g)get_env(&#146;LOGICAL&#146;,.true.)
+<P>
+         write(*,g)repeat(&#146;-&#146;,80)
+         write(*,g)get_env(&#146;CHARACTER&#146;,&#146;string&#146;,ierr=ierr)
+         write(*,*)&#146;ierr=&#146;,ierr
+         write(*,g)get_env(&#146;INTEGER&#146;,100,ierr=ierr)
+         write(*,*)&#146;ierr=&#146;,ierr
+         write(*,g)get_env(&#146;REAL&#146;,200.0,ierr=ierr)
+         write(*,*)&#146;ierr=&#146;,ierr
+         write(*,g)get_env(&#146;DOUBLE&#146;,300.0d0,ierr=ierr)
+         write(*,*)&#146;ierr=&#146;,ierr
+         write(*,g)get_env(&#146;LOGICAL&#146;,.true.)
+         write(*,*)&#146;ierr=&#146;,ierr
+<P>
+         write(*,g)repeat(&#146;-&#146;,80)
+         write(*,g)get_env(&#146;CHARACTER&#146;)
+         write(*,g)get_env(&#146;HOME&#146;)
+       else
+         write(*,g)repeat(&#146;-&#146;,80)
+         call execute_command_line(&#146;env STOP=RUN &#146;//getname())
+         call execute_command_line(&#146;env STOP=RUN CHARACTER=aaaa &
+         & INTEGER=1 REAL=2.3 DOUBLE=444444444444 &#146;//getname())
+         call execute_command_line(&#146;env STOP=RUN CHARACTER=bbbb &
+         & INTEGER=1 REAL=2.3 DOUBLE=44.555 &#146;//getname())
+         call execute_command_line(&#146;env STOP=RUN CHARACTER=cccc &
+         & INTEGER=asdf REAL=asdf DOUBLE=adsf &#146;//getname())
+         write(*,g)repeat(&#146;-&#146;,80)
+         stop
+      endif
+<P>
+   end program demo_get_env
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -154,10 +223,14 @@ Sample program:
 
 </A>
 <BLOCKQUOTE>
+This duplicates system_getenv(3m_system) in most respects but avoids
+some interdependencies as M_system(3) currently requires a POSIX
+programming environment.
+<P>
 get_environment_variable(3fortran), system_getenv(3m_system),
 set_environment_variable(3m_system), system_putenv(3m_system),
 system_clearenv(3m_system), system_initenv(3m_system),
-system_readenv(3m_system), system_unsetenv(3m_system)
+system_getenv(3m_system), system_unsetenv(3m_system)
 </BLOCKQUOTE>
 <A name=7>
 
@@ -176,7 +249,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_env (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 14789bf7-2ac3-4fb3-b609-b6f93a2d142c using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>get_env (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bb087acb-d988-4a08-ae3a-1fc072ca698c using man macros.</FONT>
 <br><br><center><img src="images/get_env.3m_io.gif"></center>
 </div>
 </div>

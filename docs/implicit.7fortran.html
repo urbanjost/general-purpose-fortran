@@ -50,14 +50,16 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>implicit (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-IMPLICIT(7f) - [FORTRAN:STATEMENT] specify default type (if any)
-associated to a starting letter
+<P>
+IMPLICIT(7f) - [STATEMENT] specify default type associated to a starting
+letter or disallow implicit typing
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -68,7 +70,8 @@ associated to a starting letter
 
 </A>
 <BLOCKQUOTE>
-IMPLICIT [NONE]|[declaration-type-spec (letter-spec-list)]
+<P>
+implicit [NONE]|[declaration-type-spec (letter-spec-list)]
 </BLOCKQUOTE>
 <A name=2>
 
@@ -76,86 +79,146 @@ IMPLICIT [NONE]|[declaration-type-spec (letter-spec-list)]
 
 </A>
 <BLOCKQUOTE>
-Determine default mapping between the first letter of a data entity
-and a type.
 <P>
-Every data entity has a type. If a type is not explicitly assigned to
-a variable or function it will (by default) be assigned one according
-to the following rule -- the type is INTEGER if the name starts with
-the letters from I to N (the first two letters of the word "integer");
-otherwise it defaults to REAL.
+Determine default mapping between the first letter of a data entity and
+a type. The default is the equivalent of the statement
 <P>
-The IMPLICIT statement allows the default rule to be changed or set
-to null. To turn off implicit typing enter one and only one IMPLICIT
-statement in the scoping unit
+<PRE>
+          implicit real(a-h,o-z),integer(i-n)
+<P>
+</PRE>
+Compiler switches often allow the default to be the commonly recommended
+<P>
+<PRE>
+          implicit none ! require all variables to have type statements
+<P>
+</PRE>
+This requires that the procedures be written using "strong typing";
+where every variable subsequently has to be defined in a type
+declaration statement.
+<P>
+If implicit typing is turned off you do not need to know all the scoping
+rules for implicit typing, which by itself is a significant reason for
+turning it off.
+<P>
+When a large number of variable names are used with strong typing a
+significant number of lines of code need added to declare the variables;
+but strong typing is still almost universally recommended where
+terseness is not critical (as is sometimes the case in interactive usage
+or quick prototyping).
+<P>
+Every data entity has a type (INTEGER, REAL, CHARACTER, &#46;&#46;&#46;). If a type
+is not explicitly assigned to a variable or function it will (by
+default) be assigned one according to the following rule -- the type is
+INTEGER if the name starts with the letters from I to N (the first two
+letters of the word "integer"); otherwise it defaults to REAL.
+<P>
+The IMPLICIT statement allows the default rule to be changed or set to
+null.
+<P>
+To turn off implicit typing enter one and only one IMPLICIT statement in
+the scoping unit
 <P>
 <PRE>
       implicit none ! Disable all implicit typing
 <P>
 </PRE>
-Each data entity will now require explicitly having a type declared
+Each data entity will now require having a type declared explicitly
 (INTEGER, REAL, DOUBLE, COMPLEX, &#46;&#46;&#46;).
 <P>
-This must appear after any USE statements and before any type
-declarations, including PARAMETER statements (which must know the
-rules to determine what type names are that have not been explicitly
+The statement must appear after any USE statements and before any type
+declarations, including PARAMETER statements (which must know the rules
+to determine what type names are that have not been explicitly
 declared).
 <P>
-In most new code implicit typing is turned off either with an
-"IMPLICIT NONE" or sometimes by a compiler switch. On the other hand,
-the majority of pre-fortran90 code depends on implicit defaults.
+In most new code implicit typing is turned off either with an "IMPLICIT
+NONE" or sometimes by a compiler switch. On the other hand, the majority
+of pre-fortran90 code depends on implicit defaults.
 <P>
-Each prefix letter may have the type assigned to it declared only
-once in a unit.
+Each prefix letter may have the type assigned to it declared only once
+in a unit.
 <P>
-The default rule, expressed as an IMPLICIT statement is
+As previously stated, the default rule, expressed as an IMPLICIT
+statement is
 <P>
 <PRE>
-      implicit real(a-h,o-z),integer(i-k)
+          implicit real(a-h,o-z),integer(i-n)
 <P>
 </PRE>
-To make the default for all names be a DOUBLEPRECISION type one could enter
+To make the default for all names be a DOUBLEPRECISION type one could
+enter
 <P>
 <PRE>
-      implicit doubleprecision (a-h,o-z)
+          implicit doubleprecision (a-z)
+<P>
+</PRE>
+NOTE: The standard does not require constants to be affected, so a type
+suffix is required for most constants. That is, even if A is implicitly
+double-precision
+<P>
+<PRE>
+         A=123456789.01234 ! only retains the precision of a default REAL
+<P>
+           A=123456789.01234D0 ! precision of a double will be retained
 <P>
 </PRE>
 In another unit one might specify (multiple statements and compound
 statements are allowed, as illustrated):
 <P>
 <PRE>
-      implicit complex (c), doubleprecision (d)
-      implicit integer (i)
-      implicit logical (l)
-      implicit real (r)
-      implicit character(len=8) (a,b,e-h,j,k,m-q,s-z)
+          implicit complex (c), doubleprecision (d)
+          implicit integer (i)
+          implicit logical (l)
+          implicit real (r)
+          implicit character(len=8) (a,b,e-h,j,k,m-q,s-z)
 <P>
 </PRE>
-There is no way to make some letters default to no type and others
-have a default. Either nothing has a default type or everything does:
+There is no way to make some letters default to no type and others have
+a default. Either nothing has a default type or everything does. You can
+however make a default be a user-defined null type.
 <P>
 <PRE>
-      implicit (a-h)  ! NOT ALLOWED. A TYPE MUST BE SPECIFIED
+          subroutine sub1()
+          ! cannot do a "implicit none" on just some letters.
+          ! and a type is required so
+          ! implicit (a-h)  ! NOTE: NOT ALLOWED. TYPE IS REQUIRE0
+          ! but you can make the default an user-defined type &#46;&#46;&#46;
+          ! notice the (incidently empty) type is defined below
+          ! the implicit statement
+          implicit nil(a-h) ! or implicit type(nil) (a)
+          !
+          type nil
+          end type nil
+          type(nil) :: anull
+          end subroutine sub1
 <P>
 </PRE>
 The default for an internal or module procedure is the mapping in the
-host scoping unit.
-</BLOCKQUOTE>
+host scoping unit. That is, a single "IMPLICIT NONE" in the global top
+section of a module makes the default be "IMPLICIT NONE" in any
+contained procedure.
 <P>
-Any data entity that is not explicitly declared by a type declaration
+Explicitly setting a variable type always overides the default so any
+data entity that is not explicitly declared by a type declaration
 statement, is not an intrinsic function, and is not accessed by use or
 host association is declared implicitly to be of the type (and type
 parameters) mapped from the first letter of its name, provided the
-mapping is not null.
-<BLOCKQUOTE>
+mapping is not null. But anything accessed by a USE statement retains
+the type it had in the scoping unit in which it was declared.
 <P>
-The mapping may be to a derived type that is inaccessible in the local
-scope if the derived type is accessible in the host scoping unit. The
-data entity is treated as if it were declared in an explicit type
+This means the mapping may be to a derived type that is inaccessible in
+the local scope if the derived type is accessible in the host scoping
+unit. That is, if you import the variable "FRED" of type "GOO" from a
+module; "FRED" is of type "GOO" even if type "GOO" is private in the
+module defining "FRED". That is, variable "FRED" retains the type "GOO"
+even if you cannot declare variables of type "GOO" in the current
+scoping unit.
+<P>
+So the data entity is treated as if it were declared in an explicit type
 declaration in the outermost scoping unit in which it appears. An
-explicit type specification in a FUNCTION statement overrides
-an IMPLICIT statement for the name of the result variable of that
-function subprogram.
+explicit type specification in a FUNCTION statement overrides an
+IMPLICIT statement for the name of the result variable of that function
+subprogram.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -163,24 +226,27 @@ function subprogram.
 
 </A>
 <BLOCKQUOTE>
+<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>NONE</B> </TD><TD valign=bottom>
-If IMPLICIT NONE is specified in a scoping unit,
-it shall precede any PARAMETER statements
-that appear in the scoping unit and there shall be
-no other IMPLICIT statements in the scoping unit.
+Turns off implicit typing. Recommended. It must
+follow USE statements but be before any variable
+<TABLE width=100% cellpadding=3><!-- tsb: Turns off implicit typing. Recommended. It must
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>declarations, including PARAMETER statements.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+When used
+there shall be no other IMPLICIT statements in the
+scoping unit.
 </TD></TR>
-<TR><TD colspan=2>
-<PRE>
-                  or
-<P>
-</PRE>
-declaration-type-spec
+<TR></TR></TABLE><!-- .TP -->
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>letter-spec</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is (letter-or-range[,letter-or-range] [,letter-or-range] )
+<B>TYPE() letter-spec</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is
+(letter-or-range[,letter-or-range] [,letter-or-range] )
 If the minus and second letter appear, the second
 letter shall follow the first letter alphabetically.
 A letter-spec consisting of two letter s separated by
@@ -200,81 +266,135 @@ in a scoping unit.
 
 </A>
 <BLOCKQUOTE>
+<P>
 The following are examples of the use of IMPLICIT statements:
 <P>
 <PRE>
-        module example_module
-           implicit none
-           &#46;&#46;&#46;
-           interface
-              function fun (i)    ! not all data entities need to
-                 integer fun      ! be declared explicitly
-              end function fun
-           end interface
-        contains
-           function jfun (j)      ! all data entities need to
-              integer jfun, j     ! be declared explicitly.
-              &#46;&#46;&#46;
-           end function jfun
-        end module example_module
+            module example_module
+               implicit none
+               &#46;&#46;&#46;
+               interface
+                  function fun (i)    ! not all data entities need to
+                     integer fun      ! be declared explicitly, so I
+                  end function fun    ! does not need declared
+               end interface
+            contains
+               function jfun (j)      ! all data entities need to
+                  integer jfun, j     ! be declared explicitly.
+                  &#46;&#46;&#46;
+               end function jfun
+            end module example_module
 <P>
-        subroutine sub
-           implicit complex (c)
-           CM = (3.0, 2.0)      ! CM is implicitly declared COMPLEX
-           &#46;&#46;&#46;
-        contains
-           subroutine sub1
-              IMPLICIT INTEGER (A, C)
-              C = (0.0, 0.0) ! C is host associated and of
-                             ! type complex
-              Z = 1.0        ! Z is implicitly declared REAL
-              A = 2          ! A is implicitly declared INTEGER
-              CC = 1         ! CC is implicitly declared INTEGER
-              &#46;&#46;&#46;
-           end subroutine sub1
-           subroutine sub2
-              Z = 2.0         ! Z is implicitly declared REAL and
-                              ! is different from the variable of
-                              ! the same name in SUB1
-              &#46;&#46;&#46;
-           end subroutine sub2
-           subroutine sub3
-              USE EXAMPLE_MODULE ! Accesses integer function FUN
-                                  ! by use association
-              Q = FUN (K)         ! Q is implicitly declared REAL and
-              &#46;&#46;&#46;                 ! K is implicitly declared INTEGER
-           end subroutine sub3
-        end subroutine sub
+            subroutine sub
+               implicit complex (c)
+               CM = (3.0, 2.0)      ! CM is implicitly declared COMPLEX
+               &#46;&#46;&#46;
+            contains
+               subroutine sub1
+                  IMPLICIT INTEGER (A, C)
+                  C = (0.0, 0.0) ! C is host associated and of
+                                 ! type complex
+                  Z = 1.0        ! Z is implicitly declared REAL
+                  A = 2          ! A is implicitly declared INTEGER
+                  CC = 1         ! CC is implicitly declared INTEGER
+                  &#46;&#46;&#46;
+               end subroutine sub1
+               subroutine sub2
+                  Z = 2.0         ! Z is implicitly declared REAL and
+                                  ! is different from the variable of
+                                  ! the same name in SUB1
+                  &#46;&#46;&#46;
+               end subroutine sub2
+               subroutine sub3
+                  USE EXAMPLE_MODULE ! Accesses integer function FUN
+                                      ! by use association
+                  Q = FUN (K)         ! Q is implicitly declared REAL and
+                  &#46;&#46;&#46;                 ! K is implicitly declared INTEGER
+               end subroutine sub3
+            end subroutine sub
 <P>
 </PRE>
 The following is an example of a mapping to a derived type that is
 inaccessible in the local scope:
 <P>
 <PRE>
-              program main
-                implicit type(blob) (a)
-                type blob
-                  integer :: i
-                end type blob
-                type(blob) :: b
-                call steve
-              contains
-                subroutine steve
-                  integer :: blob
-                  ..
-                  aa = b
-                  ..
-                end subroutine steve
-              end program main
+                  program main
+                    implicit type(blob) (a)
+                    type blob
+                      integer :: i
+                    end type blob
+                    type(blob) :: b
+                    call steve
+                  contains
+                    subroutine steve
+                      integer :: blob
+                      !..
+                      aa = b
+                      !..
+                    end subroutine steve
+                  end program main
 <P>
 </PRE>
-In the subroutine STEVE, it is not possible to explicitly declare a
+In the subroutine STEVE(), it is not possible to explicitly declare a
 variable to be of type BLOB because BLOB has been given a different
 meaning, but implicit mapping for the letter A still maps to type BLOB,
 so AA is of type BLOB.
+<P>
+<PRE>
+       program demo_implicit
+       ! everything accessed via USE already has a type and comes
+       ! before an implicit statement; but implicit rules are not
+       ! inherited from modules
+       use, intrinsic :: iso_fortran_env, only : stderr=&gt;ERROR_UNIT
+       !
+       ! the implicit statement must come before other declarations
+       ! in new code using this turns on strong typing (that is,every
+       ! variable has to have its type declared in a statement). This
+       ! is generally highly recommended for new code.
+       implicit none
+       ! it is still a convention used by many programmers to reserve
+       ! starting letters of I to N for integers.
+       integer    :: i, j, k
+       type(real) :: x,y,z
+       intrinsic sin,cos ! intrinsic types are already specified
+       integer,external :: zzz ! but external functions need declared
+                               ! if they do not have an interface
+       call sub1()
+       call sub2()
+       contains
+       subroutine sub1()
+       ! the implicit none above became the default for contained
+       ! procedures so no reason to repeat it. So only required once
+       ! in main procedure or once in top of a module to change the
+       ! default of all procedures defined after a CONTAINS statement
+       integer :: i=10,j=20
+          write(*,*)&#146;I=&#146;,i,&#146;J=&#146;,j
+       end subroutine sub1
+       subroutine sub2()
+       ! a contained subroutine can override the default created in the
+       ! containing scope though
+       implicit complex(a-z)
+          A=(10,20)
+          write(*,*)&#146;A=&#146;,a
+       end subroutine sub2
+       end
+       integer function zzz()
+           zzz=1234
+       end function zzz
+       !end program demo_implicit
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+     &gt;  I=          10 J=          20
+     &gt;  A=             (10.0000000,20.0000000)
+<P>
+</PRE>
+Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>implicit (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 45530e1c-2ed5-4995-914e-93b82db35fcd using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>implicit (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 02792fca-548d-4204-b769-0043bdc97533 using man macros.</FONT>
 <br><br><center><img src="images/implicit.7fortran.gif"></center>
 </div>
 </div>

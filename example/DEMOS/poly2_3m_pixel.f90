@@ -20,7 +20,7 @@
            enddo
            xx=xx+16.0
         enddo
-        call writegif('poly2.3M_pixel.gif',P_pixel,P_colormap)
+        call writegif('poly2.3m_pixel.gif',P_pixel,P_colormap)
         call vexit()
      contains
 

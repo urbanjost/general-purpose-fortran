@@ -50,114 +50,54 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>open (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-OPEN(7f) - [FORTRAN:IO] Initiates or modifies a connection between an external file and a specified unit.
+<P>
+open(7f) - [IO] Initiates or modifies a connection between an external
+file and a specified unit.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=7>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
-OPEN (connect-spec-list)
-<TABLE cellpadding=3><!-- tsb: OPEN (connect-spec-list)
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>connect-spec</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is   [ UNIT = ] file-unit-number
-<TABLE width=100% cellpadding=3><!-- tsb: is   [ UNIT = ] file-unit-number
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-ACCESS = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-ACTION = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-ASYNCHRONOUS = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-BLANK = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-DECIMAL = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-DELIM = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-ENCODING = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-ERR = label
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-FILE = file-name-expr
-file-name-expr is scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-FORM = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-IOMSG = iomsg-variable
-iomsg-variable is scalar-default-char-variable
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-IOSTAT = scalar-int-variable
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-NEWUNIT = scalar-int-variable
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-PAD = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-POSITION = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-RECL = scalar-int-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-ROUND = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-SIGN = scalar-default-char-expr
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-STATUS = scalar-default-char-expr
-</TD></TR>
-<TR></TR></TABLE></TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+OPEN (
+<P>
+<PRE>
+         [ UNIT = ] file-unit-number
+         ACCESS = scalar-default-char-expr
+         ACTION = scalar-default-char-expr
+         ASYNCHRONOUS = scalar-default-char-expr
+         BLANK = scalar-default-char-expr
+         DECIMAL = scalar-default-char-expr
+         DELIM = scalar-default-char-expr
+         ENCODING = scalar-default-char-expr
+         ERR = label
+         FILE = file-name-scalar-default-char-expr
+         FORM = scalar-default-char-expr
+         IOMSG = scalar-default-char-variable
+         IOSTAT = scalar-int-variable
+         NEWUNIT = scalar-int-variable
+         PAD = scalar-default-char-expr
+         POSITION = scalar-default-char-expr
+         RECL = scalar-int-expr
+         ROUND = scalar-default-char-expr
+         SIGN = scalar-default-char-expr
+         STATUS = scalar-default-char-expr
+<P>
+</PRE>
+)
+</BLOCKQUOTE>
 <A name=2>
 
      <H3>DESCRIPTION</H3>
@@ -165,39 +105,52 @@ STATUS = scalar-default-char-expr
 </A>
 <BLOCKQUOTE>
 <P>
-An OPEN statement initiates or modifies the connection between an external file and a specified unit. The
-OPEN statement may be used to connect an existing file to a unit, create a file that is preconnected, create a file
-and connect it to a unit, or change certain modes of a connection between a file and a unit.
+An OPEN statement initiates or modifies the connection between an
+external file and a specified unit. The OPEN statement may be used to
+connect an existing file to a unit, create a file that is preconnected,
+create a file and connect it to a unit, or change certain modes of a
+connection between a file and a unit.
 <P>
-An external unit may be connected by an OPEN statement in the main program or any subprogram and, once
-connected, a reference to it may appear in any program unit of the program.
+An external unit may be connected by an OPEN statement in the main
+program or any subprogram and, once connected, a reference to it may
+appear in any program unit of the program.
 <P>
-If the file to be connected to the unit does not exist but is the same as the file to which the unit is preconnected,
-the modes specified by an OPEN statement become a part of the connection.
+If the file to be connected to the unit does not exist but is the same
+as the file to which the unit is preconnected, the modes specified by an
+OPEN statement become a part of the connection.
 <P>
-If the file to be connected to the unit is not the same as the file to which the unit is connected, the effect is as
-if a CLOSE statement without a STATUS= specifier had been executed for the unit immediately prior to the
-execution of an OPEN statement.
+If the file to be connected to the unit is not the same as the file to
+which the unit is connected, the effect is as if a CLOSE statement
+without a STATUS= specifier had been executed for the unit immediately
+prior to the execution of an OPEN statement.
 <P>
-If a unit is connected to a file that exists, execution of an OPEN statement for that unit is permitted. If the
-FILE= specifier is not included in such an OPEN statement, the file to be connected to the unit is the same as
-the file to which the unit is already connected.
+If a unit is connected to a file that exists, execution of an OPEN
+statement for that unit is permitted. If the FILE= specifier is not
+included in such an OPEN statement, the file to be connected to the unit
+is the same as the file to which the unit is already connected.
 <P>
-If the file to be connected to the unit is the same as the file to which the unit is connected, only the specifiers for
-changeable modes (9.5.2) may have values different from those currently in effect. If the POSITION= specifier
-appears in such an OPEN statement, the value specified shall not disagree with the current position of the file.
-If the STATUS= specifier is included in such an OPEN statement, it shall be specified with the value OLD.
-Execution of such an OPEN statement causes any new values of the specifiers for changeable modes to be in
-effect, but does not cause any change in any of the unspecified specifiers and the position of the file is unaffected.
-The ERR=, IOSTAT=, and IOMSG= specifiers from any previously executed OPEN statement have no effect
-on any currently executed OPEN statement.
+If the file to be connected to the unit is the same as the file to which
+the unit is connected, only the specifiers for changeable modes (9.5.2)
+may have values different from those currently in effect. If the
+POSITION= specifier appears in such an OPEN statement, the value
+specified shall not disagree with the current position of the file. If
+the STATUS= specifier is included in such an OPEN statement, it shall be
+specified with the value OLD. Execution of such an OPEN statement causes
+any new values of the specifiers for changeable modes to be in effect,
+but does not cause any change in any of the unspecified specifiers and
+the position of the file is unaffected. The ERR=, IOSTAT=, and IOMSG=
+specifiers from any previously executed OPEN statement have no effect on
+any currently executed OPEN statement.
 <P>
-A STATUS= specifier with a value of OLD is always allowed when the file to be connected to the unit is the same
-as the file to which the unit is connected. In this case, if the status of the file was SCRATCH before execution of
-the OPEN statement, the file will still be deleted when the unit is closed, and the file is still considered to have
-a status of SCRATCH.
+A STATUS= specifier with a value of OLD is always allowed when the file
+to be connected to the unit is the same as the file to which the unit is
+connected. In this case, if the status of the file was SCRATCH before
+execution of the OPEN statement, the file will still be deleted when the
+unit is closed, and the file is still considered to have a status of
+SCRATCH.
 <P>
-If a file is already connected to a unit, an OPEN statement on that file with a different unit shall not be executed.
+If a file is already connected to a unit, an OPEN statement on that file
+with a different unit shall not be executed.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -206,195 +159,207 @@ If a file is already connected to a unit, an OPEN statement on that file with a 
 </A>
 <BLOCKQUOTE>
 <P>
-A specifier that requires a scalar-default-char-expr may have a
-limited list of character values. These values are listed for each
-such specifier. Any trailing blanks are ignored. The value specified
-is without regard to case. Some specifiers have a default value if the
+A specifier that requires a scalar-default-char-expr may have a limited
+list of character values. These values are listed for each such
+specifier. Any trailing blanks are ignored. The value specified is
+without regard to case. Some specifiers have a default value if the
 specifier is omitted. No specifier shall appear more than once in a
 given connect-spec-list.
 <P>
-If the NEWUNIT= specifier does not appear, a file-unit-number shall
-be specified; if the optional characters UNIT= are omitted, the
+If the NEWUNIT= specifier does not appear, a file-unit-number shall be
+specified; if the optional characters UNIT= are omitted, the
 file-unit-number shall be the first item in the connect-spec-list.
 <P>
-The label used in the ERR= specifier shall be the statement label of
-a branch target statement that appears in the same scoping unit as the
+The label used in the ERR= specifier shall be the statement label of a
+branch target statement that appears in the same scoping unit as the
 OPEN statement.
 <P>
 If a NEWUNIT= specifier appears, a file-unit-number shall not appear.
-<TABLE cellpadding=3><!-- tsb: If a NEWUNIT= specifier appears, a file-unit-number shall not appear.
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>IOSTAT=, ERR=, and IOMSG=</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-specifiers are described in 9.11.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <P>
-<P>
+IOSTAT=, ERR=, and IOMSG= specifiers are described in 9.11.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>KEYWORDS</H3>
+
+</A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>ACCESS</B> </TD><TD valign=bottom>
-The scalar-default-char-expr shall evaluate to SEQUENTIAL, DIRECT, or STREAM. The ACCESS= specifier
-specifies the access method for the connection of the file as being sequential, direct, or stream. If this specifier is
-omitted, the default value is SEQUENTIAL. For an existing file, the specified access method shall be included in
-the set of allowed access methods for the file. For a new file, the processor creates the file with a set of allowed
-access methods that includes the specified method.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>ACTION</B> </TD><TD valign=bottom>
-The scalar-default-char-expr shall evaluate to READ, WRITE, or READWRITE. READ specifies that the
-WRITE, PRINT, and ENDFILE statements shall not refer to this connection. WRITE specifies that READ
-statements shall not refer to this connection. READWRITE permits any input/output statements to refer to this
-connection. If this specifier is omitted, the default value is processor dependent. If READWRITE is included in
-the set of allowable actions for a file, both READ and WRITE also shall be included in the set of allowed actions
-for that file. For an existing file, the specified action shall be included in the set of allowed actions for the file.
-For a new file, the processor creates the file with a set of allowed actions that includes the specified action.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>ASYNCHRONOUS</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The scalar-default-char-expr shall evaluate to YES or NO. If YES is specified, asynchronous input/output on
-the unit is allowed. If NO is specified, asynchronous input/output on the unit is not allowed. If this specifier is
-omitted, the default value is NO.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>BLANK</B> </TD><TD valign=bottom>
-The scalar-default-char-expr shall evaluate to NULL or ZERO. The BLANK= specifier is permitted only for a
-connection for formatted input/output. It specifies the current value of the blank interpretation mode
-(10.8.6, 9.6.2.6) for input for this connection. This mode has no effect on output. It is a changeable mode (9.5.2).
-If this specifier is omitted in an OPEN statement that initiates a connection, the default value is NULL.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>DECIMAL</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The scalar-default-char-expr shall evaluate to COMMA or POINT. The DECIMAL= specifier is permitted only
-for a connection for formatted input/output. It specifies the current value of the decimal edit mode
-(10.6, 10.8.8, 9.6.2.7)
-for this connection. This is a changeable mode (9.5.2). If this specifier is omitted in an OPEN statement
-that initiates a connection, the default value is POINT.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>DELIM</B> </TD><TD valign=bottom>
-The scalar-default-char-expr shall evaluate to APOSTROPHE, QUOTE, or NONE. The DELIM= specifier is
-permitted only for a connection for formatted input/output. It specifies the current value of the delimiter mode
-(9.6.2.8) for list-directed (10.10.4) and namelist (10.11.4.2) output for the connection. This mode has no effect
-on input. It is a changeable mode (9.5.2). If this specifier is omitted in an OPEN statement that initiates a
-connection, the default value is NONE.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>ENCODING</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The scalar-default-char-expr shall evaluate to UTF-8 or DEFAULT. The ENCODING= specifier is permitted
-only for a connection for formatted input/output. The value UTF-8 specifies that the encoding form of the file is
-UTF-8 as specified by ISO/IEC 10646-1:2000. Such a file is called a Unicode file, and all characters therein are
-of ISO 10646 character type. The value UTF-8 shall not be specified if the processor does not support the ISO
-10646 character type. The value DEFAULT specifies that the encoding form of the file is processor-dependent.
-If this specifier is omitted in an OPEN statement that initiates a connection, the default value is DEFAULT.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>FILE</B> </TD><TD valign=bottom>
-The value of the FILE= specifier is the name of the file to be connected to the specified unit. Any trailing blanks
-are ignored. The file-name-expr shall be a name that is allowed by the processor. If this specifier is omitted and
-the unit is not connected to a file, the STATUS= specifier shall be specified with a value of SCRATCH; in this
-case, the connection is made to a processor-dependent file. The interpretation of case is processor dependent.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>FORM</B> </TD><TD valign=bottom>
-The scalar-default-char-expr shall evaluate to FORMATTED or UNFORMATTED. The FORM= specifier determines
-whether the file is being connected for formatted or unformatted input/output. If this specifier is omitted,
-the default value is UNFORMATTED if the file is being connected for direct access or stream access, and the
-default value is FORMATTED if the file is being connected for sequential access. For an existing file, the specified
-form shall be included in the set of allowed forms for the file. For a new file, the processor creates the file with a
-set of allowed forms that includes the specified form.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>NEWUNIT</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-If the NEWUNIT= specifier appears in an OPEN statement, either the FILE= specifier shall appear, or the
-STATUS= specifier shall appear with a value of SCRATCH. The unit identified by a NEWUNIT value shall not
-be preconnected.
 <P>
-The variable is defined with a processor determined NEWUNIT value if no error occurs during the execution of
-the OPEN statement. If an error occurs, the processor shall not change the value of the variable.
+ACCESS : The scalar-default-char-expr shall evaluate to SEQUENTIAL,
+DIRECT, or STREAM. The ACCESS= specifier specifies the access method for
+the connection of the file as being sequential, direct, or stream. If
+this specifier is omitted, the default value is SEQUENTIAL. For an
+existing file, the specified access method shall be included in the set
+of allowed access methods for the file. For a new file, the processor
+creates the file with a set of allowed access methods that includes the
+specified method.
 <P>
-A NEWUNIT value is a negative number, and shall not be equal to <B>-1</B>, any of the named constants ERROR_UNIT,
-INPUT_UNIT, or OUTPUT_UNIT from the intrinsic module ISO_FORTRAN_ENV (13.8.2), any value
-used by the processor for the unit argument to a defined input/output procedure, nor any previous NEWUNIT
-value that identifies a file that is currently connected.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+ACTION : The scalar-default-char-expr shall evaluate to READ, WRITE, or
+READWRITE. READ specifies that the WRITE, PRINT, and ENDFILE statements
+shall not refer to this connection. WRITE specifies that READ statements
+shall not refer to this connection. READWRITE permits any input/output
+statements to refer to this connection. If this specifier is omitted,
+the default value is processor dependent. If READWRITE is included in
+the set of allowable actions for a file, both READ and WRITE also shall
+be included in the set of allowed actions for that file. For an existing
+file, the specified action shall be included in the set of allowed
+actions for the file. For a new file, the processor creates the file
+with a set of allowed actions that includes the specified action.
 <P>
+ASYNCHRONOUS : The scalar-default-char-expr shall evaluate to YES or NO.
+If YES is specified, asynchronous input/output on the unit is allowed.
+If NO is specified, asynchronous input/output on the unit is not
+allowed. If this specifier is omitted, the default value is NO.
 <P>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>PAD</B> </TD><TD valign=bottom>
-The scalar-default-char-expr shall evaluate to YES or NO. The PAD= specifier is permitted only for a connection
-for formatted input/output. It specifies the current value of the pad mode (9.6.4.4.3, 9.6.2.10) for input for this
-connection. This mode has no effect on output. It is a changeable mode (9.5.2). If this specifier is omitted in an
-OPEN statement that initiates a connection, the default value is YES.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>POSITION</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The scalar-default-char-expr shall evaluate to ASIS, REWIND, or APPEND. The connection shall be for sequential
-or stream access. A new file is positioned at its initial point. REWIND positions an existing file at its initial
-point. APPEND positions an existing file such that the endfile record is the next record, if it has one. If an
-existing file does not have an endfile record, APPEND positions the file at its terminal point. ASIS leaves the
-position unchanged if the file exists and already is connected. ASIS leaves the position unspecified if the file exists
-but is not connected. If this specifier is omitted, the default value is ASIS.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>RECL</B> </TD><TD valign=bottom>
-The value of the RECL= specifier shall be positive. It specifies the length of each record in a file being connected
-for direct access, or specifies the maximum length of a record in a file being connected for sequential access. This
-specifier shall not appear when a file is being connected for stream access. This specifier shall appear when a
-file is being connected for direct access. If this specifier is omitted when a file is being connected for sequential
-access, the default value is processor dependent. If the file is being connected for formatted input/output, the
-length is the number of characters for all records that contain only characters of default kind. When a record
-contains any nondefault characters, the effect of the RECL= specifier is processor dependent. If the file is being
-connected for unformatted input/output, the length is measured in file storage units. For an existing file, the
-value of the RECL= specifier shall be included in the set of allowed record lengths for the file. For a new file, the
-processor creates the file with a set of allowed record lengths that includes the specified value.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>ROUND</B> </TD><TD valign=bottom>
-The scalar-default-char-expr shall evaluate to one of UP, DOWN, ZERO, NEAREST, COMPATIBLE, or PROCESSOR DEFINED.
-The ROUND= specifier is permitted only for a connection for formatted input/output. It
-specifies the current value of the I/O rounding mode (10.7.2.3.7, 9.6.2.13) for this connection. This is a changeable
-mode (9.5.2). If this specifier is omitted in an OPEN statement that initiates a connection, the I/O rounding
-mode is processor dependent; it shall be one of the above modes.
+BLANK : The scalar-default-char-expr shall evaluate to NULL or ZERO. The
+BLANK= specifier is permitted only for a connection for formatted
+input/output. It specifies the current value of the blank interpretation
+mode (10.8.6, 9.6.2.6) for input for this connection. This mode has no
+effect on output. It is a changeable mode (9.5.2). If this specifier is
+omitted in an OPEN statement that initiates a connection, the default
+value is NULL.
 <P>
-A processor is free to select any I/O rounding mode for the default mode. The mode might correspond
-to UP, DOWN, ZERO, NEAREST, or COMPATIBLE; or it might be a completely different I/O rounding mode.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>SIGN</B> </TD><TD valign=bottom>
-The scalar-default-char-expr shall evaluate to one of PLUS, SUPPRESS, or PROCESSOR DEFINED. The
-SIGN= specifier is permitted only for a connection for formatted input/output. It specifies the current value of
-the sign mode (10.8.4, 9.6.2.14) for this connection. This is a changeable mode (9.5.2). If this specifier is omitted
-in an OPEN statement that initiates a connection, the default value is PROCESSOR DEFINED.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>STATUS</B> </TD><TD valign=bottom>
-If the STATUS= specifier has the value NEW or REPLACE, the FILE= specifier shall appear. If the STATUS=
-specifier has the value SCRATCH, the FILE= specifier shall not appear. If the STATUS= specifier has the value
-OLD, the FILE= specifier shall appear unless the unit is connected and the file connected to the unit exists.
+DECIMAL : The scalar-default-char-expr shall evaluate to COMMA or POINT.
+The DECIMAL= specifier is permitted only for a connection for formatted
+input/output. It specifies the current value of the decimal edit mode
+(10.6, 10.8.8, 9.6.2.7) for this connection. This is a changeable mode
+(9.5.2). If this specifier is omitted in an OPEN statement that
+initiates a connection, the default value is POINT.
 <P>
-The scalar-default-char-expr shall evaluate to OLD, NEW, SCRATCH, REPLACE, or UNKNOWN. If OLD is
-specified, the file shall exist. If NEW is specified, the file shall not exist.
+DELIM : The scalar-default-char-expr shall evaluate to APOSTROPHE,
+QUOTE, or NONE. The DELIM= specifier is permitted only for a connection
+for formatted input/output. It specifies the current value of the
+delimiter mode (9.6.2.8) for list-directed (10.10.4) and namelist
+(10.11.4.2) output for the connection. This mode has no effect on input.
+It is a changeable mode (9.5.2). If this specifier is omitted in an OPEN
+statement that initiates a connection, the default value is NONE.
 <P>
-Successful execution of an OPEN statement with NEW specified creates the file and changes the status to OLD.
-If REPLACE is specified and the file does not already exist, the file is created and the status is changed to OLD.
-If REPLACE is specified and the file does exist, the file is deleted, a new file is created with the same name, and
-the status is changed to OLD. If SCRATCH is specified, the file is created and connected to the specified unit
-for use by the program but is deleted at the execution of a CLOSE statement referring to the same unit or at
-the normal termination of the program.
+ENCODING : The scalar-default-char-expr shall evaluate to UTF-8 or
+DEFAULT. The ENCODING= specifier is permitted only for a connection for
+formatted input/output. The value UTF-8 specifies that the encoding form
+of the file is UTF-8 as specified by ISO/IEC 10646-1:2000. Such a file
+is called a Unicode file, and all characters therein are of ISO 10646
+character type. The value UTF-8 shall not be specified if the processor
+does not support the ISO 10646 character type. The value DEFAULT
+specifies that the encoding form of the file is processor-dependent. If
+this specifier is omitted in an OPEN statement that initiates a
+connection, the default value is DEFAULT.
+<P>
+FILE : The value of the FILE= specifier is the name of the file to be
+connected to the specified unit. Any trailing blanks are ignored. The
+file-name-expr shall be a name that is allowed by the processor. If this
+specifier is omitted and the unit is not connected to a file, the
+STATUS= specifier shall be specified with a value of SCRATCH; in this
+case, the connection is made to a processor-dependent file. The
+interpretation of case is processor dependent.
+<P>
+FORM : The scalar-default-char-expr shall evaluate to FORMATTED or
+UNFORMATTED. The FORM= specifier determines whether the file is being
+connected for formatted or unformatted input/output. If this specifier
+is omitted, the default value is UNFORMATTED if the file is being
+connected for direct access or stream access, and the default value is
+FORMATTED if the file is being connected for sequential access. For an
+existing file, the specified form shall be included in the set of
+allowed forms for the file. For a new file, the processor creates the
+file with a set of allowed forms that includes the specified form.
+<P>
+NEWUNIT : If the NEWUNIT= specifier appears in an OPEN statement, either
+the FILE= specifier shall appear, or the STATUS= specifier shall appear
+with a value of SCRATCH. The unit identified by a NEWUNIT value shall
+not be preconnected.
+<P>
+The variable is defined with a processor determined NEWUNIT value if no
+error occurs during the execution of the OPEN statement. If an error
+occurs, the processor shall not change the value of the variable.
+<P>
+A NEWUNIT value is a negative number, and shall not be equal to <B>-1</B>, any
+of the named constants ERROR_UNIT, INPUT_UNIT, or OUTPUT_UNIT from the
+intrinsic module ISO_FORTRAN_ENV (13.8.2), any value used by the
+processor for the unit argument to a defined input/output procedure, nor
+any previous NEWUNIT value that identifies a file that is currently
+connected.
+<P>
+PAD : The scalar-default-char-expr shall evaluate to YES or NO. The PAD=
+specifier is permitted only for a connection for formatted input/output.
+It specifies the current value of the pad mode (9.6.4.4.3, 9.6.2.10) for
+input for this connection. This mode has no effect on output. It is a
+changeable mode (9.5.2). If this specifier is omitted in an OPEN
+statement that initiates a connection, the default value is YES.
+<P>
+POSITION : The scalar-default-char-expr shall evaluate to ASIS, REWIND,
+or APPEND. The connection shall be for sequential or stream access. A
+new file is positioned at its initial point. REWIND positions an
+existing file at its initial point. APPEND positions an existing file
+such that the endfile record is the next record, if it has one. If an
+existing file does not have an endfile record, APPEND positions the file
+at its terminal point. ASIS leaves the position unchanged if the file
+exists and already is connected. ASIS leaves the position unspecified if
+the file exists but is not connected. If this specifier is omitted, the
+default value is ASIS.
+<P>
+RECL : The value of the RECL= specifier shall be positive. It specifies
+the length of each record in a file being connected for direct access,
+or specifies the maximum length of a record in a file being connected
+for sequential access. This specifier shall not appear when a file is
+being connected for stream access. This specifier shall appear when a
+file is being connected for direct access. If this specifier is omitted
+when a file is being connected for sequential access, the default value
+is processor dependent. If the file is being connected for formatted
+input/output, the length is the number of characters for all records
+that contain only characters of default kind. When a record contains any
+nondefault characters, the effect of the RECL= specifier is processor
+dependent. If the file is being connected for unformatted input/output,
+the length is measured in file storage units. For an existing file, the
+value of the RECL= specifier shall be included in the set of allowed
+record lengths for the file. For a new file, the processor creates the
+file with a set of allowed record lengths that includes the specified
+value.
+<P>
+ROUND : The scalar-default-char-expr shall evaluate to one of UP, DOWN,
+ZERO, NEAREST, COMPATIBLE, or PROCESSOR DEFINED. The ROUND= specifier is
+permitted only for a connection for formatted input/output. It specifies
+the current value of the I/O rounding mode for this connection. This is
+a changeable mode. If this specifier is omitted in an OPEN statement
+that initiates a connection, the I/O rounding mode is processor
+dependent; it shall be one of the above modes.
+<P>
+A processor is free to select any I/O rounding mode for the default
+mode. The mode might correspond to UP, DOWN, ZERO, NEAREST, or
+COMPATIBLE; or it might be a completely different I/O rounding mode.
+<P>
+SIGN : The scalar-default-char-expr shall evaluate to one of PLUS,
+SUPPRESS, or PROCESSOR DEFINED. The SIGN= specifier is permitted only
+for a connection for formatted input/output. It specifies the current
+value of the sign mode this connection. This is a changeable mode. If
+this specifier is omitted in an OPEN statement that initiates a
+connection, the default value is PROCESSOR DEFINED.
+<P>
+STATUS : If the STATUS= specifier has the value NEW or REPLACE, the
+FILE= specifier shall appear. If the STATUS= specifier has the value
+SCRATCH, the FILE= specifier shall not appear. If the STATUS= specifier
+has the value OLD, the FILE= specifier shall appear unless the unit is
+connected and the file connected to the unit exists.
+<P>
+The scalar-default-char-expr shall evaluate to OLD, NEW, SCRATCH,
+REPLACE, or UNKNOWN. If OLD is specified, the file shall exist. If NEW
+is specified, the file shall not exist.
+<P>
+Successful execution of an OPEN statement with NEW specified creates the
+file and changes the status to OLD. If REPLACE is specified and the file
+does not already exist, the file is created and the status is changed to
+OLD. If REPLACE is specified and the file does exist, the file is
+deleted, a new file is created with the same name, and the status is
+changed to OLD. If SCRATCH is specified, the file is created and
+connected to the specified unit for use by the program but is deleted at
+the execution of a CLOSE statement referring to the same unit or at the
+normal termination of the program.
 <P>
 SCRATCH shall not be specified with a named file.
 <P>
-If UNKNOWN is specified, the status is processor dependent. If this specifier is omitted, the default value is
-UNKNOWN.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+If UNKNOWN is specified, the status is processor dependent. If this
+specifier is omitted, the default value is UNKNOWN.
+</BLOCKQUOTE>
+<A name=5>
 
      <H3>EXAMPLES</H3>
 
@@ -404,37 +369,57 @@ UNKNOWN.
 An example of an OPEN statement is:
 <P>
 <PRE>
-   program demo_open
-   integer :: ios
-   character(len=256) :: message
-   open (10, file=&#146;employee.names&#146;, action=&#146;read&#146;, iostat=ios,iomsg=message)
-   if (ios &lt; 0) then
-      ! Perform end-of-file processing on the file connected to unit 3.
-      call end_processing()
-   elseif (ios &gt; 0) then
-      ! Perform error processing
-      write(*,&#146;(a)&#146;)trim(message)
-      call error_processing()
-      stop
-   else
-      write(*,*)&#146;OPENED FILE&#146;
-   endif
-   contains
-      subroutine end_processing()
-         write(*,*)&#146;END OF FILE:&#146;,ios,&#146;MESSAGE=&#146;,trim(message)
-         close(unit=10,iostat=ios)
-         stop
-      end subroutine end_processing
-      subroutine error_processing()
-         write(*,*)&#146;ERROR:&#146;,ios,&#146;MESSAGE=&#146;,trim(message)
-         close(unit=10,iostat=ios)
-         stop
-      end subroutine error_processing
-   end program demo_open
+    program demo_open
+    integer :: ios
+    character(len=256) :: message
+    integer :: lun
+       open  (                  &
+       & newunit=lun,           &
+       & file=&#146;employee.names&#146;, &
+       & action=&#146;read&#146;,         &
+       & iostat=ios,            &
+       & iomsg=message)
+       if (ios &lt; 0) then
+          ! Perform end-of-file processing on the file connected to unit
+          call end_processing()
+       elseif (ios &gt; 0) then
+          ! Perform error processing
+          write(*,&#146;(a)&#146;)trim(message)
+          call error_processing()
+          stop
+       else
+          write(*,*)&#146;OPENED FILE&#146;
+       endif
+    contains
+    !
+    subroutine end_processing()
+       write(*,*)&#146;END OF FILE:&#146;,ios,&#146;MESSAGE=&#146;,trim(message)
+       close(unit=lun,iostat=ios)
+       stop
+    end subroutine end_processing
+    !
+    subroutine error_processing()
+       write(*,*)&#146;ERROR:&#146;,ios,&#146;MESSAGE=&#146;,trim(message)
+       close(unit=lun,iostat=ios)
+       stop
+    end subroutine error_processing
+    !
+    end program demo_open
+<P>
 </PRE>
 </BLOCKQUOTE>
+<A name=6>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7),
+PRINT(7), READ(7), REWIND(7), WAIT(7), WRITE(7)
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>open (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e71d7b90-a4d6-450b-b22a-a0ac990feb17 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>open (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 35d293cf-fd04-44b5-b523-2907e106ed0b using man macros.</FONT>
 <br><br><center><img src="images/open.7fortran.gif"></center>
 </div>
 </div>

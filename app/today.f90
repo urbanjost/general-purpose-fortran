@@ -111,19 +111,20 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    output current time for uses such as file suffixes.>',&
 '@(#)VERSION:        1.0, 2009, 1.0.1 2024>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2024-06-29 21:53:38 UTC-240>',&
+'@(#)COMPILED:       2024-11-24 04:44:38 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
 subroutine main()
-use M_time,    only : now, fmtdate_usage
+use M_time,    only : now, fmtdate_usage, locale
 use M_kracken95, only : kracken, lget, sget                    ! add command-line parser module
 
 ! ident_1="@(#) today(1f) output current time for uses such as file suffixes."
 
 character(len=:),allocatable :: options
+   call locale('LANGUAGE')
    call kracken('today','-help .F. -version .F. -test .F.')    ! define command arguments,default values and crack command line
    call help_usage(lget('today_help'))                         ! if -help option is present, display help text and exit
    call help_version(lget('today_version'))                    ! if -version option is present, display version text and exit

@@ -579,9 +579,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings atleast(3f) return string padded to at least specified length<br/>
 	 M_CLI2 locate_key(3f) find PLACE in sorted character array where KEYNAME can be found or should be placed<br/>
 </td>
-<tr><td><a href="../src/M_Compare_Float_Numbers.f90">../src/M_Compare_Float_Numbers.f90</a></td>
-<td>
-</td>
 <tr><td><a href="../src/M_LA.f90">../src/M_LA.f90</a></td>
 <td>
 	M_LA::mat_set(3f):<br/>
@@ -683,6 +680,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_color color_name2rgb(3f) given a color name return rgb color values in range 0 to 100<br/>
 	 M_strings lower(3f) Changes a string to lowercase over specified range<br/>
 </td>
+<tr><td><a href="../src/M_compiler.f90">../src/M_compiler.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_constants.f90">../src/M_constants.f90</a></td>
 <td>
 </td>
@@ -760,9 +760,18 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/M_display.f90">../src/M_display.f90</a></td>
 <td>
 	 M_display(3fm) module for pretty-printing matrices<br/>
-	 M_disp disp_scalar_int(3f) integer scalar without title (call disp_title_scalar_int(3f) with title='')<br/>
-	 M_display disp_scalar_int(3f) Default integer scalar with title<br/>
-	 M_display disp_vector_int(3f) Default integer vector without title<br/>
+	 M_disp disp_scalar_int8(3f) integer scalar without title (call disp_title_scalar_int8(3f) with title='')<br/>
+	 M_display disp_scalar_int8(3f) integer scalar with title<br/>
+	 M_display disp_vector_int8(3f) integer vector without title<br/>
+	 M_disp disp_scalar_int16(3f) integer scalar without title (call disp_title_scalar_int16(3f) with title='')<br/>
+	 M_display disp_scalar_int16(3f) integer scalar with title<br/>
+	 M_display disp_vector_int16(3f) integer vector without title<br/>
+	 M_disp disp_scalar_int64(3f) integer scalar without title (call disp_title_scalar_int64(3f) with title='')<br/>
+	 M_display disp_scalar_int64(3f) integer scalar with title<br/>
+	 M_display disp_vector_int64(3f) integer vector without title<br/>
+	 M_disp disp_scalar_int32(3f) integer scalar without title (call disp_title_scalar_int32(3f) with title='')<br/>
+	 M_display disp_scalar_int32(3f) integer scalar with title<br/>
+	 M_display disp_vector_int32(3f) integer vector without title<br/>
 </td>
 <tr><td><a href="../src/M_draw.f90">../src/M_draw.f90</a></td>
 <td>
@@ -848,6 +857,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_framework__approx anyscalar_to_realbig_(3f) convert integer or real parameter of any kind to real128 or biggest available<br/>
 	 M_framework__approx anyscalar_to_double_(3f) convert integer or real parameter of any kind to doubleprecision<br/>
 </td>
+<tr><td><a href="../src/M_framework__attr.f90">../src/M_framework__attr.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_framework__journal.f90">../src/M_framework__journal.f90</a></td>
 <td>
 	 M_framework__journal journal(3fg) provides public message routine no paging or graphic mode change<br/>
@@ -861,6 +873,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_framework__msg write(3f) writes a message to any number of open files with any scalar values<br/>
 	 M_framework__msg pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string<br/>
 	 M_framework__msg assert(3f) writes a message to a string composed of any standard scalar types<br/>
+</td>
+<tr><td><a href="../src/M_framework__timing.f90">../src/M_framework__timing.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_framework__utility.f90">../src/M_framework__utility.f90</a></td>
 <td>
@@ -947,6 +962,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d logical scalar, vector, matrix in row-column format', &<br/>
 	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
+	 print_inquire(3f) INQUIRE a file by name/number and print results', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
@@ -1361,6 +1377,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_sets.f90">../src/M_sets.f90</a></td>
 <td>
+	 M_strings lower(3f) Changes a string to lowercase<br/>
 </td>
 <tr><td><a href="../src/M_slices.f90">../src/M_slices.f90</a></td>
 <td>
@@ -1469,6 +1486,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings rotate13(3f) converts a character to its ROT13 equivalent which is a trivial encryption.<br/>
 	 M_strings join(3f) merge string array into a single CHARACTER value adding specified separators caps prefix and suffix<br/>
 	 M_strings reverse(3f) Return a string reversed<br/>
+	 M_strings lower_quoted(3f) elemental function converts string to lowercase skipping strings quoted per Fortran syntax rules<br/>
 	 M_strings upper_quoted(3f) elemental function converts string to uppercase skipping strings quoted per Fortran syntax rules<br/>
 	 M_strings upper_all(3f) returns an uppercase string<br/>
 	 M_strings upper_range(3f) returns a string with the specified range converted to uppercase<br/>
@@ -1607,6 +1625,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_tictoc.f90">../src/M_tictoc.f90</a></td>
 <td>
+	M_time::date_to_julian(3f): Converts proleptic Gregorian DAT date-time array to Julian Date<br/>
+	 a random whole number from FIRST to LAST inclusive<br/>
+	 M_random::scramble(3f): return integer array of random values 1 to N.<br/>
+	 on linux systems show process statistics. System-dependent<br/>
 </td>
 <tr><td><a href="../src/M_time.f90">../src/M_time.f90</a></td>
 <td>
@@ -1647,7 +1669,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/M_time__oop.f90">../src/M_time__oop.f90</a></td>
 <td>
 	 M_time construct_from_dat(3f) construct TYPE(DATE_TIME) with DAT date-time array<br/>
-	 M_time construct_from_jed(3f) construct TYPE(DATE_TIME) with REAL Julian JED date-time value<br/>
+	 M_time construct_from_jd(3f) construct TYPE(DATE_TIME) with REAL Julian JD date-time value<br/>
 	 M_time construct_from_uet(3f) construct TYPE(DATE_TIME) with INTEGER Unix UET date-time value<br/>
 	 M_time dt2d_(3f) convert derived type date_time to DAT date-time array<br/>
 	 M_time epoch_(3f) convert derived type date_time to unix epoch seconds<br/>

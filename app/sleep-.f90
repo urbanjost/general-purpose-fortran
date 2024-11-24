@@ -140,6 +140,72 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    sleep-(1f) - [FUNIX:TIME] pause for specified duration
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    sleep- [dd-hh:mm:ss[.xxx]|xxx.yyy[s|m|h|d|r]] [ -countdown|-countup -interval]|--help|--version
+!!##DESCRIPTION
+!!    Given a duration in the form dd-hh:mm:ss.xxx where dd is days, hh
+!!    hours, mm minutes and ss.xxx seconds pause for the specified amount
+!!    of time.
+!!
+!!    Alternatively, the time may be specified by a number immediately
+!!    followed by a unit letter; where s is seconds, m is minutes, h is
+!!    hours and d is days.
+!!
+!!    The suffix r is the same as the suffix s accept a random time between
+!!    zero and the specified number of seconds is used. This is useful for
+!!    spreading out cron(1) tasks in a HPC cluster. Only the seconds are
+!!    randomized so the r suffix is generally used by itself with a single
+!!    value.
+!!
+!!    Spaces before a suffix are significant. A suffix without a prefix is
+!!    treated as if the prefix zero (0) was present.
+!!
+!!    Given multiple arguments, pause for the time specified by the sum of
+!!    the values.
+!!##OPTIONS
+!!    dd-hh:mm:ss  Given a string representing a duration of time in the
+!!                 following forms:
+!!
+!!                   dd-hh:mm:ss[.xx]
+!!                      hh:mm:ss[.xx]
+!!                         mm:ss[.xx]
+!!                            ss[.xx]
+!!       or
+!!    xx[.yy]SUFFIX  where Suffix may be s for seconds, m for minutes, h for hours,
+!!                   or d for days; or r for a random number of seconds up to the
+!!                   value.
+!!    -countdown     sleep in one-second intervals and count down to
+!!                   end of sleep command
+!!    -countup       sleep in one-second intervals and count up till end
+!!                   of command
+!!    -interval COUNT   how many seconds between counts when -countdown and -countup
+!!                   are specified. Values other than one may trim the total sleep
+!!                   time by up to COUNT seconds.
+!!      cmd          system command to repeat at the end of each interval
+!!    --verbose      output verbose messages
+!!    --help         display this help and exit
+!!    --version      output version information and exit
+!!##EXAMPLE
+!!
+!!   usage:
+!!
+!!    sleep- 0.10     # pause one tenth of a second
+!!    sleep- 3m 10s   # pause three minutes and 10 seconds
+!!    sleep- 1:00:00  # pause for one hour
+!!    sleep 50r       # sleep a random number of seconds up to 50
+!!    sleep- 1d 86400 # pause two days
+!!    sleep- 1-3:30   # pause one day, three hours and thirty minutes
+!!##SEE ALSO
+!!    sleep(1), usleep(1), watch(1), xargs(1), yes(1), seq(1), repeat(1csh)
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -156,7 +222,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20170822>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
-'@(#)COMPILED:       2024-07-03 08:07:44 UTC-240>',&
+'@(#)COMPILED:       2024-11-24 04:44:17 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

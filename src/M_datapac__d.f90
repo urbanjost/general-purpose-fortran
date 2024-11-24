@@ -8846,7 +8846,7 @@ DATA nucut1 , nucut2/100 , 1000/
 !!    replaced by the rule that the maximum number of lags listed = 800
 !!    (which corresponds to an 8-page listing of Fourier coefficients.
 !!    If more pages are desired, change the value of the variable MAXPAG
-!!    within this subroutine from 8 to whatever is desired.
+!!    within this subroutine from 8 to whatever is desired.).
 !!
 !!    If the input observations in X are considered to have been collected
 !!    1 second apart in time, then the frequency axis of the resulting
@@ -8866,7 +8866,6 @@ DATA nucut1 , nucut2/100 , 1000/
 !!    X   The vector of (unsorted) observations.
 !!
 !!    N   The integer number of observations in the vector X.
-!!        The maximum allowable value of N for this subroutine is 15000.
 !!        The sample size N must be greater than or equal to 3.
 !!
 !!##OUTPUT
@@ -8893,10 +8892,17 @@ DATA nucut1 , nucut2/100 , 1000/
 !!    program demo_fourie
 !!    use M_datapac, only : fourie
 !!    implicit none
-!!    ! call fourie(x,y)
+!!    real :: x(100)
+!!    integer :: i
+!!    x=0.0
+!!    do i=1,size(x)
+!!       x(i)=200.0*sin(real(i))*i
+!!       x(i)=x(i)+cos(2.4*x(i))
+!!       x(i)=x(i)+3.1
+!!    enddo
+!!    write(*,*)x
+!!    call fourie(x,size(x))
 !!    end program demo_fourie
-!!
-!!   Results:
 !!
 !!##AUTHOR
 !!    The original DATAPAC library was written by James Filliben of the
@@ -8916,21 +8922,18 @@ DATA nucut1 , nucut2/100 , 1000/
 !     UPDATED         --FEBRUARY  1976.
 ! processed by SPAG 7.51RB at 12:54 on 18 Mar 2022
 SUBROUTINE FOURIE(X,N)
-REAL(kind=wp),intent(in) :: X(:)
-INTEGER                  :: N
+REAL(kind=wp),intent(in)    :: X(:)
+INTEGER,intent(in)          :: N
 REAL(kind=wp)    :: ai, amp, an, angdeg, angrad, conmsq, del, ffreq, hold, percon, period, phase1, phase2, pi, sum, suma, sumb, t
-REAL(kind=wp)    :: A(7500), B(7500)
+REAL(kind=wp)    :: A(N), B(N) ! work directories
 REAL(kind=wp)    :: vbias, WS, xbar
 INTEGER          :: i, ievodd, ilower, ipage, iskip, iupper, j, maxpag, nhalf, nnpage
 CHARACTER(len=4) :: alperc
-COMMON /BLOCK2_real64/ WS(15000)
-EQUIVALENCE (A(1),WS(1))
-EQUIVALENCE (B(1),WS(7501))
 DATA pi/3.14159265358979_wp/
 DATA alperc/'%'/
 !
       ilower = 3
-      iupper = 15000
+      iupper = huge(n)
       maxpag = 8
 !
 !     CHECK THE INPUT ARGUMENTS FOR ERRORS
@@ -8938,8 +8941,9 @@ DATA alperc/'%'/
       IF ( N<ilower .OR. N>iupper ) THEN
          WRITE (G_IO,99001) ilower , iupper
 99001    FORMAT (' ',                                                   &
-     &'***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE FOURIE SUBROU&
-     &TINE IS OUTSIDE THE ALLOWABLE (',I0,',',I0,') INTERVAL *****')
+     &'***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE FOURIE SUBROUTINE IS OUTSIDE THE ALLOWABLE (',&
+     & I0,',',I0, &
+     & ') INTERVAL *****')
          WRITE (G_IO,99002) N
 99002    FORMAT (' ','***** THE VALUE OF THE ARGUMENT IS ',I0,' *****')
          RETURN
@@ -8957,7 +8961,8 @@ DATA alperc/'%'/
 !
 !-----START POINT-----------------------------------------------------
 !
- 100  an = N
+ 100  continue
+      an = N
 !
 !     DETERMINE IF N IS ODD OR EVEN
 !
@@ -9038,7 +9043,7 @@ DATA alperc/'%'/
 !
       nnpage = 50
       i = 0
-      DO ipage = 1 , maxpag
+      PAGES: DO ipage = 1 , maxpag
          WRITE (G_IO,99013)
          WRITE (G_IO,99008)
 99008    FORMAT (' ','     I   FOURIER   PERIOD      FOURIER  ',        &
@@ -9072,11 +9077,11 @@ DATA alperc/'%'/
      &                        phase1 , phase2 , conmsq , percon , alperc
 99011       FORMAT (' ',I0,2X,F8.6,1X,F8.2,6(1X,E14.7),2X,F6.2,A1)
             A(i) = percon
-            IF ( i>=nhalf ) GOTO 200
+            IF ( i>=nhalf ) exit PAGES
             iskip = i - 10*(i/10)
             IF ( iskip==0 ) WRITE (G_IO,99014)
          ENDDO
-      ENDDO
+      ENDDO PAGES
 !
 !     PLOT OUT THE PERCENTAGE CONTRIBUTIONS
 !     TO THE TOTAL VARIANCE AT
@@ -9085,7 +9090,7 @@ DATA alperc/'%'/
 !     THIS WILL CORRESPOND TO A SPECTRAL
 !     PLOT IN SPECTRAL ANALYSIS.
 !
- 200  CALL PLOTSP(A,nhalf,0)
+      CALL PLOTSP(A,nhalf,0)
       WRITE (G_IO,99012)
 99012 FORMAT (' ',40X,                                                  &
      &        'PERIODOGRAM = FOURIER LINE SPECTRUM OF THE ORIGINAL DATA'&

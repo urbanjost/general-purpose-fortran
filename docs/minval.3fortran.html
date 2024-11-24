@@ -50,6 +50,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>minval (3)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
@@ -57,7 +58,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-MINVAL(3) - [ARRAY:REDUCTION] Minimum value of an array
+MINVAL(3) - [ARRAY:REDUCTION] Minimum value of all the elements of ARRAY
+along dimension DIM corresponding to true elements of MASK.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -69,10 +71,18 @@ MINVAL(3) - [ARRAY:REDUCTION] Minimum value of an array
 </A>
 <BLOCKQUOTE>
 <P>
-result = minval(array, [mask]) | minval(array [,dim] [,mask])
+forms
 <P>
 <PRE>
-         NUMERIC function minval(array, dim, mask)
+        result = minval(array, [mask])
+<P>
+</PRE>
+or
+<P>
+<PRE>
+        result = minval(array [,dim] [,mask])
+<P>
+         type(TYPE(kind=**)) function minval(array, dim, mask)
 <P>
           NUMERIC,intent(in) :: array(..)
           integer(kind=**),intent(in),optional :: dim
@@ -91,12 +101,28 @@ result = minval(array, [mask]) | minval(array [,dim] [,mask])
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
+TYPE may be real, integer, or character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
 a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-NUMERIC is any numeric type and kind.
+DIM is an integer scalar indicating a dimension of the array. It may
+not be an optional dummy argument.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK is an array of type logical, and conformable with ARRAY.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is of the same type and kind as ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -106,16 +132,42 @@ NUMERIC is any numeric type and kind.
 </A>
 <BLOCKQUOTE>
 <P>
-MINVAL(3) determines the minimum value of the elements in an array
-value, or, if the DIM argument is supplied, determines the minimum value
-along each row of the array in the DIM direction.
+MINVAL(3) determines the minimum value of the elements in an array or,
+if the DIM argument is supplied, determines the minimum value in the
+subarrays indicated by stepping along the DIMth dimension.
 <P>
-If MASK is present, only the elements for which MASK is .true. are
-considered.
+Note that the result of
 <P>
-If the array has zero size, or all of the elements of MASK are .false.,
-then the result is HUGE(ARRAY) if ARRAY is numeric, or a string of
-CHAR(LEN=255) characters if ARRAY is of character type.
+<PRE>
+      MINVAL(ARRAY, MASK = MASK)
+<P>
+</PRE>
+has a value equal to that of
+<P>
+<PRE>
+      MINVAL (PACK (ARRAY, MASK)).
+<P>
+</PRE>
+and The result of
+<P>
+<PRE>
+      MINVAL (ARRAY, DIM = DIM [, MASK = MASK])
+<P>
+</PRE>
+has a value equal to that of
+<P>
+<PRE>
+      MINVAL (ARRAY [, MASK = MASK])
+<P>
+</PRE>
+if ARRAY has rank one. Otherwise, the value of element (s1 , s2 , . . .
+, sDIM-1 , sDIM+1 , . . . , sn ) of the result is equal to
+<P>
+<PRE>
+      MINVAL (ARRAY (s1 , s2 , . . . , sDIM-1 , :, sDIM+1 , . . . , sn )
+      [, MASK= MASK (s1 , s2 , . . . , sDIM-1 , :, sDIM+1 , . . . , sn ) ] ).
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=4>
 
@@ -128,20 +180,30 @@ CHAR(LEN=255) characters if ARRAY is of character type.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ARRAY : Shall be an array of type integer, real, or character.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-DIM : (Optional) Shall be a scalar of type integer, with a value
-between one and the rank of ARRAY, inclusive. It may not be an
-optional dummy argument.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-MASK : Shall be an array of type logical, and conformable with
+ARRAY : array to search for minimum values. If the array has zero
+size, or all of the elements of MASK are .false., then the result is
+HUGE(ARRAY) if ARRAY is numeric, or an array of strings of
+CHAR(LEN=LEN(ARRAY)) characters, with each character equal to CHAR
+(n - 1, KIND (ARRAY)), where n is the number of characters in the
+collating sequence for characters with the kind type parameter of
 ARRAY.
+<P>
+If ARRAY is of type character, the result is the value that would be
+selected by application of intrinsic relational operators; that is,
+the collating sequence for characters with the kind type parameter
+of the arguments is applied.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DIM : Indicates which dimension to split the array into subarrays
+along. It has a value between one and the rank of ARRAY, inclusive.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK ; If MASK is present, only the elements for which MASK is
+[char46]true. are considered when searching for the minimal value.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -171,6 +233,7 @@ sample program:
     program demo_minval
     implicit none
     integer :: i
+    character(len=:),allocatable :: strs(:)
     character(len=*),parameter :: g=&#146;(3x,*(g0,1x))&#146;
 <P>
     integer,save :: ints(3,5)= reshape([&
@@ -214,6 +277,11 @@ sample program:
        write(*,g) minval(ints, mask = .false.)
        write(*,g) minval([integer ::], mask = .false.)
 <P>
+       print *, &#146;if zero-size character array all dels if ASCII&#146;
+       strs=[character(len=5)::]
+       strs=minval(strs)
+       print g, ichar([(strs(i),i=1,len(strs))])
+<P>
        write(*,*)&#146;some calls with three dimensions&#146;
        write(*,g) minval(box, mask = .true. )
        write(*,g) minval(box, dim=1, mask = .true. )
@@ -225,36 +293,38 @@ sample program:
     end program demo_minval
 <P>
 </PRE>
-Results:
+Result:
 <P>
 <PRE>
-     &gt; Given the array
-     &gt;    1   -2    3    4    5
-     &gt;   10   20  -30   40   50
-     &gt;   11   22   33  -44   55
+     &gt;  Given the array
+     &gt;     1   -2    3    4    5   
+     &gt;    10   20  -30   40   50   
+     &gt;    11   22   33  -44   55   
      &gt;
-     &gt; What is the smallest element in the array?
-     &gt;   -44 at &lt; 3 4 &gt;
-     &gt; What is the smallest element in each column?
-     &gt;   1 -2 -30 -44 5
-     &gt; What is the smallest element in each row?
-     &gt;   -2 -30 -44
-     &gt; What is the smallest element in each column,
-     &gt; considering only those elements that are
-     &gt; greater than zero?
-     &gt;   1 20 3 4 5
-     &gt; if everything is false a zero-sized array is NOT returned
-     &gt;  2147483647  2147483647  2147483647  2147483647  2147483647
-     &gt; even for a zero-sized input
-     &gt;   2147483647
-     &gt; a scalar answer for everything false is huge()
-     &gt;   2147483647
-     &gt;   2147483647
-     &gt; some calls with three dimensions
-     &gt;   -55
-     &gt;   1 -2 -30 -44 5 -11 -22 -33 -40 -55
-     &gt;   -2 -30 -44 -5 -50 -55
-     &gt;   shape of answer is  3 2
+     &gt;  What is the smallest element in the array?
+     &gt;    -44 at &lt; 3 4 &gt;
+     &gt;  What is the smallest element in each column?
+     &gt;    1 -2 -30 -44 5
+     &gt;  What is the smallest element in each row?
+     &gt;    -2 -30 -44
+     &gt;  What is the smallest element in each column,
+     &gt;  considering only those elements that are
+     &gt;  greater than zero?
+     &gt;    1 20 3 4 5
+     &gt;  if everything is false a zero-sized array is NOT returned
+     &gt;   2147483647  2147483647  2147483647  2147483647  2147483647
+     &gt;  even for a zero-sized input
+     &gt;    2147483647
+     &gt;  a scalar answer for everything false is huge()
+     &gt;    2147483647
+     &gt;    2147483647
+     &gt;  if zero-size character array all dels if ASCII
+     &gt;
+     &gt;  some calls with three dimensions
+     &gt;    -55
+     &gt;    1 -2 -30 -44 5 -11 -22 -33 -40 -55
+     &gt;    -2 -30 -44 -5 -50 -55
+     &gt;    shape of answer is  3 2
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -276,10 +346,10 @@ Fortran 95
 <P>
 MIN(3), MINLOC(3) MAXLOC(3), MAXVAL(3), MIN(3)
 <P>
-fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>minval (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7fc0366e-f12d-47e5-a281-258e4bda7e08 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>minval (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c244002d-1dab-40e8-9cbf-101f88fa8ef5 using man macros.</FONT>
 <br><br><center><img src="images/minval.3fortran.gif"></center>
 </div>
 </div>

@@ -58,7 +58,7 @@ contains
 !!
 !!       h
 !!       #----------------------------------------------------# PAGING
-!!       | f|SPACE b  forward or backward one page            |
+!!       | f b        forward or backward one page            |
 !!       | u d        redraw up or down one-half page         |
 !!       | r          refresh page                            |
 !!       | e y | j k  refresh page moving up or down one line |
@@ -78,7 +78,7 @@ contains
 !!       | h          display this help                       |
 !!       | q          quit                                    |
 !!       #----------------------------------------------------#
-!!       Anything else is ignored.
+!!       A blank repeats last positioning command. Anything else is ignored.
 !!       Line count is 25 out of 54 . Page size is 23 (see "lines")
 !!       continue ..
 !!
@@ -199,7 +199,7 @@ integer                                :: old_position
 
    howbig=size(help_text)
    toomany=1
-   last_response=' '
+   last_response='f'
    numbered=.false.
    topic=trim(topic_name)
    old_topic=''
@@ -383,7 +383,7 @@ integer                                :: old_position
 contains
 
 function want_to_stop()
-character(len=len(help_text))      :: response
+character(len=len(help_text))        :: response
 character(len=1)                     :: letter
 logical                              :: want_to_stop
 integer                              :: j
@@ -396,20 +396,24 @@ integer                              :: ierr
       if(position(1)  >  position(2)) then
          call journal('sc','continue ..')
          read(stdin,'(a)',iostat=ios) response         ! read letter to pause from standard input
+         if(response.eq.' ')response=last_response
          response=adjustl(response)
          letter=response(1:1)
          select case(letter)
-         case(' ','f')                                        ! next page
+         case('f')                                        ! next page
             position(1) = 0                                ! start new page
+            last_response='f'
          case('b')                                            ! back one page
             call pageback(2)
             position(1) = 0
+            last_response='b'
          case('0':'9')                                        ! assumed to be a number
             call a2d(response,val,ierr)
             i=nint(val)-1
             i=max(i,1)
             i=min(i,howbig-1)
             position(1) = 0
+            last_response=last_response
          case('-','+')                                        ! assumed to be a number
             call pageback(1)
             call a2d(response,val,ierr)
@@ -417,6 +421,7 @@ integer                              :: ierr
             i=max(i,1)
             i=min(i,howbig-1)
             position(1) = 0
+            last_response=last_response
          case('t')                                            ! topics
             old_topic=topic
             old_position=i
@@ -441,14 +446,17 @@ integer                              :: ierr
             call pageback(1)
             i=max(1,i-position(2)/2-1)
             position(1) = 0
+            last_response='u'
          case('e','k')                                        ! back one line page
             call pageback(1)
             i=max(1,i-1)
             position(1) = 0
+            last_response='e'
          case('y','j')                                        ! down one line page
             call pageback(1)
             i=max(1,i+1)
             position(1) = 0
+            last_response='y'
          case('w')
             WRITEFILE: block
             character(len=1000) :: errmsg
@@ -465,12 +473,15 @@ integer                              :: ierr
                endif
             endblock WRITEFILE
             i=max(1,i-1)
+            last_response=last_response
          case('d')                                            ! down one-half page
             i=min(howbig-1,i-position(2)/2-1)
             position(1) = 0
+            last_response='d'
          case('r')                                            ! repaint page
             call pageback(1)
             position(1) = 0
+            last_response=last_response
          case('/','n')                                        ! find string below
             j=i ! hold
             if(letter == 'n')response=last_response
@@ -523,9 +534,11 @@ integer                              :: ierr
          case('g')                                            ! repaint page
             i=1
             position(1) = 0
+            last_response=last_response
          case('.')                                            ! help
             position(1) = 0
             numbered=.not.numbered
+            last_response=last_response
          case('h')                                            ! help
             call journal('sc','#----------------------------------------------------# PAGING')
             call journal('sc','| f|SPACE b  forward or backward one page            |')
@@ -548,8 +561,9 @@ integer                              :: ierr
             call journal('sc','| h          display this help                       |')
             call journal('sc','| q          quit                                    |')
             call journal('sc','#----------------------------------------------------#')
-            call journal('sc','Anything else is ignored.')
+            call journal('sc','A blank repeats last positioning command. Anything else is ignored.')
             call journal('sc','Line count is ',i,'out of',howbig,'. Page size is',position(2),'(see "lines")')
+            last_response=last_response
             cycle
          case('q')
             position(1) = -1

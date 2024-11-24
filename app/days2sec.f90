@@ -28,8 +28,11 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   (LICENSE:PD)                                                                 ',&
 '                                                                                ',&
 'SYNOPSIS                                                                        ',&
-'   days2sec dd-hh:mm:ss | --version| --help                                     ',&
-'   days2sec NNdNNhNNmNNs                                                        ',&
+' Forms:                                                                         ',&
+'                                                                                ',&
+'    days2sec dd-hh:mm:ss                                                        ',&
+'    days2sec NNdNNhNNmNNs                                                       ',&
+'    days2sec --version| --help                                                  ',&
 '                                                                                ',&
 'DESCRIPTION                                                                     ',&
 '   Given a duration in the form dd-hh:mm:ss where dd is days, hh hours,         ',&
@@ -102,8 +105,11 @@ end subroutine help_usage
 !!
 !!##SYNOPSIS
 !!
-!!    days2sec dd-hh:mm:ss | --version| --help
-!!    days2sec NNdNNhNNmNNs
+!!  Forms:
+!!
+!!     days2sec dd-hh:mm:ss
+!!     days2sec NNdNNhNNmNNs
+!!     days2sec --version| --help
 !!
 !!##DESCRIPTION
 !!    Given a duration in the form dd-hh:mm:ss where dd is days, hh hours,
@@ -184,7 +190,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-06-29 21:53:22 UTC-240>',&
+'@(#)COMPILED:       2024-11-24 04:44:35 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

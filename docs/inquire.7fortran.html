@@ -50,69 +50,70 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>inquire (7)</NOBR><HR></H1>
 </CENTER>
-<A name=0>
+<P>
+<A name=21>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-inquire(7f) - [FORTRAN:FILE_INQUIRE] File inquiry statement
+<P>
+inquire(7f) - [FILE_INQUIRE] File inquiry statement
 <P>
 </BLOCKQUOTE>
-<P>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=10>
+<A name=45>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
-INQUIRE([UNIT=file_unit_number]|[FILE=file_name_expr])
+INQUIRE([UNIT=file_unit_number]|[FILE=file_name_expr],
 <P>
 <PRE>
-    and  ACCESS = scalar_default_char_variable
-    or   ACTION = scalar_default_char_variable
-    or   ASYNCHRONOUS = scalar_default_char_variable
-    or   DIRECT = scalar_default_char_variable
+        ACCESS = scalar_default_char_variable,
+        ACTION = scalar_default_char_variable,
+        ASYNCHRONOUS = scalar_default_char_variable,
+        DIRECT = scalar_default_char_variable,
 <P>
-    or   BLANK = scalar_default_char_variable
-    or   DECIMAL = scalar_default_char_variable
-    or   DELIM = scalar_default_char_variable
-    or   ENCODING = scalar_default_char_variable
-    or   PAD = scalar_default_char_variable
-    or   SIGN = scalar_default_char_variable
+        BLANK = scalar_default_char_variable,
+        DECIMAL = scalar_default_char_variable,
+        DELIM = scalar_default_char_variable,
+        ENCODING = scalar_default_char_variable,
+        PAD = scalar_default_char_variable,
+        SIGN = scalar_default_char_variable,
 <P>
-    or   ERR = label
-    or   IOMSG = iomsg_variable
-    or   IOSTAT = scalar_int_variable
+        ERR = label,
+        IOMSG = iomsg_variable,
+        IOSTAT = scalar_int_variable,
 <P>
-    or   EXIST = scalar_logical_variable
-    or   FORM = scalar_default_char_variable
-    or   FORMATTED = scalar_default_char_variable
-    or   ID = scalar_int_expr
-    or   NAME = scalar_default_char_variable
-    or   NAMED = scalar_logical_variable
-    or   NEXTREC = scalar_int_variable
-    or   NUMBER = scalar_int_variable
-    or   OPENED = scalar_logical_variable
-    or   PENDING = scalar_logical_variable
-    or   POS = scalar_int_variable
-    or   POSITION = scalar_default_char_variable
-    or   READ = scalar_default_char_variable
-    or   READWRITE = scalar_default_char_variable
-    or   RECL = scalar_int_variable
-    or   ROUND = scalar_default_char_variable
-    or   SEQUENTIAL = scalar_default_char_variable
-    or   SIZE = scalar_int_variable
-    or   STREAM = scalar_default_char_variable
-    or   UNFORMATTED = scalar_default_char_variable
-    or   WRITE = scalar_default_char_variable
+        EXIST = scalar_logical_variable,
+        FORM = scalar_default_char_variable,
+        FORMATTED = scalar_default_char_variable,
+        ID = scalar_int_expr,
+        NAME = scalar_default_char_variable,
+        NAMED = scalar_logical_variable,
+        NEXTREC = scalar_int_variable,
+        NUMBER = scalar_int_variable,
+        OPENED = scalar_logical_variable,
+        PENDING = scalar_logical_variable,
+        POS = scalar_int_variable,
+        POSITION = scalar_default_char_variable,
+        READ = scalar_default_char_variable,
+        READWRITE = scalar_default_char_variable,
+        RECL = scalar_int_variable,
+        ROUND = scalar_default_char_variable,
+        SEQUENTIAL = scalar_default_char_variable,
+        SIZE = scalar_int_variable,
+        STREAM = scalar_default_char_variable,
+        UNFORMATTED = scalar_default_char_variable,
+        WRITE = scalar_default_char_variable )
 <P>
-     or
+         or
 <P>
-    INQUIRE(IOLENGTH=scalar_int_variable) output_item_list
+        INQUIRE(IOLENGTH=scalar_int_variable) output_item_list
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -123,10 +124,11 @@ INQUIRE([UNIT=file_unit_number]|[FILE=file_name_expr])
 </A>
 <BLOCKQUOTE>
 <P>
-The INQUIRE statement may be used to inquire about properties of a particular named file or of the connection
-to a particular unit. There are three forms of the INQUIRE statement:
+The INQUIRE statement may be used to inquire about properties of a
+particular named file or of the connection to a particular unit. There
+are three forms of the INQUIRE statement:
 <BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: The INQUIRE statement may be used to inquire about properties of a particular named file or of the connection
+<TABLE cellpadding=3><!-- tsb: The INQUIRE statement may be used to inquire about properties of a
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -146,36 +148,41 @@ inquire by output list, which uses only the IOLENGTH= specifier.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P>
-All specifier value assignments are performed according to the rules for assignment statements.
+All specifier value assignments are performed according to the rules for
+assignment statements.
 <P>
-For inquiry by unit, the unit specified need not exist or be connected to a file. If it is connected to a file, the
-inquiry is being made about the connection and about the file connected.
+For inquiry by unit, the unit specified need not exist or be connected
+to a file. If it is connected to a file, the inquiry is being made about
+the connection and about the file connected.
 <P>
-An INQUIRE statement may be executed before, while, or after a file is connected to a unit. All values assigned
-by an INQUIRE statement are those that are current at the time the statement is executed.
+An INQUIRE statement may be executed before, while, or after a file is
+connected to a unit. All values assigned by an INQUIRE statement are
+those that are current at the time the statement is executed.
 </BLOCKQUOTE>
-<A name=>
+<A name=3>
 
-    <H4>&nbsp; &nbsp; ERROR PROCESSING</H4>
+     <H3>ERROR PROCESSING</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-If an error condition occurs during execution of an INQUIRE statement, all of the inquiry specifier variables
-become undefined, except for variables in the IOSTAT= and IOMSG= specifiers (if any).
+If an error condition occurs during execution of an INQUIRE statement,
+all of the inquiry specifier variables become undefined, except for
+variables in the IOSTAT= and IOMSG= specifiers (if any).
 <P>
 The IOSTAT=, ERR=, and IOMSG= specifiers are described in 9.11.
 </BLOCKQUOTE>
-<A name=3>
+<A name=4>
 
      <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
-Unless constrained, the following inquiry specifiers may be used in either of the inquire by file or inquire by unit
-forms of the INQUIRE statement.
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: Unless constrained, the following inquiry specifiers may be used in either of the inquire by file or inquire by unit
+Unless constrained, the following inquiry specifiers may be used in
+either of the inquire by file or inquire by unit forms of the INQUIRE
+statement.
+<TABLE cellpadding=3><!-- tsb: Unless constrained, the following inquiry specifiers may be used in
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
@@ -186,35 +193,45 @@ No specifier shall appear more than once in a given inquire_spec_list.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-An inquire_spec_list shall contain one FILE= specifier or one UNIT= specifier, but not both.
+An inquire_spec_list shall contain one FILE= specifier or one UNIT=
+specifier, but not both.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-In the inquire by unit form of the INQUIRE statement, if the optional characters UNIT= are omitted,
-the file_unit-number shall be the first item in the inquire_spec_list.
+In the inquire by unit form of the INQUIRE statement, if the optional
+characters UNIT= are omitted,
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+     the file_unit-number shall be the first item in the
+     inquire_spec_list.
+<P>
+</PRE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+If an ID= specifier appears in an inquire_spec_list, a PENDING=
+specifier shall also appear.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If an ID= specifier appears in an inquire_spec_list, a PENDING= specifier shall also appear.
+The label in the ERR= specifier shall be the statement label of a
+branch target statement that appears in the same scoping unit as the
+INQUIRE statement.
 </TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-The label in the ERR= specifier shall be the statement label of a branch target statement that
-appears in the same scoping unit as the INQUIRE statement.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR></TR></TABLE>If file_unit-number identifies an internal unit, an error condition
+occurs.
 <P>
-If file_unit-number identifies an internal unit, an error condition occurs.
+When a returned value of a specifier other than the NAME= specifier is
+of type character, the value returned is in upper case.
 <P>
-When a returned value of a specifier other than the NAME= specifier is of type character, the value returned is
-in upper case.
-<P>
-The specifier that receives the returned value is a a default scalar variable.
+The specifier that receives the returned value is a a default scalar
+variable.
 </BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
      <H3>INPUTS</H3>
 
@@ -222,24 +239,28 @@ The specifier that receives the returned value is a a default scalar variable.
 <BLOCKQUOTE>
 <P>
 </BLOCKQUOTE>
-<A name=>
+<A name=6>
 
-    <H4>&nbsp; &nbsp; FILE</H4>
+     <H3>FILE</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The value of the file_name_expr in the FILE= specifier specifies the name of the file being inquired about. The
-named file need not exist or be connected to a unit. The value of the file_name_expr shall be of a form acceptable
-to the processor as a file name. Any trailing blanks are ignored. The interpretation of case is processor dependent.
+The value of the file_name_expr in the FILE= specifier specifies the
+name of the file being inquired about. The named file need not exist or
+be connected to a unit. The value of the file_name_expr shall be of a
+form acceptable to the processor as a file name. Any trailing blanks are
+ignored. The interpretation of case is processor dependent.
 </BLOCKQUOTE>
-<A name=>
+<A name=7>
 
-    <H4>&nbsp; &nbsp; UNIT</H4>
+     <H3>UNIT</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
 </BLOCKQUOTE>
-<A name=5>
+<A name=8>
 
      <H3>OUTPUTS</H3>
 
@@ -247,9 +268,10 @@ to the processor as a file name. Any trailing blanks are ignored. The interpreta
 <BLOCKQUOTE>
 <P>
 </BLOCKQUOTE>
-<A name=>
+<A name=9>
 
-    <H4>&nbsp; &nbsp; ACCESS</H4>
+     <H3>ACCESS</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
@@ -258,45 +280,40 @@ SEQUENTIAL if the connection is for sequential access
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
-<B>DIRECT</B> </TD><TD valign=bottom>
 if the connection is for direct access
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B>STREAM</B> </TD><TD valign=bottom>
 if the connection is for stream access.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 If there is no connection,
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+<A name=10>
 
-    <H4>&nbsp; &nbsp; ACTION</H4>
+     <H3>ACTION</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B>READ</B> </TD><TD valign=bottom>
 the connection is for input only,
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
-<B>WRITE</B> </TD><TD valign=bottom>
 the connection is for output only
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>READWRITE</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 the connection is for both input and output.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 if there is no connection,
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+<A name=11>
 
-    <H4>&nbsp; &nbsp; ASYNCHRONOUS</H4>
+     <H3>ASYNCHRONOUS</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
@@ -310,13 +327,13 @@ if the connection allows asynchronous input/output
 if the connection does not allow asynchronous input/output.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 If there is no connection
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+<A name=12>
 
-    <H4>&nbsp; &nbsp; BLANK</H4>
+     <H3>BLANK</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
@@ -330,13 +347,14 @@ blanks are interpreted as zeros on input
 blanks are interpreted as a null on input
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-no connection or the connection is not for formatted input/output
+no connection or the connection is not for formatted
+input/output
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+<A name=13>
 
-    <H4>&nbsp; &nbsp; DECIMAL</H4>
+     <H3>DECIMAL</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
@@ -350,20 +368,22 @@ treat a comma as the separator between mantissa and decimal
 use a decimal point as the separator
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-no connection or the connection is not for formatted input/output
+no connection or the connection is not for formatted
+input/output
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+<A name=14>
 
-    <H4>&nbsp; &nbsp; DELIM</H4>
+     <H3>DELIM</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
 <B>APOSTROPHE,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-the delimiter mode in effect for a connection for formatted input/output.
+the delimiter mode in effect for a connection for
+formatted input/output.
 QUOTE,
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
@@ -375,43 +395,48 @@ QUOTE,
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-no connection or the connection is not for formatted input/output
+no connection or the connection is not for formatted
+input/output
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<P>
-<P>
-<A name=>
+<A name=15>
 
-    <H4>&nbsp; &nbsp; DIRECT</H4>
+     <H3>DIRECT</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>YES</B> </TD><TD valign=bottom>
-if DIRECT is included in the set of allowed access methods for the file
+if DIRECT is included in the set of allowed access methods
+for the file
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>NO</B> </TD><TD valign=bottom>
-if DIRECT is not included in the set of allowed access methods for the file
-UNKNOWN if the processor is unable to determine whether DIRECT is included in the set of
-allowed access methods for the file.
+if DIRECT is not included in the set of allowed access
+methods for the file
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>UNKNOWN</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if the processor is unable to determine whether DIRECT is
+included in the set of allowed access methods for the file.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+<A name=16>
 
-    <H4>&nbsp; &nbsp; ENCODING</H4>
+     <H3>ENCODING</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
 <B>UTF-8</B> </TD><TD valign=bottom>
-if the connection is for formatted input/output with an encoding form of UTF-8
+if the connection is for formatted input/output with an
+encoding form of UTF-8
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 the connection is for unformatted input/output.
 </TD></TR>
 <TR><TD colspan=2>
@@ -419,11 +444,13 @@ If there is no connection,
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>UTF-8</B> </TD><TD valign=bottom>
-if the processor is able to determine that the encoding form of the file is UTF-8
+if the processor is able to determine that the encoding
+form of the file is UTF-8
 </TD></TR>
 <TR valign=top><TD colspan=2>
 <B>UNKNOWN</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-if the processor is unable to determine the encoding form of the file
+if the processor is unable to determine the encoding
+form of the file
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=>
@@ -435,77 +462,63 @@ The value assigned may be something other than UTF-8, UNDEFINED,
 or UNKNOWN if the processor supports other specific encoding forms
 (e.g. UTF-16BE).
 </BLOCKQUOTE>
-<A name=>
+<A name=17>
 
-    <H4>&nbsp; &nbsp; EXIST</H4>
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>.true.</B> </TD><TD valign=bottom>
-if there exists a file with the specified name if inquire is by FILE=filename statement
-or if by UNIT=number and the specified unit exists.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>.false.</B> </TD><TD valign=bottom>
-otherwise, false is assigned.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+     <H3>EXIST</H3>
 
-    <H4>&nbsp; &nbsp; FORM</H4>
 </A>
 <BLOCKQUOTE>
 <P>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>FORMATTED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-if the connection is for formatted input/output,
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>UNFORMATTED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-if the connection is for unformatted input/output.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-If there is no connection
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; FORMATTED</H4>
-</A>
-<BLOCKQUOTE>
+[char46]true. if there exists a file with the specified name if inquire is by
+FILE=filename statement or if by UNIT=number and the specified unit
+exists.
 <P>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>YES</B> </TD><TD valign=bottom>
-if FORMATTED is included in the set of allowed forms for the file
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>NO</B> </TD><TD valign=bottom>
-if FORMATTED is not included in the set of allowed forms for the file
-UNKNOWN if the processor is unable to determine whether FORMATTED is included in the
-set of allowed forms for the file.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; ID</H4>
-</A>
-<BLOCKQUOTE>
-<P>
-The value of the expression specified in the ID= specifier shall be the identifier of a pending data transfer operation
-for the specified unit. This specifier interacts with the PENDING= specifier (9.10.2.21).
+[char46]false. otherwise, false is assigned.
 </BLOCKQUOTE>
-<A name=0>
+<A name=18>
 
-    <H4>&nbsp; &nbsp; NAME</H4>
+     <H3>FORM</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_default_char_variable in the NAME= specifier is assigned the value of the name of the file if the file
-has a name; otherwise, it becomes undefined.
+FORMATTED if the connection is for formatted input/output, UNFORMATTED
+if the connection is for unformatted input/output. UNDEFINED If there is
+no connection
+</BLOCKQUOTE>
+<A name=19>
+
+     <H3>FORMATTED</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+YES if FORMATTED is included in the set of allowed forms for the file NO
+if FORMATTED is not included in the set of allowed forms for the file
+UNKNOWN if the processor is unable to determine whether FORMATTED is
+included in the set of allowed forms for the file.
+</BLOCKQUOTE>
+<A name=20>
+
+     <H3>ID</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The value of the expression specified in the ID= specifier shall be the
+identifier of a pending data transfer operation for the specified unit.
+This specifier interacts with the PENDING= specifier (9.10.2.21).
+</BLOCKQUOTE>
+<A name=21>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The scalar_default_char_variable in the NAME= specifier is assigned the
+value of the name of the file if the file has a name; otherwise, it
+becomes undefined.
 <P>
 </BLOCKQUOTE>
 <A name=>
@@ -523,101 +536,103 @@ The processor may return a file name qualified by a user
 identification, device, directory, or other relevant information.
 </BLOCKQUOTE>
 <P>
-The case of the characters assigned to scalar_default_char_variable is processor dependent.
-<A name=>
+The case of the characters assigned to scalar_default_char_variable is
+processor dependent.
+<A name=22>
 
-    <H4>&nbsp; &nbsp; NAMED</H4>
+     <H3>NAMED</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_logical_variable in the NAMED= specifier is assigned the value true if the file has a name; otherwise,
-it is assigned the value false.
+The scalar_logical_variable in the NAMED= specifier is assigned the
+value true if the file has a name; otherwise, it is assigned the value
+false.
 </BLOCKQUOTE>
-<A name=>
+<A name=23>
 
-    <H4>&nbsp; &nbsp; NEXTREC</H4>
+     <H3>NEXTREC</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_int_variable in the NEXTREC= specifier is assigned the value n + 1, where n is the record number of
-the last record read from or written to the connection for direct access. If there is a connection but no records have
-been read or written since the connection, the scalar_int_variable is assigned the value 1. If there is no connection,
-the connection is not for direct access, or the position is indeterminate because of a previous error condition, the
-scalar_int_variable becomes undefined. If there are pending data transfer operations for the specified unit, the
-value assigned is computed as if all the pending data transfers had already completed.
+The scalar_int_variable in the NEXTREC= specifier is assigned the value
+n + 1, where n is the record number of the last record read from or
+written to the connection for direct access. If there is a connection
+but no records have been read or written since the connection, the
+scalar_int_variable is assigned the value 1. If there is no connection,
+the connection is not for direct access, or the position is
+indeterminate because of a previous error condition, the
+scalar_int_variable becomes undefined. If there are pending data
+transfer operations for the specified unit, the value assigned is
+computed as if all the pending data transfers had already completed.
 </BLOCKQUOTE>
-<A name=>
+<A name=24>
 
-    <H4>&nbsp; &nbsp; NUMBER</H4>
+     <H3>NUMBER</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_int_variable in the NUMBER= specifier is assigned the value of the external unit number of the unit
-that is connected to the file. If there is no unit connected to the file, the value <B>-1</B> is assigned.
+The scalar_int_variable in the NUMBER= specifier is assigned the value
+of the external unit number of the unit that is connected to the file.
+If there is no unit connected to the file, the value <B>-1</B> is assigned.
 </BLOCKQUOTE>
-<A name=>
+<A name=25>
 
-    <H4>&nbsp; &nbsp; OPENED</H4>
+     <H3>OPENED</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>.true.</B> </TD><TD valign=bottom>
-if the file specified is connected to a unit
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>.false.</B> </TD><TD valign=bottom>
-otherwise
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+[char46]true. if the file specified is connected to a unit .false. otherwise
+</BLOCKQUOTE>
+<A name=26>
 
-    <H4>&nbsp; &nbsp; PAD</H4>
+     <H3>PAD</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>YES,</B> </TD><TD valign=bottom>
-corresponding to the pad mode in effect for a connection.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
+YES, corresponding to the pad mode in effect for a connection. NO
+</BLOCKQUOTE>
+<A name=27>
 
-    <H4>&nbsp; &nbsp; NO</H4>
+     <H3>UNDEFINED</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>UNDEFINED</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-If there is no connection or if the connection is not for formatted input/output,
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<P>
-<P>
-<A name=>
+If there is no connection or if the connection is not for formatted
+input/output,
+</BLOCKQUOTE>
+<A name=28>
 
-    <H4>&nbsp; &nbsp; PENDING</H4>
+     <H3>PENDING</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The PENDING= specifier is used to determine whether previously pending asynchronous data transfers are
-complete. A data transfer operation is previously pending if it is pending at the beginning of execution of the
+The PENDING= specifier is used to determine whether previously pending
+asynchronous data transfers are complete. A data transfer operation is
+previously pending if it is pending at the beginning of execution of the
 INQUIRE statement.
 <P>
-If an ID= specifier appears and the specified data transfer operation is complete, then the variable specified in
-the PENDING= specifier is assigned the value false and the INQUIRE statement performs the wait operation
-for the specified data transfer.
+If an ID= specifier appears and the specified data transfer operation is
+complete, then the variable specified in the PENDING= specifier is
+assigned the value false and the INQUIRE statement performs the wait
+operation for the specified data transfer.
 <P>
-If the ID= specifier is omitted and all previously pending data transfer operations for the specified unit are
-complete, then the variable specified in the PENDING= specifier is assigned the value false and the INQUIRE
-statement performs wait operations for all previously pending data transfers for the specified unit.
+If the ID= specifier is omitted and all previously pending data transfer
+operations for the specified unit are complete, then the variable
+specified in the PENDING= specifier is assigned the value false and the
+INQUIRE statement performs wait operations for all previously pending
+data transfers for the specified unit.
 <P>
-In all other cases, the variable specified in the PENDING= specifier is assigned the value true and no wait
-operations are performed; in this case the previously pending data transfers remain pending after the execution
-of the INQUIRE statement.
+In all other cases, the variable specified in the PENDING= specifier is
+assigned the value true and no wait operations are performed; in this
+case the previously pending data transfers remain pending after the
+execution of the INQUIRE statement.
 <P>
 <PRE>
         NOTE:
@@ -640,97 +655,122 @@ of the INQUIRE statement.
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=>
+<A name=29>
 
-    <H4>&nbsp; &nbsp; POS</H4>
+     <H3>POS</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_int_variable in the POS= specifier is assigned the number of the file storage unit immediately following
-the current position of a file connected for stream access. If the file is positioned at its terminal position, the
-variable is assigned a value one greater than the number of the highest-numbered file storage unit in the file. If
-the file is not connected for stream access or if the position of the file is indeterminate because of previous error
-conditions, the variable becomes undefined.
+The scalar_int_variable in the POS= specifier is assigned the number of
+the file storage unit immediately following the current position of a
+file connected for stream access. If the file is positioned at its
+terminal position, the variable is assigned a value one greater than the
+number of the highest-numbered file storage unit in the file. If the
+file is not connected for stream access or if the position of the file
+is indeterminate because of previous error conditions, the variable
+becomes undefined.
 </BLOCKQUOTE>
-<A name=>
+<A name=30>
 
-    <H4>&nbsp; &nbsp; POSITION</H4>
+     <H3>POSITION</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_default_char_variable in the POSITION= specifier is assigned the value REWIND if the connection
-was opened for positioning at its initial point, APPEND if the connection was opened for positioning before its
-endfile record or at its terminal point, and ASIS if the connection was opened without changing its position.
-If there is no connection or if the file is connected for direct access, the scalar_default_char_variable is assigned
-the value UNDEFINED. If the file has been repositioned since the connection, the scalar_default_char_variable
-is assigned a processor-dependent value, which shall not be REWIND unless the file is positioned at its initial
-point and shall not be APPEND unless the file is positioned so that its endfile record is the next record or at its
-terminal point if it has no endfile record.
+The scalar_default_char_variable in the POSITION= specifier is assigned
+the value REWIND if the connection was opened for positioning at its
+initial point, APPEND if the connection was opened for positioning
+before its endfile record or at its terminal point, and ASIS if the
+connection was opened without changing its position. If there is no
+connection or if the file is connected for direct access, the
+scalar_default_char_variable is assigned the value UNDEFINED. If the
+file has been repositioned since the connection, the
+scalar_default_char_variable is assigned a processor-dependent value,
+which shall not be REWIND unless the file is positioned at its initial
+point and shall not be APPEND unless the file is positioned so that its
+endfile record is the next record or at its terminal point if it has no
+endfile record.
 </BLOCKQUOTE>
-<A name=>
+<A name=31>
 
-    <H4>&nbsp; &nbsp; READ</H4>
+     <H3>READ</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_default_char_variable in the READ= specifier is assigned the value YES if READ is included in the
-set of allowed actions for the file, NO if READ is not included in the set of allowed actions for the file, and
-UNKNOWN if the processor is unable to determine whether READ is included in the set of allowed actions for
-the file.
+The scalar_default_char_variable in the READ= specifier is assigned the
+value YES if READ is included in the set of allowed actions for the
+file, NO if READ is not included in the set of allowed actions for the
+file, and UNKNOWN if the processor is unable to determine whether READ
+is included in the set of allowed actions for the file.
 </BLOCKQUOTE>
-<A name=>
+<A name=32>
 
-    <H4>&nbsp; &nbsp; READWRITE</H4>
+     <H3>READWRITE</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_default_char_variable in the READWRITE= specifier is assigned the value YES if READWRITE is
-included in the set of allowed actions for the file, NO if READWRITE is not included in the set of allowed actions
-for the file, and UNKNOWN if the processor is unable to determine whether READWRITE is included in the
-set of allowed actions for the file.
+The scalar_default_char_variable in the READWRITE= specifier is assigned
+the value YES if READWRITE is included in the set of allowed actions for
+the file, NO if READWRITE is not included in the set of allowed actions
+for the file, and UNKNOWN if the processor is unable to determine
+whether READWRITE is included in the set of allowed actions for the
+file.
 </BLOCKQUOTE>
-<A name=>
+<A name=33>
 
-    <H4>&nbsp; &nbsp; RECL</H4>
+     <H3>RECL</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_int_variable in the RECL= specifier is assigned the value of the record length of a connection for direct
-access, or the value of the maximum record length of a connection for sequential access. If the connection is for
-formatted input/output, the length is the number of characters for all records that contain only characters of
-default kind. If the connection is for unformatted input/output, the length is measured in file storage units. If
-there is no connection, or if the connection is for stream access, the scalar_int_variable becomes undefined.
+The scalar_int_variable in the RECL= specifier is assigned the value of
+the record length of a connection for direct access, or the value of the
+maximum record length of a connection for sequential access. If the
+connection is for formatted input/output, the length is the number of
+characters for all records that contain only characters of default kind.
+If the connection is for unformatted input/output, the length is
+measured in file storage units. If there is no connection, or if the
+connection is for stream access, the scalar_int_variable becomes
+undefined.
 </BLOCKQUOTE>
-<A name=>
+<A name=34>
 
-    <H4>&nbsp; &nbsp; ROUND</H4>
+     <H3>ROUND</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_default_char_variable in the ROUND= specifier is assigned
-the value UP, DOWN, ZERO, NEAREST, COMPATIBLE, or PROCESSOR DEFINED,
+The scalar_default_char_variable in the ROUND= specifier is assigned the
+value UP, DOWN, ZERO, NEAREST, COMPATIBLE, or PROCESSOR DEFINED,
 corresponding to the I/O rounding mode in effect for a connection for
 formatted input/output. If there is no connection or if the connection
-is not for formatted input/output, the scalar_default_char_variable
-is assigned the value UNDEFINED. The processor shall return the value
-PROCESSOR DEFINED only if the behavior of the current I/O rounding
-mode is different from that of the UP, DOWN,
-ZERO, NEAREST, and COMPATIBLE modes.
+is not for formatted input/output, the scalar_default_char_variable is
+assigned the value UNDEFINED. The processor shall return the value
+PROCESSOR DEFINED only if the behavior of the current I/O rounding mode
+is different from that of the UP, DOWN, ZERO, NEAREST, and COMPATIBLE
+modes.
 </BLOCKQUOTE>
-<A name=6>
+<A name=35>
 
-    <H4>&nbsp; &nbsp; SEQUENTIAL</H4>
+     <H3>SEQUENTIAL</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_default_char_variable in the SEQUENTIAL= specifier is assigned the value YES if SEQUENTIAL is
-included in the set of allowed access methods for the file, NO if SEQUENTIAL is not included in the set of allowed
-access methods for the file, and UNKNOWN if the processor is unable to determine whether SEQUENTIAL is
-included in the set of allowed access methods for the file.
+The scalar_default_char_variable in the SEQUENTIAL= specifier is
+assigned the value YES if SEQUENTIAL is included in the set of allowed
+access methods for the file, NO if SEQUENTIAL is not included in the set
+of allowed access methods for the file, and UNKNOWN if the processor is
+unable to determine whether SEQUENTIAL is included in the set of allowed
+access methods for the file.
 </BLOCKQUOTE>
-<A name=7>
+<A name=36>
 
-    <H4>&nbsp; &nbsp; SIGN</H4>
+     <H3>SIGN</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
@@ -740,35 +780,42 @@ mode in effect for a connection for formatted input/output. If there is
 no connection, or if the connection is not for formatted input/output,
 the scalar_default_char_variable is assigned the value UNDEFINED.
 </BLOCKQUOTE>
-<A name=>
+<A name=37>
 
-    <H4>&nbsp; &nbsp; SIZE</H4>
+     <H3>SIZE</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_int_variable in the SIZE= specifier is assigned the size of the file in file storage units. If the file size
-cannot be determined, the variable is assigned the value <B>-1</B>.
+The scalar_int_variable in the SIZE= specifier is assigned the size of
+the file in file storage units. If the file size cannot be determined,
+the variable is assigned the value <B>-1</B>.
 <P>
-For a file that may be connected for stream access, the file size is the number of the highest-numbered file storage
-unit in the file.
+For a file that may be connected for stream access, the file size is the
+number of the highest-numbered file storage unit in the file.
 <P>
-For a file that may be connected for sequential or direct access, the file size may be different from the number of
-storage units implied by the data in the records; the exact relationship is processor-dependent.
+For a file that may be connected for sequential or direct access, the
+file size may be different from the number of storage units implied by
+the data in the records; the exact relationship is processor-dependent.
 </BLOCKQUOTE>
-<A name=>
+<A name=38>
 
-    <H4>&nbsp; &nbsp; STREAM</H4>
+     <H3>STREAM</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_default_char_variable in the STREAM= specifier is assigned the value YES if STREAM is included in
-the set of allowed access methods for the file, NO if STREAM is not included in the set of allowed access methods
-for the file, and UNKNOWN if the processor is unable to determine whether STREAM is included in the set of
-allowed access methods for the file.
+The scalar_default_char_variable in the STREAM= specifier is assigned
+the value YES if STREAM is included in the set of allowed access methods
+for the file, NO if STREAM is not included in the set of allowed access
+methods for the file, and UNKNOWN if the processor is unable to
+determine whether STREAM is included in the set of allowed access
+methods for the file.
 </BLOCKQUOTE>
-<A name=>
+<A name=39>
 
-    <H4>&nbsp; &nbsp; UNFORMATTED</H4>
+     <H3>UNFORMATTED</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
@@ -779,49 +826,208 @@ allowed forms for the file, and UNKNOWN if the processor is unable to
 determine whether UNFORMATTED is included in the set of allowed forms
 for the file.
 </BLOCKQUOTE>
-<A name=>
+<A name=40>
 
-    <H4>&nbsp; &nbsp; WRITE</H4>
+     <H3>WRITE</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_default_char_variable in the WRITE= specifier is assigned the value YES if WRITE is included in the
-set of allowed actions for the file, NO if WRITE is not included in the set of allowed actions for the file, and
-UNKNOWN if the processor is unable to determine whether WRITE is included in the set of allowed actions for
-the file.
+The scalar_default_char_variable in the WRITE= specifier is assigned the
+value YES if WRITE is included in the set of allowed actions for the
+file, NO if WRITE is not included in the set of allowed actions for the
+file, and UNKNOWN if the processor is unable to determine whether WRITE
+is included in the set of allowed actions for the file.
 </BLOCKQUOTE>
-<A name=8>
+<A name=41>
 
      <H3>INQUIRE BY OUTPUT LIST</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
-The scalar_int_variable in the IOLENGTH= specifier is assigned the processor-dependent number of file storage
-units that would be required to store the data of the output list in an unformatted file. The value shall be suitable
-as a RECL= specifier in an OPEN statement that connects a file for unformatted direct access when there are
+The scalar_int_variable in the IOLENGTH= specifier is assigned the
+processor-dependent number of file storage units that would be required
+to store the data of the output list in an unformatted file. The value
+shall be suitable as a RECL= specifier in an OPEN statement that
+connects a file for unformatted direct access when there are
 input/output statements with the same input/output list.
 <P>
-The output list in an INQUIRE statement shall not contain any derived-type list items that require a defined
-input/output procedure as described in subclause 9.6.3. If a derived-type list item appears in the output list, the
-value returned for the IOLENGTH= specifier assumes that no defined input/output procedure will be invoked.
+The output list in an INQUIRE statement shall not contain any
+derived-type list items that require a defined input/output procedure as
+described in subclause 9.6.3. If a derived-type list item appears in the
+output list, the value returned for the IOLENGTH= specifier assumes that
+no defined input/output procedure will be invoked.
 </BLOCKQUOTE>
-<A name=9>
+<A name=43>
 
      <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Examples of INQUIRE statements are:
 <P>
 <PRE>
-     INQUIRE (IOLENGTH = IOL) A (1:N)
-     INQUIRE (UNIT = JOAN, OPENED = LOG_01, NAMED = LOG_02, &
-        FORM = CHAR_VAR, IOSTAT = IOS)
+         INQUIRE (IOLENGTH = IOL) A (1:N)
+         INQUIRE (UNIT = JOAN, OPENED = LOG_01, NAMED = LOG_02, &
+            FORM = CHAR_VAR, IOSTAT = IOS)
+<P>
 </PRE>
 </BLOCKQUOTE>
+<A name=43>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+    program demo_inquire
+    implicit none
+    character(len=4096)  :: filename
+    character(len=20)    :: mode
+    integer              :: ios
+    character(len=256)   :: message
+    integer              :: lun
+    call print_inquire(lun,&#146;&#146;)
+    contains
+    subroutine print_inquire(lun_in,namein_in)
+<P>
+    !@(#) print_inquire(3f) INQUIRE a file by name/number and print results
+<P>
+    ! if unit &gt;= 0 then query by unit number, else by name
+    integer,intent(in),optional             :: lun_in
+    character(len=*),intent(in),optional    :: namein_in
+<P>
+    integer                        :: ios
+    character(len=256)             :: message
+    character(len=:),allocatable   :: namein
+    integer                        :: lun
+<P>
+    ! STATUS=NEW|REPLACE|OLD|SCRATCH|UNKNOWN
+<P>
+    ! SEQUENTIAL | DIRECT | STREAM
+    character(len=20) :: access         ; namelist/inquire/access
+<P>
+    ! FORMATTED | UNFORMATTED
+    character(len=20) :: form           ; namelist/inquire/form
+<P>
+    ! ASIS | REWIND | APPEND
+    character(len=20) :: position       ; namelist/inquire/position
+<P>
+    ! READ | WRITE | READWRITE
+    character(len=20) :: action         ; namelist/inquire/action
+<P>
+    character(len=20) :: asynchronous   ; namelist/inquire/asynchronous
+    character(len=20) :: blank          ; namelist/inquire/blank
+    character(len=20) :: decimal        ; namelist/inquire/decimal
+    character(len=20) :: delim          ; namelist/inquire/delim
+    character(len=20) :: direct         ; namelist/inquire/direct
+    character(len=20) :: encoding       ; namelist/inquire/encoding
+    character(len=20) :: formatted      ; namelist/inquire/formatted
+    character(len=20) :: name           ; namelist/inquire/name
+    character(len=20) :: pad            ; namelist/inquire/pad
+    character(len=20) :: read           ; namelist/inquire/read
+    character(len=20) :: readwrite      ; namelist/inquire/readwrite
+    character(len=20) :: round          ; namelist/inquire/round
+    character(len=20) :: sequential     ; namelist/inquire/sequential
+    character(len=20) :: sign           ; namelist/inquire/sign
+    character(len=20) :: stream         ; namelist/inquire/stream
+    character(len=20) :: unformatted    ; namelist/inquire/unformatted
+    character(len=20) :: write          ; namelist/inquire/write
+    integer           :: id             ; namelist/inquire/id
+    integer           :: nextrec        ; namelist/inquire/nextrec
+    integer           :: number         ; namelist/inquire/number
+    integer           :: pos            ; namelist/inquire/pos
+    integer           :: recl           ; namelist/inquire/recl
+    integer           :: size           ; namelist/inquire/size
+    logical           :: exist          ; namelist/inquire/exist
+    logical           :: named          ; namelist/inquire/named
+    logical           :: opened         ; namelist/inquire/opened
+    logical           :: pending        ; namelist/inquire/pending
+<P>
+       if(present(namein_in))then
+          namein=namein_in
+       else
+          namein=&#146;&#146;
+       endif
+       if(present(lun_in))then
+          lun=lun_in
+       else
+          lun=-1
+       endif
+       ! exist, opened, and named always become defined
+       ! unless an error condition occurs.
+       !!write(*,*)&#146;LUN=&#146;,lun,&#146; FILENAME=&#146;,namein
+       name=&#146;&#146;
+       if(namein == &#146;&#146;.and.lun /= -1)then
+          write(*,*) &#146;*print_inquire* checking unit&#146;,lun
+          inquire(unit=lun,                                          &
+          & recl=recl,nextrec=nextrec,pos=pos,size=size,             &
+          & position=position,                                       &
+          & name=name,                                               &
+          & form=form,formatted=formatted,unformatted=unformatted,   &
+          & access=access,sequential=sequential,direct=direct,       &
+          & stream=stream,                                           &
+          & action=action,read=read,write=write,readwrite=readwrite, &
+          & sign=sign,                                               &
+          & round=round,                                             &
+          & blank=blank,decimal=decimal,delim=delim,                 &
+          & encoding=encoding,pad=pad,                               &
+          & named=named,opened=opened,exist=exist,number=number,     &
+          & pending=pending,asynchronous=asynchronous,               &
+          & iostat=ios,err=999,iomsg=message)
+       elseif(namein /= &#146;&#146;)then
+          write(*,*) &#146;*print_inquire* checking file:&#146;//namein
+          inquire(file=namein,                                       &
+          & recl=recl,nextrec=nextrec,pos=pos,size=size,             &
+          & position=position,                                       &
+          & name=name,                                               &
+          & form=form,formatted=formatted,unformatted=unformatted,   &
+          & access=access,sequential=sequential,direct=direct,       &
+          & stream=stream,                                           &
+          & action=action,read=read,write=write,readwrite=readwrite, &
+          & sign=sign,                                               &
+          & round=round,                                             &
+          & blank=blank,decimal=decimal,delim=delim,                 &
+          & encoding=encoding,pad=pad,                               &
+          & named=named,opened=opened,exist=exist,number=number,     &
+          & pending=pending,asynchronous=asynchronous,               &
+          & iostat=ios,err=999,iomsg=message)
+          if(name == &#146;&#146;)name=namein
+       else
+          write(*,*) &
+          &&#146;*print_inquire* must specify either filename or unit number&#146;
+       endif
+       write(*,nml=inquire,delim=&#146;none&#146;)
+       return
+<P>
+    999   continue
+       write(*,*)&#146;*print_inquire* bad inquire&#146;
+    !  If an error condition occurs during execution of an INQUIRE statement,
+    !  all of the inquiry identifiers except ios become undefined.
+       write(*,*) &
+       &&#146;*print_inquire* inquire call failed,iostat=&#146;,ios,&#146;message=&#146;,message
+    end subroutine print_inquire
+    end program demo_inquire
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=44>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7),
+PRINT(7), READ(7), REWIND(7), WAIT(7), WRITE(7)
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>inquire (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f3a56ed6-1675-40b4-ae53-7a903ac36162 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>inquire (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b341dd45-c64c-4414-94f0-562bb27f2348 using man macros.</FONT>
 <br><br><center><img src="images/inquire.7fortran.gif"></center>
 </div>
 </div>

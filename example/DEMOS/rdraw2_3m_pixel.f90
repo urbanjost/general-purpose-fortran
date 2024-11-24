@@ -21,8 +21,8 @@
           call move2(  0.0,-50.0)
           call square(50.0)
 
-          call writegif('rdraw2.3M_pixel.gif',P_pixel,P_colormap)
-          call execute_command_line('display rdraw2.3M_pixel.gif')
+          call writegif('rdraw2.3m_pixel.gif',P_pixel,P_colormap)
+          call execute_command_line('display rdraw2.3m_pixel.gif')
           call vexit()
 
           contains

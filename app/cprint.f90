@@ -85,16 +85,26 @@ help_text=[ CHARACTER(LEN=128) :: &
 'EXAMPLES                                                                          ',&
 '  Sample usage:                                                                   ',&
 '                                                                                  ',&
-'      $echo a b c d|cprint 1000 -1 # reverse column order of a table              ',&
-'      d c b a                                                                     ',&
+'    $echo a b c d|cprint 1000 -1 # reverse column order of a table                ',&
+'    d c b a                                                                       ',&
 '                                                                                  ',&
-'      $: switch first and second column and skip third column                     ',&
-'      $: and print up to column 1000                                              ',&
-'      $ls -l |cprint 2 1 4 -1000                                                  ',&
+'    $: switch first and second column and skip third column                       ',&
+'    $: and print up to column 1000                                                ',&
+'    $ls -l |cprint 2 1 4 -1000                                                    ',&
 '                                                                                  ',&
-'      $: column numbers may be reused                                             ',&
-'      $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1                              ',&
-'      h e l l o w o r l d                                                         ',&
+'    $: column numbers may be reused                                               ',&
+'    #: Note these are all equivalent, even the null string.                       ',&
+"    $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1 --separator ' '                ",&
+"    $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1 --separator ''                 ",&
+'    $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1                                ',&
+'    h e l l o w o r l d                                                           ',&
+'    $: this is how to get a null separator ...                                    ',&
+"    $echo d e h l o r w|cprint 3 2 4 4 5 7 5 6 4 1 --null                         ",&
+'    helloworld                                                                    ',&
+'    $: The separator can be multiple characters                                   ',&
+"    $echo D E H L O R W|cprint 3 2 4 4 5 7 5 6 4 1 --separator '___' --verbose    ",&
+'    COLUMNS=[3],[2],[4],[4],[5],[7],[5],[6],[4],[1] DELIMITERS=[ ] SEPARATOR=[___]',&
+'    H___E___L___L___O___W___O___R___L___D___                                      ',&
 '                                                                                  ',&
 'AUTHOR                                                                            ',&
 '   John S. Urban                                                                  ',&

@@ -12525,6 +12525,8 @@ end subroutine xy_getmark
 !!    program demo_illusion
 !!    use M_draw,      only : vinit, color, clear, backbuffer, getkey, vexit, page
 !!    use M_xyplot,    only : illusion
+!!    implicit none
+!!    integer :: idum
 !!    call vinit(' ')
 !!    call page(0.0,4800.0,0.0,4800.0)
 !!    call color(6)

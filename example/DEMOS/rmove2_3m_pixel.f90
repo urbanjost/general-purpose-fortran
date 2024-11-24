@@ -15,7 +15,7 @@
              call rmove2(10.0, 0.0)
              call rdraw2( 0.0,10.0)
           enddo
-          call writegif('rmove2.3M_pixel.gif',P_pixel,P_colormap)
-          call  execute_command_line('display rmove2.3M_pixel.gif')
+          call writegif('rmove2.3m_pixel.gif',P_pixel,P_colormap)
+          call  execute_command_line('display rmove2.3m_pixel.gif')
           call vexit()
        end program demo_rmove2

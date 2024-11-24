@@ -1,6 +1,5 @@
       program demo_hypot
-      use, intrinsic :: iso_fortran_env, only : &
-       & real_kinds, real32, real64, real128
+      use, intrinsic :: iso_fortran_env, only : real32, real64, real128
       implicit none
       real(kind=real32) :: x, y
       real(kind=real32),allocatable :: xs(:), ys(:)

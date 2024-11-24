@@ -201,6 +201,10 @@ public :: system_signal                  ! (signal,[handler]) install signal han
 public :: system_errno
 public :: system_perror
 
+
+public :: system_getchar
+public :: system_putchar
+
 public :: system_putenv
 public :: system_getenv
 public :: set_environment_variable
@@ -1182,6 +1186,19 @@ type handler_pointer
 end type handler_pointer
 integer, parameter :: no_of_signals=64   !  obtained with command: kill -l
 type(handler_pointer), dimension(no_of_signals) :: handler_ptr_array
+!===================================================================================================================================
+interface
+   integer(kind=c_int) function C_putchar(ichar) bind (C,name="putchar")
+      import c_int
+      integer(kind=c_int),intent(in),value :: ichar
+   end function C_putchar
+end interface
+
+interface
+   integer(kind=c_int) function C_getchar() bind (C,name="getchar")
+      import c_int
+   end function C_getchar
+end interface
 !===================================================================================================================================
 contains
 !===================================================================================================================================
@@ -6048,6 +6065,94 @@ integer                          :: jalpha,ja,jb,jc,jd,je,ijul
    ierr=0
 
 end subroutine unix_to_date
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!        system_putchar(3f) - [M_system:IO] writes a character to the stdout stream.
+!!        (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!        integer(kind=c_int) function system_putchar(ch)
+!!        character(len=1),intent(in) :: ch
+!!##DESCRIPTION
+!!        system_putchar(3f) writes the character CH to the stdout stream via C I/O
+!!
+!!##RETURN VALUE
+!!        putchar(3C) returns the character written as an unsigned char cast
+!!        to an int or EOF(a negative value) on error. This is passed on to
+!!        system_putchar(3f).
+!!
+!!##RETURN VALUE
+!!    the status code. If negative an error occurred
+!!##EXAMPLE
+!!
+!!   Example program
+!!
+!!      program demo_system_putchar
+!!      use M_system,      only : system_putchar
+!!      implicit none
+!!      integer :: i
+!!      integer :: iostat
+!!      do i=32,126 ! printable ASCII characters
+!!         iostat=system_putchar(achar(i))
+!!         if(iostat.lt.0)stop '<ERROR> *main* character '//achar(i)
+!!      enddo
+!!      iostat=system_putchar(new_line('a'))
+!!      end program demo_system_putchar
+impure elemental function system_putchar(ch)
+character(len=1),intent(in) :: ch
+integer :: system_putchar
+   system_putchar=C_putchar(ichar(ch,kind=c_int))
+end function system_putchar
+!-----------------------------------------------------------------------------------------------------------------------------------
+!>
+!!##NAME
+!!        system_getchar(3f) - [M_system:IO] reads a character from the stdin stream.
+!!        (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!        integer(kind=c_int) function system_getchar(ch)
+!!        character(len=1),intent(in) :: ch
+!!##DESCRIPTION
+!!        system_getchar(3f) read the character CH from the stdin stream via C I/O
+!!
+!!##RETURN VALUE
+!!        getchar(3C) returns the character written as an unsigned char cast
+!!        to an int or EOF(a negative value) on error. This is passed on to
+!!        system_getchar(3f).
+!!
+!!##RETURN VALUE
+!!    the status code. If negative an error occurred
+!!##EXAMPLE
+!!
+!!   Example program
+!!
+!!      program demo_system_getchar
+!!      use M_system,      only : system_getchar, system_putchar
+!!      implicit none
+!!      integer :: i
+!!      integer :: iostat
+!!      character(len=1) :: ch
+!!      do while(system_getchar(ch).ge.0)
+!!         iostat= system_putchar('[')
+!!         iostat= system_putchar(ch)
+!!         iostat= system_putchar(']')
+!!      enddo
+!!      end program demo_system_getchar
+function system_getchar(ch)
+character(len=1),intent(out) :: ch
+integer :: system_getchar
+integer(kind=c_int) :: ich
+   ich=C_getchar()
+   if(ich.ge.0)then
+      ch=char(ich)
+   else
+      ch=char(0)
+   endif
+   system_getchar=ich
+end function system_getchar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

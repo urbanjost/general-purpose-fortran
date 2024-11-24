@@ -44,7 +44,7 @@
         enddo
         call vexit()
         !! write to file and display with display(1)
-        call write_animated_gif('hershey.3M_pixel.gif',&
+        call write_animated_gif('hershey.3m_pixel.gif',&
         & movie,P_colormap,delay=40)
-        !call execute_command_line('display hershey.3M_pixel.gif')
+        !call execute_command_line('display hershey.3m_pixel.gif')
      end program demo_hershey

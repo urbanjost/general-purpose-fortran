@@ -50,67 +50,72 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>stop (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-STOP(7f),ALLSTOP(7f) - [FORTRAN:STATEMENT] initiates termination of
-execution
+<P>
+STOP(7) - [STATEMENT] initiates termination of execution
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-STOP [ stop-code ]
-ERROR STOP [ stop-code ]
-<TABLE cellpadding=3><!-- tsb: STOP [ stop-code ]
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>stop-code</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is  scalar-char-initialization-expr
-<TABLE width=100% cellpadding=3><!-- tsb: is  scalar-char-initialization-expr
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>or</B> </TD><TD valign=bottom>
-scalar-int-initialization-expr
-</TD></TR>
-<TR></TR></TABLE><!-- .PP -->
-</TD></TR>
-<TR></TR></TABLE>The scalar-char-initialization-expr shall be of default kind.
 <P>
-The scalar-int-initialization-expr shall be of default kind.
+stop [ stop-code ]
+<P>
+error stop [ stop-code ]
 </BLOCKQUOTE>
 <A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STOP-CODE is a constant scalar _character_or integer expression, of
+default kind.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
-A STOP statement will cause the program to terminate normally. It may
-provide additional information in the form of output or a system status
-code, depending on the system.
+<P>
+A STOP statement will cause the program to terminate normally.
+<P>
+It may provide additional information in the form of output or a system
+status code, depending on the system.
 <P>
 Any messages generated appear on the ERROR_UNIT file, as identified in
 the intrinsic module ISO_FORTRAN_ENV. This unit is often referred to as
-"stderr". It is recommended that systems write the value of the stop
-code whether numeric or a string.
+"stderr".
 <P>
-Note that although STOP is a "normal" termination system status codes
-or "exit codes" are often used for error processing in many scripting
-languages. This code may be detectable by EXECUTE_SYSTEM_COMMAND(3f).
+It is recommended that systems write the value of the stop code whether
+numeric or a string.
 <P>
-Execution of an ERROR STOP statement initiates error termination of
-an execution, which on several systems includes the output from
-a traceback.
+Note that although STOP causes a "normal" termination, system status
+codes or "exit codes" are often used for error processing in many
+scripting languages. This code may be detectable by
+EXECUTE_SYSTEM_COMMAND(3f).
+<P>
+Execution of an ERROR STOP statement initiates error termination of an
+execution, which on several systems includes the output from a
+traceback.
 <P>
 So when an image is terminated by a STOP or ERROR STOP statement, its
 stop code, if any, is made available in a processor-dependent manner.
@@ -122,57 +127,88 @@ When normal termination occurs on more than one image, it is expected
 that a processor-dependent summary of any stop codes and signaling
 exceptions will be made available.
 <P>
-If an integer stop-code is used as the process exit status,
-the processor might be able to interpret only values within a limited
-range, or only a limited portion of the integer value (for example,
-only the least-significant 8 bits).
+If an integer STOP-CODE is used as the process exit status, the
+processor might be able to interpret only values within a limited range,
+OR only a limited portion of the integer value (for example, only the
+least-significant 8 bits).
 <P>
-If the stop-code is of type character or does not appear, or if an
-END PROGRAM statement is executed, it is recommended that the value
-zero be supplied as the process exit status, if the processor supports
-that concept.
-</BLOCKQUOTE>
-<A name=3>
-
-     <H3>EXAMPLE</H3>
-
-</A>
-<BLOCKQUOTE>
-Sample:
-<P>
-<PRE>
-   program demo_stop
-   use, intrinsic :: iso_fortran_env, only : stderr=&gt;ERROR_UNIT
-   implicit none
-   integer :: stopcode
-   ! Normal terminations
-      ! A STOP with no parameter is a normal termination and generally
-      ! returns a zero status value if the system supports return statuses
-      stop
-      ! All other stops are error stops
-      stop 10
-      stop &#146;That is all, folks!&#146;
-      stopcode=11
-      stop stopcode
-   ! Error terminations
-      ! ERROR STOP is always an error stop, even without a stop-code
-      error stop
-      ! ERROR STOP often displays a traceback but that is not required
-      error stop 10
-      error stop &#146;That is all, folks!&#146;
-      error stop stopcode
-   end program demo_stop
-<P>
-</PRE>
+If the STOP-CODE is of type character or does not appear, OR if an END
+PROGRAM statement is executed, it is recommended that the value zero be
+supplied as the process exit status, if the processor supports that
+concept.
 </BLOCKQUOTE>
 <A name=4>
 
-    <H4>&nbsp; &nbsp; JSU</H4>
+     <H3>EXAMPLES</H3>
+
 </A>
 <BLOCKQUOTE>
+<P>
+Sample:
+<P>
+<PRE>
+       program demo_stop
+       ! select which STOP call to make from command line
+       use, intrinsic :: iso_fortran_env, only : stderr=&gt;ERROR_UNIT
+       implicit none
+       integer :: i, istat, argument_length, stopcode
+       character(len=:),allocatable :: which, message
+          ! allocate string array big enough to hold command line
+          call get_command_argument(number=1,length=argument_length)
+          ! argument strings and related information
+          if(allocated(which))deallocate(which)
+          allocate(character(len=argument_length) :: which)
+          call get_command_argument(1, which,status=istat)
+          if(istat.ne.0)which=&#146;&#146;
+          select case(which)
+          ! normal terminations:
+          ! A STOP with no non-zero numeric parameter is a normal
+          ! termination and generally returns a zero status value if the
+          ! system supports return statuses
+          case(&#146;basic&#146;); stop    ! usually displays nothing
+          case(&#146;zero&#146;);  stop 0  ! sometimes displays "STOP 0" or "0"
+          case(&#146;text&#146;);  stop &#146;That is all, folks!&#146;
+          !
+          ! All other stops are generally used to indicate an error or
+          ! special exit type
+          case(&#146;nonzero&#146;);                 stop 10
+          case(&#146;variable&#146;); stopcode=11;   stop stopcode
+          case(&#146;expression&#146;); stopcode=11; stop 110/stopcode
+          case(&#146;string&#146;); message=&#146;oops&#146;;  stop &#146;ERROR:[&#146;//message//&#146;]&#146;
+          ! Error terminations:
+          ! ERROR STOP is always an error stop, even without a stop-code
+          ! ERROR STOP often displays a traceback but that is not required
+          case(&#146;error&#146;)
+             error stop
+          case(&#146;errornum&#146;)
+             stopcode=10
+             error stop stopcode+3
+          case(&#146;errorstring&#146;)
+             message=&#146;That is all, folks!&#146;
+             error stop &#146;ERROR:&#146;//message
+          case default
+             write(*,&#146;(a)&#146;)&#146;enter a stop type:&#146;, &
+                  & &#146;{basic, text, zero, nonzero, variable, expression}&#146;, &
+                  & &#146;{error, errornum, errorstring}&#146;
+             write(*,*)&#146;try again &#46;&#46;&#46;&#146;
+          end select
+       end program demo_stop
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+FORTRAN 77, ERROR STOP introduced in Fortran f2018
+<P>
+Fortran statement descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>stop (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d06dbc8f-2478-4672-a54f-fc872b49b8ca using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>stop (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from db9d203e-22cc-460b-a70e-f2be437b0daa using man macros.</FONT>
 <br><br><center><img src="images/stop.7fortran.gif"></center>
 </div>
 </div>

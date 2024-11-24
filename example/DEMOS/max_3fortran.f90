@@ -36,14 +36,17 @@
          ! Remember if any argument is an array by the definition of an
          ! elemental function all the array arguments must be the same shape.
 
-         ! to find the single largest value of arrays you could use something
-         ! like MAXVAL([arr1, arr2]) or probably better (no large temp array),
-         ! max(maxval(arr1),maxval(arr2)) instead
+         ! to find the single largest value of multiple arrays you could
+         ! use something like
+         !    MAXVAL([arr1, arr2])
+         ! or probably better (more likely to avoid creating a large temp array)
+         !    max(maxval(arr1),maxval(arr2))
+         ! instead
 
          ! so this returns an array of the same shape as any input array
          ! where each result is the maximum that occurs at that position.
          write(*,*)max(arr1,arr2(1:4))
-         ! this returns an array just like arr1 except all values less than
+         ! this returns an array just like BOX  except all values less than
          ! zero are set to zero:
          write(*,*)max(box,0)
          ! When mixing arrays and scalars you can think of the scalars

@@ -56,7 +56,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-M_sets(3f) - [M_sets::INTRO] functions reminiscent of Matlab set functions
+M_sets(3f) - [M_sets::INTRO] functions reminiscent of Matlab set
+functions
 <P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
@@ -76,7 +77,10 @@ M_sets(3f) - [M_sets::INTRO] functions reminiscent of Matlab set functions
 Procedure names and syntax:
 <P>
 <PRE>
-    use M_sets, only : & union, unique, intersect, setdiff, ismember, setxor
+    use M_sets, only : &
+    union, unique, intersect, setdiff, ismember, setxor
+    use M_sets, only : &
+    issorted
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -87,61 +91,74 @@ Procedure names and syntax:
 </A>
 <BLOCKQUOTE>
 <P>
-Unions, intersection, and set membership
-<P>
-A small subset of set functions reminiscent of Matlab set functions. They
-currently just work with vectors of default integer kind input and return
-sets but not the subscripts of the original elements.
-<P>
-It basically uses some simple calls to the M_ordersort(3f) module to
-provide the functionality that are not tuned for performance and make
-loose use of memory allocation and space.
-<P>
 Set operations compare the elements in two sets to find commonalities
-or differences. Currently the sets are arrays of integer numbers.
+or differences. This includes Unions, Intersections, and Membership.
 <P>
-## Functions
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: ## Functions
+M_set(3f) is a Fortran module comprising a small subset of set theory
+functions reminiscent of Matlab functions.
+<P>
+The functions currently support vectors of integer, default character,
+and default real and doubleprecision type.
+<P>
+float numbers (both kind=real32 and kind=real64) are allowed but "caveat
+emptor", as comparing floats for equality has issues. You may have to
+condition the float data by converting it to scaled integers or using
+intrinsics such as NEAREST(3f) to produce the desired results.
+<P>
+M_set(3f) primarily uses simple calls to the M_orderpack(3f) module to
+<TABLE cellpadding=3><!-- tsb: M_set(3f) primarily uses simple calls to the M_orderpack(3f) module to
  -->
 <TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>provide the functionality. The functions</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are not otherwise tuned for
+performance and make loose use of memory allocation but are sufficient
+for most uses, simple to use, and familiar to a large base of users.
+</TD></TR>
+<TR><TD colspan=2>
+## Functions
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-union(A,B,setOrder) - Set union of two arrays
+union(A,B,setOrder) - Join two sets and remove duplicates of values
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-unique(A,setOrder) - Unique values in array
+unique(A,setOrder) - Remove duplicates of values from a set
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-intersect(A,B,setOrder) - Set intersection of two arrays
+intersect(A,B,setOrder) - Find the values common to both A and B
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-setdiff(A,B,setOrder) - Set difference of two arrays
+setdiff(A,B,setOrder) - Find the values in A that are not in B
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-ismember(A,B,setOrder) - Array elements that are members of set array
+ismember(A,B,setOrder) - Create a mask of A marking elements also in B
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-setxor(A,B,setOrder) - Set exclusive OR of two arrays
+setxor(A,B,setOrder) - Find values of A and B not in both arrays
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-issorted(A) - test if elements are in ascending order
+issorted(A) - Determine if array is already sorted
+</TD></TR>
+<TR></TR></TABLE>The subsequent data may be produced sorted, or left in the order
+encountered.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-</BLOCKQUOTE>
 <A name=3>
 
      <H3>EXAMPLE</H3>
@@ -153,55 +170,82 @@ sample program:
 <P>
 <PRE>
    program demo_M_sets
-   use M_sets, only: unique, intersect, union, setdiff, ismember, setxor, issorted
-   character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
+   use M_sets, only: &
+   & unique, intersect, union, setdiff, ismember, setxor, issorted
+   character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+   character(len=*),parameter :: nl=new_line(&#146;A&#146;)
    integer, allocatable      :: A(:)
    integer, allocatable      :: B(:)
    integer, allocatable      :: C(:)
 <P>
-      write(*,g) &#146;UNIQUE&#146;,&#146;Find the unique elements of vector A.&#146;
-       A = [10, -10, 0, 1, 2, 3, 3, 2, 1, -10]
-       write(*,g) &#146;A=&#146;, A
-       write(*,g) unique(A)
-       write(*,g) unique(A, setOrder=&#146;stable&#146;)
-      write(*,g) &#146;UNION&#146;, &#146;Find the union of vectors A and B.&#146;
-       call setab( [5, 7, 1], [3, 1, 1] )
-       write(*,g) union(A,B)
-       call setab( [5, 5, 3], [1, 2, 5] )
-       write(*,g) union(A, B, &#146;sorted&#146;)
-       write(*,g) union(A, B, &#146;stable&#146;)
-      write(*,g) &#146;INTERSECT&#146;, &#146;Find the values common to both A and B.&#146;
-       call setab( [7, 1, 7, 7, 4], [7, 0, 4, 4, 0] )
-       write(*,g) intersect(A, B)
-       write(*,g) intersect(A, B, setOrder=&#146;stable&#146;)
-      write(*,g) &#146;SETDIFF&#146;,&#146;Find the values in A that are not in B.&#146;
-       call setab( [3, 6, 2, 1, 5, 1, 1], [2, 4, 6] )
-       write(*,g) setdiff(A, B)
-       call setab( [4, 1, 3, 2, 5], [2, 1])
-       write(*,g) setdiff(A, B, &#146;sorted&#146;)
-       write(*,g) setdiff(A, B, &#146;stable&#146;)
-      write(*,g) &#146;ISMEMBER&#146;, &#146;Determine which elements of A are also in B.&#146;
-       call setab( [5,3,4,2], [2,4,4,4,6,8] )
-       write(*,g) ismember(A,B)
-      write(*,g) &#146;SETXOR&#146;,&#146;Find values of A and B not in their intersection.&#146;
-       call setab( [5,1,3,3,3], [4,1,2] )
-       write(*,g) setxor(A,B)
-       write(*,g) setxor(A,B,&#146;stable&#146;)
+      A = [10, -10, 0, 1, 2, 3, 3, 2, 1, -10]
+      !
+      print all                                                   ,nl, &
+      &#146;UNIQUE&#146;,&#146;Find the unique elements of vector A.&#146;            ,nl, &
+      &#146;A=&#146;, A                                                     ,nl, &
+      &#146;sorted=&#146;,unique(A)                                         ,nl, &
+      &#146;stable=&#146;,unique(A, setOrder=&#146;stable&#146;)
 <P>
-       write(*,g) &#146;ISSSORTED&#146;,&#146;confirm whether array is sorted in ascending order or not&#146;
-       call setab([1,2,3,4,5],[5,4,3,2,1])
-       write(*,g) issorted(A)
-       write(*,g) issorted(B)
+      A=[5, 7, 1]
+      B=[3, 1, 1]
+      !
+      print all                                                   ,nl, &
+      &#146;UNION&#146;, &#146;Find the union of vectors A and B.&#146;               ,nl, &
+      &#146;A=&#146;, A                                                     ,nl, &
+      &#146;B=&#146;, B                                                     ,nl, &
+      &#146;sorted=&#146;,union(A, B, &#146;sorted&#146;)                             ,nl, &
+      &#146;stable=&#146;,union(A, B, &#146;stable&#146;)
 <P>
-   contains
-   subroutine setab(ain,bin)
-   integer,intent(in) :: ain(:)
-   integer,intent(in) :: bin(:)
-      A=ain
-      B=bin
-      write(*,g) &#146;A=&#146;, A
-      write(*,g) &#146;B=&#146;, B
-   end subroutine setab
+      A=[7, 1, 7, 7, 4]
+      B=[7, 0, 4, 4, 0]
+      !
+      print all                                                   ,nl, &
+      &#146;INTERSECT&#146;, &#146;Find the values common to both A and B.&#146;      ,nl, &
+      &#146;A=&#146;, A                                                     ,nl, &
+      &#146;B=&#146;, B                                                     ,nl, &
+      &#146;sorted=&#146;,intersect(A, B)                                   ,nl, &
+      &#146;stable=&#146;,intersect(A, B, setOrder=&#146;stable&#146;)
+<P>
+      A=[3, 6, 2, 1, 5, 1, 1]
+      B=[2, 4, 6]
+      !
+      print all                                                   ,nl, &
+      &#146;SETDIFF&#146;,&#146;Find the values in A that are not in B.&#146;         ,nl, &
+      &#146;A=&#146;, A                                                     ,nl, &
+      &#146;B=&#146;, B                                                     ,nl, &
+      &#146;sorted=&#146;,setdiff(A, B, &#146;sorted&#146;)                           ,nl, &
+      &#146;stable=&#146;,setdiff(A, B, &#146;stable&#146;)
+<P>
+      A=[5,3,4,2]
+      B=[2,4,4,4,6,8]
+      !
+      print all                                                   ,nl, &
+      &#146;ISMEMBER&#146;,&#146;Determine which elements of A are also in B.&#146;   ,nl, &
+      &#146;A=&#146;, A                                                     ,nl, &
+      &#146;B=&#146;, B                                                     ,nl, &
+      &#146;in A and B=&#146;,ismember(A,B)
+<P>
+      A=[5,1,3,3,3]
+      B=[4,1,2]
+      !
+      print all                                                   ,nl, &
+      &#146;SETXOR&#146;                                                       , &
+      &#146;Find values of A and B not in their intersection.&#146;         ,nl, &
+      &#146;A=&#146;, A                                                     ,nl, &
+      &#146;B=&#146;, B                                                     ,nl, &
+      &#146;sorted=&#146;,setxor(A,B)                                       ,nl, &
+      &#146;stable=&#146;,setxor(A,B,&#146;stable&#146;)
+<P>
+      A=[1,2,3,4,5]
+      B=[5,4,3,2,1]
+      !
+      print all                                                   ,nl, &
+      &#146;ISSSORTED&#146;                                                    , &
+      &#146;confirm whether array is sorted in ascending order or not&#146; ,nl, &
+      &#146;A=&#146;, A                                                     ,nl, &
+      &#146;B=&#146;, B                                                     ,nl, &
+      &#146;is A sorted?&#146;,issorted(A)                                  ,nl, &
+      &#146;is B sorted?&#146;,issorted(B)
 <P>
    end program demo_M_sets
 <P>
@@ -209,40 +253,46 @@ sample program:
 Results:
 <P>
 <PRE>
- &gt; UNIQUE Find the unique elements of vector A.
- &gt; A= 10 -10 0 1 2 3 3 2 1 -10
- &gt; -10 0 1 2 3 10
- &gt; 10 -10 0 1 2 3
- &gt; UNION Find the union of vectors A and B.
- &gt; A= 5 7 1
- &gt; B= 3 1 1
- &gt; 1 3 5 7
- &gt; A= 5 5 3
- &gt; B= 1 2 5
- &gt; 1 2 3 5
- &gt; 5 3 1 2
- &gt; INTERSECT Find the values common to both A and B.
- &gt; A= 7 1 7 7 4
- &gt; B= 7 0 4 4 0
- &gt; 4 7
- &gt; 7 4
- &gt; SETDIFF Find the values in A that are not in B.
- &gt; A= 3 6 2 1 5 1 1
- &gt; B= 2 4 6
- &gt; 1 3 5
- &gt; A= 4 1 3 2 5
- &gt; B= 2 1
- &gt; 3 4 5
- &gt; 4 3 5
- &gt; ISMEMBER Determine which elements of A are also in B.
- &gt; A= 5 3 4 2
- &gt; B= 2 4 4 4 6 8
- &gt; 0 0 1 1
- &gt; SETXOR Find values of A and B not in their intersection.
- &gt; A= 5 1 3 3 3
- &gt; B= 4 1 2
- &gt; 2 3 4 5
- &gt; 5 3 4 2
+ &gt;
+ &gt;  UNIQUE Find the unique elements of vector A.
+ &gt;  A= 10 -10 0 1 2 3 3 2 1 -10
+ &gt;  sorted= -10 0 1 2 3 10
+ &gt;  stable= 10 -10 0 1 2 3
+ &gt;
+ &gt;  UNION Find the union of vectors A and B.
+ &gt;  A= 5 7 1
+ &gt;  B= 3 1 1
+ &gt;  sorted= 1 3 5 7
+ &gt;  stable= 5 7 1 3
+ &gt;
+ &gt;  INTERSECT Find the values common to both A and B.
+ &gt;  A= 7 1 7 7 4
+ &gt;  B= 7 0 4 4 0
+ &gt;  sorted= 4 7
+ &gt;  stable= 7 4
+ &gt;
+ &gt;  SETDIFF Find the values in A that are not in B.
+ &gt;  A= 3 6 2 1 5 1 1
+ &gt;  B= 2 4 6
+ &gt;  sorted= 1 3 5
+ &gt;  stable= 3 1 5
+ &gt;
+ &gt;  ISMEMBER Determine which elements of A are also in B.
+ &gt;  A= 5 3 4 2
+ &gt;  B= 2 4 4 4 6 8
+ &gt;  in A and B= 0 0 1 1
+ &gt;
+ &gt;  SETXOR Find values of A and B not in their intersection.
+ &gt;  A= 5 1 3 3 3
+ &gt;  B= 4 1 2
+ &gt;  sorted= 2 3 4 5
+ &gt;  stable= 5 3 4 2
+ &gt;
+ &gt;  ISSSORTED confirm whether array is sorted in ascending order or not
+ &gt;  A= 1 2 3 4 5
+ &gt;  B= 5 4 3 2 1
+ &gt;  is A sorted? 1
+ &gt;  is B sorted? 0
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -263,7 +313,7 @@ John S. Urban, 2023-07-20
 CC0-1.0
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_sets (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 83a806d3-8658-4b94-a61e-e9ebefee4c97 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_sets (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ec6b3444-2496-4a84-a2fc-bd507b4081b3 using man macros.</FONT>
 <br><br><center><img src="images/M_sets.3m_sets.gif"></center>
 </div>
 </div>

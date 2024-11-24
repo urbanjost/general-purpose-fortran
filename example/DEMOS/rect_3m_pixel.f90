@@ -25,10 +25,10 @@
         enddo
 
         !! render pixel array to a file
-        call writegif('rect.3M_pixel.gif',P_pixel,P_colormap)
+        call writegif('rect.3m_pixel.gif',P_pixel,P_colormap)
 
         !! display graphic assuming display(1) is available
-        call execute_command_line('display rect.3M_pixel.gif')
+        call execute_command_line('display rect.3m_pixel.gif')
 
         !! wrap up graphics
         call vexit()

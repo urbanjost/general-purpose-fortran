@@ -50,6 +50,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>abs (3)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
@@ -169,51 +170,102 @@ Sample program:
 <P>
 <PRE>
     program demo_abs
-    implicit none
-    integer,parameter :: dp=kind(0.0d0)
+       implicit none
+       integer,parameter :: dp=kind(0.0d0)
 <P>
-    integer           :: i = -1
-    real              :: x = -1.0
-    complex           :: z = (-3.0,-4.0)
-    doubleprecision   :: rr = -45.78_dp
+    ! some values to use with ABS(3)
+       integer           :: i = -1
+       real              :: x = -1.0
+       complex           :: z = (-3.0,-4.0)
+       doubleprecision   :: rr = -45.78_dp
 <P>
-    character(len=*),parameter :: &
-       ! some formats
-       frmt  =  &#146;(1x,a15,1x," In: ",g0,            T51," Out: ",g0)&#146;, &
-       frmtc = &#146;(1x,a15,1x," In: (",g0,",",g0,")",T51," Out: ",g0)&#146;,  &
-       g     = &#146;(*(g0,1x))&#146;
+    ! some formats for pretty-printing some information
+       character(len=*),parameter :: &
+          frmt  =  &#146;(1x,a15,1x," In: ",g0,            T51," Out: ",g0)&#146;, &
+          frmtc = &#146;(1x,a15,1x," In: (",g0,",",g0,")",T51," Out: ",g0)&#146;,  &
+          gen   = &#146;(*(g0,1x))&#146;
 <P>
-      ! basic usage
-        ! any integer, real, or complex type
-        write(*, frmt)  &#146;integer         &#146;,  i, abs(i)
-        write(*, frmt)  &#146;real            &#146;,  x, abs(x)
-        write(*, frmt)  &#146;doubleprecision &#146;, rr, abs(rr)
-        write(*, frmtc) &#146;complex         &#146;,  z, abs(z)
+       ! the basics
+       print gen,  &#146;basic usage:&#146;
+       ! any integer, real, or complex type
+       write(*, frmt)  &#146;integer         &#146;,  i, abs(i)
+       write(*, frmt)  &#146;real            &#146;,  x, abs(x)
+       write(*, frmt)  &#146;doubleprecision &#146;, rr, abs(rr)
+       write(*, frmtc) &#146;complex         &#146;,  z, abs(z)
 <P>
-      ! You can take the absolute value of any value whose positive value
-      ! is representable with the same type and kind.
-        write(*, *) &#146;abs range test : &#146;, abs(huge(0)), abs(-huge(0))
-        write(*, *) &#146;abs range test : &#146;, abs(huge(0.0)), abs(-huge(0.0))
-        write(*, *) &#146;abs range test : &#146;, abs(tiny(0.0)), abs(-tiny(0.0))
-        ! A dusty corner is that abs(-huge(0)-1) of an integer would be
-        ! a representable negative value on most machines but result in a
-        ! positive value out of range.
+       ! elemental
+       print gen, &#146;abs is elemental:&#146;, abs([20,  0,  -1,  -3,  100])
 <P>
-      ! elemental
-        write(*, g) &#146; abs is elemental:&#146;, abs([20,  0,  -1,  -3,  100])
+       ! the returned value for complex input can be thought of as the
+       ! distance from the origin &lt;0,0&gt;
+       print gen, &#146;distance of (&#146;, z, &#146;) from zero is&#146;, abs( z )
 <P>
-      ! COMPLEX input produces REAL output
-        write(*, g)&#146; complex input produces real output&#146;, &
-        & abs(cmplx(30.0_dp,40.0_dp,kind=dp))
-        ! dusty corner: "kind=dp" is required or the value returned by
-        ! CMPLX() is a default real instead of double precision
+       call DUSTY_CORNERS_1("beware of abs(-huge(0)-1)")
+       call DUSTY_CORNERS_2("beware of losing precision using CMPLX(3)")
+       call DUSTY_CORNERS_3("beware of overflow of complex values")
+       call DUSTY_CORNERS_4("custom meaning for absolute value of COMPLEX")
 <P>
-      ! the returned value for complex input can be thought of as the
-      ! distance from the origin &lt;0,0&gt;
-        write(*, g) &#146; distance of (&#146;, z, &#146;) from zero is&#146;, abs( z )
-        write(*, g) &#146; so beware of overflow with complex values&#146;
-        !write(*, g) abs(cmplx( huge(0.0), huge(0.0) ))
-        write(*, g) &#146; because the biggest default real is&#146;,huge(0.0)
+    contains
+<P>
+       subroutine DUSTY_CORNERS_1(message)
+          character(len=*),intent(in) :: message
+<P>
+          ! A dusty corner is that abs(-huge(0)-1) of an integer would be
+          ! a representable negative value on most machines but result in a
+          ! positive value out of range.
+<P>
+          print gen,  message
+          ! By definition:
+          !   You can take the absolute value of any value whose POSITIVE value
+          !   is representable with the same type and kind.
+<P>
+          print gen, &#146;abs range test : &#146;, abs(huge(0)), abs(-huge(0))
+          print gen, &#146;abs range test : &#146;, abs(huge(0.0)), abs(-huge(0.0))
+          print gen, &#146;abs range test : &#146;, abs(tiny(0.0)), abs(-tiny(0.0))
+<P>
+       end subroutine DUSTY_CORNERS_1
+<P>
+       subroutine DUSTY_CORNERS_2(message)
+          character(len=*),intent(in) :: message
+<P>
+          ! dusty corner: "kind=dp" is required or the value returned by
+          ! CMPLX() is a default real instead of double precision.
+<P>
+          ! Working with complex values you often encounter the CMPLX(3)
+          ! function. CMPLX(3) defaults to returning a default REAL regardless
+          ! of input type. Not really a direct problem with ABS(2f) per-se,
+          ! but a common error when working with doubleprecision complex values
+<P>
+          print gen,  message
+          print gen, &#146;real result versus doubleprecision result&#146;, &
+          & abs(cmplx(30.0_dp,40.0_dp)), &
+          & abs(cmplx(30.0_dp,40.0_dp,kind=dp))
+<P>
+       end subroutine DUSTY_CORNERS_2
+<P>
+       subroutine DUSTY_CORNERS_3(message)
+          character(len=*),intent(in) :: message
+          print gen, message
+<P>
+          ! this will probably cause an overflow error, or
+          !print gen,  abs(cmplx( huge(0.0), huge(0.0) ))
+<P>
+          print gen, &#146;because the biggest default real is&#146;,huge(0.0)
+          print gen, &#146;because returning magnitude of sqrt(x%re**2,x%im**2)&#146;
+<P>
+       end subroutine DUSTY_CORNERS_3
+<P>
+       subroutine DUSTY_CORNERS_4(message)
+          character(len=*),intent(in) :: message
+          print gen, message
+<P>
+          ! if you do not want the distance for a complex value you
+          ! might want something like returning a complex value with
+          ! both the imaginary and real parts. One way to do that is
+<P>
+          print gen, cmplx(abs(z%re),abs(z%im),kind=kind(z))
+<P>
+       end subroutine DUSTY_CORNERS_4
 <P>
     end program demo_abs
 <P>
@@ -221,19 +273,23 @@ Sample program:
 Results:
 <P>
 <PRE>
-        integer          In: -1                     Out: 1
-        real             In: -1.000000              Out: 1.000000
-        doubleprecision  In: -45.78000000000000     Out: 45.78000000000000
-        complex          In: (-3.000000,-4.000000)  Out: 5.000000
-        abs range test :   2147483647  2147483647
-        abs range test :   3.4028235E+38  3.4028235E+38
-        abs range test :   1.1754944E-38  1.1754944E-38
-        abs is elemental: 20 0 1 3 100
-        complex input produces real output 50.00000000000000
-        distance of ( -3.000000 -4.000000 ) from zero is 5.000000
-        so beware of overflow with complex values
-        Inf
-        because the biggest default real is .3402823E+39
+     &gt;  integer          In: -1                        Out: 1
+     &gt;  real             In: -1.00000000               Out: 1.00000000
+     &gt;  doubleprecision  In: -45.780000000000001       Out: 45.780000000000001
+     &gt;  complex          In: (-3.00000000,-4.00000000) Out: 5.00000000
+     &gt; abs is elemental: 20 0 1 3 100
+     &gt; distance of ( -3.00000000 -4.00000000 ) from zero is 5.00000000
+     &gt; beware of abs(-huge(0)-1)
+     &gt; abs range test :  2147483647 2147483647
+     &gt; abs range test :  0.340282347E+39 0.340282347E+39
+     &gt; abs range test :  0.117549435E-37 0.117549435E-37
+     &gt; beware of losing precision using CMPLX(3)
+     &gt; real result versus doubleprecision result 50.0000000 50.000000000000000
+     &gt; beware of overflow of complex values
+     &gt; because the biggest default real is 0.340282347E+39
+     &gt; because returning magnitude of sqrt(x%re**2,x%im**2)
+     &gt; making your own meaning for ABS(COMPLEX_VALUE)
+     &gt; 3.00000000 4.00000000
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -255,10 +311,10 @@ FORTRAN 77
 <P>
 SIGN(3)
 <P>
-fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>abs (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 72c5a7c3-1824-4e43-8dcf-a458a24b3d7e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>abs (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d3c80e6e-e184-419c-9473-83377ccaaeff using man macros.</FONT>
 <br><br><center><img src="images/abs.3fortran.gif"></center>
 </div>
 </div>

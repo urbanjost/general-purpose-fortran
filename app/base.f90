@@ -224,7 +224,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20170916>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
-'@(#)COMPILED:       2024-06-29 21:58:44 UTC-240>',&
+'@(#)COMPILED:       2024-11-24 04:45:57 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -268,10 +268,10 @@ logical                       :: brief
                   write(*,'(i0,"#",A,"=",I0,"#",A)')  ibase,trim(values(i)),obase, trim(endstring)
                endif
             else
-               print *,'Error in coding number ',trim(values(i)), 'ibase=',ibase,'obase=',obase
+               print *,'Error in coding number ',trim(values(i)), ' ibase=',ibase,' obase=',obase
             endif
          else
-            print *,'Error in decoding number ',trim(values(i)), 'ibase=',ibase,'obase=',obase
+            print *,'Error in decoding number ',trim(values(i)), ' ibase=',ibase,' obase=',obase
          endif
       else ! EXPLICIT BASE SPECIFIED (NN#MMMMM)
          call string_to_value(values(i),value_in_base10,ierr)
@@ -284,10 +284,10 @@ logical                       :: brief
                   write(*,'(A,"=",I0,"#",A)')  trim(values(i)),obase, trim(endstring)
                endif
             else
-               print *,'Error in coding number ',trim(values(i)), 'ibase=',ibase,'obase=',obase
+               print *,'Error in coding number ',trim(values(i)), ' ibase=',ibase,' obase=',obase
             endif
          else
-            print *,'Error in decoding number NN#MMMM=',trim(values(i)), 'ibase=',ibase,'obase=',obase
+            print *,'Error in decoding number NN#MMMM=',trim(values(i)), ' ibase=',ibase,' obase=',obase
          endif
       endif
    enddo

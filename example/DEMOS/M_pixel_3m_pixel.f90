@@ -71,7 +71,7 @@
         ! change background color directly
         where (P_pixel.eq.0) P_pixel=9
         ! write standard gif file
-        call writegif('M_pixel.3M_pixel.gif',P_pixel,P_ColorMap)
+        call writegif('M_pixel.3m_pixel.gif',P_pixel,P_ColorMap)
 
      contains
 

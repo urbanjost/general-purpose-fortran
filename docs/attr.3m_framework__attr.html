@@ -1,0 +1,349 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>attr (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+attr(3f) - [M_framework__attr] substitute escape sequences for HTML-like syntax
+in strings
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Keywords</A><BR>
+<A HREF=#5>Limitations</A><BR>
+<A HREF=#6>Example</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>License</A><BR>
+<A HREF=#9>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function attr(string,reset) result (expanded)
+<P>
+<PRE>
+       ! scalar
+       character(len=*),intent(in)  :: string
+       logical,intent(in),optional  :: reset
+       character(len=:),allocatable :: expanded
+       ! or array
+       character(len=*),intent(in)  :: string(:)
+       logical,intent(in),optional  :: reset
+       character(len=:),allocatable :: expanded(:)
+       integer,intent(in),optional  :: chars
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Use HTML-like syntax to add attributes to terminal output such as
+color on devices that recognize ANSI escape sequences.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>string</B> </TD><TD valign=bottom>
+input string  of form
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                   "&lt;attribute_name&gt;string&lt;/attribute_name&gt; &#46;&#46;&#46;".
+<P>
+</PRE>
+where the current attributes are color names,
+bold, italic, underline, &#46;&#46;&#46;
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>reset</B> </TD><TD valign=bottom>
+By default, a sequence to clear all text attributes
+is sent at the end of each returned line if an escape
+character appears in the output string. This can be
+turned off by setting RESET to .false. .
+<P>
+Note if turning off the reset attributes may be
+continued across lines, but if each line is not
+self-contained attributes may not display properly
+when filtered with commands such as grep(1).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>chars</B> </TD><TD valign=bottom>
+For arrays, a reset will be placed after the Nth
+displayable column count in order to make it easier
+to generate consistent right borders for non-default
+background colors for a text block.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>KEYWORDS</H3>
+
+</A>
+<BLOCKQUOTE>
+primary default keywords
+<P>
+<PRE>
+     colors:
+       r,         red,       R,  RED
+       g,         green,     G,  GREEN
+       b,         blue,      B,  BLUE
+       m,         magenta,   M,  MAGENTA
+       c,         cyan,      C,  CYAN
+       y,         yellow,    Y,  YELLOW
+       e,         ebony,     E,  EBONY
+       w,         white,     W,  WHITE
+<P>
+     attributes:
+       it,        italic
+       bo,        bold
+       un,        underline
+<P>
+     basic control characters:
+      nul
+      bel  (0x07, ^G) beeps;
+      bs   (0x08, ^H) backspaces one column (but not past the beginning of
+                      the line);
+      ht   (0x09, ^I) goes to the next tab stop or to the end of the line if
+                      there is no earlier tab stop;
+      lf   (0x0A, ^J),
+      vt   (0x0B, ^K)
+      ff   (0x0C, ^L) all give a linefeed, and if LF/NL (new-line mode) is
+                      set also a carriage return
+      cr   (0x0D, ^M) gives a carriage return;
+      so   (0x0E, ^N) activates the G1 character set;
+      si   (0x0F, ^O) activates the G0 character set;
+      can  (0x18, ^X) and SUB (0x1A, ^Z) interrupt escape sequences;
+      sub
+      esc  (0x1B, ^[) starts an escape sequence;
+      del  (0x7F) is ignored;
+<P>
+     other:
+       clear
+       default
+       reset
+       gt
+       lt
+       save,DECSC     Save  current state (cursor coordinates, attributes,
+                      character sets pointed at by G0, G1).
+       restore,DECRC  Restore state most recently saved by ESC 7.
+       CSI            "Control Sequence Introducer"(0x9B) is equivalent to
+                      "ESC [".
+<P>
+     dual-value (one for color, one for mono):
+<P>
+       write(*,*)attr(&#146;&lt;ERROR&gt;an error message&#146;)
+       write(*,*)attr(&#146;&lt;WARNING&gt;a warning message&#146;)
+       write(*,*)attr(&#146;&lt;INFO&gt;an informational message&#146;)
+<P>
+</PRE>
+By default, if the color mnemonics (ie. the keywords) are uppercase
+they change the background color. If lowercase, the foreground color.
+When preceded by a "/" character the attribute is returned to the
+default.
+<P>
+The "default" keyword is typically used explicitly when reset=.false,
+and sets all text attributes to their initial defaults.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>LIMITATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+colors are not nestable, keywords are case-sensitive,
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+not all terminals obey the sequences. On Windows, it is best if
+you use Windows 10+ and/or the Linux mode; although it has worked
+with all CygWin and MinGW and Putty windows and mintty.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+you should use "&lt;gt&gt;" and "&lt;lt&gt;" instead of "&gt;" and "&lt;" in a string
+processed by attr(3f) instead of in any plain text output so that
+the raw mode will create correct input for the attr(3f) function
+if read back in.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+    program demo_attr
+    use M_framework__attr, only : attr, attr_mode, attr_update
+       call printstuff(&#146;defaults&#146;)
+<P>
+       call attr_mode(manner=&#146;plain&#146;)
+       call printstuff(&#146;plain:&#146;)
+<P>
+       call printstuff(&#146;raw&#146;)
+<P>
+       call attr_mode(manner=&#146;color&#146;)
+       call printstuff(&#146;&#146;)
+<P>
+       write(*,&#146;(a)&#146;) attr(&#146;TEST ADDING A CUSTOM SEQUENCE:&#146;)
+       call attr_update(&#146;blink&#146;,char(27)//&#146;[5m&#146;)
+       call attr_update(&#146;/blink&#146;,char(27)//&#146;[25m&#146;)
+       write(*,&#146;(a)&#146;) attr(&#146;&lt;blink&gt;Items for Friday&lt;/blink&gt;&#146;)
+<P>
+    contains
+    subroutine printstuff(label)
+    character(len=*),intent(in)  :: label
+    character(len=:),allocatable :: array(:)
+      call attr_mode(manner=label)
+<P>
+      array=[character(len=60) ::    &
+       &#146;TEST MANNER=&#146;//label,                      &
+       &#146;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&lt;b&gt;BLUE&lt;/b&gt;&#146;,      &
+       &#146;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&lt;y&gt;YELLOW&lt;/y&gt;&#146;, &
+       &#146;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&#146;]
+      write(*,&#146;(a)&#146;) attr(array)
+<P>
+      write(*,&#146;(a)&#146;) attr(&#146;Adding &lt;bo&gt;bold&lt;/bo&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&#146;&lt;bo&gt;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&lt;b&gt;BLUE&lt;/b&gt;&lt;/bo&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&#146;&lt;bo&gt;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&lt;y&gt;YELLOW&lt;/y&gt;&lt;/bo&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&#146;&lt;bo&gt;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&lt;/bo&gt;&#146;)
+<P>
+      write(*,&#146;(a)&#146;) attr(&#146;Adding &lt;ul&gt;underline&lt;/ul&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&
+       &&#146;&lt;bo&gt;&lt;ul&gt;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&lt;b&gt;BLUE&lt;/b&gt;&lt;/ul&gt;&lt;/bo&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&
+       &&#146;&lt;bo&gt;&lt;ul&gt;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&lt;y&gt;YELLOW&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&#146;&lt;bo&gt;&lt;ul&gt;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;&#146;)
+<P>
+      write(*,&#146;(a)&#146;) attr(&#146;Adding &lt;ul&gt;italic&lt;/ul&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&
+       &&#146;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&lt;b&gt;BLUE&lt;/b&gt;&lt;/it&gt;&lt;/ul&gt;&lt;/bo&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&
+       &&#146;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&lt;y&gt;YELLOW&lt;/it&gt;&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&#146;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;&#146;)
+<P>
+      write(*,&#146;(a)&#146;) attr(&#146;Adding &lt;in&gt;inverse&lt;/in&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&#146;&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;r&gt;RED&lt;/r&gt;,&lt;g&gt;GREEN&lt;/g&gt;,&
+       &&lt;b&gt;BLUE&lt;/b&gt;&lt;/it&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&#146;&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;c&gt;CYAN&lt;/c&gt;,&lt;m&gt;MAGENTA&lt;/g&gt;,&
+       &&lt;y&gt;YELLOW&lt;/it&gt;&lt;/y&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;&#146;)
+      write(*,&#146;(a)&#146;) attr(&
+       &&#146;&lt;in&gt;&lt;bo&gt;&lt;ul&gt;&lt;it&gt;&lt;w&gt;WHITE&lt;/w&gt; and &lt;e&gt;EBONY&lt;/e&gt;&lt;/ul&gt;&lt;/bo&gt;&lt;/in&gt;&#146;)
+    end subroutine printstuff
+    end program demo_attr
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban, 2021
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+attr_mode(3f), attr_update(3f)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>attr (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a4bac0b3-5b83-4679-9a3e-75c84ec0a7c0 using man macros.</FONT>
+<br><br><center><img src="images/attr.3m_framework__attr.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

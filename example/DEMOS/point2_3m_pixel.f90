@@ -9,6 +9,6 @@
         call linewidth(50*i)
         call point2(real(i*25),real(i*25))
      enddo
-     call writegif('point2.3M_pixel.gif',P_pixel,P_colormap)
+     call writegif('point2.3m_pixel.gif',P_pixel,P_colormap)
      call vexit()
      end program demo_point2

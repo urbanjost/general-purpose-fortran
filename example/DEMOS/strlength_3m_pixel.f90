@@ -39,8 +39,8 @@
         call nextline('Unto his nest again,')
         call nextline('I shall not live in vain.')
 
-        call writegif('strlength.3M_pixel.gif',P_pixel,P_colormap)
-        call execute_command_line('display strlength.3M_pixel.gif')
+        call writegif('strlength.3m_pixel.gif',P_pixel,P_colormap)
+        call execute_command_line('display strlength.3m_pixel.gif')
         call vexit()
      contains
      subroutine nextline(string)

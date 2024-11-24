@@ -1,0 +1,190 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>program (7)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+PROGRAM(3) - [PROGRAM UNITS] Absolute value
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Basic Fortran program sections:
+<P>
+<PRE>
+        [ PROGRAM [program-name]]
+<P>
+            [ specification-part ]
+            [ execution-part ]
+            [ internal-subprogram-part ]
+<P>
+        end [PROGRAM [program-name]]
+<P>
+</PRE>
+A PROGRAM directive optionally marks the beginning of a main program.
+<P>
+A main program is the starting point for execution of a program.
+<P>
+The main program may be defined by means other than Fortran; in that
+case, the program shall not contain a Fortran main-program program unit
+at all.
+<P>
+The optional name of the main program has no explicit use within the
+Fortran language. It is available for documentation and for possible use
+by a processor.
+<P>
+A processor might implement an unnamed program unit by assigning it a
+global identifier that is not used elsewhere in the program. This could
+be done by using a default name that does not satisfy the rules for
+Fortran names, but if the name is specified it must conform to the rules
+for a Fortran identifier (composed from the ASCII alphanumeric
+characters and underscore, up to 63 characters, must begin with a
+letter).
+<P>
+The PROGRAM statement is optional but is almost always present in modern
+programs. Since it is optional a Fortran main program block is defined
+as a program unit that does not contain a SUBROUTINE, FUNCTION, MODULE,
+SUBMODULE,or BLOCKDATA statement as its first statement.
+<P>
+Note that the PROGRAM block is not required to be the first program unit
+in a file. Modules or procedure definitions or other program units may
+proceed it and most may follow it (A module must be defined before a
+reference to it is made).
+<P>
+The program-name shall not be included in the end-program-stmt unless
+the optional program-stmt is used. If included, it shall be identical to
+the program-name specified in the program-stmt.
+<P>
+NOTE1 The program name is global to the program.
+<P>
+An example of a main program is:
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PROGRAM ANALYZE</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>REAL A, B, C (10,10)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+!   Specification part
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>CALL FIND</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+!   Execution part
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CONTAINS</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>SUBROUTINE FIND</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+!   Internal subprogram
+[char46] . .
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END SUBROUTINE FIND</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END PROGRAM ANALYZE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A reference to a Fortran main-program shall not appear in any program
+unit in the program, including itself. That is, you cannot call or jump
+to a main program from another program unit such as a module or
+procedure.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>GLOSSARY</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+program
+<P>
+set of Fortran program units and entities defined by means other than
+Fortran that includes exactly one main program.
+<P>
+program unit
+<P>
+A main program, external subprogram, module, submodule, or block data
+program unit.
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>program (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5cd2471c-e6d1-4c21-9844-c7f5b7d97ebe using man macros.</FONT>
+<br><br><center><img src="images/program.7fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,288 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>asinpi (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+ASINPI(3) - [MATHEMATICS:TRIGONOMETRIC] Circular arc sine function
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+result = asinpi(x)
+<P>
+<PRE>
+         elemental real(kind=KIND) function asinpi(x)
+<P>
+          real(kind=KIND),intent(in) :: x
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND may be any real kind
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The returned value will be of the same type and kind as the
+argument.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+ASINPI(3) computes the arcsine of its argument X.
+<P>
+The arcsine is the inverse function of the sine function. It is commonly
+used in trigonometry when trying to find the angle when the lengths of
+the hypotenuse and the opposite side of a right triangle are known.
+<P>
+The returned value is in half-revolutions (ie. in multiples of PI).
+<P>
+Example: ASINPI(1:0) has the value 0:5 (approximately).
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : The value to compute the arcsine of; where |X| &lt;= 1. The type
+shall be real
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The result has a value equal to a processor-dependent approximation to
+the arc sine of X. The result is real and it is expressed in
+half-revolutions and lies in the range
+<P>
+<PRE>
+            -1 &lt;= asinpi (X) &lt;= 1
+<P>
+</PRE>
+and is the same kind as the input.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The arcsine will allow you to find the measure of a right angle when you
+know the ratio of the side opposite the angle to the hypotenuse.
+<P>
+So if you knew that a train track rose 1.25 vertical miles on a track
+that was 50 miles long, you could determine the average angle of incline
+of the track using the arcsine. Given
+<P>
+<PRE>
+     sin(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
+<P>
+</PRE>
+Sample program:
+<P>
+<PRE>
+    program demo_asinpi
+    use, intrinsic :: iso_fortran_env, only : dp=&gt;real64
+    implicit none
+    ! value to convert degrees to half-revolutions
+    real(kind=dp),parameter :: D2HR=1/180.0_dp
+    real(kind=dp)           :: angle, rise, run
+    character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+      ! basics
+      ! elemental
+      print all, asinpi( [0.0d0, 0.5d0, -0.5d0, 1.0d0, -1.0d0 ])
+      !
+      ! sample application
+      ! given sine(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
+      ! then taking the arcsine of both sides of the equality yields
+      ! theta = arcsine(1.25 miles/50 miles) ie. arcsine(opposite/hypotenuse)
+      rise=1.250_dp
+      run=50.00_dp
+      angle = asinpi(rise/run)
+      print all, &#146;angle of incline(half-revolutions) = &#146;, angle
+      angle = angle/D2HR
+      print all, &#146;angle of incline(degrees) = &#146;, angle
+      print all, &#146;percent grade=&#146;,rise/run*100.0_dp
+    contains
+    elemental function asinpi(x)
+    real(kind=dp),parameter  :: PI=acos(-1.0_dp)
+    real(kind=dp),intent(in) :: x
+    real(kind=dp)            :: asinpi
+       asinpi=asin(x)/PI
+    end function asinpi
+    end program demo_asinpi
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+     &gt; 0.00, 0.166667, -0.166667, 0.50, -0.50
+     &gt; angle of incline(half-revolutions) =  0.79585763198139307E-2
+     &gt; angle of incline(degrees) =  1.4325437375665075
+     &gt; percent grade= 2.5000000000000000
+<P>
+</PRE>
+The percentage grade is the slope, written as a percent. To calculate
+the slope you divide the rise by the run. In the example the rise is
+1.25 mile over a run of 50 miles so the slope is 1.25/50 = 0.025.
+Written as a percent this is 2.5 %.
+<P>
+For the US, two and 1/2 percent is generally thought of as the upper
+limit. This means a rise of 2.5 feet when going 100 feet forward. In the
+US this was the maximum grade on the first major US railroad, the
+Baltimore and Ohio. Note curves increase the frictional drag on a train
+reducing the allowable grade.
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Fortran 2023
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Inverse function in half-revolutions: SINPI(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+function in radians: ASIN(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+function in degrees : ASIND(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+radians: SIN(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+degrees: SIND(3)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=9>
+
+     <H3>RESOURCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+wikipedia: inverse trigonometric functions
+</TD></TR>
+<TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>asinpi (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 992f68b9-6f9d-4f74-b011-0d853d0f7f90 using man macros.</FONT>
+<br><br><center><img src="images/asinpi.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

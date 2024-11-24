@@ -1,0 +1,240 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>User Commands  &nbsp;-&nbsp;</I><NOBR>howlong (1)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+help_text=[ CHARACTER(LEN=128) :: &
+</BLOCKQUOTE>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+howlong(1) - display wallclock time taken to execute a system command
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Sample Subject Program</A><BR>
+<A HREF=#4>Footnotes</A><BR>
+<A HREF=#5>Options</A><BR>
+<A HREF=#6>Example</A><BR>
+<A HREF=#7>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNOPIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+howlong SYSTEM_COMMAND
+<P>
+<PRE>
+   or
+<P>
+</PRE>
+howlong <B>--help</B>|<B>--version</B>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Perhaps the simplest performance metric is to just measure the
+wallclock time taken by a program. This could literally be measured
+using a conventional clock or stopwatch. This is difficult to automate!
+So typically a command like the GNU/Linux or Unix command time(1) is used.
+<P>
+Commands such as time(1)
+often provide more than wallclock times too. But lets construct a wallclock
+timing tool of our own using standard Fortran (not even the ISO_C_Binding
+interface will be called upon) that will measure the run time of a command.
+<P>
+Once passed a command to time on the command line, it will then run
+the command and report the wallclock time use by the program, and echo
+the command.
+<P>
+Next we provide a simple program that calls the routine(s) of interest
+enough times to get useful timing information and time it.
+<P>
+So lets say we compiled up the test program using two different sets of
+compiler options:
+<P>
+<PRE>
+    f90 little_test.f90 -O0 -o little_test0
+    f90 little_test.f90 -O3 -o little_test3
+<P>
+</PRE>
+Now to run the programs via our timing utility only takes a few commands:
+<P>
+<PRE>
+    howlong ./little_test0
+    Wallclock: 0-00:00:25.461 :command: ./little_test0
+    howlong ./little_test3
+    Wallclock: 0-00:00:10.274 :command: ./little_test3
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SAMPLE SUBJECT PROGRAM</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+An uninstrumented test program for timing :
+<P>
+<PRE>
+   program little_test
+   use,intrinsic :: iso_fortran_env, only : int8
+   implicit none
+   character(len=*),parameter             :: original = "abcdxyz ZXYDCBA _!@"
+   integer,parameter                      :: how_many_times = 100000000
+   character(len=:),volatile,allocatable  :: t
+   integer                                :: i
+      do i=1,how_many_times
+        t=upper(original)
+        t=lower(original)
+      enddo
+   contains
+   function upper(str) result(translated)
+   integer(kind=int8), parameter :: &
+   & ascii_diff = abs(iachar(&#146;A&#146;,kind=int8) - iachar(&#146;a&#146;,kind=int8))
+   character(*), intent(in) :: str
+   integer :: i
+   character(len=len(str)) :: translated
+<P>
+      translated=str
+      do i = 1, len(str)
+        select case(str(i:i))
+          case("a":"z")
+            translated(i:i) = achar(iachar(str(i:i))-ascii_diff)
+        end select
+      enddo
+   end function upper
+<P>
+   function lower(str) result(translated)
+   integer(kind=int8), parameter :: &
+   & ascii_diff = abs(iachar(&#146;A&#146;,kind=int8) - iachar(&#146;a&#146;,kind=int8))
+   character(*), intent(in) :: str
+   integer :: i
+   character(len=len(str)) :: translated
+<P>
+      translated=str
+      do i = 1, len(str)
+        select case(str(i:i))
+          case("A":"Z")
+            translated(i:i) = achar(iachar(str(i:i))+ascii_diff)
+        end select
+      enddo
+   end function lower
+<P>
+   end program little_test
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>FOOTNOTES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Note that in many HPC environments programs are often run via a job
+scheduler like Slurm, LSF, PBS, Torque, &#46;&#46;&#46; . In these environments
+there are usually account records of each job that provide resource
+usage statistics.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--help</B> </TD><TD valign=bottom>
+display this help and exit
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+output version information and exit
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+howlong ./myprogram
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+gprof(1), gcov(1)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>howlong (1)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b79c2647-9508-469b-b464-130ed0896173 using man macros.</FONT>
+<br><br><center><img src="images/howlong.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

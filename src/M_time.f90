@@ -122,8 +122,14 @@ end interface w2d
 !!     integer,intent(out)              :: ierr
 !!
 !!##DESCRIPTION
-!!   Converts a DAT date-time array to a Unix Epoch Time (UET) value.
-!!   UET is the number of seconds since 00:00 on January 1st, 1970, UTC.
+!!   Converts a DAT date-time array to a Julian Date value.
+!!
+!!   Julian Dates (abbreviated JD) are simply a continuous count
+!!   of days and fractions since noon Universal Time on January 1, 4713
+!!   BC (on the Julian calendar). Julian dates are widely used as time
+!!   variables within astronomical software. Typically, a 64-bit floating
+!!   point (double precision) variable can represent an epoch expressed as
+!!   a Julian date to about 20 microsecond precision.
 !!
 !!##OPTIONS
 !!    dat   Integer array holding a "DAT" array, similar in structure
@@ -133,7 +139,7 @@ end interface w2d
 !!               & minutes,seconds,milliseconds]
 !!
 !!##RETURNS
-!!    juliandate  A Julian Ephemeris Date (JED) is the number of days since
+!!    juliandate  A Julian Date (JD) is the number of days since
 !!                noon (not midnight) on January 1st, 4713 BC.
 !!
 !!    ierr        Error code. If 0 no error occurred.
@@ -228,8 +234,8 @@ end subroutine date_to_julian
 !===================================================================================================================================
 !>
 !!##NAME
-!!    julian_to_date(3f) - [M_time:JULIAN] converts a JED(Julian Ephemeris
-!!    Date) to a DAT date-time array.
+!!    julian_to_date(3f) - [M_time:JULIAN] converts a JD(Julian Date)
+!!    to a DAT date-time array.
 !!    (LICENSE:MIT)
 !!
 !!##SYNOPSIS
@@ -241,20 +247,25 @@ end subroutine date_to_julian
 !!     integer,intent(out)            :: ierr
 !!
 !!##DESCRIPTION
-!!   Converts a Unix Epoch Time (UET) value to a DAT date-time array.
-!!   UET is the number of seconds since 00:00 on January 1st, 1970, UTC.
+!!   Converts a Julian Date(JD) value to a DAT date-time
+!!   array.
+!!
+!!   Julian dates are simply a continuous count of days and
+!!   fractions since noon Universal Time on January 1, 4713 BC (on the
+!!   Julian calendar). Julian dates are widely used as time variables
+!!   within astronomical software. Typically, a 64-bit floating point
+!!   (double precision) variable can represent an epoch expressed as a
+!!   Julian date to about 20 microsecond precision.
 !!
 !!##OPTIONS
 !!     julian  Julian Date (days)
+!!
+!!##RETURNS
 !!     dat     Integer array holding a "DAT" array, similar in structure
 !!             to the array returned by the intrinsic DATE_AND_TIME(3f):
 !!
 !!              dat=[ year,month,day,timezone,hour,&
 !!               & minutes,seconds,milliseconds]
-!!
-!!##RETURNS
-!!    unixtime  The "Unix Epoch" time, or the number of seconds since 00:00:00 on
-!!              January 1st, 1970, UTC.
 !!
 !!    ierr      Error code. If 0 no error occurred.
 !!
@@ -679,16 +690,25 @@ end function d2o
 !!     program demo_ordinal_seconds
 !!     use M_time, only : ordinal_seconds
 !!     implicit none
-!!     character(len=1) :: paws
-!!     integer          :: ios
-!!     integer          :: istart, iend
-!!     istart=ordinal_seconds()
-!!     write(*,'(a)',advance='no')'now pause. Enter return to continue ...'
-!!     read(*,'(a)',iostat=ios) paws
-!!     iend=ordinal_seconds()
-!!     write(*,*)'that took ',iend-istart,'seconds'
-!!     write(*,*)istart,iend
+!!     character(len=*),parameter :: gen='(*(g0))'
+!!     integer          :: i, ios, istart, iend
+!!     real,volatile    :: x
+!!     istart = ordinal_seconds()
+!!     x = 0.0
+!!     do i = 1, 1000000000
+!!        x = x+sqrt(real(i))
+!!     enddo
+!!     print gen, 'x=',x
+!!     iend = ordinal_seconds()
+!!     print gen, 'that took ',iend-istart,' seconds'
+!!     print gen, iend,'-',istart,'=',iend-istart
 !!     end program demo_ordinal_seconds
+!!
+!!    Results:
+!!
+!!     > x=0.549755814E+12
+!!     > that took 4 seconds
+!!     > 23659912-23659908=4
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015
@@ -739,22 +759,30 @@ end function ordinal_seconds
 !!     implicit none
 !!     integer :: yyyy, ddd, mm, dd, yy
 !!     integer :: dat(8)
-!!     integer :: ios
-!!       INFINITE: do
-!!          write(*,'(a)',advance='no')&
-!!          & 'Enter year YYYY and ordinal day of year DD '
-!!          read(*,*,iostat=ios)yyyy,ddd
-!!          if(ios/=0)exit INFINITE
+!!     integer :: i, iostat
+!!     character(len=:),allocatable :: fakefile(:)
+!!       fakefile=[character(len=80) :: ' 2024 273 ','2024 001']
+!!       do i=1,size(fakefile)
+!!          ! Enter year YYYY and ordinal day of year DD
+!!          read(fakefile(i),*,iostat=iostat)yyyy,ddd
+!!          if(iostat/=0)exit
 !!          ! recover month and day from year and day number.
 !!          call ordinal_to_date(yyyy, ddd, dat)
 !!          yy=dat(1)
 !!          mm=dat(2)
 !!          dd=dat(3)
-!!          write(*,'(*(g0))')'For Year ',yyyy,' and Ordinal day ',ddd,  &
-!!          &         ' Month is ',mm,' and Day of Month is ',dd, &
-!!          &         ' and Year is ',yy
-!!        enddo INFINITE
+!!          write(*,'(*(g0))')'For Year ',yyyy,' and Ordinal day ',ddd
+!!          write(*,'(*(g0))')' Month is ',mm,' and Day of Month is ',dd, &
+!!          & ' and Year is ',yy
+!!       enddo
 !!     end program demo_ordinal_to_date
+!!
+!!    Result:
+!!
+!!     > For Year 2024 and Ordinal day 273
+!!     > Month is 9 and Day of Month is 29 and Year is 2024
+!!     > For Year 2024 and Ordinal day 1
+!!     > Month is 1 and Day of Month is 1 and Year is 2024
 subroutine ordinal_to_date(yyyy,ddd,dat)
 !x!use M_time, only : d2j,j2d, realtime
 
@@ -1506,7 +1534,6 @@ real(kind=realtime),save             :: unixtime_last
          case('W'); call dow(valloc,weekday,day,ierr)                     ! Return the name of the day of the week
                     write(text(iout:),'(a)')day
          !=====================================================================================
-         !jsujsu
          case('w'); call dow(valloc,weekday,day,ierr)                     ! Return the first abbreviation of the day of the week
                     if(ierr.ne.0)then
                        text(iout:)='ERROR'
@@ -2976,7 +3003,10 @@ end subroutine box_month
 !!
 !!              If not present, use current time.
 !!##RETURNS
-!!    julian    The Julian Date.
+!!    julian    The Julian Date. Julian dates (abbreviated JD)
+!!              are simply a continuous count of days and fractions since
+!!              noon Universal Time on January 1, 4713 BC (on the Julian
+!!              calendar).
 !!
 !!##EXAMPLE
 !!
@@ -3023,7 +3053,7 @@ end function d2j
 !===================================================================================================================================
 !>
 !!##NAME
-!!    j2d(3f) - [M_time:JULIAN] given a JED (Julian Ephemeris Date) returns a
+!!    j2d(3f) - [M_time:JULIAN] given a JD (Julian Date) returns a
 !!    date-time array DAT.
 !!    (LICENSE:MIT)
 !!
@@ -3035,10 +3065,10 @@ end function d2j
 !!     integer                                 :: dat(8)
 !!
 !!##DESCRIPTION
-!!   Converts a Julian Ephemeris Date to a DAT date-time array.
+!!   Converts a Julian Date to a DAT date-time array.
 !!
 !!##OPTIONS
-!!    julian  A Julian Ephemeris Date (JED) is the number of days since
+!!    julian  A Julian Date (JD) is the number of days since
 !!            noon (not midnight) on January 1st, 4713 BC.
 !!            If not present, use current time.
 !!
@@ -3297,8 +3327,8 @@ end function get_timezone
 !!    seconds    number of seconds to convert to string of form dd-hh:mm:ss. May
 !!               be of type INTEGER, REAL, REAL(KIND=REALTIME), or CHARACTER.
 !!
-!!               CHARACTER strings may be of the form
-!!               [NNd][NNh][NNm][NNs][NNw]. Case,spaces and underscores are
+!!               CHARACTER input strings may be of the form
+!!               [NNd][NNh][NNm][NNs][NNw]. Case, spaces and underscores are
 !!               ignored. Allowed aliases for d,h,m, and s units are
 !!
 !!                   d -  days,day
@@ -3307,6 +3337,10 @@ end function get_timezone
 !!                   s -  seconds,second,sec
 !!
 !!               The numeric values may represent floating point numbers.
+!!
+!!               " is converted to "s", and ' is converted to "m" to support
+!!               the closest ANSI representation to the "prime" character,
+!!               as in 3h10'20".
 !!
 !!    crop       if .true., remove leading zero day values or day and hour values.
 !!               Optional, defaults to .false. .
@@ -3373,10 +3407,12 @@ doubleprecision                :: dtime
    type is (real(kind=realtime));   secsleft=nint(seconds)
    type is (character(len=*))
 
+      !remove spaces, commas, and underscores
       ! note _ is removed from input strings to allow use of _ every three digits in a number as sometimes seen in Java, perl, ...
-      strlocal=compact(lower(transliterate(seconds," _',",'')),'')//'                '   ! add whitespace to make room for spaces
+      strlocal=compact(seconds,'')                                     ! remove whitespace
+      strlocal=lower(transliterate(strlocal," _,",''))//repeat(' ',16) ! lowercase and append whitespace to make room for spaces
 
-      call substitute(strlocal,'days','d')                      ! from long names to short names substitute common aliases for units
+      call substitute(strlocal,'days','d')                     ! from long names to short names substitute common aliases for units
       call substitute(strlocal,'day','d')
       call substitute(strlocal,'hours','h')
       call substitute(strlocal,'hour','h')
@@ -3385,10 +3421,12 @@ doubleprecision                :: dtime
       call substitute(strlocal,'minutes','m')
       call substitute(strlocal,'minute','m')
       call substitute(strlocal,'min','m')
+      call substitute(strlocal,"'",'m')
       call substitute(strlocal,'seconds','s')
       call substitute(strlocal,'second','s')
       call substitute(strlocal,'secs','s')
       call substitute(strlocal,'sec','s')
+      call substitute(strlocal,'"','s')
       call substitute(strlocal,'weeks','w')
       call substitute(strlocal,'week','w')
       call substitute(strlocal,'wks','w')
@@ -3524,6 +3562,10 @@ end function sec2days
 !!
 !!   Spaces, commas and case are ignored.
 !!
+!!   " is converted to "s", and ' is converted to "m" to support
+!!   the closest ANSI representation to the "prime" character,
+!!   as in 3h10'20".
+!!
 !!##OPTIONS
 !!       str   string of the general form dd-hh:mm:ss.nn
 !!##RETURNS
@@ -3592,14 +3634,14 @@ integer                        :: i, icount, iwords, ilast
 logical                        :: negative
 
    time=0.0_dp
-   strlocal=compact(str,'')                              ! remove whitespace
-   strlocal=transliterate(strlocal,"_',",'')             ! remove single quotes,underscores sometimes used in numbers
-   strlocal=lower(strlocal)//repeat(' ',len(strlocal))   ! change to lowercase and add whitespace to make room for spaces
+   strlocal=compact(str,'')                            ! remove whitespace
+   strlocal=transliterate(strlocal,"_,",'')            ! remove commas, and underscores sometimes used in numbers in Java, perl, ...
+   strlocal=lower(strlocal)//repeat(' ',len(strlocal)) ! change to lowercase and add whitespace to make room for spaces
 
    if(len(strlocal)==0)then
       time=0.0_dp
    elseif(scan(strlocal,'smhdw')/=0)then               ! unit code values not DD-HH:MM:SS either plain number or unit numbers
-      call substitute(strlocal,'days','d')               ! from long names to short names substitute common aliases for units
+      call substitute(strlocal,'days','d')             ! from long names to short names substitute common aliases for units
       call substitute(strlocal,'day','d')
       call substitute(strlocal,'hours','h')
       call substitute(strlocal,'hour','h')
@@ -3609,10 +3651,12 @@ logical                        :: negative
       call substitute(strlocal,'minute','m')
       call substitute(strlocal,'mins','m')
       call substitute(strlocal,'min','m')
+      call substitute(strlocal,"'",'m')
       call substitute(strlocal,'seconds','s')
       call substitute(strlocal,'second','s')
       call substitute(strlocal,'secs','s')
       call substitute(strlocal,'sec','s')
+      call substitute(strlocal,'"','s')
       call substitute(strlocal,'weeks','w')
       call substitute(strlocal,'week','w')
       call substitute(strlocal,'wks','w')
@@ -3773,6 +3817,10 @@ end function days2sec
 !!     end program demo_locale
 !!
 !!    Results:
+!!
+!!     Sunday, September 29th, 2024 7:55:00 PM UTC-04:00
+!!     dimanche, septembre 29th, 2024 7:55:00 PM UTC-04:00
+!!     JUL, SEPTEMBER 29th, 2024 7:55:00 PM UTC-04:00
 !!
 !!##AUTHOR
 !!    John S. Urban, 2015

@@ -30,25 +30,26 @@ stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
-'   sec2days(1f) - [TIME] Convert seconds to string of form dd-hh:mm:ss          ',&
+'   sec2days(1f) - [TIME] Convert durations of time to string of form dd-hh:mm:ss',&
 '   (LICENSE:PD)                                                                 ',&
 '                                                                                ',&
 'SYNOPSIS                                                                        ',&
 '   sec2days nnnn[.xxx] [ -crop]| --version| --help                              ',&
 '                                                                                ',&
 'DESCRIPTION                                                                     ',&
-'   Given a numeric string representing seconds convert it to a string           ',&
-'   of the form                                                                  ',&
+'   Given a numeric string representing seconds or labeled units of time         ',&
+'   convert it to a string of the form                                           ',&
 '                                                                                ',&
 '      dd-hh:mm:ss                                                               ',&
 '                                                                                ',&
 '   where dd is days, hh hours, mm minutes and ss seconds.                       ',&
 '                                                                                ',&
 'OPTIONS                                                                         ',&
-'   nnnn[.xxx]  number of seconds to convert to string of form dd-hh:mm:ss.      ',&
-'               nnnn may be interspersed with unit codes d,h,m,s. Spaces,        ',&
-'               commas and case are ignored. Allowed aliases for the unit        ',&
-'               codes are                                                        ',&
+'   nnnn[.xxx]  Defaults to number of seconds to convert to string of            ',&
+'               form dd-hh:mm:ss.  nnnn may be interspersed with unit            ',&
+'               codes d,h,m,s. Spaces, commas and case are ignored. Allowed      ',&
+'               aliases for the unit codes are                                   ',&
+'                                                                                ',&
 '                 d  days and day                                                ',&
 '                 h  hours,hour,hrs, and hr                                      ',&
 '                 m  minutes,minute and min                                      ',&
@@ -82,7 +83,7 @@ endif
 end subroutine help_usage
 !>
 !!##NAME
-!!    sec2days(1f) - [TIME] Convert seconds to string of form dd-hh:mm:ss
+!!    sec2days(1f) - [TIME] Convert durations of time to string of form dd-hh:mm:ss
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -90,18 +91,19 @@ end subroutine help_usage
 !!    sec2days nnnn[.xxx] [ -crop]| --version| --help
 !!
 !!##DESCRIPTION
-!!    Given a numeric string representing seconds convert it to a string
-!!    of the form
+!!    Given a numeric string representing seconds or labeled units of time
+!!    convert it to a string of the form
 !!
 !!       dd-hh:mm:ss
 !!
 !!    where dd is days, hh hours, mm minutes and ss seconds.
 !!
 !!##OPTIONS
-!!    nnnn[.xxx]  number of seconds to convert to string of form dd-hh:mm:ss.
-!!                nnnn may be interspersed with unit codes d,h,m,s. Spaces,
-!!                commas and case are ignored. Allowed aliases for the unit
-!!                codes are
+!!    nnnn[.xxx]  Defaults to number of seconds to convert to string of
+!!                form dd-hh:mm:ss.  nnnn may be interspersed with unit
+!!                codes d,h,m,s. Spaces, commas and case are ignored. Allowed
+!!                aliases for the unit codes are
+!!
 !!                  d  days and day
 !!                  h  hours,hour,hrs, and hr
 !!                  m  minutes,minute and min
@@ -148,7 +150,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-06-29 21:53:27 UTC-240>',&
+'@(#)COMPILED:       2024-11-24 04:44:35 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

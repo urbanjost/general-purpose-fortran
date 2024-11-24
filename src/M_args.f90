@@ -11,6 +11,7 @@
 !!  Usage:
 !!
 !!      use M_args, only : get_namelist, print_dictionary, unnamed
+!!      use M_args, only : get_arg
 !!      use M_args, only : get_command_arguments_as_raw_namelist
 !!      use M_args, only : get_command_arguments_stack
 !!      use M_args, only : get_command_arguments_string
@@ -118,10 +119,10 @@ public  :: longest_command_argument
 public  :: get_namelist
 public  :: print_dictionary
 public  :: oneline
+public  :: get_command_arguments_as_raw_namelist
+public  :: get_arg
 public debug
 public unnamed
-
-public :: get_command_arguments_as_raw_namelist
 
 private :: namelist_to_dictionary
 private :: prototype_and_cmd_args_to_nlist
@@ -1772,6 +1773,61 @@ character(len=1),parameter           :: sep=' '
       string=string//trim(str(i))//sep
    enddo
 end function oneline
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!   get_arg(3f) - [ARGUMENTS:M_args] get value of command line argument by number
+!!   (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!   function get_arg(number,ierr)
+!!
+!!    integer,intent(in) :: number
+!!    integer,optional,intent(out) :: ierr
+!!    character(len=:),allocatable :: get_arg
+!!##DESCRIPTION
+!!
+!!   retrieve the nth value from the command line arguments.
+!!
+!!##OPTIONS
+!!   NUMBER  retrieve the Nth value from the command line
+!!           argument list.
+!!   IERR    an error occurred if not zero.
+!!
+!!##EXAMPLE
+!!
+!!    Typical usage:
+!!
+!!     program demo_get_arg
+!!     use M_args, only : get_arg
+!!     implicit none
+!!     integer                      :: i
+!!        do i=1,command_argument_count()
+!!           write(*,*)i,get_arg(i)
+!!        enddo
+!!     end program demo_get_arg
+!!
+!!##AUTHOR
+!!    John S. Urban, 2019
+!!##LICENSE
+!!    Public Domain
+function get_arg(iarg,ierr) result(value)
+integer,intent(in)           :: iarg
+integer,optional,intent(out) :: ierr
+character(len=:),allocatable :: value
+character(len=255)           :: errmsg
+integer                      :: argument_length
+integer                      :: status
+   call get_command_argument( number=iarg, length=argument_length )
+   if(allocated(value))deallocate(value)
+   allocate(character(len=argument_length) :: value)
+   value(:)=''
+   call get_command_argument(iarg, value, status=status) !, errmsg=errmsg)
+   !if(status.ne.0)value=trim(errmsg)
+   if(present(ierr))ierr=status
+end function get_arg
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

@@ -22,6 +22,7 @@
         COMPLEX_VALS: block
         real                :: ang, radius
         complex,allocatable :: vals(:)
+        integer             :: i
        !
         vals=[ &
           ( 1.0, 0.0 ), & ! 0

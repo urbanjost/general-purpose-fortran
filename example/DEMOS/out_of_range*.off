@@ -11,7 +11,7 @@
           do i=127,130
              i8=i
              j8=-i
-             ! OUT_OF_RANGE(3f) can let you check if the value will fit
+             ! OUT_OF_RANGE(3) can let you check if the value will fit
              write(*,*)i8,j8,' might have expected',i,-i, &
               & out_of_range( i,i8), &
               & out_of_range(-i,i8)

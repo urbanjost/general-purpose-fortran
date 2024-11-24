@@ -382,8 +382,8 @@ module M_pixel__slices
 !!    enddo
 !!    !
 !!    call vexit()    ! close up plot package
-!!    call write_animated_gif('dl_slices.3M_pixel.gif',movie,p_colormap,delay=5)
-!!    !call execute_system_command('display dl_slices.3M_pixel.gif')
+!!    call write_animated_gif('dl_slices.3m_pixel.gif',movie,p_colormap,delay=5)
+!!    !call execute_system_command('display dl_slices.3m_pixel.gif')
 !!    end program demo_dl_slices
 !!    !
 implicit none

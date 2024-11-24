@@ -1,5 +1,5 @@
 name = "GPF"
-version = "024.09.02"
+version = "2024.24.24"
 license = "Primarily MIT and PD"
 author = "John S. Urban and GPF maintainers"
 maintainer = "urbanjost@comcast.net"
@@ -13,19 +13,11 @@ homepage = "https://github.com/urbanjost/GPF"
    auto-executables = true
    auto-tests = true
    auto-examples = true
-   # new default with v0.8.0
-   # force module naming rules to avoid collisions with other packages
-   #module-naming = true
-   # traditional where user can use any module name
    module-naming = false
-[fortran]
-   # new section with v0.8.0
-   #implicit-typing = false
-   #implicit-external = false
-   #source-form = "free"
-   # traditional pre-version8 compatibility
-   implicit-typing = true
-   implicit-external = true
-   source-form = "default"
 [install]
    library = true
+[fortran]
+   implicit-typing = false
+   implicit-external = true
+   source-form = "free"
+

@@ -143,7 +143,7 @@
 !!       ! change background color directly
 !!       where (P_pixel.eq.0) P_pixel=9
 !!       ! write standard gif file
-!!       call writegif('M_pixel.3M_pixel.gif',P_pixel,P_ColorMap)
+!!       call writegif('M_pixel.3m_pixel.gif',P_pixel,P_ColorMap)
 !!
 !!    contains
 !!
@@ -1499,10 +1499,10 @@ contains
 !!       enddo
 !!
 !!       !! render pixel array to a file
-!!       call writegif('rect.3M_pixel.gif',P_pixel,P_colormap)
+!!       call writegif('rect.3m_pixel.gif',P_pixel,P_colormap)
 !!
 !!       !! display graphic assuming display(1) is available
-!!       call execute_command_line('display rect.3M_pixel.gif')
+!!       call execute_command_line('display rect.3m_pixel.gif')
 !!
 !!       !! wrap up graphics
 !!       call vexit()
@@ -2432,9 +2432,9 @@ end subroutine draw_line_single
 !!       enddo
 !!       call vexit()
 !!       !! write to file and display with display(1)
-!!       call write_animated_gif('hershey.3M_pixel.gif',&
+!!       call write_animated_gif('hershey.3m_pixel.gif',&
 !!       & movie,P_colormap,delay=40)
-!!       !call execute_command_line('display hershey.3M_pixel.gif')
+!!       !call execute_command_line('display hershey.3m_pixel.gif')
 !!    end program demo_hershey
 !!
 !!##AUTHOR
@@ -2990,8 +2990,8 @@ END SUBROUTINE CHRCOD
 !!       call nextline('Unto his nest again,')
 !!       call nextline('I shall not live in vain.')
 !!
-!!       call writegif('strlength.3M_pixel.gif',P_pixel,P_colormap)
-!!       call execute_command_line('display strlength.3M_pixel.gif')
+!!       call writegif('strlength.3m_pixel.gif',P_pixel,P_colormap)
+!!       call execute_command_line('display strlength.3m_pixel.gif')
 !!       call vexit()
 !!    contains
 !!    subroutine nextline(string)
@@ -3188,7 +3188,7 @@ end subroutine justfy
 !!       call polyline2( [-1,-1,+1,+1,-1] , &  ! X values
 !!       & [-1,+1,+1,-1,-1] )    ! Y values
 !!        ! write gif with a transparent background
-!!       call writegif('polyline2.3M_pixel.gif',P_pixel,P_ColorMap,transparent)
+!!       call writegif('polyline2.3m_pixel.gif',P_pixel,P_ColorMap,transparent)
 !!       call vexit()
 !!    end program demo_polyline2
 !!
@@ -3275,8 +3275,8 @@ end subroutine polyline2
 !!       call color(3)
 !!       call clear()
 !!       ! gif should be blank
-!!       call writegif('clear.3M_pixel.gif',P_pixel,P_colormap)
-!!       call execute_command_line('display clear.3M_pixel.gif')
+!!       call writegif('clear.3m_pixel.gif',P_pixel,P_colormap)
+!!       call execute_command_line('display clear.3m_pixel.gif')
 !!       call vexit()
 !!    end program demo_clear
 !!
@@ -3454,7 +3454,7 @@ end subroutine if_init
 !!       call color(2)
 !!       call arc(44.0,12.0,12.0,-90.0,90.0)
 !!       ! write gif with a transparent background
-!!       call writegif('arc.3M_pixel.gif',P_pixel,P_ColorMap,transparent)
+!!       call writegif('arc.3m_pixel.gif',P_pixel,P_ColorMap,transparent)
 !!       call vexit()
 !!    end program demo_arc
 !!
@@ -3547,9 +3547,9 @@ end subroutine arc
 !!       call circle( 25.0, 25.0, 20.0)
 !!       call circle( 25.0,-25.0, 20.0)
 !!       !! render the pixel map
-!!       call writegif('circle.3M_pixel.gif',P_pixel,P_colormap)
+!!       call writegif('circle.3m_pixel.gif',P_pixel,P_colormap)
 !!       !! display the graphic assuming display(1) is available
-!!       call execute_command_line('display circle.3M_pixel.gif')
+!!       call execute_command_line('display circle.3m_pixel.gif')
 !!       !! exit graphics mode
 !!       call vexit()
 !!    end program demo_circle
@@ -3641,7 +3641,7 @@ end subroutine circle
 !!          call linewidth(i/5/3)
 !!          call draw2(x,y)
 !!       enddo
-!!       call writegif('linewidth.3M_pixel.gif',P_pixel,P_colormap)
+!!       call writegif('linewidth.3m_pixel.gif',P_pixel,P_colormap)
 !!       call vexit()
 !!    end program demo_linewidth
 !!
@@ -3724,10 +3724,10 @@ end subroutine linewidth
 !!           x1=x1+width
 !!        enddo
 !!        ! write plot as GIF file
-!!        call writegif('color.3M_pixel.gif',P_pixel,P_colormap)
+!!        call writegif('color.3m_pixel.gif',P_pixel,P_colormap)
 !!        call vexit()
 !!        ! use system to display GIF file
-!!        call execute_command_line('display color.3M_pixel.gif')
+!!        call execute_command_line('display color.3m_pixel.gif')
 !!     end program demo_color
 !!
 !!##AUTHOR
@@ -3810,7 +3810,7 @@ end subroutine color
 !!          movie(ii,:,:)=P_pixel
 !!          LIGHTNESS=LIGHTNESS+LIGHTSTEP
 !!       enddo
-!!       call write_animated_gif('mapcolor.3M_pixel.gif',movie,P_colormap,delay=40)
+!!       call write_animated_gif('mapcolor.3m_pixel.gif',movie,P_colormap,delay=40)
 !!       call vexit()
 !!    contains
 !!    subroutine wheel() ! draw an entire wheel
@@ -4008,10 +4008,10 @@ end subroutine mapcolor
 !!          x1=x1+width
 !!       enddo
 !!       ! write plot as GIF file
-!!       call writegif('circleprecision.3M_pixel.gif',P_pixel,P_colormap)
+!!       call writegif('circleprecision.3m_pixel.gif',P_pixel,P_colormap)
 !!       call vexit()
 !!       ! use system to display GIF file
-!!       call execute_command_line('display circleprecision.3M_pixel.gif')
+!!       call execute_command_line('display circleprecision.3m_pixel.gif')
 !!    end program demo_circleprecision
 !!
 !!##AUTHOR
@@ -4140,8 +4140,8 @@ end subroutine getviewport
 !!       call viewport( 200.0, 400.0, 200.0, 400.0 ); call draw_circle(4)
 !!       call viewport( 250.0, 350.0, 150.0, 300.0 ); call draw_circle(5)
 !!
-!!       call writegif('viewport.3M_pixel.gif',P_pixel,P_colormap)
-!!       !call execute_command_line('display viewport.3M_pixel.gif')
+!!       call writegif('viewport.3m_pixel.gif',P_pixel,P_colormap)
+!!       !call execute_command_line('display viewport.3m_pixel.gif')
 !!       call vexit()
 !!    contains
 !!    subroutine draw_circle(icolor)
@@ -4466,8 +4466,8 @@ end subroutine page
 !!            call rmove2(10.0, 0.0)
 !!            call rdraw2( 0.0,10.0)
 !!         enddo
-!!         call writegif('rmove2.3M_pixel.gif',P_pixel,P_colormap)
-!!         call  execute_command_line('display rmove2.3M_pixel.gif')
+!!         call writegif('rmove2.3m_pixel.gif',P_pixel,P_colormap)
+!!         call  execute_command_line('display rmove2.3m_pixel.gif')
 !!         call vexit()
 !!      end program demo_rmove2
 !!
@@ -4527,7 +4527,7 @@ end subroutine rmove2
 !!         call draw2(300.0,200.0)
 !!         call move2(300.0,-200.0)
 !!         call draw2(-300.0,200.0)
-!!         call writegif('move2.3M_pixel.gif',P_pixel,P_colormap)
+!!         call writegif('move2.3m_pixel.gif',P_pixel,P_colormap)
 !!         call vexit()
 !!      end program demo_move2
 !!
@@ -4597,8 +4597,8 @@ end subroutine move2
 !!         call move2(  0.0,-50.0)
 !!         call square(50.0)
 !!
-!!         call writegif('rdraw2.3M_pixel.gif',P_pixel,P_colormap)
-!!         call execute_command_line('display rdraw2.3M_pixel.gif')
+!!         call writegif('rdraw2.3m_pixel.gif',P_pixel,P_colormap)
+!!         call execute_command_line('display rdraw2.3m_pixel.gif')
 !!         call vexit()
 !!
 !!         contains
@@ -4697,7 +4697,7 @@ end subroutine rdraw2
 !!          call draw2(x,y)
 !!       enddo
 !!       ! write the pixel map array as a GIF image file
-!!       call writegif('draw2.3M_pixel.gif',P_pixel,P_colormap)
+!!       call writegif('draw2.3m_pixel.gif',P_pixel,P_colormap)
 !!       ! exit graphics mode
 !!       call vexit()
 !!    end program demo_draw2
@@ -4761,14 +4761,14 @@ end subroutine draw2
 !!         call prefsize(60*2,40*2)
 !!         call vinit()
 !!         call picture()
-!!         call writegif('prefsize.3M_pixel.gif',P_pixel,P_colormap)
+!!         call writegif('prefsize.3m_pixel.gif',P_pixel,P_colormap)
 !!         call vexit()
 !!
 !!         ! make second file with another size
 !!         call prefsize(60*3,40*3)
 !!         call vinit()
 !!         call picture()
-!!         call writegif('prefsize_B.3M_pixel.gif',P_pixel,P_colormap)
+!!         call writegif('prefsize_B.3m_pixel.gif',P_pixel,P_colormap)
 !!         call vexit()
 !!      contains
 !!      subroutine picture
@@ -4840,7 +4840,7 @@ end subroutine prefsize
 !!         call draw2(300.0,200.0)
 !!         call move2(300.0,-200.0)
 !!         call draw2(-300.0,200.0)
-!!         call writegif('vexit.3M_pixel.gif',P_pixel,P_colormap)
+!!         call writegif('vexit.3m_pixel.gif',P_pixel,P_colormap)
 !!         call vexit()
 !!      end program demo_vexit
 !!
@@ -4899,7 +4899,7 @@ end subroutine vexit
 !!         call draw2(300.0,200.0)
 !!         call move2(300.0,-200.0)
 !!         call draw2(-300.0,200.0)
-!!         call writegif('vinit.3M_pixel.gif',P_pixel,P_colormap)
+!!         call writegif('vinit.3m_pixel.gif',P_pixel,P_colormap)
 !!         call vexit()
 !!      end program demo_vinit
 !!
@@ -5036,7 +5036,7 @@ end subroutine vinit
 !!          write(filename,'("hypoc.",i0,".gif")')ilines
 !!          !!call writegif(filename,P_pixel,P_colormap)
 !!       enddo
-!!       call write_animated_gif('makepoly.3M_pixel.gif',&
+!!       call write_animated_gif('makepoly.3m_pixel.gif',&
 !!               movie,P_colormap,delay=70)
 !!       call vexit()
 !!    contains
@@ -5731,10 +5731,10 @@ end subroutine print_ascii
 !!          call drawstr('aA')
 !!       enddo
 !!       ! write plot as GIF file
-!!       call writegif('textsize.3M_pixel.gif',P_pixel,P_colormap)
+!!       call writegif('textsize.3m_pixel.gif',P_pixel,P_colormap)
 !!       call vexit()
 !!       ! use system to display GIF file
-!!       call execute_command_line('display textsize.3M_pixel.gif')
+!!       call execute_command_line('display textsize.3m_pixel.gif')
 !!    end program demo_textsize
 !!
 !!##AUTHOR
@@ -5899,8 +5899,8 @@ end subroutine xcentertext
 !!       enddo
 !!    enddo
 !!
-!!    call  writegif('centertext.3M_pixel.gif',P_pixel,P_colormap)
-!!    call  execute_command_line('display centertext.3M_pixel.gif')
+!!    call  writegif('centertext.3m_pixel.gif',P_pixel,P_colormap)
+!!    call  execute_command_line('display centertext.3m_pixel.gif')
 !!
 !!    call vexit()
 !!
@@ -5973,8 +5973,8 @@ end subroutine centertext
 !!       call drawstr('angled text')
 !!    enddo
 !!
-!!    call writegif('textang.3M_pixel.gif',P_pixel,P_colormap)
-!!    call execute_command_line('display textang.3M_pixel.gif')
+!!    call writegif('textang.3m_pixel.gif',P_pixel,P_colormap)
+!!    call execute_command_line('display textang.3m_pixel.gif')
 !!
 !!    call vexit()
 !!
@@ -6060,8 +6060,8 @@ end subroutine textang
 !!       call nextline('COMPLEX, or times.r')
 !!       call nextline('ITALIC, or times.i')
 !!       call nextline('DUPLEX, or futura.m')
-!!       call writegif('font.3M_pixel.gif',P_pixel,P_colormap)
-!!       !call execute_command_line('display font.3M_pixel.gif')
+!!       call writegif('font.3m_pixel.gif',P_pixel,P_colormap)
+!!       !call execute_command_line('display font.3m_pixel.gif')
 !!       call vexit()
 !!    contains
 !!    subroutine nextline(string)
@@ -6153,8 +6153,8 @@ end subroutine font
 !!    enddo
 !!    call vexit()
 !!    !! write to file and display with display(1)
-!!    call write_animated_gif('drawchar.3M_pixel.gif',movie,P_colormap)
-!!    call execute_command_line('display drawchar.3M_pixel.gif')
+!!    call write_animated_gif('drawchar.3m_pixel.gif',movie,P_colormap)
+!!    call execute_command_line('display drawchar.3m_pixel.gif')
 !!    end program demo_drawchar
 !!
 !!##AUTHOR
@@ -6227,9 +6227,9 @@ end subroutine drawchar
 !!
 !!       call drawstr(' World!')! draw string at current position
 !!       !! render pixel array to a file
-!!       call writegif('drawstr.3M_pixel.gif',P_pixel,P_colormap)
+!!       call writegif('drawstr.3m_pixel.gif',P_pixel,P_colormap)
 !!       !! display graphic assuming display(1) is available
-!!       call execute_command_line('display drawstr.3M_pixel.gif')
+!!       call execute_command_line('display drawstr.3m_pixel.gif')
 !!
 !!       call vexit()           !  wrap up and exit graphics mode
 !!
@@ -6449,7 +6449,7 @@ end subroutine getdisplaysize
 !!       call linewidth(50*i)
 !!       call point2(real(i*25),real(i*25))
 !!    enddo
-!!    call writegif('point2.3M_pixel.gif',P_pixel,P_colormap)
+!!    call writegif('point2.3m_pixel.gif',P_pixel,P_colormap)
 !!    call vexit()
 !!    end program demo_point2
 !!
@@ -6611,7 +6611,7 @@ end subroutine state
 !!          enddo
 !!          xx=xx+16.0
 !!       enddo
-!!       call writegif('poly2.3M_pixel.gif',P_pixel,P_colormap)
+!!       call writegif('poly2.3m_pixel.gif',P_pixel,P_colormap)
 !!       call vexit()
 !!    contains
 !!

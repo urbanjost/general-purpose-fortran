@@ -35,7 +35,7 @@
            call draw2(x,y)
         enddo
         ! write the pixel map array as a GIF image file
-        call writegif('draw2.3M_pixel.gif',P_pixel,P_colormap)
+        call writegif('draw2.3m_pixel.gif',P_pixel,P_colormap)
         ! exit graphics mode
         call vexit()
      end program demo_draw2

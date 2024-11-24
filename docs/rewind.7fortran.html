@@ -50,14 +50,16 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>rewind (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-REWIND(7f) - [FORTRAN:FILE_POSITIONING] rewind specified sequential
-access I/O unit
+<P>
+rewind(7f) - [FILE_POSITIONING] rewind specified sequential access I/O
+unit
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -68,13 +70,11 @@ access I/O unit
 
 </A>
 <BLOCKQUOTE>
-REWIND file-unit-number
 <P>
-<PRE>
-    REWIND ( [UNIT=]file-unit-number][,IOMSG=iomsg-variable] &
-    & [,IOSTAT=scalar-int-variable][,ERR=label] )
+rewind file-unit-number
 <P>
-</PRE>
+rewind ( [UNIT=]file-unit-number][,IOMSG=iomsg-variable] &
+& [,IOSTAT=scalar-int-variable][,ERR=label] )
 </BLOCKQUOTE>
 <A name=2>
 
@@ -82,15 +82,15 @@ REWIND file-unit-number
 
 </A>
 <BLOCKQUOTE>
-Execution of a REWIND statement causes the file connected to the
-specified unit to be positioned at the beginning of the file (its
-initial point).
+<P>
+Execution of a REWIND(7F) statement causes the file connected to the
+specified unit to be positioned at the beginning of the file.
 <P>
 If the file is already positioned at its initial point, execution of
 this statement has no effect on the position of the file.
 <P>
-Execution of a REWIND statement for a file that is connected but does
-not exist is permitted and has no effect on any file.
+Execution of a REWIND(7F) statement for a file that is connected but
+does not exist is permitted and has no effect on any file.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -98,64 +98,55 @@ not exist is permitted and has no effect on any file.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>UNIT</B> </TD><TD valign=bottom>
-unit number of file to rewind. A unit open for direct access
-or stream access cannot be referenced by a REWIND (e.g. you
-cannot typically rewind stdin and stdout).
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>IOSTAT</B> </TD><TD valign=bottom>
-(Optional) a compiler-specific number that indicates an
-error occurred if non-zero. If not present and an error
-occurs the program terminates.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>IOMSG</B> </TD><TD valign=bottom>
-(Optional) a message describing error IOSTAT if IOSTAT is
-not zero.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>ERR</B> </TD><TD valign=bottom>
-(Optional) a label number to jump to if an error occurs
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+UNIT : unit number of file to rewind. A unit open for direct access or
+stream access cannot be referenced by a REWIND(7F) (e.g. you cannot
+typically rewind stdin and stdout).
+<P>
+IOSTAT : (Optional) a compiler-specific number that indicates an error
+occurred if non-zero. If not present and an error occurs the program
+terminates.
+<P>
+IOMSG : (Optional) a message describing the error if IOSTAT is not zero.
+<P>
+ERR : (Optional) a label number to jump to if an error occurs
+</BLOCKQUOTE>
 <A name=4>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
-An example of a REWIND statement is:
+<P>
+An example of a REWIND(7F) statement is:
 <P>
 <PRE>
-   program demo_rewind
-   implicit none
-   character(len=256) :: line
-   character(len=256) :: mssge
-   integer            :: i
-   integer            :: ios
-      open(10,file=&#146;demo_rewind.txt&#146;) ! open a file
-      do i=1,100                      ! write lines to it
-         write(10,&#146;(a,i0)&#146;) &#146;line &#146;,i
-      enddo
-      rewind(10, iostat=ios,iomsg=mssge)
-      if(ios.ne.0)then
-         write(*,*)&#146;*error* &#146;,trim(mssge)
-         stop
-      endif
-      write(*,*)&#146;wrote 100 lines, but now at line &#46;&#46;&#46;&#146;
-      read(10,&#146;(a)&#146;)line
-      write(*,&#146;(a)&#146;)line
-      read(10)
-      read(10)
-      read(10)
-      write(*,*)&#146;skipped a few lines, now at &#46;&#46;&#46;&#146;
-      read(10,&#146;(a)&#146;)line
-      write(*,&#146;(a)&#146;)line
-      close(10,status=&#146;delete&#146;)
-   end program demo_rewind
+        program demo_rewind
+        implicit none
+        character(len=256) :: line
+        character(len=256) :: mssge
+        integer            :: i
+        integer            :: ios
+           open (10, file=&#146;demo_rewind.txt&#146;) ! open a file
+           do i = 1, 100                     ! write lines to it
+              write (10, &#146;(a,i0)&#146;) &#146;line &#146;, i
+           enddo
+           rewind (10, iostat=ios, iomsg=mssge)
+           if (ios .ne. 0) then
+              write (*, *) &#146;*error* &#146;, trim(mssge)
+              stop
+           endif
+           write (*, *) &#146;wrote 100 lines, but now at line &#46;&#46;&#46;&#146;
+           read (10, &#146;(a)&#146;) line
+           write (*, &#146;(a)&#146;) line
+           read (10)
+           read (10)
+           read (10)
+           write (*, *) &#146;skipped a few lines, now at &#46;&#46;&#46;&#146;
+           read (10, &#146;(a)&#146;) line
+           write (*, &#146;(a)&#146;) line
+           close (10, status=&#146;delete&#146;)
+        end program demo_rewind
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -165,48 +156,50 @@ An example of a REWIND statement is:
 
 </A>
 <BLOCKQUOTE>
-The input/output statements are the OPEN, CLOSE, READ, WRITE, PRINT,
-BACKSPACE, ENDFILE, REWIND, FLUSH, WAIT, and INQUIRE statements.
-<TABLE cellpadding=3><!-- tsb: The input/output statements are the OPEN, CLOSE, READ, WRITE, PRINT,
+<P>
+The input/output statements are the OPEN(3), CLOSE(3), READ(3),
+WRITE(3), PRINT(3), BACKSPACE(3), ENDFILE(3), REWIND(3), FLUSH(3),
+WAIT(3) and INQUIRE(3) statements.
+<TABLE cellpadding=3><!-- tsb: The input/output statements are the OPEN(3), CLOSE(3), READ(3),
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The READ statement is a data transfer input statement.
+The READ(3) statement is a data transfer input statement.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The WRITE statement and the PRINT statement are data transfer
+The WRITE(3) statement and the PRINT(3) statement are data transfer
 output statements.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The OPEN statement and the CLOSE statement are file connection
+The WAIT(3) and FLUSH(3) statements are data transfer statements.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The OPEN(3) statement and the CLOSE(3) statement are file connection
 statements.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The INQUIRE statement is a file inquiry statement.
+The INQUIRE(3) statement is a file inquiry statement.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-The BACKSPACE, ENDFILE, and REWIND statements are file positioning
-statements.
+The BACKSPACE(3), ENDFILE(3), and REWIND(3) statements are file
+positioning statements.
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; JSU</H4>
-</A>
-<BLOCKQUOTE>
+<TR></TR></TABLE>Fortran statement descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>rewind (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 004de95a-52df-4860-9184-fb9809265cfc using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>rewind (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4756fc3d-cbd2-4de9-a87f-6f77ceee28c0 using man macros.</FONT>
 <br><br><center><img src="images/rewind.7fortran.gif"></center>
 </div>
 </div>

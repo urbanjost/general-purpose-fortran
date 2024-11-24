@@ -109,7 +109,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                 ',&
 '   unique --usage # show usage, including short names                            ',&
 '   USAGE:                                                                        ',&
-'   KEYWORD  SHORT PRESENT VALUE                                                  ',&
+'   Keyword  Short Present Value                                                  ',&
 '   help        h  F        [F]                                                   ',&
 '   method      m  F        ["4"]                                                 ',&
 '   repeat      r  F        [1]                                                   ',&

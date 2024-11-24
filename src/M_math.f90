@@ -55,7 +55,7 @@ private
   public skekurx        ! skew and kurtosis variant
   public skekur1        ! skew and kurtosis variant
   public stddev         ! standard deviation
-
+  ! PERMUTATIONS
   public nextp          ! next permutation of a previously sorted integer array
   ! SCALES AND RANGES
   public scale1         ! given xmin,xmax,n, find new range xminp xmaxp divisible into approximately n linear intervals of size dist
@@ -5658,6 +5658,7 @@ end subroutine iswap
 !===================================================================================================================================
 !>
 !!##NAME
+!!    nextp(3f) - [M_math] next permutation of a previously sorted integer array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -5669,21 +5670,24 @@ end subroutine iswap
 !!##DESCRIPTION
 !!    Permutation generation in lexicographic order
 !!
-!!    There are many ways to systematically generate all permutations of
-!!    a given sequence. One classic, simple, and flexible algorithm is
-!!    based upon finding the next permutation in lexicographic ordering, if it
+!!    There are many ways to systematically generate all permutations of a
+!!    given sequence. One classic, simple, and flexible algorithm is based
+!!    upon finding the next permutation in lexicographic ordering, if it
 !!    exists. It can handle repeated values, for which case it generates each
-!!    distinct multiset permutation once. Even for ordinary permutations it is
-!!    significantly more efficient than generating values for the Lehmer code
-!!    in lexicographic order (possibly using the factorial number system) and
-!!    converting those to permutations. It begins by sorting the sequence in
-!!    (weakly) increasing order (which gives its lexicographically minimal
-!!    permutation), and then repeats advancing to the next permutation as
-!!    long as one is found. The method goes back to Narayana Pandita in 14th
-!!    century India, and has been rediscovered frequently.[45]
+!!    distinct multiset permutation once. Even for ordinary permutations
+!!    it is significantly more efficient than generating values for the
+!!    Lehmer code in lexicographic order (possibly using the factorial
+!!    number system) and converting those to permutations.
 !!
-!!    The following algorithm generates the next permutation lexicographically
-!!    after a given permutation. It changes the given permutation in-place.
+!!    It begins by sorting the sequence in (weakly) increasing order (which
+!!    gives its lexicographically minimal permutation), and then repeats
+!!    advancing to the next permutation as long as one is found. The method
+!!    goes back to Narayana Pandita in 14th century India, and has been
+!!    rediscovered frequently.
+!!
+!!    The following algorithm generates the next permutation
+!!    lexicographically after a given permutation. It changes the given
+!!    permutation in-place.
 !!
 !!     * Find the largest index k such that a[k] < a[k + 1]. If no such index
 !!       exists, the permutation is the last permutation.
@@ -5751,30 +5755,32 @@ dimension a(n)
    enddo
    j = i + 1
    k = n
-   do
-      t = a(j)
-      a(j) = a(k)
-      a(k) = t
-      j = j + 1
-      k = k - 1
-      if ( j>=k ) then
-         j = i
-         if ( j==0 ) exit
-         do
-            j = j + 1
-            if ( a(j)>=a(i) ) then
-               t = a(i)
-               a(i) = a(j)
-               a(j) = t
-               nextp = .true.
-               goto 99999
-            endif
-         enddo
-      endif
-   enddo
-   nextp = .false.
-   return
-99999 end function nextp
+   PERMUTE: block
+      do
+         t = a(j)
+         a(j) = a(k)
+         a(k) = t
+         j = j + 1
+         k = k - 1
+         if ( j>=k ) then
+            j = i
+            if ( j==0 ) exit
+            do
+               j = j + 1
+               if ( a(j)>=a(i) ) then
+                  t = a(i)
+                  a(i) = a(j)
+                  a(j) = t
+                  nextp = .true.
+                  exit PERMUTE
+               endif
+            enddo
+         endif
+      enddo
+      nextp = .false.
+      return
+   endblock PERMUTE
+end function nextp
 
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

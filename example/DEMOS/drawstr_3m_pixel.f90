@@ -31,9 +31,9 @@
 
         call drawstr(' World!')! draw string at current position
         !! render pixel array to a file
-        call writegif('drawstr.3M_pixel.gif',P_pixel,P_colormap)
+        call writegif('drawstr.3m_pixel.gif',P_pixel,P_colormap)
         !! display graphic assuming display(1) is available
-        call execute_command_line('display drawstr.3M_pixel.gif')
+        call execute_command_line('display drawstr.3m_pixel.gif')
 
         call vexit()           !  wrap up and exit graphics mode
 

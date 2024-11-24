@@ -14,7 +14,7 @@
         call color(3)
         call clear()
         ! gif should be blank
-        call writegif('clear.3M_pixel.gif',P_pixel,P_colormap)
-        call execute_command_line('display clear.3M_pixel.gif')
+        call writegif('clear.3m_pixel.gif',P_pixel,P_colormap)
+        call execute_command_line('display clear.3m_pixel.gif')
         call vexit()
      end program demo_clear

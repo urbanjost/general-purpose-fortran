@@ -50,16 +50,17 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>flush (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-flush(7f) - [FORTRAN:IO] flush I/O buffers of specified files
+<P>
+flush(7f) - [IO] flush I/O buffers of specified files
 <P>
 </BLOCKQUOTE>
-<P>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=6>
@@ -68,12 +69,8 @@ flush(7f) - [FORTRAN:IO] flush I/O buffers of specified files
 
 </A>
 <BLOCKQUOTE>
+<P>
 flush file-unit-number
-<P>
-<PRE>
-    or
-<P>
-</PRE>
 flush([UNIT=]file_unit_number,[iostat=i],[iomsg=str],[err=label_number])
 </BLOCKQUOTE>
 <A name=2>
@@ -82,37 +79,32 @@ flush([UNIT=]file_unit_number,[iostat=i],[iomsg=str],[err=label_number])
 
 </A>
 <BLOCKQUOTE>
-The actions of FLUSH(3f) are processor dependent because the Fortran
-standard does not specify the mechanism of file storage. However,
-the intention is
-<TABLE cellpadding=3><!-- tsb: The actions of FLUSH(3f) are processor dependent because the Fortran
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=4%>
-1.
-</TD><TD>
-The FLUSH(3f) operation should make all data written to an external
-file available to other processes or devices.
-</TD></TR>
-<TR valign=top><TD width=4%>
-2.
-</TD><TD>
-It is also intended that it will cause data placed in an external
-file by means other than the current Fortran process to be available
-to the process in a subsequent READ statement.
-</TD></TR>
-<TR></TR></TABLE>Together, this is commonly called "flushing I/O buffers".
 <P>
-Note that execution of a FLUSH(3f) statement performs a wait operation
-for all pending asynchronous data transfer operations for the specified
+I/O statements can buffer output before delivering it to the host system
+in order to minimize the overhead of system calls. Use FLUSH(7F) to
+deliver any such pending I/O for the identified file to the host system.
+<P>
+This is generally not required accept to ensure critical information is
+displayed or written as reliably as possible or to synchronise data from
+different units going to the same device. Do not arbitrarily flush all
+I/O operations or programs using large amounts of I/O might experience
+significant performance degradation, particularly if the I/O is to a
+block-oriented device.
+<P>
+Note execution of a FLUSH(7F) statement performs a wait operation for
+all pending asynchronous data transfer operations for the specified
 unit.
 <P>
-Execution of a FLUSH(3f) statement for a file that is connected but does
+More generally execution of a FLUSH(7F) statement causes data written to
+an external file not only to be available to other processes, causes
+data placed in an external file by means other than Fortran to be
+available to a READ(7F) statement; but these actions are processor
+dependent.
+<P>
+Execution of a FLUSH(7F) statement for a file that is connected but does
 not exist is permitted and has no effect on any file.
 <P>
-A FLUSH(3f) statement has no effect on file position.
-<P>
-No specifier shall appear more than once in a given FLUSH(3f) statement.
+A FLUSH(7F) statement has no effect on file position.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -120,64 +112,72 @@ No specifier shall appear more than once in a given FLUSH(3f) statement.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>[UNIT=]file-unit-number</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Required. If the optional characters
-UNIT= are omitted from the unit specifier,
-the file-unit-number must be the first item.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>ERR=label</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The label must branch to a target statement
-in the same scoping unit as the FLUSH(3f)
-statement.
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+UNIT : A file-unit-number is required; if the optional characters
+"UNIT=" are omitted, the unit-number must be the first item in the
+FLUSH(7) statement.
+</BLOCKQUOTE>
 <A name=4>
 
      <H3>RETURNS</H3>
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>IOSTAT=scalar-int-variable</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-variable is set to a processor-dependent
-positive value if an error occurs, to zero
-if the flush operation was successful, or
-to a processor-dependent negative value
-if the flush operation is not supported
-for the unit specified.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>IOMSG=iomsg-variable</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-message describing any error that occurred
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+IOSTAT : status variable. It is set to a processor-dependent positive
+value if an error occurs, to zero if the flush operation was successful,
+or to a processor-dependent negative value if the flush operation is not
+supported for the unit specified. IOMSG : character variable holding
+error description when iostat is not zero. ERR : The numeric line label
+of a target statement in the same scope as the FLUSH(7F) statement.
+<P>
+NOTE From the Fortran standard:
+<P>
+<PRE>
+      Because the Fortran standard does not specify the mechanism of file
+      storage, the exact meaning of the flush operation is not precisely
+      defined. It is expected that the flush operation will make all data
+      written to a file available to other processes or devices, or make data
+      recently added to a file by other processes or devices available to
+      the program via a subsequent read operation. This is commonly called
+      flushing input/output buffers.
+<P>
+</PRE>
+</BLOCKQUOTE>
 <A name=5>
 
-     <H3>EXAMPLE</H3>
+     <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program:
 <P>
 <PRE>
-   program demo_flush
-   implicit none
-   character(len=256) :: msg
-   integer :: ios, lun
-      lun=10
-      flush (unit=lun, iostat=ios, iomsg=msg)
-      if(ios.ne.0)then
-         write(*,&#146;(a)&#146;)&#146;&lt;ERROR&gt;*flush*:&#146;//trim(msg)
-      endif
-   end program demo_flush
+        program demo_flush
+        use, intrinsic :: iso_fortran_env, only : &
+        & stderr=&gt;ERROR_UNIT, &
+        & stdin=&gt;INPUT_UNIT,  &
+        & stdout=&gt;OUTPUT_UNIT
+        implicit none
+        integer :: iostat
+        character(len=255) :: iomsg
+           flush (stderr, iostat=iostat, iomsg=iomsg)
+           if(iostat.ne.0)then
+              write(*,*)&#146;ERROR:&#146;//trim(iomsg)
+              error stop 1
+           endif
+           flush (stdout, err = 999 )
+           stop
+           999 continue
+           stop 10
+        end program demo_flush
+<P>
 </PRE>
+Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>flush (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4c0c9886-919c-488f-8299-5eac39ede6a7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>flush (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 942f6584-1a42-4ecf-968a-ac0492f01c15 using man macros.</FONT>
 <br><br><center><img src="images/flush.7fortran.gif"></center>
 </div>
 </div>

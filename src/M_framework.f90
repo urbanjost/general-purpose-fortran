@@ -1,9 +1,21 @@
+
+
+
+
+
+
+
+
+
+
+
 module M_framework
 use M_framework__journal
 use M_framework__msg
 use M_framework__verify
 use M_framework__approx
 use M_framework__utility
+use M_framework__timing
 !use M_framework__attr
 implicit none(type,external)
 !private
@@ -302,7 +314,7 @@ implicit none(type,external)
 !! The example programs also contain a placeholder call to unit\_test\_mode(3f).
 !!
 !!    PROCEDURAL AND COMMAND LINE MODE OPTIONS
-!! The dummy skeleton routines all start with a call to unix\_check\_mode(3f).
+!! The dummy skeleton routines all start with a call to 1\_check\_mode(3f).
 !! Its documentation describes a few default modes you can change with the
 !! routine. Essentially the same options are available on the command line
 !! of the test program(s) as well.
@@ -500,9 +512,7 @@ implicit none(type,external)
 !! the gdb(1) debugger (you can enter "q" after each test has run; or enter
 !! gdb commands at the prompt):
 !!
-!!     > fpm test --target '*' --verbose \
-!!     > --runner 'gdb -ex "list, 0" -ex run --quiet --args' \
-!!     > -- flags=9997,9998,9999 luns=6 level=3
+!!     > fpm test --target '*' --verbose !!     > --runner 'gdb -ex "list, 0" -ex run --quiet --args' !!     > -- flags=9997,9998,9999 luns=6 level=3
 !!
 !! This is long enough that an alias or script would facilitate its use,
 !! with one changing it to use one's favorite options.

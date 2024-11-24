@@ -1,10 +1,18 @@
-     program demo_flush
-     implicit none
-     character(len=256) :: msg
-     integer :: ios, lun
-        lun=10
-        flush (unit=lun, iostat=ios, iomsg=msg)
-        if(ios.ne.0)then
-           write(*,'(a)')'<ERROR>*flush*:'//trim(msg)
-        endif
-     end program demo_flush
+          program demo_flush
+          use, intrinsic :: iso_fortran_env, only : &
+          & stderr=>ERROR_UNIT, &
+          & stdin=>INPUT_UNIT,  &
+          & stdout=>OUTPUT_UNIT
+          implicit none
+          integer :: iostat
+          character(len=255) :: iomsg
+             flush (stderr, iostat=iostat, iomsg=iomsg)
+             if(iostat.ne.0)then
+                write(*,*)'ERROR:'//trim(iomsg)
+                error stop 1
+             endif
+             flush (stdout, err = 999 )
+             stop
+             999 continue
+             stop 10
+          end program demo_flush

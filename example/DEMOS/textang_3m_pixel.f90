@@ -22,8 +22,8 @@
         call drawstr('angled text')
      enddo
 
-     call writegif('textang.3M_pixel.gif',P_pixel,P_colormap)
-     call execute_command_line('display textang.3M_pixel.gif')
+     call writegif('textang.3m_pixel.gif',P_pixel,P_colormap)
+     call execute_command_line('display textang.3m_pixel.gif')
 
      call vexit()
 

@@ -1,8 +1,8 @@
      program demo_union
      use M_sets, only: union
      character(len=*),parameter :: g='(*(g0,1x))'
-     integer, allocatable      :: A(:)
-     integer, allocatable      :: B(:)
+     integer,allocatable        :: A(:)
+     integer,allocatable        :: B(:)
 
         write(*,g) 'UNION', 'Find the union of vectors A and B.'
         A=[5, 7, 1]

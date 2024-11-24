@@ -39,7 +39,7 @@
          write(*,*)'isprint?',verify(string,prnt) == 0
 
          print *,'VERIFY(3) is very powerful using expressions as masks'
-         ! verify(3f) is often used in a logical expression
+         ! verify(3) is often used in a logical expression
          string=" This is NOT all UPPERCASE "
          write(*,*)'all uppercase/spaces?',verify(string, blank//upp) == 0
          string=" This IS all uppercase "

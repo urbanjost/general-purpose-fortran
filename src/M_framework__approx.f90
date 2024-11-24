@@ -947,9 +947,9 @@ end function anyscalar_to_double_
 !!    where ULP is a user-selected scaling factor that defaults to 1. The
 !!    default is intentionally low so that default behavior is close to
 !!    that of the default operators. Setting it to zero(0.0) essentially
-!!    causes default behavior within some possible margin of rounding error.
+!!    causes no values to compare equal.
 !!
-!!    If the result is .TRUE., the numbers are considered equal.  Both single
+!!    If the result is .TRUE., the numbers are considered equal. Both single
 !!    and double precision scalar and array values can be compared, as the
 !!    function is elemental.
 !!

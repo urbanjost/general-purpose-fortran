@@ -41,8 +41,8 @@
         enddo
      enddo
 
-     call  writegif('centertext.3M_pixel.gif',P_pixel,P_colormap)
-     call  execute_command_line('display centertext.3M_pixel.gif')
+     call  writegif('centertext.3m_pixel.gif',P_pixel,P_colormap)
+     call  execute_command_line('display centertext.3m_pixel.gif')
 
      call vexit()
 

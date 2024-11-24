@@ -132,41 +132,72 @@ help_text=[ CHARACTER(LEN=128) :: &
 'character triplets that consist of the percent character and a two-digit',&
 'hexadecimal value.                                                      ',&
 '                                                                        ',&
-'OPTIONS                                                                 ',&
-'    --type         "html", or "md"                                      ',&
-'    --help         display this help and exit                           ',&
-'    --version      output version information and exit                  ',&
-'    filename(s)    Fortran source files                                 ',&
+'MOTIVATION                                                              ',&
 '                                                                        ',&
-'EXAMPLES                                                                ',&
-'  Sample commands                                                       ',&
+'What is desired is the ability to click on codes in Forums and HTML     ',&
+'documents and have it execute with the most recent compilers on-line.   ',&
 '                                                                        ',&
-'   > $  playground hello.f90 > playground.html                          ',&
-'   > <!DOCTYPE html>                                                    ',&
-'   > <html xmlns="http://www.w3.org/1999/xhtml">                        ',&
-'   > <head>                                                             ',&
-'   >   <meta name="generator" content="playground" />                   ',&
-'   >   <title>playground</title>                                        ',&
-'   > </head>                                                            ',&
-'   > <body>                                                             ',&
-'   >                                                                    ',&
-'   >   <a href="https://play.fortran-lang.org/?code=                    ',&
-'   >   program%20hello%5Fworld                                          ',&
-'   >   %0A%20%20%20write%28%2A%2C%2A%29%27Hello%20World%21%27           ',&
-'   >   %0Aend%20program%20hello%5Fworld                                 ',&
-'   >   %0A"                                                             ',&
-'   >   target="_blank" title="Open in Fortran Playground">              ',&
-'   >   <img src="https://raw.githubusercontent.com/fortran-lang/        ',&
-'   >   playground/main/frontend/src/fortran-logo.png"                   ',&
-'   >   alt="Fortran logo" class="align-text-bottom" height="15.5" /> hello',&
-'   >   </a>                                                               ',&
-'   >   <xmp>                                                              ',&
-'   > program hello_world                                                  ',&
-'   >    write(*,*)''''Hello World!''''                                    ',&
-'   > end program hello_world                                              ',&
-'   >   </xmp>                                                             ',&
-'   > </body>                                                              ',&
-'   > </html>                                                              ',&
+'There are several on-line Fortran compilers available. The Fortran wiki ',&
+'lists several. One, called the "playground" is maintained as part of the',&
+'fortran-lang site.                                                      ',&
+'                                                                        ',&
+'The current playground allows for easily transferring programs from     ',&
+'an HTML document as a form. This would be particularly useful for code  ',&
+'examples in other fortran-lang resources like the example codes in the  ',&
+'intrinsics descriptions and allow for other fortran documentation to    ',&
+'have live links.                                                        ',&
+'                                                                        ',&
+'As mentioned, there are several dozen on-line Fortran interfaces described on the',&
+'Fortran WIki. Some are trivial but others are good examples of possible          ',&
+'features but the most desirable feature for me would be                          ',&
+'                                                                                 ',&
+'  + integration with the fortran-lang documentation so example codes and         ',&
+'    the man-page demo programs could be executed.                                ',&
+'  + the ability to use fpm(1) and registered packages with the latest compilers. ',&
+'  + If possible an extension to the Fortran discourse that automatically         ',&
+'    could transfer a fortran section from a discourse discussion to the          ',&
+'    playground would be a major unique enhancement.                              ',&
+'                                                                                 ',&
+'    A more ambitious feature would be able to also include an fpm                ',&
+'    manifest file that uses dependencies as repositories as well. Perhaps        ',&
+'    just simple comments in the code could be used or a scan for USE             ',&
+'    statements.                                                                  ',&
+'                                                                                 ',&
+'OPTIONS                                                                          ',&
+'    --type         "html", or "md"                                               ',&
+'    --help         display this help and exit                                    ',&
+'    --version      output version information and exit                           ',&
+'    filename(s)    Fortran source files                                          ',&
+'                                                                                 ',&
+'EXAMPLES                                                                         ',&
+'  Sample commands                                                                ',&
+'                                                                                 ',&
+'   > $  playground hello.f90 > playground.html                                   ',&
+'   > <!DOCTYPE html>                                                             ',&
+'   > <html xmlns="http://www.w3.org/1999/xhtml">                                 ',&
+'   > <head>                                                                      ',&
+'   >   <meta name="generator" content="playground" />                            ',&
+'   >   <title>playground</title>                                                 ',&
+'   > </head>                                                                     ',&
+'   > <body>                                                                      ',&
+'   >                                                                             ',&
+'   >   <a href="https://play.fortran-lang.org/?code=                             ',&
+'   >   program%20hello%5Fworld                                                   ',&
+'   >   %0A%20%20%20write%28%2A%2C%2A%29%27Hello%20World%21%27                    ',&
+'   >   %0Aend%20program%20hello%5Fworld                                          ',&
+'   >   %0A"                                                                      ',&
+'   >   target="_blank" title="Open in Fortran Playground">                       ',&
+'   >   <img src="https://raw.githubusercontent.com/fortran-lang/                 ',&
+'   >   playground/main/frontend/src/fortran-logo.png"                            ',&
+'   >   alt="Fortran logo" class="align-text-bottom" height="15.5" /> hello       ',&
+'   >   </a>                                                                      ',&
+'   >   <xmp>                                                                     ',&
+'   > program hello_world                                                         ',&
+'   >    write(*,*)''''Hello World!''''                                           ',&
+'   > end program hello_world                                                     ',&
+'   >   </xmp>                                                                    ',&
+'   > </body>                                                                     ',&
+'   > </html>                                                                     ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&

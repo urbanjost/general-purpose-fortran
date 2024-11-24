@@ -1,8 +1,8 @@
 program findll
-use M_CLI2, only    : set_args, sgets, lget, iget, filenames=>unnamed
-use M_io, only      : read_line
-use M_strings, only : v2s, switch
-use ISO_FORTRAN_ENV, only: error_unit ! compiler_options,compiler_version,input_unit,output_unit
+use  M_CLI2,          only: set_args, sgets, lget, iget, filenames=>unnamed
+use  M_io,            only: read_line
+use  M_strings,       only: v2s, switch
+use  ISO_FORTRAN_ENV, only: error_unit  ! compiler_options,compiler_version,input_unit,output_unit
 implicit none
 
 ! ident_1="@(#) findll(1f) find long lines"
@@ -14,15 +14,19 @@ integer                      :: ilen
 integer                      :: ilines
 integer                      :: ios
 integer                      :: ilength
+integer                      :: longest
 integer                      :: isize
 logical                      :: wrap
+logical                      :: verbose
 character(len=:),allocatable :: fmt
 character(len=:),allocatable :: help_text(:)
 character(len=:),allocatable :: version_text(:)
 
+   longest=0
    call setup()
    call set_args(' -l 132 -wrap F',help_text,version_text) ! define and crack command line arguments
    wrap=lget('wrap')                                       ! test if -wrap    switch is present on command line
+   verbose=lget('verbose')
    ilength=max(0,iget('l'))
    isize=size(filenames)                                   ! number of words in default list
 
@@ -34,6 +38,7 @@ character(len=:),allocatable :: version_text(:)
       STDIN: do while (read_line(line)==0)                 ! read lines of arbitrary length
          ilines=ilines+1
          ilen=len_trim(line)
+         longest=max(longest,ilen)                         ! record most recent longest line
          if(wrap)then                                      ! if wrapping lines
             if(ilen.gt.ilength)then
                write(*,fmt)switch(line)                    ! if line needs wrapper write it as an array of chars
@@ -44,6 +49,9 @@ character(len=:),allocatable :: version_text(:)
             write(*,'(i0,":",i0,":",a)')ilines,ilen,line
          endif
       enddo STDIN
+      if(verbose)then
+         write(*,'(*(g0,1x))')'longest line=',longest
+      endif
    case default                                            ! a list of filenames is present
       FILES: do i=1,isize                                  ! step through files
          ilines=0                                          ! number of lines successfully read from this file
@@ -55,9 +63,11 @@ character(len=:),allocatable :: version_text(:)
             cycle FILES
          endif
 
+         longest=0
          FILE: do while (read_line(line,lun=10)==0)
             ilines=ilines+1
             ilen=len_trim(line)
+            longest=max(longest,ilen)
             if(wrap)then
                if(ilen.gt.ilength)then
                   write(*,fmt)switch(line)
@@ -69,7 +79,9 @@ character(len=:),allocatable :: version_text(:)
                & trim(filenames(i)),ilines,ilen,line
             endif
          enddo FILE
-
+         if(verbose)then
+            write(*,'(*(g0,1x))')trim(filenames(i)),':longest line=',longest
+         endif
          close(unit=10,iostat=ios)
       enddo FILES
    end select SELECT_DATA
@@ -97,6 +109,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   --wrap     instead of locating and displaying long           ',&
 '              lines, fold the lines at the specified            ',&
 '              line length                                       ',&
+'   --verbose  output additional descriptive information         ',&
 '                                                                ',&
 '   --help     display this help and exit                        ',&
 '   --version  output version information and exit               ',&

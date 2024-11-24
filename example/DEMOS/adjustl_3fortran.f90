@@ -10,18 +10,18 @@
           write(*,'(a,"[",a,"]")') 'adjusted: ',str
 
           ! a fixed-length string can be printed
-          ! trimmed using trim(3f) or len_trim(3f)
+          ! trimmed using trim(3) or len_trim(3)
           write(*,'(a,"[",a,"]")') 'trimmed:  ',trim(str)
           length=len_trim(str)
           write(*,'(a,"[",a,"]")') 'substring:',str(:length)
 
           ! note an allocatable string stays the same length too
-          ! and is not trimmed by just an adjustl(3f) call.
+          ! and is not trimmed by just an adjustl(3) call.
           astr='    allocatable string   '
           write(*,'(a,"[",a,"]")') 'original:',astr
           astr = adjustl(astr)
           write(*,'(a,"[",a,"]")') 'adjusted:',astr
-          ! trim(3f) can be used to change the length
+          ! trim(3) can be used to change the length
           astr = trim(astr)
           write(*,'(a,"[",a,"]")') 'trimmed: ',astr
 

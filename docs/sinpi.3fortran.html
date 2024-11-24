@@ -1,0 +1,280 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sinpi (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+SINPI(3) - [MATHEMATICS:TRIGONOMETRIC] Circular sine function
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+result = sinpi(x)
+<P>
+<PRE>
+         elemental real(kind=KIND) function sinpi(x)
+<P>
+          real(kind=KIND) :: x
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X may be any real
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+KIND may be any kind supported by the associated real type of X.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The returned value will be of the same type and kind as the argument
+X.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+SINPI(3) computes the circular sine of an angle given the size of the
+angle in half-revolutions.
+<P>
+SINPI(X) is approximately equal to SIN(X*PI).
+<P>
+The sine of an angle in a right-angled triangle is the ratio of the
+length of the side opposite the given angle divided by the length of the
+hypotenuse.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+X : The angle in half-revolutions to compute the sine of.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The return value contains the processor-dependent approximation of the
+sine of X.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Example. SINPI(1.0) has the value 0.0 (approximately).
+<P>
+Sample program:
+<P>
+<PRE>
+    program demo_sinpi
+    implicit none
+    real    :: x
+    integer :: i
+    real,parameter :: PI=acos(-1.0)
+       do i=0,8
+          x=i*0.25
+          write(*,*)&#146;x=&#146;,x,&#146; sinpi(x)=&#146;,sinpi(x)
+       enddo
+    end program demo_sinpi
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+     &gt; x=   0.00000000  sinpi(x)=   0.00000000
+     &gt; x=  0.250000000  sinpi(x)=   0.707106769
+     &gt; x=  0.500000000  sinpi(x)=   1.00000000
+     &gt; x=  0.750000000  sinpi(x)=   0.707106769
+     &gt; x=   1.00000000  sinpi(x)=  -8.74227766E-08
+     &gt; x=   1.25000000  sinpi(x)=  -0.707106888
+     &gt; x=   1.50000000  sinpi(x)=  -1.00000000
+     &gt; x=   1.75000000  sinpi(x)=  -0.707106531
+     &gt; x=   2.00000000  sinpi(x)=   1.74845553E-07
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+fortran 2023
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ACOS(3), ACOSD(3), ACOSPI(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ASIN(3), ASIND(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ATAN2(3), ATAN2D(3), ATAN2PI(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+COS(3), COSD(3), COSPI(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+TAN(3), TAND(3), TANPI(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ACOSH(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ACOSH(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ASINH(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ASINH(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ATANH(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ATANH(3),
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=9>
+
+     <H3>RESOURCES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Wikipedia:sine and cosine
+</TD></TR>
+<TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sinpi (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8725d9c0-a29f-484a-b1a8-23f2b841b08e using man macros.</FONT>
+<br><br><center><img src="images/sinpi.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

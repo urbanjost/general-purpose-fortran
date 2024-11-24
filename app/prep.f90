@@ -1,11 +1,12 @@
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-!  @(#)prep: Fortran preprocessor
-!  Fortran preprocessor originally based on public-domain FPP preprocessor from Lahey Fortran Code Repository
-!     http://www.lahey.com/code.htm
-!  Extensively rewritten since under a MIT License.
-!     2013-10-03,2020-12-19,2021-06-12 : John S. Urban
+! TODO ==>
+! LOOK AT TEMPLATING:  Need arrays of values; way to call $POST with command-like options to set values or NAMELIST syntax;
+!                      $POST should be elemental so if call with scalars and array it makes a call for each array element
+!                      something like a $FOR statement and nicer looping on a parcel
+! ${NAME} syntax could include more attributes of a bash(1) here document but perhaps allow expression inside of {} and array and
+! implied do?
 ! ADD
 ! o line control  # linenumber "file"
 ! o looping
@@ -30,6 +31,14 @@
 ! extend $INCLUDE to call libcurl to access remote files
 !
 ! case('ENDBLOCK');           call document(' ') ! BUG: '' instead of 'END' worked with kracken95, not with M_CLI2
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!  @(#)prep: Fortran preprocessor
+!  Fortran preprocessor originally based on public-domain FPP preprocessor from Lahey Fortran Code Repository
+!     http://www.lahey.com/code.htm
+!  Extensively rewritten since under a MIT License.
+!     2013-10-03, 2020-12-19, 2021-06-12 : John S. Urban
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -2378,7 +2387,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '  This is a block of text that will be converted to comments and optionally     ',&
 '  appended to a $PREP_DOCUMENT_DIR/doc/ file when $PREP_DOCUMENT_DIR is set.    ',&
 '                                                                                ',&
-'   > $BLOCK COMMENT--file conditional_compile.man                               ',&
+'   > $BLOCK COMMENT --file conditional_compile.man                              ',&
 '   > NAME                                                                       ',&
 '   >    conditional_compile - basic example for prep(1) preprocessor.           ',&
 '   > SYNOPSIS                                                                   ',&

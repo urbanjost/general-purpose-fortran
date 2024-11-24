@@ -1,10 +1,6 @@
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an optional timestamp prefix
    use iso_fortran_env, only : iostat_end
    use m_kracken,only        : kracken,lget,sget,retrev,IPvalue   ! command line parameter cracking module
-   use m_verify, only        : stderr
    use m_time, only          : now,fmtdate_usage
    use m_strings, only       : v2s, chomp
    implicit none
@@ -23,7 +19,7 @@ program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an opti
    integer                      :: ii                        ! length of trimmed format
    character(len=*),parameter   :: delimiters=' '//char(9)//char(13)//char(10) ! token delimiters (space, tab, return, line feed)
    character(len=:),allocatable :: token
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 !  crack command line
    call kracken('ttee','            &
    & -o -output                     &
@@ -33,19 +29,19 @@ program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an opti
    & -fmt %Y/%M/%D %h:%m:%s.%x>     &
    & -version .F.                   &
    & ')
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
    call help_version(lget('ttee_version')) !  display version number if --version is present
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 !  display help text and exit if --help is present
    if(lget('ttee_help'))then
       call usage()
       stop
    endif
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 !  get time format
    call retrev('ttee_fmt', format, ii, ier)
    ! assuming timestamp has same length as current timestamp , which might not be if change now(3f)
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 !  decide whether to append to output file or overwrite it if -a or --append is present
    access='sequential'
    if(lget('ttee_a'))then
@@ -54,7 +50,7 @@ program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an opti
    if(lget('ttee_append'))then
       access='append'
    endif
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 !  open optional output file ... simply append FILENAME, -o FILENAME, -output FILENAME
    file=' '
    call retrev('ttee_oo', file, len1, ier)              ! get any filename before any keywords
@@ -77,7 +73,7 @@ program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an opti
    else
       outfile=-1                                        ! flag there is no output file specified
    endif
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 !  set prefix length to 0 or PLEN depending on whether --timestamp value flags file to have timestamp prefix
    stamp_stdout=.true. ! prefix stdout
    stamp_output=.true. ! prefix outfiles
@@ -104,7 +100,7 @@ program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an opti
       call stderr('unknown timestamp value [stdout|all|output|none]')
       stop
    end select
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 !  loop reading stdin till end-of-file or error and write to stdout and output file with optional timestamp prefix
    infinite: do
       prefix=now(format(:ii))
@@ -147,13 +143,24 @@ program ttee ! @(#) ttee(1) writes stdin to stdout and another file with an opti
       endif
 
    enddo infinite
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
    stop
-!- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 contains
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
+
+subroutine stderr(msg)
+use, intrinsic :: iso_fortran_env, only : ERROR_UNIT, OUTPUT_UNIT
+implicit none
+
+! @(#) M_verify stderr(3f) writes a message to standard error
+
+character(len=*),intent(in) :: msg
+integer                     :: iostat
+   write(error_unit,'(a)',iostat=iostat) trim(msg)
+   flush(unit=output_unit,iostat=iostat)
+   flush(unit=error_unit,iostat=iostat)
+end subroutine stderr
+
 subroutine usage() ! "@(#) usage(3f90) writes program help to stdout and exits
 !character(len=132),parameter :: text(:)= [&
 character(len=132),allocatable :: text(:)
@@ -241,7 +248,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      Copyright (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-06-29 21:57:16 UTC-240>',&
+'@(#)COMPILED:       2024-11-24 04:45:34 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

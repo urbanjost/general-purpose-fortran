@@ -513,7 +513,7 @@ end type
 ! with the same name as the derived type they're supposed to construct.
 interface date_time
    module procedure construct_from_dat
-   !-!module procedure construct_from_jed
+   !-!module procedure construct_from_jd
    !-!module procedure construct_from_uet
 end interface date_time
 !===================================================================================================================================
@@ -547,14 +547,14 @@ type(date_time)             :: construct_from_dat
    construct_from_dat%millisecond=datlocal(8)
 end function construct_from_dat
 !===================================================================================================================================
-function construct_from_jed(jed)
+function construct_from_jd(jd)
 
-! ident_2="@(#) M_time construct_from_jed(3f) construct TYPE(DATE_TIME) with REAL Julian JED date-time value"
+! ident_2="@(#) M_time construct_from_jd(3f) construct TYPE(DATE_TIME) with REAL Julian JD date-time value"
 
-real(kind=realtime),intent(in)   :: jed
-type(date_time)                 :: construct_from_jed
-   construct_from_jed=construct_from_dat(j2d(jed))
-end function construct_from_jed
+real(kind=realtime),intent(in)   :: jd
+type(date_time)                 :: construct_from_jd
+   construct_from_jd=construct_from_dat(j2d(jd))
+end function construct_from_jd
 !===================================================================================================================================
 function construct_from_uet(uet)
 

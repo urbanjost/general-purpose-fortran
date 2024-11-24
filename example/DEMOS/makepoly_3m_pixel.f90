@@ -49,7 +49,7 @@
            write(filename,'("hypoc.",i0,".gif")')ilines
            !!call writegif(filename,P_pixel,P_colormap)
         enddo
-        call write_animated_gif('makepoly.3M_pixel.gif',&
+        call write_animated_gif('makepoly.3m_pixel.gif',&
                 movie,P_colormap,delay=70)
         call vexit()
      contains

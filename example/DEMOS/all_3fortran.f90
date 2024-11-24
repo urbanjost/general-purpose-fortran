@@ -2,13 +2,15 @@
       implicit none
       logical,parameter :: T=.true., F=.false.
       logical bool
+
         ! basic usage
          ! is everything true?
          bool = all([ T,T,T ])
+         print *, 'are all values true?', bool
          bool = all([ T,F,T ])
-         print *, bool
+         print *, 'are all values true now?', bool
 
-        ! by a dimension
+        ! compare matrices, even by a dimension
          ARRAYS: block
          integer :: a(2,3), b(2,3)
           ! set everything to one except one value in b

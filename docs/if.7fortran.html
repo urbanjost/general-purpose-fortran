@@ -50,37 +50,45 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>if (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-if(7f) - [FORTRAN:EXECUTION CONTROL] selects a block based on a sequence of logical expressions.
+<P>
+if(7f) - [EXECUTION CONTROL] selects a block based on a
+sequence of logical expressions.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=4>
+<A name=7>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
-[if_construct_name:] IF (scalar-logical-expr) THEN
-block
-ELSEIF (scalar-logical-expr) THEN [if_construct_name]
-block
-ELSE [if_construct_name]
-block
-ENDIF [if_construct_name]
+Syntax:
 <P>
 <PRE>
-        or
+         [if_construct_name:] IF (scalar-logical-expr) THEN
+            block
+         ELSEIF (scalar-logical-expr) THEN [if_construct_name]
+            block
+         ELSE [if_construct_name]
+            block
+         ENDIF [if_construct_name]
 <P>
 </PRE>
-IF (scalar-logical-expression) action-statement
+or
+<P>
+<PRE>
+         IF (scalar-logical-expression) action-statement
+<P>
+</PRE>
 </BLOCKQUOTE>
 <A name=2>
 
@@ -96,37 +104,33 @@ If an if-construct-name is specified, both the IF and ENDIF must use
 that same name. If an ELSE or ELSEIF uses an if-construct-name it must
 be the same as the one specified on the corresponding IF/ENDIF.
 </BLOCKQUOTE>
-<A name=>
+<A name=3>
 
-    <H4>&nbsp; &nbsp; EXECUTION OF AN IF CONSTRUCT</H4>
+     <H3>EXECUTION OF AN IF CONSTRUCT</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
-If there is an ELSE statement in the construct it acts as a default
-if all the preceding conditionals on the IF or ELSEIF where false,
-ensuring exactly one of the blocks in the construct is executed. The
-scalar logical expressions are evaluated in the order of their
-appearance in the construct until a true value is found or an ELSE
-statement or ENDIF statement is encountered. IF an ELSE statement is
-found, the block immediately following is executed and this completes
-the execution of the construct. That is, an ELSE should follow any
-<TABLE cellpadding=3><!-- tsb: If there is an ELSE statement in the construct it acts as a default
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>ELSEIF statements.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-The scalar logical expressions in any remaining
-ELSEIF statements of the IF construct are not evaluated. If none of
-the evaluated expressions is true and there is no ELSE statement,
-the execution of the construct is completed without the execution of
-any block within the construct.
-</TD></TR>
-<TR></TR></TABLE>It is permissible to branch to an ENDIF statement only from within
-its IF construct. Execution of an ENDIF statement has no effect.
+If there is an ELSE statement in the construct it acts as a default if
+all the preceding conditionals on the IF or ELSEIF where false, ensuring
+exactly one of the blocks in the construct is executed. The scalar
+logical expressions are evaluated in the order of their appearance in
+the construct until a true value is found or an ELSE statement or ENDIF
+statement is encountered. IF an ELSE statement is found, the block
+immediately following is executed and this completes the execution of
+the construct. That is, an ELSE should follow any ELSEIF statements. The
+scalar logical expressions in any remaining ELSEIF statements of the IF
+construct are not evaluated. If none of the evaluated expressions is
+true and there is no ELSE statement, the execution of the construct is
+completed without the execution of any block within the construct.
+<P>
+It is permissible to branch to an ENDIF statement only from within its
+IF construct. Execution of an ENDIF statement has no effect.
 </BLOCKQUOTE>
-<A name=>
+<A name=4>
 
-    <H4>&nbsp; &nbsp; STANDALONE IF</H4>
+     <H3>STANDALONE IF</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
@@ -134,13 +138,13 @@ The IF statement controls the execution of a single action statement
 based on a single logical expression.
 <P>
 The action-stmt in the if-stmt shall not be an end-function-stmt,
-end-mp-subprogram-stmt, end-program-stmt, end-subroutine-stmt,
-or if-stmt.
+end-mp-subprogram-stmt, end-program-stmt, end-subroutine-stmt, or
+if-stmt.
 <P>
 Execution of an IF statement causes evaluation of the scalar logical
-expression. If the value of the expression is true, the action
-statement is executed. If the value is false, the action statement
-is not executed and execution continues.
+expression. If the value of the expression is true, the action statement
+is executed. If the value is false, the action statement is not executed
+and execution continues.
 <P>
 The execution of a function reference in the scalar logical expression
 may affect entities in the action statement. That is, if values are
@@ -148,33 +152,46 @@ changed by the functions used in the logical expressions the selected
 block will use those values. It is generally a bad idea to use functions
 changing the values, but what would you expect this to produce?
 <P>
-<PRE>
-        program change
-        i=1
-        if(increment(i).gt.10)then
-           write(*,*)&#146;IF&#146;,i
-        elseif(increment(i).ge.20)then
-           write(*,*)&#146;ELSEIF&#146;,i
-        else
-           write(*,*)&#146;ELSE&#146;,i
-        endif
-        contains
-        function increment(i)
-           increment=i*5
-           i=i+3
-        end function increment
-        end program change
+Calling a function with side-effects on I;
 <P>
+<PRE>
+            program change
+            i=1
+            if(increment(i).gt.10)then
+               write(*,*)&#146;IF&#146;,i
+            elseif(increment(i).ge.20)then
+               write(*,*)&#146;ELSEIF&#146;,i
+            else
+               write(*,*)&#146;ELSE&#146;,i
+            endif
+            contains
+            function increment(i)
+               write(*,*)&#146;INC&#146;,i
+               increment=i*5
+               i=i+3
+               write(*,*)&#146;INC&#146;,i
+            end function increment
+            end program change
+<P>
+</PRE>
+Result:
+<P>
+<PRE>
+         &gt; INC           1
+         &gt; INC           4
+         &gt; INC           4
+         &gt; INC           7
+         &gt; ELSEIF           7
 <P>
 </PRE>
 An example of an IF statement is:
 <P>
 <PRE>
-       IF (A &gt; 0.0) A = LOG (A)
+           IF (A &gt; 0.0) A = LOG (A)
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=3>
+<A name=5>
 
      <H3>EXAMPLES</H3>
 
@@ -184,53 +201,120 @@ An example of an IF statement is:
 Sample IF constructs:
 <P>
 <PRE>
-    program demo_if
-    character(len=:),allocatable :: cvar
-    logical :: PROP
-    real :: a, b, c, d
-    integer :: case
-     !
-     ! basic IF
-     !
-     cvar=&#146;NO&#146;
-     if (cvar == &#146;RESET&#146;) then
-        i = 0; j = 0; k = 0
-     endif
-     !
-     ! labeled and nested IF constructs
-     !
-     OUTER: if (case.eq.0)then
-        PROOF_DONE: if (PROP) then
-           write (3, &#146;(&#146;&#146;QED&#146;&#146;)&#146;)
-           exit OUTER
-        else
-           PROP = nextprop
-        endif PROOF_DONE
-        write(*,*)&#146;END OF PROOF_DONE&#146;
-     else OUTER
-             write(*,*)&#146;else outer&#146;
-     endif OUTER
-     !
-     ! if-elseif-endif
-     !
-     if (a &gt; 0) then
-        b = c/a
-        if (b &gt; 0) then
-           d = 1.0
-        endif
-     elseif (c &gt; 0) then
-        b = a/c
-        d = -1.0
-     else
-        b = abs (max (a, c))
-        d = 0
-     endif
-     !
-    end program demo_if
+        program demo_if
+        implicit none
+        character(len=:),allocatable :: cvar
+        logical :: PROP=.false.
+        real :: a, b, c, d
+        integer :: case=0
+        integer :: i, j, k
+        logical :: nextprop=.true.
+         !
+         ! basic IF
+         !
+         cvar=&#146;NO&#146;
+         if (cvar == &#146;RESET&#146;) then
+            i = 0; j = 0; k = 0
+         endif
+         !
+         ! labeled and nested IF constructs
+         !
+         OUTER: if (case.eq.0)then
+            PROOF_DONE: if (PROP) then
+               write (3, &#146;(&#146;&#146;QED&#146;&#146;)&#146;)
+               exit OUTER
+            else
+               PROP = nextprop
+            endif PROOF_DONE
+            write(*,*)&#146;END OF PROOF_DONE&#146;
+         else OUTER
+                 write(*,*)&#146;else outer&#146;
+         endif OUTER
+         !
+         ! if-elseif-endif
+         !
+         if (a &gt; 0) then
+            b = c/a
+            if (b &gt; 0) then
+               d = 1.0
+            endif
+         elseif (c &gt; 0) then
+            b = a/c
+            d = -1.0
+         else
+            b = abs (max (a, c))
+            d = 0
+         endif
+         !
+        end program demo_if
+<P>
 </PRE>
 </BLOCKQUOTE>
+<A name=6>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DO(3) - construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+IF(3) - selects a block based on a sequence of logical expressions.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CYCLE(3) - construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+EXIT(3) - statement
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ASSOCIATE(3) - associate construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BLOCK(3) - construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+GOTO(3) - jump to target line
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SELECT(3) - select a block based on the value of an expression (a
+case)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CASE(3) - select a block based on the value of an expression (a
+case)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ENDSELECT(3) - select a block based on the value of an expression (a
+case)
+</TD></TR>
+<TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
+</BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>if (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f090cac5-4ddc-41bc-8762-c089cc4ad1ba using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>if (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b96f6268-6626-4d80-86fd-0de63506d9e9 using man macros.</FONT>
 <br><br><center><img src="images/if.7fortran.gif"></center>
 </div>
 </div>

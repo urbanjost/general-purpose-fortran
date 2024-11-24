@@ -18,6 +18,8 @@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 MODULE M_display__PUTSTRMODULE ! DUMMY VERSION
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+use,intrinsic :: iso_fortran_env, only : real32, real64, real128
   ! An auxiliary module that accompanies M_display. This module contains dummy versions of the
   ! subroutines putstr and putnl that do nothing. It is needed to avoid an "undefined symbol" link
   ! error for these. In addition it defines the named constant (or parameter) DEFAULT_UNIT = -3,
@@ -92,7 +94,8 @@ END MODULE M_display__PUTSTRMODULE
 !===================================================================================================================================
 !>
 !!##NAME
-!!      M_display(3f) - [M_display::INTRO] module for pretty-printing matrices
+!!     M_display(3f) - [M_display::INTRO] module for pretty-printing
+!!     matrices
 !!
 !!##INTRODUCTION
 !!
@@ -109,13 +112,20 @@ END MODULE M_display__PUTSTRMODULE
 !! real, complex and logical data of other than default kind are supported
 !! with add-on modules. The module contains the following public procedures:
 !!
-!!     Subroutine DISP                  The main procedure used for displaying items
-!!     Subroutine DISP_SET              Used to change default settings for DISP
-!!     Subroutine DISP_SET_FACTORY      Restores DISP-settings to original (factory) default
-!!     Function DISP_GET                Returns a structure with current DISP-settings
-!!     Function TOSTRING                Returns a string representation of a scalar or vector
-!!     Subroutine TOSTRING_SET          Used to change default settings for TOSTRING
-!!     Subroutine TOSTRING_SET_FACTORY  Restores TOSTRING-settings to original default
+!!     Subroutine DISP                  The main procedure used for
+!!                                      displaying items
+!!     Subroutine DISP_SET              Used to change default settings
+!!                                      for DISP
+!!     Subroutine DISP_SET_FACTORY      Restores DISP-settings to original
+!!                                      (factory) default
+!!     Function DISP_GET                Returns a structure with current
+!!                                      DISP-settings
+!!     Function TOSTRING                Returns a string representation of
+!!                                      a scalar or vector
+!!     Subroutine TOSTRING_SET          Used to change default settings
+!!                                      for TOSTRING
+!!     Subroutine TOSTRING_SET_FACTORY  Restores TOSTRING-settings to
+!!                                      original default
 !!
 !! In addition the module defines a public derived type, DISP_SETTINGS,
 !! used for saving and restoring settings for DISP. The procedures DISP and
@@ -131,8 +141,10 @@ END MODULE M_display__PUTSTRMODULE
 !! CALL DISP(title, expression) will label the displayed item with a
 !! title. Examples are CALL DISP(A), CALL DISP(A,'F9.3'), CALL DISP('A=',A)
 !! and CALL DISP('A=',A,'F9.3'), the last one specifying both title and
-!! format. If aij = exp(i + j - 1), i, j = 1,...,4, then CALL DISP('A =
-!! ', A) writes out:
+!! format. If aij = exp(i + j - 1), i, j = 1,...,4, then
+!!
+!!     CALL DISP('A = ', A)
+!! writes out:
 !!
 !!      > A =  2.72    7.39   20.09    54.60
 !!      >      7.39   20.09   54.60   148.41
@@ -291,6 +303,8 @@ END MODULE M_display__PUTSTRMODULE
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 MODULE M_display__UTIL
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+use,intrinsic :: iso_fortran_env, only : real32, real64, real128
   ! M_display__util contains utilities that are used by M_display, and the add-on modules
   ! disp_i1mod, disp_i2mod,..., disp_l1mod and disp_r16mod. Note that the entities that are
   ! declared public below are not exported to the user. The private statements in M_display and
@@ -380,7 +394,7 @@ CONTAINS
     character(9) :: tsty
     character tch
     logical number, ok, dmxerr, orierr, styerr, adverr
-    character(6), parameter :: ADVOK(3) = ['NO    ', 'YES   ', 'DOUBLE']
+    character(6), parameter :: ADVOK(*) = ['NO    ', 'YES   ', 'DOUBLE']
     type(disp_settings) ds
     ds = DEFSET
     call getstyles(ds % style, tsty, tch, number, ok)
@@ -582,7 +596,7 @@ CONTAINS
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
   subroutine find_editdesc_real(exp, expm, dmx,  edesc, flen, ndec, posit)
-    ! Subroutine of find_editdesc_sngl and find_editdesc_dble
+    ! Subroutine of find_editdesc_real32 and find_editdesc_real64
     integer,       intent(in)    :: expm, dmx
     integer,       intent(inout) :: exp
     character(14), intent(out)   :: edesc
@@ -676,7 +690,7 @@ CONTAINS
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
   subroutine get_SE(SE, title, shapex, fmt, advance, lbound, separator, style, trim, unit, orient, zeroas, digmax)
-    ! Get the settings from the optional parameters fmt...zeroas in to the structure SE.
+    ! Get the settings from the optional parameters fmt ... zeroas in to the structure SE.
     ! Replace absent arguments with corresponding values from the structure DEFSET.
     type(settings), intent(out)          :: SE
     character(*),   intent(in)           :: title
@@ -816,8 +830,8 @@ CONTAINS
     logical,      intent(out) :: number, ok
     integer kamp, i, nsty
     character(len(style))   :: sty(2)
-    character(9), parameter :: LPUA(4) = ['LEFT     ', 'PAD      ', 'UNDERLINE', 'ABOVE    ']
-    character(9), parameter :: PU(2) = ['PAD      ', 'UNDERLINE']
+    character(9), parameter :: LPUA(*) = ['LEFT     ', 'PAD      ', 'UNDERLINE', 'ABOVE    ']
+    character(9), parameter :: PU(*) = ['PAD      ', 'UNDERLINE']
     kamp = scan(upper(style), '&')
     ok = .true.
     if (kamp > 0) then
@@ -1288,6 +1302,8 @@ END MODULE M_display__UTIL
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 MODULE M_display
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+use,intrinsic :: iso_fortran_env, only : real32, real64, real128
   use M_display__util
   implicit none
   private  ! everything not explicitly declared public will be private (including entities from M_display__util)
@@ -1317,18 +1333,19 @@ MODULE M_display
 !===================================================================================================================================
 !>
 !!##NAME
-!!       disp(3f) - [M_display] pretty-print a matrix
+!!     disp(3f) - [M_display] pretty-print a matrix
 !!
 !!##DESCRIPTION
 !!
-!! This is the principal subroutine of the package. It has various control
-!! arguments that specify the exact format of the output. Most of these
-!! may also be used as arguments of the subroutine DISP_SET. When used
-!! with DISP, a control argument affects only the item being displayed with
-!! the current call, but when used with DISP_SET, the default settings for
-!! subsequent DISP calls are affected. The default values for individual
-!! arguments given below are used unless they have been changed by a call
-!! to DISP_SET. All character arguments should be of type default character.
+!!    This is the principal subroutine of the package. It has various control
+!!    arguments that specify the exact format of the output. Most of these
+!!    may also be used as arguments of the subroutine DISP_SET. When used
+!!    with DISP, a control argument affects only the item being displayed
+!!    with the current call, but when used with DISP_SET, the default
+!!    settings for subsequent DISP calls are affected. The default values
+!!    for individual arguments given below are used unless they have been
+!!    changed by a call to DISP_SET. All character arguments should be of
+!!    type default character.
 !!
 !! Simple Calls:
 !!
@@ -1338,13 +1355,15 @@ MODULE M_display
 !!       call disp(x, fmt)
 !!       call disp(title, x, fmt)
 !!
-!! The first call advances to the next line, and the other calls display X
-!! on the default unit (the unit may be changed with the UNIT argument). The
-!! default putstrmodule (see section 2) sets the asterisk unit (usually the
-!! screen) to be default. The purpose of individual arguments is as follows:
+!!    The first call advances to the next line, and the other calls
+!!    display X on the default unit (the unit may be changed with the UNIT
+!!    argument). The default putstrmodule (see section 2) sets the asterisk
+!!    unit (usually the screen) to be default. The purpose of individual
+!!    arguments is as follows:
 !!
-!! X      The item to be displayed. X may be scalar, vector or matrix
-!!        (i.e. of rank <= 2) and the following kinds of data are supported:
+!!       X  The item to be displayed. X may be scalar, vector or matrix
+!!          (i.e. of rank <= 2) and the following kinds of data are
+!!          supported:
 !!
 !!           default integer
 !!           default real (or single precision, real(kind(1.0)))
@@ -1371,7 +1390,8 @@ MODULE M_display
 !!        X is complex and FMT_IMAG is present; see below). The possible
 !!        edit descriptors are:
 !!
-!!           Fw.d, Dw.d, Ew.dEe, ENw.dEe, ESw.dEe: real data (the Ee suffixes are optional)
+!!           Fw.d, Dw.d, Ew.dEe, ENw.dEe, ESw.dEe: real data
+!!           (the Ee suffixes are optional)
 !!           Iw, Bw, Ow, Zw: integer data (all may be suffixed with .m)
 !!           Lw: logical data
 !!           A, Aw: character data
@@ -1398,18 +1418,18 @@ MODULE M_display
 !!       CALL DISP(TITLE, X, FMT, FMT_IMAG, ADVANCE, DIGMAX, LBOUND, ORIENT,
 !!       SEP, STYLE, TRIM, UNIT, ZEROAS)
 !!
-!! All dummy arguments are optional and some of them are incompatible
-!! with some data types of X. The arguments control how X is displayed,
-!! as described in section 3.1 and below. For the character arguments
-!! ADVANCE and ORIENT the case of letters is ignored (so e.g. ADVANCE =
-!! 'yes' and ADVANCE = 'YES' are equivalent). Normally argument association
-!! for arguments after FMT (or FMT_IMAG) will be realized with argument
-!! keywords, e.g. CALL DISP('X=', X, DIGMAX=3, ORIENT='ROW'). When X is a
-!! scalar string FMT must also be associated with keyword, as mentioned in
-!! section 3.1. The most useful application of calling DISP with X absent is
-!! to advance to the next line or display an empty line. For this purpose,
-!! the only relevant arguments are UNIT, and ADVANCE with the value 'YES'
-!! or 'DOUBLE'.
+!!    All dummy arguments are optional and some of them are incompatible
+!!    with some data types of X. The arguments control how X is displayed, as
+!!    described in section 3.1 and below. For the character arguments ADVANCE
+!!    and ORIENT the case of letters is ignored (so e.g. ADVANCE = 'yes'
+!!    and ADVANCE = 'YES' are equivalent). Normally argument association
+!!    for arguments after FMT (or FMT_IMAG) will be realized with argument
+!!    keywords, e.g. CALL DISP('X=', X, DIGMAX=3, ORIENT='ROW'). When X is a
+!!    scalar string FMT must also be associated with keyword, as mentioned
+!!    in section 3.1. The most useful application of calling DISP with X
+!!    absent is to advance to the next line or display an empty line. For
+!!    this purpose, the only relevant arguments are UNIT, and ADVANCE with
+!!    the value 'YES' or 'DOUBLE'.
 !!
 !! FMT_IMAG = edit-descriptor-imag  An edit descriptor for imaginary parts
 !!        of complex X. The statement CALL DISP((1.31,2.47),'F0.1','F0.2')
@@ -1477,12 +1497,12 @@ MODULE M_display
 !!
 !! STYLE = style  There are five possible styles:
 !!
-!!       'left'       Title is immediately to the left of the first line
-!!                    of the displayed item.
-!!       'above'      Title is centered immediately above the item.
-!!       'pad'        Title is centered above the item, padded with hyphens (-).
-!!       'underline'  Title is centered above the item, underlined with hyphens.
-!!       'number'     Each matrix or vector row and / or column is numbered.
+!!    'left'       Title is immediately to the left of the first line
+!!                 of the displayed item.
+!!    'above'      Title is centered immediately above the item.
+!!    'pad'        Title is centered above the item, padded with hyphens (-).
+!!    'underline'  Title is centered above the item, underlined with hyphens.
+!!    'number'     Each matrix or vector row and / or column is numbered.
 !!
 !!       Any of the four title position styles can also be combined with the
 !!       number style by specifying for example STYLE = 'pad & number'. Any
@@ -1493,55 +1513,60 @@ MODULE M_display
 !!       when ORIENT is 'col'). The five styles are illustrated below,
 !!       accompanied by an example of combined padded title and numbering.
 !!
-!!         > Matr = 1.2   4.2       Matr      ---Matr--       Matr          1     2     ____Matr____
-!!         >        5.6  18.3    1.2   4.2    1.2   4.2    ---------    1  1.2   4.2        1     2
-!!         >                     5.6  18.3    5.6  18.3    1.2   4.2    2  5.6  18.3    1  1.2   4.2
-!!         >                                               5.6  18.3                    2  5.6  18.3
+!!         > Matr = 1.2   4.2       Matr      ---Matr--       Matr
+!!         >        5.6  18.3    1.2   4.2    1.2   4.2    ---------
+!!         >                     5.6  18.3    5.6  18.3    1.2   4.2
+!!         >                                               5.6  18.3
+!!         > ...      Matr          1     2     ____Matr____
+!!         > ...   ---------    1  1.2   4.2        1     2
+!!         > ...   1.2   4.2    2  5.6  18.3    1  1.2   4.2
+!!         > ...   5.6  18.3                    2  5.6  18.3
 !!
 !!       The default value of STYLE is 'left' if LBOUND is absent, 'number'
 !!       if it is present, and 'left & number' if both TITLE and LBOUND
 !!       are present.
 !!
 !! TRIM = trim  This argument can take three values, 'YES', 'NO' and
-!!       'AUTO'. When YES is specified, each column of displayed items is
-!!       trimmed from the left, with 'NO' the items are not trimmed and if
-!!       TRIM is 'AUTO' the items are trimmed when FMT is absent but not when
-!!       it is present. In the following example, X and U are displayed
-!!       with TRIM = 'yes', but Y and V with TRIM = 'no'. In all cases the
-!!       edit descriptor is the default (I4). The default is TRIM = 'AUTO'.
+!!        'AUTO'. When YES is specified, each column of displayed items is
+!!        trimmed from the left, with 'NO' the items are not trimmed and if
+!!        TRIM is 'AUTO' the items are trimmed when FMT is absent but not when
+!!        it is present. In the following example, X and U are displayed
+!!        with TRIM = 'yes', but Y and V with TRIM = 'no'. In all cases the
+!!        edit descriptor is the default (I4). The default is TRIM = 'AUTO'.
 !!
 !!         > ----X----   -------Y------   -----U-----   -------V------
 !!         > 1  2    4      1    2    3   333 22 4444    333   22 4444
 !!         > 2 22   34      2   22   34
 !!         > 3 32 1234      3   32 1234
 !!
-!!       One application of trimming is to display matrices with a fixed
-!!       number of fractional digits but variable effective field width. Then
-!!       Fw.d editing with w big enough is accompanied by TRIM = 'yes'. An
-!!       example is the following display of a matrix with (i, k) element
-!!       exp(k**i) using F20.2 and 'yes':
+!!    One application of trimming is to display matrices with a fixed
+!!    number of fractional digits but variable effective field width. Then
+!!    Fw.d editing with w big enough is accompanied by TRIM = 'yes'. An
+!!    example is the following display of a matrix with (i, k) element
+!!    exp(k**i) using F20.2 and 'yes':
 !!
 !!         >  power exponentials
 !!         > 2.72   7.39    20.09
 !!         > 2.72  54.60  8103.08
 !!
-!!       Similar output may be obtained using I and F edit descriptors
-!!       with w = 0 as discussed in section 3.5. Apart from I and F edited
-!!       displays, it is possible to trim A-edited displays as well as
-!!       E-edited displays with some negative elements, but the first column
-!!       all positive:
+!!    Similar output may be obtained using I and F edit descriptors
+!!    with w = 0 as discussed in section 3.5. Apart from I and F edited
+!!    displays, it is possible to trim A-edited displays as well as
+!!    E-edited displays with some negative elements, but the first column
+!!    all positive:
 !!
-!!           With TRIM='yes':X=1.2e+5 -4.1e-2   With TRIM='no':X= 1.2e+5 -4.1e-2
-!!                             2.3e-3  8.6e+1                     2.3e-3  8.6e+1
+!!        With TRIM='yes':X=1.2e+5 -4.1e-2   With TRIM='no':X= 1.2e+5 -4.1e-2
+!!                          2.3e-3  8.6e+1                     2.3e-3  8.6e+1
 !!
 !! UNIT = external-file-unit  The unit which the output is sent to. There
 !!       are three special units, which may be referred to either with
 !!       constants or parameters (named constants) as follows:
 !!
-!!           Constant  Parameter      Preconnected unit
-!!             -3      ASTERISK_UNIT  The asterisk unit (often the screen)
-!!             -2      PUTSTR_UNIT    The subroutines PUTSTR and PUTNL
-!!             -1      NULL_UNIT      Null device (all output to this is discarded)
+!!         Constant  Parameter      Preconnected unit
+!!           -3      ASTERISK_UNIT  The asterisk unit (often the screen)
+!!           -2      PUTSTR_UNIT    The subroutines PUTSTR and PUTNL
+!!           -1      NULL_UNIT      Null device (all output to this is
+!!                                  discarded)
 !!
 !!       These units are further described in sections 3.3 and 3.4. Other
 !!       unit numbers correspond to external files that should have been
@@ -1638,9 +1663,9 @@ MODULE M_display
 !! there is no limit on the width of a column, but with Fw.d and TRIM='yes'
 !! any element wider than w will be displayed as w asterisks:
 !!
-!!       ------------------F0.2------------------    -----F13.2, TRIM='yes'----
-!!       14.28  142857142857142857142857.14  0.47    14.28  *************  0.47
-!!        1.42                1414213562.37  0.69     1.42  1414213562.37  0.69
+!!   > ------------------F0.2------------------    -----F13.2, TRIM='yes'----
+!!   > 14.28  142857142857142857142857.14  0.47    14.28  *************  0.47
+!!   > 1.42                1414213562.37  0.69     1.42  1414213562.37  0.69
 !!
 !!
 !!##NOT-A-NUMBER AND INFINITE VALUES
@@ -1669,25 +1694,29 @@ MODULE M_display
 !!   Dept. of Computer Science,
 !!   University of Iceland (jonasson@hi.is).
   interface disp
-    module procedure disp_scalar_int, disp_title_scalar_int,   &
-                     disp_vector_int, disp_title_vector_int,   &
-                     disp_matrix_int, disp_title_matrix_int
+    module procedure disp_scalar_int32, disp_title_scalar_int32,   &
+                     disp_vector_int32, disp_title_vector_int32,   &
+                     disp_matrix_int32, disp_title_matrix_int32
 
-    module procedure disp_s_sngl, disp_ts_sngl, disp_v_sngl, disp_tv_sngl, disp_m_sngl, disp_tm_sngl
-    module procedure disp_s_dble, disp_ts_dble, disp_v_dble, disp_tv_dble, disp_m_dble, disp_tm_dble
-    module procedure disp_s_cplx, disp_ts_cplx, disp_v_cplx, disp_tv_cplx, disp_m_cplx, disp_tm_cplx
-    module procedure disp_s_cpld, disp_ts_cpld, disp_v_cpld, disp_tv_cpld, disp_m_cpld, disp_tm_cpld
+    module procedure disp_s_real32, disp_ts_real32, disp_v_real32, disp_tv_real32, disp_m_real32, disp_tm_real32
+    module procedure disp_s_real64, disp_ts_real64, disp_v_real64, disp_tv_real64, disp_m_real64, disp_tm_real64
+    module procedure disp_s_cpl_real32, disp_ts_cpl_real32
+    module procedure disp_v_cpl_real32, disp_tv_cpl_real32
+    module procedure disp_m_cpl_real32, disp_tm_cpl_real32
+    module procedure disp_s_cpl_real64, disp_ts_cpl_real64
+    module procedure disp_v_cpl_real64, disp_tv_cpl_real64
+    module procedure disp_m_cpl_real64, disp_tm_cpl_real64
     module procedure disp_s_dlog, disp_ts_dlog, disp_v_dlog, disp_tv_dlog, disp_m_dlog, disp_tm_dlog
     module procedure              disp_ts_dchr, disp_v_dchr, disp_tv_dchr, disp_m_dchr, disp_tm_dchr
   end interface
 
   interface tostring
-    module procedure tostring_dint, tostring_f_dint, tostring_s_dint, tostring_sf_dint
-    module procedure tostring_dlog, tostring_f_dlog, tostring_s_dlog, tostring_sf_dlog
-    module procedure tostring_sngl, tostring_f_sngl, tostring_s_sngl, tostring_sf_sngl
-    module procedure tostring_dble, tostring_f_dble, tostring_s_dble, tostring_sf_dble
-    module procedure tostring_cplx, tostring_f_cplx, tostring_s_cplx, tostring_sf_cplx
-    module procedure tostring_cpld, tostring_f_cpld, tostring_s_cpld, tostring_sf_cpld
+module  procedure  tostring_int32,        tostring_f_int32,        tostring_s_int32,        tostring_sf_int32
+module  procedure  tostring_dlog,        tostring_f_dlog,        tostring_s_dlog,        tostring_sf_dlog
+module  procedure  tostring_real32,      tostring_f_real32,      tostring_s_real32,      tostring_sf_real32
+module  procedure  tostring_real64,      tostring_f_real64,      tostring_s_real64,      tostring_sf_real64
+module  procedure  tostring_cpl_real32,  tostring_f_cpl_real32,  tostring_s_cpl_real32,  tostring_sf_cpl_real32
+module  procedure  tostring_cpl_real64,  tostring_f_cpl_real64,  tostring_s_cpl_real64,  tostring_sf_cpl_real64
   end interface
 
   ! *********************** DEFINITION OF TYPED CONSTANTS: UNITS AND KIND PARAMETERS ********************
@@ -1703,15 +1732,15 @@ MODULE M_display
 
   ! The above are also used as specific procedure (i.e. module procedure) name extensions, together
   ! with the following:
-  !        cplx = complex single precision (default complex)
-  !        cpld = complex double precision
+  !        cpl_real32 = complex single precision (default complex)
+  !        cpl_real64 = complex double precision
 
 CONTAINS
 
   ! ******************************* SETTING AND GETTING PROCEDURES *************************************
 !>
 !!##NAME
-!!       disp_set(3f) - [M_display] set default options for disp(3f)
+!!     disp_set(3f) - [M_display] set default options for disp(3f)
 !!
 !!##DESCRIPTION
 !!
@@ -1807,7 +1836,8 @@ CONTAINS
   end subroutine disp_set
 !>
 !!##NAME
-!!    disp_set_factory(3f) - [M_display] set DISP(3f) output back to original defaults
+!!     disp_set_factory(3f) - [M_display] set DISP(3f) output back to
+!!     original defaults
 !!
 !!##DESCRIPTION
 !!    The subroutine disp_set_factory (which has no arguments) may be called
@@ -1838,7 +1868,7 @@ CONTAINS
   end subroutine avoid_compiler_warnings
 !>
 !!##NAME
-!!    tostring_set(3f) - [M_display] set modes for TOSTRING(3f)
+!!     tostring_set(3f) - [M_display] set modes for TOSTRING(3f)
 !!
 !!##DESCRIPTION
 !!
@@ -1873,29 +1903,30 @@ CONTAINS
 !! When the original (factory) defaults are in effect, the result of invoking
 !! TOSTRING will usually be as follows.
 !!
-!!     Invocation                             Returned String
-!!     ----------                             ---------------
-!!     tostring(atan(1.0))                    '0.785398'
-!!     tostring(exp([-3.,-1.,0.,1.]))         '4.97871E-02, 0.36788, 1, 2.7183'
-!!     tostring(real([(i,i=1,5)])**8)         '1, 256, 6561, 65536, 3.90625E+05'
-!!     tostring([1.23456,1.2300,1.23456e6])   '1.2346, 1.23, 1.23456E+06'
-!!     tostring(real([(i,i=1,5)])**8,'f0.1')  '1.0, 256.0, 6561.0, 65536.0, 390625.0'
-!!     tostring(real([(i,i=1,5)])**8,'f6.1')  '1.0, 256.0, 6561.0, ******, ******'
-!!     tostring([1200000.,-1.2e-9])           '1.2E+06, -1.2E-09'
-!!     !
-!!     tostring(1.200d103)                    '1.2+103'
-!!     tostring([1.1d0,2.2d10,3.3d20])        '1.1E+00, 2.2E+10, 3.3E+20'
-!!     !
-!!     tostring(-77)                          '-77'
-!!     tostring([(i,i=-3,3)]**11)             '-177147, -2048, -1, 0, 1, 2048, 177147'
-!!     tostring([(i,i=-3,3)]**11, 'i7')       '-177147, -2048, -1, 0, 1, 2048, 177147'
-!!     tostring([(i,i=-3,3)]**11, 'i4')       '****, ****, -1, 0, 1, 2048, ****'
-!!     !
-!!     tostring((1,3)/(4,2))                  '0.5 + 0.5i'
-!!     tostring(cmplx([-1,-2])**0.25)       '0.70711 + 0.70711i, 0.8409 + 0.8409i'
-!!     !
-!!     tostring([.true., .false., .false.])   'T, F, F'
-!!     tostring(.true., 'L2')                 'T'
+!!    Invocation                             Returned String
+!!    ----------                             ---------------
+!!    tostring(atan(1.0))                   '0.785398'
+!!    tostring(exp([-3.,-1.,0.,1.]))        '4.97871E-02, 0.36788, 1, 2.7183'
+!!    tostring(real([(i,i=1,5)])**8)        '1, 256, 6561, 65536, 3.90625E+05'
+!!    tostring([1.23456,1.2300,1.23456e6])  '1.2346, 1.23, 1.23456E+06'
+!!    tostring(real([(i,i=1,5)])**8,'f0.1') '1.0, 256.0, 6561.0, ....
+!!                                          65536.0, 390625.0'
+!!    tostring(real([(i,i=1,5)])**8,'f6.1') '1.0, 256.0, 6561.0, ******, ******'
+!!    tostring([1200000.,-1.2e-9])          '1.2E+06, -1.2E-09'
+!!    !
+!!    tostring(1.200d103)                 '1.2+103'
+!!    tostring([1.1d0,2.2d10,3.3d20])     '1.1E+00, 2.2E+10, 3.3E+20'
+!!    !
+!!    tostring(-77)                     '-77'
+!!    tostring([(i,i=-3,3)]**11)        '-177147, -2048, -1, 0, 1, 2048, 177147'
+!!    tostring([(i,i=-3,3)]**11, 'i7')  '-177147, -2048, -1, 0, 1, 2048, 177147'
+!!    tostring([(i,i=-3,3)]**11, 'i4')  '****, ****, -1, 0, 1, 2048, ****'
+!!
+!!    tostring((1,3)/(4,2))               '0.5 + 0.5i'
+!!    tostring(cmplx([-1,-2])**0.25)      '0.70711 + 0.70711i, 0.8409 + 0.8409i'
+!!    !
+!!    tostring([.true., .false., .false.])  'T, F, F'
+!!    tostring(.true., 'L2')                'T'
 !!
 !! The returned strings may be slightly different from the ones shown,
 !! because some compilers (at least some versions of g95) will produce one
@@ -1914,31 +1945,32 @@ CONTAINS
 !! Examples of using TOSTRING_SET follow (again the returned string may be
 !! slightly different).
 !!
-!!       Invocation                              Returned String
-!!       ----------                              ---------------
-!!       call tostring_set(sep=';')
-!!       tostring([1,2,30])                      '1;2;30'
-!!       !
-!!       call tostring_set(trimb='NO')
-!!       tostring(real([(i,i=1,5)])**8,'f6.1')   '   1.0; 256.0;6561.0;******;******'
-!!       tostring([1,2,30],'i3')                 '  1;  2; 30'
-!!       tostring([(i,i=-3,3)]**11, 'i4')        '****;****;  -1;   0;   1;2048;****'
-!!       tostring([1,2,30],'i0')                 '1;2;30'
-!!       tostring(.true.,'L3')                   '  T'
-!!       !
-!!       call tostring_set(trimz='NONE',sep=', ',trimb='YES')
-!!       tostring(real([(i,i=1,4)])**8)          '1.0000, 256.00, 6561.0, 65536.'
-!!       tostring([1.23456,1.2300,1.23456e6])    '1.2346, 1.2300, 1.23456E+06'
-!!       tostring(1.200d103)                     '1.20000+103'
-!!       !
-!!       call tostring_set(trimz='ALL')
-!!       tostring(real([(i,i=1,5)])**8,'f0.1')   '1, 256, 6561, 65536, 390625'
-!!       !
-!!       call tostring_set(rfmt='G12.4')
-!!       tostring(real([(i,i=0,5)])**8)          '1, 256, 6561, 0.6554E+05, 0.3906E+06'
-!!       tostring([1200000.,-1.2e-9])            '0.12E+07, -0.12E-08'
-!!       !
-!!       call tostring_set_factory()
+!!    Invocation                             Returned String
+!!    ----------                             ---------------
+!!    call tostring_set(sep=';')
+!!    tostring([1,2,30])                     '1;2;30'
+!!    !
+!!    call tostring_set(trimb='NO')
+!!    tostring(real([(i,i=1,5)])**8,'f6.1')  '   1.0; 256.0;6561.0;******;******'
+!!    tostring([1,2,30],'i3')                '  1;  2; 30'
+!!    tostring([(i,i=-3,3)]**11, 'i4')       '****;****;  -1;   0;   1;2048;****'
+!!    tostring([1,2,30],'i0')                '1;2;30'
+!!    tostring(.true.,'L3')                  '  T'
+!!    !
+!!    call tostring_set(trimz='NONE',sep=', ',trimb='YES')
+!!    tostring(real([(i,i=1,4)])**8)         '1.0000, 256.00, 6561.0, 65536.'
+!!    tostring([1.23456,1.2300,1.23456e6])   '1.2346, 1.2300, 1.23456E+06'
+!!    tostring(1.200d103)                    '1.20000+103'
+!!    !
+!!    call tostring_set(trimz='ALL')
+!!    tostring(real([(i,i=1,5)])**8,'f0.1')  '1, 256, 6561, 65536, 390625'
+!!    !
+!!    call tostring_set(rfmt='G12.4')
+!!    tostring(real([(i,i=0,5)])**8)         '1, 256, 6561, 0.6554E+05, ....
+!!                                           ... 0.3906E+06'
+!!    tostring([1200000.,-1.2e-9])           '0.12E+07, -0.12E-08'
+!!    !
+!!    call tostring_set_factory()
 !!
 !!##AUTHOR
 !!   Based on dispmodule(3f),
@@ -1961,8 +1993,8 @@ CONTAINS
 !===================================================================================================================================
 !>
 !!##NAME
-!!    tostring_set_factory(3f) - [M_display] set TOSTRING(3f) output back
-!!    to original defaults
+!!     tostring_set_factory(3f) - [M_display] set TOSTRING(3f) output back
+!!     to original defaults
 !!
 !!##DESCRIPTION
 !! The subroutine TOSTRING_SET_FACTORY (which has no arguments) may be
@@ -1994,9 +2026,8 @@ CONTAINS
 !===================================================================================================================================
 !>
 !!##NAME
-!!
-!! disp_get(3f) - [M_display] return default settings in a structure of
-!!                DISP(3f) settings
+!!     disp_get(3f) - [M_display] return default settings in a structure
+!!                    of DISP(3f) settings
 !!
 !!##DESCRIPTION
 !!
@@ -2057,223 +2088,9 @@ end function disp_get
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-! *********************************************** DEFAULT INTEGER PROCEDURES ******************************************************
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine disp_scalar_int(x, fmt, advance, sep, trim, unit, zeroas)
-
-! ident_2="@(#) M_disp disp_scalar_int(3f) integer scalar without title (call disp_title_scalar_int(3f) with title='')"
-
-character(*), intent(in), optional :: fmt, advance, sep, trim, zeroas
-integer(dint), intent(in)          :: x
-integer, intent(in), optional      :: unit
-
-   call disp_title_scalar_int('', x, fmt, advance, sep, 'left', trim, unit, zeroas)
-
-end subroutine disp_scalar_int
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine disp_title_scalar_int(title, x, fmt, advance, sep, style, trim, unit, zeroas)
-
-! ident_3="@(#) M_display disp_scalar_int(3f) Default integer scalar with title"
-
-character(*), intent(in) :: title
-character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
-integer(dint), intent(in)          :: x
-integer, intent(in), optional      :: unit
-
-   call disp_title_matrix_int(title,reshape([x],[1,1]),fmt,advance,sep=sep,style=style,trim=trim,unit=unit,zeroas=zeroas)
-
-end subroutine disp_title_scalar_int
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine disp_vector_int(x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
-
-! ident_4="@(#) M_display disp_vector_int(3f) Default integer vector without title"
-
-character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
-integer(dint), intent(in) :: x(:)
-integer, intent(in), optional :: unit, lbound(:)
-
-   call disp_title_vector_int('', x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
-
-end subroutine disp_vector_int
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine disp_title_vector_int(title, x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
-! Default integer vector with title
-character(*), intent(in) :: title
-character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
-integer(dint), intent(in) :: x(:)
-integer, intent(in), optional :: unit, lbound(:)
-type(settings) :: SE
-
-    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
-    if (SE % row) then
-      call disp_dint(title, reshape(x, [1, size(x)]), SE)
-    else
-      call disp_dint(title, reshape(x, [size(x), 1]), SE)
-    endif
-
-end subroutine disp_title_vector_int
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine disp_matrix_int(x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
-! Default integer matrix without title
-character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
-integer(dint), intent(in) :: x(:,:)
-integer, intent(in), optional :: unit, lbound(:)
-
-   call disp_title_matrix_int('', x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
-
-end subroutine disp_matrix_int
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine disp_title_matrix_int(title, x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
-! Default integer matrix with title
-character(*), intent(in)           :: title      ! The title to use for the matrix
-integer(dint),intent(in)           :: x(:,:)     ! The matrix to be written
-character(*), intent(in), optional :: fmt        ! Format edit descriptor to use for each matrix element (e.g.'I4')
-integer,      intent(in), optional :: unit       ! Unit to display on
-character(*), intent(in), optional :: advance    ! 'No' to print next matrix to right of current, otherwise 'Yes'
-character(*), intent(in), optional :: sep        ! Separator between matrix columns (e.g. ", ")
-character(*), intent(in), optional :: zeroas     ! Zeros are replaced by this string
-character(*), intent(in), optional :: style      ! Style(s): See NOTE 1 below
-character(*), intent(in), optional :: trim       ! 'Auto' (the default) to trim if fmt absent, 'no' for no trimming,
-!                                                ! trimming, 'yes' for trimming
-integer,      intent(in), optional :: lbound(:)  ! Lower bounds of x
-type(settings) :: SE
-
-    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, zeroas=zeroas)
-    call disp_dint(title, x, SE)
-
-end subroutine disp_title_matrix_int
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine disp_dint(title, x, SE)
-! Default integer item
-character(*),   intent(in)    :: title
-integer(dint),  intent(in)    :: x(:,:)
-type(settings), intent(inout) :: SE
-integer wid(size(x,2)), nbl(size(x,2))
-
-   call find_editdesc_dint(x, SE, wid, nbl) ! determine also SE % w
-   call tobox_dint(title, x, SE, wid, nbl)
-
-end subroutine disp_dint
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine tobox_dint(title, x, SE, wid, nbl)
-! Write default integer matrix to box
-character(*),   intent(in)    :: title
-integer(dint),  intent(in)    :: x(:,:)
-type(settings), intent(inout) :: SE
-integer,        intent(inout) :: wid(:)
-integer,        intent(inout) :: nbl(:)
-character(SE % w)  :: s(size(x,1))
-integer            :: lin1, j, wleft, m, n, widp(size(wid))
-character, pointer :: boxp(:,:)
-
-   m = size(x,1)
-   n = size(x,2)
-   call preparebox(title, SE, m, n, wid, widp, lin1, wleft, boxp)
-   do j=1,n
-     if (m > 0) write(s, SE % ed) x(:,j)
-     if (SE % lzas > 0) call replace_zeronaninf(s, SE % zas(1:SE % lzas), x(:,j) == 0)
-     call copytobox(s, lin1, wid(j), widp(j), nbl(j), boxp,  wleft)
-     if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
-   enddo
-   call finishbox(title, SE, boxp)
-
-end subroutine tobox_dint
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine find_editdesc_dint(x, SE, wid, nbl)
-! Determine SE % ed, SE % w (unless specified) and wid
-integer(dint),  intent(in)    :: x(:,:)
-type(settings), intent(inout) :: SE
-integer,        intent(out)   :: wid(size(x,2)), nbl(size(x,2))
-!
-integer(dint) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm
-logical xzero(size(x,2)), xallz(size(x,2))
-character(22) s
-integer ww
-!
-   if (SE % w == 0) then
-     xp = maxval(x)
-     xm = minval(x)
-     write(s, '(SS,I0)') xp; ww = len_trim(s)
-     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
-     SE % w = max(SE % lzas, ww)
-     call replace_w(SE % ed, ww)
-   elseif (SE % w < 0) then ! obtain max-width of x
-     if (size(x) == 0) then
-       SE % ed = '()'
-       SE % w = 0
-       wid = 0
-       return
-     endif
-     xp = maxval(x)
-     xm = minval(x)
-     write(s, '(SS,I0)') xp; ww = len_trim(s)
-     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
-     ww = max(SE % lzas, ww)
-     SE % ed = '(SS,Ixx)'
-     write(SE % ed(6:7), '(SS,I2)') ww
-     SE % w = ww
-   endif
-   if (SE % trm) then
-     xmaxv = maxval(x, 1) ! max in each column
-     xminv = minval(x, 1) ! min
-     xzero = any(x == 0_dint, 1) ! true where column has some zeros
-     xallz = all(x == 0_dint, 1) ! true where column has only zeros
-     call getwid_dint(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
-   else
-     wid = SE % w
-     nbl = 0
-   endif
-
-end subroutine find_editdesc_dint
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine getwid_dint(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
-integer(dint),  intent(in)  :: xmaxv(:), xminv(:)
-logical,        intent(in)  :: xzero(:), xallz(:) ! True for columns with some/all zeros
-type(settings), intent(in)  :: SE                 ! Settings
-integer,        intent(out) :: wid(:)             ! Widths of columns
-integer,        intent(out) :: nbl(:)             ! n of blanks to peel from left (w-wid)
-character(SE % w) :: stmax(size(xmaxv)), stmin(size(xminv))
-integer w
-
-   w = SE % w
-   write(stmax, SE % ed) xmaxv
-   write(stmin, SE % ed) xminv
-   nbl = mod(verify(stmin, ' ') + w, w + 1) ! loc. of first nonblank
-   nbl = min(nbl, mod(verify(stmax, ' ') + w, w + 1))
-   wid = w - nbl
-   if (SE % lzas > 0) then
-     wid = merge(SE % lzas, wid, xallz)
-     wid = max(wid, merge(SE % lzas, 0, xzero))
-     nbl = w - wid
-   endif
-
-end subroutine getwid_dint
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 !>
 !!##NAME
-!!      tostring(3f) - [M_display] change numbers to a string
+!!     tostring(3f) - [M_display] change numbers to a string
 !!
 !!##INTRODUCTION
 !!
@@ -2338,14 +2155,228 @@ end subroutine getwid_dint
 !!     Kristjan Jonasson,
 !!     Dept. of Computer Science,
 !!     University of Iceland (jonasson@hi.is).
+! *********************************************** int8 INTEGER PROCEDURES ******************************************************
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-  ! ********* DEFAULT INTEGER TOSTRING PROCEDURES *********
+subroutine disp_scalar_int8(x, fmt, advance, sep, trim, unit, zeroas)
 
-  pure function widthmax_dint(x, fmt) result(w)
+! ident_2="@(#) M_disp disp_scalar_int8(3f) integer scalar without title (call disp_title_scalar_int8(3f) with title='')"
+
+character(*), intent(in), optional :: fmt, advance, sep, trim, zeroas
+integer(kind=int8), intent(in)          :: x
+integer, intent(in), optional      :: unit
+
+   call disp_title_scalar_int8('', x, fmt, advance, sep, 'left', trim, unit, zeroas)
+
+end subroutine disp_scalar_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_scalar_int8(title, x, fmt, advance, sep, style, trim, unit, zeroas)
+
+! ident_3="@(#) M_display disp_scalar_int8(3f) integer scalar with title"
+
+character(*), intent(in) :: title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
+integer(kind=int8), intent(in)          :: x
+integer, intent(in), optional      :: unit
+
+   call disp_title_matrix_int8(title,reshape([x],[1,1]),fmt,advance,sep=sep,style=style,trim=trim,unit=unit,zeroas=zeroas)
+
+end subroutine disp_title_scalar_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_vector_int8(x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+
+! ident_4="@(#) M_display disp_vector_int8(3f) integer vector without title"
+
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
+integer(kind=int8), intent(in) :: x(:)
+integer, intent(in), optional :: unit, lbound(:)
+
+   call disp_title_vector_int8('', x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+
+end subroutine disp_vector_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_vector_int8(title, x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+! integer vector with title
+character(*), intent(in) :: title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
+integer(kind=int8), intent(in) :: x(:)
+integer, intent(in), optional :: unit, lbound(:)
+type(settings) :: SE
+
+    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+    if (SE % row) then
+      call disp_int8(title, reshape(x, [1, size(x)]), SE)
+    else
+      call disp_int8(title, reshape(x, [size(x), 1]), SE)
+    endif
+
+end subroutine disp_title_vector_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_matrix_int8(x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+! integer matrix without title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
+integer(kind=int8), intent(in) :: x(:,:)
+integer, intent(in), optional :: unit, lbound(:)
+
+   call disp_title_matrix_int8('', x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+
+end subroutine disp_matrix_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_matrix_int8(title, x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+! integer matrix with title
+character(*), intent(in)           :: title      ! The title to use for the matrix
+integer(kind=int8),intent(in)           :: x(:,:)     ! The matrix to be written
+character(*), intent(in), optional :: fmt        ! Format edit descriptor to use for each matrix element (e.g.'I4')
+integer,      intent(in), optional :: unit       ! Unit to display on
+character(*), intent(in), optional :: advance    ! 'No' to print next matrix to right of current, otherwise 'Yes'
+character(*), intent(in), optional :: sep        ! Separator between matrix columns (e.g. ", ")
+character(*), intent(in), optional :: zeroas     ! Zeros are replaced by this string
+character(*), intent(in), optional :: style      ! Style(s): See NOTE 1 below
+character(*), intent(in), optional :: trim       ! 'Auto' (the default) to trim if fmt absent, 'no' for no trimming,
+!                                                ! trimming, 'yes' for trimming
+integer,      intent(in), optional :: lbound(:)  ! Lower bounds of x
+type(settings) :: SE
+
+    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, zeroas=zeroas)
+    call disp_int8(title, x, SE)
+
+end subroutine disp_title_matrix_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_int8(title, x, SE)
+! integer item
+character(*),   intent(in)    :: title
+integer(kind=int8),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer wid(size(x,2)), nbl(size(x,2))
+
+   call find_editdesc_int8(x, SE, wid, nbl) ! determine also SE % w
+   call tobox_int8(title, x, SE, wid, nbl)
+
+end subroutine disp_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine tobox_int8(title, x, SE, wid, nbl)
+! Write integer matrix to box
+character(*),   intent(in)    :: title
+integer(kind=int8),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer,        intent(inout) :: wid(:)
+integer,        intent(inout) :: nbl(:)
+character(SE % w)  :: s(size(x,1))
+integer            :: lin1, j, wleft, m, n, widp(size(wid))
+character, pointer :: boxp(:,:)
+
+   m = size(x,1)
+   n = size(x,2)
+   call preparebox(title, SE, m, n, wid, widp, lin1, wleft, boxp)
+   do j=1,n
+     if (m > 0) write(s, SE % ed) x(:,j)
+     if (SE % lzas > 0) call replace_zeronaninf(s, SE % zas(1:SE % lzas), x(:,j) == 0)
+     call copytobox(s, lin1, wid(j), widp(j), nbl(j), boxp,  wleft)
+     if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
+   enddo
+   call finishbox(title, SE, boxp)
+
+end subroutine tobox_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine find_editdesc_int8(x, SE, wid, nbl)
+! Determine SE % ed, SE % w (unless specified) and wid
+integer(kind=int8),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer,        intent(out)   :: wid(size(x,2)), nbl(size(x,2))
+!
+integer(kind=int8) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm
+logical xzero(size(x,2)), xallz(size(x,2))
+character(22) s
+integer ww
+!
+   if (SE % w == 0) then
+     xp = maxval(x)
+     xm = minval(x)
+     write(s, '(SS,I0)') xp; ww = len_trim(s)
+     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
+     SE % w = max(SE % lzas, ww)
+     call replace_w(SE % ed, ww)
+   elseif (SE % w < 0) then ! obtain max-width of x
+     if (size(x) == 0) then
+       SE % ed = '()'
+       SE % w = 0
+       wid = 0
+       return
+     endif
+     xp = maxval(x)
+     xm = minval(x)
+     write(s, '(SS,I0)') xp; ww = len_trim(s)
+     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
+     ww = max(SE % lzas, ww)
+     SE % ed = '(SS,Ixx)'
+     write(SE % ed(6:7), '(SS,I2)') ww
+     SE % w = ww
+   endif
+   if (SE % trm) then
+     xmaxv = maxval(x, 1) ! max in each column
+     xminv = minval(x, 1) ! min
+     xzero = any(x == 0_int8, 1) ! true where column has some zeros
+     xallz = all(x == 0_int8, 1) ! true where column has only zeros
+     call getwid_int8(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
+   else
+     wid = SE % w
+     nbl = 0
+   endif
+
+end subroutine find_editdesc_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine getwid_int8(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
+integer(kind=int8),  intent(in)  :: xmaxv(:), xminv(:)
+logical,        intent(in)  :: xzero(:), xallz(:) ! True for columns with some/all zeros
+type(settings), intent(in)  :: SE                 ! Settings
+integer,        intent(out) :: wid(:)             ! Widths of columns
+integer,        intent(out) :: nbl(:)             ! n of blanks to peel from left (w-wid)
+character(SE % w) :: stmax(size(xmaxv)), stmin(size(xminv))
+integer w
+
+   w = SE % w
+   write(stmax, SE % ed) xmaxv
+   write(stmin, SE % ed) xminv
+   nbl = mod(verify(stmin, ' ') + w, w + 1) ! loc. of first nonblank
+   nbl = min(nbl, mod(verify(stmax, ' ') + w, w + 1))
+   wid = w - nbl
+   if (SE % lzas > 0) then
+     wid = merge(SE % lzas, wid, xallz)
+     wid = max(wid, merge(SE % lzas, 0, xzero))
+     nbl = w - wid
+   endif
+
+end subroutine getwid_int8
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+  ! ********* INTEGER TOSTRING PROCEDURES *********
+
+  pure function widthmax_int8(x, fmt) result(w)
     ! Maximum width of string representation of an element in x
-    integer(dint), intent(in)  :: x(:)
+    integer(kind=int8), intent(in)  :: x(:)
     character(*), intent(in) :: fmt
     character(range(x)+2) sx(2)
     integer w, d
@@ -2356,13 +2387,13 @@ end subroutine getwid_dint
       write(sx, '(SS,I0)') maxval(x), minval(x)
       w = maxval(len_trim(sx))
     endif
-  end function widthmax_dint
+  end function widthmax_int8
 
-  pure function len_f_dint(x, fmt) result(wtot)
+  pure function len_f_int8(x, fmt) result(wtot)
     ! Total width of tostring representation of x
-    integer(dint), intent(in)        :: x(:)
+    integer(kind=int8), intent(in)        :: x(:)
     character(*), intent(in)         :: fmt
-    character(widthmax_dint(x, fmt)) :: sa(size(x))
+    character(widthmax_int8(x, fmt)) :: sa(size(x))
     integer                          :: wtot, w, d
     logical                          :: gedit
     character(nnblk(fmt)+5)          :: fmt1
@@ -2372,36 +2403,36 @@ end subroutine getwid_dint
     write(sa, fmt1, iostat=iostat) x
     if (tosset % trimb == 'YES' .or. w == 0) sa = adjustl(sa)
     wtot = sum(len_trim(sa)) + (size(x) - 1)*(tosset % seplen)
-  end function len_f_dint
+  end function len_f_int8
 
-  function tostring_s_dint(x) result(st)
+  function tostring_s_int8(x) result(st)
     ! Scalar to string
-    integer(dint), intent(in)                   :: x
-    character(len_f_dint([x], tosset % ifmt)) :: st
-    st = tostring_f_dint([x], tosset % ifmt)
-  end function tostring_s_dint
+    integer(kind=int8), intent(in)                   :: x
+    character(len_f_int8([x], tosset % ifmt)) :: st
+    st = tostring_f_int8([x], tosset % ifmt)
+  end function tostring_s_int8
 
-  function tostring_sf_dint(x, fmt) result(st)
+  function tostring_sf_int8(x, fmt) result(st)
     ! Scalar with specified format to string
-    integer(dint),intent(in)        :: x
+    integer(kind=int8),intent(in)        :: x
     character(*), intent(in)        :: fmt
-    character(len_f_dint([x], fmt)) :: st
-    st = tostring_f_dint([x], fmt)
-  end function tostring_sf_dint
+    character(len_f_int8([x], fmt)) :: st
+    st = tostring_f_int8([x], fmt)
+  end function tostring_sf_int8
 
-  function tostring_dint(x) result(st)
+  function tostring_int8(x) result(st)
     ! Vector to string
-    integer(dint), intent(in)               :: x(:)
-    character(len_f_dint(x, tosset % ifmt)) :: st
-    st = tostring_f_dint(x, tosset % ifmt)
-  end function tostring_dint
+    integer(kind=int8), intent(in)               :: x(:)
+    character(len_f_int8(x, tosset % ifmt)) :: st
+    st = tostring_f_int8(x, tosset % ifmt)
+  end function tostring_int8
 
-  function tostring_f_dint(x, fmt) result(st)
+  function tostring_f_int8(x, fmt) result(st)
     ! Vector with specified format to string
-    integer(dint), intent(in)        :: x(:)
+    integer(kind=int8), intent(in)        :: x(:)
     character(*), intent(in)         :: fmt
-    character(len_f_dint(x, fmt))    :: st
-    character(widthmax_dint(x, fmt)) :: sa(size(x))
+    character(len_f_int8(x, fmt))    :: st
+    character(widthmax_int8(x, fmt)) :: sa(size(x))
     integer                          :: w, d
     logical                          :: gedit
     character(nnblk(fmt)+5)          :: fmt1
@@ -2411,69 +2442,945 @@ end subroutine getwid_dint
     write(sa, fmt1,iostat=iostat) x
     if (tosset % trimb == 'YES' .or. w == 0) sa = adjustl(sa)
     call tostring_get(sa, st)
-  end function tostring_f_dint
+  end function tostring_f_int8
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-  ! ************************************* END OF DEFAULT INTEGER PROCEDURES ******************************************
+  ! ************************************* END OF int8 INTEGER PROCEDURES ******************************************
+! *********************************************** int16 INTEGER PROCEDURES ******************************************************
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_scalar_int16(x, fmt, advance, sep, trim, unit, zeroas)
 
-  ! **************************************** SINGLE PRECISION PROCEDURES *********************************************
+! ident_5="@(#) M_disp disp_scalar_int16(3f) integer scalar without title (call disp_title_scalar_int16(3f) with title='')"
+
+character(*), intent(in), optional :: fmt, advance, sep, trim, zeroas
+integer(kind=int16), intent(in)          :: x
+integer, intent(in), optional      :: unit
+
+   call disp_title_scalar_int16('', x, fmt, advance, sep, 'left', trim, unit, zeroas)
+
+end subroutine disp_scalar_int16
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-  subroutine disp_s_sngl(x, fmt, advance, digmax, sep, trim, unit, zeroas)
-    ! Single precision scalar without title
+subroutine disp_title_scalar_int16(title, x, fmt, advance, sep, style, trim, unit, zeroas)
+
+! ident_6="@(#) M_display disp_scalar_int16(3f) integer scalar with title"
+
+character(*), intent(in) :: title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
+integer(kind=int16), intent(in)          :: x
+integer, intent(in), optional      :: unit
+
+   call disp_title_matrix_int16(title,reshape([x],[1,1]),fmt,advance,sep=sep,style=style,trim=trim,unit=unit,zeroas=zeroas)
+
+end subroutine disp_title_scalar_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_vector_int16(x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+
+! ident_7="@(#) M_display disp_vector_int16(3f) integer vector without title"
+
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
+integer(kind=int16), intent(in) :: x(:)
+integer, intent(in), optional :: unit, lbound(:)
+
+   call disp_title_vector_int16('', x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+
+end subroutine disp_vector_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_vector_int16(title, x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+! integer vector with title
+character(*), intent(in) :: title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
+integer(kind=int16), intent(in) :: x(:)
+integer, intent(in), optional :: unit, lbound(:)
+type(settings) :: SE
+
+    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+    if (SE % row) then
+      call disp_int16(title, reshape(x, [1, size(x)]), SE)
+    else
+      call disp_int16(title, reshape(x, [size(x), 1]), SE)
+    endif
+
+end subroutine disp_title_vector_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_matrix_int16(x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+! integer matrix without title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
+integer(kind=int16), intent(in) :: x(:,:)
+integer, intent(in), optional :: unit, lbound(:)
+
+   call disp_title_matrix_int16('', x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+
+end subroutine disp_matrix_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_matrix_int16(title, x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+! integer matrix with title
+character(*), intent(in)           :: title      ! The title to use for the matrix
+integer(kind=int16),intent(in)           :: x(:,:)     ! The matrix to be written
+character(*), intent(in), optional :: fmt        ! Format edit descriptor to use for each matrix element (e.g.'I4')
+integer,      intent(in), optional :: unit       ! Unit to display on
+character(*), intent(in), optional :: advance    ! 'No' to print next matrix to right of current, otherwise 'Yes'
+character(*), intent(in), optional :: sep        ! Separator between matrix columns (e.g. ", ")
+character(*), intent(in), optional :: zeroas     ! Zeros are replaced by this string
+character(*), intent(in), optional :: style      ! Style(s): See NOTE 1 below
+character(*), intent(in), optional :: trim       ! 'Auto' (the default) to trim if fmt absent, 'no' for no trimming,
+!                                                ! trimming, 'yes' for trimming
+integer,      intent(in), optional :: lbound(:)  ! Lower bounds of x
+type(settings) :: SE
+
+    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, zeroas=zeroas)
+    call disp_int16(title, x, SE)
+
+end subroutine disp_title_matrix_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_int16(title, x, SE)
+! integer item
+character(*),   intent(in)    :: title
+integer(kind=int16),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer wid(size(x,2)), nbl(size(x,2))
+
+   call find_editdesc_int16(x, SE, wid, nbl) ! determine also SE % w
+   call tobox_int16(title, x, SE, wid, nbl)
+
+end subroutine disp_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine tobox_int16(title, x, SE, wid, nbl)
+! Write integer matrix to box
+character(*),   intent(in)    :: title
+integer(kind=int16),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer,        intent(inout) :: wid(:)
+integer,        intent(inout) :: nbl(:)
+character(SE % w)  :: s(size(x,1))
+integer            :: lin1, j, wleft, m, n, widp(size(wid))
+character, pointer :: boxp(:,:)
+
+   m = size(x,1)
+   n = size(x,2)
+   call preparebox(title, SE, m, n, wid, widp, lin1, wleft, boxp)
+   do j=1,n
+     if (m > 0) write(s, SE % ed) x(:,j)
+     if (SE % lzas > 0) call replace_zeronaninf(s, SE % zas(1:SE % lzas), x(:,j) == 0)
+     call copytobox(s, lin1, wid(j), widp(j), nbl(j), boxp,  wleft)
+     if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
+   enddo
+   call finishbox(title, SE, boxp)
+
+end subroutine tobox_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine find_editdesc_int16(x, SE, wid, nbl)
+! Determine SE % ed, SE % w (unless specified) and wid
+integer(kind=int16),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer,        intent(out)   :: wid(size(x,2)), nbl(size(x,2))
+!
+integer(kind=int16) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm
+logical xzero(size(x,2)), xallz(size(x,2))
+character(22) s
+integer ww
+!
+   if (SE % w == 0) then
+     xp = maxval(x)
+     xm = minval(x)
+     write(s, '(SS,I0)') xp; ww = len_trim(s)
+     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
+     SE % w = max(SE % lzas, ww)
+     call replace_w(SE % ed, ww)
+   elseif (SE % w < 0) then ! obtain max-width of x
+     if (size(x) == 0) then
+       SE % ed = '()'
+       SE % w = 0
+       wid = 0
+       return
+     endif
+     xp = maxval(x)
+     xm = minval(x)
+     write(s, '(SS,I0)') xp; ww = len_trim(s)
+     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
+     ww = max(SE % lzas, ww)
+     SE % ed = '(SS,Ixx)'
+     write(SE % ed(6:7), '(SS,I2)') ww
+     SE % w = ww
+   endif
+   if (SE % trm) then
+     xmaxv = maxval(x, 1) ! max in each column
+     xminv = minval(x, 1) ! min
+     xzero = any(x == 0_int16, 1) ! true where column has some zeros
+     xallz = all(x == 0_int16, 1) ! true where column has only zeros
+     call getwid_int16(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
+   else
+     wid = SE % w
+     nbl = 0
+   endif
+
+end subroutine find_editdesc_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine getwid_int16(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
+integer(kind=int16),  intent(in)  :: xmaxv(:), xminv(:)
+logical,        intent(in)  :: xzero(:), xallz(:) ! True for columns with some/all zeros
+type(settings), intent(in)  :: SE                 ! Settings
+integer,        intent(out) :: wid(:)             ! Widths of columns
+integer,        intent(out) :: nbl(:)             ! n of blanks to peel from left (w-wid)
+character(SE % w) :: stmax(size(xmaxv)), stmin(size(xminv))
+integer w
+
+   w = SE % w
+   write(stmax, SE % ed) xmaxv
+   write(stmin, SE % ed) xminv
+   nbl = mod(verify(stmin, ' ') + w, w + 1) ! loc. of first nonblank
+   nbl = min(nbl, mod(verify(stmax, ' ') + w, w + 1))
+   wid = w - nbl
+   if (SE % lzas > 0) then
+     wid = merge(SE % lzas, wid, xallz)
+     wid = max(wid, merge(SE % lzas, 0, xzero))
+     nbl = w - wid
+   endif
+
+end subroutine getwid_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+  ! ********* INTEGER TOSTRING PROCEDURES *********
+
+  pure function widthmax_int16(x, fmt) result(w)
+    ! Maximum width of string representation of an element in x
+    integer(kind=int16), intent(in)  :: x(:)
+    character(*), intent(in) :: fmt
+    character(range(x)+2) sx(2)
+    integer w, d
+    logical gedit
+    character(nnblk(fmt)+5) :: fmt1
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w<=0) then
+      write(sx, '(SS,I0)') maxval(x), minval(x)
+      w = maxval(len_trim(sx))
+    endif
+  end function widthmax_int16
+
+  pure function len_f_int16(x, fmt) result(wtot)
+    ! Total width of tostring representation of x
+    integer(kind=int16), intent(in)        :: x(:)
+    character(*), intent(in)         :: fmt
+    character(widthmax_int16(x, fmt)) :: sa(size(x))
+    integer                          :: wtot, w, d
+    logical                          :: gedit
+    character(nnblk(fmt)+5)          :: fmt1
+    integer                          :: iostat
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w < 0) then; wtot = len(errormsg); return; endif
+    write(sa, fmt1, iostat=iostat) x
+    if (tosset % trimb == 'YES' .or. w == 0) sa = adjustl(sa)
+    wtot = sum(len_trim(sa)) + (size(x) - 1)*(tosset % seplen)
+  end function len_f_int16
+
+  function tostring_s_int16(x) result(st)
+    ! Scalar to string
+    integer(kind=int16), intent(in)                   :: x
+    character(len_f_int16([x], tosset % ifmt)) :: st
+    st = tostring_f_int16([x], tosset % ifmt)
+  end function tostring_s_int16
+
+  function tostring_sf_int16(x, fmt) result(st)
+    ! Scalar with specified format to string
+    integer(kind=int16),intent(in)        :: x
+    character(*), intent(in)        :: fmt
+    character(len_f_int16([x], fmt)) :: st
+    st = tostring_f_int16([x], fmt)
+  end function tostring_sf_int16
+
+  function tostring_int16(x) result(st)
+    ! Vector to string
+    integer(kind=int16), intent(in)               :: x(:)
+    character(len_f_int16(x, tosset % ifmt)) :: st
+    st = tostring_f_int16(x, tosset % ifmt)
+  end function tostring_int16
+
+  function tostring_f_int16(x, fmt) result(st)
+    ! Vector with specified format to string
+    integer(kind=int16), intent(in)        :: x(:)
+    character(*), intent(in)         :: fmt
+    character(len_f_int16(x, fmt))    :: st
+    character(widthmax_int16(x, fmt)) :: sa(size(x))
+    integer                          :: w, d
+    logical                          :: gedit
+    character(nnblk(fmt)+5)          :: fmt1
+    integer                          :: iostat
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w < 0) then; st = errormsg; return; endif
+    write(sa, fmt1,iostat=iostat) x
+    if (tosset % trimb == 'YES' .or. w == 0) sa = adjustl(sa)
+    call tostring_get(sa, st)
+  end function tostring_f_int16
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+  ! ************************************* END OF int16 INTEGER PROCEDURES ******************************************
+! *********************************************** int64 INTEGER PROCEDURES ******************************************************
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_scalar_int64(x, fmt, advance, sep, trim, unit, zeroas)
+
+! ident_8="@(#) M_disp disp_scalar_int64(3f) integer scalar without title (call disp_title_scalar_int64(3f) with title='')"
+
+character(*), intent(in), optional :: fmt, advance, sep, trim, zeroas
+integer(kind=int64), intent(in)          :: x
+integer, intent(in), optional      :: unit
+
+   call disp_title_scalar_int64('', x, fmt, advance, sep, 'left', trim, unit, zeroas)
+
+end subroutine disp_scalar_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_scalar_int64(title, x, fmt, advance, sep, style, trim, unit, zeroas)
+
+! ident_9="@(#) M_display disp_scalar_int64(3f) integer scalar with title"
+
+character(*), intent(in) :: title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
+integer(kind=int64), intent(in)          :: x
+integer, intent(in), optional      :: unit
+
+   call disp_title_matrix_int64(title,reshape([x],[1,1]),fmt,advance,sep=sep,style=style,trim=trim,unit=unit,zeroas=zeroas)
+
+end subroutine disp_title_scalar_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_vector_int64(x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+
+! ident_10="@(#) M_display disp_vector_int64(3f) integer vector without title"
+
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
+integer(kind=int64), intent(in) :: x(:)
+integer, intent(in), optional :: unit, lbound(:)
+
+   call disp_title_vector_int64('', x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+
+end subroutine disp_vector_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_vector_int64(title, x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+! integer vector with title
+character(*), intent(in) :: title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
+integer(kind=int64), intent(in) :: x(:)
+integer, intent(in), optional :: unit, lbound(:)
+type(settings) :: SE
+
+    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+    if (SE % row) then
+      call disp_int64(title, reshape(x, [1, size(x)]), SE)
+    else
+      call disp_int64(title, reshape(x, [size(x), 1]), SE)
+    endif
+
+end subroutine disp_title_vector_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_matrix_int64(x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+! integer matrix without title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
+integer(kind=int64), intent(in) :: x(:,:)
+integer, intent(in), optional :: unit, lbound(:)
+
+   call disp_title_matrix_int64('', x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+
+end subroutine disp_matrix_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_matrix_int64(title, x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+! integer matrix with title
+character(*), intent(in)           :: title      ! The title to use for the matrix
+integer(kind=int64),intent(in)           :: x(:,:)     ! The matrix to be written
+character(*), intent(in), optional :: fmt        ! Format edit descriptor to use for each matrix element (e.g.'I4')
+integer,      intent(in), optional :: unit       ! Unit to display on
+character(*), intent(in), optional :: advance    ! 'No' to print next matrix to right of current, otherwise 'Yes'
+character(*), intent(in), optional :: sep        ! Separator between matrix columns (e.g. ", ")
+character(*), intent(in), optional :: zeroas     ! Zeros are replaced by this string
+character(*), intent(in), optional :: style      ! Style(s): See NOTE 1 below
+character(*), intent(in), optional :: trim       ! 'Auto' (the default) to trim if fmt absent, 'no' for no trimming,
+!                                                ! trimming, 'yes' for trimming
+integer,      intent(in), optional :: lbound(:)  ! Lower bounds of x
+type(settings) :: SE
+
+    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, zeroas=zeroas)
+    call disp_int64(title, x, SE)
+
+end subroutine disp_title_matrix_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_int64(title, x, SE)
+! integer item
+character(*),   intent(in)    :: title
+integer(kind=int64),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer wid(size(x,2)), nbl(size(x,2))
+
+   call find_editdesc_int64(x, SE, wid, nbl) ! determine also SE % w
+   call tobox_int64(title, x, SE, wid, nbl)
+
+end subroutine disp_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine tobox_int64(title, x, SE, wid, nbl)
+! Write integer matrix to box
+character(*),   intent(in)    :: title
+integer(kind=int64),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer,        intent(inout) :: wid(:)
+integer,        intent(inout) :: nbl(:)
+character(SE % w)  :: s(size(x,1))
+integer            :: lin1, j, wleft, m, n, widp(size(wid))
+character, pointer :: boxp(:,:)
+
+   m = size(x,1)
+   n = size(x,2)
+   call preparebox(title, SE, m, n, wid, widp, lin1, wleft, boxp)
+   do j=1,n
+     if (m > 0) write(s, SE % ed) x(:,j)
+     if (SE % lzas > 0) call replace_zeronaninf(s, SE % zas(1:SE % lzas), x(:,j) == 0)
+     call copytobox(s, lin1, wid(j), widp(j), nbl(j), boxp,  wleft)
+     if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
+   enddo
+   call finishbox(title, SE, boxp)
+
+end subroutine tobox_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine find_editdesc_int64(x, SE, wid, nbl)
+! Determine SE % ed, SE % w (unless specified) and wid
+integer(kind=int64),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer,        intent(out)   :: wid(size(x,2)), nbl(size(x,2))
+!
+integer(kind=int64) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm
+logical xzero(size(x,2)), xallz(size(x,2))
+character(22) s
+integer ww
+!
+   if (SE % w == 0) then
+     xp = maxval(x)
+     xm = minval(x)
+     write(s, '(SS,I0)') xp; ww = len_trim(s)
+     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
+     SE % w = max(SE % lzas, ww)
+     call replace_w(SE % ed, ww)
+   elseif (SE % w < 0) then ! obtain max-width of x
+     if (size(x) == 0) then
+       SE % ed = '()'
+       SE % w = 0
+       wid = 0
+       return
+     endif
+     xp = maxval(x)
+     xm = minval(x)
+     write(s, '(SS,I0)') xp; ww = len_trim(s)
+     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
+     ww = max(SE % lzas, ww)
+     SE % ed = '(SS,Ixx)'
+     write(SE % ed(6:7), '(SS,I2)') ww
+     SE % w = ww
+   endif
+   if (SE % trm) then
+     xmaxv = maxval(x, 1) ! max in each column
+     xminv = minval(x, 1) ! min
+     xzero = any(x == 0_int64, 1) ! true where column has some zeros
+     xallz = all(x == 0_int64, 1) ! true where column has only zeros
+     call getwid_int64(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
+   else
+     wid = SE % w
+     nbl = 0
+   endif
+
+end subroutine find_editdesc_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine getwid_int64(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
+integer(kind=int64),  intent(in)  :: xmaxv(:), xminv(:)
+logical,        intent(in)  :: xzero(:), xallz(:) ! True for columns with some/all zeros
+type(settings), intent(in)  :: SE                 ! Settings
+integer,        intent(out) :: wid(:)             ! Widths of columns
+integer,        intent(out) :: nbl(:)             ! n of blanks to peel from left (w-wid)
+character(SE % w) :: stmax(size(xmaxv)), stmin(size(xminv))
+integer w
+
+   w = SE % w
+   write(stmax, SE % ed) xmaxv
+   write(stmin, SE % ed) xminv
+   nbl = mod(verify(stmin, ' ') + w, w + 1) ! loc. of first nonblank
+   nbl = min(nbl, mod(verify(stmax, ' ') + w, w + 1))
+   wid = w - nbl
+   if (SE % lzas > 0) then
+     wid = merge(SE % lzas, wid, xallz)
+     wid = max(wid, merge(SE % lzas, 0, xzero))
+     nbl = w - wid
+   endif
+
+end subroutine getwid_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+  ! ********* INTEGER TOSTRING PROCEDURES *********
+
+  pure function widthmax_int64(x, fmt) result(w)
+    ! Maximum width of string representation of an element in x
+    integer(kind=int64), intent(in)  :: x(:)
+    character(*), intent(in) :: fmt
+    character(range(x)+2) sx(2)
+    integer w, d
+    logical gedit
+    character(nnblk(fmt)+5) :: fmt1
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w<=0) then
+      write(sx, '(SS,I0)') maxval(x), minval(x)
+      w = maxval(len_trim(sx))
+    endif
+  end function widthmax_int64
+
+  pure function len_f_int64(x, fmt) result(wtot)
+    ! Total width of tostring representation of x
+    integer(kind=int64), intent(in)        :: x(:)
+    character(*), intent(in)         :: fmt
+    character(widthmax_int64(x, fmt)) :: sa(size(x))
+    integer                          :: wtot, w, d
+    logical                          :: gedit
+    character(nnblk(fmt)+5)          :: fmt1
+    integer                          :: iostat
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w < 0) then; wtot = len(errormsg); return; endif
+    write(sa, fmt1, iostat=iostat) x
+    if (tosset % trimb == 'YES' .or. w == 0) sa = adjustl(sa)
+    wtot = sum(len_trim(sa)) + (size(x) - 1)*(tosset % seplen)
+  end function len_f_int64
+
+  function tostring_s_int64(x) result(st)
+    ! Scalar to string
+    integer(kind=int64), intent(in)                   :: x
+    character(len_f_int64([x], tosset % ifmt)) :: st
+    st = tostring_f_int64([x], tosset % ifmt)
+  end function tostring_s_int64
+
+  function tostring_sf_int64(x, fmt) result(st)
+    ! Scalar with specified format to string
+    integer(kind=int64),intent(in)        :: x
+    character(*), intent(in)        :: fmt
+    character(len_f_int64([x], fmt)) :: st
+    st = tostring_f_int64([x], fmt)
+  end function tostring_sf_int64
+
+  function tostring_int64(x) result(st)
+    ! Vector to string
+    integer(kind=int64), intent(in)               :: x(:)
+    character(len_f_int64(x, tosset % ifmt)) :: st
+    st = tostring_f_int64(x, tosset % ifmt)
+  end function tostring_int64
+
+  function tostring_f_int64(x, fmt) result(st)
+    ! Vector with specified format to string
+    integer(kind=int64), intent(in)        :: x(:)
+    character(*), intent(in)         :: fmt
+    character(len_f_int64(x, fmt))    :: st
+    character(widthmax_int64(x, fmt)) :: sa(size(x))
+    integer                          :: w, d
+    logical                          :: gedit
+    character(nnblk(fmt)+5)          :: fmt1
+    integer                          :: iostat
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w < 0) then; st = errormsg; return; endif
+    write(sa, fmt1,iostat=iostat) x
+    if (tosset % trimb == 'YES' .or. w == 0) sa = adjustl(sa)
+    call tostring_get(sa, st)
+  end function tostring_f_int64
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+  ! ************************************* END OF int64 INTEGER PROCEDURES ******************************************
+! *********************************************** int32 INTEGER PROCEDURES ******************************************************
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_scalar_int32(x, fmt, advance, sep, trim, unit, zeroas)
+
+! ident_11="@(#) M_disp disp_scalar_int32(3f) integer scalar without title (call disp_title_scalar_int32(3f) with title='')"
+
+character(*), intent(in), optional :: fmt, advance, sep, trim, zeroas
+integer(kind=int32), intent(in)          :: x
+integer, intent(in), optional      :: unit
+
+   call disp_title_scalar_int32('', x, fmt, advance, sep, 'left', trim, unit, zeroas)
+
+end subroutine disp_scalar_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_scalar_int32(title, x, fmt, advance, sep, style, trim, unit, zeroas)
+
+! ident_12="@(#) M_display disp_scalar_int32(3f) integer scalar with title"
+
+character(*), intent(in) :: title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
+integer(kind=int32), intent(in)          :: x
+integer, intent(in), optional      :: unit
+
+   call disp_title_matrix_int32(title,reshape([x],[1,1]),fmt,advance,sep=sep,style=style,trim=trim,unit=unit,zeroas=zeroas)
+
+end subroutine disp_title_scalar_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_vector_int32(x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+
+! ident_13="@(#) M_display disp_vector_int32(3f) integer vector without title"
+
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
+integer(kind=int32), intent(in) :: x(:)
+integer, intent(in), optional :: unit, lbound(:)
+
+   call disp_title_vector_int32('', x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+
+end subroutine disp_vector_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_vector_int32(title, x, fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+! integer vector with title
+character(*), intent(in) :: title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
+integer(kind=int32), intent(in) :: x(:)
+integer, intent(in), optional :: unit, lbound(:)
+type(settings) :: SE
+
+    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, zeroas)
+    if (SE % row) then
+      call disp_int32(title, reshape(x, [1, size(x)]), SE)
+    else
+      call disp_int32(title, reshape(x, [size(x), 1]), SE)
+    endif
+
+end subroutine disp_title_vector_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_matrix_int32(x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+! integer matrix without title
+character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
+integer(kind=int32), intent(in) :: x(:,:)
+integer, intent(in), optional :: unit, lbound(:)
+
+   call disp_title_matrix_int32('', x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+
+end subroutine disp_matrix_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_title_matrix_int32(title, x, fmt, advance, lbound, sep, style, trim, unit, zeroas)
+! integer matrix with title
+character(*), intent(in)           :: title      ! The title to use for the matrix
+integer(kind=int32),intent(in)           :: x(:,:)     ! The matrix to be written
+character(*), intent(in), optional :: fmt        ! Format edit descriptor to use for each matrix element (e.g.'I4')
+integer,      intent(in), optional :: unit       ! Unit to display on
+character(*), intent(in), optional :: advance    ! 'No' to print next matrix to right of current, otherwise 'Yes'
+character(*), intent(in), optional :: sep        ! Separator between matrix columns (e.g. ", ")
+character(*), intent(in), optional :: zeroas     ! Zeros are replaced by this string
+character(*), intent(in), optional :: style      ! Style(s): See NOTE 1 below
+character(*), intent(in), optional :: trim       ! 'Auto' (the default) to trim if fmt absent, 'no' for no trimming,
+!                                                ! trimming, 'yes' for trimming
+integer,      intent(in), optional :: lbound(:)  ! Lower bounds of x
+type(settings) :: SE
+
+    call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, zeroas=zeroas)
+    call disp_int32(title, x, SE)
+
+end subroutine disp_title_matrix_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine disp_int32(title, x, SE)
+! integer item
+character(*),   intent(in)    :: title
+integer(kind=int32),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer wid(size(x,2)), nbl(size(x,2))
+
+   call find_editdesc_int32(x, SE, wid, nbl) ! determine also SE % w
+   call tobox_int32(title, x, SE, wid, nbl)
+
+end subroutine disp_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine tobox_int32(title, x, SE, wid, nbl)
+! Write integer matrix to box
+character(*),   intent(in)    :: title
+integer(kind=int32),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer,        intent(inout) :: wid(:)
+integer,        intent(inout) :: nbl(:)
+character(SE % w)  :: s(size(x,1))
+integer            :: lin1, j, wleft, m, n, widp(size(wid))
+character, pointer :: boxp(:,:)
+
+   m = size(x,1)
+   n = size(x,2)
+   call preparebox(title, SE, m, n, wid, widp, lin1, wleft, boxp)
+   do j=1,n
+     if (m > 0) write(s, SE % ed) x(:,j)
+     if (SE % lzas > 0) call replace_zeronaninf(s, SE % zas(1:SE % lzas), x(:,j) == 0)
+     call copytobox(s, lin1, wid(j), widp(j), nbl(j), boxp,  wleft)
+     if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
+   enddo
+   call finishbox(title, SE, boxp)
+
+end subroutine tobox_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine find_editdesc_int32(x, SE, wid, nbl)
+! Determine SE % ed, SE % w (unless specified) and wid
+integer(kind=int32),  intent(in)    :: x(:,:)
+type(settings), intent(inout) :: SE
+integer,        intent(out)   :: wid(size(x,2)), nbl(size(x,2))
+!
+integer(kind=int32) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm
+logical xzero(size(x,2)), xallz(size(x,2))
+character(22) s
+integer ww
+!
+   if (SE % w == 0) then
+     xp = maxval(x)
+     xm = minval(x)
+     write(s, '(SS,I0)') xp; ww = len_trim(s)
+     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
+     SE % w = max(SE % lzas, ww)
+     call replace_w(SE % ed, ww)
+   elseif (SE % w < 0) then ! obtain max-width of x
+     if (size(x) == 0) then
+       SE % ed = '()'
+       SE % w = 0
+       wid = 0
+       return
+     endif
+     xp = maxval(x)
+     xm = minval(x)
+     write(s, '(SS,I0)') xp; ww = len_trim(s)
+     write(s, '(SS,I0)') xm; ww = max(ww, len_trim(s))
+     ww = max(SE % lzas, ww)
+     SE % ed = '(SS,Ixx)'
+     write(SE % ed(6:7), '(SS,I2)') ww
+     SE % w = ww
+   endif
+   if (SE % trm) then
+     xmaxv = maxval(x, 1) ! max in each column
+     xminv = minval(x, 1) ! min
+     xzero = any(x == 0_int32, 1) ! true where column has some zeros
+     xallz = all(x == 0_int32, 1) ! true where column has only zeros
+     call getwid_int32(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
+   else
+     wid = SE % w
+     nbl = 0
+   endif
+
+end subroutine find_editdesc_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine getwid_int32(xmaxv, xminv, xzero, xallz, SE,  wid, nbl)
+integer(kind=int32),  intent(in)  :: xmaxv(:), xminv(:)
+logical,        intent(in)  :: xzero(:), xallz(:) ! True for columns with some/all zeros
+type(settings), intent(in)  :: SE                 ! Settings
+integer,        intent(out) :: wid(:)             ! Widths of columns
+integer,        intent(out) :: nbl(:)             ! n of blanks to peel from left (w-wid)
+character(SE % w) :: stmax(size(xmaxv)), stmin(size(xminv))
+integer w
+
+   w = SE % w
+   write(stmax, SE % ed) xmaxv
+   write(stmin, SE % ed) xminv
+   nbl = mod(verify(stmin, ' ') + w, w + 1) ! loc. of first nonblank
+   nbl = min(nbl, mod(verify(stmax, ' ') + w, w + 1))
+   wid = w - nbl
+   if (SE % lzas > 0) then
+     wid = merge(SE % lzas, wid, xallz)
+     wid = max(wid, merge(SE % lzas, 0, xzero))
+     nbl = w - wid
+   endif
+
+end subroutine getwid_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+  ! ********* INTEGER TOSTRING PROCEDURES *********
+
+  pure function widthmax_int32(x, fmt) result(w)
+    ! Maximum width of string representation of an element in x
+    integer(kind=int32), intent(in)  :: x(:)
+    character(*), intent(in) :: fmt
+    character(range(x)+2) sx(2)
+    integer w, d
+    logical gedit
+    character(nnblk(fmt)+5) :: fmt1
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w<=0) then
+      write(sx, '(SS,I0)') maxval(x), minval(x)
+      w = maxval(len_trim(sx))
+    endif
+  end function widthmax_int32
+
+  pure function len_f_int32(x, fmt) result(wtot)
+    ! Total width of tostring representation of x
+    integer(kind=int32), intent(in)        :: x(:)
+    character(*), intent(in)         :: fmt
+    character(widthmax_int32(x, fmt)) :: sa(size(x))
+    integer                          :: wtot, w, d
+    logical                          :: gedit
+    character(nnblk(fmt)+5)          :: fmt1
+    integer                          :: iostat
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w < 0) then; wtot = len(errormsg); return; endif
+    write(sa, fmt1, iostat=iostat) x
+    if (tosset % trimb == 'YES' .or. w == 0) sa = adjustl(sa)
+    wtot = sum(len_trim(sa)) + (size(x) - 1)*(tosset % seplen)
+  end function len_f_int32
+
+  function tostring_s_int32(x) result(st)
+    ! Scalar to string
+    integer(kind=int32), intent(in)                   :: x
+    character(len_f_int32([x], tosset % ifmt)) :: st
+    st = tostring_f_int32([x], tosset % ifmt)
+  end function tostring_s_int32
+
+  function tostring_sf_int32(x, fmt) result(st)
+    ! Scalar with specified format to string
+    integer(kind=int32),intent(in)        :: x
+    character(*), intent(in)        :: fmt
+    character(len_f_int32([x], fmt)) :: st
+    st = tostring_f_int32([x], fmt)
+  end function tostring_sf_int32
+
+  function tostring_int32(x) result(st)
+    ! Vector to string
+    integer(kind=int32), intent(in)               :: x(:)
+    character(len_f_int32(x, tosset % ifmt)) :: st
+    st = tostring_f_int32(x, tosset % ifmt)
+  end function tostring_int32
+
+  function tostring_f_int32(x, fmt) result(st)
+    ! Vector with specified format to string
+    integer(kind=int32), intent(in)        :: x(:)
+    character(*), intent(in)         :: fmt
+    character(len_f_int32(x, fmt))    :: st
+    character(widthmax_int32(x, fmt)) :: sa(size(x))
+    integer                          :: w, d
+    logical                          :: gedit
+    character(nnblk(fmt)+5)          :: fmt1
+    integer                          :: iostat
+    call readfmt(fmt, fmt1, w, d, gedit)
+    if (w < 0) then; st = errormsg; return; endif
+    write(sa, fmt1,iostat=iostat) x
+    if (tosset % trimb == 'YES' .or. w == 0) sa = adjustl(sa)
+    call tostring_get(sa, st)
+  end function tostring_f_int32
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+  ! ************************************* END OF int32 INTEGER PROCEDURES ******************************************
+
+! **************************************** real32 precision procedures *********************************************
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+  subroutine disp_s_real32(x, fmt, advance, digmax, sep, trim, unit, zeroas)
+    ! real32 precision scalar without title
     character(*), intent(in), optional :: fmt, advance, sep, trim, zeroas
-    real(sngl), intent(in) :: x
+    real(kind=real32), intent(in) :: x
     integer, intent(in), optional :: unit, digmax
-    call disp_ts_sngl('', x, fmt, advance, digmax, sep, 'left', trim, unit, zeroas)
-  end subroutine disp_s_sngl
+    call disp_ts_real32('', x, fmt, advance, digmax, sep, 'left', trim, unit, zeroas)
+  end subroutine disp_s_real32
 
-  subroutine disp_v_sngl(x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
-    ! Single precision vector without title
+  subroutine disp_v_real32(x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
+    ! real32 precision vector without title
     character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
-    real(sngl), intent(in) :: x(:)
+    real(kind=real32), intent(in) :: x(:)
     integer, intent(in), optional :: unit, lbound(:), digmax
-    call disp_tv_sngl('', x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
-  end subroutine disp_v_sngl
+    call disp_tv_real32('', x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
+  end subroutine disp_v_real32
 
-  subroutine disp_m_sngl(x, fmt, advance, lbound, sep, style, trim, unit, digmax, zeroas)
-    ! Single precision matrix without title
+  subroutine disp_m_real32(x, fmt, advance, lbound, sep, style, trim, unit, digmax, zeroas)
+    ! real32 precision matrix without title
     character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
-    real(sngl), intent(in) :: x(:,:)
+    real(kind=real32), intent(in) :: x(:,:)
     integer, intent(in), optional :: unit, digmax, lbound(:)
-    call disp_tm_sngl('', x, fmt, advance, digmax, lbound, sep, style, trim, unit, zeroas)
-  end subroutine disp_m_sngl
+    call disp_tm_real32('', x, fmt, advance, digmax, lbound, sep, style, trim, unit, zeroas)
+  end subroutine disp_m_real32
 
-  subroutine disp_ts_sngl(title, x, fmt, advance, digmax, sep, style, trim, unit, zeroas)
-    ! Single precision scalar with title
+  subroutine disp_ts_real32(title, x, fmt, advance, digmax, sep, style, trim, unit, zeroas)
+    ! real32 precision scalar with title
     character(*), intent(in) :: title
     character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
-    real(sngl), intent(in) :: x
+    real(kind=real32), intent(in) :: x
     integer, intent(in), optional :: unit, digmax
-    call disp_tm_sngl(title, reshape([x], [1, 1]), fmt, advance, digmax, sep=sep, style=style, trim=trim, &
+    call disp_tm_real32(title, reshape([x], [1, 1]), fmt, advance, digmax, sep=sep, style=style, trim=trim, &
          unit=unit, zeroas=zeroas)
-  end subroutine disp_ts_sngl
+  end subroutine disp_ts_real32
 
-  subroutine disp_tv_sngl(title, x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
-    ! Single precision vector with title
+  subroutine disp_tv_real32(title, x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
+    ! real32 precision vector with title
     character(*), intent(in) :: title
     character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
-    real(sngl), intent(in) :: x(:)
+    real(kind=real32), intent(in) :: x(:)
     integer, intent(in), optional :: unit, lbound(:), digmax
     type(settings) :: SE
     call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, zeroas, digmax)
     if (SE % row) then
-      call disp_sngl(title, reshape(x, [1, size(x)]), SE)
+      call disp_real32(title, reshape(x, [1, size(x)]), SE)
     else
-      call disp_sngl(title, reshape(x, [size(x), 1]), SE)
+      call disp_real32(title, reshape(x, [size(x), 1]), SE)
     endif
-  end subroutine disp_tv_sngl
+  end subroutine disp_tv_real32
 
-  subroutine disp_tm_sngl(title, x, fmt, advance, digmax, lbound, sep, style, trim, unit, zeroas)
-    ! Single precision matrix with title
+  subroutine disp_tm_real32(title, x, fmt, advance, digmax, lbound, sep, style, trim, unit, zeroas)
+    ! real32 precision matrix with title
     character(*), intent(in)           :: title      ! The title to use for the matrix
-    real(sngl),   intent(in)           :: x(:,:)     ! The matrix to be written
+    real(kind=real32),   intent(in)           :: x(:,:)     ! The matrix to be written
     character(*), intent(in), optional :: fmt        ! Editdit descriptor to use for each matrix element (e.g. 'F5.2')
     integer,      intent(in), optional :: unit       ! Unit to display on
     integer,      intent(in), optional :: digmax     ! Nbr of significant digits for largest abs value in x
@@ -2487,30 +3394,30 @@ end subroutine getwid_dint
     type(settings) :: SE
     !
     call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, zeroas=zeroas, digmax=digmax)
-    call disp_sngl(title, x, SE)
-  end subroutine disp_tm_sngl
+    call disp_real32(title, x, SE)
+  end subroutine disp_tm_real32
 
-  subroutine disp_sngl(title, x, SE)
-    ! Single precision item
+  subroutine disp_real32(title, x, SE)
+    ! real32 precision item
     character(*),   intent(in)    :: title
-    real(sngl),     intent(in)    :: x(:,:)
+    real(kind=real32),     intent(in)    :: x(:,:)
     type(settings), intent(inout) :: SE
     integer wid(size(x,2)), nbl(size(x,2))
-    call find_editdesc_sngl(x, SE, wid, nbl) ! determine also SE % w
-    call tobox_sngl(title, x, SE, wid, nbl)
-  end subroutine disp_sngl
+    call find_editdesc_real32(x, SE, wid, nbl) ! determine also SE % w
+    call tobox_real32(title, x, SE, wid, nbl)
+  end subroutine disp_real32
 
-  subroutine tobox_sngl(title, x, SE, wid, nbl)
-    ! Write single precision matrix to box
+  subroutine tobox_real32(title, x, SE, wid, nbl)
+    ! Write real32 precision matrix to box
     character(*),   intent(in)    :: title   ! title
-    real(sngl),     intent(in)    :: x(:,:)  ! item
+    real(kind=real32),     intent(in)    :: x(:,:)  ! item
     type(settings), intent(inout) :: SE      ! settings
     integer,        intent(inout) :: wid(:)  ! widths of columns
     integer,        intent(inout) :: nbl(:)  ! number of blanks to trim from left
     character(SE % w)  :: s(size(x,1))
     integer            :: lin1, j, wleft, m, n, widp(size(wid))
     character, pointer :: boxp(:,:)
-    real(sngl)         :: xj(size(x,1)), h
+    real(kind=real32)         :: xj(size(x,1)), h
     integer            :: iostat
     m = size(x,1)
     n = size(x,2)
@@ -2524,15 +3431,15 @@ end subroutine getwid_dint
       if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
     enddo
     call finishbox(title, SE, boxp)
-  end subroutine tobox_sngl
+  end subroutine tobox_real32
 
-  pure function maxw_sngl(x, d) result(w)
+  pure function maxw_real32(x, d) result(w)
     ! Find max field width needed (F0.d editing is specified)
-    real(sngl), intent(in) :: x(:)
+    real(kind=real32), intent(in) :: x(:)
     integer, intent(in) :: d
     integer expmax, expmin, w
     logical xfinite(size(x))
-    real(sngl) xmax, xmin, h
+    real(kind=real32) xmax, xmin, h
     character(12) :: f1, s(2)
     character(len=:),allocatable :: temp(:)
     xmin = 0; xmax = 0; h = huge(h)
@@ -2549,19 +3456,19 @@ end subroutine getwid_dint
       w = max(0, expmax, expmin) + d + 4
     endif
     if (.not. all(xfinite)) w = max(w, 4)
-  end function maxw_sngl
+  end function maxw_real32
 
-  subroutine find_editdesc_sngl(x, SE, wid, nbl)
+  subroutine find_editdesc_real32(x, SE, wid, nbl)
     ! Determine SE % ed, SE % w (unless specified) and wid.
     ! The if-block (*) is for safety: make f wider in case xm is written ok with the
     ! ES format in fmt but overflows with F format (the feature has been tested through
     ! manual changes to the program).
-    real(sngl),     intent(in)    :: x(:,:)         ! Item to be written
+    real(kind=real32),     intent(in)    :: x(:,:)         ! Item to be written
     type(settings), intent(inout) :: SE             ! Settings
     integer,        intent(out)   :: wid(size(x,2)) ! Widths of individual columns
     integer,        intent(out)   :: nbl(size(x,2)) ! Blanks to trim from left of individual columns
     integer :: expmax, expmin, ww, dd, dmx
-    real(sngl) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
+    real(kind=real32) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
     character(14) :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
     character(99) s
     logical xzero(size(x,2)), xallz(size(x,2)), xfinite(size(x,1),size(x,2)), xnonn(size(x,2)), xalln(size(x,2))
@@ -2570,8 +3477,8 @@ end subroutine getwid_dint
     h = huge(h)
     xfinite = x == x .and. x >= -h .and. x <= h ! neither NaN, Inf nor -Inf
     if (SE % w == 0) then  ! Edit descriptor 'F0.d' specified
-      ww = maxw_sngl(reshape(x, [size(x)]), SE % d)
-      if (SE % lzas > 0 .and. any(x == 0._sngl))  ww = max(ww, SE % lzas)
+      ww = maxw_real32(reshape(x, [size(x)]), SE % d)
+      if (SE % lzas > 0 .and. any(x == 0._real32))  ww = max(ww, SE % lzas)
       call replace_w(SE % ed, ww)
       SE % w = ww
     elseif (SE % w < 0) then ! No edit descriptor specified
@@ -2589,7 +3496,7 @@ end subroutine getwid_dint
         write(s,f1) xm; read(s(dmx+4:dmx+8),'(I5)') expmin
         call find_editdesc_real(expmax, expmin, dmx,  SE % ed, ww, dd, xm >= 0)
         if (.not. all(xfinite))                     ww = max(ww, 4)
-        if (SE % lzas > 0 .and. any(x == 0._sngl))  ww = max(ww, SE % lzas)
+        if (SE % lzas > 0 .and. any(x == 0._real32))  ww = max(ww, SE % lzas)
         if (SE % ed(5:5)=='F') then  ! (*)
           write(s, SE % ed) xp; if (s(1:1) == '*') ww = ww + 1
           write(s, SE % ed) xm; if (s(1:1) == '*') ww = ww + 1
@@ -2604,21 +3511,21 @@ end subroutine getwid_dint
     if (SE % trm) then
       xmaxv = maxval(x, 1, mask=xfinite)  ! max in each column
       xminv = minval(x, 1, mask=xfinite)  ! min
-      xzero = any(x == 0._sngl, 1) ! true where column has some zeros
-      xallz = all(x == 0._sngl, 1) ! true where column has only zeros
+      xzero = any(x == 0._real32, 1) ! true where column has some zeros
+      xallz = all(x == 0._real32, 1) ! true where column has only zeros
       xnonn = any(x > h .or. x < -h .or. x /= x, 1)  ! true where column has some nonnormals (inf, -inf, nan)
       xalln = all(x > h .or. x < -h .or. x /= x, 1)  ! true where column has only nonnormals (inf, -inf, nan)
-      call getwid_sngl(xmaxv, xminv, xzero, xallz, xnonn, xalln, SE,  wid, nbl)
+      call getwid_real32(xmaxv, xminv, xzero, xallz, xnonn, xalln, SE,  wid, nbl)
     else
       wid = SE % w
       nbl = 0
     endif
-  end subroutine find_editdesc_sngl
+  end subroutine find_editdesc_real32
 
-  subroutine getwid_sngl(xmaxv, xminv, xzero, xallz, xnonn, xalln, SE,  wid, nbl)
+  subroutine getwid_real32(xmaxv, xminv, xzero, xallz, xnonn, xalln, SE,  wid, nbl)
     ! determine length of the strings that result when writing with edit descriptor SE%ed a
     ! vector v where v(i) is xmaxv(i) or xminv(i) depending on which gives longer output
-    real(sngl),     intent(in)  :: xmaxv(:), xminv(:) ! max and min values in each column
+    real(kind=real32),     intent(in)  :: xmaxv(:), xminv(:) ! max and min values in each column
     logical,        intent(in)  :: xzero(:), xallz(:) ! true for columns with some/all zeros
     logical,        intent(in)  :: xnonn(:), xalln(:) ! true for columns with some/all nonnormals
     type(settings), intent(in)  :: SE                 ! settings
@@ -2645,14 +3552,14 @@ end subroutine getwid_dint
     wid = merge(4, wid, xalln)
     wid = max(wid, merge(4, 0, xnonn))
     nbl = w - wid
-  end subroutine getwid_sngl
+  end subroutine getwid_real32
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-  ! ******** TOSTRING SINGLE PRECISION PROCEDURES ***********
-  pure function widthmax_sngl(x, fmt) result(w)
+  ! ******** TOSTRING real32 PRECISION PROCEDURES ***********
+  pure function widthmax_real32(x, fmt) result(w)
     ! Maximum width of an element of x
-    real(sngl), intent(in)   :: x(:)
+    real(kind=real32), intent(in)   :: x(:)
     character(*), intent(in) :: fmt
     character(nnblk(fmt)+5)  :: fmt1
     integer w, d
@@ -2661,15 +3568,15 @@ end subroutine getwid_dint
     if (w < 0) then ! illegal format, use 1
       w = 1
     elseif (w == 0) then
-      w = maxw_sngl(x, d)
+      w = maxw_real32(x, d)
     endif
-  end function widthmax_sngl
+  end function widthmax_real32
 
-  pure function len_f_sngl(x, fmt) result(wtot)
+  pure function len_f_real32(x, fmt) result(wtot)
     ! Total length of returned string, vector s
-    real(sngl), intent(in)           :: x(:)
+    real(kind=real32), intent(in)           :: x(:)
     character(*), intent(in)         :: fmt
-    character(widthmax_sngl(x, fmt)) :: sa(size(x))
+    character(widthmax_real32(x, fmt)) :: sa(size(x))
     integer                          :: wtot, w, d, ww
     logical                          :: gedit
     character(nnblk(fmt)+8)          :: fmt1  !(5 for readfmt and 3 for replace_w)
@@ -2677,42 +3584,42 @@ end subroutine getwid_dint
     call readfmt(fmt, fmt1, w, d, gedit)
     if (w < 0) then; wtot = len(errormsg); return; endif
     if (w == 0) then
-      ww = maxw_sngl(x, d)
+      ww = maxw_real32(x, d)
       call replace_w(fmt1, ww)
     endif
     write(sa, fmt1,iostat=iostat) x
     call trim_real(sa, gedit, w)
     wtot = sum(len_trim(sa)) + (size(x) - 1)*(tosset % seplen)
-  end function len_f_sngl
+  end function len_f_real32
 
-  function tostring_s_sngl(x) result(st)
+  function tostring_s_real32(x) result(st)
     ! Scalar to string
-    real(sngl), intent(in) :: x
-    character(len_f_sngl([x], tosset % rfmt)) :: st
-    st = tostring_f_sngl([x], tosset % rfmt)
-  end function tostring_s_sngl
+    real(kind=real32), intent(in) :: x
+    character(len_f_real32([x], tosset % rfmt)) :: st
+    st = tostring_f_real32([x], tosset % rfmt)
+  end function tostring_s_real32
 
-  function tostring_sf_sngl(x, fmt) result(st)
+  function tostring_sf_real32(x, fmt) result(st)
     ! Scalar with specified format to string
-    real(sngl),   intent(in) :: x
+    real(kind=real32),   intent(in) :: x
     character(*), intent(in) :: fmt
-    character(len_f_sngl([x], fmt)) :: st
-    st = tostring_f_sngl([x], fmt)
-  end function tostring_sf_sngl
+    character(len_f_real32([x], fmt)) :: st
+    st = tostring_f_real32([x], fmt)
+  end function tostring_sf_real32
 
-  function tostring_sngl(x) result(st)
+  function tostring_real32(x) result(st)
     ! Vector to string
-    real(sngl), intent(in) :: x(:)
-    character(len_f_sngl(x, tosset % rfmt)) :: st
-    st = tostring_f_sngl(x, tosset % rfmt)
-  end function tostring_sngl
+    real(kind=real32), intent(in) :: x(:)
+    character(len_f_real32(x, tosset % rfmt)) :: st
+    st = tostring_f_real32(x, tosset % rfmt)
+  end function tostring_real32
 
-  function tostring_f_sngl(x, fmt) result(st)
+  function tostring_f_real32(x, fmt) result(st)
     ! Vector with specified format to string
-    real(sngl)    ,       intent(in) :: x(:)
+    real(kind=real32)    ,       intent(in) :: x(:)
     character(*),         intent(in) :: fmt
-    character(len_f_sngl(x, fmt))    :: st
-    character(widthmax_sngl(x, fmt)) :: sa(size(x))
+    character(len_f_real32(x, fmt))    :: st
+    character(widthmax_real32(x, fmt)) :: sa(size(x))
     character(nnblk(fmt)+8)          :: fmt1  !(5 for readfmt and 3 for replace_w)
     integer                          :: w, d, ww
     logical                          :: gedit
@@ -2722,58 +3629,58 @@ end subroutine getwid_dint
       st = errormsg
       return
     elseif (w == 0) then
-      ww = maxw_sngl(x, d)
+      ww = maxw_real32(x, d)
       call replace_w(fmt1, ww)
     endif
     write(sa, fmt1,iostat=iostat) x
     call trim_real(sa, gedit, w)
     call tostring_get(sa, st)
-  end function tostring_f_sngl
+  end function tostring_f_real32
 
-  ! *************************************** END OF SINGLE PRECISION PROCEDURES ***************************************
+! *************************************** end of real32 precision procedures ***************************************
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-  ! *************************************** SINGLE PRECISION COMPLEX PROCEDURES **************************************
-  subroutine disp_s_cplx(x, fmt, fmt_imag, advance, digmax, sep, trim, unit)
-    ! single precision complex scalar without title
+! *************************************** real32 PRECISION COMPLEX PROCEDURES **************************************
+  subroutine disp_s_cpl_real32(x, fmt, fmt_imag, advance, digmax, sep, trim, unit)
+    ! real32 precision complex scalar without title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, trim
-    complex(sngl), intent(in) :: x
+    complex(kind=real32), intent(in) :: x
     integer, intent(in), optional :: unit, digmax
-    call disp_ts_cplx('', x, fmt, fmt_imag, advance, digmax, sep, 'left', trim, unit)
-  end subroutine disp_s_cplx
+    call disp_ts_cpl_real32('', x, fmt, fmt_imag, advance, digmax, sep, 'left', trim, unit)
+  end subroutine disp_s_cpl_real32
 
-  subroutine disp_v_cplx(x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
-    ! single precision complex vector without title
+  subroutine disp_v_cpl_real32(x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
+    ! real32 precision complex vector without title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, style, trim, orient
-    complex(sngl), intent(in) :: x(:)
+    complex(kind=real32), intent(in) :: x(:)
     integer, intent(in), optional :: unit, lbound(:), digmax
-    call disp_tv_cplx('', x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
-  end subroutine disp_v_cplx
+    call disp_tv_cpl_real32('', x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
+  end subroutine disp_v_cpl_real32
 
-  subroutine disp_m_cplx(x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
-    ! single precision complex matrix without title
+  subroutine disp_m_cpl_real32(x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
+    ! real32 precision complex matrix without title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, style, trim
-    complex(sngl), intent(in) :: x(:,:)
+    complex(kind=real32), intent(in) :: x(:,:)
     integer, intent(in), optional :: unit, digmax, lbound(:)
-    call disp_tm_cplx('', x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
-  end subroutine disp_m_cplx
+    call disp_tm_cpl_real32('', x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
+  end subroutine disp_m_cpl_real32
 
-  subroutine disp_ts_cplx(title, x, fmt, fmt_imag, advance, digmax, sep, style, trim, unit)
-    ! single precision complex scalar with title
+  subroutine disp_ts_cpl_real32(title, x, fmt, fmt_imag, advance, digmax, sep, style, trim, unit)
+    ! real32 precision complex scalar with title
     character(*), intent(in) :: title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, style, trim
-    complex(sngl), intent(in) :: x
+    complex(kind=real32), intent(in) :: x
     integer, intent(in), optional :: unit, digmax
-    call disp_tm_cplx(title, reshape([x], [1, 1]), fmt, fmt_imag, advance, digmax, sep=sep, style=style, &
+    call disp_tm_cpl_real32(title, reshape([x], [1, 1]), fmt, fmt_imag, advance, digmax, sep=sep, style=style, &
                                                        trim=trim, unit=unit)
-  end subroutine disp_ts_cplx
+  end subroutine disp_ts_cpl_real32
 
-  subroutine disp_tv_cplx(title, x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
-    ! single precision complex vector with title
+  subroutine disp_tv_cpl_real32(title, x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
+    ! real32 precision complex vector with title
     character(*), intent(in) :: title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, style, trim, orient
-    complex(sngl), intent(in) :: x(:)
+    complex(kind=real32), intent(in) :: x(:)
     integer, intent(in), optional :: unit, lbound(:), digmax
     type(settings) SE, SEim
     call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, digmax=digmax)
@@ -2786,16 +3693,16 @@ end subroutine getwid_dint
       SEim = SE
     endif
     if (SE % row) then
-      call disp_cplx(title, reshape(x, [1, size(x)]), SE, SEim, n = size(x))
+      call disp_cpl_real32(title, reshape(x, [1, size(x)]), SE, SEim, n = size(x))
     else
-      call disp_cplx(title, reshape(x, [size(x), 1]), SE, SEim, n = 1)
+      call disp_cpl_real32(title, reshape(x, [size(x), 1]), SE, SEim, n = 1)
     endif
-  end subroutine disp_tv_cplx
+  end subroutine disp_tv_cpl_real32
 
-  subroutine disp_tm_cplx(title, x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
-    ! single precision complex matrix with title
+  subroutine disp_tm_cpl_real32(title, x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
+    ! real32 precision complex matrix with title
     character(*), intent(in)           :: title      ! The title to use for the matrix
-    complex(sngl),  intent(in)         :: x(:,:)     ! The matrix to be written
+    complex(kind=real32),  intent(in)         :: x(:,:)     ! The matrix to be written
     character(*), intent(in), optional :: fmt        ! Edit descriptor for each element (real element when fmt_imag &
     !                                                ! is present)
     character(*), intent(in), optional :: fmt_imag   ! Edit descriptor for each imaginary element
@@ -2819,25 +3726,25 @@ end subroutine getwid_dint
     else
       SEim = SE
     endif
-    call disp_cplx(title, x, SE, SEim, n = size(x,2))
-  end subroutine disp_tm_cplx
+    call disp_cpl_real32(title, x, SE, SEim, n = size(x,2))
+  end subroutine disp_tm_cpl_real32
 
-  subroutine disp_cplx(title, x, SE, SEim, n)
-    ! Single precision item
+  subroutine disp_cpl_real32(title, x, SE, SEim, n)
+    ! real32 precision item
     character(*),   intent(in)    :: title
-    complex(sngl),  intent(in)    :: x(:,:)
+    complex(kind=real32),  intent(in)    :: x(:,:)
     type(settings), intent(inout) :: SE, SEim
     integer,        intent(in)    :: n
     integer, dimension(n) :: widre(n), widim(n), nblre(n), nblim(n)
-    call find_editdesc_sngl(real(x), SE, widre, nblre)         ! determine also SE % w
-    call find_editdesc_sngl(abs(aimag(x)), SEim, widim, nblim) ! determine also SEim % w
-    call tobox_cplx(title, x, SE, SEim, widre, widim, nblre, nblim, m = size(x,1), n = size(x,2))
-  end subroutine disp_cplx
+    call find_editdesc_real32(real(x), SE, widre, nblre)         ! determine also SE % w
+    call find_editdesc_real32(abs(aimag(x)), SEim, widim, nblim) ! determine also SEim % w
+    call tobox_cpl_real32(title, x, SE, SEim, widre, widim, nblre, nblim, m = size(x,1), n = size(x,2))
+  end subroutine disp_cpl_real32
 
-  subroutine tobox_cplx(title, x, SE, SEim, widre, widim, nblre, nblim, m, n)
-    ! Write single precision complex matrix to box
+  subroutine tobox_cpl_real32(title, x, SE, SEim, widre, widim, nblre, nblim, m, n)
+    ! Write real32 precision complex matrix to box
     character(*),   intent(in)    :: title
-    complex(sngl),  intent(in)    :: x(:,:)
+    complex(kind=real32),  intent(in)    :: x(:,:)
     integer,        intent(in)    :: m, n, widre(:), widim(:), nblre(:), nblim(:)
     type(settings), intent(inout) :: SE, SEim
     character(SE % w)   :: s(m)
@@ -2862,66 +3769,66 @@ end subroutine getwid_dint
       if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
     enddo
     call finishbox(title, SE, boxp)
-  end subroutine tobox_cplx
+  end subroutine tobox_cpl_real32
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 
-  ! ******* TOSTRING SINGLE PRECISION COMPLEX PROCEDURES ********
+  ! ******* TOSTRING real32 PRECISION COMPLEX PROCEDURES ********
 
-  pure function len_s_cplx(x, fmt) result(wtot)
-    complex(sngl), intent(in) :: x
+  pure function len_s_cpl_real32(x, fmt) result(wtot)
+    complex(kind=real32), intent(in) :: x
     character(*), intent(in)  :: fmt
     integer                   :: wtot, w, d
     logical                   :: gedit
     character(nnblk(fmt)+8)   :: fmt1
     call readfmt(fmt, fmt1, w, d, gedit)
     if (w < 0) then; wtot = len(errormsg); return; endif
-    wtot = len_f_sngl([real(x)], fmt) + len_f_sngl([abs(aimag(x))], fmt) + 4
-  end function len_s_cplx
+    wtot = len_f_real32([real(x)], fmt) + len_f_real32([abs(aimag(x))], fmt) + 4
+  end function len_s_cpl_real32
 
-  pure function len_f_cplx(x, fmt) result(wtot)
-    complex(sngl), intent(in) :: x(:)
+  pure function len_f_cpl_real32(x, fmt) result(wtot)
+    complex(kind=real32), intent(in) :: x(:)
     character(*), intent(in)  :: fmt
     integer                   :: wtot, w, d
     logical                   :: gedit
     character(nnblk(fmt)+8)   :: fmt1
     call readfmt(fmt, fmt1, w, d, gedit)
     if (w < 0) then; wtot = len(errormsg); return; endif
-    wtot = len_f_sngl(real(x), fmt) + len_f_sngl(abs(aimag(x)), fmt) + size(x)*4 - (size(x) - 1)*(tosset % seplen)
-    ! subtract seplen because it has been added twice in len_f_sngl
-  end function len_f_cplx
+    wtot = len_f_real32(real(x), fmt) + len_f_real32(abs(aimag(x)), fmt) + size(x)*4 - (size(x) - 1)*(tosset % seplen)
+    ! subtract seplen because it has been added twice in len_f_real32
+  end function len_f_cpl_real32
 
-  function tostring_s_cplx(x) result(st)
-    complex(sngl), intent(in)                   :: x
-    character(len_s_cplx(x, tosset % rfmt)) :: st
-    st = tostring_f_cplx([x], tosset % rfmt)
-  end function tostring_s_cplx
+  function tostring_s_cpl_real32(x) result(st)
+    complex(kind=real32), intent(in)                   :: x
+    character(len_s_cpl_real32(x, tosset % rfmt)) :: st
+    st = tostring_f_cpl_real32([x], tosset % rfmt)
+  end function tostring_s_cpl_real32
 
-  function tostring_sf_cplx(x, fmt) result(st)
-    complex(sngl),  intent(in)        :: x
+  function tostring_sf_cpl_real32(x, fmt) result(st)
+    complex(kind=real32),  intent(in)        :: x
     character(*), intent(in)          :: fmt
-    character(len_s_cplx(x, fmt)) :: st
-    st = tostring_f_cplx([x], fmt)
-  end function tostring_sf_cplx
+    character(len_s_cpl_real32(x, fmt)) :: st
+    st = tostring_f_cpl_real32([x], fmt)
+  end function tostring_sf_cpl_real32
 
-  function tostring_cplx(x) result(st)
-    complex(sngl), intent(in)               :: x(:)
-    character(len_f_cplx(x, tosset % rfmt)) :: st
-    st = tostring_f_cplx(x, tosset % rfmt)
-  end function tostring_cplx
+  function tostring_cpl_real32(x) result(st)
+    complex(kind=real32), intent(in)               :: x(:)
+    character(len_f_cpl_real32(x, tosset % rfmt)) :: st
+    st = tostring_f_cpl_real32(x, tosset % rfmt)
+  end function tostring_cpl_real32
 
-  function tostring_f_cplx(x, fmt) result(st)
-    complex(sngl),  intent(in)                    :: x(:)
+  function tostring_f_cpl_real32(x, fmt) result(st)
+    complex(kind=real32),  intent(in)                    :: x(:)
     character(*),   intent(in)                    :: fmt
-    character(len_f_cplx(x, fmt))                 :: st
-    character(widthmax_sngl(real(x), fmt))        :: sar(size(x))
-    character(widthmax_sngl(abs(x-real(x)), fmt)) :: sai(size(x))  ! x-real(x) instead of aimag(x) to enable the function
+    character(len_f_cpl_real32(x, fmt))                 :: st
+    character(widthmax_real32(real(x), fmt))        :: sar(size(x))
+    character(widthmax_real32(abs(x-real(x)), fmt)) :: sai(size(x))  ! x-real(x) instead of aimag(x) to enable the function
     character(1)                                  :: sgn(size(x))  ! to pass -stand:f95 switch of the ifort compiler.
     integer                                       :: w, d, wr, wi, i
     logical                                       :: gedit
     character(nnblk(fmt)+8)                       :: fmt1  !(5 for readfmt and 3 for replace_w)
-    real(sngl)                                    :: xre(size(x)), xim(size(x)), h
+    real(kind=real32)                                    :: xre(size(x)), xim(size(x)), h
     call readfmt(fmt, fmt1, w, d, gedit)
     xre = real(x)
     xim = aimag(x)
@@ -2930,8 +3837,8 @@ end subroutine getwid_dint
       st = errormsg
       return
     elseif (w == 0) then
-      wr = maxw_sngl(xre, d)
-      wi = maxw_sngl(xim, d)
+      wr = maxw_real32(xre, d)
+      wi = maxw_real32(xim, d)
       call replace_w(fmt1, max(wr, wi))
     endif
     write(sar, fmt1) real(x)
@@ -2940,66 +3847,66 @@ end subroutine getwid_dint
     call trim_real(sai, gedit, w)
     do i = 1,size(x); if (aimag(x(i)) < 0) then; sgn(i) = '-'; else; sgn(i) = '+'; endif; enddo
     call tostring_get_complex(sar, sgn, sai, st)
-  end function tostring_f_cplx
-  ! *************************************** END OF SINGLE PRECISION COMPLEX PROCEDURES ********************************
+  end function tostring_f_cpl_real32
+! *************************************** END OF real32 PRECISION COMPLEX PROCEDURES ********************************
+
+! **************************************** real64 precision procedures *********************************************
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-
-  ! ************************************* DOUBLE PRECISION PROCEDURES (SEE NOTE 2 BELOW) ******************************
-  subroutine disp_s_dble(x, fmt, advance, digmax, sep, trim, unit, zeroas)
-    ! Double precision scalar without title
+  subroutine disp_s_real64(x, fmt, advance, digmax, sep, trim, unit, zeroas)
+    ! real64 precision scalar without title
     character(*), intent(in), optional :: fmt, advance, sep, trim, zeroas
-    real(dble), intent(in) :: x
+    real(kind=real64), intent(in) :: x
     integer, intent(in), optional :: unit, digmax
-    call disp_ts_dble('', x, fmt, advance, digmax, sep, 'left', trim, unit, zeroas)
-  end subroutine disp_s_dble
+    call disp_ts_real64('', x, fmt, advance, digmax, sep, 'left', trim, unit, zeroas)
+  end subroutine disp_s_real64
 
-  subroutine disp_v_dble(x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
-    ! Double precision vector without title
+  subroutine disp_v_real64(x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
+    ! real64 precision vector without title
     character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
-    real(dble), intent(in) :: x(:)
+    real(kind=real64), intent(in) :: x(:)
     integer, intent(in), optional :: unit, lbound(:), digmax
-    call disp_tv_dble('', x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
-  end subroutine disp_v_dble
+    call disp_tv_real64('', x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
+  end subroutine disp_v_real64
 
-  subroutine disp_m_dble(x, fmt, advance, lbound, sep, style, trim, unit, digmax, zeroas)
-    ! Double precision matrix without title
+  subroutine disp_m_real64(x, fmt, advance, lbound, sep, style, trim, unit, digmax, zeroas)
+    ! real64 precision matrix without title
     character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
-    real(dble), intent(in) :: x(:,:)
+    real(kind=real64), intent(in) :: x(:,:)
     integer, intent(in), optional :: unit, digmax, lbound(:)
-    call disp_tm_dble('', x, fmt, advance, digmax, lbound, sep, style, trim, unit, zeroas)
-  end subroutine disp_m_dble
+    call disp_tm_real64('', x, fmt, advance, digmax, lbound, sep, style, trim, unit, zeroas)
+  end subroutine disp_m_real64
 
-  subroutine disp_ts_dble(title, x, fmt, advance, digmax, sep, style, trim, unit, zeroas)
-    ! Double precision scalar with title
+  subroutine disp_ts_real64(title, x, fmt, advance, digmax, sep, style, trim, unit, zeroas)
+    ! real64 precision scalar with title
     character(*), intent(in) :: title
     character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas
-    real(dble), intent(in) :: x
+    real(kind=real64), intent(in) :: x
     integer, intent(in), optional :: unit, digmax
-    call disp_tm_dble(title, reshape([x], [1, 1]), fmt, advance, digmax, sep=sep, style=style, trim=trim, &
+    call disp_tm_real64(title, reshape([x], [1, 1]), fmt, advance, digmax, sep=sep, style=style, trim=trim, &
          unit=unit, zeroas=zeroas)
-  end subroutine disp_ts_dble
+  end subroutine disp_ts_real64
 
-  subroutine disp_tv_dble(title, x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
-    ! Double precision vector with title
+  subroutine disp_tv_real64(title, x, fmt, advance, digmax, lbound, sep, style, trim, unit, orient, zeroas)
+    ! real64 precision vector with title
     character(*), intent(in) :: title
     character(*), intent(in), optional :: fmt, advance, sep, style, trim, zeroas, orient
-    real(dble), intent(in) :: x(:)
+    real(kind=real64), intent(in) :: x(:)
     integer, intent(in), optional :: unit, lbound(:), digmax
     type(settings) :: SE
     call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, zeroas, digmax)
     if (SE % row) then
-      call disp_dble(title, reshape(x, [1, size(x)]), SE)
+      call disp_real64(title, reshape(x, [1, size(x)]), SE)
     else
-      call disp_dble(title, reshape(x, [size(x), 1]), SE)
+      call disp_real64(title, reshape(x, [size(x), 1]), SE)
     endif
-  end subroutine disp_tv_dble
+  end subroutine disp_tv_real64
 
-  subroutine disp_tm_dble(title, x, fmt, advance, digmax, lbound, sep, style, trim, unit, zeroas)
-    ! Double precision matrix with title
+  subroutine disp_tm_real64(title, x, fmt, advance, digmax, lbound, sep, style, trim, unit, zeroas)
+    ! real64 precision matrix with title
     character(*), intent(in)           :: title      ! The title to use for the matrix
-    real(dble),   intent(in)           :: x(:,:)     ! The matrix to be written
+    real(kind=real64),   intent(in)           :: x(:,:)     ! The matrix to be written
     character(*), intent(in), optional :: fmt        ! Editdit descriptor to use for each matrix element (e.g. 'F5.2')
     integer,      intent(in), optional :: unit       ! Unit to display on
     integer,      intent(in), optional :: digmax     ! Nbr of significant digits for largest abs value in x
@@ -3013,51 +3920,52 @@ end subroutine getwid_dint
     type(settings) :: SE
     !
     call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, zeroas=zeroas, digmax=digmax)
-    call disp_dble(title, x, SE)
-  end subroutine disp_tm_dble
+    call disp_real64(title, x, SE)
+  end subroutine disp_tm_real64
 
-  subroutine disp_dble(title, x, SE)
-    ! Double precision item
+  subroutine disp_real64(title, x, SE)
+    ! real64 precision item
     character(*),   intent(in)    :: title
-    real(dble),     intent(in)    :: x(:,:)
+    real(kind=real64),     intent(in)    :: x(:,:)
     type(settings), intent(inout) :: SE
     integer wid(size(x,2)), nbl(size(x,2))
-    call find_editdesc_dble(x, SE, wid, nbl) ! determine also SE % w
-    call tobox_dble(title, x, SE, wid, nbl)
-  end subroutine disp_dble
+    call find_editdesc_real64(x, SE, wid, nbl) ! determine also SE % w
+    call tobox_real64(title, x, SE, wid, nbl)
+  end subroutine disp_real64
 
-  subroutine tobox_dble(title, x, SE, wid, nbl)
-    ! Write double precision matrix to box
+  subroutine tobox_real64(title, x, SE, wid, nbl)
+    ! Write real64 precision matrix to box
     character(*),   intent(in)    :: title   ! title
-    real(dble),     intent(in)    :: x(:,:)  ! item
+    real(kind=real64),     intent(in)    :: x(:,:)  ! item
     type(settings), intent(inout) :: SE      ! settings
     integer,        intent(inout) :: wid(:)  ! widths of columns
     integer,        intent(inout) :: nbl(:)  ! number of blanks to trim from left
     character(SE % w)  :: s(size(x,1))
     integer            :: lin1, j, wleft, m, n, widp(size(wid))
     character, pointer :: boxp(:,:)
-    real(dble)         :: xj(size(x,1)), h
+    real(kind=real64)         :: xj(size(x,1)), h
+    integer            :: iostat
     m = size(x,1)
     n = size(x,2)
     h = huge(x)
     call preparebox(title, SE, m, n, wid, widp, lin1, wleft, boxp)
     do j=1,n
       xj = x(:, j)
-      if (m > 0) write(s, SE % ed) xj
+      if (m > 0) write(s, SE % ed,iostat=iostat) xj
       call replace_zeronaninf(s, SE % zas(1:SE % lzas), xj == 0, xj /= xj, xj < -h, xj > h)
       call copytobox(s, lin1, wid(j), widp(j), nbl(j), boxp,  wleft)
       if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
     enddo
     call finishbox(title, SE, boxp)
-  end subroutine tobox_dble
+  end subroutine tobox_real64
 
-  pure function maxw_dble(x, d) result(w)
+  pure function maxw_real64(x, d) result(w)
     ! Find max field width needed (F0.d editing is specified)
-    real(dble), intent(in) :: x(:)
+    real(kind=real64), intent(in) :: x(:)
     integer, intent(in) :: d
     integer expmax, expmin, w
     logical xfinite(size(x))
-    real(dble) xmax, xmin, h
+    real(kind=real64) xmax, xmin, h
     character(12) :: f1, s(2)
     character(len=:),allocatable :: temp(:)
     xmin = 0; xmax = 0; h = huge(h)
@@ -3074,19 +3982,19 @@ end subroutine getwid_dint
       w = max(0, expmax, expmin) + d + 4
     endif
     if (.not. all(xfinite)) w = max(w, 4)
-  end function maxw_dble
+  end function maxw_real64
 
-  subroutine find_editdesc_dble(x, SE, wid, nbl)
+  subroutine find_editdesc_real64(x, SE, wid, nbl)
     ! Determine SE % ed, SE % w (unless specified) and wid.
     ! The if-block (*) is for safety: make f wider in case xm is written ok with the
     ! ES format in fmt but overflows with F format (the feature has been tested through
     ! manual changes to the program).
-    real(dble),     intent(in)    :: x(:,:)         ! Item to be written
+    real(kind=real64),     intent(in)    :: x(:,:)         ! Item to be written
     type(settings), intent(inout) :: SE             ! Settings
     integer,        intent(out)   :: wid(size(x,2)) ! Widths of individual columns
     integer,        intent(out)   :: nbl(size(x,2)) ! Blanks to trim from left of individual columns
     integer :: expmax, expmin, ww, dd, dmx
-    real(dble) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
+    real(kind=real64) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
     character(14) :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
     character(99) s
     logical xzero(size(x,2)), xallz(size(x,2)), xfinite(size(x,1),size(x,2)), xnonn(size(x,2)), xalln(size(x,2))
@@ -3095,8 +4003,8 @@ end subroutine getwid_dint
     h = huge(h)
     xfinite = x == x .and. x >= -h .and. x <= h ! neither NaN, Inf nor -Inf
     if (SE % w == 0) then  ! Edit descriptor 'F0.d' specified
-      ww = maxw_dble(reshape(x, [size(x)]), SE % d)
-      if (SE % lzas > 0 .and. any(x == 0._dble))  ww = max(ww, SE % lzas)
+      ww = maxw_real64(reshape(x, [size(x)]), SE % d)
+      if (SE % lzas > 0 .and. any(x == 0._real64))  ww = max(ww, SE % lzas)
       call replace_w(SE % ed, ww)
       SE % w = ww
     elseif (SE % w < 0) then ! No edit descriptor specified
@@ -3114,7 +4022,7 @@ end subroutine getwid_dint
         write(s,f1) xm; read(s(dmx+4:dmx+8),'(I5)') expmin
         call find_editdesc_real(expmax, expmin, dmx,  SE % ed, ww, dd, xm >= 0)
         if (.not. all(xfinite))                     ww = max(ww, 4)
-        if (SE % lzas > 0 .and. any(x == 0._dble))  ww = max(ww, SE % lzas)
+        if (SE % lzas > 0 .and. any(x == 0._real64))  ww = max(ww, SE % lzas)
         if (SE % ed(5:5)=='F') then  ! (*)
           write(s, SE % ed) xp; if (s(1:1) == '*') ww = ww + 1
           write(s, SE % ed) xm; if (s(1:1) == '*') ww = ww + 1
@@ -3129,28 +4037,29 @@ end subroutine getwid_dint
     if (SE % trm) then
       xmaxv = maxval(x, 1, mask=xfinite)  ! max in each column
       xminv = minval(x, 1, mask=xfinite)  ! min
-      xzero = any(x == 0._dble, 1) ! true where column has some zeros
-      xallz = all(x == 0._dble, 1) ! true where column has only zeros
+      xzero = any(x == 0._real64, 1) ! true where column has some zeros
+      xallz = all(x == 0._real64, 1) ! true where column has only zeros
       xnonn = any(x > h .or. x < -h .or. x /= x, 1)  ! true where column has some nonnormals (inf, -inf, nan)
       xalln = all(x > h .or. x < -h .or. x /= x, 1)  ! true where column has only nonnormals (inf, -inf, nan)
-      call getwid_dble(xmaxv, xminv, xzero, xallz, xnonn, xalln, SE,  wid, nbl)
+      call getwid_real64(xmaxv, xminv, xzero, xallz, xnonn, xalln, SE,  wid, nbl)
     else
       wid = SE % w
       nbl = 0
     endif
-  end subroutine find_editdesc_dble
+  end subroutine find_editdesc_real64
 
-  subroutine getwid_dble(xmaxv, xminv, xzero, xallz, xnonn, xalln, SE,  wid, nbl)
+  subroutine getwid_real64(xmaxv, xminv, xzero, xallz, xnonn, xalln, SE,  wid, nbl)
     ! determine length of the strings that result when writing with edit descriptor SE%ed a
     ! vector v where v(i) is xmaxv(i) or xminv(i) depending on which gives longer output
-    real(dble),     intent(in)  :: xmaxv(:), xminv(:) ! max and min values in each column
+    real(kind=real64),     intent(in)  :: xmaxv(:), xminv(:) ! max and min values in each column
     logical,        intent(in)  :: xzero(:), xallz(:) ! true for columns with some/all zeros
     logical,        intent(in)  :: xnonn(:), xalln(:) ! true for columns with some/all nonnormals
     type(settings), intent(in)  :: SE                 ! settings
     integer,        intent(out) :: wid(:)             ! widths of columns
     integer,        intent(out) :: nbl(:)             ! number of blanks to peel from left (w-wid)
     character(SE % w) :: stmax(size(xmaxv)), stmin(size(xminv))
-    integer w, iostat
+    integer           :: w
+    integer           :: iostat
     w = SE % w
     write(stmin, SE % ed,iostat=iostat) xminv
     write(stmax, SE % ed,iostat=iostat) xmaxv
@@ -3169,16 +4078,14 @@ end subroutine getwid_dint
     wid = merge(4, wid, xalln)
     wid = max(wid, merge(4, 0, xnonn))
     nbl = w - wid
-  end subroutine getwid_dble
+  end subroutine getwid_real64
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-
-  ! ******** TOSTRING DOUBLE PRECISION PROCEDURES ***********
-
-  pure function widthmax_dble(x, fmt) result(w)
+  ! ******** TOSTRING real64 PRECISION PROCEDURES ***********
+  pure function widthmax_real64(x, fmt) result(w)
     ! Maximum width of an element of x
-    real(dble), intent(in)   :: x(:)
+    real(kind=real64), intent(in)   :: x(:)
     character(*), intent(in) :: fmt
     character(nnblk(fmt)+5)  :: fmt1
     integer w, d
@@ -3187,118 +4094,119 @@ end subroutine getwid_dint
     if (w < 0) then ! illegal format, use 1
       w = 1
     elseif (w == 0) then
-      w = maxw_dble(x, d)
+      w = maxw_real64(x, d)
     endif
-  end function widthmax_dble
+  end function widthmax_real64
 
-  pure function len_f_dble(x, fmt) result(wtot)
+  pure function len_f_real64(x, fmt) result(wtot)
     ! Total length of returned string, vector s
-    real(dble), intent(in)           :: x(:)
+    real(kind=real64), intent(in)           :: x(:)
     character(*), intent(in)         :: fmt
-    character(widthmax_dble(x, fmt)) :: sa(size(x))
+    character(widthmax_real64(x, fmt)) :: sa(size(x))
     integer                          :: wtot, w, d, ww
     logical                          :: gedit
     character(nnblk(fmt)+8)          :: fmt1  !(5 for readfmt and 3 for replace_w)
+    integer                          :: iostat
     call readfmt(fmt, fmt1, w, d, gedit)
     if (w < 0) then; wtot = len(errormsg); return; endif
     if (w == 0) then
-      ww = maxw_dble(x, d)
+      ww = maxw_real64(x, d)
       call replace_w(fmt1, ww)
     endif
-    write(sa, fmt1) x
+    write(sa, fmt1,iostat=iostat) x
     call trim_real(sa, gedit, w)
     wtot = sum(len_trim(sa)) + (size(x) - 1)*(tosset % seplen)
-  end function len_f_dble
+  end function len_f_real64
 
-  function tostring_s_dble(x) result(st)
+  function tostring_s_real64(x) result(st)
     ! Scalar to string
-    real(dble), intent(in) :: x
-    character(len_f_dble([x], tosset % rfmt)) :: st
-    st = tostring_f_dble([x], tosset % rfmt)
-  end function tostring_s_dble
+    real(kind=real64), intent(in) :: x
+    character(len_f_real64([x], tosset % rfmt)) :: st
+    st = tostring_f_real64([x], tosset % rfmt)
+  end function tostring_s_real64
 
-  function tostring_sf_dble(x, fmt) result(st)
+  function tostring_sf_real64(x, fmt) result(st)
     ! Scalar with specified format to string
-    real(dble),   intent(in) :: x
+    real(kind=real64),   intent(in) :: x
     character(*), intent(in) :: fmt
-    character(len_f_dble([x], fmt)) :: st
-    st = tostring_f_dble([x], fmt)
-  end function tostring_sf_dble
+    character(len_f_real64([x], fmt)) :: st
+    st = tostring_f_real64([x], fmt)
+  end function tostring_sf_real64
 
-  function tostring_dble(x) result(st)
+  function tostring_real64(x) result(st)
     ! Vector to string
-    real(dble), intent(in) :: x(:)
-    character(len_f_dble(x, tosset % rfmt)) :: st
-    st = tostring_f_dble(x, tosset % rfmt)
-  end function tostring_dble
+    real(kind=real64), intent(in) :: x(:)
+    character(len_f_real64(x, tosset % rfmt)) :: st
+    st = tostring_f_real64(x, tosset % rfmt)
+  end function tostring_real64
 
-  function tostring_f_dble(x, fmt) result(st)
+  function tostring_f_real64(x, fmt) result(st)
     ! Vector with specified format to string
-    real(dble)    ,       intent(in) :: x(:)
+    real(kind=real64)    ,       intent(in) :: x(:)
     character(*),         intent(in) :: fmt
-    character(len_f_dble(x, fmt))    :: st
-    character(widthmax_dble(x, fmt)) :: sa(size(x))
+    character(len_f_real64(x, fmt))    :: st
+    character(widthmax_real64(x, fmt)) :: sa(size(x))
     character(nnblk(fmt)+8)          :: fmt1  !(5 for readfmt and 3 for replace_w)
     integer                          :: w, d, ww
     logical                          :: gedit
+    integer                          :: iostat
     call readfmt(fmt, fmt1, w, d, gedit)
     if (w < 0) then
       st = errormsg
       return
     elseif (w == 0) then
-      ww = maxw_dble(x, d)
+      ww = maxw_real64(x, d)
       call replace_w(fmt1, ww)
     endif
-    write(sa, fmt1) x
+    write(sa, fmt1,iostat=iostat) x
     call trim_real(sa, gedit, w)
     call tostring_get(sa, st)
-  end function tostring_f_dble
+  end function tostring_f_real64
 
-  ! *************************************** END OF DOUBLE PRECISION PROCEDURES ***************************************
+! *************************************** end of real64 precision procedures ***************************************
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-
-  ! *************************************** DOUBLE PRECISION COMPLEX PROCEDURES **************************************
-  subroutine disp_s_cpld(x, fmt, fmt_imag, advance, digmax, sep, trim, unit)
-    ! double precision complex scalar without title
+! *************************************** real64 PRECISION COMPLEX PROCEDURES **************************************
+  subroutine disp_s_cpl_real64(x, fmt, fmt_imag, advance, digmax, sep, trim, unit)
+    ! real64 precision complex scalar without title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, trim
-    complex(dble), intent(in) :: x
+    complex(kind=real64), intent(in) :: x
     integer, intent(in), optional :: unit, digmax
-    call disp_ts_cpld('', x, fmt, fmt_imag, advance, digmax, sep, 'left', trim, unit)
-  end subroutine disp_s_cpld
+    call disp_ts_cpl_real64('', x, fmt, fmt_imag, advance, digmax, sep, 'left', trim, unit)
+  end subroutine disp_s_cpl_real64
 
-  subroutine disp_v_cpld(x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
-    ! double precision complex vector without title
+  subroutine disp_v_cpl_real64(x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
+    ! real64 precision complex vector without title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, style, trim, orient
-    complex(dble), intent(in) :: x(:)
+    complex(kind=real64), intent(in) :: x(:)
     integer, intent(in), optional :: unit, lbound(:), digmax
-    call disp_tv_cpld('', x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
-  end subroutine disp_v_cpld
+    call disp_tv_cpl_real64('', x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
+  end subroutine disp_v_cpl_real64
 
-  subroutine disp_m_cpld(x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
-    ! double precision complex matrix without title
+  subroutine disp_m_cpl_real64(x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
+    ! real64 precision complex matrix without title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, style, trim
-    complex(dble), intent(in) :: x(:,:)
+    complex(kind=real64), intent(in) :: x(:,:)
     integer, intent(in), optional :: unit, digmax, lbound(:)
-    call disp_tm_cpld('', x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
-  end subroutine disp_m_cpld
+    call disp_tm_cpl_real64('', x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
+  end subroutine disp_m_cpl_real64
 
-  subroutine disp_ts_cpld(title, x, fmt, fmt_imag, advance, digmax, sep, style, trim, unit)
-    ! double precision complex scalar with title
+  subroutine disp_ts_cpl_real64(title, x, fmt, fmt_imag, advance, digmax, sep, style, trim, unit)
+    ! real64 precision complex scalar with title
     character(*), intent(in) :: title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, style, trim
-    complex(dble), intent(in) :: x
+    complex(kind=real64), intent(in) :: x
     integer, intent(in), optional :: unit, digmax
-    call disp_tm_cpld(title, reshape([x], [1, 1]), fmt, fmt_imag, advance, digmax, sep=sep, style=style, &
+    call disp_tm_cpl_real64(title, reshape([x], [1, 1]), fmt, fmt_imag, advance, digmax, sep=sep, style=style, &
                                                        trim=trim, unit=unit)
-  end subroutine disp_ts_cpld
+  end subroutine disp_ts_cpl_real64
 
-  subroutine disp_tv_cpld(title, x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
-    ! double precision complex vector with title
+  subroutine disp_tv_cpl_real64(title, x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit, orient)
+    ! real64 precision complex vector with title
     character(*), intent(in) :: title
     character(*), intent(in), optional :: fmt, fmt_imag, advance, sep, style, trim, orient
-    complex(dble), intent(in) :: x(:)
+    complex(kind=real64), intent(in) :: x(:)
     integer, intent(in), optional :: unit, lbound(:), digmax
     type(settings) SE, SEim
     call get_SE(SE, title, shape(x), fmt, advance, lbound, sep, style, trim, unit, orient, digmax=digmax)
@@ -3311,16 +4219,16 @@ end subroutine getwid_dint
       SEim = SE
     endif
     if (SE % row) then
-      call disp_cpld(title, reshape(x, [1, size(x)]), SE, SEim, n = size(x))
+      call disp_cpl_real64(title, reshape(x, [1, size(x)]), SE, SEim, n = size(x))
     else
-      call disp_cpld(title, reshape(x, [size(x), 1]), SE, SEim, n = 1)
+      call disp_cpl_real64(title, reshape(x, [size(x), 1]), SE, SEim, n = 1)
     endif
-  end subroutine disp_tv_cpld
+  end subroutine disp_tv_cpl_real64
 
-  subroutine disp_tm_cpld(title, x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
-    ! double precision complex matrix with title
+  subroutine disp_tm_cpl_real64(title, x, fmt, fmt_imag, advance, digmax, lbound, sep, style, trim, unit)
+    ! real64 precision complex matrix with title
     character(*), intent(in)           :: title      ! The title to use for the matrix
-    complex(dble),  intent(in)         :: x(:,:)     ! The matrix to be written
+    complex(kind=real64),  intent(in)         :: x(:,:)     ! The matrix to be written
     character(*), intent(in), optional :: fmt        ! Edit descriptor for each element (real element when fmt_imag &
     !                                                ! is present)
     character(*), intent(in), optional :: fmt_imag   ! Edit descriptor for each imaginary element
@@ -3344,25 +4252,25 @@ end subroutine getwid_dint
     else
       SEim = SE
     endif
-    call disp_cpld(title, x, SE, SEim, n = size(x,2))
-  end subroutine disp_tm_cpld
+    call disp_cpl_real64(title, x, SE, SEim, n = size(x,2))
+  end subroutine disp_tm_cpl_real64
 
-  subroutine disp_cpld(title, x, SE, SEim, n)
-    ! Double precision item
+  subroutine disp_cpl_real64(title, x, SE, SEim, n)
+    ! real64 precision item
     character(*),   intent(in)    :: title
-    complex(dble),  intent(in)    :: x(:,:)
+    complex(kind=real64),  intent(in)    :: x(:,:)
     type(settings), intent(inout) :: SE, SEim
     integer,        intent(in)    :: n
     integer, dimension(n) :: widre(n), widim(n), nblre(n), nblim(n)
-    call find_editdesc_dble(real(x), SE, widre, nblre)         ! determine also SE % w
-    call find_editdesc_dble(abs(aimag(x)), SEim, widim, nblim) ! determine also SEim % w
-    call tobox_cpld(title, x, SE, SEim, widre, widim, nblre, nblim, m = size(x,1), n = size(x,2))
-  end subroutine disp_cpld
+    call find_editdesc_real64(real(x), SE, widre, nblre)         ! determine also SE % w
+    call find_editdesc_real64(abs(aimag(x)), SEim, widim, nblim) ! determine also SEim % w
+    call tobox_cpl_real64(title, x, SE, SEim, widre, widim, nblre, nblim, m = size(x,1), n = size(x,2))
+  end subroutine disp_cpl_real64
 
-  subroutine tobox_cpld(title, x, SE, SEim, widre, widim, nblre, nblim, m, n)
-    ! Write double precision complex matrix to box
+  subroutine tobox_cpl_real64(title, x, SE, SEim, widre, widim, nblre, nblim, m, n)
+    ! Write real64 precision complex matrix to box
     character(*),   intent(in)    :: title
-    complex(dble),  intent(in)    :: x(:,:)
+    complex(kind=real64),  intent(in)    :: x(:,:)
     integer,        intent(in)    :: m, n, widre(:), widim(:), nblre(:), nblim(:)
     type(settings), intent(inout) :: SE, SEim
     character(SE % w)   :: s(m)
@@ -3387,66 +4295,66 @@ end subroutine getwid_dint
       if (j<n) call copyseptobox(SE % sep(1:SE % lsep), m, lin1, boxp,  wleft)
     enddo
     call finishbox(title, SE, boxp)
-  end subroutine tobox_cpld
+  end subroutine tobox_cpl_real64
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 
-  ! ******* TOSTRING DOUBLE PRECISION COMPLEX PROCEDURES ********
+  ! ******* TOSTRING real64 PRECISION COMPLEX PROCEDURES ********
 
-  pure function len_s_cpld(x, fmt) result(wtot)
-    complex(dble), intent(in) :: x
+  pure function len_s_cpl_real64(x, fmt) result(wtot)
+    complex(kind=real64), intent(in) :: x
     character(*), intent(in)  :: fmt
     integer                   :: wtot, w, d
     logical                   :: gedit
     character(nnblk(fmt)+8)   :: fmt1
     call readfmt(fmt, fmt1, w, d, gedit)
     if (w < 0) then; wtot = len(errormsg); return; endif
-    wtot = len_f_dble([real(x)], fmt) + len_f_dble([abs(aimag(x))], fmt) + 4
-  end function len_s_cpld
+    wtot = len_f_real64([real(x)], fmt) + len_f_real64([abs(aimag(x))], fmt) + 4
+  end function len_s_cpl_real64
 
-  pure function len_f_cpld(x, fmt) result(wtot)
-    complex(dble), intent(in) :: x(:)
+  pure function len_f_cpl_real64(x, fmt) result(wtot)
+    complex(kind=real64), intent(in) :: x(:)
     character(*), intent(in)  :: fmt
     integer                   :: wtot, w, d
     logical                   :: gedit
     character(nnblk(fmt)+8)   :: fmt1
     call readfmt(fmt, fmt1, w, d, gedit)
     if (w < 0) then; wtot = len(errormsg); return; endif
-    wtot = len_f_dble(real(x), fmt) + len_f_dble(abs(aimag(x)), fmt) + size(x)*4 - (size(x) - 1)*(tosset % seplen)
-    ! subtract seplen because it has been added twice in len_f_dble
-  end function len_f_cpld
+    wtot = len_f_real64(real(x), fmt) + len_f_real64(abs(aimag(x)), fmt) + size(x)*4 - (size(x) - 1)*(tosset % seplen)
+    ! subtract seplen because it has been added twice in len_f_real64
+  end function len_f_cpl_real64
 
-  function tostring_s_cpld(x) result(st)
-    complex(dble), intent(in)                   :: x
-    character(len_s_cpld(x, tosset % rfmt)) :: st
-    st = tostring_f_cpld([x], tosset % rfmt)
-  end function tostring_s_cpld
+  function tostring_s_cpl_real64(x) result(st)
+    complex(kind=real64), intent(in)                   :: x
+    character(len_s_cpl_real64(x, tosset % rfmt)) :: st
+    st = tostring_f_cpl_real64([x], tosset % rfmt)
+  end function tostring_s_cpl_real64
 
-  function tostring_sf_cpld(x, fmt) result(st)
-    complex(dble),  intent(in)        :: x
+  function tostring_sf_cpl_real64(x, fmt) result(st)
+    complex(kind=real64),  intent(in)        :: x
     character(*), intent(in)          :: fmt
-    character(len_s_cpld(x, fmt)) :: st
-    st = tostring_f_cpld([x], fmt)
-  end function tostring_sf_cpld
+    character(len_s_cpl_real64(x, fmt)) :: st
+    st = tostring_f_cpl_real64([x], fmt)
+  end function tostring_sf_cpl_real64
 
-  function tostring_cpld(x) result(st)
-    complex(dble), intent(in)               :: x(:)
-    character(len_f_cpld(x, tosset % rfmt)) :: st
-    st = tostring_f_cpld(x, tosset % rfmt)
-  end function tostring_cpld
+  function tostring_cpl_real64(x) result(st)
+    complex(kind=real64), intent(in)               :: x(:)
+    character(len_f_cpl_real64(x, tosset % rfmt)) :: st
+    st = tostring_f_cpl_real64(x, tosset % rfmt)
+  end function tostring_cpl_real64
 
-  function tostring_f_cpld(x, fmt) result(st)
-    complex(dble),  intent(in)                    :: x(:)
+  function tostring_f_cpl_real64(x, fmt) result(st)
+    complex(kind=real64),  intent(in)                    :: x(:)
     character(*),   intent(in)                    :: fmt
-    character(len_f_cpld(x, fmt))                 :: st
-    character(widthmax_dble(real(x), fmt))        :: sar(size(x))
-    character(widthmax_dble(abs(x-real(x)), fmt)) :: sai(size(x))  ! x-real(x) instead of aimag(x) to enable the function
+    character(len_f_cpl_real64(x, fmt))                 :: st
+    character(widthmax_real64(real(x), fmt))        :: sar(size(x))
+    character(widthmax_real64(abs(x-real(x)), fmt)) :: sai(size(x))  ! x-real(x) instead of aimag(x) to enable the function
     character(1)                                  :: sgn(size(x))  ! to pass -stand:f95 switch of the ifort compiler.
     integer                                       :: w, d, wr, wi, i
     logical                                       :: gedit
     character(nnblk(fmt)+8)                       :: fmt1  !(5 for readfmt and 3 for replace_w)
-    real(dble)                                    :: xre(size(x)), xim(size(x)), h
+    real(kind=real64)                                    :: xre(size(x)), xim(size(x)), h
     call readfmt(fmt, fmt1, w, d, gedit)
     xre = real(x)
     xim = aimag(x)
@@ -3455,8 +4363,8 @@ end subroutine getwid_dint
       st = errormsg
       return
     elseif (w == 0) then
-      wr = maxw_dble(xre, d)
-      wi = maxw_dble(xim, d)
+      wr = maxw_real64(xre, d)
+      wi = maxw_real64(xim, d)
       call replace_w(fmt1, max(wr, wi))
     endif
     write(sar, fmt1) real(x)
@@ -3465,8 +4373,9 @@ end subroutine getwid_dint
     call trim_real(sai, gedit, w)
     do i = 1,size(x); if (aimag(x(i)) < 0) then; sgn(i) = '-'; else; sgn(i) = '+'; endif; enddo
     call tostring_get_complex(sar, sgn, sai, st)
-  end function tostring_f_cpld
-  ! *************************************** END OF DOUBLE PRECISION COMPLEX PROCEDURES ********************************
+  end function tostring_f_cpl_real64
+! *************************************** END OF real64 PRECISION COMPLEX PROCEDURES ********************************
+
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3762,6 +4671,7 @@ end subroutine getwid_dint
     call finishbox(title, SE, boxp)
   end subroutine disp_dchr
 
+
   ! ************************* END OF DEFAULT CHARACTER PROCEDURES ********************************
 
   ! NOTE 1: STYLES
@@ -3774,8 +4684,8 @@ end subroutine getwid_dint
   ! NOTE 2: DOUBLE PRECISION
   !   The double precision functions and subroutines above (the sections marked DOUBLE PRECISION
   !   PROCEDURES and DOUBLE PRECISION COMPLEX PROCEDURES) are copies of the sections marked SINGLE
-  !   PRECISION PROCEDURES and SINGLE PRECISION COMPLEX PROCEDURES, with the kind parameter sngl
-  !   changed to dble, the procedure name suffixes _sngl and _cplx changed to _dble and _cpld, and
+  !   PRECISION PROCEDURES and SINGLE PRECISION COMPLEX PROCEDURES, with the kind parameter real32
+  !   changed to real64, the procedure name suffixes _real32 and _cpl_real32 changed to _real64 and _cpl_real64, and
   !   single changed to double (only appears in comments). The add-on module DISP_R16MOD is another
   !   copy of these procedures (for quad precision).
 

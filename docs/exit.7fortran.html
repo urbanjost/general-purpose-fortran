@@ -50,23 +50,26 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>exit (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-EXIT(7f) - [FORTRAN:EXECUTION CONTROL] statement (LICENSE:PD)
+<P>
+EXIT(7f) - [EXECUTION CONTROL] terminate do-loops and block constructs
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=7>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 EXIT [construct-name]
 </BLOCKQUOTE>
 <A name=2>
@@ -75,93 +78,381 @@ EXIT [construct-name]
 
 </A>
 <BLOCKQUOTE>
-The EXIT statement provides a way of terminating a loop. It can also
-complete execution of other constructs.
 <P>
-An EXIT statement cannot occur within or refer to a DO CONCURRENT
-construct even if it refers to another construct.
+*exit statements can terminate do-loops but also can exit most named
+block constructs. First &#46;&#46;&#46;
 <P>
-If a construct-name appears, the EXIT statement must be within that
-construct; otherwise, it has to be within the range of at least one
-do-construct.
+EXIT STATEMENTS CAN TERMINATE DO-LOOP CONSTRUCTS
 <P>
-An EXIT statement belongs to a particular construct. If a construct
-name appears, the EXIT statement belongs to that construct; otherwise,
-it belongs to the innermost DO construct in which it appears.
+The EXIT statement most commonly terminates a DO or DO WHILE loop.
 <P>
-When an EXIT statement that belongs to a DO construct is executed,
-it terminates the loop and any active loops contained within the
-terminated loop. When an EXIT statement that belongs to a non-DO
-construct is executed, it terminates any active loops contained within
-that construct, and completes execution of that construct.
+The related CYCLE statement immediately begins the next loop cycle
+versus terminating the loop.
+<P>
+An unnamed EXIT statement must be within a DO loop and if executed it
+exits the innermost DO within which it appears, terminating that loop.
+<P>
+If it is desired to exit nested do-loops the do-loop must be labeled
+with a name, which the EXIT then refers to.
+<P>
+The DO CONTROL VARIABLES RETAIN THEIR LAST VALUE. That is if a DO loop
+is terminated by and EXIT any additional inner DO loops are also
+terminated, but all DO LOOP control variables retain their last value;
+assuming they are still in scope.
 </BLOCKQUOTE>
 <A name=3>
+
+     <H3>WITH A CONSTRAINT NAME EXIT CAN TERMINATE MOST BLOCK CONSTRUCTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Named EXIT statements can also complete execution of other (named) block
+constructs(eg. a BLOCK construct, an ASSOCIATE construct, &#46;&#46;&#46;).
+<P>
+If a construct name appears on an EXIT, the EXIT statement must be
+within that construct. That is, an EXIT jumps to the end of the
+associated construct only from within that very same construct.
+<P>
+If a non-DO construct is terminated, any DO loops inside that construct
+are of course also terminated.
+<P>
+That stipulated, an EXIT statement can appear in any of the following
+constructs:
+<TABLE cellpadding=3><!-- tsb: That stipulated, an EXIT statement can appear in any of the following
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ASSOCIATE construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BLOCK construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+IF construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SELECT CASE construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SELECT RANK construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SELECT TYPE construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DO construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CHANGETEAM construct
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CRITICAL construct
+</TD></TR>
+<TR></TR></TABLE>Note specifically what is missing -- WHERE and FORALL constructs cannot
+have EXIT statements associated with them.
+<P>
+A few additional restrictions apply, primarily for potentially parallel
+regions.
+<TABLE cellpadding=3><!-- tsb: A few additional restrictions apply, primarily for potentially parallel
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+An EXIT statement cannot cannot terminate a DO CONCURRENT construct
+because the execution order of the iterations is allowed to be
+indeterminate -- so an exit would result in an unknown state.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+For related reasons jumping out of a parallel region to the exit of
+another block construct could skip steps that would leave a parallel
+program in an unknown state. Therefore EXIT statements in a DO
+CONCURRENT, CHANGE TEAM or CRITICAL construct cannot reference an
+outer construct.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+An exit from a CHANGE TEAM construct does not just resume execution
+after the end of the construct. The effect is the same as
+transferring control to the END TEAM statement, including that if
+that statement contains a STAT= or ERRMSG= specifier, the STAT
+variable or ERRMSG variable becomes defined.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+CONSTRUCT-NAME (Optional for DO-LOOP exits) Is the name of the DO-LOOP
+or block construct. Note the construct names must be unique within the
+same scope.
+<P>
+Unnamed EXIT statements could introduce errors when loop nesting is
+modified. Therefore names are strongly recommended accept perhaps where
+the loop comprises only a few lines of code.
+</BLOCKQUOTE>
+<A name=5>
 
      <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 Samples:
 <P>
 <PRE>
-   program demo_exit
-   implicit none
-   integer :: i, j
-   logical :: big
-      ! EXIT a simple loop
-      do i=1, 10
-         if(i .eq. 4) exit ! exit loop
-      enddo
-      write(*,*)&#146;I=&#146;,i
+       program demo_exit
+       implicit none
+       integer,parameter :: arbitrary_size=10
+       integer :: i, j, k, iarr(arbitrary_size)
+       integer :: iostat, lun
+       logical :: ok
+       character(len=80) :: line
+       character(len=*),parameter :: gen=&#146;(*(g0:,1x))&#146;
+       !
+       ! the basics
+       !
+       ! Note we will use the function irand(3f) contained in
+       ! the end of the code below to generate random whole numbers
+       !
+       !----------------------
+       ! EXIT an infinite loop
+       !----------------------
+          i=0
+          do
+            i=i+1
+            ! we will test on a random value to simulate an actual criteria
+            ! to meet that indicates the loop should be terminated
+            if(irand(-100,100).gt.95)exit
+          enddo
+          print gen, &#146;escaped infinite loop after only &#146;,i,&#146;tries&#146;
 <P>
-      ! EXIT only exits an innermost loop
-      do i=1,10
-         do j=100, 200
-            if(j .eq. 150) exit ! exit inner loop "j" but not "i"
-         enddo
-      enddo
-      write(*,*)&#146;I=&#146;,i,&#146; J=&#146;,j
+         ! a related common use is to read a file of unknown size
+         ! till an error or end-of-file, although READ does have
+         ! the options ERR=numeric-label and EOF=numeric-label.
+         ! INFINITE: do
+         !    read(*,&#146;(a)&#146;,iostat=iostat) line
+         !    if(iostat.ne.0)exit INFINITE
+         ! enddo INFINITE
 <P>
-      ! EXIT an outermost loop from inner loop by using a construct name
-      OUTER: do i=1,10
-         INNER: do j=100, 200
-            if(j .eq. 150) exit OUTER ! exit named loop "i"
-         enddo INNER
-      enddo OUTER
-      write(*,*)&#146;I=&#146;,i,&#146; J=&#146;,j
+       ! Some argue that an infinite loop is never a good idea.
+       ! A common practice is to avoid even the possibility of an
+       ! infinite loop by putting a cap on the number of iterations
+       ! that should "never" occur, and then error processing
+       ! if the unexpected number of loops is inadvertently reached.
+       ! This technique can let your code gracefully handle being used with
+       ! problems bigger than it was intended for, or not loop infinitely
+       ! if some unexpected or incorrect input or condition is encountered.
+       ! It might make it stop unitentionally as well.
+         !
+          ! run a loop but quit as soon as 200 random integers are odd
+          j=0
+          ! fun facts: What are the odds of not getting 200 in 10000?
+          do i=1, 10000
+             k=irand(0,99)
+             if((k+1)/2 /= k/2)j=j+1 ! cheap integer math trick to tell if odd
+             if(j .ge. 200) exit
+          enddo
+          if(j.lt.200) then
+             print gen,&#146;Oh no! Not enough odd samples. only found&#146;,j
+             print gen,&#146;That is REALLY unlikely.&#146;
+             stop &#146;&lt;ERROR&gt; unexpectedly low number of odd values&#146;
+          else
+             print gen,&#146;only did I=&#146;,i,&#146;passes to get 200 odd samples&#146;
+          endif
+       ! ---------------------------
+       ! how to EXIT nested do-loops
+       ! ---------------------------
+         ! EXIT with no name only exits an innermost loop
+         ! so in the following k will be 3, as all passes of the
+         ! outer loop still occur
+          k=0
+          do i=1,3
+             do j=1,5
+                exit
+             enddo
+             k=k+1
+          enddo
+          ! at the end of a completed loop the counter is end_limit+step so
+          ! you can tell if you exhausted the do loop or exited early:
+          print gen,&#146;I=&#146;,i,&#146;so &#146;,&
+          & merge(&#146;completed&#146;,&#146;exited   &#146;,i.gt.3),&#146; outer loop&#146;
+          print gen,&#146;J=&#146;,j,&#146;so &#146;,&
+          & merge(&#146;completed&#146;,&#146;exited   &#146;,j.gt.5),&#146; inner loop&#146;
+          print gen,&#146;K=&#146;,k
 <P>
-      ! EXIT a BLOCK not just a DO loop
-      MYBLOCK: block
-         big = .false.
-         do i = 1, 100
-           if( i==40 )then
-             exit MYBLOCK
-           endif
-         enddo
-         big = .true.
-      endblock MYBLOCK
-      write(*,*)&#146;I=&#146;,i,&#146; BIG=&#146;,big
-   end program demo_exit
+          ! COMMENTARY:
+          ! A labeled exit is less prone to error so generally worth the
+          ! additional verbosity even when just exiting an inner loop.
+          ! Without a label an EXIT is somewhat like saying "EXIT SOMEWHERE".
+<P>
+       ! It is simple to EXIT nested loops from an inner loop.
+       ! Just use a construct name. Lets start with the nested loop above
+       ! that only repeatedly exited the inner loop and label the outer
+       ! loop "OUTER". Now our exit can explicity name what loop it wants
+       ! to exit &#46;&#46;&#46;
+<P>
+          k=0
+          OUTER: do i=1,3
+             do j=1,5
+                exit OUTER
+             enddo
+             k=k+1
+          enddo OUTER
+          if(i==1.and.j==1.and.k==0)then
+             print gen,&#146;exited nested loops successfully as expected&#146;
+          else
+             print gen,&#146;something went wrong, i=&#146;,i,&#146;j=&#146;,j,&#146;k=&#146;,k
+          endif
+<P>
+       ! ---------------------------------------
+       ! exits from non-DO-loop block constructs
+       ! ---------------------------------------
+       ! REMEMBER: non-DO-loop exits are always named
+<P>
+       !----------------------------------------------------------------------
+       ! EXIT a BLOCK statement surrounding a loop to avoid the nefarious GOTO
+       !----------------------------------------------------------------------
+          ! look for a 5 in an array that should always have it
+          iarr=[(i,i=1,size(iarr))] ! fill array with 1 to N
+          LOOKFOR: block
+             do i=1,size(iarr)
+               ! when you find what you are looking for use an EXIT instead
+               ! of a GOTO , which follows much more restricted rules on
+               ! on where you can land, preventing the threat of spaghetti code
+               if(iarr(i).eq.5) exit LOOKFOR
+             enddo
+             write(*,*)&#146;should not get here. iarr=&#146;,iarr
+             stop &#146;&lt;INTERNAL ERROR&gt; should never get here! is array too small?&#146;
+          endblock LOOKFOR
+          print gen,&#146;Good Found 5 at position I=&#146;,i,&#146;so exited BLOCK construct&#146;
+<P>
+       !--------------
+       ! Dusty corners
+       !--------------
+<P>
+       ! a block contained completely within a DO CONCURRENT can
+       ! be exited even though the DO CONCURRENT itself or an outer block
+       ! cannot be terminated from within a DO CONCURRENT
+       do concurrent (i = 1:10)
+          INCC:  block
+            real :: t
+           t = 0.0
+           if (t == 0.0) exit INCC
+           t= t+1.0
+           end block INCC
+       end do
+<P>
+       ! The following example shows illegal EXIT statements in DO CONCURRENT
+       ! and CRITICAL:
+<P>
+       ! can   t EXIT DO CONCURRENT or outer construct of a DO CONCURRENT
+       !x!N=4
+       !x!LOOP_1 : DO CONCURRENT (I = 1:N)
+       !x!  N = N + 1
+       !x!  IF (N &gt; I) EXIT LOOP_1
+       !x!END DO LOOP_1
+<P>
+       !x!LOOP_2 : DO I = 1, 15
+       !x!  CRITICAL
+       !x!    N = N + 1
+       !x!    IF (N &gt; I) EXIT LOOP_2 ! cannott EXIT outer construct from inside
+       !x!  END CRITICAL             ! CHANGE TEAM, DO CONCURRENT, or CRITICAL
+       !x!END DO LOOP_2
+<P>
+       ! this would fail
+       ! because the same construct name was used in the same scope:
+       !x! LEVELA block:
+       !x! exit LEVELA
+       !x! endblock LEVELA
+       !x!
+       !x! LEVELA block:
+       !x! exit LEVELA
+       !x! endblock LEVELA
+<P>
+       contains
+       ! choose a value from range of integers inclusive randomly
+       function irand(first,last)
+       integer, allocatable :: seed(:)
+       integer,intent(in)   :: first,last
+       real                 :: rand_val
+       integer              :: irand
+          call random_number(rand_val)
+          irand = first + floor((last+1-first)*rand_val)
+       end function irand
+       end program demo_exit
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-    I=           4
-    I=          11  J=         150
-    I=           1  J=         150
-    I=          40  BIG= F
+     &gt; escaped infinite loop after only  71 tries
+     &gt; only did I= 426 passes to get 200 odd samples
+     &gt; I= 4 so  completed  outer loop
+     &gt; J= 1 so  exited     inner loop
+     &gt; K= 3
+     &gt; exited nested loops successfully as expected
+     &gt; Good Found 5 at position I= 5 so exited BLOCK construct
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=4>
+<A name=6>
 
-    <H4>&nbsp; &nbsp; JSU</H4>
+     <H3>SEE ALSO</H3>
+
 </A>
 <BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CYCLE(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+RETURN(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STOP(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DO(3)
+</TD></TR>
+<TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>exit (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 83a52afd-faad-4cfa-8e10-544d456ece3a using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>exit (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9f06a6b1-1806-466e-a960-ff41832b8649 using man macros.</FONT>
 <br><br><center><img src="images/exit.7fortran.gif"></center>
 </div>
 </div>

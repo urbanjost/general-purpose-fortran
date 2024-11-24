@@ -13,6 +13,6 @@
           call draw2(300.0,200.0)
           call move2(300.0,-200.0)
           call draw2(-300.0,200.0)
-          call writegif('vinit.3M_pixel.gif',P_pixel,P_colormap)
+          call writegif('vinit.3m_pixel.gif',P_pixel,P_colormap)
           call vexit()
        end program demo_vinit

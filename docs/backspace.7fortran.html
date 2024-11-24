@@ -50,27 +50,30 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>Environments, Tables, And Troff Macros &nbsp;-&nbsp;</I><NOBR>backspace (7)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
 
 </A>
 <BLOCKQUOTE>
-BACKSPACE(7f) - [FORTRAN:FILE_POSITIONING] - backspace one record on
+<P>
+backspace(7f) - [IO:FILE POSITIONING] - backspace one record on
 specified I/O unit
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 BACKSPACE file-unit-number
-BACKSPACE([UNIT=]file-unit-number][,IOMSG=iomsg-variable]
-[,IOSTAT=scalar-int-variable][,ERR=label])
+<P>
+BACKSPACE([UNIT=]unit-number][,IOMSG=iomsg][,IOSTAT=iostat][,ERR=label])
 </BLOCKQUOTE>
 <A name=2>
 
@@ -78,29 +81,41 @@ BACKSPACE([UNIT=]file-unit-number][,IOMSG=iomsg-variable]
 
 </A>
 <BLOCKQUOTE>
-Execution of a BACKSPACE statement causes the file connected to the
-specified unit to be positioned before the current record if there
-is a current record, or before the preceding record if there is no
-current record. If the file is at its initial point, the position of
-the file is not changed.
 <P>
-BACKSPACE works with typical files being accessed sequentially but
-does not work with standard input from a terminal and other similar
-file types.
+backspace(7f) positions the specified file back to the beginning of the
+current record or if already at the beginning of a record, back to the
+beginning of the previous record.
 <P>
-It is usually used when a program has partially read a line and
-then wants to go back and reread the line using the information
-from the first read. Backspacing can be very inefficient (Note that
-positioning to specific records in direct access files is typically
-much faster). It is usually better to read the line into a CHARACTER
-variable and then read from the variable multiple times using an
-internal READ, or parsing the string.
+If the file is at its initial point, the position of the file is not
+changed.
+<P>
+It is most often used when a program has partially read a line and then
+wants to go back and reread the line using the information from the
+previous read(7f),
+<P>
+backspace(7f) is rarely used in new code as the subsequent addition of
+Fortran features such as non-advancing I/O and internal reads into a
+CHARACTER variable (which can be read from multiple times) are typically
+far more efficient and provide much of the same functionality when
+re-reading the current line.
+<P>
+Backspacing is very inefficient on many current platforms. Reading a
+file with stream-I/O and indexing relevant line positions to return to;
+or using direct-access files is far more efficient than backspacing
+through a file when moving back large numbers of lines on Linux and Unix
+platforms.
+<P>
+A unit open for direct access or unformatted access cannot be referenced
+by backspace(7f). backspace(7f) only works with formatted sequential
+files that may be repositioned. So it does not generally work with
+standard input from a terminal, pipes, and other formatted sequential
+file types that cannot be rewound or positioned.
 <P>
 Backspacing over records written using list-directed or namelist
 formatting is prohibited. It will usually work, but since the compiler
-is free to write list-directed or namelist output on a varying number
-of lines it is not supported, as it is not certain what data is on
-which line.
+is free to write list-directed or namelist output on a varying number of
+lines it is not supported, as it is not certain what data is on which
+line unless the program itself searches for particular strings.
 <P>
 Backspacing a file that is connected but does not exist is prohibited.
 <P>
@@ -117,76 +132,82 @@ before the endfile record.
 
 </A>
 <BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>UNIT</B> </TD><TD valign=bottom>
-unit number of file to backspace one line on.
-A unit open for direct access or unformatted access cannot
-be referenced by a BACKSPACE.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>IOSTAT</B> </TD><TD valign=bottom>
-a compiler-specific number that indicates an error occurred
-if non-zero.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>IOMSG</B> </TD><TD valign=bottom>
-a message describing error IOSTAT if IOSTAT is not zero.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>ERR</B> </TD><TD valign=bottom>
-a label number to jump to if an error occurs
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+UNIT : unit number of file to backspace one line on. A unit open for
+direct access or unformatted access cannot be referenced by a BACKSPACE.
+IOSTAT : a compiler-specific number that indicates an error occurred if
+non-zero. IOMSG : a message describing error IOSTAT if IOSTAT is not
+zero. ERR : a label number to jump to if an error occurs
+</BLOCKQUOTE>
 <A name=4>
 
      <H3>EXAMPLE</H3>
 
 </A>
 <BLOCKQUOTE>
+<P>
 An example of a BACKSPACE statement is:
 <P>
 <PRE>
-   program demo_backspace
-   implicit none
-   character(len=256) :: line
-   character(len=256) :: mssge
-   integer            :: i
-   integer            :: ios
-      open(10,file=&#146;dem_backspace.txt&#146;) ! open a file
-      do i=1,100                         ! write lines to it
-         write(10,&#146;(a,i0)&#146;) &#146;line &#146;,i
-      enddo
-      do i=1,10                          ! back up several lines
-         backspace(10, iostat=ios,iomsg=mssge)
-         if(ios.ne.0)then
-                 write(*,&#146;(*(a))&#146;) &#146;*dem_backspace* ERROR:&#146;,mssge
-         endif
-      enddo
-      read(10,&#146;(a)&#146;)line
-      write(*,*)&#146;back at a previous record !&#146;
-      write(*,&#146;(1x,a)&#146;)line
-      !! writing new line will truncate file to current record position
-      close(10,status=&#146;delete&#146;)
-   end program demo_backspace
+       program demo_backspace
+       implicit none
+       character(len=256) :: line
+       character(len=256) :: mssge
+       integer            :: i
+       integer            :: j
+       integer            :: ios
+       integer,allocatable :: iarr(:)
+<P>
+          ! create a basic sequential file
+          open(10,file=&#146;dem_backspace.txt&#146;,action=&#146;readwrite&#146;) ! open a file
+          do i=1,30                         ! write lines to it
+             write(10,&#146;(a,i3,*(i3))&#146;) &#146;line &#146;,i, (j,j=1,i)
+          enddo
+<P>
+          ! back up several lines
+          do i=1,14
+             backspace(10, iostat=ios,iomsg=mssge)
+             if(ios.ne.0)then
+                     write(*,&#146;(*(a))&#146;) &#146;*dem_backspace* ERROR:&#146;,mssge
+             endif
+          enddo
+          read(10,&#146;(a)&#146;)line
+          write(*,*)&#146;back at a previous record !&#146;
+<P>
+          ! read line as a string
+          write(*,&#146;("string=",a)&#146;)trim(line)
+<P>
+          ! backspace so can read again as numbers
+          backspace(10)
+          ! read part of a line numerically to get size of array to read
+          read(10,&#146;(5x,i3)&#146;)i
+          allocate(iarr(i))
+<P>
+          ! reread line just reading array
+          backspace(10)
+          read(10,&#146;(8x,*(i3))&#146;)iarr
+          write(*,&#146;(*(g0,1x))&#146;)&#146;size=&#146;,i,&#146;array=&#146;,iarr
+<P>
+          !! Note: writing a new line will truncate file
+          !!       to current record position
+<P>
+          close(10,status=&#146;delete&#146;)
+<P>
+       end program demo_backspace
 <P>
 </PRE>
-Expected Results:
+Results:
 <P>
 <PRE>
-    back at a previous record !
-    line 91
+     &gt;  back at a previous record !
+     &gt; string=line  17  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
+     &gt; size= 17 array= 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
 <P>
 </PRE>
-</BLOCKQUOTE>
-<A name=5>
-
-    <H4>&nbsp; &nbsp; JSU</H4>
-</A>
-<BLOCKQUOTE>
+Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>backspace (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0786044d-c034-46c2-b30f-5452c0ca2e24 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>backspace (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4db40843-47db-4c1f-91af-663ce977519b using man macros.</FONT>
 <br><br><center><img src="images/backspace.7fortran.gif"></center>
 </div>
 </div>

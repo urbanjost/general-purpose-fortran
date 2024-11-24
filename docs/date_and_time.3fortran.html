@@ -50,6 +50,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>date_and_time (3)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
@@ -92,17 +93,7 @@ call date_and_time( [date] [,time] [,zone] [,values] )
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-*date is a default character scalar
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-*time is a default character scalar
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-*zone is a default character scalar
+DATE, - TIME, and ZONE are default character scalar types
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -143,22 +134,28 @@ o
 </TD><TD>
 DATE : A character string of default kind of the form CCYYMMDD, of
 length 8 or larger, where
-</TD></TR>
-<TR></TR></TABLE><!-- .nf -->
-<PRE>
-        + CCYY is the year in the Gregorian calendar
-        + MM is the month within the year
-        + DD is the day within the month.
-<P>
-</PRE>
-The characters of this value are all decimal digits.
-<BLOCKQUOTE>
-<P>
-If there is no date available, DATE is assigned all blanks.
-</BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: If there is no date available, DATE is assigned all blanks.
+<TABLE width=100% cellpadding=3><!-- tsb: DATE : A character string of default kind of the form CCYYMMDD, of
  -->
 <TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+CCYY is the year in the Gregorian calendar
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MM is the month within the year
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+DD is the day within the month.
+</TD></TR>
+<TR></TR></TABLE>The characters of this value are all decimal digits.
+<P>
+If there is no date available, DATE is assigned all blanks.
+</TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -276,43 +273,59 @@ Sample program:
 <P>
 <PRE>
     program demo_date_and_time
-    implicit none
-    character(len=8)     :: date
-    character(len=10)    :: time
-    character(len=5)     :: zone
-    integer,dimension(8) :: values
+       implicit none
+       character(len=8)     :: date
+       character(len=10)    :: time
+       character(len=5)     :: zone
+       integer, dimension(8) :: values
 <P>
-        call date_and_time(date,time,zone,values)
+       call date_and_time(date, time, zone, values)
 <P>
-        ! using keyword arguments
-        call date_and_time(DATE=date,TIME=time,ZONE=zone)
-        print &#146;(*(g0))&#146;,&#146;DATE="&#146;,date,&#146;" TIME="&#146;,time,&#146;" ZONE="&#146;,zone,&#146;"&#146;
+       ! using keyword arguments
+       call date_and_time(DATE=date, TIME=time, ZONE=zone)
+       print &#146;(*(g0))&#146;,&#146;DATE="&#146;,date,&#146;" TIME="&#146;,time,&#146;" ZONE="&#146;,zone,&#146;"&#146;
 <P>
-        call date_and_time(VALUES=values)
-        write(*,&#146;(i5,a)&#146;) &
-         & values(1),&#146; - The year&#146;, &
-         & values(2),&#146; - The month&#146;, &
-         & values(3),&#146; - The day of the month&#146;, &
-         & values(4),&#146; - Time difference with UTC in minutes&#146;, &
-         & values(5),&#146; - The hour of the day&#146;, &
-         & values(6),&#146; - The minutes of the hour&#146;, &
-         & values(7),&#146; - The seconds of the minute&#146;, &
-         & values(8),&#146; - The milliseconds of the second&#146;
+       call date_and_time(VALUES=values)
+       write (*, &#146;(i5,a)&#146;) &
+        & values(1), &#146; - The year&#146;, &
+        & values(2), &#146; - The month&#146;, &
+        & values(3), &#146; - The day of the month&#146;, &
+        & values(4), &#146; - Time difference with UTC in minutes&#146;, &
+        & values(5), &#146; - The hour of the day&#146;, &
+        & values(6), &#146; - The minutes of the hour&#146;, &
+        & values(7), &#146; - The seconds of the minute&#146;, &
+        & values(8), &#146; - The milliseconds of the second&#146;
+<P>
+       write (*, &#146;(a)&#146;) iso_8601()
+    contains
+       function iso_8601()
+       ! return date using ISO-8601 format at a resolution of seconds
+       character(len=8)  :: dt
+       character(len=10) :: tm
+       character(len=5)  :: zone
+       character(len=25) :: iso_8601
+       call date_and_time(dt, tm, zone)
+          ISO_8601 = dt(1:4)//&#146;-&#146;//dt(5:6)//&#146;-&#146;//dt(7:8) &
+                   & //&#146;T&#146;//                             &
+                   & tm(1:2)//&#146;:&#146;//tm(3:4)//&#146;:&#146;//tm(5:6) &
+                   & //zone(1:3)//&#146;:&#146;//zone(4:5)
+       end function iso_8601
     end program demo_date_and_time
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-     &gt; DATE="20201222" TIME="165738.779" ZONE="-0500"
-     &gt;  2020 - The year
-     &gt;    12 - The month
-     &gt;    22 - The day of the month
-     &gt;  -300 - Time difference with UTC in minutes
-     &gt;    16 - The hour of the day
-     &gt;    57 - The minutes of the hour
-     &gt;    38 - The seconds of the minute
-     &gt;   779 - The milliseconds of the second
+     &gt; DATE="20240426" TIME="111545.335" ZONE="-0400"
+     &gt;  2024 - The year
+     &gt;     4 - The month
+     &gt;    26 - The day of the month
+     &gt;  -240 - Time difference with UTC in minutes
+     &gt;    11 - The hour of the day
+     &gt;    15 - The minutes of the hour
+     &gt;    45 - The seconds of the minute
+     &gt;   335 - The milliseconds of the second
+     &gt; 2024-04-26T11:15:45-04:00
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -353,7 +366,7 @@ M_time - https://github.com/urbanjost/M_time
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-fortran-datetime https://github.com/dongli/fortran-datetime
+fortran-datetime - https://github.com/dongli/fortran-datetime
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -361,10 +374,10 @@ o
 datetime-fortran -
 https://github.com/wavebitscientific/datetime-fortran
 </TD></TR>
-<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 45df0339-aa1d-4e1c-9948-cd5724cb4010 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>date_and_time (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d0635e2a-6939-43b3-b510-74cc9b33dc08 using man macros.</FONT>
 <br><br><center><img src="images/date_and_time.3fortran.gif"></center>
 </div>
 </div>

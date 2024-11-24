@@ -1,24 +1,21 @@
       program demo_anyscalar_to_real128
-      use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
-      use, intrinsic :: iso_fortran_env, only : real32, real64, real128
+      use, intrinsic :: iso_fortran_env, only : &
+         & i8=>int8, i16=>int16, i32=>int32, i64=>int64
+      use, intrinsic :: iso_fortran_env, only : &
+         & sp=>real32, dp=>real64, qp=>real128
       implicit none
          ! call same function with many scalar input types
-         write(*,*)squarei(2_int8)
-         write(*,*)squarei(2_int16)
-         write(*,*)squarei(2_int32)
-         write(*,*)squarei(2_int64)
-         write(*,*)squarei(2.0_real32)
-         write(*,*)squarei(2.0_real64)
-         write(*,*)squarei(2.0_real128)
+         write(*,*)minall(&
+         & 2_i8, 7_i16, 8_i32, 9_i64, 2.0123123_sp, 3.0123_dp, 5.0_qp)
+         write(*,*)minall(&
+         & 5.0_qp, 3.0123_dp, 2.0123123_sp, 9_i64, 8_i32, 7_i16, 2_i8)
       contains
 
-      function squarei(invalue) result (dvalue)
-      use M_anything, only : anyscalar_to_real128
-      class(*),intent(in)  :: invalue
-      real(kind=real128)   :: invalue_local
-      real(kind=real128)   :: dvalue
-         invalue_local=anyscalar_to_real128(invalue)
-         dvalue=invalue_local*invalue_local
-      end function squarei
+      function minall(a,b,c,d,e,f,g) result (value)
+      use M_anything, only : x=>anyscalar_to_real128
+      class(*),intent(in)  :: a,b,c,d,e,f,g
+      real(kind=qp)   :: value
+         value=min( x(a),x(b),x(c),x(d),x(e),x(f),x(g) )
+      end function minall
 
       end program demo_anyscalar_to_real128

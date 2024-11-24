@@ -11,6 +11,7 @@
 
       function get_env(name,default) result(value)
       ! a function that makes calling get_environment_variable(3) simple
+      use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT
       implicit none
       character(len=*),intent(in)          :: name
       character(len=*),intent(in),optional :: default
@@ -25,11 +26,12 @@
             & length=howbig,status=stat,trim_name=.true.)
             select case (stat)
             case (1)
-             print *, name, " is not defined in the environment. Strange..."
+             write(stderr,*) &
+             & name, " is not defined in the environment. Strange..."
              value=''
             case (2)
-             print *, &
-             "This processor does not support environment variables. Boooh!"
+             write(stderr,*) &
+             & "This processor does not support environment variables. Boooh!"
              value=''
             case default
              ! make string of sufficient size to hold value

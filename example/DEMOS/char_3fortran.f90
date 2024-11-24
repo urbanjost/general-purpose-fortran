@@ -1,12 +1,16 @@
       program demo_char
       implicit none
       integer, parameter :: ascii =  selected_char_kind ("ascii")
-      character(len=1, kind=ascii ) :: c
+      character(len=1, kind=ascii ) :: c, esc
       integer :: i
         ! basic
          i=74
          c=char(i)
          write(*,*)'ASCII character ',i,'is ',c
+         write(*,'(*(g0))')'Uppercase ASCII: ',(char(i),i=65,90)
+         write(*,'(*(g0))')'lowercase ASCII: ',(char(i),i=97,122)
+         esc=char(27)
+         write(*,'(*(g0))')'Elemental: ',char([65,97,90,122])
         !
          print *, 'a selection of ASCII characters (shows hex if not printable)'
          do i=0,127,10

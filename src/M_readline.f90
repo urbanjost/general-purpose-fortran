@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!      M_readline(3fm) - [M_readline::INTRO] Calling readline(3c) from Fortran
@@ -30,7 +19,7 @@
 !!    probably move around the line with the left and right arrow keys, and
 !!    insert characters by typing them wherever you moved the cursor to,
 !!    and use the DEL/ RUBOUT key to delete characters and such. If you use
-!!    a GNU/1 shell with command line editing, you are probably familiar
+!!    a GNU/Linux shell with command line editing, you are probably familiar
 !!    with readline(3c)'s function.
 !!
 !!    It quits if you enter 'q' on an input line, and it dumps the history if
@@ -120,7 +109,7 @@ contains
 !!    probably move around the line with the left and right arrow keys, and
 !!    insert characters by typing them wherever you moved the cursor to,
 !!    and use the DEL/ RUBOUT key to delete characters and such. If you use
-!!    a GNU/1 shell with command line editing, you are probably familiar
+!!    a GNU/Linux shell with command line editing, you are probably familiar
 !!    with readline(3c)'s function.
 !!
 !!    It quits if you enter 'q' on an input line, and it dumps the history if

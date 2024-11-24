@@ -31,8 +31,8 @@
            x1=x1+width
         enddo
         ! write plot as GIF file
-        call writegif('circleprecision.3M_pixel.gif',P_pixel,P_colormap)
+        call writegif('circleprecision.3m_pixel.gif',P_pixel,P_colormap)
         call vexit()
         ! use system to display GIF file
-        call execute_command_line('display circleprecision.3M_pixel.gif')
+        call execute_command_line('display circleprecision.3m_pixel.gif')
      end program demo_circleprecision

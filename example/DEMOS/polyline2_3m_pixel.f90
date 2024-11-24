@@ -14,6 +14,6 @@
         call polyline2( [-1,-1,+1,+1,-1] , &  ! X values
         & [-1,+1,+1,-1,-1] )    ! Y values
          ! write gif with a transparent background
-        call writegif('polyline2.3M_pixel.gif',P_pixel,P_ColorMap,transparent)
+        call writegif('polyline2.3m_pixel.gif',P_pixel,P_ColorMap,transparent)
         call vexit()
      end program demo_polyline2

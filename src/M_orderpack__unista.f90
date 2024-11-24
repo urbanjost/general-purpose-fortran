@@ -21,7 +21,10 @@ public :: unista
 !!
 !!       o Real(kind=real32)
 !!       o Real(kind=real64)
+!!       o Integer(kind=int8)
+!!       o Integer(kind=int16)
 !!       o Integer(kind=int32)
+!!       o Integer(kind=int64)
 !!       o Character(kind=selected_char_kind("DEFAULT"),len=*)
 !!
 !!##DESCRIPTION
@@ -72,7 +75,9 @@ public :: unista
 !!##LICENSE
 !!    CC0-1.0
 interface unista
-  module procedure real64_unista, real32_unista, int32_unista, f_char_unista
+  module procedure real64_unista, real32_unista
+  module procedure f_char_unista
+  module procedure int8_unista, int16_unista, int32_unista, int64_unista
 end interface unista
 contains
 Subroutine real64_unista (INOUTVALS, NUNI)
@@ -117,6 +122,48 @@ Subroutine real32_unista (INOUTVALS, NUNI)
    End Do
 !
 End Subroutine real32_unista
+Subroutine int8_unista (INOUTVALS, NUNI)
+! __________________________________________________________
+   Integer (kind=int8), Dimension (:), Intent (InOut) :: INOUTVALS
+   Integer, Intent (Out) :: NUNI
+! __________________________________________________________
+   Integer, Dimension (Size(INOUTVALS)) :: IWRKT
+   Logical, Dimension (Size(INOUTVALS)) :: IFMPTYT
+   Integer :: ICRS
+! __________________________________________________________
+   Call UNIINV (INOUTVALS, IWRKT)
+   IFMPTYT = .True.
+   NUNI = 0
+   Do ICRS = 1, Size(INOUTVALS)
+      If (IFMPTYT(IWRKT(ICRS))) Then
+         IFMPTYT(IWRKT(ICRS)) = .False.
+         NUNI = NUNI + 1
+         INOUTVALS (NUNI) = INOUTVALS (ICRS)
+      End If
+   End Do
+!
+End Subroutine int8_unista
+Subroutine int16_unista (INOUTVALS, NUNI)
+! __________________________________________________________
+   Integer (kind=int16), Dimension (:), Intent (InOut) :: INOUTVALS
+   Integer, Intent (Out) :: NUNI
+! __________________________________________________________
+   Integer, Dimension (Size(INOUTVALS)) :: IWRKT
+   Logical, Dimension (Size(INOUTVALS)) :: IFMPTYT
+   Integer :: ICRS
+! __________________________________________________________
+   Call UNIINV (INOUTVALS, IWRKT)
+   IFMPTYT = .True.
+   NUNI = 0
+   Do ICRS = 1, Size(INOUTVALS)
+      If (IFMPTYT(IWRKT(ICRS))) Then
+         IFMPTYT(IWRKT(ICRS)) = .False.
+         NUNI = NUNI + 1
+         INOUTVALS (NUNI) = INOUTVALS (ICRS)
+      End If
+   End Do
+!
+End Subroutine int16_unista
 Subroutine int32_unista (INOUTVALS, NUNI)
 ! __________________________________________________________
    Integer (kind=int32), Dimension (:), Intent (InOut) :: INOUTVALS
@@ -138,6 +185,27 @@ Subroutine int32_unista (INOUTVALS, NUNI)
    End Do
 !
 End Subroutine int32_unista
+Subroutine int64_unista (INOUTVALS, NUNI)
+! __________________________________________________________
+   Integer (kind=int64), Dimension (:), Intent (InOut) :: INOUTVALS
+   Integer, Intent (Out) :: NUNI
+! __________________________________________________________
+   Integer, Dimension (Size(INOUTVALS)) :: IWRKT
+   Logical, Dimension (Size(INOUTVALS)) :: IFMPTYT
+   Integer :: ICRS
+! __________________________________________________________
+   Call UNIINV (INOUTVALS, IWRKT)
+   IFMPTYT = .True.
+   NUNI = 0
+   Do ICRS = 1, Size(INOUTVALS)
+      If (IFMPTYT(IWRKT(ICRS))) Then
+         IFMPTYT(IWRKT(ICRS)) = .False.
+         NUNI = NUNI + 1
+         INOUTVALS (NUNI) = INOUTVALS (ICRS)
+      End If
+   End Do
+!
+End Subroutine int64_unista
 Subroutine f_char_unista (INOUTVALS, NUNI)
 ! __________________________________________________________
    character (kind=f_char,len=*), Dimension (:), Intent (InOut) :: INOUTVALS

@@ -426,7 +426,6 @@ Mike Metcalf
 <P>
 <P>
 <P>
-<P>
 <PRE>
         glen herrmannsfeldt    
 </PRE>
@@ -455,49 +454,58 @@ This might be one case where I would want it null() each
 That is, unless one actually
 wanted to keep it between calls.
 </TD></TR>
-<TR></TR></TABLE>-- glen
-<P>
+<TR><TD colspan=2>
+-- glen
+</TD></TR>
+<TR><TD colspan=2>
 <PRE>
         Richard E Maine        
 </PRE>
 10/4/06
 Craig gave seveal good answers. I&#146;ll try to supplement what he said and
 add answers to some of the things that he didn&#146;t.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 Fortran Learner &lt;ding.xi&#46;&#46;&#46;@gmail.com&gt; wrote:
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 &gt; Hi, Nice to be here. I am a beginer in Fortran,
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 My first, and probably most important comment is that pointers are *NOT*
 a good thing to start out with. Pointers provide many extra
 opportunities for error and confusion, even for experiences users of the
 language.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 The answers here aren&#146;t going to be enough to make you proficient in
 using pointers.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 &gt; What is the difference between the deallocate() and nullify() function
 &gt; in Fortran 90?
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 As Craig said, deallocate frees the space. Nullify does nothing to the
 allocated space. It just makes that pointer not point to that space any
 more. I can see that you are missing one of the most fundamental ideas
 of what pointers are about in the first place. In fact, I can see that
 trend inmost of these questions. More on that below.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 &gt; And what is the difference among the allocate(), =&gt; and = operator for
 &gt; the pointer variable?
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 Allocate allocates a new target and makes the pointer point to it.
 Pointer assignment (the =&gt;) makes the pointer point to some existing
 target. Ordinary assignment (the =) assigns data to the target.
-</BLOCKQUOTE>
-<P>
-<P>
-<BLOCKQUOTE>
+</TD></TR>
+<TR><TD colspan=2>
 &gt; Before I want to deallocate a pointer varibale, I use a associated()
 &gt; function to test it&#46;&#46;&#46;
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 Ok. Stop right there. A major and common problem. Pointers can be in one
 of *THREE* states. Yes, that is three, not two. A pointer can be
 associated, nullified (aka disassociated), or its association status can
@@ -514,12 +522,14 @@ rules (which are way too much to go into here). But the first rule is
 that pointers normally start out in the undefined state. So if the first
 thing you do with a pointer is use the associated function on it, that
 is an error there.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 &gt; I also found that the pointer can be allocated several times. And every
 &gt; time been allocated, the previous memory space assciated by the pointer
 &gt; will inaccessible. It could be a possible way to memory leak. Is this a
 &gt; bug in fortran standard? if not, may be my logical doesn&#146;t work.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 Ah. This is what makes it clear to me that you have missed what pointers
 are about. Because this is fundamental to the whole idea. I think you
 are probably looking for allocatables instead of pointers. The most
@@ -529,7 +539,8 @@ allocatable variable is uniquely tied to the space allocated for it.
 That space "belongs" to the variable. If the variable "goes away" for
 any reason, so does the space. By design, allocatables cannot leak
 memory.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 A pointer, on the other hand, does not uniquely "own" any allocation. It
 can point to a target, but the target has existance completely
 independent of the pointer. When you "allocate a pointer", you really do
@@ -544,7 +555,8 @@ elaborate on that, but&#46;&#46;&#46; it takes a bit of time to do well; books w
 do it better than anything I could write on the fly in a posting; and I
 really, really think this is probably all irrelevant because you are
 probably looking at the wrong tool anyway.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 Your questions strongly suggest to me that you are thinking about
 alocatables and wondering why pointers don&#146;t act like allocatables.
 Allocatables has limitations that sevverely handicapped their use in
@@ -555,11 +567,10 @@ understand how they are different. That gets into quite a bit more. I
 know I haven&#146;t explained that adequately, but this is long enough
 already, I&#146;m short on time, and with any luck it is all irrelevant
 because you can switch to allocatables instead.
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 --
-<TABLE cellpadding=3><!-- tsb: --
- -->
-<TR></TR><TR></TR>
+</TD></TR>
 <TR valign=top><TD colspan=2>
 <B>Richard Maine</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 | Good judgment comes from experience;
@@ -569,15 +580,17 @@ email: my first.last at org.domain| experience comes from bad judgment.
 <B>org: nasa, domain: gov</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 |       -- Mark Twain
 </TD></TR>
-<TR></TR></TABLE><!-- .nf -->
+<TR><TD colspan=2>
 <PRE>
         Michael Metcalf        
 </PRE>
 10/4/06
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 "glen herrmannsfeldt" &lt;g&#46;&#46;&#46;@seniti.ugcs.caltech.edu&gt; wrote in message
 news:eg1886$oc6$<A HREF="mailto:1@naig.caltech.edu">1@naig.caltech.edu</A>&#46;&#46;&#46;
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 &gt; Michael Metcalf &lt;michael&#46;&#46;&#46;@compuserve.com&gt; wrote:
 &gt;
 &gt;&gt; Remember that a pointer is created with the status of &#146;undefined
@@ -597,22 +610,20 @@ Yes, as is the pointer association status. (Note: if the statement above is
 within a type definition, it becomes a *default* initialization with
 different semantics, see "Fortran 95/2003 Explained", Sections 7.5.3 and
 7.5.4.)
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 Regards,
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 Mike Metcalf
-</BLOCKQUOTE>
-<P>
-<P>
+</TD></TR>
+<TR><TD colspan=2>
 <PRE>
         John Harper    
 </PRE>
 10/4/06
 In article &lt;45241887$0$40072$a726&#46;&#46;&#46;@news.hal-pc.org&gt;,
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:         John Harper    
- -->
-<TR></TR><TR></TR>
+</TD></TR>
 <TR valign=top><TD colspan=2>
 <B>Craig Powers</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 &lt;eni&#46;&#46;&#46;@hal-pc.org&gt; wrote:
@@ -780,10 +791,7 @@ allocate(element)
 element % next =&gt; root
 element % value = 3
 root % element
-</BLOCKQUOTE>
 <P>
-<P>
-<BLOCKQUOTE>
 Now root points to a linked list:
 <P>
 root -&gt; {3} -&gt; {2} -&gt; {1} -&gt; 0
@@ -1024,7 +1032,7 @@ Thanks for the clarification.
 ################################################################################
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nullify (7)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a86bbd83-2076-42ef-b41f-698160e049bf using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>nullify (7)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from de18e97b-60b2-4fcc-92d7-7cabfacc08e1 using man macros.</FONT>
 <br><br><center><img src="images/nullify.7fortran.gif"></center>
 </div>
 </div>

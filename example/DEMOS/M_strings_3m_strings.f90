@@ -4,7 +4,7 @@
        use M_strings,only : substitute, change, modif, transliterate, &
                & reverse, squeeze
        use M_strings,only : REPLACE, join
-       use M_strings,only : UPPER, LOWER, upper_quoted
+       use M_strings,only : UPPER, LOWER, upper_quoted, lower_quoted
        use M_strings,only : rotate13, percent_encode, percent_decode
        use M_strings,only : adjustc, compact, nospace, indent
        use M_strings,only : crop, clip, unquote, quote, matching_delimiter

@@ -158,19 +158,19 @@ function random_string(chars,length) result(out)
 
 character(len=*),intent(in)     :: chars
 integer,intent(in)              :: length
-character(len=:),allocatable    :: out
-   real                         :: x
-   integer                      :: ilen   ! length of list of characters
-   integer                      :: which
-   integer                      :: i
+character(len=length)           :: out
+real                            :: x
+integer                         :: ilen   ! length of list of characters
+integer                         :: which
+integer                         :: i
    ilen=len(chars)
-   out=''
+   out=repeat(' ',length)
    call init_random_seed_by_dat()
    if(ilen.gt.0)then
       do i=1,length
          call random_number(x)
          which=nint(real(ilen-1)*x)+1
-         out=out//chars(which:which)
+         out(i:i)=chars(which:which)
       enddo
    endif
 end function random_string

@@ -50,6 +50,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>gamma (3)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
@@ -73,9 +74,9 @@ positive whole numbers
 result = gamma(x)
 <P>
 <PRE>
-         elemental real(kind=KIND) function gamma( x)
+         elemental real(kind=**) function gamma( x)
 <P>
-          type(real,kind=KIND),intent(in) :: x
+          type(real,kind=**),intent(in) :: x
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -90,12 +91,12 @@ result = gamma(x)
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-X is a real value
+X is a real value of any available KIND
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-returns a real value with the kind as X.
+returns a real value with the same kind as X.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -152,11 +153,12 @@ Sample program:
 <P>
 <PRE>
     program demo_gamma
-    use, intrinsic :: iso_fortran_env, only : wp=&gt;real64
+    use, intrinsic :: iso_fortran_env, only : wp=&gt;real64, int64
     implicit none
     real :: x, xa(4)
-    integer :: i
+    integer :: i, j
 <P>
+       ! basic usage
        x = gamma(1.0)
        write(*,*)&#146;gamma(1.0)=&#146;,x
 <P>
@@ -165,92 +167,80 @@ Sample program:
        write(*,*)xa
        write(*,*)
 <P>
-       ! gamma(3) is related to the factorial function
-       do i=1,20
+       ! gamma() is related to the factorial function
+       do i = 1, 171
           ! check value is not too big for default integer type
-          if(factorial(i).gt.huge(0))then
-             write(*,*)i,factorial(i)
+          if (factorial(i)  &lt;=  huge(0)) then
+             write(*,*) i, nint(factorial(i)), &#146;integer&#146;
+          elseif (factorial(i)  &lt;=  huge(0_int64)) then
+             write(*,*) i, nint(factorial(i),kind=int64),&#146;integer(kind=int64)&#146;
           else
-             write(*,*)i,factorial(i),int(factorial(i))
+             write(*,*) i, factorial(i) , &#146;user factorial function&#146;
+             write(*,*) i, product([(real(j, kind=wp), j=1, i)]), &#146;product&#146;
+             write(*,*) i, gamma(real(i + 1, kind=wp)), &#146;gamma directly&#146;
           endif
        enddo
-       ! more factorials
-       FAC: block
-       integer,parameter :: n(*)=[0,1,5,11,170]
-       integer :: j
-          do j=1,size(n)
-             write(*,&#146;(*(g0,1x))&#146;)&#146;factorial of&#146;, n(j),&#146; is &#146;, &
-              & product([(real(i,kind=wp),i=1,n(j))]),  &
-              & gamma(real(n(j)+1,kind=wp))
-          enddo
-       endblock FAC
 <P>
-       contains
-       function factorial(i) result(f)
-       integer,parameter :: dp=kind(0d0)
-       integer,intent(in) :: i
-       real :: f
-          if(i.le.0)then
-             write(*,&#146;(*(g0))&#146;)&#146;&lt;ERROR&gt; gamma(3) function value &#146;,i,&#146; &lt;= 0&#146;
-             stop      &#146;&lt;STOP&gt; bad value in gamma function&#146;
-          endif
-          f=gamma(real(i+1))
-       end function factorial
+    contains
+    function factorial(i) result(f)
+    !  GAMMA(X) computes Gamma of X. For positive whole number values of N the
+    !  Gamma function can be used to calculate factorials, as (N-1)! ==
+    !  GAMMA(REAL(N)). That is
+    !
+    !      n! == gamma(real(n+1))
+    !
+    integer, intent(in) :: i
+    real(kind=wp) :: f
+       if (i  &lt;=  0) then
+          write(*,&#146;(*(g0))&#146;) &#146;&lt;ERROR&gt; gamma(3) function value &#146;, i, &#146; &lt;= 0&#146;
+          stop &#146;&lt;STOP&gt; bad value in gamma function&#146;
+       endif
+       f = anint(gamma(real(i + 1,kind=wp)))
+    end function factorial
+<P>
     end program demo_gamma
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-        gamma(1.0)=   1.000000
-          1.000000       1.000000       2.000000       6.000000
+     &gt;  gamma(1.0)=   1.00000000
+     &gt;    1.00000000       1.00000000       2.00000000       6.00000000
+     &gt;
+     &gt;            1           1 integer
+     &gt;            2           2 integer
+     &gt;            3           6 integer
+     &gt;            4          24 integer
+     &gt;            5         120 integer
+     &gt;            6         720 integer
+     &gt;            7        5040 integer
+     &gt;            8       40320 integer
+     &gt;            9      362880 integer
+     &gt;           10     3628800 integer
+     &gt;           11    39916800 integer
+     &gt;           12   479001600 integer
+     &gt;           13           6227020800 integer(kind=int64)
+     &gt;           14          87178291200 integer(kind=int64)
+     &gt;           15        1307674368000 integer(kind=int64)
+     &gt;           16       20922789888000 integer(kind=int64)
+     &gt;           17      355687428096000 integer(kind=int64)
+     &gt;           18     6402373705728001 integer(kind=int64)
+     &gt;           19   121645100408832000 integer(kind=int64)
+     &gt;           20  2432902008176640000 integer(kind=int64)
+     &gt;           21   5.1090942171709440E+019 user factorial function
+     &gt;           21   5.1090942171709440E+019 product
+     &gt;           21   5.1090942171709440E+019 gamma directly
+     &gt;            :
+     &gt;            :
+     &gt;            :
+     &gt;          170   7.2574156153079990E+306 user factorial function
+     &gt;          170   7.2574156153079940E+306 product
+     &gt;          170   7.2574156153079990E+306 gamma directly
+     &gt;          171                  Infinity user factorial function
+     &gt;          171                  Infinity product
+     &gt;          171                  Infinity gamma directly
 <P>
-                  1   1.000000               1
-                  2   2.000000               2
-                  3   6.000000               6
-                  4   24.00000              24
-                  5   120.0000             120
-                  6   720.0000             720
-                  7   5040.000            5040
-                  8   40320.00           40320
-                  9   362880.0          362880
-                 10   3628800.         3628800
-                 11  3.9916800E+07    39916800
-                 12  4.7900160E+08   479001600
-                 13  6.2270208E+09
-                 14  8.7178289E+10
-                 15  1.3076744E+12
-                 16  2.0922791E+13
-                 17  3.5568741E+14
-                 18  6.4023735E+15
-                 19  1.2164510E+17
-                 20  2.4329020E+18
 </PRE>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:                   1   1.000000               1
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>factorial of 0</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is  1.000000000000000 1.000000000000000
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>factorial of 1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is  1.000000000000000 1.000000000000000
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>factorial of 5</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is  120.0000000000000 120.0000000000000
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>factorial of 11</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is  39916800.00000000 39916800.00000000
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>factorial of 170</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-is  .7257415615307994E+307 .7257415615307999E+307
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
 
@@ -279,10 +269,10 @@ Logarithm of the Gamma function: LOG_GAMMA(3)
 <P>
 Wikipedia: Gamma_function
 <P>
-fortran-lang intrinsic descriptions
+Fortran intrinsic descriptions
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>gamma (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f85cc083-edec-4aa6-a143-3c8ed4c32b75 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>gamma (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 429fbb66-8bff-4e49-8c6f-74fbff422802 using man macros.</FONT>
 <br><br><center><img src="images/gamma.3fortran.gif"></center>
 </div>
 </div>

@@ -1,0 +1,201 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>User Commands  &nbsp;-&nbsp;</I><NOBR>playground (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+playground(1f) - convert Fortran file to an HTML document that uploads
+the code to "Fortran Playground"
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Motivation</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Examples</A><BR>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+playground [ <B>--help</B>| <B>--version</B>] [ <B>--type</B> OUTPUT_TYPE] *.[fF]90
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+create an HTML document from Fortran source files that includes a
+click-able download to the "Fortran Playground".
+<P>
+URL encoding, officially known as percent-encoding, is a method to
+encode arbitrary data in a Uniform Resource Identifier (URI) using only
+a limited subset of ASCII characters, replacing them with one or more
+character triplets that consist of the percent character and a two-digit
+hexadecimal value.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>MOTIVATION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+What is desired is the ability to click on codes in Forums and HTML
+documents and have it execute with the most recent compilers on-line.
+<P>
+There are several on-line Fortran compilers available. The Fortran wiki
+lists several. One, called the "playground" is maintained as part of the
+fortran-lang site.
+<P>
+The current playground allows for easily transferring programs from
+an HTML document as a form. This would be particularly useful for code
+examples in other fortran-lang resources like the example codes in the
+intrinsics descriptions and allow for other fortran documentation to
+have live links.
+<P>
+As mentioned, there are several dozen on-line Fortran interfaces described on the
+Fortran WIki. Some are trivial but others are good examples of possible
+features but the most desirable feature for me would be
+<P>
+<PRE>
+  + integration with the fortran-lang documentation so example codes and
+    the man-page demo programs could be executed.
+  + the ability to use fpm(1) and registered packages with the latest compilers.
+  + If possible an extension to the Fortran discourse that automatically
+    could transfer a fortran section from a discourse discussion to the
+    playground would be a major unique enhancement.
+<P>
+    A more ambitious feature would be able to also include an fpm
+    manifest file that uses dependencies as repositories as well. Perhaps
+    just simple comments in the code could be used or a scan for USE
+    statements.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--type</B> </TD><TD valign=bottom>
+"html", or "md"
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B></B><B>--help</B> </TD><TD valign=bottom>
+display this help and exit
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--version</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+output version information and exit
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>filename(s)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Fortran source files
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample commands
+<P>
+<PRE>
+   &gt; $  playground hello.f90 &gt; playground.html
+   &gt; &lt;!DOCTYPE html&gt;
+   &gt; &lt;html xmlns="<A HREF="http://www.w3.org/1999/xhtml">http://www.w3.org/1999/xhtml</A>"&gt;
+   &gt; &lt;head&gt;
+   &gt;   &lt;meta name="generator" content="playground" /&gt;
+   &gt;   &lt;title&gt;playground&lt;/title&gt;
+   &gt; &lt;/head&gt;
+   &gt; &lt;body&gt;
+   &gt;
+   &gt;   &lt;a href="https://play.fortran-lang.org/?code=
+   &gt;   program%20hello%5Fworld
+   &gt;   %0A%20%20%20write%28%2A%2C%2A%29%27Hello%20World%21%27
+   &gt;   %0Aend%20program%20hello%5Fworld
+   &gt;   %0A"
+   &gt;   target="_blank" title="Open in Fortran Playground"&gt;
+   &gt;   &lt;img src="https://raw.githubusercontent.com/fortran-lang/
+   &gt;   playground/main/frontend/src/fortran-logo.png"
+   &gt;   alt="Fortran logo" class="align-text-bottom" height="15.5" /&gt; hello
+   &gt;   &lt;/a&gt;
+   &gt;   &lt;xmp&gt;
+   &gt; program hello_world
+   &gt;    write(*,*)&#146;&#146;Hello World!&#146;&#146;
+   &gt; end program hello_world
+   &gt;   &lt;/xmp&gt;
+   &gt; &lt;/body&gt;
+   &gt; &lt;/html&gt;
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>playground (1)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4b44ac8c-9ada-4349-bdd2-803f1d0463ef using man macros.</FONT>
+<br><br><center><img src="images/playground.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

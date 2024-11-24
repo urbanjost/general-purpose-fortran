@@ -50,6 +50,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>ceiling (3)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
@@ -57,7 +58,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-CEILING(3) - [NUMERIC] Integer ceiling function
+CEILING(3) - [NUMERIC] returns the least integer greater than or equal
+to A.
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -90,13 +92,13 @@ result = ceiling(a [,kind])
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-** a is of type real
+A is of type real
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-KIND shall be a scalar integer constant expression. It specifies the
-kind of the result if present.
+if present KIND is a scalar integer constant expression that
+specifies the kind of the result.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -115,6 +117,13 @@ CEILING(3) returns the least integer greater than or equal to A.
 <P>
 On the number line <B>-n</B> &lt;-- 0 -&gt; +n the value returned is always at or to
 the right of the input value.
+<P>
+For example, ceil(0.5) is 1.0, and ceil(<B>-0.5</B>) is 0.0.
+<P>
+The input value may be too large to store the result in an integer type.
+To avoid an overflow (which produces an undefined result), an
+application should perform a range check on the input value before using
+ceiling(3).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -163,28 +172,117 @@ Sample program:
     program demo_ceiling
     implicit none
     ! just a convenient format for a list of integers
-    character(len=*),parameter :: ints=&#146;(*("   &gt; ",5(i0:,",",1x),/))&#146;
-    real :: x
-    real :: y
-      ! basic usage
-       x = 63.29
-       y = -63.59
-       print ints, ceiling(x)
-       print ints, ceiling(y)
-       ! note the result was the next integer larger to the right
-<P>
-      ! real values equal to whole numbers
-       x = 63.0
-       y = -63.0
-       print ints, ceiling(x)
-       print ints, ceiling(y)
-<P>
-      ! elemental (so an array argument is allowed)
-       print ints , &
-       & ceiling([ &
+    character(len=*),parameter :: gen=&#146;(1x,*(g0:,1x))&#146;
+    real              :: x
+    real              :: y
+    real,parameter    :: arr(*)=[ &
        &  -2.7,  -2.5, -2.2, -2.0, -1.5, &
        &  -1.0,  -0.5,  0.0, +0.5, +1.0, &
-       &  +1.5,  +2.0, +2.2, +2.5, +2.7  ])
+       &  +1.5,  +2.0, +2.2, +2.5, +2.7  ]
+    integer           :: i
+    integer           :: ierr
+    character(len=80) :: message
+       print *, &#146;Basic Usage&#146;
+       x = 63.29
+       y = -63.59
+       print gen, ceiling(x), ceiling(y)
+       ! note the result was the next integer larger to the right
+<P>
+       print *, &#146;Whole Numbers&#146; ! real values equal to whole numbers
+       x = 63.0
+       y = -63.0
+       print gen, ceiling(x), ceiling(y)
+<P>
+       print *, &#146;Elemental&#146; ! (so an array argument is allowed)
+       print gen , ceiling(arr)
+<P>
+       print *, &#146;Advanced Usage&#146; ! Dealing with large magnitude values
+       print &#146;(a)&#146;,[character(len=80):: &
+       &#146;Limits                                                           &#146;,&
+       &#146;You only care about Limits if you are using values near or above &#146;,&
+       &#146;the limits of the integer type you are using (see huge(3)).      &#146;,&
+       &#146;&#146;,&
+       &#146;Surprised by some of the following results?                      &#146;,&
+       &#146;What do real values clearly out of the range of integers return? &#146;,&
+       &#146;What do values near the end of the range of integers return?     &#146;,&
+       &#146;The standard only specifies what happens for representable values&#146;,&
+       &#146;in the range of integer values.                                  &#146;,&
+       &#146;&#146;,&
+       &#146;It is common but not required that if the input is out of range  &#146;,&
+       &#146;and positive the result is -huge(0) and -huge(0)-1 if negative.  &#146;,&
+       &#146;Note you are out of range before you get to real(huge(0)).       &#146;,&
+       &#146;&#146; ]
+       print gen , &#146;For reference: huge(0)=&#146;,huge(0),&#146;-huge(0)-1=&#146;,-huge(0)-1
+<P>
+       x=huge(0)
+       call displayx()
+<P>
+       x=2*x
+       call displayx()
+<P>
+       x=-huge(0)-1
+       call displayx()
+<P>
+       x=2*x
+       call displayx()
+<P>
+       print gen , repeat(&#146;=&#146;,80)
+<P>
+    contains
+<P>
+    subroutine displayx()
+    use,intrinsic :: iso_fortran_env, only: int8,int16,int32,int64
+       print gen , repeat(&#146;=&#146;,80)
+       print gen , &#146;x=&#146;,x,&#146; spacing=&#146;,spacing(x)
+       print gen , &#146; ceiling(x):&#146;,ceiling(x)
+       print gen , &#146; ceiling(x,kind=int64):&#146;,ceiling(x,kind=int64)
+       print gen , &#146; ceiling_robust(x):&#146;,ceiling_robust(x,ierr,message)
+       if(ierr.ne.0)then
+          print gen, ierr,&#146;=&gt;&#146;,trim(message)
+       endif
+    end subroutine displayx
+<P>
+    elemental impure function ceiling_robust(x,ierr,message)
+    ! return the least integer &gt;= x
+    use,intrinsic :: iso_fortran_env, only: int8,int16,int32,int64
+    use,intrinsic :: iso_fortran_env, only: real32,real64,real128
+    real,intent(in)                       :: x
+    integer,intent(out),optional          :: ierr
+    character(len=*),intent(out),optional :: message
+    character(len=80)                     :: message_local
+    integer                               :: ceiling_robust
+    integer                               :: ierr_local
+       ierr_local=0
+       message_local=&#146;&#146;
+       ! allow -huge(0)-1 or not?
+       if(spacing(x) &gt; 128)then ! bounds checking
+          if(x.ge.0)then
+             write(message_local,*)&#146;&lt;ERROR&gt;X=&#146;,x,&#146; &gt;=&#146;,anint(real(huge(0)))
+             ierr_local=1
+             ceiling_robust=huge(0)
+          else
+             ierr_local=2
+             ceiling_robust=-huge(0)-1
+             write(message_local,*)&#146;&lt;ERROR&gt;X=&#146;,x,&#146; &lt;=&#146;,anint(real(-huge(0)-1))
+          endif
+       else
+          ! used to use a computed goto to do this!
+          ceiling_robust = int(x)
+          if (x &gt; 0.0) then
+             if (real(ceiling_robust) &lt; x)then
+                ceiling_robust = ceiling_robust + 1
+             endif
+          endif
+       endif
+       if(present(ierr))then
+          ierr=ierr_local
+       elseif(ierr_local.ne.0)then
+          stop message_local
+       endif
+       if(present(message))then
+          message=message_local
+       endif
+    end function ceiling_robust
 <P>
     end program demo_ceiling
 <P>
@@ -192,13 +290,50 @@ Sample program:
 Results:
 <P>
 <PRE>
-       &gt; 64
-       &gt; -63
-       &gt; 63
-       &gt; -63
-       &gt; -2, -2, -2, -2, -1,
-       &gt; -1, 0, 0, 1, 1,
-       &gt; 2, 2, 3, 3, 3
+     &gt;  Basic Usage
+     &gt;  64 -63
+     &gt;  Whole Numbers
+     &gt;  63 -63
+     &gt;  Elemental
+     &gt;  -2 -2 -2 -2 -1 -1 0 0 1 1 2 2 3 3 3
+     &gt; Limits
+     &gt;
+     &gt; Surprised by some of the following results?
+     &gt; What do real values clearly out of the range of integers return?
+     &gt; What do values near the end of the range of integers return?
+     &gt; The standard only specifies what happens for representable values
+     &gt; in the range of integer values.
+     &gt;
+     &gt; It is common but not required that if the input is out of range
+     &gt; and positive the result is -huge(0) and -huge(0)-1 if negative.
+     &gt; Note you are out of range before you get to real(huge(0)).
+     &gt;
+     &gt;  For reference: huge(0)= 2147483647 -huge(0)-1= -2147483648
+     &gt;  ======================================================================
+     &gt;  x= 0.214748365E+10  spacing= 256.000000
+     &gt;   ceiling(x): -2147483647
+     &gt;   ceiling(x,kind=int64): 2147483648
+     &gt;   ceiling_robust(x): 2147483647
+     &gt;  1 =&gt;  &lt;ERROR&gt;X=   2.14748365E+09  &gt;=   2.14748365E+09
+     &gt;  ======================================================================
+     &gt;  x= 0.429496730E+10  spacing= 512.000000
+     &gt;   ceiling(x): -2147483647
+     &gt;   ceiling(x,kind=int64): 4294967296
+     &gt;   ceiling_robust(x): 2147483647
+     &gt;  1 =&gt;  &lt;ERROR&gt;X=   4.29496730E+09  &gt;=   2.14748365E+09
+     &gt;  ======================================================================
+     &gt;  x= -0.214748365E+10  spacing= 256.000000
+     &gt;   ceiling(x): -2147483648
+     &gt;   ceiling(x,kind=int64): -2147483648
+     &gt;   ceiling_robust(x): -2147483648
+     &gt;  2 =&gt;  &lt;ERROR&gt;X=  -2.14748365E+09  &lt;=  -2.14748365E+09
+     &gt;  ======================================================================
+     &gt;  x= -0.429496730E+10  spacing= 512.000000
+     &gt;   ceiling(x): -2147483648
+     &gt;   ceiling(x,kind=int64): -4294967296
+     &gt;   ceiling_robust(x): -2147483648
+     &gt;  2 =&gt;  &lt;ERROR&gt;X=  -4.29496730E+09  &lt;=  -2.14748365E+09
+     &gt;  ======================================================================
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -222,10 +357,12 @@ FLOOR(3), NINT(3)
 <P>
 AINT(3), ANINT(3), INT(3), SELECTED_INT_KIND(3)
 <P>
-fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+NEAREST(3), SPACING(3), EPSILON(3)
+<P>
+Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ceiling (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b36df125-c97c-46b8-911c-2237643b7c82 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ceiling (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a111a603-9189-4761-acc1-22f6e47a6b27 using man macros.</FONT>
 <br><br><center><img src="images/ceiling.3fortran.gif"></center>
 </div>
 </div>

@@ -590,7 +590,7 @@ end subroutine wrt
 !===================================================================================================================================
 !>
 !!##NAME
-!!    set(3f) - [M_set] set scalars from an array
+!!    set(3f) - [M_msg] set scalars from an array
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS

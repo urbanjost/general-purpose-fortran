@@ -4,7 +4,8 @@ implicit none
 Private
 integer,parameter :: f_char=selected_char_kind("DEFAULT")
 public :: refsor
-private :: real64_inssor, real32_inssor, int32_inssor, f_char_inssor
+private :: real64_inssor, real32_inssor, f_char_inssor
+private :: int8_inssor, int16_inssor, int32_inssor, int64_inssor
 !>
 !!##NAME
 !!    sort(3f) - [M_orderpack:SORT] Sorts array into ascending order
@@ -20,7 +21,10 @@ private :: real64_inssor, real32_inssor, int32_inssor, f_char_inssor
 !!
 !!       o Real(kind=real32)
 !!       o Real(kind=real64)
+!!       o Integer(kind=int8)
+!!       o Integer(kind=int16)
 !!       o Integer(kind=int32)
+!!       o Integer(kind=int64)
 !!       o Character(kind=selected_char_kind("DEFAULT"),len=*)
 !!
 !!##DESCRIPTION
@@ -86,7 +90,8 @@ private :: real64_inssor, real32_inssor, int32_inssor, f_char_inssor
 !!##LICENSE
 !!    CC0-1.0
 interface refsor
-  module procedure real64_refsor, real32_refsor, int32_refsor, f_char_refsor
+  module procedure real64_refsor, real32_refsor, f_char_refsor
+  module procedure int8_refsor, int16_refsor, int32_refsor, int64_refsor
 end interface refsor
 contains
 Subroutine real64_refsor (INOUTVALS)
@@ -313,6 +318,230 @@ Recursive Subroutine real32_subsor (INOUTVALS, IDEB1, IFIN1)
       End Do
 !
 End Subroutine real32_inssor
+Subroutine int8_refsor (INOUTVALS)
+! __________________________________________________________
+      Integer (kind=int8), Dimension (:), Intent (InOut) :: INOUTVALS
+! __________________________________________________________
+      Call int8_subsor (INOUTVALS, 1, Size (INOUTVALS))
+      Call int8_inssor (INOUTVALS)
+End Subroutine int8_refsor
+
+Recursive Subroutine int8_subsor (INOUTVALS, IDEB1, IFIN1)
+!  Sorts INOUTVALS from IDEB1 to IFIN1
+! __________________________________________________________
+      Integer(kind=int8), dimension (:), Intent (InOut) :: INOUTVALS
+      Integer, Intent (In) :: IDEB1, IFIN1
+! __________________________________________________________
+      Integer(kind=int8) :: XPIV, XWRK
+      Integer, Parameter :: NINS = 16 ! Max for insertion sort
+      Integer :: ICRS, IDEB, IDCR, IFIN, IMIL
+!
+      IDEB = IDEB1
+      IFIN = IFIN1
+!
+!  If we don't have enough values to make it worth while, we leave
+!  them unsorted, and the final insertion sort will take care of them
+!
+      If ((IFIN - IDEB) > NINS) Then
+         IMIL = (IDEB+IFIN) / 2
+!
+!  One chooses a pivot, median of 1st, last, and middle values
+!
+         If (INOUTVALS(IMIL) < INOUTVALS(IDEB)) Then
+            XWRK = INOUTVALS (IDEB)
+            INOUTVALS (IDEB) = INOUTVALS (IMIL)
+            INOUTVALS (IMIL) = XWRK
+         End If
+         If (INOUTVALS(IMIL) > INOUTVALS(IFIN)) Then
+            XWRK = INOUTVALS (IFIN)
+            INOUTVALS (IFIN) = INOUTVALS (IMIL)
+            INOUTVALS (IMIL) = XWRK
+            If (INOUTVALS(IMIL) < INOUTVALS(IDEB)) Then
+               XWRK = INOUTVALS (IDEB)
+               INOUTVALS (IDEB) = INOUTVALS (IMIL)
+               INOUTVALS (IMIL) = XWRK
+            End If
+         End If
+         XPIV = INOUTVALS (IMIL)
+!
+!  One exchanges values to put those > pivot in the end and
+!  those <= pivot at the beginning
+!
+         ICRS = IDEB
+         IDCR = IFIN
+         ECH2: Do
+            Do
+               ICRS = ICRS + 1
+               If (ICRS >= IDCR) Then
+!
+!  the first  >  pivot is IDCR
+!  the last   <= pivot is ICRS-1
+!  Note: If one arrives here on the first iteration, then
+!        the pivot is the maximum of the set, the last value is equal
+!        to it, and one can reduce by one the size of the set to process,
+!        as if INOUTVALS (IFIN) > XPIV
+!
+                  Exit ECH2
+!
+               End If
+               If (INOUTVALS(ICRS) > XPIV) Exit
+            End Do
+            Do
+               If (INOUTVALS(IDCR) <= XPIV) Exit
+               IDCR = IDCR - 1
+               If (ICRS >= IDCR) Then
+!
+!  The last value < pivot is always ICRS-1
+!
+                  Exit ECH2
+               End If
+            End Do
+!
+            XWRK = INOUTVALS (IDCR)
+            INOUTVALS (IDCR) = INOUTVALS (ICRS)
+            INOUTVALS (ICRS) = XWRK
+         End Do ECH2
+!
+!  One now sorts each of the two sub-intervals
+!
+         Call int8_subsor (INOUTVALS, IDEB1, ICRS-1)
+         Call int8_subsor (INOUTVALS, IDCR, IFIN1)
+      End If
+
+   End Subroutine int8_subsor
+
+   Subroutine int8_inssor (INOUTVALS)
+!  Sorts INOUTVALS into increasing order (Insertion sort)
+! __________________________________________________________
+      Integer(kind=int8), dimension (:), Intent (InOut) :: INOUTVALS
+! __________________________________________________________
+      Integer :: ICRS, IDCR
+      Integer(kind=int8) :: XWRK
+!
+      Do ICRS = 2, Size (INOUTVALS)
+         XWRK = INOUTVALS (ICRS)
+         If (XWRK >= INOUTVALS(ICRS-1)) Cycle
+         INOUTVALS (ICRS) = INOUTVALS (ICRS-1)
+         Do IDCR = ICRS - 2, 1, - 1
+            If (XWRK >= INOUTVALS(IDCR)) Exit
+            INOUTVALS (IDCR+1) = INOUTVALS (IDCR)
+         End Do
+         INOUTVALS (IDCR+1) = XWRK
+      End Do
+!
+End Subroutine int8_inssor
+Subroutine int16_refsor (INOUTVALS)
+! __________________________________________________________
+      Integer (kind=int16), Dimension (:), Intent (InOut) :: INOUTVALS
+! __________________________________________________________
+      Call int16_subsor (INOUTVALS, 1, Size (INOUTVALS))
+      Call int16_inssor (INOUTVALS)
+End Subroutine int16_refsor
+
+Recursive Subroutine int16_subsor (INOUTVALS, IDEB1, IFIN1)
+!  Sorts INOUTVALS from IDEB1 to IFIN1
+! __________________________________________________________
+      Integer(kind=int16), dimension (:), Intent (InOut) :: INOUTVALS
+      Integer, Intent (In) :: IDEB1, IFIN1
+! __________________________________________________________
+      Integer(kind=int16) :: XPIV, XWRK
+      Integer, Parameter :: NINS = 16 ! Max for insertion sort
+      Integer :: ICRS, IDEB, IDCR, IFIN, IMIL
+!
+      IDEB = IDEB1
+      IFIN = IFIN1
+!
+!  If we don't have enough values to make it worth while, we leave
+!  them unsorted, and the final insertion sort will take care of them
+!
+      If ((IFIN - IDEB) > NINS) Then
+         IMIL = (IDEB+IFIN) / 2
+!
+!  One chooses a pivot, median of 1st, last, and middle values
+!
+         If (INOUTVALS(IMIL) < INOUTVALS(IDEB)) Then
+            XWRK = INOUTVALS (IDEB)
+            INOUTVALS (IDEB) = INOUTVALS (IMIL)
+            INOUTVALS (IMIL) = XWRK
+         End If
+         If (INOUTVALS(IMIL) > INOUTVALS(IFIN)) Then
+            XWRK = INOUTVALS (IFIN)
+            INOUTVALS (IFIN) = INOUTVALS (IMIL)
+            INOUTVALS (IMIL) = XWRK
+            If (INOUTVALS(IMIL) < INOUTVALS(IDEB)) Then
+               XWRK = INOUTVALS (IDEB)
+               INOUTVALS (IDEB) = INOUTVALS (IMIL)
+               INOUTVALS (IMIL) = XWRK
+            End If
+         End If
+         XPIV = INOUTVALS (IMIL)
+!
+!  One exchanges values to put those > pivot in the end and
+!  those <= pivot at the beginning
+!
+         ICRS = IDEB
+         IDCR = IFIN
+         ECH2: Do
+            Do
+               ICRS = ICRS + 1
+               If (ICRS >= IDCR) Then
+!
+!  the first  >  pivot is IDCR
+!  the last   <= pivot is ICRS-1
+!  Note: If one arrives here on the first iteration, then
+!        the pivot is the maximum of the set, the last value is equal
+!        to it, and one can reduce by one the size of the set to process,
+!        as if INOUTVALS (IFIN) > XPIV
+!
+                  Exit ECH2
+!
+               End If
+               If (INOUTVALS(ICRS) > XPIV) Exit
+            End Do
+            Do
+               If (INOUTVALS(IDCR) <= XPIV) Exit
+               IDCR = IDCR - 1
+               If (ICRS >= IDCR) Then
+!
+!  The last value < pivot is always ICRS-1
+!
+                  Exit ECH2
+               End If
+            End Do
+!
+            XWRK = INOUTVALS (IDCR)
+            INOUTVALS (IDCR) = INOUTVALS (ICRS)
+            INOUTVALS (ICRS) = XWRK
+         End Do ECH2
+!
+!  One now sorts each of the two sub-intervals
+!
+         Call int16_subsor (INOUTVALS, IDEB1, ICRS-1)
+         Call int16_subsor (INOUTVALS, IDCR, IFIN1)
+      End If
+
+   End Subroutine int16_subsor
+
+   Subroutine int16_inssor (INOUTVALS)
+!  Sorts INOUTVALS into increasing order (Insertion sort)
+! __________________________________________________________
+      Integer(kind=int16), dimension (:), Intent (InOut) :: INOUTVALS
+! __________________________________________________________
+      Integer :: ICRS, IDCR
+      Integer(kind=int16) :: XWRK
+!
+      Do ICRS = 2, Size (INOUTVALS)
+         XWRK = INOUTVALS (ICRS)
+         If (XWRK >= INOUTVALS(ICRS-1)) Cycle
+         INOUTVALS (ICRS) = INOUTVALS (ICRS-1)
+         Do IDCR = ICRS - 2, 1, - 1
+            If (XWRK >= INOUTVALS(IDCR)) Exit
+            INOUTVALS (IDCR+1) = INOUTVALS (IDCR)
+         End Do
+         INOUTVALS (IDCR+1) = XWRK
+      End Do
+!
+End Subroutine int16_inssor
 Subroutine int32_refsor (INOUTVALS)
 ! __________________________________________________________
       Integer (kind=int32), Dimension (:), Intent (InOut) :: INOUTVALS
@@ -425,6 +654,118 @@ Recursive Subroutine int32_subsor (INOUTVALS, IDEB1, IFIN1)
       End Do
 !
 End Subroutine int32_inssor
+Subroutine int64_refsor (INOUTVALS)
+! __________________________________________________________
+      Integer (kind=int64), Dimension (:), Intent (InOut) :: INOUTVALS
+! __________________________________________________________
+      Call int64_subsor (INOUTVALS, 1, Size (INOUTVALS))
+      Call int64_inssor (INOUTVALS)
+End Subroutine int64_refsor
+
+Recursive Subroutine int64_subsor (INOUTVALS, IDEB1, IFIN1)
+!  Sorts INOUTVALS from IDEB1 to IFIN1
+! __________________________________________________________
+      Integer(kind=int64), dimension (:), Intent (InOut) :: INOUTVALS
+      Integer, Intent (In) :: IDEB1, IFIN1
+! __________________________________________________________
+      Integer(kind=int64) :: XPIV, XWRK
+      Integer, Parameter :: NINS = 16 ! Max for insertion sort
+      Integer :: ICRS, IDEB, IDCR, IFIN, IMIL
+!
+      IDEB = IDEB1
+      IFIN = IFIN1
+!
+!  If we don't have enough values to make it worth while, we leave
+!  them unsorted, and the final insertion sort will take care of them
+!
+      If ((IFIN - IDEB) > NINS) Then
+         IMIL = (IDEB+IFIN) / 2
+!
+!  One chooses a pivot, median of 1st, last, and middle values
+!
+         If (INOUTVALS(IMIL) < INOUTVALS(IDEB)) Then
+            XWRK = INOUTVALS (IDEB)
+            INOUTVALS (IDEB) = INOUTVALS (IMIL)
+            INOUTVALS (IMIL) = XWRK
+         End If
+         If (INOUTVALS(IMIL) > INOUTVALS(IFIN)) Then
+            XWRK = INOUTVALS (IFIN)
+            INOUTVALS (IFIN) = INOUTVALS (IMIL)
+            INOUTVALS (IMIL) = XWRK
+            If (INOUTVALS(IMIL) < INOUTVALS(IDEB)) Then
+               XWRK = INOUTVALS (IDEB)
+               INOUTVALS (IDEB) = INOUTVALS (IMIL)
+               INOUTVALS (IMIL) = XWRK
+            End If
+         End If
+         XPIV = INOUTVALS (IMIL)
+!
+!  One exchanges values to put those > pivot in the end and
+!  those <= pivot at the beginning
+!
+         ICRS = IDEB
+         IDCR = IFIN
+         ECH2: Do
+            Do
+               ICRS = ICRS + 1
+               If (ICRS >= IDCR) Then
+!
+!  the first  >  pivot is IDCR
+!  the last   <= pivot is ICRS-1
+!  Note: If one arrives here on the first iteration, then
+!        the pivot is the maximum of the set, the last value is equal
+!        to it, and one can reduce by one the size of the set to process,
+!        as if INOUTVALS (IFIN) > XPIV
+!
+                  Exit ECH2
+!
+               End If
+               If (INOUTVALS(ICRS) > XPIV) Exit
+            End Do
+            Do
+               If (INOUTVALS(IDCR) <= XPIV) Exit
+               IDCR = IDCR - 1
+               If (ICRS >= IDCR) Then
+!
+!  The last value < pivot is always ICRS-1
+!
+                  Exit ECH2
+               End If
+            End Do
+!
+            XWRK = INOUTVALS (IDCR)
+            INOUTVALS (IDCR) = INOUTVALS (ICRS)
+            INOUTVALS (ICRS) = XWRK
+         End Do ECH2
+!
+!  One now sorts each of the two sub-intervals
+!
+         Call int64_subsor (INOUTVALS, IDEB1, ICRS-1)
+         Call int64_subsor (INOUTVALS, IDCR, IFIN1)
+      End If
+
+   End Subroutine int64_subsor
+
+   Subroutine int64_inssor (INOUTVALS)
+!  Sorts INOUTVALS into increasing order (Insertion sort)
+! __________________________________________________________
+      Integer(kind=int64), dimension (:), Intent (InOut) :: INOUTVALS
+! __________________________________________________________
+      Integer :: ICRS, IDCR
+      Integer(kind=int64) :: XWRK
+!
+      Do ICRS = 2, Size (INOUTVALS)
+         XWRK = INOUTVALS (ICRS)
+         If (XWRK >= INOUTVALS(ICRS-1)) Cycle
+         INOUTVALS (ICRS) = INOUTVALS (ICRS-1)
+         Do IDCR = ICRS - 2, 1, - 1
+            If (XWRK >= INOUTVALS(IDCR)) Exit
+            INOUTVALS (IDCR+1) = INOUTVALS (IDCR)
+         End Do
+         INOUTVALS (IDCR+1) = XWRK
+      End Do
+!
+End Subroutine int64_inssor
 Subroutine f_char_refsor (INOUTVALS)
 ! __________________________________________________________
       character (kind=f_char,len=*), Dimension (:), Intent (InOut) :: INOUTVALS

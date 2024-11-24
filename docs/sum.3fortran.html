@@ -50,6 +50,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <CENTER>
 <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>sum (3)</NOBR><HR></H1>
 </CENTER>
+<P>
 <A name=0>
 
      <H3>NAME</H3>
@@ -254,66 +255,67 @@ Sample program:
 Results:
 <P>
 <PRE>
-        sum all elements:           9
-        real :   26.00000
-        complex : (13.10000,-4.300000)
-        sum odd elements:           6
-        sum positive values:          12
-        the input array  (a matrix)
-        &gt; [   -1,    2,   -3,    4 ]
-        &gt; [   10,  -20,   30,  -40 ]
-        &gt; [  100,  200, -300,  400 ]
-        &gt;shape= 3 4 ,rank= 2 ,size= 12
-<P>
-        sum of all elements in matrix  (a scalar)
-        &gt; [  382 ]
-        &gt;shape= ,rank= 0 ,size= 1
-<P>
-        sum of positive elements  (a scalar)
-        &gt; [  746 ]
-        &gt;shape= ,rank= 0 ,size= 1
-<P>
-        sum along rows  (a vector)
-        &gt; [  109 ]
-        &gt; [  182 ]
-        &gt; [ -273 ]
-        &gt; [  364 ]
-        &gt;shape= 4 ,rank= 1 ,size= 4
-<P>
-        sum along columns  (a vector)
-        &gt; [    2 ]
-        &gt; [  -20 ]
-        &gt; [  400 ]
-        &gt;shape= 3 ,rank= 1 ,size= 3
-<P>
-        sum of a vector is always a scalar  (a scalar)
-        &gt; [  9 ]
-        &gt;shape= ,rank= 0 ,size= 1
-<P>
-        sum of a volume by row  (a matrix)
-        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-        &gt; [  55,  55,  55,  55,  55,  55,  55 ]
-        &gt;shape= 6 7 ,rank= 2 ,size= 42
-<P>
-        sum of a volume by column  (a matrix)
-        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-        &gt; [  66,  66,  66,  66,  66,  66,  66 ]
-        &gt;shape= 5 7 ,rank= 2 ,size= 35
-<P>
-        sum of a volume by depth  (a matrix)
-        &gt; [  77,  77,  77,  77,  77,  77 ]
-        &gt; [  77,  77,  77,  77,  77,  77 ]
-        &gt; [  77,  77,  77,  77,  77,  77 ]
-        &gt; [  77,  77,  77,  77,  77,  77 ]
-        &gt; [  77,  77,  77,  77,  77,  77 ]
-        &gt;shape= 5 6 ,rank= 2 ,size= 30
+     &gt;  sum all elements:           9
+     &gt;  real :   26.0000000   
+     &gt;  complex :            (13.1000004,-4.30000019)
+     &gt;  sum odd elements:           6
+     &gt;  sum positive values:          12
+     &gt;  the input array  (a matrix)
+     &gt;  &gt; [   -1,    2,   -3,    4 ]
+     &gt;  &gt; [   10,  -20,   30,  -40 ]
+     &gt;  &gt; [  100,  200, -300,  400 ]
+     &gt;  &gt;shape= 3 4 ,rank= 2 ,size= 12
+     &gt;
+     &gt;  sum of all elements in matrix  (a scalar)
+     &gt;  &gt; [  382 ]
+     &gt;  &gt;shape= ,rank= 0 ,size= 1
+     &gt;
+     &gt;  sum of positive elements  (a scalar)
+     &gt;  &gt; [  746 ]
+     &gt;  &gt;shape= ,rank= 0 ,size= 1
+     &gt;
+     &gt;  sum along rows  (a vector)
+     &gt;  &gt; [  109 ]
+     &gt;  &gt; [  182 ]
+     &gt;  &gt; [ -273 ]
+     &gt;  &gt; [  364 ]
+     &gt;  &gt;shape= 4 ,rank= 1 ,size= 4
+     &gt;
+     &gt;  sum along columns  (a vector)
+     &gt;  &gt; [    2 ]
+     &gt;  &gt; [  -20 ]
+     &gt;  &gt; [  400 ]
+     &gt;  &gt;shape= 3 ,rank= 1 ,size= 3
+     &gt;
+     &gt;  sum of a vector is always a scalar  (a scalar)
+     &gt;  &gt; [  9 ]
+     &gt;  &gt;shape= ,rank= 0 ,size= 1
+     &gt;
+     &gt;  sum of a volume by row  (a matrix)
+     &gt;  &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+     &gt;  &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+     &gt;  &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+     &gt;  &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+     &gt;  &gt; [  55,  55,  55,  55,  55,  55,  55 ]
+     &gt;  &gt; [  55,  55,  55,  55,  55,  55, 113 ]
+     &gt;  &gt;shape= 6 7 ,rank= 2 ,size= 42
+     &gt;
+     &gt;  sum of a volume by column  (a matrix)
+     &gt;  &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+     &gt;  &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+     &gt;  &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+     &gt;  &gt; [  66,  66,  66,  66,  66,  66,  66 ]
+     &gt;  &gt; [  66,  66,  66,  66,  66,  66,**** ]
+     &gt;  &gt;shape= 5 7 ,rank= 2 ,size= 35
+     &gt;
+     &gt;  sum of a volume by depth  (a matrix)
+     &gt;  &gt; [  77,  77,  77,  77,  77,  77 ]
+     &gt;  &gt; [  77,  77,  77,  77,  77,  77 ]
+     &gt;  &gt; [  77,  77,  77,  77,  77,  77 ]
+     &gt;  &gt; [  77,  77,  77,  77,  77,  77 ]
+     &gt;  &gt; [  77,  77,  77,  77,  77,4193 ]
+     &gt;  &gt;shape= 5 6 ,rank= 2 ,size= 30
+     &gt;
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -370,10 +372,10 @@ o
 </TD><TD>
 MERGE(3) - Merge variables
 </TD></TR>
-<TR></TR></TABLE>fortran-lang intrinsic descriptions (license: MIT) @urbanjost
+<TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sum (3)</TD> <TD align=right width=33%><I>September 01, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from feb5a22e-0bb3-4b0a-a29c-6ccdbf59cea1 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>sum (3)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 84d5f19b-0500-4630-9081-dc071cb2f76f using man macros.</FONT>
 <br><br><center><img src="images/sum.3fortran.gif"></center>
 </div>
 </div>
