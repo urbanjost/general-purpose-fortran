@@ -266,7 +266,8 @@ integer        :: ier
    call unit_check('sgets', all(sgets('MY_STRING1').eq. ['100 ','0   ','-321']),      'MY_STRING1')
    call unit_check('sgets', all(sgets('MY_STRING2').eq.['-1234']),                    'MY_STRING2')
    call unit_check('sgets', all(sgets('NOTTHERE_SGETS').eq.[char(0)]),                'NOTTHERE_SGETS')
-   call unit_check('sgets', size(sgets('BLANK')).eq.0.and.len(sgets('BLANK')).eq.0,   'BLANK')
+   call unit_check('sgets', size(sgets('BLANK')).eq.0.and.len(sgets('BLANK')).eq.0,   'BLANK',&
+   size(sgets('BLANK')),len(sgets('BLANK')))
    call unit_check_done('sgets',msg='')
 end subroutine test_sgets
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
