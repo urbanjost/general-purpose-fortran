@@ -42,34 +42,31 @@ character(len=256)           :: cmdmsg
    call print_watch(watch=w1, title='COMMAND:'//cmd, err=errcode)
    call destroy_watch(w1)
 contains
-!>
-!!##NAME
-!!    time-(1f) - [FUNIX] display time used by a command
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!     time 'commands'
-!!##DESCRIPTION
-!!     Given a command time it and report all clock and system
-!!     time used.
-!!
-!!     Demonstrates the use of the M_stopwatch(3fm) module.
-!!##EXAMPLE
-!!
-!!   Sample usage:
-!!
-!!     time- 'hostname;sleep 3;pwd;date'
-!!
-!!   Typical output:
-!!
-!!    buzz
-!!    /home/urbanjs/V600/LIBRARY/libGPF/EXE/FUNIX
-!!    Sun Nov  4 22:11:09 EST 2018
-!!    COMMAND:hostname;sleep 3;pwd;date
-!!      times:
-!!            cpu=    0.03 user=    0.00  sys=    0.03 wall=    3.55
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
+! NAME
+!    time-(1f) - [FUNIX] display time used by a command
+!    (LICENSE:PD)
+! SYNOPSIS
+!     time 'commands'
+! DESCRIPTION
+!     Given a command time it and report all clock and system
+!     time used.
+! 
+!     Demonstrates the use of the M_stopwatch(3fm) module.
+! EXAMPLE
+!   Sample usage:
+! 
+!     time- 'hostname;sleep 3;pwd;date'
+! 
+!   Typical output:
+! 
+!    buzz
+!    /home/urbanjs/V600/LIBRARY/libGPF/EXE/FUNIX
+!    Sun Nov  4 22:11:09 EST 2018
+!    COMMAND:hostname;sleep 3;pwd;date
+!      times:
+!            cpu=    0.03 user=    0.00  sys=    0.03 wall=    3.55
+! AUTHOR
+!    John S. Urban
+! LICENSE
+!    Public Domain
 end program demo_print_watch

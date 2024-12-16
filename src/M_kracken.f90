@@ -109,7 +109,7 @@ contains
 !!     LEN     length of returned STRING
 !!     IER     error flag. Any non-zero value means an error occurred
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -200,7 +200,7 @@ end subroutine retrev
 !!##RETURNS
 !!     VALUE      doubleprecision value returned by function
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -277,7 +277,7 @@ end function dget
 !!##RETURNS
 !!     VALUE      real value returned by function
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -354,7 +354,7 @@ end function rget
 !!##RETURNS
 !!     VALUE      integer value returned by function
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -436,7 +436,7 @@ end function iget
 !!                if the corresponding string in the dictionary for KEYWORD is blank.
 !!                .FALSE. is returned if a string not in the list is found.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -542,7 +542,7 @@ end function lget
 !!             as NAME not being in the dictionary.
 !!     ilen    optional length of returned output string
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -643,7 +643,7 @@ end function sget
 !!              will have zero size if the parsed dictionary entry is blank.
 !!     IER      If present and non-zero an error occurred in converting strings to a value
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -752,7 +752,7 @@ end function dgets
 !!                The array will have zero size if the parsed dictionary
 !!     IER        If present and non-zero an error occurred in converting strings to a value
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -842,7 +842,7 @@ end function igets
 !!                entry is blank.
 !!     IER        If present and non-zero an error occurred in converting strings to a value
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program converts between Celcius and Fahrenheit
 !!
@@ -954,7 +954,7 @@ end function rgets
 !!                from the case-insensitive list of the words "true, false,
 !!                t, f, yes, no, y, n, .false., .true., .f., .t".
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1067,7 +1067,7 @@ end function lgets
 !!##RETURNS
 !!     strings  returned string array
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1175,7 +1175,7 @@ end function sgets
 !!     STYLE    parsing style. Either 'kracken' or 'args'. The default
 !!              is 'kracken'.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program:
@@ -1347,7 +1347,7 @@ end subroutine kracken
 !!    verb    name to define prompts for
 !!    string  to define prompts instead of values
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1419,7 +1419,7 @@ end subroutine setprompts
 !!##RETURNS
 !!    ERROR_RETURN  error code. If zero no error occurred.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1535,7 +1535,7 @@ end subroutine dissect
 !!##RETURNS
 !!    ERROR_RETURN  error code. If zero, no error occurred
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample program:
 !!
@@ -1880,7 +1880,7 @@ end subroutine parse
 !!##RETURNS
 !!    IER      flag if error occurs in adding or setting value
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2154,7 +2154,7 @@ end subroutine store
 !!
 !!##RETURNS
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##SEE ALSO
@@ -2217,7 +2217,7 @@ end function subscript_
 !!
 !!##RETURNS
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##SEE ALSO
@@ -2481,7 +2481,7 @@ end subroutine menu
 !!    VERBS_ONLY   flag to show verbs only
 !!    IWIDE        if .ge. zero, how many columns wide to show just verbs
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!

@@ -52,10 +52,10 @@
      write(*,*)'polyarea=',polyarea( xy(1,vertex(1:nvert)), xy(2,vertex(1:nvert)))
      contains
      subroutine pickrandom()
-        ! randomly pick a point in the plot area and color it according to whether it is inside
-        ! the original polygon
-        real :: pointx, pointy
-        integer :: l, m
+     ! randomly pick a point in the plot area and color it according to whether it is inside
+     ! the original polygon
+     real :: pointx, pointy
+     integer :: l, m
         call random_number(pointx)
         call random_number(pointy)
         pointx=int(pointx*20.0-10.0)

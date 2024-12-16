@@ -53,27 +53,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    unlink-(1f) - [FUNIX:FILESYSTEM] call the unlink(3c) function to remove the specified file
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!      unlink- file(s)
-!!      unlink- OPTION
-!!
-!!##DESCRIPTION
-!!        Call the unlink function to remove the specified FILE.
-!!
-!!##OPTIONS
-!!        FILES      list of files to remove
-!!        --help     display this help and exit
-!!        --version  output version information and exit
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -93,7 +72,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-11-24 04:44:26 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:38:40 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

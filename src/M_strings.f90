@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_strings(3f) - [M_strings::INTRO] Fortran string module
@@ -295,7 +284,6 @@
 !!
 !!    Each of the procedures includes an [example](example/) program in
 !!    the corresponding man(1) page for the function.
-!!##EXAMPLE
 !!
 !!    Sample program:
 !!
@@ -1396,7 +1384,12 @@ integer                       :: imax                   ! length of longest toke
    case default             ; ii=1            ; iiii=1            ! first to last
    end select
 !-----------------------------------------------------------------------------------------------------------------------------------
-   imax=maxval(iend-ibegin+1)
+   ! maxval() of a zero-size array is set to a flag value not zero or length of character string
+   if(size(ibegin).eq.0)then
+      imax=0
+   else
+      imax=maxval(iend-ibegin)+1
+   endif
    allocate(character(len=imax) :: array(size(ibegin)))           ! allocate the array to return
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i20=1,size(ibegin)                                          ! fill the array with the tokens that were found
@@ -1605,9 +1598,9 @@ integer                         :: imax                   ! length of longest to
 !-----------------------------------------------------------------------------------------------------------------------------------
    n=len(input_line)+1                        ! max number of strings INPUT_LINE could slice into if all delimiter
    if(allocated(ibegin))deallocate(ibegin)    !x! intel compiler says allocated already ?
-   if(allocated(iend))deallocate(iend)      !x! intel compiler says allocated already ?
+   if(allocated(iend))deallocate(iend)        !x! intel compiler says allocated already ?
    allocate(ibegin(n))                        ! allocate enough space to hold starting location of tokens if string all tokens
-   allocate(iend(n))                         ! allocate enough space to hold ending location of tokens if string all tokens
+   allocate(iend(n))                          ! allocate enough space to hold ending location of tokens if string all tokens
    ibegin(:)=1
    iend(:)=1
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1616,27 +1609,27 @@ integer                         :: imax                   ! length of longest to
    inotnull=0                                                     ! how many tokens found not composed of delimiters
    imax=0                                                         ! length of longest token found
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(lgth > 0)then                                              ! there is at least one non-delimiter in INPUT_LINE if get here
+   if(lgth > 0)then                                               ! there is at least one non-delimiter in INPUT_LINE if get here
       icol=1                                                      ! initialize pointer into input line
       INFINITE: do i30=1,lgth,1                                   ! store into each array element
          ibegin(i30)=icol                                         ! assume start new token on the character
          if(index(dlim(1:idlim),input_line(icol:icol)) == 0)then  ! if current character is not a delimiter
-            iend(i30)=lgth                                       ! initially assume no more tokens
+            iend(i30)=lgth                                        ! initially assume no more tokens
             do i10=1,idlim                                        ! search for next delimiter
                ifound=index(input_line(ibegin(i30):lgth),dlim(i10:i10))
                IF(ifound > 0)then
                   iend(i30)=min(iend(i30),ifound+ibegin(i30)-2)
                endif
             enddo
-            icol=iend(i30)+2                                     ! next place to look as found end of this token
+            icol=iend(i30)+2                                      ! next place to look as found end of this token
             inotnull=inotnull+1                                   ! increment count of number of tokens not composed of delimiters
          else                                                     ! character is a delimiter for a null string
-            iend(i30)=icol-1                                     ! record assumed end of string. Will be less than beginning
+            iend(i30)=icol-1                                      ! record assumed end of string. Will be less than beginning
             icol=icol+1                                           ! advance pointer into input string
          endif
          imax=max(imax,iend(i30)-ibegin(i30)+1)
          icount=i30                                               ! increment count of number of tokens found
-         if(icol > lgth)then                                     ! no text left
+         if(icol > lgth)then                                      ! no text left
             exit INFINITE
          endif
       enddo INFINITE
@@ -1753,7 +1746,7 @@ end subroutine slice
 !!
 !!##LICENSE
 !!    Public Domain
-FUNCTION chomp(source_string,token,delimiters)
+function chomp(source_string,token,delimiters)
 
 ! ident_10="@(#) M_strings chomp(3f) Tokenize a string JSU- 20151030"
 
@@ -2383,7 +2376,7 @@ end function replace
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine substitute(targetline,old,new,ierr,start,end)
+!!    impure elemental subroutine substitute(targetline,old,new,ierr,start,end)
 !!
 !!     character(len=*)              :: targetline
 !!     character(len=*),intent(in)   :: old
@@ -3039,7 +3032,7 @@ end subroutine modif                           !RETURN
 !!
 !!##SYNOPSIS
 !!
-!!    integer function len_white(string)
+!!    elemental integer function len_white(string)
 !!
 !!     character(len=*) :: string
 !!
@@ -4593,7 +4586,7 @@ end function s2a
 !!
 !!##SYNOPSIS
 !!
-!!    function s2c(string)
+!!    pure function s2c(string)  RESULT (array)
 !!
 !!     character(len=*),intent=(in)  :: string
 !!     character(len=1),allocatable  :: s2c(:)
@@ -5046,7 +5039,7 @@ end function expand
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine notabs(INSTR,OUTSTR,lgth)
+!!    elemental impure subroutine notabs(instr,outstr,lgth)
 !!
 !!     character(len=*),intent=(in)           :: INSTR
 !!     character(len=*),intent=(out),optional :: OUTSTR
@@ -5100,7 +5093,7 @@ end function expand
 !!    write(*,*)'['//string//']'
 !!    contains
 !!    subroutine makefile(lun)
-!!    integer :: iostat,lun
+!!    integer :: lun
 !!    integer :: i
 !!    character(len=80),parameter  :: fakefile(*)=[character(len=80) :: &
 !!    'col1'//t//'col2' ,&
@@ -5110,9 +5103,9 @@ end function expand
 !!    'dddd'//t//'four' ,&
 !!    '']
 !!    ! create input file
-!!    open(newunit=lun,status='scratch')
-!!    write(lun,'(a)')(trim(fakefile(i)),i=1,size(fakefile))
-!!    rewind(lun)
+!!       open(newunit=lun,status='scratch')
+!!       write(lun,'(a)')(trim(fakefile(i)),i=1,size(fakefile))
+!!       rewind(lun)
 !!    end subroutine makefile
 !!    end program demo_notabs
 !! ```

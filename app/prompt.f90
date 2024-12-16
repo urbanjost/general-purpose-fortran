@@ -38,34 +38,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    prompt(1f) - prompt for whether to execute the command given on the command line
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    prompt "cmd"
-!!
-!!##DESCRIPTION
-!!    Given a command prompt as to whether to execute it or not.
-!!
-!!##OPTIONS
-!!    cmd   command to conditionally execute
-!!    --help        display this help and exit
-!!    --version     output version information and exit
-!!
-!!##EXAMPLE
-!!
-!!   Typical usage:
-!!
-!!    prompt  program
-!!##SEE ALSO
-!!    xargs(1)
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -85,7 +57,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-11-24 04:45:27 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:40:51 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -109,7 +81,7 @@ character(len=256) :: sstat
    itimes=max(1,iget('prompt_repeat'))
    cmd=trim(sget('prompt_oo'))
    do i=itimes,1,-1
-      write(*,'("run '//cmd//'...")',advance="no")
+      write(*,'("execute '//cmd//'...?")',advance="no")
       read(*,'(a)',iostat=ios) cprompt
       if(ios.ne.0)cycle
       select case(cprompt)

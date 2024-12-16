@@ -95,7 +95,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2024-11-24 04:44:52 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:39:35 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -139,31 +139,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!        ffmt(1f) - [FILE EDIT] simple text formatter for Fortran comments
-!!        (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!        ffmt [OPTION]...
-!!
-!!##DESCRIPTION
-!!    Ignoring lines not beginning with an exclamation, trim the leading
-!!    exclamation and then reformat each paragraph on standard input,
-!!    prefixing the output with an exclamation.
-!!
-!!    A paragraph ends when a blank line is encountered or the left margin
-!!    changes.
-!!
-!!##OPTIONS
-!!        -w, WIDTH               maximum line width (default of 75 columns)
-!!        --help                  display this help and exit
-!!        --version               output version information and exit
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 end program demo_ffmt
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

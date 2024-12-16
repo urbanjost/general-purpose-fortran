@@ -24,7 +24,7 @@
 !!    Transparent    Transparent color; optional
 !!    Delay          Delay time [ 1/100 of seconds]; optional
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample call:
 !!

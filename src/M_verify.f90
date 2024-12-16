@@ -890,7 +890,7 @@ integer                              :: clicks_now
        & "check_stop:  TALLY                ",a,&
        & " GOOD:",i9,                           &
        & " BAD:",i9,                            &
-       & " DURATION:",i14.14                    &
+       & " DURATION:",i20.20                    &
        & )')                                    &
        & trim(unit_check_prefix),               &
        & PF,                                    &
@@ -1010,7 +1010,7 @@ integer                              :: clicks_now
        & 1x,a,                            &
        & " GOOD:",i9,                     &
        & " BAD:",i9,                      &
-       & " DURATION:",i14.14              &
+       & " DURATION:",i20.20              &
        & )')                              &
        & trim(unit_check_prefix),         &
        & atleast(name,20),                &
@@ -1398,7 +1398,7 @@ end function julian
 !!##RETURNS
 !!    almost   TRUE if the input values compare up to the specified number
 !!             of values
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample:
 !!
@@ -1563,7 +1563,7 @@ end function almost
 !!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
 !!    here the accuracy reported is -0.30103000.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Example program:
@@ -1750,7 +1750,7 @@ END SUBROUTINE accdig
 !!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
 !!    here the accuracy reported is -0.30103000.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Example program:
@@ -1898,7 +1898,7 @@ end subroutine dp_accdig
 !!   measured_value   Second value
 !!   allowed_margin   Allowed relative margin
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2047,7 +2047,7 @@ end function round
 !!                                   which may correspond to one of the
 !!                                   other modes.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program
 !!

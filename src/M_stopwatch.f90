@@ -3,7 +3,7 @@
 !!                     M_StopWatch Version 1.1
 !!
 !!   M_StopWatch is a Fortran 90 module for portable, easy-to-use
-!!   measurement of execution time.  It supports four clocks
+!!   measurement of execution time. It supports four clocks
 !!
 !!      o wall clock
 !!      o CPU clock
@@ -16,7 +16,7 @@
 !!   and the precision of those clocks.
 !!
 !!   M_StopWatch is used by instrumenting your code with subroutine calls
-!!   that mimic the operation of a stop watch.  M_StopWatch supports multiple
+!!   that mimic the operation of a stop watch. M_StopWatch supports multiple
 !!   watches, and provides the concept of watch groups to allow functions
 !!   to operate on multiple watches simultaneously.
 !!
@@ -62,10 +62,10 @@
 !! property. The software was developed by NIST employees. NIST employee
 !! contributions are not subject to copyright protection within the United States.
 module M_stopwatch
-use,intrinsic     :: iso_c_binding,   only : c_float, c_int, c_char
-use,intrinsic     :: iso_c_binding,   only : c_ptr, c_f_pointer, c_null_char, c_null_ptr
-!use,intrinsic     :: iso_c_binding
-!use,intrinsic     :: iso_fortran_env, only : int8, int16, int32, int64 !x!, real32, real64, real128, dp=>real128
+use,intrinsic   :: iso_c_binding,  only : c_float, c_int, c_char
+use,intrinsic   :: iso_c_binding,  only : c_ptr, c_f_pointer, c_null_char, c_null_ptr
+!use,intrinsic  :: iso_c_binding
+!use,intrinsic  :: iso_fortran_env, only : int8, int16, int32, int64 !x!, real32, real64, real128, dp=>real128
 implicit none
 private
 
@@ -262,7 +262,7 @@ subroutine create_watch_actual(watch,clock,name,err)
 
 !----------------------------------------------------
 ! This routine creates the specified watches with the specified clocks.
-! You can NOT use it to add a clock to an already created watch.  This is
+! You can NOT use it to add a clock to an already created watch. This is
 ! because I cannot use "allocated" to see if the watch was already created,
 ! and then know whether to allocate or just add a clock.
 !----------------------------------------------------
@@ -293,7 +293,7 @@ if (present(err)) then
    err=0
 end if
 
-! set default clocks to be all available clocks.  This only needs to be done
+! set default clocks to be all available clocks. This only needs to be done
 ! once, which can be checked by seeing if default_clocks has been allocated.
 
 if (.not. allocated(default_clocks)) then
@@ -2466,7 +2466,7 @@ character(len=*),parameter :: ident_option_stopwatch='M_stopwatch::option_stopwa
 !----------------------------------------------------
 ! Dummy arguments
 
-! DEC bug 1.  Can't have optional array argument here.
+! DEC bug 1. Can't have optional array argument here.
 !character(len=*), optional, intent(in), dimension(:) :: default_clock
 character(len=*), intent(in), dimension(:) :: default_clock
 integer, optional, intent(in) :: io_unit_print, io_unit_error
@@ -2779,10 +2779,10 @@ subroutine create_watchgroup_actual(watch,handle,err)
 
 character(len=*),parameter :: ident_create_watchgroup='M_stopwatch::create_watchgroup(3f): creates a M_StopWatch watch group'
 
-! handle should not be an optional argument.  It must be present.  It was made
+! handle should not be an optional argument. It must be present. It was made
 ! optional to deal with F's requirement that nonoptional arguments do not
 ! follow optional arguments, and to keep upward compatibility with 1) a watch
-! need not be provided and 2) argument order.  This should not cause confusion
+! need not be provided and 2) argument order. This should not cause confusion
 ! on the user's part because 1) the documentation will not indicate handle is
 ! optional, and 2) calling this routine without handle is meaningless
 type (watch_pointer), optional, intent(in), dimension(:) :: watch
@@ -2793,7 +2793,7 @@ type (watch_list), pointer :: list_entry
 integer :: i,erralloc
 integer :: itemp ! change for 0.8.1; see explanation below
 
-! Creates a new watch group and returns a handle for it.  If watch is
+! Creates a new watch group and returns a handle for it. If watch is
 ! present then the group will initially contain the given watches; otherwise
 ! the group will initially be empty.
 
@@ -2805,7 +2805,7 @@ if (.not. present(handle)) then ! just in case it gets called without handle
    return
 end if
 
-! desired:  if the group already exists (associated(head)==.true.)
+! desired: if the group already exists (associated(head)==.true.)
 ! then either destroy_watchgroup or set an error and don"t create.
 ! Unfortunately, I cannot test associated(head) because head will (correctly)
 ! have an undefined association status the first time a watch is passed to
@@ -3181,7 +3181,7 @@ end subroutine leave_watchgroup_s
 subroutine which_clocks_a(clock,from,err)
 !----------------------------------------------------
 ! This routine sets the flags do_cpu, do_user, do_sys and do_wall to indicate
-! which clocks should be operated on.  clock is an array of clock names
+! which clocks should be operated on. clock is an array of clock names
 ! ("cpu", "user", "sys", and "wall") for which to set the flag true
 !----------------------------------------------------
 !----------------------------------------------------
@@ -3343,7 +3343,6 @@ end subroutine err_handler_watch
 !===================================================================================================================================
 subroutine system_cpu_time(total,user,system)
 
-
 real,intent(out)   :: user,system,total
 real(kind=c_float) :: c_user,c_system,c_total
 
@@ -3365,7 +3364,7 @@ end subroutine system_cpu_time
 subroutine tic()
 
    call create_watch(tictoc,name='tictoc')    ! Watches must be created before they are used
-   call start_watch(tictoc)     ! This starts the watch
+   call start_watch(tictoc)                   ! This starts the watch
 
 end subroutine tic
 !===================================================================================================================================

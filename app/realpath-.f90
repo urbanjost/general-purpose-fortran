@@ -24,32 +24,29 @@ integer                      :: filename_length
       write(*,'(a)')trim(patho)
    endif
 contains
-!>
-!!##NAME
-!!        realpath-(1f) - [FUNIX] print the resolved path
-!!        (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!        realpath- FILE...
-!!
-!!##DESCRIPTION
-!!    Print the resolved absolute file name; all but the last component
-!!    must exist
-!!
-!!##AUTHOR
-!!    Written by John S. Urban
-!!##OPTIONS
-!!    FILE(S)  name of files to resolve
-!!
-!!##EXAMPLES
-!!
-!!   Sample usage
-!!
-!!      realpath- *
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
+! NAME
+!        realpath-(1f) - [FUNIX] print the resolved path
+!        (LICENSE:PD)
+! 
+! SYNOPSIS
+!        realpath- FILE...
+! 
+! DESCRIPTION
+!    Print the resolved absolute file name; all but the last component
+!    must exist
+! 
+! AUTHOR
+!    Written by John S. Urban
+! OPTIONS
+!    FILE(S)  name of files to resolve
+! 
+! EXAMPLES
+!   Sample usage
+! 
+!      realpath- *
+! 
+! AUTHOR
+!    John S. Urban
+! LICENSE
+!    Public Domain
 end program demo_system_realpath

@@ -96,7 +96,7 @@ module M_uuid
 !!
 !! -- Wikipedia
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -188,7 +188,7 @@ contains
 !!             4.  pseudo-RNG(Random Number Generator) based
 !!             5.  Not implemented
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample usage:
 !!

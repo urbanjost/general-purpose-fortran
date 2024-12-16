@@ -1,10 +1,9 @@
 program qa6
 ! (LICENSE:Public Domain)
-   use M_calcomp
-   implicit none
-   real :: totx, toty, am, cv
-   dimension totx(10), toty(10), am(10, 10), cv(10)
-   integer :: kin, nx, ny, ncv, i, j
+use M_calcomp
+implicit none
+real    :: totx(10), toty(10), am(10, 10), cv(10), hgt
+integer :: kin, nx, ny, ncv, i, j
    !
    kin = 50
    call make_c_qa6()
@@ -28,7 +27,9 @@ program qa6
    ! plotting
    call plots(0.0, 8.5, 0.0, 11.0)
    call plot(0., 1., -3)
-   call cntour(am, nx, ny, totx, toty, 3.0, cv, ncv, .true., 10)
+   !    cntour(am, xx, yy, totx, toty, hgt, cv, cvn, tab, ndimyy)
+   hgt=3.0
+   call cntour(am, nx, ny, totx, toty, hgt, cv, ncv, .true., 10)
    call plot(0.0, 0.0, 999)
 810 format(8f6.1)
 900 format('1', 'NX =', i2, 'NY =', i2, 'NCV =', i2)
@@ -36,6 +37,7 @@ program qa6
 920 format('0', 'TOTY', /(' ', 5x, 10f10.1))
 940 format('0', 5x, 10f10.1)
 950 format('0', 'CV', /, (' ', 10f10.1))
+   close (unit=kin, status='delete')
    stop
 contains
    subroutine make_c_qa6()

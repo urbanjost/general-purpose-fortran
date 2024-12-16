@@ -9,6 +9,7 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
+!!  Usage:
 !!
 !!    use M_CLI, only : commandline, check_commandline
 !!    use M_CLI, only : unnamed, debug
@@ -18,7 +19,7 @@
 !!    parsing using a simple prototype that looks just like a call to the
 !!    program and NAMELIST.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   This is an extensive example that even adds a procedure that lets you
 !!   interactively edit the NAMELIST values. See the demo programs for more
@@ -333,7 +334,7 @@ contains
 !!
 !!         strings demo2|grep '@(#)'|tr '>' '\n'|sed -e 's/  */ /g'
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Typical usage:
 !!
@@ -678,7 +679,7 @@ end function commandline
 !!
 !!##RETURNS
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    sample program:
@@ -847,7 +848,7 @@ end subroutine prototype_to_dictionary
 !!     val  if present add or replace value associated with keyword. If not
 !!          present remove keyword entry from dictionary.
 !!##RETURNS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -913,7 +914,7 @@ end subroutine update
 !!     subroutine wipe_dictionary()
 !!##DESCRIPTION
 !!     reset private M_CLI(3fm) dictionary to empty
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!     program demo_wipe_dictionary
@@ -947,7 +948,7 @@ end subroutine wipe_dictionary
 !!     Get dictionary value associated with key name in private M_CLI(3fm) dictionary.
 !!##OPTIONS
 !!##RETURNS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !===================================================================================================================================
 function get(key) result(valout)
@@ -983,7 +984,7 @@ end function get
 !!     prototype
 !!##RETURNS
 !!     nml
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    Sample program
@@ -1296,7 +1297,7 @@ end subroutine dictionary_to_namelist
 !!            argument list.
 !!    STOP    logical value that if true stops the program after displaying
 !!            the dictionary.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!     Typical usage:
@@ -1401,7 +1402,7 @@ end subroutine print_dictionary
 !!     length of longest argument on command line. Useful when allocating storage for holding arguments.
 !!##RESULT
 !!     longest_command_argument  length of longest command argument
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -1460,7 +1461,7 @@ end function longest_command_argument
 !!    SPECIFIED  returns .TRUE. if specified NAME was present on the command
 !!               line when the program was invoked.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!

@@ -18,6 +18,8 @@
 !!     (LICENSE:MIT)
 !!##SYNOPSIS
 !!
+!! Usage:
+!!
 !!     use M_xterm, only : xterm_font
 !!     use M_xterm, only : xterm_colors, xterm_pencolor
 !!     use M_xterm, only : xterm_geometry, xterm_width, xterm_position
@@ -178,8 +180,9 @@ contains
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_xrdb(name)
-!!    character(len=*),intent(in):: color
+!!     subroutine xterm_xrdb(name)
+!!
+!!      character(len=*),intent(in):: color
 !!
 !!##DESCRIPTION
 !!
@@ -289,8 +292,9 @@ end subroutine xterm_xrdb
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_occupancy(windowname)
-!!    character(len=*)    :: windowname
+!!     subroutine xterm_occupancy(windowname)
+!!
+!!      character(len=*)    :: windowname
 !!
 !!##DESCRIPTION
 !!
@@ -353,9 +357,10 @@ end subroutine xterm_occupancy
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    function xterm_get_pencolor(pennum) result(color)
-!!    integer,intent(in)  :: pennum
-!!    character(len=*)    :: color
+!!     function xterm_get_pencolor(pennum) result(color)
+!!
+!!      integer,intent(in)  :: pennum
+!!      character(len=*)    :: color
 !!
 !!##DESCRIPTION
 !!
@@ -417,9 +422,10 @@ end function xterm_get_pencolor
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    function xterm_get_colors(type) result(color)
-!!    character(len=*),intent(in) :: type
-!!    character(len=*)            :: color
+!!     function xterm_get_colors(type) result(color)
+!!
+!!      character(len=*),intent(in) :: type
+!!      character(len=*)            :: color
 !!
 !!##DESCRIPTION
 !!
@@ -538,9 +544,10 @@ end function xterm_get_colors
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_pencolor(pennum,color)
-!!    integer,intent(in)          :: pennum
-!!    character(len=*),intent(in) :: color
+!!     subroutine xterm_pencolor(pennum,color)
+!!
+!!      integer,intent(in)          :: pennum
+!!      character(len=*),intent(in) :: color
 !!
 !!##DESCRIPTION
 !!    Set the color of a pen of an xterm(1) window.
@@ -590,9 +597,10 @@ end subroutine xterm_pencolor
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_colors(type,color)
-!!    character(len=*),intent(in) :: type
-!!    character(len=*),intent(in) :: color
+!!     subroutine xterm_colors(type,color)
+!!
+!!      character(len=*),intent(in) :: type
+!!      character(len=*),intent(in) :: color
 !!
 !!##DESCRIPTION
 !!
@@ -691,8 +699,9 @@ end subroutine xterm_colors
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_font(fontname)
-!!    character(len=*),intent(in) :: fontname
+!!     subroutine xterm_font(fontname)
+!!
+!!      character(len=*),intent(in) :: fontname
 !!
 !!##DESCRIPTION
 !!
@@ -797,8 +806,9 @@ end subroutine xterm_font
 !! (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_keywords(keyword)
-!!    character(len=*),intent(in) :: keyword
+!!     subroutine xterm_keywords(keyword)
+!!
+!!      character(len=*),intent(in) :: keyword
 !!
 !!##DESCRIPTION
 !!    Send basic hints to the X11 Window Manager, such as to raise
@@ -872,9 +882,10 @@ end subroutine xterm_keywords
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_position(right,down)
-!!    integer,intent(in),optional :: right
-!!    integer,intent(in),optional :: down
+!!     subroutine xterm_position(right,down)
+!!
+!!      integer,intent(in),optional :: right
+!!      integer,intent(in),optional :: down
 !!
 !!##DESCRIPTION
 !!    Sets the position of an xterm(1) window by specifying the
@@ -929,9 +940,10 @@ end subroutine xterm_position
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_geometry(rows,cols)
-!!    integer,intent(in),optional :: rows
-!!    integer,intent(in),optional :: cols
+!!     subroutine xterm_geometry(rows,cols)
+!!
+!!      integer,intent(in),optional :: rows
+!!      integer,intent(in),optional :: cols
 !!
 !!##DESCRIPTION
 !!    Sets the size of an xterm(1) window.
@@ -983,8 +995,9 @@ end subroutine xterm_geometry
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_width(iwidth)
-!!    integer,intent(in) :: iwidth
+!!     subroutine xterm_width(iwidth)
+!!
+!!      integer,intent(in) :: iwidth
 !!
 !!##DESCRIPTION
 !!    Sets the width of an xterm(1) window to 80 or 132 characters.
@@ -1043,10 +1056,10 @@ end subroutine xterm_width
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!   subroutine xterm_labels(type,label)
+!!     subroutine xterm_labels(type,label)
 !!
-!!    character(len=*),intent(in) :: type
-!!    character(len=*),intent(in) :: label
+!!      character(len=*),intent(in) :: type
+!!      character(len=*),intent(in) :: label
 !!
 !!##DESCRIPTION
 !!    Set icon and decoration title labels for xterm(1) windows.
@@ -1097,7 +1110,7 @@ end subroutine xterm_labels
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_clear()
+!!     subroutine xterm_clear()
 !!
 !!##DESCRIPTION
 !!    clears the screen of an xterm(1) window using escape sequences
@@ -1185,8 +1198,9 @@ end function RAWGET
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    function xterm_get_font() result(fontname)
-!!    character(len=:),allocatable :: fontname
+!!     function xterm_get_font() result(fontname)
+!!
+!!      character(len=:),allocatable :: fontname
 !!
 !!##DESCRIPTION
 !!    Sends an escape sequence to stdout to query the fontname of an xterm(1) window.
@@ -1238,8 +1252,9 @@ end function xterm_get_font
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    function xterm_get_iconstate() result(state)
-!!    integer :: state
+!!     function xterm_get_iconstate() result(state)
+!!
+!!      integer :: state
 !!
 !!##DESCRIPTION
 !!    Sends an escape sequence to stdout to query the icon state of an xterm(1) window.
@@ -1292,9 +1307,10 @@ end function xterm_get_iconstate
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_get_geometry(rows,cols)
-!!    integer,intent(out) :: rows
-!!    integer,intent(out) :: cols
+!!     subroutine xterm_get_geometry(rows,cols)
+!!
+!!      integer,intent(out) :: rows
+!!      integer,intent(out) :: cols
 !!
 !!##DESCRIPTION
 !!    Sends an escape sequence to stdout to query the size of an xterm(1) window.
@@ -1348,9 +1364,10 @@ end subroutine xterm_get_geometry
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine xterm_get_position(right,down)
-!!    integer,intent(out) :: right
-!!    integer,intent(out) :: down
+!!     subroutine xterm_get_position(right,down)
+!!
+!!      integer,intent(out) :: right
+!!      integer,intent(out) :: down
 !!
 !!##DESCRIPTION
 !!    Sends an escape sequence to stdout to query the position of an xterm(1) window.

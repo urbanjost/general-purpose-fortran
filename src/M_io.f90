@@ -155,7 +155,7 @@ CONTAINS
 !!             except with a number appended at the end if needed. If could
 !!             not find a unique name a blank is returned.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -318,7 +318,7 @@ end function uniq
 !!           filename even if present
 !!    name   if lun = -1  or is not present then query by this filename
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -490,7 +490,7 @@ end subroutine print_inquire
 !!
 !!    The value is cached as a return value for subsequent calls.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample usage
 !!
@@ -1333,7 +1333,7 @@ end function number_of_lines
 !!    Beginning with f2008, you can probably use OPEN(NEWUNIT=...) instead
 !!    of an open unit locator.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    Sample program:
@@ -1787,7 +1787,7 @@ end function basename
 !!        value that cannot be returned as a NEWUNIT value on an OPEN(3f))
 !!        and IOS will be non-zero.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Common usage
 !!
@@ -1945,7 +1945,7 @@ end function fileopen
 !!   LUN unit number to close
 !!##RETURNS
 !!   IOS status value from CLOSE
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -2007,7 +2007,7 @@ end function fileclose
 !!              Allowed values are  ASIS|REWIND|APPEND
 !!##RETURNS
 !!   IERR       status value. Zero indicates no error occurred
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -2120,7 +2120,7 @@ end function filewrite
 !!   LUN  unit number of open file to delete or filename.
 !!##RETURNS
 !!   IOS  status returned by CLOSE().
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -2187,7 +2187,7 @@ end function filedelete_filename
 !!     the ends of sections and a separator (as returned by separator(3f)
 !!     ) placed between them, and duplicate adjacent separators removed
 !!     accept for one beginning the joined pathname.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -2280,7 +2280,7 @@ end function joinpath
 !!    routine is only intended for simple parsing of names of the form
 !!    "[dir/]name[.extension].
 !!
-!!##RESULTS
+!!##RETURNS
 !!    dir       Path of directories, including the trailing slash.
 !!    name      Name of file leaf or, if no file is specified in path,
 !!              name of the lowest directory.
@@ -2292,7 +2292,7 @@ end function joinpath
 !!    special name ".." is assumed to mean one directory above the current
 !!    directory.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   program demo_splitpath
 !!
@@ -2511,7 +2511,7 @@ end subroutine splitpath
 !!    IER     zero unless an error occurred. If not zero, LINE returns the
 !!            I/O error message.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2628,7 +2628,7 @@ end function getline
 !!    IER    status returned by READ(IOSTAT=IER). If not zero, an error
 !!           occurred or an end-of-file or end-of-record was encountered.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2732,7 +2732,7 @@ end function read_line
 !!    nothing is set "/tmp/" is returned. The returned value always ends in
 !!    "/". No test is made that the directory exists or is writable.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample:
@@ -2849,7 +2849,7 @@ end function get_tmp
 !!       The same as if a prefix is not supplied accept the basename begins with
 !!       the given string instead of the current program name.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample:
 !!
@@ -2966,7 +2966,7 @@ end function scratch
 !!    out       returned string or value. If an end-of-file or system error
 !!              is encountered the string "EOF" is returned, or a "Nan"
 !!              REAL numeric value, or huge(0), or .false. .
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3196,7 +3196,7 @@ end function rd_integer
 !!    getname(3f) returns the name of the current executable using
 !!    get_command_argument(3f) and inquire(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample getting a pathname of current executable:
 !!
@@ -3268,7 +3268,7 @@ end function getname
 !!    PATHNAME  the first pathname found in the current user path. Returns blank
 !!              if the command is not found.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3359,7 +3359,7 @@ end function which
 !!    PATHNAME  the first pathname found in the current user path. Returns blank
 !!              if the file is not found.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3456,7 +3456,7 @@ end function lookfor
 !!    IERR     return error code. Must be specified with a keyword.
 !!             It is zero if no error occurred.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3728,7 +3728,7 @@ end function get_env_logical
 !!    YESNO    true if pathname points to a hidden file, otherwise it
 !!             is false.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3809,7 +3809,7 @@ end function is_hidden_file
 !!    IOS   The error status returned by the last read. It is zero (0) if
 !!          no error occurred
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3936,7 +3936,7 @@ end subroutine get_next_char
 !!              representing NUM.
 !!
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    Sample program:
@@ -4013,7 +4013,7 @@ end function filename_generator
 !!    A integer value for the ADE (ASCII Decimal Equivalent) of the
 !!    character, or a negative value if an error occurs.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample usage
 !!
@@ -4058,7 +4058,7 @@ end function putchar
 !!    A integer value for the ADE (ASCII Decimal Equivalent) of the
 !!    character, or a negative value if an error occurs.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample usage
 !!

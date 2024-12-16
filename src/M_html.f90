@@ -16,6 +16,8 @@
 !!
 !!##SYNOPSIS
 !!
+!! Usage:
+!!
 !!    use M_html, only : h_open, h_close
 !!    use M_html, only : h_array
 !!
@@ -24,7 +26,7 @@
 !!     o h_open(lun)          open HTML file and create simple header
 !!     o h_close(lun)         close HTML file
 !!     o h_array(lun,array)   print a numeric array as an HTML table
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample Usage
 !!
@@ -78,15 +80,15 @@ CONTAINS
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine h_array(iounit,array)
+!!     subroutine h_array(iounit,array)
 !!
-!!    integer,intent(in) :: iounit
-!!    real,intent(in)    :: array(:,:)
+!!      integer,intent(in) :: iounit
+!!      real,intent(in)    :: array(:,:)
 !!
 !!##DESCRIPTION
 !!    Write an array as an HTML table
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -137,9 +139,9 @@ end subroutine h_array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine h_close(iounit)
+!!     subroutine h_close(iounit)
 !!
-!!    integer,intent(in) :: iounit
+!!      integer,intent(in) :: iounit
 !!
 !!##DESCRIPTION
 !!    Write out
@@ -152,7 +154,7 @@ end subroutine h_array
 !!##OPTIONS
 !!    lun       The unit number to close
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -194,10 +196,10 @@ end subroutine h_close
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine h_open(iounit)
+!!     subroutine h_open(iounit)
 !!
-!!    integer,intent(in) :: iounit
-!!    character(len=*),intent(in) :: filename
+!!      integer,intent(in) :: iounit
+!!      character(len=*),intent(in) :: filename
 !!
 !!##DESCRIPTION
 !!    Open  an HTML output file and then Write out
@@ -212,7 +214,7 @@ end subroutine h_close
 !!    lun       The unit number to open
 !!    filename  Name of the file to open
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!

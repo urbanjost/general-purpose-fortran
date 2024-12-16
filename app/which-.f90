@@ -80,39 +80,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!        which-(1f) - [FUNIX:FILESYSTEM] shows the full path of (shell) commands.
-!!        (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!        which- program_leafname [ --all| -a]|[ --help|--version]
-!!
-!!##DESCRIPTION
-!!        which-(1f) takes one or more pathnames. For each of its arguments
-!!        it prints to stdout the full path of the executables that would
-!!        have been executed when this argument had been entered at the
-!!        shell prompt. It does this by searching for an executable or
-!!        script in the directories listed in the environment variable PATH.
-!!
-!!##OPTIONS
-!!        --all,-a   Print all matching executables in PATH, not just the first.
-!!        --version  Print version information on standard output then
-!!                   exit successfully.
-!!        --help     Print usage information on standard output then
-!!                   exit successfully.
-!!
-!!##RETURN VALUE
-!!        Which returns the number of failed arguments, or -1 when no
-!!        programname was given.
-!!
-!!##EXAMPLE
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -128,7 +95,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    list pathnames of leaf names that are executable and can be found using the $PATH variable>',&
 '@(#)VERSION:        1.0, 2017-10-15>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2024-11-24 04:44:27 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:38:43 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

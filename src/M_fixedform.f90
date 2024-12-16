@@ -16,6 +16,8 @@
 !!
 !!##SYNOPSIS
 !!
+!!  Usage:
+!!
 !!      use :: M_fixedform, only : icount_ptr,page_ptr,page_pd,icount_pd
 !!      use :: M_fixedform, only : fixedform ,loaddata
 !!
@@ -24,7 +26,7 @@
 !!    to a form-like screen interface using the ncurses(3f) library. An
 !!    appropriate action is taken for each keypress.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!

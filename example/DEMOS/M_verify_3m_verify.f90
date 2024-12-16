@@ -81,5 +81,9 @@
 
       program demo_M_verify
       use M_msg__demo,  only: test_suite_M_demo
+      use M_verify, only: unit_check_command, unit_check_keep_going,unit_check_level
+      unit_check_command=''
+      unit_check_keep_going=.true.
+      unit_check_level=0
         call test_suite_M_demo
       end program demo_M_verify

@@ -1,7 +1,7 @@
      program demo_fit
      use M_calcomp, only : plots, plot, newpen, width, fit
-     use M_calcomp, only : black ,red ,green ,yellow
-     use M_calcomp, only : purple ,magenta ,cyan ,white
+     !use M_calcomp, only : black ,red ,green ,yellow, purple ,magenta ,cyan ,white
+     use M_calcomp, only : green, red, yellow, magenta, green
      implicit none
      integer,parameter  :: MOVE=3, DRAW=2
      integer            :: i

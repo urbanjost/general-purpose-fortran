@@ -1,0 +1,1768 @@
+color_name2rgb (3m_color) - [M_color] returns the RGB values in the range 0 to 100 for a given known color name. (LICENSE:PD)
+color_name2rgb (3m_pixel) - [M_pixel:COLOR] returns the RGB values in the range 0 to 100 for a given known color name. (LICENSE:PD)
+hue (3m_color)	     - [M_color] converts a color's components from one color model to another. (LICENSE:PD)
+hue (3m_pixel)	     - [M_pixel:COLOR] converts color components from one color model to another (LICENSE:PD)
+intro_blas1 (3)      - Introduction to vector-vector linear algebra (matrix) (LICENSE:PD) subprograms
+M_strings__oop (3m_strings) - [M_strings::INTRO::OOPS] OOP Fortran string module
+M_strings__oop (3m_strings__oop) - [M_strings::INTRO::OOPS] OOP Fortran string module
+system_stat (3m_system) - [M_system:QUERY_FILE] Get file status information (LICENSE:PD)
+abs (3fortran)	     - [NUMERIC] Absolute value
+accdig (3m_framework__approx) - [M_framework__approx] compare two numbers only up to a specified number of digits (LICENSE:PD)
+accdig (3m_verify)   - [M_verify] compare two real numbers only up to a specified number of digits (LICENSE:PD)
+achar (3fortran)     - [CHARACTER:CONVERSION] Returns a character in a specified position in the ASCII collating sequence
+acos (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Arccosine (inverse cosine) function
+acosd (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Arccosine (inverse cosine) function in degrees
+acosd (3m_units)     - [M_units:TRIGONOMETRY] calculate arccosine of value in degrees (LICENSE:PD)
+acosh (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Inverse hyperbolic cosine function
+acospi (3fortran)    - [MATHEMATICS:TRIGONOMETRIC] Circular Arccosine (inverse circular cosine) function
+adjustc (3m_strings) - [M_strings:WHITESPACE] center text (LICENSE:PD)
+adjustl (3fortran)   - [CHARACTER:WHITESPACE] Left-justified a string
+adjustr (3fortran)   - [CHARACTER:WHITESPACE] Right-justify a string
+aimag (3fortran)     - [TYPE:CONVERSION] Imaginary part of complex number
+aint (3fortran)      - [NUMERIC] Truncate toward zero to a whole number
+alert (3m_attr)      - [M_attr] print messages using a standard format including time and program name (LICENSE:MIT)
+all (3fortran)	     - [ARRAY:REDUCTION] Determines if all the values are true
+allocated (3fortran) - [ARRAY:INQUIRY] Allocation status of an allocatable entity
+almost (3m_framework__approx) - [M_framework__approx] return true or false if two numbers agree up to specified number of digits (LICENSE:PD)
+almost (3m_verify)   - [M_verify] return true or false if two numbers agree up to specified number of digits (LICENSE:PD)
+alphabet (1)	     - [CONVERT] print numeric values or a string as decimal, hexadecimal, octal and binary values (LICENSE:PD)
+amatch (3m_match)    - [M_MATCH] look for pattern matching regular expression; returns its location (LICENSE:PD)
+anagrams (1)	     - print anagrams of strings
+anint (3fortran)     - [NUMERIC] Real nearest whole number
+any (3fortran)	     - [ARRAY:REDUCTION] Determines if any of the values in the logical array are .true.
+anyinteger_to_string (3m_anything) - [M_anything] convert integer of any kind to a string (LICENSE:MIT)
+anyscalar_to_double (3m_anything) - [M_anything] convert integer or real parameter of any kind to doubleprecision (LICENSE:MIT)
+anyscalar_to_int64 (3m_anything) - [M_anything] convert intrinsic scalar types to integer(kind=int64) (LICENSE:MIT)
+anyscalar_to_real (3m_anything) - [M_anything] convert integer or real parameter of any kind to real (LICENSE:MIT)
+anyscalar_to_real128 (3m_anything) - [M_anything] convert integer or real parameter of any kind to real128 (LICENSE:MIT)
+anyscalar_to_string (3m_anything) - [M_anything] converts up to twenty standard scalar type values to a string (LICENSE:MIT)
+anything_to_bytes (3m_anything) - [M_anything] convert standard types to bytes (character(len=1):: array(:)) (LICENSE:MIT)
+arc (3m_draw)	     - [M_draw:ARCS] Draw an arc in world units. (LICENSE:PD)
+arc (3m_pixel)	     - [M_pixel:ARCS] draw an arc using current line width and color (LICENSE:PD)
+area_of_simple_polygon (1) - determine area of simple (non-intersecting) polygon given coordinates of points (LICENSE:PD)
+ARGUMENTS (3)	     - [ARGUMENTS::INTRO] collection of command line argument parsers
+arrowhead (3m_drawplus) - [M_drawplus] Draw arrow head (for text boxes and line markers) (LICENSE:MIT)
+asa2pdf (1)	     - [FILE FILTER] Convert text files with/without ASA carriage control to an Adobe PDF file. (LICENSE:PD)
+asin (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Arcsine function
+asind (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Arcsine function in degrees
+asind (3m_units)     - [M_units:TRIGONOMETRY] calculate arcsine of value in degrees (LICENSE:PD)
+asinh (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Inverse hyperbolic sine function
+asinpi (3fortran)    - [MATHEMATICS:TRIGONOMETRIC] Circular arc sine function
+assert (3m_framework__msg) - [M_framework__msg] print filename, linenumber, and message to stderr and stop program (LICENSE:PD)
+assert (3m_verify)   - [M_verify] print filename, linenumber, and message to stderr and stop program (LICENSE:PD)
+associate (7fortran) - [EXECUTION CONTROL] aliases complex variable names and creates parameters from expressions
+associated (3fortran) - [STATE:INQUIRY] Association status of a pointer or pointer/target pair
+atan (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Arctangent AKA inverse tangent function
+atan2 (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Arctangent (inverse tangent) function
+atan2d (3fortran)    - [MATHEMATICS:TRIGONOMETRIC] Arc tangent function in degrees (inverse tangent)
+atan2d (3m_units)    - [M_units:TRIGONOMETRY] calculate arctangent of the complex number X + i Y (LICENSE:PD)
+atan2pi (3fortran)   - [MATHEMATICS:TRIGONOMETRIC] Circular Arc tangent (inverse tangent) function
+atand (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Arc tangent AKA inverse tangent function in degrees
+atand (3m_units)     - [M_units:TRIGONOMETRY] calculate arctangent of value in degrees (LICENSE:PD)
+atanh (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Inverse hyperbolic tangent function
+atanpi (3fortran)    - [MATHEMATICS:TRIGONOMETRIC] Circular Arctangent AKA inverse tangent function
+atoi (3m_strings)    - [M_strings:TYPE] function returns a 32-bit integer value from a string (LICENSE:PD)
+atol (3m_strings)    - [M_strings:TYPE] function returns a 64-bit integer value from a string (LICENSE:PD)
+atomic_add (3fortran) - [ATOMIC] Atomic ADD operation
+atomic_and (3fortran) - [ATOMIC:BIT MANIPULATION] Atomic bitwise AND operation
+atomic_cas (3fortran) - [ATOMIC] Atomic compare and swap
+atomic_define (3fortran) - [ATOMIC] Setting a variable atomically
+atomic_fetch_add (3fortran) - [ATOMIC] Atomic ADD operation with prior fetch
+atomic_fetch_and (3fortran) - [ATOMIC:BIT MANIPULATION] Atomic bitwise AND operation with prior fetch
+atomic_fetch_or (3fortran) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation with prior fetch
+atomic_fetch_xor (3fortran) - [ATOMIC:BIT MANIPULATION] Atomic bitwise XOR operation with prior fetch
+atomic_or (3fortran) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation
+atomic_ref (3fortran) - [ATOMIC] Obtaining the value of a variable atomically
+atomic_xor (3fortran) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation
+atomnum2symbol (3m_units) - [M_units:SYMBOLS] return element symbol given atomic number (LICENSE:PD)
+aton (3m_strings)    - [M_strings:TYPE] function returns argument as a numeric value from a string (LICENSE:PD)
+attr (3m_attr)	     - [M_attr] substitute escape sequences for HTML-like syntax in strings (LICENSE:MIT)
+attr (3m_framework__attr) - [M_framework__attr] substitute escape sequences for HTML-like syntax in strings (LICENSE:MIT)
+attr_mode (3m_attr)  - [M_attr] select processing mode for output from attr(3f) (LICENSE:MIT)
+attr_mode (3m_framework__attr) - [M_framework__attr] select processing mode for output from attr(3f) (LICENSE:MIT)
+attr_update (3m_attr) - [M_attr] update internal dictionary given keyword and value (LICENSE:MIT)
+attr_update (3m_framework__attr) - [M_framework__attr] update internal dictionary given keyword and value (LICENSE:MIT)
+autoco (3m_datapac)  - [M_datapac:STATISTICS] compute the sample autocorrelation coefficient
+axis (3m_calcomp)    - [M_calcomp:basic] draw linear axis with numeric scale and axis label (LICENSE:PD)
+b3hs_hash_key_jenkins (3m_hashkeys) - [M_hashkeys] hash key algorithm by Bob Jenkins (LICENSE:PD)
+backbuffer (3m_draw) - [M_draw:DOUBLE_BUFFERING] Draw in the backbuffer. Returns -1 if the device is not up to it. (LICENSE:PD)
+backface (3m_draw)   - [M_draw:POLYGONS] Turns on culling of backfacing polygons. (LICENSE:PD)
+backfacedir (3m_draw) - [M_draw:POLYGONS] Sets backfacing direction to clockwise or anti-clockwise (LICENSE:PD)
+backspace (7fortran) - [IO:FILE POSITIONING] - backspace one record on specified I/O unit
+write (7fortran)     - (unknown subject)
+banner- (1)	     - [FUNIX] print large block letters (LICENSE:PD)
+base (1)	     - [CONVERT] convert numbers between bases (LICENSE:PD)
+base (3m_strings)    - [M_strings:BASE] convert whole number string in base [2-36] to string in alternate base [2-36] (LICENSE:PD)
+base2 (3m_strings)   - [M_strings:BASE] convert whole number to string in base 2 (LICENSE:PD)
+base64- (1)	     - [FUNIX:FILESYSTEM] encode/data specified file to stdout using base64 encoding as defined in RFC-4648 (LICENSE:MIT)
+basename (3m_io)     - [M_io:PATHNAMES] return last component from filename (LICENSE:PD)
+basename- (1)	     - [FUNIX:FILESYSTEM] display last component of file name(s) (LICENSE:PD)
+bds (3m_math)	     - [M_math:statistics] Basic Statistical Measures
+bes (3m_bessel)      - [M_bessel::INTRO] calculate Bessel functions J(X), Y(X), I(X), K(X) for doubleprecision arguments and integer orders
+besi (3m_bessel)     - [M_bessel] compute the I Bessel function for a given argument and order
+besj (3m_bessel)     - [M_bessel] compute the J Bessel function for a given argument and order
+besj0 (3m_bessel)    - [M_bessel] calculates the Bessel function J(X) of order zero.
+besj1 (3m_bessel)    - [M_bessel] calculates the Bessel function J(X) of order one.
+besk (3m_bessel)     - [M_bessel] compute the K Bessel function for a given argument and order
+bessel_j0 (3fortran) - [MATHEMATICS] Bessel function of the first kind of order 0
+bessel_j1 (3fortran) - [MATHEMATICS] Bessel function of the first kind of order 1
+bessel_jn (3fortran) - [MATHEMATICS] Bessel function of the first kind
+bessel_y0 (3fortran) - [MATHEMATICS] Bessel function of the second kind of order 0
+bessel_y1 (3fortran) - [MATHEMATICS] Bessel function of the second kind of order 1
+bessel_yn (3fortran) - [MATHEMATICS] Bessel function of the second kind
+besy (3m_bessel)     - [M_bessel] compute the Y Bessel function for a given argument and order
+besy0 (3m_bessel)    - [M_bessel] calculates the Bessel function Y(X) of order zero.
+betran (3m_datapac)  - [M_datapac:RANDOM] generate beta random numbers
+bge (3fortran)	     - [BIT:COMPARE] Bitwise greater than or equal to
+bgt (3fortran)	     - [BIT:COMPARE] Bitwise greater than
+bincdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the binomial cumulative distribution function
+binppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the binomial percent point function
+binran (3m_datapac)  - [M_datapac:RANDOM] generate binomial random numbers
+bit_size (3fortran)  - [BIT:INQUIRY] Bit size inquiry function
+ble (3fortran)	     - [BIT:COMPARE] Bitwise less than or equal to
+block (7fortran)     - [FORTRAN:EXECUTION CONTROL] construct (LICENSE:PD)
+blocks (3m_messages) - [M_messages] write large block letters (LICENSE:PD)
+blt (3fortran)	     - [BIT:COMPARE] Bitwise less than
+bottomjustify (3m_draw) - [M_draw:TEXT] bottom justify text (LICENSE:PD)
+bound (3m_math)      - [M_math] constrain a value to a range
+box_month (3m_time)  - [M_time:DATE_PRINTING] create specified month in a character array (LICENSE:MIT)
+boxfit (3m_draw)     - [M_draw:TEXT] resize the SOFTWARE text size so it fits in a box (LICENSE:PD)
+boxtext (3m_draw)    - [M_draw:TEXT] stretch and draw the SOFTWARE string s so that it fits in the imaginary box (LICENSE:PD)
+btest (3fortran)     - [BIT:INQUIRY] Tests a bit of an integer value.
+bundle (3m_strings)  - [M_strings:ARRAY] return up to twenty strings of arbitrary length as an array (LICENSE:PD)
+bytes_to_anything (3m_anything) - [M_anything] convert bytes(character)len=1):: array(:)) to standard types (LICENSE:MIT)
+c2f (3m_units)	     - [M_units:TEMPERATURE] convert Celsius to Fahrenheit (LICENSE:PD)
+c2s (3m_strings)     - [M_strings:ARRAY] convert C string pointer to Fortran character string (LICENSE:PD)
+c_associated (3fortran) - [ISO_C_BINDING] Status of a C pointer
+c_f_pointer (3fortran) - [ISO_C_BINDING] Convert C into Fortran pointer
+c_f_procpointer (3fortran) - [ISO_C_BINDING] Convert C into Fortran procedure pointer
+c_funloc (3fortran)  - [ISO_C_BINDING] Obtain the C address of a procedure
+c_loc (3fortran)     - [ISO_C_BINDING] Obtain the C address of an object
+c_sizeof (3fortran)  - [ISO_C_BINDING] Size in bytes of an expression
+calculator (3m_calculator) - [M_calculator] parse calculator expression and return numeric or string values (LICENSE:PD)
+call_draw (3m_drawplus) - [M_drawplus] Given a string representing a M_draw procedure and parameters call the routine (LICENSE:MIT)
+callobj (3m_draw)    - [M_draw:OBJECT] Draw object number n. (LICENSE:PD)
+cartesian_to_polar (3m_units) - [M_units:TRIGONOMETRY] convert Cartesian coordinates to polar coordinates (LICENSE:PD)
+cartesian_to_spherical (3m_units) - [M_units:TRIGONOMETRY] convert Cartesian coordinates to ISO polar coordinates (LICENSE:PD)
+case (7fortran)      - [FORTRAN:EXECUTION CONTROL] select a block based on the value of an expression (a case)
+caucdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the Cauchy cumulative distribution function
+caupdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] compute the Cauchy probability density function
+cauplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a Cauchy probability plot
+cauppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the Cauchy percent point function
+cauran (3m_datapac)  - [M_datapac:RANDOM] generate Cauchy random numbers
+causf (3m_datapac)   - [M_datapac:SPARSITY] compute the Cauchy sparsity function
+caxpy (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL1] CY:=CY+CA*CX (constant times a vector plus a vector)
+ccopy (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL1] CY:=CX (copies elements of a vector x to a vector y)
+cdotc (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL1] CDOTC := SUM CONJUGATE(CX) * CY (conjugated vector dot product)
+cdotu (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL1] CDOTU := SUM CX * CY (unconjugated vector dot product)
+ceiling (3fortran)   - [NUMERIC] returns the least integer greater than or equal to A.
+centertext (3m_draw) - [M_draw:TEXT] Turns centertext mode on or off for SOFTWARE fonts. (LICENSE:PD)
+centertext (3m_pixel) - [M_pixel:TEXT] set text centering mode for drawstr(3f) and drawc(3f) (LICENSE:PD)
+cgbmv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CY := alpha*A*CX + beta*CY; ==> A is a rectangular band matrix).
+cgemm (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL3] C:=alpha*A*B+beta*C; ==> A, B, C rectangular.
+cgemv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CY := alpha*A*CX + beta*CY; ==> A a rectangular matrix.
+cgerc (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] A := A + alpha*CX*CONJUGATE-TRANSPOSE(CY); ==> A is a rectangular matrix.
+cgeru (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] A := A + alpha*CX*TRANSPOSE(CY); ==> A is a rectangular matrix.
+change (1)	     - [FILE EDIT] replace fixed strings in files (LICENSE:MIT)
+change (3m_strings)  - [M_strings:EDITING] change old string to new string with a directive like a line editor (LICENSE:PD)
+changen (1)	     - [FILE EDIT] replace old fixed string with new fixed string in names of files (LICENSE:PD)
+char (3fortran)      - [CHARACTER:CONVERSION] Generate a character from a code value
+chbmv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CY := alpha*A*CX + beta*CY; ==> A a (square) hermitian band matrix.
+check_commandline (3m_cli) - [ARGUMENTS:M_CLI] check status from READ of NAMELIST group and process pre-defined options
+checkkey (3m_draw)   - [M_draw:INTERACTIVE] Returns zero if no key is pressed or ASCII ordinal (LICENSE:PD)
+chemm (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL3] C:=alpha*A*TRANSPOSE(A)+beta*C; ==> A hermitian, B, C rectangular.
+chemv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CY := alpha*A*CX + beta*CY; ==> A a (square) hermitian matrix.
+cher (3m_blas)	     - [BLAS:COMPLEX_BLAS_LEVEL2] A := A + alpha*CX*CONJUGATE-TRANSPOSE(CX); ==> A a (square) hermitian matrix. (performs the hermitian rank 1 operation)
+cher2 (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] A := A + alpha*CX*CONJUGATE-TRANSPOSE(CY)n + CONJUGATE(alpha)*CY*CONJUGATE-TRANSPOSE(CX); ==> n A a (square) hermitian matrix. (performs the hermitian rank 2 operation)
+cher2k (3m_blas)     - [BLAS:COMPLEX_BLAS_LEVEL3] C:=alpha*A*TRANSPOSE(B)+alpha*B*TRANSPOSE(A)+beta*C; ==> C hermitian. (performs one of the hermitian rank 2k operations)
+cherk (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL3] performs one of the hermitian rank k operations C:=alpha*A*TRANSPOSE(A)+beta*C, C hermitian.
+chomp (3m_strings)   - [M_strings:TOKENS] Tokenize a string, consuming it one token per call (LICENSE:PD)
+choose (1)	     - [NCURSES] select one item from a menu using a screen interface (LICENSE:PD)
+chpmv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CY := alpha*A*CX + beta*CY, A a (square) hermitian packed matrix.
+chpr (3m_blas)	     - [BLAS:COMPLEX_BLAS_LEVEL2] performs the hermitian rank 1 operation A := A + alpha*CX*CONJUGATE-TRANSPOSE(CX), a a (square) hermitian packed.
+chpr2 (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] performs the hermitian rank 2 operation A := A + alpha*CX*CONJUGATE-TRANSPOSE(CY)n + CONJUGATE(ALPHA)*CY*CONJUGATE-TRANSPOSE(CX), n A a (square) hermitian packed matrix.
+chscdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the chi-square cumulative distribution function
+chsplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a Chi-square probability plot
+chsppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the chi-square percent point function
+chsran (3m_datapac)  - [M_datapac:RANDOM] generate chi-square random numbers
+cincinatti_chili (7) - [RECIPES] cincinatti chili (LICENSE:PD)
+circl (3m_calcomp)   - [M_calcomp:general] draws an arc or spiral (LICENSE:PD)
+circle (3m_draw)     - [M_draw:ARCS] Draw a circle. (LICENSE:PD)
+circle (3m_pixel)    - [M_pixel:ARCS] draw a circle using current line width and color (LICENSE:PD)
+circleprecision (3m_draw) - [M_draw:ARCS] Set number of line segments used to approximate a circle (LICENSE:PD)
+circleprecision (3m_pixel) - [M_pixel:ARCS] set number of line segments used to approximate a circle (LICENSE:PD)
+citer (3m_math)      - [M_math:geometry] determine various geometric properties of a circle segment given radius and area of the segment.
+clear (3m_draw)      - [M_draw:COLOR] Clears screen to current color (LICENSE:PD)
+clear (3m_pixel)     - [M_pixel] clear background to current color or specified color index (LICENSE:PD)
+clip (3m_strings)    - [M_strings:WHITESPACE] trim leading and trailing blanks or set of characters from a string (LICENSE:PD)
+clipping (3m_draw)   - [M_draw:CLIPPING] Turn clipping on or off (LICENSE:PD)
+clock (1m_draw)      - [M_draw] display a clock using the M_draw(3f) graphics module (LICENSE:PD)
+close (7fortran)     - [IO] terminate the connection of a specified unit to an external file.
+closeobj (3m_draw)   - [M_draw:OBJECT] Close the current object. (LICENSE:PD)
+closepoly (3m_draw)  - [M_draw:POLYGONS] Terminates a polygon opened by makepoly(3f) (LICENSE:PD)
+closepoly (3m_pixel) - [M_pixel:POLYGONS] Terminates a polygon opened by makepoly(3f) (LICENSE:PD)
+closest (3m_math)    - [M_math:geometry] find the data point that is closest to the target point
+closest_color_name (3m_color) - [M_color] returns the closest name for the given RGB values. (LICENSE:PD)
+closest_color_name (3m_pixel) - [M_pixel:COLOR] returns the closest name for the given RGB values. (LICENSE:PD)
+clr (3m_list)	     - [M_list::dictionary::OOPS] clear basic dictionary (LICENSE:PD)
+cmp- (1)	     - [FUNIX] compare two files byte by byte (LICENSE:PD)
+cmplx (3fortran)     - [TYPE:CONVERSION] Conversion to a complex type
+cn (1)		     - [M_xyplot] Draw a basic contour plot (LICENSE:PD)
+cntour (3m_calcomp)  - [M_calcomp:scientific] draw a contour plot (LICENSE:PD)
+co_broadcast (3fortran) - [COLLECTIVE] Copy a value to all images the current set of images
+co_lbound (3fortran) - [COLLECTIVE] Lower codimension bounds of an array
+co_max (3fortran)    - [COLLECTIVE] Maximal value on the current set of images
+co_min (3fortran)    - [COLLECTIVE] Minimal value on the current set of images
+co_reduce (3fortran) - [COLLECTIVE] Reduction of values on the current set of images
+co_sum (3fortran)    - [COLLECTIVE] Sum of values on the current set of images
+co_ubound (3fortran) - [COLLECTIVE] Upper codimension bounds of an array
+code (3m_datapac)    - [M_datapac:VECTOR_OPERATIONS] code the elements of a vector (1 for the minimum, 2 for the next larger value, and so on)
+codebase (3m_strings) - [M_strings:BASE] convert whole number in base 10 to string in base [2-36] (LICENSE:PD)
+color (3m_draw)      - [M_draw:COLOR] Set current color (LICENSE:PD)
+color (3m_pixel)     - [M_pixel:COLOR] set current color index (LICENSE:PD)
+color_wheel (1)      - [M_draw] generate HLS color wheels (LICENSE:PD)
+colors (1)	     - [CONVERT] list colors and their values using common color models (LICENSE:PD)
+colrm- (1)	     - [FUNIX] remove columns from a file (LICENSE:PD)
+command_argument_count (3fortran) - [SYSTEM:COMMAND LINE] Get number of command line arguments
+commandline (3m_cli) - [ARGUMENTS:M_CLI] command line argument parsing (LICENSE:PD)
+comment (5fortran)   - [SYNTAX] code annotation
+common (7fortran)    - [FORTRAN:INTRINSICS] specifies blocks of variables that can be accessed by any scoping unit in the program
+compact (3m_strings) - [M_strings:WHITESPACE] converts contiguous whitespace to a single character (or nothing) (LICENSE:PD)
+compare_float (3m_framework__approx) - [M_framework__approx] compare floating point values with adjustable tolerance. (LICENSE:PD)
+compiler_options (3fortran) - [COMPILER:INQUIRY] Options passed to the compiler
+compiler_version (3fortran) - [COMPILER:INQUIRY] Compiler version string
+compute (1)	     - [MATH] evaluate a calculator expression (LICENSE:PD)
+cond (3m_logic)      - [M_logic] process input files with embedded if/else/elseif/endif commands (LICENSE:PD)
+condl67 (3m_steam67) - [M_steam67] return thermal conductivity given P, T
+condv67 (3m_steam67) - [M_steam67] compute thermal conductivity of water at pressure P and temperature T
+conjg (3fortran)     - [NUMERIC] Complex conjugate of a complex value
+continuation (5fortran) - [FORTRAN] - the rules for free-format line continuation
+continue (7fortran)  - [EXECUTION_CONTROL] execution of a CONTINUE statement has no effect
+contourlines (3m_contourplot) - [M_contourplot] calculate contour lines from ungridded data f(x, y) and call user-supplied routine with results
+copy (3m_datapac)    - [M_datapac:VECTOR_OPERATION] copy the elements of one vector into another vector
+corr (3m_datapac)    - [M_datapac:STATISTICS] compute the sample correlation coefficient
+cos (3fortran)	     - [MATHEMATICS:TRIGONOMETRIC] Cosine function
+cosd (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Degree cosine function
+cosd (3m_units)      - [M_units:TRIGONOMETRY] calculate cosine of value in degrees (LICENSE:PD)
+cosh (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic cosine function
+cospi (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Circular Cosine function
+count (3fortran)     - [ARRAY:REDUCTION] Count true values in an array
+count (3m_datapac)   - [M_datapac:STATISTICS] compute the number of observations between a minimum and a maximum value
+cpad (3m_strings)    - [M_strings:LENGTH] convert to a cropped string and then centers the string to specified length (LICENSE:PD)
+cpl67 (3m_steam67)   - [M_steam67] CPL67 calculates specific isobaric head capacity of water at pressure P and temperature T
+cprint (1)	     - [FILE FILTER] filter prints specified columns (LICENSE:PD)
+cpu_time (3fortran)  - [SYSTEM:TIME] Return CPU processor time used in seconds
+cpv67 (3m_steam67)   - [M_steam67] calculates specific isobaric heat capacity and specific volume of water at pressure P and temperature T
+crc32_hash (3m_hashkeys) - [M_hashkeys] CRC (Cyclic Redundancy Check) (LICENSE:PD)
+create_watch (3m_stopwatch) - [M_stopwatch] creates and initializes a M_StopWatch watch (LICENSE:PD)
+create_watchgroup (3m_stopwatch) - [M_stopwatch] creates a M_StopWatch watch group (LICENSE:PD)
+crflo67 (3m_steam67) - [M_steam67] critical flow and degrees superheat of wet/superheated steam at PRES, ENTH
+critvs67 (3m_steam67) - [M_steam67] function critvs67(press, enth, gamma)
+critvw67 (3m_steam67) - [M_steam67]
+crop (3m_strings)    - [M_strings:WHITESPACE] trim leading and trailing blanks and control characters from a string (LICENSE:PD)
+crotg (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] Generate a hermitian Given's rotation.
+crvel67 (3m_steam67) - [M_steam67] critical flow velocity and isentropic exponent of wet/superheated steam
+cscal (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL1] scales a vector by a constant. CX:=CA*CX (complex multiplier)
+cshift (3fortran)    - [ARRAY:TRANSFORMATIONAL] Circular shift elements of an array
+csrot (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL1] Applies a real Given's rotation to complex vectors.
+csscal (3m_blas)     - [BLAS:COMPLEX_BLAS_LEVEL1] CSSCAL scales a complex vector by a real constant. CX:=SA*CX (real multiplier).
+csv (3m_csv)	     - [M_csv] prints up to 20 standard scalar types to a string in CSV style (LICENSE:PD)
+csv_write (3m_csv)   - [M_csv] prints intrinsic type to a file assigned to LUN CSV_LUN (LICENSE:PD)
+cswap (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL1] Interchange vectors CX and CY.
+csymm (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL3] C:=alpha*A*B+beta*C, A symmetric, B, C rectangular.
+csyr2k (3m_blas)     - [BLAS:COMPLEX_BLAS_LEVEL3] C:=alpha*A*TRANSPOSE(B)+alpha*B*TRANSPOSE(A)+beta*C, C symmetric.
+csyrk (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL3] C:=alpha*A*TRANSPOSE(A)+beta*C, C symmetric.
+ctbmv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CX := A*CX, A is a triangular band matrix.
+ctbsv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CX := INVERSE(A)*CX, where A is a triangular band matrix.
+ctpmv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CX := A*CX, A is a packed triangular band matrix.
+ctpsv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CX := INVERSE(A)*CX, where A is a packed triangular band matrix.
+ctrmm (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL3] B:=A*B or B:=B*A, A triangular, B rectangular.
+ctrmv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CX := A*CX, A is a triangular matrix.
+ctrsm (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL3] B:=INVERSE(A)*C or B:=C*INVERSE(A), B, C rectangular, A triangular.
+ctrsv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CX := INVERSE(A)*CX, where A is a triangular matrix.
+curve (3m_draw)      - [M_draw:CURVE] Draw a curve. (LICENSE:PD)
+curvebasis (3m_draw) - [M_draw:CURVE] Define a basis matrix for a curve. (LICENSE:PD)
+curven (3m_draw)     - [M_draw:CURVE] Draw n-3 overlapping curve segments. Note: n must be at least 4. (LICENSE:PD)
+curveprecision (3m_draw) - [M_draw:CURVE] Define number of line segments used to draw a curve. (LICENSE:PD)
+curvx (3m_calcomp)   - [M_calcomp:scientific] plots a function of X over a given range (LICENSE:PD)
+curvy (3m_calcomp)   - [M_calcomp:scientific] plots a function of Y over a given range (LICENSE:PD)
+cycle (7fortran)     - [FORTRAN:EXECUTION CONTROL] construct (LICENSE:PD)
+cylinder (1)	     - [GEOMETRY] calculate the surface area of a cylinder (LICENSE:PD)
+d2j (3m_time)	     - [M_time:JULIAN] given DAT date-time array returns Julian Date (LICENSE:MIT)
+d2o (3m_time)	     - [M_time:ORDINAL_DAY] converts DAT date-time array to Ordinal day (LICENSE:MIT)
+d2r (3m_pixel)	     - [M_pixel:TRIGONOMETRY] convert degrees to radians (LICENSE:PD)
+d2r (3m_units)	     - [M_units:TRIGONOMETRY] convert degrees to radians (LICENSE:PD)
+d2u (3m_time)	     - [M_time:UNIX_EPOCH] given DAT date-time array returns Unix Epoch Time (UET starts at 0000 on 1 Jan. 1970, UTC) (LICENSE:MIT)
+d2w (3m_time)	     - [M_time:WEEK_OF_YEAR] calculate iso-8601 Week, both numerically and as a string of the form "yyyy-Wmm-d" given a DAT date-time array (LICENSE:MIT)
+dashcode (3m_draw)   - [M_draw:LINESTYLE] set dash pattern length (LICENSE:PD)
+dashl (3m_calcomp)   - [M_calcomp:general] draws a polyline with dashed lines (LICENSE:PD)
+dashp (3m_calcomp)   - [M_calcomp:general] draw from current position to new point with dashed line (LICENSE:PD)
+dasum (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] takes the sum of the absolute values.
+data (7fortran)      - [FORTRAN] DATA statement
+date_and_time (3fortran) - [SYSTEM:TIME] Gets current date time
+date_to_julian (3m_time) - [M_time:JULIAN] converts DAT date-time array to Julian Date (LICENSE:MIT)
+date_to_unix (3m_time) - [M_time:UNIX_EPOCH] converts DAT date-time array to Unix Epoch Time (LICENSE:MIT)
+daxpy (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] constant times a vector plus a vector.
+days2sec (1)	     - [TIME] Convert [[-]dd-][[hh:]mm:]ss to seconds (LICENSE:PD)
+days2sec (3m_time)   - [M_time:DURATION] convert string of form [[-]dd-]hh:mm:ss.nn to seconds (LICENSE:MIT)
+dble (3fortran)      - [TYPE:CONVERSION] Converstion to double precision real
+dble (3m_overload)   - [M_overload::TYPE] allow dble(3f), real(3f), int(3f) to take character arguments (LICENSE:PD)
+dble (3m_strings)    - [M_strings:TYPE] overloads DBLE(3f) so it can handle character arguments (LICENSE:PD)
+dcabs1 (3m_blas)     - [BLAS:DOUBLE_BLAS_LEVEL1] DCABS1 computes |Re(.)| + |Im(.)| of a double complex number
+dcopy (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] copies elements of a vector, x, to a vector, y.
+ddot (3m_blas)	     - [BLAS:DOUBLE_BLAS_LEVEL1] forms the dot product of two vectors.
+deallocate (7fortran) - [FORTRAN:STATEMENT] causes allocated variables and targets to be deallocated
+decodebase (3m_strings) - [M_strings:BASE] convert whole number string in base [2-36] to base 10 number (LICENSE:PD)
+define (3m_datapac)  - [M_datapac:VECTOR_OPERATION] set all elements of a vector equal to a specified constant
+degrees (1)	     - [CONVERT] Convert between Fahrenheit and Celsius temperature values (LICENSE:PD)
+del (3m_list)	     - [M_list::dictionary::OOPS] delete entry by key name from a basic dictionary (LICENSE:PD)
+delete (3m_datapac)  - [M_datapac:VECTOR_OPERATION] delete all elements of a vector within some specified interval
+delim (3m_strings)   - [M_strings:TOKENS] parse a string and store tokens into an array (LICENSE:PD)
+delobj (3m_draw)     - [M_draw:OBJECT] Delete the object number n. (LICENSE:PD)
+demod (3m_datapac)   - [M_datapac:STATISTICS] perform a complex demodulation
+describe (3m_strings) - [M_strings:DESCRIBE] returns a string describing the name of a single character (LICENSE:PD)
+destroy_watch (3m_stopwatch) - [M_stopwatch] destroys a M_StopWatch watch (LICENSE:PD)
+destroy_watchgroup (3m_stopwatch) - [M_stopwatch] destroys a M_StopWatch watch group (LICENSE:PD)
+deviled_eggs (7)     - [RECIPES] Million Dollar Deviled Eggs (LICENSE:PD)
+dexcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the double exponential cumulative distribution function
+dexpdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] compute the double exponential probability density function
+dexplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a double exponential probability plot
+dexppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the double exponential percent point function
+dexran (3m_datapac)  - [M_datapac:RANDOM] generate double exponential random numbers
+dexsf (3m_datapac)   - [M_datapac:SPARSITY] compute the double exponential sparsity function
+dgbmv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dgemm (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL3]
+dgemv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dger (3m_blas)	     - [BLAS:DOUBLE_BLAS_LEVEL2]
+dget (3m_kracken)    - [ARGUMENTS:M_kracken] given keyword fetch doubleprecision value from command argument (LICENSE:PD)
+dgets (3m_kracken)   - [ARGUMENTS:M_kracken] given keyword fetch doubleprecision array from command arguments (LICENSE:PD)
+fpm-dict (1)	     - Get definition of a word using DICT Protocol and libcurl(3c) (LICENSE:PD)
+digest (1)	     - [FUNIX] compute SHA256 message digest (LICENSE:PD)
+digits (3fortran)    - [MODEL:NUMERIC] Significant digits in the numeric model
+dilate (3m_strings)  - [M_strings:NONALPHA] function to expand tab characters (LICENSE:PD)
+dim (3fortran)	     - [NUMERIC] Positive difference of X - Y
+dirname (3m_io)      - [M_io:PATHNAMES] strip last component from filename (LICENSE:PD)
+dirname- (1)	     - [FUNIX:FILESYSTEM] strip last component from file name (LICENSE:PD)
+discr2 (3m_datapac)  - [M_datapac:STATISTICS] bin the elements of a vector (output vector contains class midpoints)
+discr3 (3m_datapac)  - [M_datapac:STATISTICS] bin the elements of a vector (output vector contains 1's, 2's, 3's, and so on)
+discre (3m_datapac)  - [M_datapac:STATISTICS] bin the elements of a vector (like DISCR2, but allows specification of min and max class limits)
+disp (3m_display)    - [M_display] pretty-print a matrix
+disp_get (3m_display) - [M_display] return default settings in a structure of DISP(3f) settings
+disp_set (3m_display) - [M_display] set default options for disp(3f)
+disp_set_factory (3m_display) - [M_display] set DISP(3f) output back to original defaults
+dissect (3m_kracken) - [ARGUMENTS:M_kracken] convenient call to parse() - define defaults, then process (LICENSE:PD)
+djb2_hash (3m_hashkeys) - [M_hashkeys:bucket_hash] djb2 string hash (algorithm by Daniel J. Bernstein) (LICENSE:PD)
+dl_init (3m_slices)  - [M_slices] initialize the longlib graphics plot package (LICENSE:PD)
+dl_slices (3m_pixel) - [M_pixel__slices] basic 3-d surface plotting routine
+dl_slices (3m_slices) - [M_slices] plot data in 3-D overlay form (LICENSE:PD)
+dl_symbol (3m_slices) - [M_slices] routine to plot characters and symbols (LICENSE:PD)
+dnrm2 (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] returns the euclidean norm of a vector via the function name
+dnum0 (3m_calculator) - [M_calculator] return double precision value from string expression using calculator(3f) (LICENSE:PD)
+do (7fortran)	     - [FORTRAN:EXECUTION CONTROL] construct (LICENSE:PD)
+dot (3m_datapac)     - [M_datapac:VECTOR_OPERATION] compute a dot product of two vectors
+dot_product (3fortran) - [ARRAY:TRANSFORMATIONAL] Dot product of two vectors
+dow (3m_time)	     - [M_time:DAY_OF_WEEK] given a date-time array DAT return the day of the week (LICENSE:MIT)
+dp_accdig (3m_verify) - [M_verify] compare two numbers only up to a specified number of digits (LICENSE:PD)
+dprod (3fortran)     - [NUMERIC] Double precision real product
+draw (1)	     - [M_drawplus] basic interpreter for testing M_draw(3fm) routines (LICENSE:PD)
+draw (3m_draw)	     - [M_draw:DRAW] Draw from current graphics position to (x, y, z) (LICENSE:PD)
+draw2 (3m_draw)      - [M_draw:DRAW] Draw from current graphics position to given point (x, y) (LICENSE:PD)
+draw2 (3m_pixel)     - [M_pixel:DRAW] draw from current position to given point (LICENSE:PD)
+draw_interpret (3m_drawplus) - [M_drawplus] call interpreter for testing M_draw(3fm) routines (LICENSE:MIT)
+drawchar (3m_draw)   - [M_draw:TEXT] Draw the character c and update current position. (LICENSE:PD)
+drawchar (3m_pixel)  - [M_pixel:TEXT] Draw a character at the current position (LICENSE:PD)
+drawstr (3m_draw)    - [M_draw:TEXT] Draw the text in string at the current position. (LICENSE:PD)
+drawstr (3m_pixel)   - [M_pixel:TEXT] Draw the text string at the current position (LICENSE:PD)
+drot (3m_blas)	     - [BLAS:SINGLE_BLAS_LEVEL1] DROT applies a plane rotation.
+drotg (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] constructs a plane rotation
+drotm (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] Apply the Modified Givens Transformation, H, to the 2 by N matrix
+drotmg (3m_blas)     - [BLAS:DOUBLE_BLAS_LEVEL1]
+dsbmv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dscal (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] scales a vector by a constant.
+dsdot (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1]
+dshiftl (3fortran)   - [BIT:COPY] Combined left shift of the bits of two integers
+dshiftr (3fortran)   - [BIT:COPY] Combined right shift of the bits of two integers
+dspmv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dspr (3m_blas)	     - [BLAS:DOUBLE_BLAS_LEVEL2]
+dspr2 (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dswap (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] interchanges two vectors.
+dsymm (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL3]
+dsymv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dsyr (3m_blas)	     - [BLAS:DOUBLE_BLAS_LEVEL3]
+dsyr2 (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dsyr2k (3m_blas)     - [BLAS:DOUBLE_BLAS_LEVEL3]
+dsyrk (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL3]
+dtbmv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL3]
+dtbsv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL3]
+dtpmv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL3]
+dtpsv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dtrmm (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL3]
+dtrmv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL2]
+dtrsm (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL3]
+dtrsv (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1]
+dtu (1) 	     - [FILE FILTER] convert files between Unix and DOS line terminator conventions (LICENSE:PD)
+dzasum (3m_blas)     - [BLAS:DOUBLE_BLAS_LEVEL1]
+dznrm2 (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL1]
+easter (1)	     - [FUNIX] print day and month Easter falls on for given year (LICENSE:PD)
+easter (3m_time)     - [M_time:ASTROLOGICAL] calculate date for Easter given a year (LICENSE:MIT)
+echo- (1)	     - [FUNIX] display a line of text (LICENSE:PD)
+edit_distance (3m_strings) - [M_strings:DESCRIBE] returns a naive edit distance using the Levenshtein distance algorithm (LICENSE:PD)
+elementcopy (3m_la)  - [M_LA] copy elements from IN to OUT regardless of rank until hit end of one of them
+elips (3m_calcomp)   - [M_calcomp:general] draw an elliptical arc (LICENSE:PD)
+ellipse (3m_drawplus) - [M_drawplus] draws an ellipse or elliptical arc. (LICENSE:MIT)
+empty (3m_anything)  - [M_anything] set an allocatable array to zero (LICENSE:MIT)
+end_pause_watch (3m_stopwatch) - [M_stopwatch] resumes a paused M_StopWatch watch (LICENSE:PD)
+endfile (7fortran)   - [NUMERIC] Absolute value
+ends_with (3m_strings) - [M_strings:COMPARE] test if string ends with specified suffix(es) (LICENSE:PD)
+endselect (7fortran) - [FORTRAN:EXECUTION CONTROL] select a block based on the value of an expression (a case)
+envelope (3m_math)   - [M_math:geometry] Find vertices (in clockwise order) of a polygon enclosing the points (x(i), y(i), i=1, ..., n.
+eoshift (3fortran)   - [ARRAY:TRANSFORMATIONAL] End-off shift of elements of an array
+epsilon (3fortran)   - [MODEL:NUMERIC] Epsilon function
+equivalence (7fortran) - [FORTRAN:INTRINSICS] used to specify the sharing of storage units by two or more objects in a storage unit
+erf (3fortran)	     - [MATHEMATICS] Error function
+erfc (3fortran)      - [MATHEMATICS] Complementary error function
+erfc_scaled (3fortran) - [MATHEMATICS] Scaled complementary error function
+error (3m_match)     - [M_MATCH] print message and stop program execution (LICENSE:PD)
+esc (1) 	     - [NCURSES] set xterm(1) attributes using a screen or line mode (LICENSE:PD)
+ev1cdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the extreme value type 1 (Gumbel) cumulative distribution function
+ev1plt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a extreme value type 1 (Gumbel) probability plot
+ev1ppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the extreme value type 1 (Gumbel) percent point function
+ev1ran (3m_datapac)  - [M_datapac:RANDOM] generate extreme value type 1 (Gumbel) random numbers
+ev2cdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the extreme value type 2 (Frechet) cumulative distribution function
+ev2plt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a extreme value type 2 (Frechet) probability plot
+ev2ppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the extreme value type 2 (Frechet) percent point function
+ev2ran (3m_datapac)  - [M_datapac:RANDOM] generate extreme value type 2 (Frechet) random numbers
+event_query (3fortran) - [COLLECTIVE] Query whether a coarray event has occurred
+example_text_justification (7m_draw) - [M_draw:EXAMPLE] example program showing text justification (LICENSE:PD)
+exchange (1)	     - [CONVERT] test of basic unit conversion functions (LICENSE:PD)
+execute_command_line (3fortran) - [SYSTEM:PROCESSES] Execute a shell command
+exit (7fortran)      - [EXECUTION CONTROL] terminate do-loops and block constructs
+exp (3fortran)	     - [MATHEMATICS] Base-e exponential function
+expand (3m_strings)  - [M_strings:NONALPHA] expand C-like escape sequences (LICENSE:PD)
+expand- (1)	     - [FUNIX] convert tabs to spaces (LICENSE:PD)
+expandviewport (3m_draw) - [M_draw:VIEWPORT] use the entire device viewport (LICENSE:PD)
+expcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the exponential cumulative distribution function
+explain (1)	     - [HELP] reads and navigates a VMS-style help file. (LICENSE:GNU LGPL)
+exponent (3fortran)  - [MODEL:COMPONENTS] Exponent of floating-point number
+exppdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] compute the exponential probability density function
+expplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a exponential probability plot
+expppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the exponential percent point function
+expran (3m_datapac)  - [M_datapac:RANDOM] generate exponential random numbers
+expression (3m_calculator) - [M_calculator] return value from a string expression processing messages to simplify call to CALCULATOR(3f) (LICENSE:PD)
+expsf (3m_datapac)   - [M_datapac:SPARSITY] compute the exponential sparsity function
+extends_type_of (3fortran) - [STATE:INQUIRY] Determine if the dynamic type of A is an extension of the dynamic type of MOLD.
+extrem (3m_datapac)  - [M_datapac:STATISTICS] determine whether a type 1 or type 2 extreme value distribution better fits a given data set
+extremum (3m_math)   - [M_math:statistics] Finds the minimum and maximum value in a REAL array.
+f2c (3m_units)	     - [M_units:TEMPERATURE] convert Fahrenheit to Celsius (LICENSE:PD)
+f90split (1)	     - [DEVELOPER] split Fortran source file into individual files at module or procedure boundaries. (LICENSE:PD)
+factor (3m_calcomp)  - [M_calcomp:basic] rescale entire plot (LICENSE:PD)
+factors (1)	     - [NUMBERS] display prime factors of numbers (LICENSE:PD)
+false- (1)	     - [FUNIX] do nothing, unsuccessfully (LICENSE:PD)
+fcdf (3m_datapac)    - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the F cumulative distribution function
+fcmd (1)	     - [FUNIX:FILESYSTEM] find the pathname of commands and optionally perform commands on them. (LICENSE:MIT)
+feet_to_meters (3m_units) - [M_units:LENGTH] converts a measurement in feet to meters (LICENSE:PD)
+ffmt (1)	     - [FILE EDIT] simple text formatter for Fortran comments (LICENSE:PD)
+filebyte (3m_io)     - [M_io:READ] read (ie. slurp) a file into a character array (LICENSE:PD)
+fileclose (3m_io)    - [M_io] A simple close of a sequential file (LICENSE:PD)
+filedelete (3m_io)   - [M_io] A simple close of an open file with STATUS='DELETE' (LICENSE:PD)
+fileglob (3m_system) - [M_system:QUERY_FILE] Read output of an ls(1) command from Fortran (LICENSE:PD)
+filename_generator (3m_io) - [M_io:FILENAME] generate a filename containing a number (LICENSE:PD)
+fileopen (3m_io)     - [M_io] A simple open of a sequential file (LICENSE:PD)
+fileread (3m_io)     - [M_io:READ] read (ie. slurp) a file into a string array (LICENSE:PD)
+filewrite (3m_io)    - [M_io:WRITE] A simple write of a CHARACTER array to a file (LICENSE:PD)
+find_field (3m_strings) - [M_strings:TOKENS] parse a string into tokens (LICENSE:MIT)
+findll (1)	     - [FILE FILTER] find long lines (LICENSE:PD)
+findloc (3fortran)   - [ARRAY:LOCATION] Location of first element of ARRAY identified by MASK along dimension DIM matching a target value
+fit (3m_calcomp)     - [M_calcomp:general] draws a semi-hyperbolic curve through three points (LICENSE:PD)
+fixedform (1)	     - [FUNIX] read in a TUI definition and return values from screen panel (LICENSE:PD)
+fixedwidth (3m_draw) - [M_draw:TEXT] Turns fixedwidth mode on or off for SOFTWARE fonts. (LICENSE:PD)
+fline (3m_calcomp)   - [M_calcomp:scientific] plot a polyline with optional fit (LICENSE:PD)
+float (3fortran)     - [FORTRAN:INTRINSIC:NUMERIC:TYPE] Convert integer to default real
+floor (3fortran)     - [NUMERIC] Function to return largest integral value not greater than argument
+flower (1)	     - [DEVELOPER] change case of free-format Fortran file or remove code or remove comments (LICENSE:PD)
+flush (7fortran)     - [IO] flush I/O buffers of specified files
+fmt (3m_framework__msg) - [M_framework__msg] convert any intrinsic to a string using specified format (LICENSE:PD)
+fmt (3m_msg)	     - [M_msg] convert any intrinsic to a string using specified format (LICENSE:PD)
+fmt (3m_overload)    - [M_overload] convert any intrinsic to a string using specified format (LICENSE:PD)
+fmt (3m_strings)     - [M_strings:TYPE] convert any intrinsic to a string using specified format (LICENSE:PD)
+fmt- (1)	     - [FUNIX:FILE EDIT] simple text formatter (LICENSE:PD)
+fmtdate (3m_time)    - [M_time:DATE_PRINTING] given DAT date-time array return date as string using specified format (LICENSE:MIT)
+fmtdate_usage (3m_time) - [M_time:DATE_PRINTING] display macros recognized by fmtdate(3f) and now(3f) (LICENSE:MIT)
+font (3m_draw)	     - [M_draw:TEXT] Set the current font by name (LICENSE:PD)
+font (3m_pixel)      - [M_pixel:TEXT] select font style by name (LICENSE:PD)
+format (7fortran)    - [FORTRAN:INTRINSIC:I/O] Format statement
+fortran (7fortran)   - [FORTRAN] Fortran Example
+fortran_continuation_line (7fortran) - [FORTRAN] Fortran Continuation Lines
+fortran_name (3m_strings) - [M_strings:COMPARE] test if string meets criteria for being a fortran name (LICENSE:PD)
+fortran_recursion (7fortran) - [FORTRAN] Examples of recursion
+fourie (3m_datapac)  - [M_datapac:ANALYSIS] perform a Fourier analysis of a data set
+fpm-gdb (1)	     - [FUNIX:FILESYSTEM] launch gdb(1) in vim(1) from fpm(1) (LICENSE:MIT)
+gdb (1) 	     - [FUNIX:FILESYSTEM] launch gdb(1) in vim(1) from fpm(1) (LICENSE:MIT)
+fpm_license (1)      - [FPM:LICENSES] write out common licenses as text or subroutines (LICENSE:MIT)
+fpm-man (1)	     - [DEVELOPER] output descriptions of Fortran intrinsics (LICENSE:PD)
+fpm-time (1)	     - call fpm(1) with gprof(1) to generata a flat timing profile
+fraction (3fortran)  - [MODEL:COMPONENTS] Fractional part of the model representation
+fran (3m_datapac)    - [M_datapac:RANDOM] generate F random numbers
+free_source_form (7fortran) - [FORTRAN] syntax of free source form statements, comments, and continuation lines
+freq (3m_datapac)    - [M_datapac:STATISTICS] compute the sample frequency and cumulative sample frequency of a vector
+frontbuffer (3m_draw) - [M_draw:DOUBLE_BUFFERING] Draw in the front buffer. This will always work. (LICENSE:PD)
+fseq (1)	     - [M_kracken] print a sequence of numbers, optionally appending file lines. (LICENSE:PD)
+fstop (3m_framework__utility) - [M_framework__utility] call stop with both a number and a message (LICENSE:PD)
+fstop (3m_verify)    - [M_verify] call stop with both a number and a message (LICENSE:PD)
+gamcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the gamma cumulative distribution function
+gamma (3fortran)     - [MATHEMATICS] Gamma function, which yields factorials for positive whole numbers
+gamplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a gamma probability plot
+gamppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the gamma percent point function
+gamran (3m_datapac)  - [M_datapac:RANDOM] generate gamma random numbers
+gcd (1) 	     - [NUMBERS] display greatest common divisor of a list of whole numbers (LICENSE:PD)
+gcsgau1 (3m_math)    - [M_math] solve a system of simultaneous linear equations (LICENSE:PD)
+gcsgau2 (3m_math)    - [M_math] solve a system of simultaneous linear equations (LICENSE:PD)
+generate_uuid (3m_uuid) - [M_uuid] generate a UUID (Universally Unique IDentifier) string per RFC 4122 (LICENSE:BSD-4-Clause)
+genobj (3m_draw)     - [M_draw:OBJECT] Returns a unique object identifier. (LICENSE:PD)
+geocdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the geometric cumulative distribution function
+geographical_distance (3m_geography) - [M_geography] Compute the distance between two points over the Earth's surface. (LICENSE:GPL3)
+geoplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a geometric probability plot
+geoppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the geometric percent point function
+georan (3m_datapac)  - [M_datapac:RANDOM] generate geometric random numbers
+get (3m_list)	     - [M_list::dictionary::OOPS] get value of key-value pair in a dictionary given key (LICENSE:PD)
+get_arg (3m_args)    - [ARGUMENTS:M_args] get value of command line argument by number (LICENSE:PD)
+get_args (3m_cli2)   - [ARGUMENTS:M_CLI2] return keyword values when parsing command line arguments (LICENSE:PD)
+get_args_fixed_length (3m_cli2) - [ARGUMENTS:M_CLI2] return keyword values for fixed-length string when parsing command line (LICENSE:PD)
+get_args_fixed_size (3m_cli2) - [ARGUMENTS:M_CLI2] return keyword values for fixed-size array when parsing command line arguments (LICENSE:PD)
+get_command (3fortran) - [SYSTEM:COMMAND LINE] Get the entire command line invocation
+get_command_argument (3fortran) - [SYSTEM:COMMAND LINE] Get command line arguments
+get_command_arguments_stack (3m_args) - [ARGUMENTS:M_args] return a character array containing all the command line arguments (LICENSE:PD)
+get_command_arguments_string (3m_args) - [ARGUMENTS:M_args] return all command arguments as an allocated string (LICENSE:PD)
+get_env (3m_io)      - [M_io:QUERY] a function returning the value of an environment variable (LICENSE:PD)
+get_environment_variable (3fortran) - [SYSTEM:ENVIRONMENT] Retrieve the value of an environment variable
+get_from_lala (3m_matrix) - [M_matrix] return data from lala(3f) to calling program LICENSE(MIT)
+get_namelist (3m_args) - [ARGUMENTS:M_args] NAMELIST-based command line argument parsing (LICENSE:PD)
+get_next_char (3m_io) - [M_io:READ] read from a file one character at a time (LICENSE:PD)
+get_subcommand (3m_cli2) - [ARGUMENTS:M_CLI2] special-case routine for handling subcommands on a command line (LICENSE:PD)
+get_tmp (3m_io)      - [M_io:QUERY] Return the name of the scratch directory (LICENSE:PD)
+get_type (3m_anything) - [M_anything] return array of strings containing type names of arguments (LICENSE:MIT)
+getaspect (3m_draw)  - [M_draw:ASPECT] Returns the ratio height over width of the display device. (LICENSE:PD)
+getchar (3m_io)      - [M_io:QUERY] read a single-byte character from stdin via C interface (LICENSE:PD)
+getcharsize (3m_draw) - [M_draw:TEXT] Get the width and height of a character. (LICENSE:PD)
+getdepth (3m_draw)   - [M_draw:DEVICE] Return number of bit planes (color planes) (LICENSE:PD)
+getdisplaysize (3m_draw) - [M_draw:ASPECT] Returns width and height of device in device units (LICENSE:PD)
+getdisplaysize (3m_pixel) - [M_pixel] Returns the width and height of the device in pixels (LICENSE:PD)
+getfactors (3m_draw) - [M_draw:ASPECT] Returns width over min(width of device, height of device) and height over min(width of device, height of device). (LICENSE:PD)
+getfontdec (3m_draw) - [M_draw:TEXT] Return size of maximum font descender (LICENSE:PD)
+getfontsize (3m_draw) - [M_draw:TEXT] Get maximum width and height of a character in a font. (LICENSE:PD)
+getgp (3m_draw)      - [M_draw:POSITION] Gets the current graphics position (LICENSE:PD)
+getgp2 (3m_draw)     - [M_draw:POSITION] Gets the current graphics position in world coordinates (LICENSE:PD)
+getgp2 (3m_pixel)    - [M_pixel] Gets the current graphics position in world coords. (LICENSE:PD)
+getgpt (3m_draw)     - [M_draw:POSITION] Gets the current transformed graphics position in world coords. (LICENSE:PD)
+getkey (3m_draw)     - [M_draw:INTERACTIVE] Return ASCII ordinal of next key typed (LICENSE:PD)
+getline (3m_io)      - [M_io:READ] read a line from specified LUN into allocatable string up to line length limit (LICENSE:PD)
+getname (3m_io)      - [M_io:QUERY] get name of the current executable (LICENSE:PD)
+getopenobj (3m_draw) - [M_draw:OBJECT] Return the number of the current object. (LICENSE:PD)
+getpat (3m_match)    - [M_MATCH] convert str into pattern (LICENSE:PD)
+getstring (3m_draw)  - [M_draw:INTERACTIVE] Read in a string, echoing it in current font (LICENSE:PD)
+getvals (3m_strings) - [M_strings:TYPE] read arbitrary number of REAL values from a character variable up to size of VALUES() array (LICENSE:PD)
+getvalue (3m_calculator) - [M_calculator] given numeric variable name return doubleprecision value directly from calculator dictionary for efficiency (LICENSE:PD)
+getviewport (3m_draw) - [M_draw:VIEWPORT] Returns limits of current viewport in screen coordinates (LICENSE:PD)
+getviewport (3m_pixel) - [M_pixel] return viewport in screen pixel coordinates (LICENSE:PD)
+glob (3m_strings)    - [M_strings:COMPARE] compare given string for match to a pattern which may contain globbing wildcard characters (LICENSE:PD)
+glstsq (3m_math)     - [M_math] least squares fit to a polynomial expression (LICENSE:PD)
+graph (3m_graph)     - [M_graph] Draw an XY graph
+graph_init (3m_graph) - [M_graph] initialize the longlib graphics plot routine graph(3f)
+greatest_common_divisor (3m_factor) - [M_factor] calculate greatest common divisor of two integers or vector m(:), matrix m(:, :) or cuboid m(:, :, :) (LICENSE:MIT)
+grep- (1)	     - [FUNIX] search a file for a pattern (LICENSE:PD)
+grid (3m_calcomp)    - [M_calcomp:general] draws a linear grid (LICENSE:PD)
+guessdate (3m_time)  - [M_time:READING_DATES] reads in a date, in various formats (LICENSE:MIT)
+h_array (3m_html)    - [M_html] print a numeric array as an HTML table (LICENSE:PD)
+h_close (3m_html)    - [M_html] close an HTML file (LICENSE:PD)
+h_open (3m_html)     - [M_html] open an HTML file (LICENSE:PD)
+hasher (1)	     - [M_hashkeys] exercise the string hash methods in the M_hashkey(3fm) module (LICENSE:PD)
+hatchang (3m_draw)   - [M_draw:POLYGONS] Set the angle of the hatch lines. (LICENSE:PD)
+hatchpitch (3m_draw) - [M_draw:POLYGONS] Set the distance between hatch lines. (LICENSE:PD)
+hcl67 (3m_steam67)   - [M_steam67] calculate specific enthalpy and entropy of water at pressure P and temp T
+hcsl67 (3m_steam67)  - [M_steam67] calculate specific enthalpy/volume and entropy of liquid(P, T)
+hcslv267 (3m_steam67) - [M_steam67] calculate specific enthalpy, specific volume, and entropy of the liquid at P and T
+hcslvl67 (3m_steam67) - [M_steam67] calculate V, S, specific enthalpy for liquid given (P, T)
+hello (1)	     - [] "hello world!" examples (LICENSE:PD)
+help_command (3m_help) - [M_help] uses a specially formatted text array to provide a HELP interface (LICENSE:PD)
+hershey (3m_pixel)   - [M_pixel:TEXT] draw text string as Hershey software vector fonts (LICENSE:PD
+hfncdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the half-normal cumulative distribution function
+hfnplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a half-normal probability plot
+hfnppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the half-normal percent point function
+hfnran (3m_datapac)  - [M_datapac:RANDOM] generate half-normal random numbers
+hisiss67 (3m_steam67) - [M_steam67] calculate specific enthalpy, temperature, specific volume, and steam quality of water at P and S.
+hist (3m_datapac)    - [M_datapac:STATISTICS] generates histograms based on two different class widths
+hostname- (1)	     - [FUNIX] display hostname (LICENSE:PD)
+howlong (1)	     - display wallclock time taken to execute a system command
+hpsiss67 (3m_steam67) - [M_steam67]
+hsl67 (3m_steam67)   - [M_steam67] calculate specific enthalpy of the saturated liquid at temperature T
+hss167 (3m_steam67)  - [M_steam67]
+hss67 (3m_steam67)   - [M_steam67] specific enthalpy = HSS67(P, T, s, v)
+hssicl67 (3m_steam67) - [M_steam67] compute specific enthalpy and temperature of water at pressure P and entropy S
+hssiss67 (3m_steam67) - [M_steam67]
+hsv67 (3m_steam67)   - [M_steam67] specific enthalpy, temperature, specific entropy, and specific volume of saturated vapor at pressure P.
+huegif (1)	     - [M_pixel] generate color wheels as GIF pixmap files (LICENSE:PD)
+huge (3fortran)      - [MODEL:NUMERIC] Largest number of a type and kind
+hypocycloidal (1)    - [M_draw] display hypocycloidal curves (LICENSE:PD)
+hypot (3fortran)     - [MATHEMATICS] Returns the Euclidean distance - the distance between a point and the origin.
+hypot (3m_math)      - [M_math:geometry] Euclidean distance function
+i_is_prime (3m_factor) - [M_factor] Determine if a number is prime using Sieve of Erasthosthenes (LICENSE:UNKNOWN)
+iachar (3fortran)    - [CHARACTER:CONVERSION] Return integer ASCII code of a character
+iall (3fortran)      - [BIT:LOGICAL] Bitwise and of array elements
+iand (3fortran)      - [BIT:LOGICAL] Bitwise logical AND
+iany (3fortran)      - [BIT:LOGICAL] Bitwise OR of array elements
+ibclr (3fortran)     - [BIT:SET] Clear a bit
+ibits (3fortran)     - [BIT:COPY] Extraction of a subset of bits
+ibset (3fortran)     - [BIT:SET] Set a bit to one in an integer value
+icamax (3m_blas)     - [BLAS:AUX_BLAS] Return index of maximum "absolute value" in CX.
+ichar (3fortran)     - [CHARACTER:CONVERSION] Character-to-integer code conversion function
+idamax (3m_blas)     - [BLAS:AUX_BLAS]
+ieor (3fortran)      - [BIT:LOGICAL] Bitwise exclusive OR
+if (7fortran)	     - [EXECUTION CONTROL] selects a block based on a sequence of logical expressions.
+ifdef (3m_list)      - [M_list::dictionary::OOPS] return whether name is present in dictionary or not (LICENSE:PD)
+ifin_lala (3m_matrix) - [M_matrix] test if variable name exists in lala() LICENSE(MIT)
+iget (3m_kracken)    - [ARGUMENTS:M_kracken] given keyword fetch integer value from command argument (LICENSE:PD)
+igets (3m_kracken)   - [ARGUMENTS:M_kracken] given keyword fetch integer array from command arguments (LICENSE:PD)
+igetvalue (3m_calculator) - [M_calculator] given numeric variable name return integer value directly from calculator dictionary for efficiency (LICENSE:PD)
+illusion (3m_xyplot) - [M_xyplot:banner] draw a banner page with short labels at the compass points (LICENSE:MIT)
+image_index (3fortran) - [COLLECTIVE] Cosubscript to image index conversion
+implicit (7fortran)  - [STATEMENT] specify default type associated to a starting letter or disallow implicit typing
+implied_do (7fortran) - [FORTRAN] documentation on usage of implied do in Fortran
+in (3m_math)	     - [M_math] test if a value occurs in an expected range
+in_margin (3m_framework__approx) - [M_framework__approx] check if two reals are approximately equal using a relative margin
+in_margin (3m_verify) - [M_verify] check if two reals are approximately equal using a relative margin
+include (7fortran)   - [PREPROCESS] blending source text
+indent (3m_strings)  - [M_strings:WHITESPACE] count number of leading spaces in a string (LICENSE:PD)
+index (3fortran)     - [CHARACTER:SEARCH] Position of a substring within a string
+inf (3m_units)	     - [M_units] return an inf (Infinity) (LICENSE:PD)
+init_random_seed (3m_random) - [M_random] seed random_number(3f) with single value like srand(3c) usage (LICENSE:MIT)
+init_random_seed_by_dat (3m_random) - [M_random] seed random_number(3f) with values from date_and_time(3f) (LICENSE:MIT)
+init_random_seed_by_system_clock (3m_random) - [M_random] seed random_number(3f) with system clock value (LICENSE:MIT)
+initialize_arrays (7fortran) - [FORTRAN:FAQ] Initializing small 2D numeric arrays with array constructors
+inpolygon (3m_math)  - [M_math:geometry] determine whether or not an integer point is in an integer polygon
+inquire (7fortran)   - [FILE_INQUIRE] File inquiry statement
+inquiry_stopwatch (3m_stopwatch) - [M_stopwatch] returns M_StopWatch options and system dependent values (LICENSE:PD)
+insert (3m_list)     - [M_list] insert entry into a string array at specified position (LICENSE:PD)
+int (3fortran)	     - [TYPE:CONVERSION] Truncate towards zero and convert to integer
+int (3m_strings)     - [M_strings:TYPE] overloads INT(3f) so it can handle character arguments (LICENSE:PD)
+intersect (3m_sets)  - [M_sets] Find the values common to both sets A and B
+intrinsics (3m_overload) - [M_overload::INTRINSICS] rename intrinsic functions (LICENSE:PD)
+intrinsics (7fortran) - [FORTRAN] intrinsic man(1) pages
+intrinsics_project (7fortran) - [FORTRAN] intrinsic man(1) pages
+inum0 (3m_calculator) - [M_calculator] return integer value from calculator expression (LICENSE:PD)
+invert_2x2 (3m_math) - [M_math] directly invert 2x2 matrix
+invert_3x3 (3m_math) - [M_math] directly invert 3x3 matrix
+invert_4x4 (3m_math) - [M_math] directly invert 4x4 matrix
+invokeobj (3m_draw)  - [M_draw] invoke object with specified transformations (LICENSE:PD)
+ior (3fortran)	     - [BIT:LOGICAL] Bitwise logical inclusive OR
+iparity (3fortran)   - [BIT:LOGICAL] Bitwise exclusive OR of array elements
+is_contiguous (3fortran) - [ARRAY:INQUIRY] Test if object is contiguous
+is_even (3m_units)   - [M_units] determine if integer is even (LICENSE:PD)
+is_hidden_file (3m_io) - [M_io:QUERY] determine if a pathname points to a hidden file, which is defined as a file basename starting with a period. (LICENSE:PD)
+is_iostat_end (3fortran) - [STATE:INQUIRY] Test for end-of-file value
+is_iostat_eor (3fortran) - [STATE:INQUIRY] Test for end-of-record value
+is_nan (3m_units)    - [M_units] determine if integer is a Nan (Not a Number) value (LICENSE:PD)
+isalnum (3m_strings) - [M_strings:COMPARE] test membership in subsets of ASCII set (LICENSE:PD)
+isalpha (3m_strings) - [M_strings:COMPARE] returns .true. if character is a letter and .false. otherwise (LICENSE:PD)
+isamax (3m_blas)     - [BLAS:AUX_BLAS] Return index of maximum absolute value in SX.
+isascii (3m_strings) - [M_strings:COMPARE] returns .true. if the character is in the range char(0) to char(256) (LICENSE:PD)
+isblank (3m_strings) - [M_strings:COMPARE] returns .true. if character is a blank character (space or horizontal tab). (LICENSE:PD)
+iscntrl (3m_strings) - [M_strings:COMPARE] returns .true. if character is a delete character or ordinary control character (LICENSE:PD)
+isdigit (3m_strings) - [M_strings:COMPARE] returns .true. if character is a digit (0, 1, ..., 9) and .false. otherwise (LICENSE:PD)
+isgraph (3m_strings) - [M_strings:COMPARE] returns .true. if character is a printable character except a space is considered non-printable (LICENSE:PD)
+ishft (3fortran)     - [BIT:SHIFT] Logical shift of bits in an integer
+ishftc (3fortran)    - [BIT:SHIFT] Shift rightmost bits circularly, AKA. a logical shift
+islower (3m_strings) - [M_strings:COMPARE] returns .true. if character is a miniscule letter (a-z) (LICENSE:PD)
+ismember (3m_sets)   - [M_sets] Create a mask of A marking elements also in B
+isnumber (3m_strings) - [M_strings:TYPE] determine if a string represents a number (LICENSE:PD)
+iso_c_binding (7fortran) - [FORTRAN] standard intrinsic module which defines named constants, types, and procedures for C interoperability
+iso_fortran_env (7fortran) - [FORTRAN] standard intrinsic module provides public entities related to the Fortran environment
+isobj (3m_draw)      - [M_draw:OBJECT] Returns .FALSE. if there is an object of number n. (LICENSE:PD)
+isprint (3m_strings) - [M_strings:COMPARE] returns .true. if character is an ASCII printable character (LICENSE:PD)
+ispunct (3m_strings) - [M_strings:COMPARE] returns .true. if character is a printable punctuation character (LICENSE:PD)
+issorted (3m_sets)   - [M_sets] Report if A is sorted in ascending order or not.
+isspace (3m_strings) - [M_strings:COMPARE] returns .true. if character is a null, space, tab, carriage return, new line, vertical tab, or formfeed (LICENSE:PD)
+isupper (3m_strings) - [M_strings:COMPARE] returns .true. if character is an uppercase letter (A-Z) (LICENSE:PD)
+isxdigit (3m_strings) - [M_strings:COMPARE] returns .true. if character is a hexadecimal digit (0-9, a-f, or A-F). (LICENSE:PD)
+izamax (3m_blas)     - [BLAS:AUX_BLAS]
+j2d (3m_time)	     - [M_time:JULIAN] given a JD (Julian Date) returns a date-time array DAT. (LICENSE:MIT)
+join (3m_strings)    - [M_strings:EDITING] append CHARACTER variable array into a single CHARACTER variable with specified separator (LICENSE:PD)
+join_watchgroup (3m_stopwatch) - [M_stopwatch] adds a M_StopWatch watch to a watch group (LICENSE:PD)
+joinpath (3m_io)     - [M_io:PATHNAMES] join parts of a pathname together (LICENSE:PD)
+journal (3m_framework__journal) - [M_framework__journal] provides public message routine, no paging or graphic mode change (LICENSE:PD)
+journal (3m_journal) - [M_journal] provides public message routine, no paging or graphic mode change (LICENSE:PD)
+ju_polfit (3m_math)  - [M_math] Fit discrete data in a least squares sense by polynomials in one variable.
+julfit (3m_math)     - [M_math:fit] linear least squares curve fits, destroys input arrays
+julian_to_date (3m_time) - [M_time:JULIAN] converts a JD(Julian Date) to a DAT date-time array. (LICENSE:MIT)
+junbad (3m_messages) - [M_messages] print an eye-catching image of a skull. (LICENSE:PD)
+junbat (3m_messages) - [M_messages] print an eye-catching image of a bat. (LICENSE:PD)
+junbuster (3m_messages) - [M_messages] call journal(3f) to print eye-catching ASCII graphic (ghostbuster) (LICENSE:PD)
+jundragon (3m_messages) - [M_messages] fill in a character array with a message (LICENSE:PD)
+junroach (3m_messages) - [M_messages] print an eye-catching image of a roach. (LICENSE:PD)
+junsun (3m_messages) - [M_messages] print an eye-catching image of a smiling sun. (LICENSE:PD)
+juntrolls (3m_messages) - [M_messages] print an eye-catching bulletin (LICENSE:PD)
+justfy (3m_pixel)    - [M_pixel:TEXT] return lengths used to justify a string when calling hershey (LICENSE:PD)
+kill- (1)	     - [FUNIX] send signals to processes (LICENSE:PD)
+kind (3fortran)      - [KIND:INQUIRY] Query kind of an entity
+kolor (1)	     - [TERMINAL] set background, foreground, and cursor color of most terminal emulators (LICENSE:PD)
+kracken (3m_kracken) - [ARGUMENTS:M_kracken] crack command line options on Fortran programs, using "-KEYWORD VALUE" syntax (LICENSE:PD)
+la (1)		     - interpret matrix expressions using a shell-like interface
+lala (1)	     - interpret matrix expressions using a shell-like interface
+lala (3m_matrix)     - [M_matrix] initialize and/or pass commands to matrix laboratory interpreter LICENSE(MIT)
+lamcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the Tukey-Lambda cumulative distribution function
+lampdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] compute the Tukey-Lambda probability density function
+lamplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a Tukey-Lambda probability plot
+lamppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the Tukey-Lambda percent point function
+lamran (3m_datapac)  - [M_datapac:RANDOM] generate Tukey-Lambda random numbers
+lamsf (3m_datapac)   - [M_datapac:SPARSITY] compute the Tukey-Lambda sparsity function
+lasagna (7)	     - [RECIPES] lasagna (LICENSE:PD)
+lbound (3fortran)    - [ARRAY:INQUIRY] Lower dimension bounds of an array
+lcm (1) 	     - [NUMBERS] display least common multiple of a list of whole numbers (LICENSE:PD)
+lcobound (3fortran)  - [COLLECTIVE] Lower codimension bounds of an array
+leadz (3fortran)     - [BIT:COUNT] Number of leading zero bits of an integer
+least_common_multiple (3m_factor) - [M_factor] Least common multiple of two integers or vector m(:), matrix m(:, :) or cuboid m(:, :, :) (LICENSE:MIT)
+leave_watchgroup (3m_stopwatch) - [M_stopwatch] removes a M_StopWatch watch from a watch group (LICENSE:PD)
+leftjustify (3m_draw) - [M_draw:TEXT] left justify text (LICENSE:PD)
+len (3fortran)	     - [CHARACTER] Length of a character entity
+len_trim (3fortran)  - [CHARACTER:WHITESPACE] Character length without trailing blank characters
+len_white (3m_strings) - [M_strings:LENGTH] get length of string trimmed of whitespace. (LICENSE:PD)
+lenset (3m_strings)  - [M_strings:LENGTH] return string trimmed or padded to specified length (LICENSE:PD)
+lgaxs (3m_calcomp)   - [M_calcomp:scientific] draw logarithmic axis (LICENSE:PD)
+lge (3fortran)	     - [CHARACTER:COMPARE] ASCII Lexical greater than or equal
+lget (3m_kracken)    - [ARGUMENTS:M_kracken] given keyword fetch logical value from command argument (LICENSE:PD)
+lgets (3m_kracken)   - [ARGUMENTS:M_kracken] given keyword fetch logical array from command arguments (LICENSE:PD)
+lglin (3m_calcomp)   - [M_calcomp:scientific] draw polyline in log-log or semi-log mode (LICENSE:PD)
+lgncdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the lognormal cumulative distribution function
+lgnplt (3m_datapac)  - [M_datapac:LINE_PLOT] generates a lognormal probability plot
+lgnppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the lognormal percent point function
+lgnran (3m_datapac)  - [M_datapac:RANDOM] generate lognormal random numbers
+lgt (3fortran)	     - [CHARACTER:COMPARE] ASCII Lexical greater than
+line (3m_calcomp)    - [M_calcomp:basic] plot a polyline with optional rescaling (LICENSE:PD)
+line (3m_pixel)      - [M_pixel:DRAW] draw line between two points (LICENSE:PD)
+linearint (3m_math)  - [M_math:fit] interpolates a curve defined by X(i), Y(i) using linear interpolation at given XI(j) values
+linestyle (3m_draw)  - [M_draw:LINESTYLE] set the line dash pattern (LICENSE:PD)
+linewidth (3m_draw)  - [M_draw:LINESTYLE] set line width in rasters (LICENSE:PD)
+linewidth (3m_pixel) - [M_pixel] set linewidth (LICENSE:PD)
+link- (1)	     - [FUNIX:FILESYSTEM] call the link(3c) function to create the specified file link (LICENSE:PD)
+linspace (3m_la)     - [M_LA] return a vector of linearly spaced values
+list_free (3m_generic_list) - [M_generic_list] Free the entire list and all data, beginning at SELF (LICENSE:MIT)
+list_get (3m_generic_list) - [M_generic_list] Return the DATA stored in the node SELF (LICENSE:MIT)
+list_init (3m_generic_list) - [M_generic_list] Initialize a head node SELF and optionally store the provided DATA. (LICENSE:MIT)
+list_insert (3m_generic_list) - [M_generic_list] Insert a list node after SELF containing DATA (optional) (LICENSE:MIT)
+list_next (3m_generic_list) - [M_generic_list] Return the next node after SELF (LICENSE:MIT)
+list_put (3m_generic_list) - [M_generic_list] Store the encoded DATA in list node SELF (LICENSE:MIT)
+listout (3m_strings) - [M_strings:NUMERIC] expand a list of numbers where negative numbers denote range ends (1 -10 means 1 thru 10) (LICENSE:PD)
+lle (3fortran)	     - [CHARACTER:COMPARE] ASCII Lexical less than or equal
+llt (3fortran)	     - [CHARACTER:COMPARE] ASCII Lexical less than
+ln- (1) 	     - [FUNIX:FILESYSTEM] create hard links to a file (LICENSE:PD)
+loadobj (3m_draw)    - [M_draw:OBJECT] Load the object in the file filename as object number n. (LICENSE:PD)
+loc (3m_datapac)     - [M_datapac:STATISTICS] print the sample mean, midrange, midmean, and median
+locale (3m_time)     - [M_time:DATE_PRINTING] allow for selecting languages to represent month and weekday names (LICENSE:MIT)
+locate (3m_list)     - [M_list] finds the index where a string is found or should be in a sorted array (LICENSE:PD)
+locator (3m_draw)    - [M_draw:INTERACTIVE] Find out where cursor is (LICENSE:PD)
+locpt (3m_math)      - [M_math:geometry] find if a point is inside a polygonal path
+log (3fortran)	     - [MATHEMATICS] Natural logarithm
+log10 (3fortran)     - [MATHEMATICS] Base 10 or common logarithm
+log_gamma (3fortran) - [MATHEMATICS] Logarithm of the absolute value of the Gamma function
+logcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the logistic cumulative distribution function
+logical (3fortran)   - [TYPE:LOGICAL] Conversion between kinds of logical values
+logname- (1)	     - [FUNIX] display login name (LICENSE:PD)
+logpdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] compute the logistic probability density function
+logplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a logistic probability plot
+logppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the logistic percent point function
+logran (3m_datapac)  - [M_datapac:RANDOM] generate logistic random numbers
+logsf (3m_datapac)   - [M_datapac:SPARSITY] compute the logistic sparsity function
+longest_command_argument (3m_args) - [ARGUMENTS:M_args] length of longest argument on command line (LICENSE:PD)
+longest_common_substring (3m_strings) - [M_strings:COMPARE] function that returns the longest common substring of two strings.
+lookat (3m_draw)     - [M_draw:VIEWPORT] Specify the viewer's position (LICENSE:PD)
+lookfor (3m_io)      - [M_io:SCANNAMES] look for a filename in a number of directories specified by an environment variable (LICENSE:PD)
+lower (3m_strings)   - [M_strings:CASE] changes a string to lowercase over specified range (LICENSE:PD)
+lower_quoted (3m_strings) - [M_strings:CASE] elemental function converts string to lowercase skipping strings quoted per Fortran syntax rules (LICENSE:PD)
+lowess (3m_math)     - [M_math:fit] procedures for locally weighted regression
+lpad (3m_strings)    - [M_strings:LENGTH] convert to a cropped string and then blank-pad on the left to requested length (LICENSE:PD)
+ls- (1) 	     - [FUNIX:FILESYSTEM] list files in a directory (LICENSE:PD)
+lsame (3m_blas)      - [BLAS:AUX_BLAS] compare two letters ignoring case
+lsup (1)	     - [FUNIX:FILESYSTEM] list permissions of pathname and directories in pathname (LICENSE:PD)
+luhn_checksum (3m_hashkeys) - [M_hashkeys] Luhn checksum algorithm applied to a string of numeric values
+M_anything (3m_anything) - [M_anything::INTRO] procedures that use polymorphism to allow arguments of different types generically (LICENSE:MIT)
+M_args (3m_args)     - [ARGUMENTS::M_args::INTRO] define a NAMELIST in a module template to provide command line argument parsing (LICENSE:PD)
+M_attr (3m_attr)     - [M_attr::INTRO] control text attributes on terminals (LICENSE:MIT)
+M_big_integer (3m_big_integer) - [M_big_integer] define new data type BIG_INTEGER and operators
+M_calcomp (3m_calcomp) - [M_calcomp::INTRO] emulate old Calcomp graphics library (LICENSE:PD)
+M_calculator (3m_calculator) - [M_calculator::INTRO] module of routines for parsing expressions and returning values (LICENSE:PD)
+M_calculator_programmer_notes (3m_calculator) - [M_calculator] Programmer notes for module M_calculator (LICENSE:PD)
+M_CLI (3m_cli)	     - [ARGUMENTS::M_CLI::INTRO] command line argument parsing using a prototype command and NAMELIST (LICENSE:PD)
+M_CLI2 (3m_cli2)     - [ARGUMENTS::M_CLI2::INTRO] command line argument parsing using a prototype command (LICENSE:PD)
+M_color (3m_color)   - [M_color::INTRO] a Fortran module that lets you convert between common color models (LICENSE:PD)
+M_Compare_Float_Numbers (3m_compare_float_numbers) - [M_Compare_Float_Numbers::INTRO] perform relational comparisons on real numbers (LICENSE:GPL)
+M_constants (3m_constants) - [M_constants:INTRO] Useful constants
+M_csv (3m_csv)	     - [M_csv] Comma-separated values
+M_display (3m_display) - [M_display] module for pretty-printing matrices
+M_draw (3m_draw)     - [M_draw::INTRO] The M_draw graphics library (LICENSE:PD)
+M_drawplus (3m_drawplus) - [M_drawplus] Additional routines using the M_DRAW graphics library (LICENSE:MIT)
+M_factor (3m_factor) - [M_factor::INTRO] module for least common multiple, greatest common divisor, and prime factors
+M_fixedform (3m_fixedform) - [NCURSES] convert a text block into a TUI (screen interface) (LICENSE:PD)
+M_framework (3m_framework) - [M_framework::INTRO] unit test framework (LICENSE:PD)
+M_framework__attr (3m_framework__attr) - [M_framework__attr::INTRO] control text attributes on terminals (LICENSE:MIT)
+M_framework__journal (3m_framework__journal) - [M_framework__journal::INTRO] write program messages to stdout and/or a log file (LICENSE:PD)
+M_framework__verify (3m_framework__verify) - [M_framework__verify::INTRO] unit test framework (LICENSE:PD)
+M_generic_list (3m_generic_list) - [M_generic_list::INTRO] A Generic Linked List Implementation in Fortran 95 (LICENSE:MIT)
+M_getopt (3m_getopt) - [ARGUMENTS:M_getopt::INTRO] parse command line arguments similarly to those in standard C library. (LICENSE:GPL)
+M_getopt_long (3m_getopt_long) - [ARGUMENTS:M_getopt_long::INTRO] parse command line options like Sun getopt_long, including the Sun CLIP specification (LICENSE:PD)
+M_html (3m_html)     - [M_html::INTRO] a module of routines to help write output as HTML documents (LICENSE:PD)
+M_io (3m_io)	     - [M_io::INTRO] Fortran I/O module (LICENSE:PD)
+M_journal (3m_journal) - [M_journal::INTRO] write program messages to stdout and/or a log file (LICENSE:PD)
+M_kracken (3m_kracken) - [ARGUMENTS:M_kracken] parse command line options of Fortran programs using Unix-like syntax (LICENSE:PD)
+M_list (3m_list)     - [M_list::INTRO] maintain simple lists (LICENSE:PD)
+M_lua (3m_lua)	     - [M_lua] Fortran interface to the LUA language (LICENSE:MIT)
+M_match (3m_match)   - [M_MATCH] Basic Regular Expressions (LICENSE:PD)
+M_math (3m_math)     - [M_math::INTRO] module collecting various general math-related procedures
+M_matrix (3m_matrix) - [M_matrix::INTRO] The Los Alamos-inspired Linear Algebra Fortran Facility (LALA) LICENSE(MIT)
+M_messages (3m_messages) - [M_messages] module collecting various general routines for displaying messages (LICENSE:PD)
+M_orderpack (3m_orderpack) - [M_orderpack::INTRO]General and Specialized Ranking and Sorting Routines
+M_overload (3m_overload) - [M_overload::INTRO] overloads of standard operators and intrinsic procedures (LICENSE:PD)
+M_pixel (3m_pixel)   - [M_pixel::INTRO] module for drawing into a pixel array with 2D vector operations (LICENSE:PD)
+M_process (3m_process) - [M_process::INTRO] Fortran Module for calling process-related C functions from Fortran (LICENSE:PD)
+M_random (3m_random) - [M_random::INTRO] Routines for generating random numbers and strings
+M_readline (3m_readline) - [M_readline::INTRO] Calling readline(3c) from Fortran (LICENSE:PD)
+M_regex (3m_regex)   - [M_regex] Fortran interface to POSIX 1003.2 regular expression library using ISO_C_BINDING.
+M_sets (3m_sets)     - [M_sets::INTRO] functions reminiscent of Matlab set functions
+M_sort (3m_sort)     - [M_sort::INTRO] Fortran module containing sorting algorithms for arrays of standard scalar types (LICENSE:PD)
+M_sqlite (3m_sqlite) - [M_sqlite] Fortran interface to SQLite3 API
+M_stopwatch (3m_stopwatch) - [M_stopwatch] package for measuring cpu and wall clock execution time (LICENSE:PD)
+M_strings (3m_strings) - [M_strings::INTRO] Fortran string module
+M_system (3m_system) - [M_system::INTRO] Fortran interface to C system interface (LICENSE:PD)
+M_time (3m_time)     - [M_time::INTRO] Fortran module for manipulating and presenting time and date values as defined in ISO 8601:1988 (LICENSE:MIT)
+M_time__oop (3m_time) - [M_time::INTRO::OOPS] OOP interface for M_time(3fm) (LICENSE:MIT)
+M_units (3m_units)   - [M_units::INTRO] convert between various physical units (LICENSE:MIT)
+M_uuid (3m_uuid)     - [M_uuid::INTRO] a module of UUID (Universally Unique IDentifier) procedures (LICENSE:BSD-4-Clause)
+M_verify (3m_verify) - [M_verify::INTRO] a collection of Fortran routines for supporting code development by providing error processing, debugging procedures and unit testing. (LICENSE:PD)
+M_xterm (3m_xterm)   - [M_xterm] send escape sequences to an xterm(1) window that control VT102 emulator attributes (LICENSE:MIT)
+mac_and_cheese (7)   - [RECIPES] mac and cheese (LICENSE:PD)
+magic_square (3m_math) - [M_math] create an N x N magic square array, N>2
+makeobj (3m_draw)    - [M_draw:OBJECT] Commence the object number n. (LICENSE:PD)
+makeout (1)	     - [DEVELOPER] Generate a Makefile from the sources (C, Fortran) in the current directory (LICENSE:PD)
+makepoly (3m_draw)   - [M_draw:POLYGONS] opens polygon constructed by a series of move-draws and closed by closepoly (LICENSE:PD)
+makepoly (3m_pixel)  - [M_pixel:POLYGONS] opens polygon constructed by a series of move-draws and closed by closepoly (LICENSE:PD)
+makpat (3m_match)    - [M_MATCH] make pattern from arg(from), terminate on delim (LICENSE:PD)
+manup (1)	     - [DEVELOPER] Simple markup of text to a man(1) page (LICENSE:PD)
+mapcolor (3m_draw)   - [M_draw:COLOR] set a color index using RGB values (LICENSE:PD)
+mapcolor (3m_pixel)  - [M_pixel:COLOR] set a color index using RGB values (LICENSE:PD)
+maskl (3fortran)     - [BIT:SET] Generates a left justified mask
+maskr (3fortran)     - [BIT:SET] Generates a right-justified mask
+mat_magic (3m_la)    - [M_LA] create an N x N magic square array, N>2
+match (1)	     - find occurrences of a Regular Expression in a file(s). (LICENSE:PD)
+match (3m_match)     - [M_MATCH] find match to a basic regular expression anywhere on input string (LICENSE:PD)
+matching_delimiter (3m_strings) - [M_strings:QUOTES] find position of matching delimiter (LICENSE:PD)
+matmul (3fortran)    - [ARRAY:TRANSFORMATIONAL] Numeric or logical matrix multiplication
+max (3fortran)	     - [NUMERIC] Maximum value of an argument list
+max (3m_datapac)     - [M_datapac:VECTOR_OPERATION] MAX compute the maximum of a data vector
+maxexponent (3fortran) - [MODEL:NUMERIC] Maximum exponent of a real kind
+maxloc (3fortran)    - [ARRAY:LOCATION] Location of the maximum value within an array
+maxval (3fortran)    - [ARRAY:REDUCTION] Determines the maximum value in an array or row
+mean (3m_datapac)    - [M_datapac:STATISTICS] compute the sample mean of a data vector
+median (3m_datapac)  - [M_datapac:STATISTICS] compute the median of a data vector
+median (3m_orderpack) - [M_orderpack:MEDIAN] Calculates median VALUE. If number of elements is even, returns average of the two "medians".
+medianloc (3m_orderpack) - [M_orderpack:MEDIAN] Returns median value's INDEX.
+medianval (3m_orderpack) - [M_orderpack:MEDIAN] Returns median VALUE.
+merge (3fortran)     - [ARRAY:CONSTRUCTION] Merge variables
+merge (3m_overload)  - [M_overload:INTRINSIC] allow MERGE(3f) intrinsic to take strings of different length (LICENSE:PD)
+merge_bits (3fortran) - [BIT:COPY] Merge bits using a mask
+merge_str (3m_strings) - [M_strings:LENGTH] pads strings to same length and then calls MERGE(3f) (LICENSE:PD)
+meters_to_feet (3m_units) - [M_units:LENGTH] converts a measurement in meters to feet (LICENSE:PD)
+midm (3m_datapac)    - [M_datapac:STATISTICS] compute the midmean of a data vector
+midr (3m_datapac)    - [M_datapac:STATISTICS] compute the midrange of a data vector
+min (3fortran)	     - [NUMERIC] Minimum value of an argument list
+min (3m_datapac)     - [M_datapac:STATISTICS] compute the minimum of a data vector
+minefield (1m_draw)  - [M_draw] minefield game (LICENSE:PD)
+minexponent (3fortran) - [MODEL:NUMERIC] Minimum exponent of a real kind
+minloc (3fortran)    - [ARRAY:LOCATION] Location of the minimum value within an array
+minval (3fortran)    - [ARRAY:REDUCTION] Minimum value of all the elements of ARRAY along dimension DIM corresponding to true elements of MASK.
+mkdir- (1)	     - [FUNIX:FILESYSTEM] call mkdir(3c) to make directories (LICENSE:PD)
+mkfifo- (1)	     - [FUNIX:FILESYSTEM] make a FIFO pipe by calling mkfifo(3c) (LICENSE:PD)
+mo2d (3m_time)	     - [M_time:MONTH_NAME] given month name return DAT date-time array for beginning of that month in specified year (LICENSE:MIT)
+mo2v (3m_time)	     - [M_time:MONTH_NAME] given month name return month number (1-12) of that month (LICENSE:MIT)
+mod (3fortran)	     - [NUMERIC] Remainder function
+model (1)	     - [FORTRAN:iso_fortran_env] fortran numeric model information (LICENSE:PD)
+modif (3m_strings)   - [M_strings:EDITING] emulate the MODIFY command from the line editor XEDIT (LICENSE:PD)
+modulo (3fortran)    - [NUMERIC] Modulo function
+month (1)	     - [TIME] display a calendar (LICENSE:PD)
+moon_fullness (3m_time) - [M_time:ASTROLOGICAL] return percentage of moon phase from new to full (LICENSE:MIT)
+move (3m_datapac)    - [M_datapac:VECTOR_OPERATION] move selected elements of one vector into another vector
+move (3m_draw)	     - [M_draw:MOVE] Move current graphics position to (x, y, z) (LICENSE:PD)
+move2 (3m_draw)      - [M_draw:MOVE] Move graphics position to point (x, y) (LICENSE:PD)
+move2 (3m_pixel)     - [M_pixel:DRAW] change current position (LICENSE:PD)
+move_alloc (3fortran) - [MEMORY] Move allocation from one object to another
+mtprng_init (3m_random) - [M_random:MERSENNE TWISTER] Initialize the Mersenne Twister random number generator with "seed" (LICENSE:CUSTOM OPEN)
+mtprng_init_by_array (3m_random) - [M_random:MERSENNE TWISTER] Initialize the Mersenne Twister random number generator with "seed" array (LICENSE:CUSTOM OPEN)
+mtprng_rand (3m_random) - [M_random:MERSENNE TWISTER] Obtain the next 32-bit integer in the pseudo-random sequence (LICENSE:CUSTOM OPEN)
+mtprng_rand64 (3m_random) - [M_random:MERSENNE TWISTER] Obtain the next 64-bit integer in the pseudo-random sequence (LICENSE:CUSTOM OPEN)
+mtprng_rand_range (3m_random) - [M_random:MERSENNE TWISTER] Obtain a pseudo-random integer in the range [lo, hi] (LICENSE:CUSTOM OPEN)
+mtprng_rand_real1 (3m_random) - [M_random:MERSENNE TWISTER] Obtain a pseudo-random real number in the range [0.0, 1.0] (LICENSE:CUSTOM OPEN)
+mtprng_rand_real2 (3m_random) - [M_random:MERSENNE TWISTER] Obtain a pseudo-random real number in the range [0, <1) (LICENSE:CUSTOM OPEN)
+mtprng_rand_real3 (3m_random) - [M_random:MERSENNE TWISTER] Obtain a pseudo-random real number in the range (0< XXX <1) (LICENSE:CUSTOM OPEN)
+mv- (1) 	     - [FUNIX:FILESYSTEM] rename file (LICENSE:PD)
+mvbits (3fortran)    - [BIT:COPY] Reproduce bit patterns found in one integer in another
+namelist (7fortran)  - [STATEMENT] specify a group of data to be referred to by a single name in data input/output
+nan (3m_units)	     - [M_units] return a NaN (Not a number) (LICENSE:PD)
+nbcdf (3m_datapac)   - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the negative binomial cumulative distribution function
+nbppf (3m_datapac)   - [M_datapac:PERCENT_POINT] compute the negative binomial percent point function
+nbran (3m_datapac)   - [M_datapac:RANDOM] generate negative binomial random numbers
+nc2html (1)	     - [NCURSES] print an ncurses(3c) window dump as HTML (LICENSE:PD)
+ncr (3m_math)	     - [M_math] Calculate the number of unique combinations of r objects out of n.
+nd (1)		     - [DEVELOPER] Compare numeric differences between two files (LICENSE:PD)
+nearest (3fortran)   - [MODEL:COMPONENTS] Nearest representable number
+needs (7fortran)     - rough notes on what is missing from standard Fortran
+new_line (3fortran)  - [CHARACTER:INQUIRY] Newline character
+newpen (3m_calcomp)  - [M_calcomp:basic] select new pen color and move to origin (LICENSE:PD)
+nextp (3m_math)      - [M_math] next permutation of a previously sorted integer array (LICENSE:PD)
+nframe (3m_calcomp)  - [M_calcomp:basic] start new frame (LICENSE:PD)
+nint (3fortran)      - [TYPE:CONVERSION] Nearest whole number
+nint (3m_strings)    - [M_strings:TYPE] overloads NINT(3f) so it can handle character arguments (LICENSE:PD)
+noesc (3m_strings)   - [M_strings:NONALPHA] convert non-printable characters to a space (LICENSE:PD)
+norcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the normal cumulative distribution function
+norm2 (3fortran)     - [MATHEMATICS] Euclidean vector norm
+norm_angle_deg (3m_units) - [M_units:TRIGONOMETRY] Return input angle given in degrees as angle between 0 and 360 (LICENSE:PD)
+norm_angle_rad (3m_units) - [M_units:TRIGONOMETRY] Return input angle given in radians as angle between 0 and 2pi (LICENSE:PD)
+norout (3m_datapac)  - [M_datapac:ANALYSIS] Performs a normal outlier analysis on the data in the input vector X.
+norpdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] compute the normal probability density function
+norplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a normal probability plot
+norppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the normal percent point function
+norran (3m_datapac)  - [M_datapac:RANDOM] generate normal random numbers
+norsf (3m_datapac)   - [M_datapac:SPARSITY] compute the normal sparsity function
+nospace (3m_strings) - [M_strings:WHITESPACE] remove all whitespace from input string (LICENSE:PD)
+not (3fortran)	     - [BIT:LOGICAL] Logical negation; flips all bits in an integer
+notabs (3m_strings)  - [M_strings:NONALPHA] expand tab characters (LICENSE:PD)
+note (1)	     - [M_messages] print large block letters (LICENSE:PD)
+notopen (3m_io)      - [M_io:QUERY] Find a FUN/LUN (Fortran-unit-number) that is not in use (LICENSE:PD)
+now (1) 	     - [TIME] print the date and time (LICENSE:PD)
+now (3m_time)	     - [M_time:DATE_PRINTING] return string representing current time given one of many formats to present with (LICENSE:MIT)
+null (3fortran)      - [TRANSFORMATIONAL] Function that returns a disassociated pointer
+nullify (7fortran)   - [FORTRAN:STATEMENT] causes pointers to be disassociated from a target
+num_images (3fortran) - [COLLECTIVE] Number of images
+number (3m_calcomp)  - [M_calcomp:basic] plots a floating-point number (LICENSE:PD)
+number_of_lines (3m_io) - [M_io:QUERY] read an open sequential file to get number of lines (LICENSE:PD)
+numchars (3m_draw)   - [M_draw:TEXT] Return number of characters in the current SOFTWARE font. (LICENSE:PD)
+o2d (3m_time)	     - [M_time:ORDINAL_DAY] converts Ordinal day to DAT date-time array (LICENSE:MIT)
+occurrences (3m_orderpack) - [M_orderpack:MULTIPLICITY] Give the multiplicity for each array value (number of times that it appears in the array)
+open (7fortran)      - [IO] Initiates or modifies a connection between an external file and a specified unit.
+option_stopwatch (3m_stopwatch) - [M_stopwatch] sets M_StopWatch options (LICENSE:PD)
+orderloc (3m_orderpack) - [M_orderpack:FRACTILE] Return INDEX of Nth ordered value of array (Quick-Sort-like)
+orderval (3m_orderpack) - [M_orderpack:FRACTILE] Return VALUE of Nth ordered element of array (Quick-Sort-like)
+orderval_special (3m_orderpack) - [M_orderpack:FRACTILE] Return VALUE of Nth ordered element of array (InsertSort-like)
+ordinal_seconds (3m_time) - [M_time:ORDINAL_DAY] seconds since beginning of year (LICENSE:MIT)
+ordinal_to_date (3m_time) - [M_time:ORDINAL_DAY] when given a valid year and day of the year returns the DAT array for the date (LICENSE:MIT)
+ortho (3m_draw)      - [M_draw:PROJECTION] Define x, y, z clipping planes. (LICENSE:PD)
+ortho2 (3m_draw)     - [M_draw:PROJECTION] define the area of the virtual world coordinates to map to the viewport (LICENSE:PD)
+ortho2 (3m_pixel)    - [M_pixel] define the area of the virtual world coordinates to map to the viewport (LICENSE:PD)
+out_of_range (3fortran) - [TYPE:CONVERSION] Whether a numeric value can be converted safely to another type
+oz (3m_overload)     - [M_overload::LOGICAL] returns One if expression is TRUE, else returns Zero. (LICENSE:PD)
+pack (3fortran)      - [ARRAY:CONSTRUCTION] Pack an array into an array of rank one
+pad (3m_strings)     - [M_strings:LENGTH] return string padded to at least specified length (LICENSE:PD)
+page (3m_draw)	     - [M_draw] set window into largest viewport available (LICENSE:PD)
+page (3m_pixel)      - [M_pixel] define the area of the virtual world coordinates to map to the viewport (LICENSE:PD)
+pancakes (7)	     - [RECIPES] pancakes (LICENSE:PD)
+paragraph (3m_strings) - [M_strings:TOKENS] break a long line into a paragraph (LICENSE:PD)
+paranoid (1)	     - [DEVELOPER] call doubleprecision and real versions of paranoia(3f) (LICENSE:PD)
+parcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the Pareto cumulative distribution function
+parity (3fortran)    - [ARRAY:REDUCTION] Array reduction by .NEQV. operation
+parplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a Pareto probability plot
+parppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the Pareto percent point function
+parran (3m_datapac)  - [M_datapac:RANDOM] generate Pareto random numbers
+parse (3m_kracken)   - [ARGUMENTS:M_kracken] parse user command and store tokens into Language Dictionary (LICENSE:PD)
+paste- (1)	     - [FILE FILTER] merge lines of files (LICENSE:PD)
+patch (3m_draw)      - [M_draw:PATCH] Draws a patch in the current basis, according to the geometry matrices gx, gy, and gz. (LICENSE:PD)
+patchbasis (3m_draw) - [M_draw:PATCH] Define the t and u basis matrices of a patch. (LICENSE:PD)
+patchcurves (3m_draw) - [M_draw:PATCH] Set the number of curves making up a patch. (LICENSE:PD)
+patchprecision (3m_draw) - [M_draw:PATCH] Set minimum number of line segments making up curves in a patch. (LICENSE:PD)
+path (3m_path)	     - [M_path] OOP interface for a GNU Linux or Unix pathname (LICENSE:PD)
+pause_watch (3m_stopwatch) - [M_stopwatch] pauses a M_StopWatch watch (LICENSE:PD)
+paws (1)	     - [TIME] pause until specified time or for specified duration (LICENSE:PD)
+pdec (3m_framework__msg) - [M_framework__msg] write out string with ASCII decimal equivalent vertically under it (LICENSE:PD)
+pdec (3m_verify)     - [M_verify] write out string with ASCII decimal equivalent vertically under it (LICENSE:PD)
+pendulum (1)	     - [PHYSICS] calculate pendulum period (LICENSE:PD)
+penv (1)	     - [M_system:ENVIRONMENT] print all or part of environment in formats readable by various shells (LICENSE:PD)
+percent_decode (3m_strings) - [M_strings:ENCODE] percent-decode strings and character arrays (LICENSE:ISC)
+percent_done (3m_messages) - [M_messages] non-advancing status counter displays percentage done on terminal displays (LICENSE:PD)
+percent_encode (3m_strings) - [M_strings:ENCODE] percent-encode strings and character arrays (LICENSE:PD)
+system_perror (3m_system) - [M_system:ERROR_PROCESSING] print error message for last C error on stderr (LICENSE:PD)
+perspective (3m_draw) - [M_draw:PROJECTION] Specify perspective viewing pyramid (LICENSE:PD)
+perturb (3m_orderpack) - [M_orderpack:PERMUTATION] generate a random permutation of an array leaving elements close to initial locations
+phase_of_moon (3m_time) - [M_time:ASTROLOGICAL] return name for phase of moon for given date (LICENSE:MIT)
+pixel (3m_pixel)     - [M_pixel] set pixel to current color (LICENSE:PD)
+pixel_slice (3m_pixel) - [M_pixel] simplified call of DL_SLICES(3f) to make a plot of a 3-d surface (LICENSE:PD)
+plain_rect (3m_drawplus) - [M_drawplus] - draw a simple rectangle that does not act as a polygon (LICENSE:MIT)
+planets (1)	     - [FUNIX] ephemeris position of planets for adjusting an equatorial telescope
+playground (1)	     - convert Fortran file to an HTML document that uploads the code to "Fortran Playground"
+plot (3m_calcomp)    - [M_calcomp:basic] move with pen up or down or start new origin or terminate plotting (LICENSE:PD)
+plot (3m_datapac)    - [M_datapac:GENERIC_LINE_PLOT] yields a one-page printer plot of Y(I) versus X(I)
+plot10 (3m_datapac)  - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot with special plot characters
+plot6 (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot
+plot7 (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot with special plot characters
+plot8 (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot with special plot characters
+plot9 (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot with special plot characters
+plot_axis (3m_xyplot) - [M_xyplot] draw XY axis for XY plot routines (LICENSE:MIT)
+plot_clear (3m_xyplot) - [M_xyplot] clear graphics area and ensure in graphics mode (LICENSE:MIT)
+plot_drawplot (3m_xyplot) - [M_xyplot] draw an xy plot (LICENSE:MIT)
+plot_get_plot_area (3m_xyplot) - [M_xyplot] initialize plot page and set up common page-related values (LICENSE:MIT)
+plot_getdatarange (3m_xyplot) - [M_xyplot] get plot window extremes, set plot window extremes for dual axis (LICENSE:MIT)
+plot_hcopy (3m_xyplot) - [M_xyplot] generate copy of the current plot for XY plot routines (LICENSE:MIT)
+plot_id (3m_xyplot)  - [M_xyplot] render the id(1) command for XY plots (LICENSE:MIT)
+plot_init (3m_xyplot) - [M_xyplot] initialize command language and graphics mode to set up starting interpretation (LICENSE:MIT)
+plot_init_globals (3m_xyplot) - [M_xyplot] call xy_init_labels(3f) an xy_init_markers(3f) (LICENSE:MIT)
+plot_jupage (3m_xyplot) - [M_xyplot] a good try at allowing mixing of PLT commands and M_plot commands (LICENSE:MIT)
+plot_juparea (3m_xyplot) - [M_xyplot] parse parea command (LICENSE:MIT)
+plot_jut (3m_xyplot) - [M_xyplot] allow user to place text on screen (LICENSE:MIT)
+plot_marks (3m_xyplot) - [M_xyplot] draw examples of dash codes, pen styles and screen markers for XY plots (LICENSE:MIT)
+xy_noclose (3m_xyplot) - [M_xyplot] flag whether to keep current device open while switching to alternate device (LICENSE:MIT)
+plot_page_aspect (3m_xyplot) - [M_xyplot] Get aspect ratio from ASPECT command and call xy_aspct (LICENSE:MIT)
+plot_set_plot_area (3m_xyplot) - [M_xyplot] initialize plot page and set up common page-related values (LICENSE:MIT)
+plot_set_xmin (3m_xyplot) - [M_xyplot] set value for xmin/xmax/ymin/... command (LICENSE:MIT)
+plot_setdash (3m_xyplot) - [M_xyplot] allow user to display|alter|retrieve dash codes by style number (LICENSE:MIT)
+plot_setfill (3m_xyplot) - [M_xyplot] set background, middleground, and foreground colors for plot (LICENSE:MIT)
+plot_setmark (3m_xyplot) - [M_xyplot] set or display marker geometries (LICENSE:MIT)
+plot_storage (3m_xyplot) - [M_xyplot] if on a storage tube, clear the screen to unclutter it (LICENSE:MIT)
+plot_sz (3m_xyplot)  - [M_xyplot] change the size of the display surface (LICENSE:MIT)
+plot_title (3m_xyplot) - [M_xyplot] allow user to add extra title lines by number (LICENSE:MIT)
+plot_toggle (3m_xyplot) - [M_xyplot] special version of toggle(3f) to integrate calculator and language libraries (LICENSE:MIT)
+plot_z (3m_xyplot)   - [M_xyplot] Interactive ZOOM mode (LICENSE:MIT)
+plot_zmode (3m_xyplot) - [M_xyplot] Interactive ZOOM mode (LICENSE:MIT)
+plotc (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot with special plot characters
+plotco (3m_datapac)  - [M_datapac:GENERIC_LINE_PLOT] generate a line printer autocorrelation plot
+plotct (3m_datapac)  - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot for the terminal (71 characters wide)
+plots (3m_calcomp)   - [M_calcomp:basic] initialize the CALCOMP package (LICENSE:PD)
+plots (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot of Y vs X
+plotsc (3m_datapac)  - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot with special plot characters
+plotsp (3m_datapac)  - [M_datapac:LINE_PLOT] generate a line printer spectrum plot
+plotst (3m_datapac)  - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot of Y vs X for the terminal (71 characters wide)
+plott (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot of Y vs X for the terminal (71 characters wide)
+plotu (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer 4-plot
+plotx (3m_datapac)   - [M_datapac:GENERIC_LINE_PLOT] generate a line printer run sequence plot
+plotxt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a line printer run sequence plot for the terminal (71 characters wide)
+plotxx (3m_datapac)  - [M_datapac:LINE_PLOT] generate a line printer lag plot
+pls67 (3m_steam67)   - [M_steam67] saturation pressure of the saturated liquid at entropy SS.
+pltsct (3m_datapac)  - [M_datapac:GENERIC_LINE_PLOT] generate a line printer plot with special plot characters for the terminal (71 characters wide)
+pltxxt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a line printer lag plot for the terminal (71 characters wide)
+poicdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the Poisson cumulative distribution function
+point (3m_draw)      - [M_draw:POINT] Draw a point at x, y, z (LICENSE:PD)
+point2 (3m_draw)     - [M_draw:POINT] Draw a point at x, y. (LICENSE:PD)
+point2 (3m_pixel)    - [M_pixel:DRAW] Draw a point at x, y (LICENSE:PD)
+pointers (7fortran)  - [FORTRAN] Pointers and targets methods
+poiplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a Poisson probability plot (line printer graph)
+poippf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the Poisson percent point function
+poiran (3m_datapac)  - [M_datapac:RANDOM] generate Poisson random numbers
+polar (3m_calcomp)   - [M_calcomp:scientific] plot radial values versus angular variables (as polar coordinates) (LICENSE:PD)
+polar_to_cartesian (3m_pixel) - [M_pixel:TRIGONOMETRY] convert polar coordinates to Cartesian coordinates (LICENSE:PD)
+polar_to_cartesian (3m_units) - [M_units:TRIGONOMETRY] convert polar coordinates to Cartesian coordinates (LICENSE:PD)
+polarview (3m_draw)  - [M_draw:VIEWPORT] Specify the viewer's position in polar coordinates (LICENSE:PD)
+poly (3m_calcomp)    - [M_calcomp:general] draw an equilateral polygon (LICENSE:PD)
+poly (3m_draw)	     - [M_draw:POLYGONS] Construct a polygon from an array of points (LICENSE:PD)
+poly2 (3m_draw)      - [M_draw:POLYGONS] Construct an (x, y) polygon from an array of points (LICENSE:PD)
+poly2 (3m_pixel)     - [M_pixel:POLYGONS] construct a polygon from an array of points (LICENSE:PD)
+poly_intercept (3m_math) - [M_math:geometry] intersection of a straight line and polygonal path
+polyarea (3m_math)   - [M_math:geometry] compute the area bounded by a simple closed polygonal curve
+polyarea_shoelace (3m_math) - [M_math:geometry] compute area bounded by a simple closed polygon using the shoelace algorithm
+polyfill (3m_draw)   - [M_draw:POLYGONS] Set the polygon fill flag (LICENSE:PD)
+polyhatch (3m_draw)  - [M_draw:POLYGONS] Set the polygon hatch flag (LICENSE:PD)
+polyline2 (3m_drawplus) - [M_drawplus] - draw an unclosed polyline in the XY plane (LICENSE:MIT)
+polyline2 (3m_pixel) - [M_pixel:DRAW] - draw an unclosed polyline in the XY plane (LICENSE:PD)
+pop (3m_draw)	     - [M_draw] call popviewport(), popmatrix(), popattributes() (LICENSE:PD)
+popattributes (3m_draw) - [M_draw:ATTRIBUTE_STACK] Restore attributes to what they were at last pushattributes(). (LICENSE:PD)
+popcnt (3fortran)    - [BIT:COUNT] Number of bits set
+popdev (3m_draw)     - [M_draw:DEVICE] pop device from stack created by pushdev. (LICENSE:PD)
+popmatrix (3m_draw)  - [M_draw:MATRIX_STACK] Reinstall the last matrix pushed (LICENSE:PD)
+poppar (3fortran)    - [BIT:COUNT] Parity of the number of bits set
+popviewport (3m_draw) - [M_draw:VIEWPORT] Retrieve last viewport (LICENSE:PD)
+pounds_to_kilograms (3m_units) - [M_units:MASS] - converts a measurement in pounds-mass to kilograms. (LICENSE:PD)
+ppm (5) 	     - portable pixmap file format
+prank (3m_orderpack) - [M_orderpack:RANK:PARTIAL] partially ranks an array (Quick-Sort-like)
+prank_basic (3m_orderpack) - [M_orderpack:RANK:PARTIAL] partially ranks an array (Quick-Sort)
+prank_decreasing (3m_orderpack) - [M_orderpack:RANK:PARTIAL] partially ranks an array in DECREASING order.
+prank_special (3m_orderpack) - [M_orderpack:RANK:PARTIAL] partially ranks an array in ASCENDING order (Insertion Sort)
+prank_unique (3m_orderpack) - [M_orderpack:RANK:PARTIAL:UNIQUE] partially ranks an array removing duplicates
+precision (3fortran) - [MODEL:NUMERIC] Decimal precision of a real kind
+prefposition (3m_draw) - [M_draw:WINDOW_SETUP] Specify preferred position of window (LICENSE:PD)
+prefsize (3m_draw)   - [M_draw:WINDOW_SETUP] Specify preferred width and height of window in physical units (LICENSE:PD)
+prefsize (3m_pixel)  - [M_pixel] specify size of pixel array (LICENSE:PD)
+prep (1)	     - [DEVELOPER] pre-process FORTRAN source files (LICENSE:MIT)
+present (3fortran)   - [STATE:INQUIRY] Determine whether an optional dummy argument is specified
+prime_factors (3m_factor) - [M_factor] decompose a number into its prime factors
+print (3m_draw)      - [M_draw] call DRAWSTR(3f) with up to nine arbitrary intrinsic scalar values
+print (7fortran)     - [IO] write formatted sequential I/O to stdout
+print_ansi (3m_pixel) - [M_pixel:PRINT] print small pixel array as colored text on terminals and terminal emulators that obey ANSI escape sequences (LICENSE:PD)
+print_ascii (3m_pixel) - [M_pixel:PRINT] print small pixel array as ASCII text (LICENSE:PD)
+print_dictionary (3m_args) - [ARGUMENTS:M_args] print internal dictionary created by calls to get_namelist(3f) (LICENSE:PD)
+print_dictionary (3m_cli) - [ARGUMENTS:M_CLI] print internal dictionary created by calls to commandline(3f) (LICENSE:PD)
+print_inquire (3m_io) - [M_io:QUERY] Do INQUIRE on file by name/number and print results (LICENSE:PD)
+print_p3 (3m_pixel)  - [M_pixel:PRINT] print pixel array as a ppm p3 file (LICENSE:PD)
+print_p6 (3m_pixel)  - [M_pixel:PRINT] print pixel array as a ppm file (LICENSE:PD)
+print_ppm (3m_pixel) - [M_pixel:PRINT] print pixel array as a ppm file (LICENSE:PD)
+print_watch (3m_stopwatch) - [M_stopwatch] prints the current value of a M_StopWatch watch (LICENSE:PD)
+printenv- (1)	     - [FUNIX:ENVIRONMENT] print all or part of environment in formats readable by various shells (LICENSE:PD)
+prliq67 (3m_steam67) - [M_steam67] compute the Prandtl number of the liquid at pressure P and temperature T in regsion 1
+process_close (3m_process) - [M_process] close a process being written to or read from (LICENSE:PD)
+process_open_read (3m_process) - [M_process] open a process for reading using POSIX interface (LICENSE:PD)
+process_open_write (3m_process) - [M_process] open a process for writing using a POSIX interface (LICENSE:PD)
+process_readall (3m_process) - [M_process] read all lines from process into single string (LICENSE:PD)
+process_readline (3m_process) - [M_process] read a line of output from a system command as a character variable (LICENSE:PD)
+process_writeline (3m_process) - [M_process] write to a process using a POSIX interface (LICENSE:PD)
+product (3fortran)   - [ARRAY:REDUCTION] Product of array elements
+program (7fortran)   - [PROGRAM UNITS] Absolute value
+prompt (1)	     - prompt for whether to execute the command given on the command line (LICENSE:PD)
+propor (3m_datapac)  - [M_datapac:STATISTICS] compute the sample proportion
+protected (7fortran) - [FORTRAN:SPECIFICATION ATTRIBUTE] protect use associated module objects from change outside of the module
+prstm67 (3m_steam67) - [M_steam67] compute the Prandtl number of the liquid at pressure P and temperature T. in Region 2
+psl167 (3m_steam67)  - [M_steam67] calculate saturation pressure of the saturated liquid at temperature T.
+psl67 (3m_steam67)   - [M_steam67] calculate saturation pressure of the saturated liquid at temperature T
+psort (3m_orderpack) - [M_orderpack:SORT:PARTIAL] partially sorts an array (Insertion Sort, generally for small or nearly sorted arrays)
+psv167 (3m_steam67)  - [M_steam67] calculate saturation pressure in psia of the saturated liquid at entropy SS.
+psv267 (3m_steam67)  - [M_steam67] calculate saturation pressure in psia of the saturated liquid at entropy SS.
+psv67 (3m_steam67)   - [M_steam67] calculate saturation pressure of the saturated liquid at entropy SS in psia
+pumpkin_roll (7)     - [RECIPES] pumpkin roll (LICENSE:PD)
+pure (7fortran)      - [FORTRAN:SPECIFICATION ATTRIBUTE] Pure procedures
+push (3m_draw)	     - [M_draw] call pushviewport(), pushmatrix(), pushattributes() (LICENSE:PD)
+pushattributes (3m_draw) - [M_draw:ATTRIBUTE_STACK] Save the current attributes on the attribute stack. (LICENSE:PD)
+pushdev (3m_draw)    - [M_draw:DEVICE] push current device onto a stack (LICENSE:PD)
+pushmatrix (3m_draw) - [M_draw:MATRIX_STACK] Save the current transformation matrix on the matrix stack. (LICENSE:PD)
+pushviewport (3m_draw) - [M_draw:VIEWPORT] Save current viewport (LICENSE:PD)
+put_into_lala (3m_matrix) - [M_matrix] return data from lala(3f) to calling program LICENSE(MIT)
+putchar (3m_io)      - [M_io:QUERY] write a single-byte character to stdout via C interface (LICENSE:PD)
+pwd- (1)	     - [FUNIX:FILESYSTEM] list full pathname of current directory (LICENSE:PD)
+qhfg (3m_math)	     - [M_math:integral] compute integral values for given general table of argument, function, and derivative values.
+qhsg (3m_math)	     - [M_math] Compute integral values for given table of argument, function, 1st derivative, and 2nd derivative values.
+qsort (1)	     - [FUNIX] sort a file (LICENSE:PD)
+qtfg (3m_math)	     - [M_math] Compute integral values for given general table of argument and function values.
+quadratic (1)	     - [MATH] Calculate and print the roots of a quadratic formula even if they are complex (LICENSE:PD)
+quadratic (3m_math)  - [M_math] calculate the roots of a quadratic formula even if they are complex
+quote (3m_strings)   - [M_strings:QUOTES] add quotes to string as if written with list-directed output (LICENSE:PD)
+r2d (3m_units)	     - [M_units:TRIGONOMETRY] convert radians to degrees (LICENSE:PD)
+radix (3fortran)     - [MODEL:NUMERIC] Base of a numeric model
+rand (1m_random)     - [M_random] generate pseudo-random permutations of file lines, whole numbers, or strings (LICENSE:PD)
+random_hex (3m_random) - [M_random] create a string representing a random hexadecimal value of specified length (LICENSE:MIT)
+random_init (3fortran) - [MATHEMATICS:RANDOM] Initializes the state of the pseudorandom number generator
+random_int (3m_random) - [M_random] return an integer between low and high value inclusive (LICENSE:MIT)
+random_kiss64 (3m_random) - [M_random] A 64-bit KISS random number generator by George Margaglia.
+random_number (3fortran) - [MATHEMATICS:RANDOM] Pseudo-random number
+random_seed (3fortran) - [MATHEMATICS:RANDOM] Initialize a pseudo-random number sequence
+random_string (3m_random) - [M_random] create random string composed of provided characters of specified length (LICENSE:MIT)
+range (1)	     - [M_strings] expand list of whole numbers where negative curve numbers designate ranges (1 -10 means 1 thru 10) (LICENSE:PD)
+range (3fortran)     - [MODEL:NUMERIC] Decimal exponent range of a numeric kind
+range (3m_datapac)   - [M_datapac:STATISTICS] compute the sample range
+rank (3fortran)      - [ARRAY:INQUIRY] Rank of a data object
+rank (3m_datapac)    - [M_datapac:SORT] rank a vector of sample observations
+rank (3m_orderpack)  - [M_orderpack:RANK] produces an INDEX that sorts an input array (optimized merge-sort)
+rank_basic (3m_orderpack) - [M_orderpack:RANK] create an INDEX that defines the order of array sorted in ascending order (basic merge-sort)
+rank_decreasing (3m_orderpack) - [M_orderpack:RANK:UNIQUE] ranks an array in decreasing order, with duplicate entries assigned the same rank(Merge-Sort)
+rank_unique (3m_orderpack) - [M_orderpack:RANK:UNIQUE] ranks an array, with removal of duplicate entries (Merge-Sort)
+ranper (3m_datapac)  - [M_datapac:RANDOM] generates a random permutation
+rcurve (3m_draw)     - [M_draw:CURVE] Draw a rational curve. (LICENSE:PD)
+rd (3m_io)	     - [M_io:READ] ask for string from standard input with user-definable prompt (LICENSE:PD)
+rdbox (3m_drawplus)  - [M_drawplus:locator] - reads two points and outline defined box and return points (LICENSE:MIT)
+rdpnt (3m_drawplus)  - [M_drawplus:locator] reads coordinates of point locator clicked at (LICENSE:MIT)
+rdraw (3m_draw)      - [M_draw:DRAW] Relative draw (LICENSE:PD)
+rdraw2 (3m_draw)     - [M_draw:DRAW] Relative draw from current position to given point (LICENSE:PD)
+rdraw2 (3m_pixel)    - [M_pixel:DRAW] draw from current position to given point (LICENSE:PD)
+read (7fortran)      - [IO] read data
+read_line (3m_io)    - [M_io:READ] read a line from specified LUN into allocatable string up to line length limit cleaning up input line (LICENSE:PD)
+read_table (3m_io)   - [M_io:READ] read file containing a table of numeric values (LICENSE:PD)
+read_watch (3m_stopwatch) - [M_stopwatch] reads the values from a M_StopWatch watch (LICENSE:PD)
+readenv (3m_io)      - [M_io:QUERY] a function returning the value of an environment variable (LICENSE:PD)
+real (3fortran)      - [TYPE:CONVERSION] Convert to real type
+real (3m_strings)    - [M_strings:TYPE] overloads REAL(3f) so it can handle character arguments (LICENSE:PD)
+realpath- (1)	     - [FUNIX] print the resolved path (LICENSE:PD)
+recipes (7)	     - [RECIPES] list recipes (LICENSE:PD)
+rect (3m_calcomp)    - [M_calcomp:general] draw a rectangle (LICENSE:PD)
+rect (3m_draw)	     - [M_draw:POLYGONS] Draw a rectangle given two corners (LICENSE:PD)
+rect (3m_pixel)      - [M_pixel:POLYGON] draw rectangle given two corners (LICENSE:PD)
+redo (3m_history)    - [M_history] Fortran-based Input History Editor (LICENSE:MIT)
+reduce (3fortran)    - [ARRAY:TRANSFORMATIONAL] General reduction of an array
+references (5fortran) - FORTRAN:SUPPLEMENT] www references for Fortran
+regcomp (3m_regex)   - [M_regex] Compile a regular expression into a regex object
+regerror (3m_regex)  - [M_regex] maps a non-zero errcode from either regcomp(3f) or regexec(3f) to a human-readable, printable message.
+regexec (3m_regex)   - [M_regex] Execute a compiled regex against a string
+regfree (3m_regex)   - [M_regex] Release storage used by the internal form of the RE (Regular Expression)
+regmatch (3m_regex)  - [M_regex] return selected substring defined by the MATCHES(2, :) array
+regsub (3m_regex)    - [M_regex] perform regex substitutions
+relsd (3m_datapac)   - [M_datapac:STATISTICS] compute the relative standard deviation of a vector of observations
+remove (3m_list)     - [M_list] remove entry from an allocatable array at specified position (LICENSE:PD)
+rename- (1)	     - [FUNIX:FILESYSTEM] rename files by replacing first occurrence of a string in a filename with new string (LICENSE:PD)
+repeat (3fortran)    - [CHARACTER] Repeated string concatenation
+replac (3m_datapac)  - [M_datapac:VECTOR_OPERATION] replace all observations in a vector within a given interval with a user-specified constant
+replace (3m_list)    - [M_list] replace entry in a string array at specified position (LICENSE:PD)
+replace (3m_strings) - [M_strings:EDITING] function replaces one substring for another in string (LICENSE:PD)
+replace- (1)	     - [FILE EDIT] replace fixed strings in files (LICENSE:MIT)
+reset_watch (3m_stopwatch) - [M_stopwatch] resets a M_StopWatch watch to 0.0 (LICENSE:PD)
+reshape (3fortran)   - [ARRAY:RESHAPE] Function to reshape an array
+retain (3m_datapac)  - [M_datapac:VECTOR_OPERATION] retain all observations in a vector within a user-specified interval
+retrev (3m_kracken)  - [ARGUMENTS:M_kracken] get keyword value as a string from a command's argument list processed by kracken(3f) (LICENSE:PD)
+return (7fortran)    - [STATEMENT] completes execution of the instance of the subprogram in which it appears
+rev- (1)	     - [FUNIX] reverse lines in a file (LICENSE:PD)
+reverse (1)	     - [FUNIX] print file in reverse (LICENSE:PD)
+reverse (3m_strings) - [M_strings:EDITING] Return a string reversed (LICENSE:PD)
+rewind (7fortran)    - [FILE_POSITIONING] rewind specified sequential access I/O unit
+rgbmono (3m_color)   - [M_color] converts RGB colors to a reasonable grayscale intensity (LICENSE:PD)
+rget (3m_kracken)    - [ARGUMENTS:M_kracken] given keyword fetch real value from command argument (LICENSE:PD)
+rgets (3m_kracken)   - [ARGUMENTS:M_kracken] given keyword fetch real array from command arguments (LICENSE:PD)
+rgetvalue (3m_calculator) - [M_calculator] given numeric variable name return real value directly from calculator dictionary for efficiency (LICENSE:PD)
+rightjustify (3m_draw) - [M_draw:TEXT] right justify text (LICENSE:PD)
+rm- (1) 	     - [FUNIX:FILESYSTEM] remove file(s) (LICENSE:PD)
+rmdir- (1)	     - [FUNIX:FILESYSTEM] remove empty directories (LICENSE:PD)
+rmove (3m_draw)      - [M_draw:MOVE] Relative move (LICENSE:PD)
+rmove2 (3m_draw)     - [M_draw:MOVE] Relative move in world units. (LICENSE:PD)
+rmove2 (3m_pixel)    - [M_pixel:DRAW] relative move (LICENSE:PD)
+rnum0 (3m_calculator) - [M_calculator] returns real number from string expression using CALCULATOR(3f) (LICENSE:PD)
+rotate (3m_draw)     - [M_draw:TRANSFORMATION] Set up a rotation in axis axis where axis is one of 'x', 'y', or 'z'. (LICENSE:PD)
+rotate13 (3m_strings) - [M_strings:ENCODE] apply trivial ROT13 encryption to a string (LICENSE:PD)
+rpad (3m_strings)    - [M_strings:LENGTH] convert to a string and pad on the right to requested length (LICENSE:PD)
+rpatch (3m_draw)     - [M_draw:PATCH] Draws a rational patch in the current basis, according to the geometry matrices gx, gy, gz, and gw. (LICENSE:PD)
+rrspacing (3fortran) - [MODEL_COMPONENTS] Reciprocal of the relative spacing of a numeric type
+rsdraw2 (3m_draw)    - [M_draw:DRAW] Relative draw in screen units (-1.0 to 1.0). (LICENSE:PD)
+rsmove2 (3m_draw)    - [M_draw:MOVE] Relative move in screen units (-1.0 to 1.0). (LICENSE:PD)
+runs (3m_datapac)    - [M_datapac:ANALYSIS] perform a runs test
+s2c (3m_strings)     - [M_strings:ARRAY] convert character variable to array of characters with last element set to null (LICENSE:PD)
+s2v (3m_strings)     - [M_strings:TYPE] function returns doubleprecision numeric value from a string (LICENSE:PD)
+s2vs (3m_strings)    - [M_strings:TYPE] given a string representing numbers return a numeric array (LICENSE:PD)
+same_type_as (3fortran) - [STATE:INQUIRY] Query dynamic types for equality
+sampp (3m_datapac)   - [M_datapac:PERCENT_POINT] compute the sample 100P percent point (i.e., percentile)
+sasum (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] SASUM:=sum of absolute values of SX.
+save (7fortran)      - [FORTRAN:STATEMENT:ATTRIBUTE] specifies that a local variable retains its status and value after a RETURN
+saveobj (3m_draw)    - [M_draw:OBJECT] Save object number n into file filename. Does NOT save objects called inside object n. (LICENSE:PD)
+saxpy (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] SY:=SY+SA*SX (constant times a vector plus a vector)
+scabs1 (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL1]
+scale (3fortran)     - [MODEL:COMPONENTS] Scale a real value by a whole power of the radix
+scale (3m_calcomp)   - [M_calcomp:basic] calculate scaling factors for producing XY plots with LINE(3f) and AXIS(3f) routines (LICENSE:PD)
+scale (3m_datapac)   - [M_datapac:STATISTICS] compute the sample range, sample standard deviation, sample relative standard deviation, and sample variance
+scale (3m_draw)      - [M_draw:TRANSFORMATION] Set up scaling factors in x, y, and z axis. (LICENSE:PD)
+scale1 (3m_math)     - [M_math] find new range xMINP XMAXP divisible into approximately N linear intervals of size DIST
+scale3 (3m_math)     - [M_math] find nice log range
+scalg (3m_calcomp)   - [M_calcomp:scientific] determine scale factors for a logarithmic scale (LICENSE:PD)
+scan (3fortran)      - [CHARACTER:SEARCH] Scan a string for the presence of a set of characters
+scasum (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL1] SCASUM:=SUM(I=1 to N) ABS(REAL(CX(I)))+ABS(AIMAG(CX(I))).
+scnrm2 (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL1] SCNRM2:= square root of sum of magnitudes of entries of CX.
+scopy (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] SY:=SX
+scramble (3m_random) - [M_random] generate an integer array of specified size populated with a random permutation of 1 to size(array) (LICENSE:MIT)
+scratch (3m_io)      - [M_io:QUERY] Return the name of a scratch file (LICENSE:PD)
+scratch (7fortran)   - [FORTRAN:OPEN] where scratch files are typically written by OPEN(3f)
+sd (3m_datapac)      - [M_datapac:STATISTICS] compute the standard deviation of a vector of observations
+sdbm_hash (3m_hashkeys) - [M_hashkeys:bucket_hash] sdbm string hash (LICENSE:PD)
+sdot (3m_blas)	     - [BLAS:SINGLE_BLAS_LEVEL1] SDOT := SUM SX * SY (vector dot product)
+sdraw2 (3m_draw)     - [M_draw:DRAW] Draw in screen coordinates (-1.0 to 1.0). (LICENSE:PD)
+sdsdot (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL1] Compute the inner product of two vectors with extended precision accumulation. SDSDOT := SUM SX * SY (accumulated double precision, returned single)
+sec2days (1)	     - [TIME] Convert durations of time to string of form dd-hh:mm:ss (LICENSE:PD)
+sec2days (3m_time)   - [M_time:DURATION] convert seconds to string of form dd-hh:mm:ss (LICENSE:MIT)
+sector (3m_draw)     - [M_draw:ARCS] Draw a sector. Note: sectors are polygons. (LICENSE:PD)
+seefont (1)	     - [M_drawplus] show sample of font (LICENSE:PD)
+seefont (3m_drawplus) - [M_drawplus] display font sample pages (LICENSE:MIT)
+select (7fortran)    - [FORTRAN:EXECUTION CONTROL] select a block based on the value of an expression (a case)
+select_case (7fortran) - [EXECUTION CONTROL] select a block based on the value of an expression (a case)
+select_type (7fortran) - [FORTRAN:EXECUTION_CONTROL] select_type
+selected_char_kind (3fortran) - [KIND] Select character kind such as "Unicode"
+selected_int_kind (3fortran) - [KIND] Choose integer kind
+selected_real_kind (3fortran) - [KIND] Choose real kind
+sep (3m_strings)     - [M_strings:TOKENS] function to parse string into an array using specified delimiters (LICENSE:PD)
+separator (3m_io)    - [M_io:QUERY] try to determine pathname directory separator character (LICENSE:PD)
+seq- (1)	     - [FUNIX] print a sequence of numbers (LICENSE:PD)
+set (3m_framework__msg) - [M_msg] set scalars from an array (LICENSE:PD)
+set (3m_list)	     - [M_list::dictionary::OOPS] add or replace a key-value pair in a dictionary (LICENSE:PD)
+set (3m_msg)	     - [M_msg] set scalars from an array (LICENSE:PD)
+set_args (3m_cli2)   - [ARGUMENTS:M_CLI2] command line argument parsing (LICENSE:PD)
+set_environment_variable (3m_system) - [M_system:ENVIRONMENT] call setenv(3c) to set environment variable (LICENSE:PD)
+set_exponent (3fortran) - [MODEL:COMPONENTS] real value with specified exponent
+set_mode (3m_cli2)   - [ARGUMENTS:M_CLI2] turn on optional modes+ (LICENSE:PD)
+set_usage (3m_cli2)  - [ARGUMENTS:M_CLI2] allow setting a short description for keywords for the --usage switch (LICENSE:PD)
+setdiff (3m_sets)    - [M_sets] Find the values in A that are not in B
+setprompts (3m_kracken) - [ARGUMENTS:M_kracken] set explicit prompts for keywords in interactive mode (LICENSE:PD)
+setxor (3m_sets)     - [M_sets] Find values of A and B not in both arrays
+sgbmv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a band matrix.
+sgemm (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL3] C:=alpha*A*B+beta*C, A, B, C rectangular.
+sgemv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a rectangular matrix.
+sger (3m_blas)	     - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SY), rank 1 update, A a rectangular matrix.
+sget (3m_kracken)    - [ARGUMENTS:M_kracken] given keyword fetch string value and length from command argument (LICENSE:PD)
+sgetgp2 (3m_draw)    - [M_draw:POSITION] Gets the current screen graphics position in screen coords (-1 to 1) (LICENSE:PD)
+sgets (3m_kracken)   - [ARGUMENTS:M_kracken] given keyword fetch string value parsed on whitespace into an array (LICENSE:PD)
+sha3 (1)	     - [FUNIX:M_strings] generate SHA-{224, 256, 384, 512} digest values for specified files (LICENSE:PD)
+shape (3fortran)     - [ARRAY:INQUIRY] Determine the shape of an array or scalar
+shell (1)	     - shell for demonstrating major modules in libGPF.a (LICENSE:PD)
+shifta (3fortran)    - [BIT:SHIFT] Right shift with fill
+shiftl (3fortran)    - [BIT:SHIFT] Shift bits left
+shiftr (3fortran)    - [BIT:SHIFT] Shift bits right
+show (3m_kracken)    - [ARGUMENTS:M_kracken] dump dictionary entries (LICENSE:PD)
+showumask- (1)	     - [FUNIX] show umask in decimal, octal, hex, and binary (LICENSE:PD)
+shuf- (1)	     - [FUNIX] generate random permutations of file lines, whole numbers, or strings (LICENSE:PD)
+sign (3fortran)      - [NUMERIC] Sign copying function
+sign (3m_overload)   - [M_overload::INTRINSIC] When sign(3f) is given a single value sign(value), call sign(1, value). (LICENSE:PD)
+sign (7fortran)      - [FORTRAN:IO] option to force optional plus sign on output values
+significant (3m_framework__approx) - [M_framework__approx] round val to specified number of significant digits
+significant (3m_verify) - [M_verify] round val to specified number of significant digits
+signs (3m_messages)  - [M_messages] write out string in large block letters (LICENSE:PD)
+sin (3fortran)	     - [MATHEMATICS:TRIGONOMETRIC] Sine function
+sind (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Degree sine function
+sind (3m_units)      - [M_units:TRIGONOMETRY] calculate sine of value in degrees (LICENSE:PD)
+sinh (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic sine function
+sinpi (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Circular sine function
+sisiss67 (3m_steam67) - [M_steam67] calculate specific entropy, temperature, specific volume, and steam quality of the liquid at pressure P and enthalpy H.
+size (3fortran)      - [ARRAY:INQUIRY] Determine the size of an array or extent of one dimension
+skekur1 (3m_math)    - [M_math:statistics] variant on calculating skewness and kurtosis of an array
+skekurx (3m_math)    - [M_math:statistics] Compute unbiased estimator of the population SKEWNESS and KURTOSIS
+sleep- (1)	     - [FUNIX:TIME] pause for specified duration (LICENSE:PD)
+slice (1m_draw)      - [M_slices] display a grid of Z values with a 3D view (LICENSE:PD)
+slice (1m_slices)    - [M_slices] display a grid of Z values with a 3D view (LICENSE:PD)
+slice (3m_strings)   - [M_strings:TOKENS] parse string into an array using specified delimiters (LICENSE:PD)
+slocator (3m_draw)   - [M_draw:INTERACTIVE] Find out where cursor is in screen coordinates (LICENSE:PD)
+smoot (3m_calcomp)   - [M_calcomp:scientific] draw a polyline using modified spline-fitting technique (LICENSE:PD)
+smove2 (3m_draw)     - [M_draw:MOVE] Move current graphics position in screen coordinates (-1.0 to 1.0). (LICENSE:PD)
+sngl (3fortran)      - [FORTRAN:INTRINSIC:NUMERIC:TYPE] Convert double precision real to default real
+snrm2 (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] SNRM2 := square root of sum of SX(I)**2
+snum0 (3m_calculator) - [M_calculator] resolve a calculator expression into a string(return blank on errors) (LICENSE:PD)
+soft_pretzel (7)     - [RECIPES] soft pretzels (LICENSE:PD)
+sort (3m_datapac)    - [M_datapac:SORT] sort a vector of sample observations, also return the positions in the original vector
+sort (3m_orderpack)  - [M_orderpack:SORT] Sorts array into ascending order (Quick-sort)
+sort_heap (3m_sort)  - [M_sort:sort:heapsort] indexed sort of an array (LICENSE:PD)
+sort_quick_compact (3m_sort) - [M_sort:sort:quicksort] recursive quicksort of an array (LICENSE: CC BY 3.0)
+sort_quick_rx (3m_sort) - [M_sort:sort:quicksort] indexed hybrid quicksort of an array (LICENSE:PD)
+sort_shell (3m_sort) - [M_sort:sort:shellsort] Generic subroutine sorts the array X using Shell's Method (LICENSE:PD)
+sort_special (3m_orderpack) - [M_orderpack:SORT] Sorts array into ascending order (Insertion sort, generally for small or nearly sorted arrays)
+sortc (3m_datapac)   - [M_datapac:SORT] sort a vector of sample observations and "carry" a second vector
+sortp (3m_datapac)   - [M_datapac:SORT] sorts and ranks a numeric vector X
+spacing (3fortran)   - [MODEL_COMPONENTS] Smallest distance between two numbers of a given type
+spcorr (3m_datapac)  - [M_datapac:STATISTICS] compute the sample Spearman rank correlation coefficient between two vectors of observations
+specified (3m_cli)   - [ARGUMENTS:M_CLI] return true if keyword was present on command line (LICENSE:PD)
+specified (3m_cli2)  - [ARGUMENTS:M_CLI2] return true if keyword was present on command line (LICENSE:PD)
+spherical_to_cartesian (3m_units) - [M_units:TRIGONOMETRY] convert ISO polar coordinates to Cartesian coordinates (LICENSE:PD)
+spirograph (3m_drawplus) - [M_drawplus] draw a hypotrochoid (LICENSE:MIT)
+splift (3m_math)     - [M_math:fit] fits a spline to the n data points given in x and y and also returns first and second derivatives
+splint (3m_math)     - [M_math:fit] interpolates and twice differentiates a cubic spline
+split (3fortran)     - [CHARACTER:SPLIT] Parse a string into tokens, one at a time.
+split (3m_strings)   - [M_strings:TOKENS] parse string into an array using specified delimiters (LICENSE:PD)
+split2020 (3m_strings) - [M_strings:TOKENS] parse a string into tokens using proposed f2023 method (LICENSE:PD)
+splitname (1)	     - [FUNIX] strip pathname into components {dir, name, basename, extension} (LICENSE:PD)
+splitpath (3m_io)    - [M_io:PATHNAMES] split a Unix pathname into components (LICENSE:PD)
+spoiler (1)	     - [CONVERT] A trifling program for reading punchlines that are encoded using the ROT-13 rotation encryption (LICENSE:PD)
+spread (3fortran)    - [ARRAY:CONSTRUCTION] Add a dimension and replicate data
+spsiss67 (3m_steam67) - [M_steam67]
+sqlite3_begin (3m_sqlite) - [M_sqlite] Start a transaction on the given database
+sqlite3_close (3m_sqlite) - [M_sqlite] Close a database file
+sqlite3_column_props (3m_sqlite) - [M_sqlite] Convenience routine to set the properties of a column
+sqlite3_column_query (3m_sqlite) - [M_sqlite] Convenience routine to query a column or a function of that column
+sqlite3_commit (3m_sqlite) - [M_sqlite] Commits a transaction on the given database
+sqlite3_create_table (3m_sqlite) - [M_sqlite] Create a new table
+sqlite3_delete_table (3m_sqlite) - [M_sqlite] Delete a table
+sqlite3_do (3m_sqlite) - [M_sqlite] Run a single SQL command
+sqlite3_errmsg (3m_sqlite) - [M_sqlite] Return the last error message
+sqlite3_error (3m_sqlite) - [M_sqlite] Return the last error code
+sqlite3_finalize (3m_sqlite) - [M_sqlite] Finalize the prepared SQL statement
+sqlite3_get_column (3m_sqlite) - [M_sqlite] Convenience routine to get the value of a column
+sqlite3_get_table (3m_sqlite) - [M_sqlite] Call sqlite3_exec() and return the result in an array of strings
+sqlite3_insert (3m_sqlite) - [M_sqlite] Insert a complete row into the given table
+sqlite3_libversion (3m_sqlite) - [M_sqlite] obtain string describing library version
+sqlite3_libversion_number (3m_sqlite) - [M_sqlite] obtain library version number
+sqlite3_next_row (3m_sqlite) - [M_sqlite] Gets the next row of data from a selection
+sqlite3_open (3m_sqlite) - [M_sqlite] Open a database file
+sqlite3_prepare (3m_sqlite) - [M_sqlite] Reset the prepared SQL statement so that it can be used again
+sqlite3_prepare_select (3m_sqlite) - [M_sqlite] Prepare a selection of data from the database
+sqlite3_query_table (3m_sqlite) - [M_sqlite] Retrieve the column names and types from a table
+sqlite3_reset (3m_sqlite) - [M_sqlite] Reset the prepared SQL statement so that it can be used again
+sqlite3_rollback (3m_sqlite) - [M_sqlite] Rolls back any changes to the database since the last commit
+sqlite3_set_column (3m_sqlite) - [M_sqlite] Convenience routines to set the value of a column
+sqlite3_sourceid (3m_sqlite) - [M_sqlite] obtain string describing library version
+sqlite3_step (3m_sqlite) - [M_sqlite] Run the prepared SQL statement
+sqrt (3fortran)      - [MATHEMATICS] Square-root function
+squeeze (3m_strings) - [M_strings:EDITING] delete adjacent duplicate occurrences of a character from a string (LICENSE:PD)
+srot (3m_blas)	     - [BLAS:SINGLE_BLAS_LEVEL1] Apply Given's rotation.
+srotg (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] Generate Given's rotation.
+srotm (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] Apply a modified Given's rotation.
+srotmg (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL1] Generate a modified Given's rotation.
+ssbmv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a symmetric band matrix.
+sscal (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] SX:=SA*SX.
+ssl67 (3m_steam67)   - [M_steam67]
+sspmv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a packed symmetric matrix.
+sspr (3m_blas)	     - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SX), A a packed symmetric matrix.
+sspr2 (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SY)+alpha*SY*TRANSPOSE(SX), A packed symmetric.
+sssicl67 (3m_steam67) - [M_steam67] calculate specific entropy and temperature of the liquid at pressure P and enthalpy H.
+sssiss67 (3m_steam67) - [M_steam67] calculate specific entropy, temperature, specific volume, and steam quality of the liquid at pressure P and enthalpy H.
+sswap (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] Interchange vectors SX and SY.
+ssymm (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL3] C:=alpha*A*B+beta*C, A symmetric, B, C rectangular.
+ssymv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a symmetric matrix.
+ssyr (3m_blas)	     - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SX), A a symmetric matrix.
+ssyr2 (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] A:=A+alpha*SX*TRANSPOSE(SY)+alpha*SY*TRANSPOSE(SX), A a symmetric
+ssyr2k (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL3] C:=alpha*A*TRANSPOSE(B)+alpha*B*TRANSPOSE(A)+beta*C, C symmetric.
+ssyrk (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL3] C:=alpha*A*TRANSPOSE(A)+beta*C, C symmetric.
+start_watch (3m_stopwatch) - [M_stopwatch] starts a M_StopWatch watch (LICENSE:PD)
+stat- (1)	     - [FUNIX:FILESYSTEM] list file properties (LICENSE:PD)
+state (3m_pixel)     - [M_pixel] print graphics state of M_pixel graphics module (LICENSE:PD)
+stbmv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SX:=A*SX, A a triangular band matrix.
+stbsv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SX:=INVERSE(A)*SX, A a triangular band matrix.
+stddev (3m_math)     - [M_math:statistics] given a real vector and the vector average calculate the standard deviation
+stderr (3m_framework__msg) - [M_framework__msg] write message to stderr (LICENSE:PD)
+stderr (3m_msg)      - [M_msg] write message to stderr (LICENSE:PD)
+steamv67 (3m_steam67) - [M_steam67] print version information to unit and return version string
+stmom3 (3m_datapac)  - [M_datapac:STATISTICS] compute the third central moment (i.e., the skewness) of a vector of observations
+stmom4 (3m_datapac)  - [M_datapac:STATISTICS] compute the fourth central moment (i.e., the kurtosis) of a vector of observations
+stop (7fortran)      - [STATEMENT] initiates termination of execution
+stop_watch (3m_stopwatch) - [M_stopwatch] stops a M_StopWatch watch (LICENSE:PD)
+storage_size (3fortran) - [BIT:INQUIRY] Storage size in bits
+store (3m_kracken)   - [ARGUMENTS:M_kracken] add or replace value for specified name in dictionary(if allow='add' add name if needed) (LICENSE:PD)
+stpmv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SX:=A*SX, A a packed symmetric matrix.
+stpsv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SX:=INVERSE(A)*SX, A a packed symmetric matrix.
+str (3m_framework__msg) - [M_framework__msg] converts up to twenty standard scalar type values to a string (LICENSE:PD)
+str (3m_msg)	     - [M_msg] converts up to twenty standard scalar type values to a string (LICENSE:PD)
+str (3m_strings)     - [M_strings:TYPE] converts multiple values to a (CSV) string (LICENSE:PD)
+stretch (3m_strings) - [M_strings:LENGTH] return string padded to at least specified length (LICENSE:PD)
+strgar2 (3m_calculator) - [M_calculator] read a string into a real array USING CALCULATOR, allowing quoted strings in arguments, (LICENSE:PD)
+strgar3 (3m_hybrid)  - [M_hybrid] fetch a value from language dictionary but process via calculator too
+strgarr (3m_calculator) - [M_calculator] read a string into an array using CALCULATOR(3f) calculator (LICENSE:PD)
+string_to_value (3m_strings) - [M_strings:TYPE] subroutine returns numeric value from string (LICENSE:PD)
+string_to_values (3m_strings) - [M_strings:TYPE] read a string representing numbers into a numeric array (LICENSE:PD)
+strlength (3m_draw)  - [M_draw:TEXT] return length of string (LICENSE:PD)
+strlength (3m_pixel) - [M_pixel:TEXT] return length of string (LICENSE:PD)
+strmm (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL3] B:=A*B or B:=B*A, A triangular, B rectangular.
+strmv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SX:=A*SX, A a triangular matrix.
+strsm (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL3] B:=INVERSE(A)*C or B:=C*INVERSE(A), B, C rectangular, A triangular.
+strsv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SX:=INVERSE(A)*SX, A a triangular matrix.
+strtok (3m_strings)  - [M_strings:TOKENS] Tokenize a string (LICENSE:PD)
+stuff (3m_calculator) - [M_calculator] directly store value into calculator dictionary for efficiency (LICENSE:PD)
+stuffa (3m_calculator) - [M_calculator] directly store a string into calculator variable name table (LICENSE:PD)
+sub (1) 	     - [FILE EDIT] substitute new fixed strings for old fixed strings in files (LICENSE:MIT)
+subse1 (3m_datapac)  - [M_datapac:VECTOR_OPERATION] extract the elements of a vector which fall into a user-specified subset (one subset variable)
+subse2 (3m_datapac)  - [M_datapac:VECTOR_OPERATION] extract the elements of a vector which fall into a user-specified subset (two subset variables)
+subset (3m_datapac)  - [M_datapac:VECTOR_OPERATION] extract the elements of a vector which fall into a user-specified subset (one subset variable)
+substitute (3m_strings) - [M_strings:EDITING] subroutine globally substitutes one substring for another in string (LICENSE:PD)
+sum (3fortran)	     - [ARRAY:REDUCTION] Sum the elements of an array
+swap (3m_sort)	     - [M_sort] elemental subroutine swaps two standard type variables of like type (LICENSE:PD)
+swap_any (3m_sort)   - [M_sort] subroutine swaps two variables of like type (LICENSE:PD)
+swapbuffers (3m_draw) - [M_draw:DOUBLE_BUFFERING] Swap the front and back buffers. (LICENSE:PD)
+switch (3m_strings)  - [M_strings:ARRAY] converts between CHARACTER scalar and array of single characters (LICENSE:PD)
+symbol (3m_calcomp)  - [M_calcomp:basic] draw text string or marker (LICENSE:PD)
+symbol2atomnum (3m_units) - [M_units:SYMBOLS] return atomic number given element symbol name (LICENSE:PD)
+system_access (3m_system) - [M_system:QUERY_FILE] checks accessibility or existence of a pathname (LICENSE:PD)
+system_chdir (3m_system) - [M_system_FILE_SYSTEM] call chdir(3c) from Fortran to change working directory (LICENSE:PD)
+system_chmod (3m_system) - [M_system_FILE_SYSTEM] call chmod(3c) to change permission mode of a file relative to directory file descriptor (LICENSE:PD)
+system_chown (3m_system) - [M_system:FILE_SYSTEM] change file owner and group (LICENSE:PD)
+system_clearenv (3m_system) - [M_system:ENVIRONMENT] clear environment by calling clearenv(3c) (LICENSE:PD)
+system_clock (3fortran) - [SYSTEM:TIME] Query system clock
+system_closedir (3m_system) - [M_system:QUERY_FILE] close a directory stream by calling closedir(3c) (LICENSE:PD)
+system_cpu_time (3m_system) - [M_system] get processor time by calling times(3c) (LICENSE:PD)
+system_dir (3m_system) - [M_system] return filenames in a directory matching specified wildcard string (LICENSE:PD)
+system_errno (3m_system) - [M_system:ERROR_PROCESSING] C error return value (LICENSE:PD)
+system_getchar (3m_system) - [M_system:IO] reads a character from the stdin stream. (LICENSE:PD)
+system_getcwd (3m_system) - [M_system:QUERY_FILE] call getcwd(3c) to get the pathname of the current working directory (LICENSE:PD)
+system_getegid (3m_system) - [M_system:QUERY] get the effective group ID (GID) of current process from Fortran by calling getegid(3c) (LICENSE:PD)
+system_getenv (3m_system) - [M_system:ENVIRONMENT] get environment variable from Fortran by calling get_environment_variable(3f) (LICENSE:PD)
+system_geteuid (3m_system) - [M_system:QUERY] get effective UID of current process from Fortran by calling geteuid(3c) (LICENSE:PD)
+system_getgid (3m_system) - [M_system:QUERY] get the real group ID (GID) of current process from Fortran by calling getgid(3c) (LICENSE:PD)
+system_getgrgid (3m_system) - [M_system:QUERY] get groupd name associated with a GID (LICENSE:PD)
+system_gethostname (3m_system) - [M_system:QUERY] get name of current host (LICENSE:PD)
+system_getkey (3m_getkey) - [M_getkey] read single character from keyboard in hot (raw I/O) mode (LICENSE:PD)
+system_getlogin (3m_system) - [M_system:QUERY] get login name (LICENSE:PD)
+system_getpid (3m_system) - [M_system:QUERY] get PID (process ID) of current process from Fortran by calling getpid(3c) (LICENSE:PD)
+system_getppid (3m_system) - [M_system:QUERY] get parent process ID (PPID) of current process from Fortran by calling getppid(3c) (LICENSE:PD)
+system_getpwuid (3m_system) - [M_system:QUERY] get login name associated with a UID (LICENSE:PD)
+system_getsid (3m_system) - [M_system:QUERY] get the process group ID of a session leader (LICENSE:PD)
+system_getuid (3m_system) - [M_system:QUERY] get real UID of current process from Fortran by calling getuid(3c) (LICENSE:PD)
+system_getumask (3m_system) - [M_system:QUERY_FILE] get current umask (LICENSE:PD)
+system_initenv (3m_system) - [M_system:ENVIRONMENT] initialize environment table pointer and size so table can be read by readenv(3f) (LICENSE:PD)
+system_isblk (3m_system) - [M_system:QUERY_FILE] checks if argument is a block device (LICENSE:PD)
+system_ischr (3m_system) - [M_system:QUERY_FILE] checks if argument is a character device (LICENSE:PD)
+system_isdir (3m_system) - [M_system:QUERY_FILE] checks if argument is a directory path (LICENSE:PD)
+system_isfifo (3m_system) - [M_system:QUERY_FILE] checks if argument is a fifo - named pipe (LICENSE:PD)
+system_islnk (3m_system) - [M_system:QUERY_FILE] checks if argument is a link (LICENSE:PD)
+system_isreg (3m_system) - [M_system:QUERY_FILE] checks if argument is a regular file (LICENSE:PD)
+system_issock (3m_system) - [M_system:QUERY_FILE] checks if argument is a socket (LICENSE:PD)
+system_kill (3m_system) - [M_system:SIGNALS] send a signal to a process or a group of processes (LICENSE:PD)
+system_link (3m_system) - [M_system:FILE_SYSTEM] link one file to another file relative to two directory file descriptors (LICENSE:PD)
+system_mkdir (3m_system) - [M_system:FILE_SYSTEM] call mkdir(3c) to create a new directory (LICENSE:PD)
+system_mkfifo (3m_system) - [M_system:FILE_SYSTEM] make a FIFO special file relative to directory file descriptor (LICENSE:PD)
+system_opendir (3m_system) - [M_system:QUERY_FILE] open directory stream by calling opendir(3c) (LICENSE:PD)
+system_perm (3m_system) - [M_system:QUERY_FILE] get file type and permission as a string (LICENSE:PD)
+system_putchar (3m_system) - [M_system:IO] writes a character to the stdout stream. (LICENSE:PD)
+system_putenv (3m_system) - [M_system:ENVIRONMENT] set environment variable from Fortran by calling putenv(3c) (LICENSE:PD)
+system_rand (3m_system) - [M_system:PSEUDORANDOM] call pseudo-random number generator rand(3c) (LICENSE:PD)
+system_readdir (3m_system) - [M_system:QUERY_FILE] read a directory using readdir(3c) (LICENSE:PD)
+system_readenv (3m_system) - [M_system:ENVIRONMENT] step thru and read environment table (LICENSE:PD)
+system_readline (3m_readline) - [M_readline] Call readline(3c) from Fortran (LICENSE:PD)
+system_realpath (3m_system) - [M_system:FILE_SYSTEM] call realpath(3c) to resolve a pathname (LICENSE:PD)
+system_remove (3m_system) - [M_system_FILE_SYSTEM] call remove(3c) to remove file (LICENSE:PD)
+system_rename (3m_system) - [M_system_FILE_SYSTEM] call rename(3c) to rename a system file (LICENSE:PD)
+system_rewinddir (3m_system) - [M_system:QUERY_FILE] call rewinddir(3c) to rewind directory stream (LICENSE:PD)
+system_rmdir (3m_system) - [M_system:FILE_SYSTEM] call rmdir(3c) to remove empty directories (LICENSE:PD)
+system_setsid (3m_system) - [M_system:QUERY] create session and set the process group ID of a session leader (LICENSE:PD)
+system_setumask (3m_system) - [M_system:FILE_SYSTEM] set the file mode creation umask (LICENSE:PD)
+system_signal (3m_system) - [M_system:SIGNALS] install a signal handler (LICENSE:PD)
+system_sleep (3m_system) - [M_system:C_INTERFACE] call C sleep(3c) or usleep(3c) procedure (LICENSE:PD)
+system_sleep (3m_time) - [M_time:C_INTERFACE] call C sleep(3c) or usleep(3c) procedure (LICENSE:MIT)
+system_srand (3m_system) - [M_system:PSEUDORANDOM] set seed for pseudo-random number generator system_rand(3f) (LICENSE:PD)
+system_stat_print (3m_system) - [M_system] print the principal info obtained for a pathname from system_stat(3f) (LICENSE:PD)
+system_system (3m_system) - [M_system:SYSTEM_COMMAND] call execute_command_line (LICENSE:PD)
+system_uname (3m_system) - [M_system] call a C wrapper that calls uname(3c) to get current system information from Fortran (LICENSE:PD)
+system_unlink (3m_system) - [M_system:FILE_SYSTEM] remove a directory entry relative to directory file descriptor (LICENSE:PD)
+system_unsetenv (3m_system) - [M_system:ENVIRONMENT] delete an environment variable by calling unsetenv(3c) (LICENSE:PD)
+system_utime (3m_system) - [M_system:FILE_SYSTEM] set file access and modification times (LICENSE:PD)
+tabgraph (3m_messages) - [M_messages] write out a row of numbers and a text-based scaled graph (LICENSE:PD)
+table2html (1)	     - [FILE FILTER] filter to format simple columns into an HTML table form (LICENSE:PD)
+tablesort (1)	     - [FUNIX] sort a file containing a numeric table (LICENSE:PD)
+tabulate (1)	     - [M_messages] write out a row of numbers and a text-based scaled graph (LICENSE:PD)
+tac- (1)	     - [FUNIX:FILESYSTEM] reverse or transpose lines in a file (LICENSE:PD)
+tail (3m_datapac)    - [M_datapac:ANALYSIS] performs a symmetric distribution tail length analysis
+tan (3fortran)	     - [MATHEMATICS:TRIGONOMETRIC] Tangent function
+tand (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Degree Tangent function
+tand (3m_units)      - [M_units:TRIGONOMETRY] calculate tangent of value in degrees (LICENSE:PD)
+tanh (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic tangent function
+tanpi (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Circular tangent function
+target (1)	     - [M_drawplus] draw targets on Adobe PDF files (LICENSE:PD)
+tat (1) 	     - [M_attr] filter terminal attribute strings (LICENSE:MIT)
+tcdf (3m_datapac)    - [M_datapac:CUMULATIVE_DISTRIBUTION] computes the cumulative distribution function value for student's t distribution with integer degrees of freedom NU.
+textang (3m_draw)    - [M_draw:TEXT] Set the SOFTWARE text angle. (LICENSE:PD)
+textang (3m_pixel)   - [M_pixel:TEXT] set text angle (LICENSE:PD)
+textjustify (3m_draw) - [M_draw:TEXT] general text justification (C only) (LICENSE:PD)
+textsize (3m_draw)   - [M_draw:TEXT] Set text size of a character in the current SOFTWARE font in world units. (LICENSE:PD)
+textsize (3m_pixel)  - [M_pixel:TEXT] set text size in world units (LICENSE:PD)
+textslant (3m_draw)  - [M_draw:TEXT] Defines the obliqueness of the fonts. (LICENSE:PD)
+textweight (3m_draw) - [M_draw:TEXT] Defines the weight of the fonts. (LICENSE:PD)
+this_image (3fortran) - [COLLECTIVE] Cosubscript index of this image
+time (3m_datapac)    - [M_datapac:ANALYSIS] perform a time series analysis (autocorrelation plot, a test for white noise, a "pilot" spectrum, and 4 other estimated spectra based on differing bandwidth)
+time- (1)	     - [FUNIX] display time used by a command (LICENSE:PD)
+tiny (3fortran)      - [MODEL:NUMERIC] Smallest positive number of a real kind
+to (3m_overload)     - [M_overload::LOGICAL] return array of adjacent integers over specified range, inclusive (LICENSE:PD)
+today (1)	     - [TIME] output current time for uses such as file suffixes. (LICENSE:PD)
+tokenize (3fortran)  - [CHARACTER:PARSE] Parse a string into tokens.
+tol (3m_datapac)     - [M_datapac:STATISTICS] compute normal and distribution-free tolerance limits
+topic (1)	     - [HELP] Display specially formatted help text files.
+topjustify (3m_draw) - [M_draw:TEXT] top justify text (LICENSE:PD)
+tostring (3m_display) - [M_display] change numbers to a string
+tostring_set (3m_display) - [M_display] set modes for TOSTRING(3f)
+tostring_set_factory (3m_display) - [M_display] set TOSTRING(3f) output back to original defaults
+touch- (1)	     - [FUNIX:FILESYSTEM] change file access and modify timestamps to current time, creating file if necessary (LICENSE:PD)
+tph67 (3m_steam67)   - [M_steam67]
+tphl67 (3m_steam67)  - [M_steam67]
+tplt (3m_datapac)    - [M_datapac:LINE_PLOT] generates a Student's T probability plot (with integer degrees of freedom parameter value NU).
+tppf (3m_datapac)    - [M_datapac:PERCENT_POINT] computes the percent point function value for the student's T distribution
+tps67 (3m_steam67)   - [M_steam67]
+tpsl67 (3m_steam67)  - [M_steam67]
+tr- (1) 	     - [FUNIX:M_strings] translate or delete characters (LICENSE:PD)
+trailz (3fortran)    - [BIT:COUNT] Number of trailing zero bits of an integer
+tran (3m_datapac)    - [M_datapac:RANDOM] a random sample of size n from the Student's t distribution with integer degrees of freedom parameter NU.
+transfer (3fortran)  - [TYPE:MOLD] Transfer bit patterns
+translate (3m_draw)  - [M_draw:TRANSFORMATION] Set up a translation. (LICENSE:PD)
+transliterate (3m_strings) - [M_strings:EDITING] replace characters from old set with new set (LICENSE:PD)
+transpose (3fortran) - [ARRAY:MANIPULATION] Transpose an array of rank two
+trapezoidal_integral (3m_math) - [M_math] trapezoidal integration
+tree_insert (3m_sort) - [M_sort:sort:treesort] sort a number of integers by building a tree, sorted in infix order (LICENSE:MIT)
+tree_print (3m_sort) - [M_sort] print a sorted integer tree generated by tree_insert(3f) (LICENSE:MIT)
+triangle (1)	     - resolution of a triangle (LICENSE:PD)
+trim (3fortran)      - [CHARACTER:WHITESPACE] Remove trailing blank characters from a string
+trim (3m_datapac)    - [M_datapac:STATISTICS] computes the sample trimmed mean of the data in the input vector X.
+true- (1)	     - [FUNIX] do nothing, successfully (LICENSE:PD)
+tsl167 (3m_steam67)  - [M_steam67]
+tsl67 (3m_steam67)   - [M_steam67]
+tslh67 (3m_steam67)  - [M_steam67]
+ttee (1)	     - [TIME] write input to stdout and a file with timing info. (LICENSE:PD)
+tty- (1)	     - [FUNIX:FILESYSTEM] print information about the file/terminal connected to standard input (LICENSE:PD)
+txt2man (1)	     - [DEVELOPER] convert flat ASCII text to manpage format
+u2d (3m_time)	     - [M_time:UNIX_EPOCH] given Unix Epoch Time returns DAT date-time array (LICENSE:MIT)
+uarc (3m_drawplus)   - [M_drawplus] create circular arc, leaving CP at end of arc (LICENSE:MIT)
+ubound (3fortran)    - [ARRAY:INQUIRY] Upper dimension bounds of an array
+ucobound (3fortran)  - [COLLECTIVE] Upper codimension bounds of an array
+uconic (3m_drawplus) - [M_drawplus] general conic sections (LICENSE:MIT)
+ufpp (1)	     - [DEVELOPER] pre-process FORTRAN source files (LICENSE:PD)
+uname- (1)	     - [FUNIX] print system information (LICENSE:PD)
+unexpandviewport (3m_draw) - [M_draw:VIEWPORT] undo expandviewport(3f) (LICENSE:PD)
+unicdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] trivially compute the Uniform cumulative distribution function
+unicode_example1 (1) - [FORTRAN] UNICODE example
+unimed (3m_datapac)  - [M_datapac:STATISTICS] generates the N order statistic medians from the uniform (rectangular) distribution on the unit interval (0, 1).
+union (3m_sets)      - [M_sets] Join two sets and removes duplicates of values
+unipdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] trivially compute the Uniform probability density function
+uniplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a Uniform probability plot (line printer graph)
+unippf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the Uniform percent point function
+uniq (3m_io)	     - [M_io:QUERY] append a number to the end of filename to make a unique name if name exists (LICENSE:PD)
+unique (1m_uuid)     - [FUNIX] generate a UUID (Universally Unique ID) string per RFC 4122 (LICENSE:PD)
+unique (3m_orderpack) - [M_orderpack:UNIQUE] removes duplicates from an array otherwise retaining original order (i.e. it is "stable")
+unique (3m_sets)     - [M_sets] return unique values in array A
+unique (3m_sort)     - [M_sort] return array with adjacent duplicate values removed (LICENSE:PD)
+uniran (3m_datapac)  - [M_datapac:RANDOM] generate Uniform random numbers
+unisf (3m_datapac)   - [M_datapac:SPARSITY] compute the Uniform sparsity function
+unit_check (3m_verify) - [M_verify] if logical expression is false, call command "goodbad NAME bad" and stop program by default (LICENSE:PD)
+unit_check_bad (3m_verify) - [M_verify] call command "goodbad NAME bad" and stop program (LICENSE:PD)
+unit_check_done (3m_verify) - [M_verify] call command "goodbad NAME good" or "goodbad NAME bad" depending on whether failures were found (LICENSE:PD)
+unit_check_good (3m_verify) - [M_verify] call command "goodbad NAME good" (LICENSE:PD)
+unit_check_msg (3m_verify) - [M_verify] converts up to nine standard scalar values to a message for unit testing (LICENSE:PD)
+unit_check_start (3m_verify) - [M_verify] call command "goodbad NAME start" and optionally set options (LICENSE:PD)
+unit_check_stop (3m_verify) - [M_verify] call command "goodbad NAME good" or goodbad NAME bad" depending on whether failures were found (LICENSE:PD)
+unit_test (3m_framework__verify) - [M_framework__verify] report if logical expression is true or false, optionally call command and/or stop program. (LICENSE:PD)
+unit_test_end (3m_framework__verify) - [M_framework__verify] end test of procedure started by unit_test_start(3f) (LICENSE:PD)
+unit_test_expected (3m_framework__verify) - [M_framework__verify] report if two scalar values of like type and kind are equal. (LICENSE:PD)
+unit_test_mode (3m_framework__verify) - [M_framework__verify] set testing modes (LICENSE:PD)
+unit_test_msg (3m_framework__verify) - [M_framework__verify] converts up to twenty standard scalar values to a message for unit testing (LICENSE:PD)
+unit_test_start (3m_framework__verify) - [M_framework__verify] reset counters and start a new test block (LICENSE:PD)
+unit_test_stop (3m_framework__verify) - [M_framework__verify] report tally of all checks and stop program (LICENSE:PD)
+unit_test_system (3m_framework__verify) - [M_framework__verify] return status from system command (LICENSE:PD)
+unix_to_date (3m_time) - [M_time:UNIX_EPOCH] converts Unix Epoch Time to DAT date-time array (LICENSE:MIT)
+unlink- (1)	     - [FUNIX:FILESYSTEM] call the unlink(3c) function to remove the specified file (LICENSE:PD)
+unpack (3fortran)    - [ARRAY:CONSTRUCTION] Scatter the elements of a vector into an array using a mask
+unquote (3m_strings) - [M_strings:QUOTES] remove quotes from string as if read with list-directed input (LICENSE:PD)
+up (3m_draw)	     - [M_draw:VIEWPORT] Specify the world up. (LICENSE:PD)
+upper (3m_strings)   - [M_strings:CASE] changes a string to uppercase (LICENSE:PD)
+upper_quoted (3m_strings) - [M_strings:CASE] elemental function converts string to uppercase skipping strings quoted per Fortran syntax rules (LICENSE:PD)
+use (7fortran)	     - [FORTRAN] gives a program unit access to public entities in a module.
+v2mo (3m_time)	     - [M_time:MONTH_NAME] returns the month name of a Common month number (LICENSE:MIT)
+v2s (3m_strings)     - [M_strings:TYPE] return numeric string from a numeric value (LICENSE:PD)
+value_to_string (3m_strings) - [M_strings:TYPE] return numeric string from a numeric value (LICENSE:PD)
+var (3m_datapac)     - [M_datapac:STATISTICS] compute the sample variance of a vector of observations
+vcl67 (3m_steam67)   - [M_steam67] compute the specific volume of the liquid at pressure P and temperature T
+verify (3fortran)    - [CHARACTER:SEARCH] Position of a character in a string of characters that does not appear in a given set of characters.
+vexit (3m_draw)      - [M_draw:DEVICE] Reset window/terminal and exit graphics mode. Must be last routine called. (LICENSE:PD)
+vexit (3m_pixel)     - [M_pixel] exit pixel graphics mode (LICENSE:PD)
+vflush (3m_draw)     - [M_draw:FLUSHING] Call device flush or syncronisation routine (LICENSE:PD)
+vgetdev (3m_draw)    - [M_draw:DEVICE] Get name of current device (LICENSE:PD)
+viewport (3m_draw)   - [M_draw:VIEWPORT] Specify which part of screen to draw in (LICENSE:PD)
+viewport (3m_pixel)  - [M_pixel] Specify which part of the screen to draw in. (LICENSE:PD)
+vinit (3m_draw)      - [M_draw:DEVICE] Initialise device (LICENSE:PD)
+vinit (3m_pixel)     - [M_pixel] initialize pixel graphics module (LICENSE:PD)
+visible (3m_strings) - [M_strings:NONALPHA] expand a string to control and meta-control representations (LICENSE:PD)
+visl67 (3m_steam67)  - [M_steam67]
+visv67 (3m_steam67)  - [M_steam67]
+vnewdev (3m_draw)    - [M_draw:DEVICE] Reinitialize to use new device without changing (LICENSE:PD)
+voutput (3m_draw)    - [M_draw:DEVICE] Redirect output from *next* vinit to file (LICENSE:PD)
+vsetflush (3m_draw)  - [M_draw:FLUSHING] Set global flushing status (LICENSE:PD)
+vsl67 (3m_steam67)   - [M_steam67] calculate specific volume on the liquid side of the saturation line
+w2d (3m_time)	     - [M_time:WEEK_OF_YEAR] calculate DAT date-time array from iso-8601 numeric Week values or from string "yyyy-Www-d" (LICENSE:MIT)
+wait (7fortran)      - [IO] statement performs a wait operation for specified pending asynchronous data transfer operations
+weib (3m_datapac)    - [M_datapac:ANALYSIS] perform a Weibull distribution analysis (Weibull PPCC analysis)
+weicdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the Weibull cumulative distribution function
+weiplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a Weibull probability plot (line printer graph)
+weippf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the Weibull percent point function
+weiran (3m_datapac)  - [M_datapac:RANDOM] generate Weibull random numbers
+wgedi (3m_la)	     - [M_LA] computes the determinant and inverse of a matrix using the factors computed by WGECO(3f) or WGEFA(3f).
+what (1)	     - [DEVELOPER] extract SCCS-style metadata from a file (LICENSE:PD)
+where (3m_calcomp)   - [M_calcomp:basic] return current position and current plot-scaling factor (LICENSE:PD)
+where (7fortran)     - [ASSIGNMENT] masked array assignment
+which (3m_io)	     - [M_io:SCANNAMES] given a command name find the pathname by searching the directories in the environment variable $PATH (LICENSE:PD)
+which- (1)	     - [FUNIX:FILESYSTEM] shows the full path of (shell) commands. (LICENSE:PD)
+whoami- (1)	     - [FUNIX] display login name (LICENSE:PD)
+width (3m_calcomp)   - [M_calcomp:basic] select pen width (LICENSE:PD)
+wind (3m_datapac)    - [M_datapac:STATISTICS] compute the sample Winsorized mean of a vector of observations
+window (3m_draw)     - [M_draw:PROJECTION] Specify a perspective viewing pyramid (LICENSE:PD)
+wrt (3m_framework__msg) - [M_framework__msg] write multiple scalar values to any number of files (LICENSE:PD)
+wrt (3m_msg)	     - [M_msg] write multiple scalar values to any number of files (LICENSE:PD)
+xauth_key (1m_random) - [M_random] generate magic cookies for xauth (LICENSE:PD)
+xcentertext (3m_draw) - [M_draw:TEXT] set text centering mode on in X direction (LICENSE:PD)
+xcentertext (3m_pixel) - [M_pixel:TEXT] set text centering mode on for drawstr(3f) and drawc(3f) in X direction (LICENSE:PD)
+xerbla (3m_blas)     - [BLAS:AUX_BLAS] error handler routine for the BLAS/LAPACK routines
+xerbla_array (3m_blas) - [BLAS:AUX_BLAS] call XERBLA(3f) with an array of characters instead of a string
+xpand (1)	     - [FUNIX] expand tabs, remove trailing white space and (optionally) adjacent blank lines
+xterm_clear (3m_xterm) - [M_xterm] clear xterm(1) screen using escape sequences (LICENSE:MIT)
+xterm_colors (3m_xterm) - [M_xterm] set xterm(1) colors (LICENSE:MIT)
+xterm_font (3m_xterm) - [M_xterm] set xterm(1) font (LICENSE:MIT)
+xterm_geometry (3m_xterm) - [M_xterm] set xterm(1) size using escape sequences (LICENSE:MIT)
+xterm_get_colors (3m_xterm) - [M_xterm] query xterm(1) colors (LICENSE:MIT)
+xterm_get_font (3m_xterm) - [M_xterm] obtain xterm(1) font name (LICENSE:MIT)
+xterm_get_geometry (3m_xterm) - [M_xterm] obtain xterm(1) screen size in character units (LICENSE:MIT)
+xterm_get_iconstate (3m_xterm) - [M_xterm] obtain xterm(1) icon state using escape sequences (LICENSE:MIT)
+xterm_get_pencolor (3m_xterm) - [M_xterm] query xterm(1) color by number (LICENSE:MIT)
+xterm_get_position (3m_xterm) - [M_xterm] obtain xterm(1) screen position (LICENSE:MIT)
+xterm_keywords (3m_xterm) - [M_xterm] sent hints to X11 Window manager and select modes (LICENSE:MIT)
+xterm_labels (3m_xterm) - [M_xterm] set xterm(1) X11 WIndow labels using escape sequences (LICENSE:MIT)
+xterm_occupancy (3m_xterm) - [M_xterm] try to move xterm(1) to specified virtual display (LICENSE:MIT)
+xterm_pencolor (3m_xterm) - [M_xterm] set xterm(1) color by number using escape sequences (LICENSE:MIT)
+xterm_position (3m_xterm) - [M_xterm] set xterm(1) window position using escape sequences (LICENSE:MIT)
+xterm_width (3m_xterm) - [M_xterm] set xterm(1) width to 80 or 132 characters (LICENSE:MIT)
+xterm_xrdb (3m_xterm) - [M_xterm] write current xterm(1) window attributes as X11 Windows resources (LICENSE:MIT)
+xy (1)		     - [M_xyplot] Draw a basic XY plot (LICENSE:PD)
+xy_arrow (3m_xyplot) - [M_xyplot] Add xy_arrow from T text box to specified point (LICENSE:MIT)
+xy_aspct (3m_xyplot) - [M_xyplot] Store plot window size in global variables and call plot_page() (LICENSE:MIT)
+xy_bans (3m_xyplot)  - [M_xyplot] draw banner lines from PLT ban command (LICENSE:MIT)
+xy_con_x (3m_xyplot) - [M_xyplot] scale an axis value to the overall window/viewport (LICENSE:MIT)
+xy_con_y (3m_xyplot) - [M_xyplot] scale an axis value to the overall window/viewport (LICENSE:MIT)
+xy_convert (3m_xyplot) - [M_xyplot] do linear conversion for XY plot routines (LICENSE:MIT)
+xy_fxed (3m_xyplot)  - [M_xyplot] select whether a string is fixed-space or not (LICENSE:MIT)
+xy_getdat (3m_xyplot) - [M_xyplot] place data from specified file and curve into xy_arrayQ xy_array (LICENSE:MIT)
+xy_getmark (3m_xyplot) - [M_xyplot] get marker geometries (LICENSE:MIT)
+xy_getrel (3m_xyplot) - [M_xyplot] return values to convert one set of units to another (LICENSE:MIT)
+xy_getxy_jufont (3m_xyplot) - [M_xyplot] check and set font and store it so can query it (LICENSE:MIT)
+xy_idbox (3m_xyplot) - [M_xyplot] Draw ID legend box specified with LEGEND command (LICENSE:MIT)
+xy_idbox0 (3m_xyplot) - [M_xyplot] draw legend lines (LICENSE:MIT)
+xy_ifdrawn (3m_xyplot) - [M_xyplot] xy_ifdrawn() is used to see if first page drawn or not (LICENSE:MIT)
+xy_iflou (3m_xyplot) - [M_xyplot] set global flag for Leading Edge trimming (see LE command) (LICENSE:MIT)
+xy_iftext (3m_xyplot) - [M_xyplot] Add user-specified text strings to plot (LICENSE:MIT)
+xy_init_default (3m_xyplot) - [M_xyplot] initialize XY plot routines (LICENSE:MIT)
+xy_init_graphics (3m_xyplot) - [M_xyplot] Initialize PLT graphics environment (LICENSE:MIT)
+xy_init_labels (3m_xyplot) - [M_xyplot] data defining all unit code labels (LICENSE:MIT)
+xy_init_markers (3m_xyplot) - [M_xyplot] part of plot_axes(3f), used to define default geometric markers (LICENSE:MIT)
+xy_jucp (3m_xyplot)  - [M_xyplot] plot string line at current position (LICENSE:MIT)
+xy_jucp2 (3m_xyplot) - [M_xyplot] plot string line at current position (LICENSE:MIT)
+xy_jucurv (3m_xyplot) - [M_xyplot] find extrema for group of curves and set legend label defaults (LICENSE:MIT)
+xy_judraw (3m_xyplot) - [M_xyplot] draw curves to plot scales using plot_ values (LICENSE:MIT)
+xy_jufont (3m_xyplot) - [M_xyplot] check and set font and store it so can query it (LICENSE:MIT)
+xy_jugetwn (3m_xyplot) - [M_xyplot] query current window ( appropriate for 2-d only) (LICENSE:MIT)
+xy_jumapc (3m_xyplot) - [M_xyplot] map colors using HUE command (LICENSE:MIT)
+xy_juprint (3m_xyplot) - [M_xyplot] print string LINE at position x, y with embedded directives (LICENSE:MIT)
+xy_juprints (3m_xyplot) - [M_xyplot] simple print of string l at position x, y (LICENSE:MIT)
+xy_juput (3m_xyplot) - [M_xyplot] write current memory-resident curves in global variables(q) onto pseudo file (LICENSE:MIT)
+xy_jurang (3m_xyplot) - [M_xyplot] return nice max and min values for the axis, and nice axis grid spacings (LICENSE:MIT)
+xy_jutitl (3m_xyplot) - [M_xyplot] add title lines to plot (LICENSE:MIT)
+xy_jutitlx (3m_xyplot) - [M_xyplot] draw plot titling information (titles and legend block) (LICENSE:MIT)
+xy_laxis (3m_xyplot) - [M_xyplot] draw linear axis and logarithmic axis for PLT (LICENSE:MIT)
+xy_listout3 (3m_xyplot) - [M_xyplot] copy rcurve_in to rcurve_out expanding negative curve numbers to ranges (1 -10 means 1 thru 10) (LICENSE:MIT)
+xy_loadtl (3m_xyplot) - [M_xyplot] load title xy_array (LICENSE:MIT)
+xy_obj12345 (3m_xyplot) - [M_xyplot] create or close M_plot object 12345 (LICENSE:MIT)
+xy_pause (3m_xyplot) - [M_xyplot] conditionally pause until graphic or text-window response (LICENSE:MIT)
+xy_pickpnt (3m_xyplot) - [M_xyplot] interactively draw a line to current left scale and store the curve or return point (LICENSE:MIT)
+xy_printban (3m_xyplot) - [M_xyplot] plot horizontal banner string at specified location (LICENSE:MIT)
+xy_printbanv (3m_xyplot) - [M_xyplot] plot vertical banner string (LICENSE:MIT)
+xy_rasters (3m_xyplot) - [M_xyplot] set line width (LICENSE:MIT)
+xy_resetpens (3m_xyplot) - [M_xyplot] reset pens (LICENSE:MIT)
+xy_retrv2 (3m_xyplot) - [M_xyplot] a special version of RETREV() that integrates the Calculator and Language library for XY plots (LICENSE:MIT)
+xy_set_bigger (3m_xyplot) - [M_xyplot] change title line size (LICENSE:MIT)
+xy_setcnv (3m_xyplot) - [M_xyplot] set up conversion table for xy_con_x and xy_con_y functions (LICENSE:MIT)
+xy_setlbl (3m_xyplot) - [M_xyplot] decide axis label strings (LICENSE:MIT)
+xy_setsize (3m_xyplot) - [M_xyplot] use values to set size and border on output device (LICENSE:MIT)
+xy_slide (3m_xyplot) - [M_xyplot] slide value (LICENSE:MIT)
+xy_tidybox (3m_xyplot) - [M_xyplot] draw legend lines inside box specified on call (LICENSE:MIT)
+xy_tidybox1 (3m_xyplot) - [M_xyplot] draw legend lines in box with legend box autosized and positioned by edge number (LICENSE:MIT)
+xy_tidybox2 (3m_xyplot) - [M_xyplot] draw legend lines inside box specified on call (LICENSE:MIT)
+xy_units (3m_xyplot) - [M_xyplot] given unit code return string label optionally converted to uppercase (LICENSE:MIT)
+xy_ustrlen (3m_xyplot) - [M_xyplot] get software string length including trailing whitespace (LICENSE:MIT)
+xy_ustrlen2 (3m_xyplot) - [M_xyplot] get software string length up to specified character (LICENSE:MIT)
+xy_zoom (3m_xyplot)  - [M_xyplot] given current four numbers defining a box; alter them by indicated selections of an old and new box (LICENSE:MIT)
+ycentertext (3m_draw) - [M_draw:TEXT] center text in the Y direction (LICENSE:PD)
+ycentertext (3m_pixel) - [M_pixel:TEXT] set text centering mode on for drawstr(3f) and drawc(3f) in Y direction (LICENSE:PD)
+yes- (1)	     - [FUNIX] output a string repeatedly until killed or limit is reached (LICENSE:PD)
+zaxpy (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL1] ZY := ZY+ZA*ZX complex constant times a complex vector plus a complex vector.
+zcopy (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL1]
+zdotc (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL1]
+zdotu (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL1]
+zdrot (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL1]
+zdscal (3m_blas)     - [BLAS:COMPLEX16_BLAS_LEVEL1]
+zgbmv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zgemm (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL3]
+zgemv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zgerc (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zgeru (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zhbmv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zhemm (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL3]
+zhemv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zher (3m_blas)	     - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zher2 (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zher2k (3m_blas)     - [BLAS:COMPLEX16_BLAS_LEVEL3]
+zherk (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL3]
+zhpmv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zhpr (3m_blas)	     - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zhpr2 (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+zo (3m_overload)     - [M_overload::LOGICAL] returns Zero if expression is TRUE, else returns One. (LICENSE:PD)
+zpad (3m_strings)    - [M_strings:LENGTH] pad a string on the left with zeros to specified length (LICENSE:PD)
+zrotg (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL1] constructs a plane rotation
+zscal (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL1]
+zsdh67 (3m_steam67)  - [M_steam67]
+zsdt67 (3m_steam67)  - [M_steam67]
+zsrh67 (3m_steam67)  - [M_steam67] calculate remaining variables at extremities of isentropic process given inlet, exit P, inlet enthalpy in compressed liquid region.
+zsrt67 (3m_steam67)  - [M_steam67]
+zswap (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL1]
+zsymm (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL3]
+zsyr2k (3m_blas)     - [BLAS:COMPLEX16_BLAS_LEVEL3]
+zsyrk (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL3]
+ztbmv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+ztbsv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+ztpmv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+ztpsv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+ztrmm (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL3]
+ztrmv (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL2]
+ztrsm (3m_blas)      - [BLAS:COMPLEX_16_BLAS_LEVEL3]
+ztrsv (3m_blas)      - [BLAS:COMPLEX16_BLAS_LEVEL2]

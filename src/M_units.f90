@@ -46,6 +46,8 @@
 !!
 !!##CONSTANTS SYNOPSIS
 !!
+!!   syntax:
+!!
 !!       function nan()
 !!       function inf()
 !!       function is_nan()
@@ -301,9 +303,9 @@ contains
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function c2f(celsius)
+!!     elemental real function c2f(celsius)
 !!
-!!     class(*),intent(in) :: celsius
+!!      class(*),intent(in) :: celsius
 !!##DESCRIPTION
 !!    Converts Celsius temperatures to Fahrenheit using the formula:
 !!
@@ -346,9 +348,9 @@ end function c2f
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function f2c(fahrenheit)
+!!     elemental real function f2c(fahrenheit)
 !!
-!!     class(*),intent(in) :: fahrenheit
+!!      class(*),intent(in) :: fahrenheit
 !!##DESCRIPTION
 !!    Converts Fahrenheit temperatures to Celsius using the formula:
 !!
@@ -394,9 +396,9 @@ end function f2c
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function r2d(radians)
+!!     elemental real function r2d(radians)
 !!
-!!     class(*),intent(in) :: degrees
+!!      class(*),intent(in) :: degrees
 !!##DESCRIPTION
 !!    Converts radians to degrees using the formula:
 !!
@@ -460,9 +462,9 @@ end function r2d_r
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function d2r(degrees)
+!!     elemental real function d2r(degrees)
 !!
-!!     class(*),intent(in) :: radians
+!!      class(*),intent(in) :: radians
 !!##DESCRIPTION
 !!    Converts degrees to radians using the formula:
 !!
@@ -527,9 +529,9 @@ end function d2r_i
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function sind(degrees)
+!!     elemental real function sind(degrees)
 !!
-!!     class(*),intent(in) :: degrees
+!!      class(*),intent(in) :: degrees
 !!##DESCRIPTION
 !!    Calculate sine of input value in degrees
 !!
@@ -585,9 +587,9 @@ end function sind
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function cosd(degrees)
+!!     elemental real function cosd(degrees)
 !!
-!!     class(*),intent(in) :: degrees
+!!      class(*),intent(in) :: degrees
 !!##DESCRIPTION
 !!    Calculate cosine of input value in degrees
 !!
@@ -643,9 +645,9 @@ end function cosd
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! elemental real function tand(degrees)
+!!     elemental real function tand(degrees)
 !!
-!!     class(*),intent(in) :: degrees
+!!      class(*),intent(in) :: degrees
 !!##DESCRIPTION
 !!    Calculate tangent of input value in degrees
 !!
@@ -702,9 +704,9 @@ end function tand
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function asind(value)
+!!     elemental real function asind(value)
 !!
-!!     class(*),intent(in) :: value
+!!      class(*),intent(in) :: value
 !!##DESCRIPTION
 !!    Calculate arcsine of input value in degrees. It converts the input
 !!    value to radians from degrees and calls asin(3f).
@@ -748,9 +750,9 @@ end function asind
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function acosd(value)
+!!     elemental real function acosd(value)
 !!
-!!     class(*),intent(in) :: value
+!!      class(*),intent(in) :: value
 !!##DESCRIPTION
 !!    Calculate arcsine of input value in degrees. It converts the input value
 !!    from degrees to radians and calls acos(3f).
@@ -795,9 +797,9 @@ end function acosd
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function atand(value)
+!!     elemental real function atand(value)
 !!
-!!     class(*),intent(in) :: value
+!!      class(*),intent(in) :: value
 !!##DESCRIPTION
 !!    Calculate arctangent of input value in degrees. It calls atan(3f) and
 !!    converts the output to degrees from radians.
@@ -843,10 +845,10 @@ end function atand
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function atan2d(x,y)
+!!     elemental real function atan2d(x,y)
 !!
-!!     class(*),intent(in) :: x
-!!     class(*),intent(in) :: y
+!!      class(*),intent(in) :: x
+!!      class(*),intent(in) :: y
 !!##DESCRIPTION
 !!    Calculate arctangent of arctangent of the complex number
 !!
@@ -897,9 +899,9 @@ end function atan2d
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental doubleprecision function feet_to_meters(feet)
+!!     elemental doubleprecision function feet_to_meters(feet)
 !!
-!!     class(*),intent(in) :: feet
+!!      class(*),intent(in) :: feet
 !!##DESCRIPTION
 !!    Converts feet to meters using the formula:
 !!
@@ -953,9 +955,9 @@ end function feet_to_meters
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental real function meters_to_feet(meters)
+!!     elemental real function meters_to_feet(meters)
 !!
-!!     class(*),intent(in) :: meters
+!!      class(*),intent(in) :: meters
 !!##DESCRIPTION
 !!    Converts feet to meters using the formula:
 !!
@@ -1002,10 +1004,10 @@ end function meters_to_feet
 !!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    subroutine cartesian_to_spherical(x,y,z,radius,inclination,azimuth)
+!!     subroutine cartesian_to_spherical(x,y,z,radius,inclination,azimuth)
 !!
-!!     real,intent(in)  :: x,y,z
-!!     real,intent(out) :: radius,inclination,azimuth
+!!      real,intent(in)  :: x,y,z
+!!      real,intent(out) :: radius,inclination,azimuth
 !!
 !!##DESCRIPTION
 !!
@@ -1074,10 +1076,10 @@ end subroutine cartesian_to_spherical
 !!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
+!!     subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
 !!
-!!     real,intent(in) :: radius,inclination,azimuth
-!!     real,intent(out)  :: x,y,z
+!!      real,intent(in) :: radius,inclination,azimuth
+!!      real,intent(out)  :: x,y,z
 !!
 !!##DESCRIPTION
 !!
@@ -1148,10 +1150,10 @@ end subroutine spherical_to_cartesian
 !!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    subroutine cartesian_to_polar(x,y,radius,inclination)
+!!     subroutine cartesian_to_polar(x,y,radius,inclination)
 !!
-!!     real,intent(in)  :: y,z
-!!     real,intent(out) :: radius,inclination
+!!      real,intent(in)  :: y,z
+!!      real,intent(out) :: radius,inclination
 !!
 !!##DESCRIPTION
 !!
@@ -1214,10 +1216,10 @@ end subroutine cartesian_to_polar
 !!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    subroutine polar_to_cartesian(radius,inclination,x,y)
+!!     subroutine polar_to_cartesian(radius,inclination,x,y)
 !!
-!!     real,intent(in) :: radius,inclination
-!!     real,intent(out)  :: x,y
+!!      real,intent(in) :: radius,inclination
+!!      real,intent(out)  :: x,y
 !!
 !!##DESCRIPTION
 !!
@@ -1283,10 +1285,10 @@ end subroutine polar_to_cartesian
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine atomnum2symbol(atomnum,symbol)
+!!     subroutine atomnum2symbol(atomnum,symbol)
 !!
-!!    integer,intent(in)           :: atomnum
-!!    character(len=2),intent(out) :: symbol
+!!      integer,intent(in)           :: atomnum
+!!      character(len=2),intent(out) :: symbol
 !!
 !!##DESCRIPTION
 !!    Given an atomic number in the range of 1 to 109 return the corresponding element symbol name
@@ -1466,10 +1468,10 @@ end subroutine atomnum2symbol
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine symbol2atomnum(symbol,atomnum)
+!!     subroutine symbol2atomnum(symbol,atomnum)
 !!
-!!    character(len=2),intent(in) :: symbol
-!!    integer,intent(out)         :: atomnum
+!!      character(len=2),intent(in) :: symbol
+!!      integer,intent(out)         :: atomnum
 !!
 !!##DESCRIPTION
 !!    Given a two-character element symbol name return the corresponding atomic number
@@ -1546,10 +1548,10 @@ end subroutine symbol2atomnum
 !!
 !!##SYNOPSIS
 !!
-!!    elemental function pounds_to_kilograms ( pounds )
+!!     elemental function pounds_to_kilograms ( pounds )
 !!
-!!     class(*),intent(in) ::  pounds
-!!     doubleprecision     :: pounds_to_kilograms
+!!      class(*),intent(in) ::  pounds
+!!      doubleprecision     :: pounds_to_kilograms
 !!
 !!##DESCRIPTION
 !!    Converts pounds-mass to kilograms using the formula:
@@ -1610,10 +1612,10 @@ end function pounds_to_kilograms
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental function norm_angle_rad(ang) result(rev)
+!!     elemental function norm_angle_rad(ang) result(rev)
 !!
-!!    class(*), intent(in) :: ang
-!!    doubleprecision      :: rev
+!!      class(*), intent(in) :: ang
+!!      doubleprecision      :: rev
 !!##DESCRIPTION
 !!    Given an input angle specified in radians, normalize the value to fall in the
 !!    range 0 to 2*pi radians.
@@ -1664,16 +1666,16 @@ end function norm_angle_rad
 !!
 !!##SYNOPSIS
 !!
-!!    elemental function norm_angle_deg(ang) result(rev)
+!!     elemental function norm_angle_deg(ang) result(rev)
 !!
-!!     doubleprecision, intent(in) :: ang
-!!     doubleprecision             :: rev
-!!        or
-!!     real, intent(in) :: ang
-!!     real             :: rev
-!!        or
-!!     integer, intent(in) :: ang
-!!     integer             :: rev
+!!      doubleprecision, intent(in) :: ang
+!!      doubleprecision             :: rev
+!!         or
+!!      real, intent(in) :: ang
+!!      real             :: rev
+!!         or
+!!      integer, intent(in) :: ang
+!!      integer             :: rev
 !!
 !!##DESCRIPTION
 !!    Given an input angle in degrees, normalize the value to fall in the
@@ -1773,10 +1775,11 @@ end function norm_angle_deg_integer
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    function inf(value)
-!!    use,intrinsic :: iso_fortran_env, only: real32, real64, real128
-!!    real(kind=real32|real64|real128) :: inf
-!!    real(kind=real32|real64|real128) :: value
+!!     function inf(value)
+!!
+!!      use,intrinsic :: iso_fortran_env, only: real32, real64, real128
+!!      real(kind=real32|real64|real128) :: inf
+!!      real(kind=real32|real64|real128) :: value
 !!##DESCRIPTION
 !!    Return an inf (Infinity) value. The type returned will be the same
 !!    kind as the passed value.
@@ -1876,10 +1879,11 @@ end function inf128
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    function nan(value)
-!!    use,intrinsic :: iso_fortran_env, only: real32, real64, real128
-!!    real(kind=real32|real64|real128) :: nan
-!!    real(kind=real32|real64|real128) :: value
+!!     function nan(value)
+!!
+!!      use,intrinsic :: iso_fortran_env, only: real32, real64, real128
+!!      real(kind=real32|real64|real128) :: nan
+!!      real(kind=real32|real64|real128) :: value
 !!##DESCRIPTION
 !!    Return a NaN (Not a number) value. The type returned will be the same
 !!    kind as the passed value.
@@ -2020,9 +2024,9 @@ end function nan128
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental pure logical is_even(int)
+!!     elemental pure logical is_even(int)
 !!
-!!     integer(kind=int8|int16|int32|int64) :: int
+!!      integer(kind=int8|int16|int32|int64) :: int
 !!##DESCRIPTION
 !!     Determine if an integer is even or not.
 !!##OPTIONS
@@ -2078,9 +2082,9 @@ end function is_even
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    elemental pure logical is_nan(value)
+!!     elemental pure logical is_nan(value)
 !!
-!!     integer(kind=real32|real64|real128|complex) :: value
+!!      integer(kind=real32|real64|real128|complex) :: value
 !!##DESCRIPTION
 !!     Determine if a real or complex value is a NaN (Not a Number) value
 !!##OPTIONS

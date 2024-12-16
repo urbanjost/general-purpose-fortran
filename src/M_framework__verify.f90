@@ -787,7 +787,7 @@ integer(kind=int64)                  :: clicks_now
    if(PF == 'PASSED  :'.and.ipassed_all_G == 0)then
       PF='UNTESTED:'
    endif
-      write(out,'("'//CHECK_PREFIX%check_stop//'",a,1x,a," GOOD: ",a," BAD: ",a," DURATION: ",i14.14)') &
+      write(out,'("'//CHECK_PREFIX%check_stop//'",a,1x,a," GOOD: ",a," BAD: ",a," DURATION: ",i20.20)') &
        & atleast_("TALLY",G_LONGEST),     &
        & PF,                              &
        & atleast_(str(IPASSED_ALL_G),9),  &
@@ -910,7 +910,7 @@ integer(kind=int64)                  :: clicks_now
        & 1x,a,                            &
        & " GOOD: ",a,                     &
        & " BAD: " ,a,                     &
-       & " DURATION: ",i14.14             &
+       & " DURATION: ",i20.20             &
        & )')                              &
        & atleast_(name,G_LONGEST),        &
        & PF,                              &
@@ -1620,7 +1620,7 @@ end function unit_test_system
 !!    the leaf name past the last backslash or slash and trims
 !!    the suffix ".exe" as well.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample getting a pathname of current executable:
 !!
@@ -1694,7 +1694,7 @@ end function getarg0_
 !!    getall_(3f) returns the name of the current executable
 !!    and all the arguments surrounded with double-quotes
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample getting a pathname of current executable:
 !!

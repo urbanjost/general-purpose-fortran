@@ -721,7 +721,7 @@ end subroutine process_open_write
 !!##SYNOPSIS
 !!
 !!##DESCRIPTION
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -1004,7 +1004,7 @@ end subroutine process_readline
 !!                         output of the system command are concatenated
 !!                         into a string with spaces added between the
 !!                         output lines of the command.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Read all output of a command to a single string

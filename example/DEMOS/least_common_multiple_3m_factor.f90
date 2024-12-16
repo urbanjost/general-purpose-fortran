@@ -1,4 +1,4 @@
-     program demo_lcm
+     program demo_least_common_multiple
      use M_factor, only : lcm=>least_common_multiple
      implicit none
         write(*,*)'SCALAR:'
@@ -41,4 +41,4 @@
               & lcm(array),lcm(array).eq.answer
         end subroutine writeit_v
 
-     end program demo_lcm
+     end program demo_least_common_multiple

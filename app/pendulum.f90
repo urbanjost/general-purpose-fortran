@@ -81,77 +81,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    pendulum(1f) - [PHYSICS] calculate pendulum period
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    pendulum [ -length Length_In_Feet ][ -verbose]|[ --help]|[ --version]
-!!
-!!##DESCRIPTION
-!!    Given the length to the center of gravity from the fulcrum (pivot
-!!    point) of a pendulum in feet calculate the pendulum frequency in
-!!    swings/sec, and how long the swing takes (the period of the pendulum).
-!!
-!!    If the pendulum weight or bob of a simple pendulum is pulled to a
-!!    relatively small angle and let go, it will swing back and forth at a
-!!    regular frequency. If damping effects from air resistance and friction
-!!    are negligible, equations concerning the frequency and period of the
-!!    the pendulum, as well as the length of the string can be calculated.
-!!
-!!    The period of the motion for a pendulum is how long it takes to swing
-!!    back-and-forth, measured in seconds. The period equation is:
-!!
-!!       T = 2*PI*sqrt(L/g)
-!!
-!!    The frequency of a pendulum is how many back-and-forth swings there
-!!    are in a second, measured in hertz. Frequency f is the reciprocal
-!!    of the period T:
-!!
-!!       f = 1/T
-!!
-!!    Therefore in terms of the length the frequency is
-!!
-!!       f = [ sqrt(g/L)]/2
-!!
-!!    The length equations are:
-!!
-!!       L = g/(4*PI**2*f**2)
-!!    and
-!!
-!!       L = (g*T**2)/(4*PI**2)
-!!
-!!    The generally accepted length of a seconds pendulum at sea level,
-!!    lat. 45 degrees, is 99.356 cm or 39.116 in. = 3.25966 feet.
-!!
-!!##OPTIONS
-!!    -length Length_In_Feet  distance from pivot point to center
-!!                            of gravity of pendulum.
-!!    -verbose [T|F]          verbose mode, default is .true. .
-!!    --help                  display this help and exit
-!!    --version               output version information and exit
-!!
-!!##EXAMPLES
-!!
-!!   Sample command lines ...
-!!
-!!    # A 1/4 of a meter pendulum has a period of about 1 second.
-!!    pendulum -length 0.820209980
-!!    For a pendulum with length  0.820209980      feet
-!!    The frequency of the pendulum is  0.996806502     swings/sec.
-!!    Each swing takes   1.00320375     sec.
-!!
-!!    pendulum -length 3.00
-!!    For a pendulum with length   3.00000000      feet
-!!    The frequency of the pendulum is  0.287753224     swings/sec.
-!!    Each swing takes   3.47519994     sec.
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -171,7 +100,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-11-24 04:45:29 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:40:53 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

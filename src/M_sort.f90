@@ -166,6 +166,7 @@ contains
 !!
 !!##SYNOPSIS
 !!
+!! Usage:
 !!
 !!     use M_sort, only : sort_quick_rx, sort_quick_compact
 !!     use M_sort, only : sort_shell, sort_heap
@@ -339,7 +340,7 @@ contains
 !!                  I  for Imaginary component,
 !!                  S  for the magnitude Sqrt(R**2+I**2)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -1037,7 +1038,7 @@ end subroutine sort_shell_complex_double
 !!    o generalized from only real values to include other intrinsic types;
 !!      John S. Urban 20210110
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample usage:
 !!
@@ -3937,7 +3938,7 @@ end subroutine sort_quick_rx_complex_int64
 !!   o generalized to include intrinsic types other than default REAL
 !!     John S. Urban 20210110
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample usage:
 !!
@@ -4254,7 +4255,7 @@ end function sort_quick_compact_character_ascii
 !!            DOUBLEPRECISION, or COMPLEX(KIND=KIND(0.0d0)).
 !!
 !!    ivals   returned number of unique values packed into beginning of array
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -4638,7 +4639,7 @@ end subroutine unique_allocatable_strings
 !!    SWAP(3f) is elemental, so it can operate on vectors and arrays as
 !!    well as scalar values.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Example program:
 !!
@@ -5068,7 +5069,7 @@ end subroutine swap_string
 !!
 !!    DO NOT CURRENTLY USE WITH ANYTHING BUT SCALAR VALUES.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Example program:
 !!
@@ -5267,7 +5268,7 @@ end subroutine swap_any_array
 !!   and Jeanne C. Adams. This code may be copied and used without
 !!   restriction as long as this notice is retained.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  sample program
 !!
@@ -5327,7 +5328,7 @@ end subroutine tree_insert
 !!   and Jeanne C. Adams. This code may be copied and used without
 !!   restriction as long as this notice is retained.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  sample program
 !!
@@ -5395,7 +5396,7 @@ end subroutine tree_print
 !!
 !!    CHARS    The returned value is an array of bytes (character(len=1)).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -5459,8 +5460,8 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      !chars=transfer(anything,chars) ! should work for everything, does not with some compilers
-      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      !stop 'crud. anything_to_bytes_arr(1) does not know about this type'
    end select
 
 end function anything_to_bytes_arr
@@ -5525,7 +5526,7 @@ end function  anything_to_bytes_scalar
 !!              REAL(kind=real32, REAL(kind=real64),
 !!              REAL(kind=real128), complex, or CHARACTER(len=*)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -5616,7 +5617,7 @@ end subroutine bytes_to_anything
 !!     INDEX  an INTEGER array of default kind that contains the sorted
 !!            indices.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample usage:
 !!
@@ -5716,7 +5717,7 @@ end function sort_character
 !!     INDX   an INTEGER array of default kind that contains the sorted
 !!            indices.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample usage:
 !!

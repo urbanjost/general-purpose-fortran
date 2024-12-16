@@ -412,7 +412,7 @@
 !!    subroutine pop()            pop
 !!    subroutine push()           push
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -583,9 +583,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine prefposition(x, y)
+!!     subroutine prefposition(x, y)
 !!
-!!     integer,intent(in) :: x, y
+!!      integer,intent(in) :: x, y
 !!
 !!##DESCRIPTION
 !!    Specify the preferred position of the window opened by the *next*
@@ -594,7 +594,7 @@
 !!    For X11 Windows and PPM pixmaps the values would represent rasters.
 !!    For vector output devices the number of "rasters" per inch varies.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -631,8 +631,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine prefsize(width, height)
-!!         integer,intent(in) :: width, height
+!!     subroutine prefsize(width, height)
+!!
+!!      integer,intent(in) :: width, height
 !!
 !!##DESCRIPTION
 !!
@@ -643,7 +644,7 @@
 !!    WIDTH   width of device to create when vinit(3f) is called
 !!    HEIGHT  height of device to create when vinit(3f) is called
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -687,8 +688,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine vinit(device)
-!!          character(len=*),intent(in) :: device
+!!     subroutine vinit(device)
+!!
+!!      character(len=*),intent(in) :: device
 !!
 !!##DESCRIPTION
 !!    Initialise the device.
@@ -906,7 +908,7 @@
 !!
 !!    Alternatively, could use depth to keep up to 999 pages separate
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -969,7 +971,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine vexit()
+!!     subroutine vexit()
 !!
 !!##DESCRIPTION
 !!
@@ -977,7 +979,7 @@
 !!    properly close out most output devices. Must be called before any
 !!    second call to vinit(3f). Must be the last M_draw routine called.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1030,8 +1032,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine voutput(path)
-!!          character*(*) path
+!!     subroutine voutput(path)
+!!
+!!      character*(*) path
 !!##DESCRIPTION
 !!
 !!       Redirect output from *next* vinit() to file given by path. This routine
@@ -1055,25 +1058,25 @@
 !!       that convert PPM files to other common pixmap formats or converts the GNU
 !!       metafile to other formats (typically via the GNU plotutils plot program).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
 !!    program demo_voutput
 !!    use M_draw
 !!    implicit none
-!!    ! want a 400x400 raster output
-!!    call prefsize(400,400)
-!!    ! convert PPM to a GIF file using ppmtogif(1)
-!!    call voutput('|ppmtogif >voutput.3m_draw.gif')
-!!    ! start graphics using PPM device
-!!    call vinit('p6')
-!!    ! draw a filled circle
-!!    call color(D_RED)
-!!    call polyfill(.true.)
-!!    call circle(0.0,0.0,1.0)
-!!    !
-!!    call vexit()
+!!     ! want a 400x400 raster output
+!!       call prefsize(400,400)
+!!     ! convert PPM to a GIF file using ppmtogif(1)
+!!       call voutput('|ppmtogif >voutput.3m_draw.gif')
+!!     ! start graphics using PPM device
+!!       call vinit('p6')
+!!     ! draw a filled circle
+!!       call color(D_RED)
+!!       call polyfill(.true.)
+!!       call circle(0.0,0.0,1.0)
+!!     !
+!!       call vexit()
 !!    end program demo_voutput
 !>
 !!##NAME
@@ -1081,8 +1084,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!          subroutine vnewdev(device)
-!!          character *(*) device
+!!     subroutine vnewdev(device)
+!!
+!!      character *(*) device
 !!##DESCRIPTION
 !!
 !!    Reinitialize M_draw to use a new device without changing attributes,
@@ -1093,8 +1097,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!          subroutine vgetdev(device)
-!!          character *(*) device
+!!     subroutine vgetdev(device)
+!!
+!!      character *(*) device
 !!##DESCRIPTION
 !!
 !!    Gets the name of the current M_draw device. The C version of the routine
@@ -1106,7 +1111,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          integer function getdepth()
+!!     integer function getdepth()
 !!
 !!##DESCRIPTION
 !!    Returns the number of bit planes (or color planes) for a particular
@@ -1120,8 +1125,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine pushdev(device)
-!!          character *(*) device
+!!     subroutine pushdev(device)
+!!
+!!      character *(*) device
 !!
 !!##DESCRIPTION
 !!    Initialize a new device without changing attributes, viewport etc,
@@ -1137,7 +1143,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!           subroutine popdev()
+!!     subroutine popdev()
 !!
 !!##DESCRIPTION
 !!
@@ -1150,8 +1156,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine move(x, y, z)
-!!          real x, y, z
+!!     subroutine move(x, y, z)
+!!
+!!      real x, y, z
 !!##DESCRIPTION
 !!
 !!    Move current graphics position to (x, y, z). (x, y, z) is a point in
@@ -1163,8 +1170,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine rmove(deltax, deltay, deltaz)
-!!          real deltax, deltay, deltaz
+!!     subroutine rmove(deltax, deltay, deltaz)
+!!
+!!      real deltax, deltay, deltaz
 !!
 !!##DESCRIPTION
 !!
@@ -1176,8 +1184,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine move2(x, y)
-!!          real,intent(in) :: x, y
+!!     subroutine move2(x, y)
+!!
+!!      real,intent(in) :: x, y
 !!
 !!##DESCRIPTION
 !!
@@ -1189,7 +1198,7 @@
 !!    X  new X position
 !!    Y  new Y position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1222,7 +1231,8 @@
 !!##SYNOPSIS
 !!
 !!     subroutine rmove2(deltax, deltay)
-!!     real,intent(in) :: deltax, deltay
+!!
+!!      real,intent(in) :: deltax, deltay
 !!
 !!##DESCRIPTION
 !!    Update current position.
@@ -1231,7 +1241,7 @@
 !!##OPTIONS
 !!    X  new X position
 !!    Y  new Y position
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1261,8 +1271,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine smove2(x, y)
-!!          real x, y
+!!     subroutine smove2(x, y)
+!!
+!!      real x, y
 !!
 !!##DESCRIPTION
 !!    Move current graphics position in screen coordinates (-1.0 to 1.0).
@@ -1273,8 +1284,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine rsmove2(deltax, deltay)
-!!          real deltax, deltay
+!!     subroutine rsmove2(deltax, deltay)
+!!
+!!      real deltax, deltay
 !!
 !!##DESCRIPTION
 !!
@@ -1287,8 +1299,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine draw(x, y, z)
-!!          real x, y, z
+!!     subroutine draw(x, y, z)
+!!
+!!      real x, y, z
 !!##DESCRIPTION
 !!
 !!    Draw from current graphics position to (x, y, z). (x, y, z) is a
@@ -1301,7 +1314,8 @@
 !!##SYNOPSIS
 !!
 !!     subroutine rdraw(deltax, deltay, deltaz)
-!!     real deltax, deltay, deltaz
+!!
+!!      real deltax, deltay, deltaz
 !!
 !!##DESCRIPTION
 !!    Relative draw. deltax, deltay, and deltaz are offsets in world units.
@@ -1313,7 +1327,8 @@
 !!##SYNOPSIS
 !!
 !!     subroutine draw2(x, y)
-!!     real,intent(in) :: x, y
+!!
+!!      real,intent(in) :: x, y
 !!
 !!##DESCRIPTION
 !!    Draw from current position to specified point using current
@@ -1324,7 +1339,7 @@
 !!    X  new X position
 !!    Y  new Y position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1396,8 +1411,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine rdraw2(deltax, deltay)
-!!          real,intent(in) :: deltax, deltay
+!!     subroutine rdraw2(deltax, deltay)
+!!
+!!      real,intent(in) :: deltax, deltay
 !!
 !!##DESCRIPTION
 !!    Relative draw from current position to specified point using current
@@ -1410,7 +1426,7 @@
 !!    X  new X position
 !!    Y  new Y position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1460,8 +1476,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine sdraw2(x, y)
-!!          real x, y
+!!     subroutine sdraw2(x, y)
+!!
+!!      real x, y
 !!##DESCRIPTION
 !!    Draw in screen coordinates (-1.0 to 1.0).
 !>
@@ -1471,8 +1488,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine rsdraw2(deltax, deltay)
-!!          real deltax, deltay
+!!     subroutine rsdraw2(deltax, deltay)
+!!
+!!      real deltax, deltay
 !!
 !!##DESCRIPTION
 !!    Relative sdraw2. delatx and deltay are in screen units (-1.0 to 1.0).
@@ -1483,8 +1501,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine rect(x1, y1, x2, y2)
-!!       real,intent(in) :: x1,y1,x2,y2
+!!     subroutine rect(x1, y1, x2, y2)
+!!
+!!      real,intent(in) :: x1,y1,x2,y2
 !!
 !!##DESCRIPTION
 !!    Draw rectangle given two opposite corners.
@@ -1505,7 +1524,7 @@
 !!    X1,Y1  coordinates of a corner of the rectangle
 !!    X2,Y2  coordinates of corner point opposite first point
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1558,13 +1577,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine polyfill(onoff)
-!!       logical onoff
+!!     subroutine polyfill(onoff)
+!!
+!!      logical onoff
 !!
 !!##DESCRIPTION
 !!    Set the polygon fill flag. This will always turn off hatching. A
 !!    LOGICAL .true. turns polyfill on.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1643,13 +1663,14 @@
 !!##SYNOPSIS
 !!
 !!     subroutine polyhatch(onoff)
-!!     logical onoff
+!!
+!!      logical onoff
 !!##DESCRIPTION
 !!
 !!    Set the polygon hatch flag. This will always turn off fill. A
 !!    LOGICAL .true. turns polyhatch on. Note that hatched polygons
 !!    must initially be defined parallel to the X-Y plane.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1756,8 +1777,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!       subroutine hatchang(angle)
-!!       real,intent(in) :: angle
+!!     subroutine hatchang(angle)
+!!
+!!      real,intent(in) :: angle
 !!
 !!##DESCRIPTION
 !!
@@ -1766,7 +1788,7 @@
 !!    value is 0 at program initialization. The last value set is retained
 !!    even if hatching is not active or is turned on and off.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1834,14 +1856,15 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine hatchpitch(pitch)
-!!       real,intent(in) :: pitch
+!!     subroutine hatchpitch(pitch)
+!!
+!!      real,intent(in) :: pitch
 !!
 !!##DESCRIPTION
 !!    Set the distance between hatch lines. The distance is measured in
 !!    window units (as opposed to viewport or device units).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1894,14 +1917,15 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!       subroutine poly2(n, points)
-!!       integer,intent(in) :: n
-!!       real,intent(in) :: points(2, n)
+!!     subroutine poly2(n, points)
+!!
+!!      integer,intent(in) :: n
+!!      real,intent(in) :: points(2, n)
 !!
 !!##DESCRIPTION
 !!    Construct an (x, y) polygon from an array of points provided by the user.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1974,15 +1998,16 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine poly(n, points)
-!!       integer,intent(in) :: n
-!!       real,intent(in) :: points(3, n)
+!!     subroutine poly(n, points)
+!!
+!!      integer,intent(in) :: n
+!!      real,intent(in) :: points(3, n)
 !!
 !!##DESCRIPTION
 !!
 !!    Construct a polygon from an array of points provided by the user.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -2070,13 +2095,13 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine makepoly()
+!!     subroutine makepoly()
 !!
 !!##DESCRIPTION
 !!    makepoly(3f)  opens up a polygon which will then be constructed by a series
 !!    of move-draws and closed by a closepoly.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -2206,7 +2231,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine closepoly()
+!!     subroutine closepoly()
 !!
 !!##DESCRIPTION
 !!
@@ -2218,15 +2243,16 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine backface(onoff)
-!!       logical onoff
+!!     subroutine backface(onoff)
+!!
+!!      logical onoff
 !!
 !!##DESCRIPTION
 !!    Turns on culling of backfacing polygons. A polygon is backfacing if
 !!    its orientation in *screen* coords is clockwise, unless a call
 !!    to backfacedir is made.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2441,8 +2467,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine backfacedir(clockwise)
-!!       integer,intent(in) :: clockwise
+!!     subroutine backfacedir(clockwise)
+!!
+!!      integer,intent(in) :: clockwise
 !!
 !!##DESCRIPTION
 !!    Sets the backfacing direction to clockwise or anti-clockwise depending
@@ -2456,8 +2483,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine circleprecision(nsegs)
-!!         integer,intent(in) :: nsegs
+!!     subroutine circleprecision(nsegs)
+!!
+!!      integer,intent(in) :: nsegs
 !!
 !!    Set the number of line segments making up a circle. Default is
 !!    currently 32. The number of segments in an arc or sector is calculated
@@ -2466,7 +2494,7 @@
 !!##OPTIONS
 !!    NSEGS   number of line segments making up a circle
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2517,12 +2545,13 @@
 !!     (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!         subroutine arc(x, y, radius, startang, endang)
-!!         real,intent(in) :: x
-!!         real,intent(in) :: y
-!!         real,intent(in) :: radius
-!!         real,intent(in) :: startang
-!!         real,intent(in) :: endang
+!!     subroutine arc(x, y, radius, startang, endang)
+!!
+!!      real,intent(in) :: x
+!!      real,intent(in) :: y
+!!      real,intent(in) :: radius
+!!      real,intent(in) :: startang
+!!      real,intent(in) :: endang
 !!##DESCRIPTION
 !!
 !!    Draw an arc. x, y, and radius are values in world units
@@ -2538,7 +2567,7 @@
 !!    STARTANG   Start angle
 !!    ENDANG     End angle
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2603,8 +2632,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine sector(x, y, radius, startang, endang)
-!!         REAL x, y, radius, startang, endang
+!!     subroutine sector(x, y, radius, startang, endang)
+!!
+!!      REAL x, y, radius, startang, endang
 !!
 !!##DESCRIPTION
 !!
@@ -2612,7 +2642,7 @@
 !!    are regarded as polygons, so if polyfill or polyhatch has been called
 !!    with 1, the sectors will be filled or hatched accordingly.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2695,10 +2725,11 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine circle(x, y, radius)
-!!         real,intent(in) :: x
-!!         real,intent(in) :: y
-!!         real,intent(in) :: radius
+!!     subroutine circle(x, y, radius)
+!!
+!!      real,intent(in) :: x
+!!      real,intent(in) :: y
+!!      real,intent(in) :: radius
 !!
 !!##DESCRIPTION
 !!
@@ -2715,7 +2746,7 @@
 !!    X,Y        Coordinates for the center of the circle
 !!    RADIUS     Radius of the circle
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2781,14 +2812,15 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!         subroutine point(x, y, z)
-!!         real,intent(in) :: x, y, z
+!!     subroutine point(x, y, z)
+!!
+!!      real,intent(in) :: x, y, z
 !!##DESCRIPTION
 !!    Draw a point at x, y, z. The size of the point is not affected by
 !!    perspective. Draw a polygon if you want perspective to be applied.
 !!    The size of the point is controlled by the current linewidth.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2832,15 +2864,16 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine point2(x, y)
-!!         real,intent(in) :: x, y
+!!     subroutine point2(x, y)
+!!
+!!      real,intent(in) :: x, y
 !!
 !!##DESCRIPTION
 !!    Draw a point at x, y. Points are device-dependent and may not appear
 !!    at all. Generally points are drawn with the current color as a circle
 !!    with a diameter equal to the current linewidth.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2866,8 +2899,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!          subroutine curvebasis(basis)
-!!          real,intent(in) :: basis(4,4)
+!!     subroutine curvebasis(basis)
+!!
+!!      real,intent(in) :: basis(4,4)
 !!##DESCRIPTION
 !!    Define a basis matrix for a curve.
 !>
@@ -2876,8 +2910,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!          subroutine curveprecision(nsegs)
-!!          integer nsegs
+!!     subroutine curveprecision(nsegs)
+!!
+!!      integer nsegs
 !!##DESCRIPTION
 !!    Define the number of line segments used to draw a curve.
 !>
@@ -2887,8 +2922,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine rcurve(geom)
-!!          real geom(4,4)
+!!     subroutine rcurve(geom)
+!!
+!!      real geom(4,4)
 !!
 !!##DESCRIPTION
 !!    Draw a rational curve.
@@ -2899,13 +2935,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine curve(geom)
-!!    real geom(3,4)
+!!     subroutine curve(geom)
+!!
+!!      real geom(3,4)
 !!
 !!##DESCRIPTION
 !!    Draw a curve.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample Program:
 !!
@@ -3096,9 +3133,10 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine curven(n, geom)
-!!          integer n
-!!          real geom(3,n)
+!!     subroutine curven(n, geom)
+!!
+!!      integer n
+!!      real geom(3,n)
 !!
 !!##DESCRIPTION
 !!    Draw n-3 overlapping curve segments. Note: n must be at least 4.
@@ -3110,8 +3148,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine font(fontname)
-!!         character(len=*),intent(in) :: fontname
+!!     subroutine font(fontname)
+!!
+!!      character(len=*),intent(in) :: fontname
 !!
 !!##DESCRIPTION
 !!    Set the current font.
@@ -3147,7 +3186,7 @@
 !!
 !!    WHEN ASKED FOR NON-EXISTENT FONT NAMES, FONT(3f) STOPS THE PROGRAM.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample Program:
 !!
@@ -3216,7 +3255,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!         integer function numchars()
+!!     integer function numchars()
 !!
 !!##DESCRIPTION
 !!    Return the number of characters in the current font. Applicable only to
@@ -3227,9 +3266,10 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!         subroutine textsize(width, height)
-!!         real,intent(in) :: width
-!!         real,intent(in) :: height
+!!     subroutine textsize(width, height)
+!!
+!!      real,intent(in) :: width
+!!      real,intent(in) :: height
 !!
 !!##DESCRIPTION
 !!
@@ -3240,7 +3280,7 @@
 !! sizes aligned along the same baseline not that you typically need to
 !! subtract the descender height from the Y position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3281,8 +3321,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!         subroutine textang(ang)
-!!         real,intent(in) :: ang
+!!     subroutine textang(ang)
+!!
+!!      real,intent(in) :: ang
 !!
 !!##DESCRIPTION
 !!    Set the text angle. This angles strings and chars. This routine only
@@ -3293,7 +3334,7 @@
 !!          Angles are measured counterclockwise with zero degrees at the horizontal
 !!          line to the right of the original.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3334,8 +3375,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!         subroutine fixedwidth(onoff)
-!!         logical onoff
+!!     subroutine fixedwidth(onoff)
+!!
+!!      logical onoff
 !!##DESCRIPTION
 !!
 !!    Turns fixedwidth text on or off. .TRUE. causes all text to
@@ -3346,7 +3388,7 @@
 !!
 !!    The default at program initialization is fixedwidth(.false.)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3384,8 +3426,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine centertext(onoff)
-!!         logical,intent(in) :: onoff
+!!     subroutine centertext(onoff)
+!!
+!!      logical,intent(in) :: onoff
 !!
 !!##DESCRIPTION
 !!
@@ -3395,7 +3438,7 @@
 !!##OPTIONS
 !!    ONOFF  set centering mode on or off
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3455,9 +3498,10 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine getcharsize(c, width, height)
-!!         character*1 c
-!!         real width, height
+!!     subroutine getcharsize(c, width, height)
+!!
+!!      character*1 c
+!!      real width, height
 !!
 !!##DESCRIPTION
 !!    Get the width and height of a character. At the moment the height
@@ -3470,7 +3514,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!         real function getfontdec()
+!!     real function getfontdec()
 !!##DESCRIPTION
 !!    Get the descender size of a character in a font.
 !>
@@ -3480,8 +3524,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine getfontsize(width, height)
-!!         real width, height
+!!     subroutine getfontsize(width, height)
+!!
+!!      real width, height
 !!
 !!##DESCRIPTION
 !!
@@ -3493,8 +3538,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine drawchar(ch)
-!!         character(len=1),intent(in) :: ch
+!!     subroutine drawchar(ch)
+!!
+!!      character(len=1),intent(in) :: ch
 !!
 !!##DESCRIPTION
 !!
@@ -3503,7 +3549,7 @@
 !!
 !!    Uses current line color and thickness and text justification mode.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3628,14 +3674,15 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine drawstr(str)
-!!         character(len=*),intent(in) :: str
+!!     subroutine drawstr(str)
+!!
+!!      character(len=*),intent(in) :: str
 !!
 !!##DESCRIPTION
 !!    Draw a text string at the current position. Uses current line color
 !!    and thickness and text centering mode.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -3679,9 +3726,9 @@
 !!
 !!##SYNOPSIS
 !!
+!!     real function strlength(string)
 !!
-!!       real function strlength(string)
-!!       character(len=*),intent(in) :: string
+!!      character(len=*),intent(in) :: string
 !!
 !!##DESCRIPTION
 !!    Return the length of the string "STRING" in world units.
@@ -3689,7 +3736,7 @@
 !!##RETURNS
 !!    STRLENGTH  length of string using current font size
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample Program:
 !!
@@ -3765,8 +3812,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine boxtext(x, y, l, h, s)
-!!         real x, y, l, h, s
+!!     subroutine boxtext(x, y, l, h, s)
+!!
+!!      real x, y, l, h, s
 !!
 !!##DESCRIPTION
 !!    Draw the string S so that it fits in the imaginary box defined with
@@ -3779,7 +3827,7 @@
 !!    H     height of box in world coordinates
 !!    S     string to stretch into box and draw
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Simple program:
 !!
@@ -3821,9 +3869,10 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine boxfit(l, h, nchars)
-!!         real l, h
-!!         integer nchars
+!!     subroutine boxfit(l, h, nchars)
+!!
+!!      real l, h
+!!      integer nchars
 !!
 !!##DESCRIPTION
 !!    Set scale for text so that a string of the biggest characters in
@@ -3836,9 +3885,10 @@
 !!
 !!##SYNOPSIS
 !!
-!!        subroutine textjustify(val)
-!!        character(kind=c_short) :: ival
-!!        character(kind=c_char) :: val
+!!     subroutine textjustify(val)
+!!
+!!      character(kind=c_short) :: ival
+!!      character(kind=c_char) :: val
 !!
 !!##DESCRIPTION
 !!    General (direct) control of text justification. The value of val is made
@@ -3857,7 +3907,7 @@
 !!        val=char(ival)
 !!        call textjustify(val)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3930,14 +3980,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine leftjustify()
+!!     subroutine leftjustify()
 !!
 !!##DESCRIPTION
 !!    Left justifies text. The text string will begin at the current position
 !!    and extend to the notional right. Right justification and X centering
 !!    are turned off.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3978,14 +4028,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!        subroutine rightjustify()
+!!     subroutine rightjustify()
 !!
 !!##DESCRIPTION
 !!
 !!    Right justifies text. The text string will begin at a point to the
 !!    notional left of the current position and finish at the current
 !!    position. Left justification and X centering are turned off.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4026,7 +4076,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!        subroutine xcentertext()
+!!     subroutine xcentertext()
 !!
 !!##DESCRIPTION
 !!    Set text centering mode on in X direction. Y justification is
@@ -4037,7 +4087,7 @@
 !!    point to the right of the current position. Left justification and
 !!    Right justification are turned off.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4075,14 +4125,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine topjustify()
+!!     subroutine topjustify()
 !!
 !!##DESCRIPTION
 !!    Top justifies text. The text string will be drawn with its upper edge
 !!    aligned with the current Y position. Bottom justification and Y centering
 !!    are turned off.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4120,14 +4170,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!        subroutine bottomjustify()
+!!     subroutine bottomjustify()
 !!
 !!##DESCRIPTION
 !!
 !!    Bottom justifies text. The text string will be drawn with the lower
 !!    edge aligned with the current Y position. Top justification and Y
 !!    centering are turned off.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4165,14 +4215,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!        subroutine ycentertext()
+!!     subroutine ycentertext()
 !!
 !!##DESCRIPTION
 !!    Centers text in the Y direction. The text string will so that its
 !!    center line is aligned with the current y position. Top justification
 !!    and Bottom justification are turned off.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4213,8 +4263,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!        subroutine textslant(var)
-!!        real var
+!!     subroutine textslant(var)
+!!
+!!      real var
 !!
 !!##DESCRIPTION
 !!
@@ -4228,7 +4279,7 @@
 !!
 !!    Generally, practical values are generally between -1 and 1 times the
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4280,8 +4331,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!        subroutine textweight(ival)
-!!        integer ival
+!!     subroutine textweight(ival)
+!!
+!!      integer ival
 !!##DESCRIPTION
 !!
 !!     Defines the weight of the fonts. Currently, the predefined constants
@@ -4290,7 +4342,7 @@
 !!     appearance of a software font. The font is redrawn multiple times
 !!     with a slight offset to create the bold appearance.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4332,14 +4384,15 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine linewidth(iwidth)
-!!         integer iwidth
+!!     subroutine linewidth(iwidth)
+!!
+!!      integer iwidth
 !!##DESCRIPTION
 !!
 !!    Set the current line width in units of 1/10,000 of the X size of the
 !!    display surface
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4428,8 +4481,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine dashcode(dashlen)
-!!         real dashlen
+!!     subroutine dashcode(dashlen)
+!!
+!!      real dashlen
 !!
 !!##DESCRIPTION
 !!
@@ -4441,7 +4495,7 @@
 !!    linestyle except the dashcode is being changed. Note that the dashcode
 !!    is in world units,
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -4500,8 +4554,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine linestyle(style)
-!!    character *(*) style
+!!     subroutine linestyle(style)
+!!
+!!      character *(*) style
 !!
 !!##DESCRIPTION
 !!
@@ -4519,7 +4574,7 @@
 !!     dashcode (to specify dash length) except the linestyle is being
 !!     changed. Note that the dashcode is in world units.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -4671,7 +4726,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine clear()
+!!     subroutine clear()
 !!
 !!##DESCRIPTION
 !!
@@ -4679,7 +4734,7 @@
 !!    on file-based devices that support multiple pages (Currently, the
 !!    pixmap devices do not support multiple pages).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -4720,8 +4775,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine color(col)
-!!         integer,intent(in) :: col
+!!     subroutine color(col)
+!!
+!!      integer,intent(in) :: col
 !!
 !!##DESCRIPTION
 !!
@@ -4734,7 +4790,7 @@
 !!     COL  A color number from 0 to 255. To define additional
 !!          colors see mapcolor(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4786,8 +4842,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine mapcolor(indx, red, green, blue)
-!!         integer,intent(in) :: indx, red, green, blue
+!!     subroutine mapcolor(indx, red, green, blue)
+!!
+!!      integer,intent(in) :: indx, red, green, blue
 !!
 !!##DESCRIPTION
 !!
@@ -4802,7 +4859,7 @@
 !!    GREEN   green component of color being defined, in range 0 to 255
 !!    BLUE    blue component of color being defined, in range 0 to 255
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Color wheel EXAMPLE:
 !!
@@ -5034,9 +5091,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine clipping(onoff)
+!!     subroutine clipping(onoff)
 !!
-!!          logical onoff
+!!      logical onoff
 !!##DESCRIPTION
 !!
 !! Turn clipping on or off. Note: on some devices
@@ -5048,13 +5105,13 @@
 !!
 !!##SYNOPSIS
 !!
-!!          integer function getkey()
+!!     integer function getkey()
 !!
 !!##DESCRIPTION
 !!
 !!    Return the ASCII ordinal of the next key typed at the keyboard. If the
 !!    device has no keyboard getkey(3) returns -1.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5101,14 +5158,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!          integer function checkkey()
+!!     integer function checkkey()
 !!
 !!##DESCRIPTION
 !!
 !!    Returns zero if no key is pressed or the ASCII ordinal of the key
 !!    that was pressed.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5154,9 +5211,10 @@
 !!
 !!##SYNOPSIS
 !!
-!!          integer function getstring(bcol, string)
-!!          integer bcol
-!!          character *(*) string
+!!     integer function getstring(bcol, string)
+!!
+!!      integer bcol
+!!      character *(*) string
 !!##DESCRIPTION
 !!
 !!    Read in a string, echoing it in the current font, using the current
@@ -5173,7 +5231,7 @@
 !!          getstring(3f) returns the number of characters read. Getstring
 !!          does not check for overflow in the input buffer string.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5253,8 +5311,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          integer function locator(xaddr, yaddr)
-!!          real xaddr, yaddr
+!!     integer function locator(xaddr, yaddr)
+!!
+!!      real xaddr, yaddr
 !!##DESCRIPTION
 !!
 !!    Find out where the cursor is. XADDR and YADDR are set to the current
@@ -5265,7 +5324,7 @@
 !!    if doing 3-D transformations XADDR and YADDR may not make a lot of
 !!    sense. In that case use slocator.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5450,8 +5509,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          integer function slocator(xaddr, yaddr)
-!!          real xaddr, yaddr
+!!     integer function slocator(xaddr, yaddr)
+!!
+!!      real xaddr, yaddr
 !!##DESCRIPTION
 !!
 !!    Find out where the cursor is. xaddr and yaddr are set to the current
@@ -5459,7 +5519,7 @@
 !!    set up in the same way as with locator. If the device has no locator
 !!    device slocator returns -1.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5550,8 +5610,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine vsetflush(yesno)
-!!          logical yesno
+!!     subroutine vsetflush(yesno)
+!!
+!!      logical yesno
 !!
 !!##DESCRIPTION
 !!    Set global flushing status. If yesno = 0 (.false.) then don't do any
@@ -5564,7 +5625,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine vflush()
+!!     subroutine vflush()
 !!
 !!##DESCRIPTION
 !!
@@ -5576,8 +5637,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine viewport(left, right, bottom, top)
-!!          real,intent(in) :: left, right, bottom, top
+!!     subroutine viewport(left, right, bottom, top)
+!!
+!!      real,intent(in) :: left, right, bottom, top
 !!##DESCRIPTION
 !!    Specify which part of the screen to draw in. Left, right, bottom,
 !!    and top are real values in screen coordinates (0:n,0:m).
@@ -5593,7 +5655,7 @@
 !!           #------------------------------------#
 !!      (left=0,bottom=400)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5715,7 +5777,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine pushviewport()
+!!     subroutine pushviewport()
 !!##DESCRIPTION
 !!
 !!    Save current viewport.
@@ -5726,7 +5788,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine popviewport()
+!!     subroutine popviewport()
 !!
 !!##DESCRIPTION
 !!
@@ -5738,11 +5800,12 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine getviewport(left, right, bottom, top)
-!!          real,intent(out) :: left
-!!          real,intent(out) :: right
-!!          real,intent(out) :: bottom
-!!          real,intent(out) :: top
+!!     subroutine getviewport(left, right, bottom, top)
+!!
+!!      real,intent(out) :: left
+!!      real,intent(out) :: right
+!!      real,intent(out) :: bottom
+!!      real,intent(out) :: top
 !!
 !!##DESCRIPTION
 !!
@@ -5772,7 +5835,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine expandviewport()
+!!     subroutine expandviewport()
 !!
 !!##DESCRIPTION
 !!
@@ -5782,7 +5845,7 @@
 !!    into account any distortion that will occur due to the non-square
 !!    mapping. Thus, a viewport of (-1.0, 1.0, -1.0, 1.0) will map into
 !!    the whole display device.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5846,13 +5909,13 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine unexpandviewport()
+!!     subroutine unexpandviewport()
 !!##DESCRIPTION
 !!
 !!    Does the reverse of expandviewport. Basically, it returns M_draw to
 !!    using the largest square of the device for its viewport calculations.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5914,7 +5977,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          real function getaspect()
+!!     real function getaspect()
 !!
 !!##DESCRIPTION
 !!    Returns the ratio height over width of the display device.
@@ -5925,8 +5988,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine getfactors(w, h)
-!!          real w, h
+!!     subroutine getfactors(w, h)
+!!
+!!      real w, h
 !!##DESCRIPTION
 !!    Returns wfact as the width over min(width of device, height of device)
 !!    and hfact as the height over min(width of device, height of
@@ -5938,8 +6002,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine getdisplaysize(w, h)
-!!          real,intent(in) :: w, h
+!!     subroutine getdisplaysize(w, h)
+!!
+!!      real,intent(in) :: w, h
 !!
 !!##DESCRIPTION
 !!    Returns the width and height of the device in device units in w and h
@@ -5952,7 +6017,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine pushattributes()
+!!     subroutine pushattributes()
 !!
 !!##DESCRIPTION
 !!
@@ -5964,7 +6029,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine popattributes()
+!!     subroutine popattributes()
 !!
 !!##DESCRIPTION
 !!
@@ -5976,8 +6041,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine ortho(left, right, bottom, top, near_d, far_d)
-!!          real left, right, bottom, top, near_d, far_d
+!!     subroutine ortho(left, right, bottom, top, near_d, far_d)
+!!
+!!      real left, right, bottom, top, near_d, far_d
 !!##DESCRIPTION
 !!
 !!    Define x (left, right), y (bottom, top), and z (near, far) clipping
@@ -5992,8 +6058,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine ortho2(left, right, bottom, top)
-!!          real,intent(in) :: left, right, bottom, top
+!!     subroutine ortho2(left, right, bottom, top)
+!!
+!!      real,intent(in) :: left, right, bottom, top
 !!##DESCRIPTION
 !!
 !!    Defines the section of the virtual world coordinates to map to
@@ -6010,14 +6077,15 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine perspective(fov, aspect, near, far)
-!!          real fov, aspect, near, far
+!!     subroutine perspective(fov, aspect, near, far)
+!!
+!!      real fov, aspect, near, far
 !!##DESCRIPTION
 !!    Specify a perspective viewing pyramid in world coordinates by giving
 !!    a field of view, aspect ratio and the distance from the eye of the
 !!    near and far clipping plane.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -6185,15 +6253,16 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine window(left, right, bot, top, near, far)
-!!          real left, right, bot, top, near, far
+!!     subroutine window(left, right, bot, top, near, far)
+!!
+!!      real left, right, bot, top, near, far
 !!##DESCRIPTION
 !!
 !!    Specify a perspective viewing pyramid in world coordinates by giving
 !!    the rectangle closest to the eye (ie. at the near clipping plane)
 !!    and the distances to the near and far clipping planes.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -6318,7 +6387,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine pushmatrix()
+!!     subroutine pushmatrix()
 !!
 !!##DESCRIPTION
 !!
@@ -6330,7 +6399,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine popmatrix()
+!!     subroutine popmatrix()
 !!
 !!##DESCRIPTION
 !!
@@ -6342,8 +6411,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine polarview(dist, azim, inc, twist)
-!!          real dist, azim, inc, twist
+!!     subroutine polarview(dist, azim, inc, twist)
+!!
+!!      real dist, azim, inc, twist
 !!##DESCRIPTION
 !!
 !! Specify the viewer's position in polar coordinates by giving the distance
@@ -6357,8 +6427,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine up(x, y, z)
-!!          real x, y, z
+!!     subroutine up(x, y, z)
+!!
+!!      real x, y, z
 !!
 !!##DESCRIPTION
 !! Specify the world up. This can be used to prevent lookat's sometimes
@@ -6371,15 +6442,16 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine lookat(vx, vy, vz, px, py, pz, twist)
-!!          real vx, vy, vz, px, py, pz, twist
+!!     subroutine lookat(vx, vy, vz, px, py, pz, twist)
+!!
+!!      real vx, vy, vz, px, py, pz, twist
 !!
 !!##DESCRIPTION
 !!    Specify the viewer's position by giving a viewpoint and a reference
 !!    point in world coordinates. A twist about the line of sight may also
 !!    be given.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -6595,14 +6667,15 @@
 !!
 !!##SYNOPSIS
 !!
-!!       subroutine translate(x, y, z)
-!!       real x, y, z
+!!     subroutine translate(x, y, z)
+!!
+!!      real x, y, z
 !!
 !!##DESCRIPTION
 !!
 !!    Set up a translation.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -6751,9 +6824,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine scale(x, y, z)
+!!     subroutine scale(x, y, z)
 !!
-!!     real,intent(in) ::  x, y, z
+!!      real,intent(in) ::  x, y, z
 !!##DESCRIPTION
 !!    Set up scaling factors in x, y, and z axis. The scaling is applied relative
 !!    to the current transformation matrix; ie. the scaling is accumulative.
@@ -6762,7 +6835,7 @@
 !!    x  scaling factor to apply in X direction to current transformation matrix
 !!    y  scaling factor to apply in Y direction to current transformation matrix
 !!    x  scaling factor to apply in Z direction to current transformation matrix
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  Sample program
@@ -6820,9 +6893,10 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine rotate(angle, axis)
-!!          real angle
-!!          character axis
+!!     subroutine rotate(angle, axis)
+!!
+!!      real angle
+!!      character axis
 !!##DESCRIPTION
 !!
 !!    Set up a rotation of coordinate system along specified axis, relative
@@ -6835,7 +6909,7 @@
 !!    axis   Which axis to perform rotation about. Allowed values are 'x',
 !!           'y', and 'z'.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample usage
 !!
@@ -6887,8 +6961,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine patchbasis(tbasis, ubasis)
-!!          real :: tbasis(4,4), ubasis(4,4)
+!!     subroutine patchbasis(tbasis, ubasis)
+!!
+!!      real :: tbasis(4,4), ubasis(4,4)
 !!##DESCRIPTION
 !!
 !!    Define the t and u basis matrices of a patch.
@@ -6899,8 +6974,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine patchprecision(tseg, useg)
-!!          integer,intent(in) :: tseg, useg
+!!     subroutine patchprecision(tseg, useg)
+!!
+!!      integer,intent(in) :: tseg, useg
 !!
 !!##DESCRIPTION
 !!    Set the minimum number of line segments making up curves in a patch.
@@ -6911,8 +6987,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine patchcurves(nt, nu)
-!!          integer,intent(in) :: nt, nu
+!!     subroutine patchcurves(nt, nu)
+!!
+!!      integer,intent(in) :: nt, nu
 !!
 !!##DESCRIPTION
 !!
@@ -6924,8 +7001,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine rpatch(gx, gy, gz, gw)
-!!          real,intent(in) :: gx(4,4), gy(4,4), gz(4,4), gw(4,4)
+!!     subroutine rpatch(gx, gy, gz, gw)
+!!
+!!      real,intent(in) :: gx(4,4), gy(4,4), gz(4,4), gw(4,4)
 !!##DESCRIPTION
 !!
 !!    Draws a rational patch in the current basis, according to the geometry
@@ -6937,14 +7015,15 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine patch(gx, gy, gz)
-!!          real,intent(in) :: gx(4,4), gy(4,4), gz(4,4)
+!!     subroutine patch(gx, gy, gz)
+!!
+!!      real,intent(in) :: gx(4,4), gy(4,4), gz(4,4)
 !!##DESCRIPTION
 !!
 !!    Draws a patch in the current basis, according to the geometry matrices
 !!    gx, gy, and gz.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -7194,8 +7273,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!         subroutine makeobj(n)
-!!         integer n
+!!     subroutine makeobj(n)
+!!
+!!      integer n
 !!
 !!##DESCRIPTION
 !!    Commence the object number n.
@@ -7206,7 +7286,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine closeobj()
+!!     subroutine closeobj()
 !!##DESCRIPTION
 !!
 !!    Close the current object.
@@ -7217,7 +7297,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!         integer function genobj()
+!!     integer function genobj()
 !!##DESCRIPTION
 !!    Returns a unique object identifier.
 !>
@@ -7227,7 +7307,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!         integer function getopenobj()
+!!     integer function getopenobj()
 !!
 !!##DESCRIPTION
 !!    Return the number of the current object.
@@ -7238,11 +7318,12 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine callobj(n)
-!!         integer n
+!!     subroutine callobj(n)
+!!
+!!      integer n
 !!##DESCRIPTION
 !!    Draw object number n.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -7623,14 +7704,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!         logical function isobj(n)
-!!         integer :: n
+!!     logical function isobj(n)
 !!
+!!      integer :: n
 !!
 !!##DESCRIPTION
 !!    Returns .FALSE. if there is an object of number n.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -7682,8 +7763,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine delobj(n)
-!!         integer n
+!!     subroutine delobj(n)
+!!
+!!      integer n
 !!##DESCRIPTION
 !!    Delete the object number n.
 !>
@@ -7693,13 +7775,14 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine loadobj(n, filename)
-!!         integer n
-!!         character*(*) filename
+!!     subroutine loadobj(n, filename)
+!!
+!!      integer n
+!!      character*(*) filename
 !!##DESCRIPTION
 !!    Load the object in the file "filename" as object number n.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -7758,15 +7841,16 @@
 !!
 !!##SYNOPSIS
 !!
-!!         subroutine saveobj(n, filename)
-!!         integer,intent(in) :: n
-!!         character(len=*),intent(in) :: filename
+!!     subroutine saveobj(n, filename)
+!!
+!!      integer,intent(in) :: n
+!!      character(len=*),intent(in) :: filename
 !!
 !!##DESCRIPTION
 !!    Save the object number n into the file filename. This call does not
 !!    save objects called inside object n.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -7826,7 +7910,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          integer function backbuffer()
+!!     integer function backbuffer()
 !!
 !!##DESCRIPTION
 !!    Make M_draw draw in the backbuffer. Returns -1 if the device is not up to it.
@@ -7837,7 +7921,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine frontbuffer()
+!!     subroutine frontbuffer()
 !!
 !!##DESCRIPTION
 !!
@@ -7849,7 +7933,7 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine swapbuffers()
+!!     subroutine swapbuffers()
 !!
 !!##DESCRIPTION
 !!    Swap the front and back buffers.
@@ -7860,8 +7944,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine getgp(x, y, z)
-!!          real x, y, z
+!!     subroutine getgp(x, y, z)
+!!
+!!      real x, y, z
 !!##DESCRIPTION
 !!
 !!    Gets the current graphics position in world coords.
@@ -7872,8 +7957,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine getgpt(x, y, z, w)
-!!          real x, y, z, w
+!!     subroutine getgpt(x, y, z, w)
+!!
+!!      real x, y, z, w
 !!##DESCRIPTION
 !!
 !!    Gets the current transformed graphics position in world coords.
@@ -7883,8 +7969,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!          subroutine getgp2(x, y)
-!!          real,intent(out) :: x,y
+!!     subroutine getgp2(x, y)
+!!
+!!      real,intent(out) :: x,y
 !!##DESCRIPTION
 !!
 !!    Gets the current graphics position in world coords.
@@ -7893,7 +7980,7 @@
 !!    X  X coordinate of current position
 !!    Y  Y coordinate of current position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -7923,8 +8010,9 @@
 !!
 !!##SYNOPSIS
 !!
-!!          subroutine sgetgp2(x, y)
-!!          real x, y
+!!     subroutine sgetgp2(x, y)
+!!
+!!      real x, y
 !!
 !!##DESCRIPTION
 !!    Gets the current screen graphics position in screen coords (-1 to 1)
@@ -7938,7 +8026,7 @@
 !!    Interactive example program to demonstrate text features such as
 !!    justification, size, angle, ...
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -10025,49 +10113,65 @@ end function isobj
  subroutine font(NAME)
    implicit none
    character(len=*),intent(in) :: NAME
-   call font_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   call font_F(temp)
  end subroutine font
 !-------------------------------------------------------------------------------
  subroutine linestyle(NAME)
    implicit none
    character(len=*),intent(in) :: NAME
-   call linestyle_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   call linestyle_F(temp)
  end subroutine linestyle
 !-------------------------------------------------------------------------------
  subroutine printvdevice(S)
    implicit none
    character(len=*),intent(in) :: S
-   call printvdevice_F(s2c(S))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(S)+1)
+   temp=s2c(S)
+   call printvdevice_F(temp)
  end subroutine printvdevice
 !-------------------------------------------------------------------------------
  subroutine printattribs(S)
    implicit none
    character(len=*),intent(in) :: S
-   call printattribs_F(s2c(S))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(S)+1)
+   temp=s2c(S)
+   call printattribs_F(temp)
  end subroutine printattribs
 !-------------------------------------------------------------------------------
  subroutine vinit(NAME)
    implicit none
    character(len=*),intent(in) :: NAME
-   call vinit_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   call vinit_F(temp)
  end subroutine vinit
 !-------------------------------------------------------------------------------
  subroutine voutput(NAME)
    implicit none
    character(len=*),intent(in) :: NAME
-   call voutput_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   call voutput_F(temp)
  end subroutine voutput
 !-------------------------------------------------------------------------------
  subroutine vnewdev(NAME)
    implicit none
    character(len=*),intent(in) :: NAME
-   call vnewdev_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   call vnewdev_F(temp)
  end subroutine vnewdev
 !-------------------------------------------------------------------------------
  subroutine pushdev(NAME)
    implicit none
    character(len=*),intent(in) :: NAME
-   call pushdev_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   call pushdev_F(temp)
  end subroutine pushdev
 !-------------------------------------------------------------------------------
  subroutine vgetdev(NAME)
@@ -10091,7 +10195,9 @@ end subroutine vgetdev
    implicit none
    character(len=*),intent(in) :: FILE
    integer(KIND=C_INT)         :: N
-   call loadobj_F(N,s2c(FILE))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(FILE)+1)
+   temp=s2c(FILE)
+   call loadobj_F(N,temp)
  end subroutine loadobj
 !-------------------------------------------------------------------------------
  subroutine saveobj(N,FILE)
@@ -10099,7 +10205,9 @@ end subroutine vgetdev
    implicit none
    character(len=*),intent(in)  :: FILE
    integer(KIND=C_INT) :: N
-   call saveobj_F(N,s2c(FILE))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(FILE)+1)
+   temp=s2c(FILE)
+   call saveobj_F(N,temp)
  end subroutine saveobj
 !-------------------------------------------------------------------------------
  function strlength(NAME)
@@ -10107,7 +10215,9 @@ end subroutine vgetdev
    implicit none
    character(len=*),intent(in) :: NAME
    real(KIND=C_FLOAT) :: strlength
-   strlength=strlength_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   strlength=strlength_F(temp)
  end function strlength
 !-------------------------------------------------------------------------------
  subroutine boxtext(X,Y,L,H,S)
@@ -10118,13 +10228,17 @@ end subroutine vgetdev
    real(KIND=C_FLOAT),intent(in) :: L
    real(KIND=C_FLOAT),intent(in) :: H
    character(len=*),intent(in)   :: S
-   call boxtext_F(X,Y,L,H,s2c(S))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(S)+1)
+   temp=s2c(S)
+   call boxtext_F(X,Y,L,H,temp)
 end subroutine boxtext
 !-------------------------------------------------------------------------------
  subroutine drawstr(NAME)
    implicit none
    character(len=*),intent(in) :: NAME
-   call drawstr_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   call drawstr_F(temp)
  end subroutine drawstr
 !-------------------------------------------------------------------------------
  subroutine drawchar(NAME)
@@ -10134,13 +10248,17 @@ end subroutine boxtext
 ! and change drawstr_F back to drawstr
    implicit none
    character(len=1),intent(in) :: NAME
-   call drawstr_F(s2c(NAME))
+   character(kind=C_CHAR,len=1) :: temp(len_trim(NAME)+1)
+   temp=s2c(NAME)
+   call drawstr_F(temp)
  end subroutine drawchar
 !-------------------------------------------------------------------------------
 !subroutine verror(STR)
 !   implicit none
 !   character(len=*),intent(in) :: STR
-!   call verror_F(s2c(STR))
+!   character(kind=C_CHAR,len=1) :: temp(len_trim(STR)+1)
+!   temp=s2c(str)
+!   call verror_F(temp)
 ! end subroutine verror
 !-------------------------------------------------------------------------------
 ! so fortran 77 does not have to have TYPE matrix
@@ -10240,6 +10358,7 @@ end subroutine boxtext
 !-------------------------------------------------------------------------------
 pure function s2c(string)  RESULT (array)
 ! ident_2="@(#) s2c(3fp) copy string(1 Clen(string)) to char array with null terminator"
+! fpm(1) is warning about temporary arrays as arguments which generates excessive messages, so create array temp
 character(len=*),intent(in)     :: string
    character(kind=C_CHAR,len=1) :: array(len_trim(string)+1)
    integer                      :: i
@@ -10277,7 +10396,7 @@ end function s2c
 !!    xs,ys,zs    scaling
 !!    xr,yr,zr    rotation in degrees
 !!    iobject     object to invoke
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program
 !!
@@ -10399,7 +10518,7 @@ end subroutine invokeobj
 !!    area that has the same aspect ratio, and set the background color to
 !!    the value mapped to color ICOLOR.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -10561,7 +10680,7 @@ end subroutine biggest_ortho2
 !!    YSIZE    Y size of requested window
 !!    ICOLOR   Color to set background.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -10616,7 +10735,7 @@ end subroutine page_rri
 !!    subroutine pop()
 !!##DESCRIPTION
 !!    call popviewport(), popmatrix(), popattributes()
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -10652,7 +10771,7 @@ end subroutine pop
 !!    are trimmed unless the entire variable is blank.
 !!##OPTIONS
 !!    g1-g9  intrinsic scalar values to plot at the current point.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -10790,7 +10909,7 @@ end function str
 !!     subroutine push()
 !!##DESCRIPTION
 !!    call pushattributes(), pushmatrix(), pushviewport()
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!    John S. Urban

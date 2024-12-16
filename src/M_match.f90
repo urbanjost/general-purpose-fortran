@@ -9,6 +9,9 @@
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
+!!
+!! Usage:
+!!
 !!    use M_match, only: match, amatch, getpat, makpat
 !!    use M_match, only: YES, MAXPAT, MAXARG, MAXLINE, EOS, NEWLINE, ERR
 !!
@@ -30,7 +33,7 @@
 !!        \\r  carriage return
 !!        \\t  tab
 !!        \\b  backspace
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -279,11 +282,11 @@ end function r2f
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! integer function getpat(str, pat)
+!!     integer function getpat(str, pat)
 !!##DESCRIPTION
 !!    convert str into pattern
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -326,12 +329,12 @@ end function getpat__
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! integer function addset(c, str, j, maxsiz)
+!!     integer function addset(c, str, j, maxsiz)
 !!##DESCRIPTION
 !!   put c in string(j) if it fits, increment
 !!##OPTIONS
 !!##RETURNS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -365,11 +368,11 @@ end function addset
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! subroutine dodash(valid, array, i, set, j, maxset)
+!!     subroutine dodash(valid, array, i, set, j, maxset)
 !!##DESCRIPTION
 !!    expand array(i-1)-array(i+1) into set(j)... from valid
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -407,7 +410,7 @@ end subroutine dodash
 !!##DESCRIPTION
 !!    look for c in char class at pat(offset)
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -462,7 +465,7 @@ end function locate
 !!    LIN  string to search for a match to the pattern
 !!    PAT  pattern generated from a BRE using getpat(3f) or makpat(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -547,11 +550,11 @@ end function match__
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! integer function patsiz(pat, n)
+!!     integer function patsiz(pat, n)
 !!##DESCRIPTION
 !!  returns size of pattern entry at pat(n)
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -590,12 +593,12 @@ end function patsiz
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! integer function stclos(pat, j, lastj, lastcl)
+!!     integer function stclos(pat, j, lastj, lastcl)
 !!##DESCRIPTION
 !!  insert CLOSURE entry at pat(j)
 !!##OPTIONS
 !!##RETURNS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -632,7 +635,7 @@ end function stclos
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! integer function getccl(arg, i, pat, j)
+!!     integer function getccl(arg, i, pat, j)
 !!##DESCRIPTION
 !!    expand char class at arg(i) into pat(j)
 !!##OPTIONS
@@ -640,7 +643,7 @@ end function stclos
 !!    I    index into ARG
 !!    PAT  encoded regular expression
 !!    J    .
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -682,11 +685,11 @@ end function getccl
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! subroutine filset(delim, array, i, set, j, maxset)
+!!     subroutine filset(delim, array, i, set, j, maxset)
 !!##DESCRIPTION
 !!   expand set at array(i) into set(j), stop at delim
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -735,9 +738,10 @@ end subroutine filset
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    integer function esc(array, i)
-!!    integer,intent(in) :: array(*)
-!!    integer            :: i
+!!     integer function esc(array, i)
+!!
+!!      integer,intent(in) :: array(*)
+!!      integer            :: i
 !!
 !!##DESCRIPTION
 !!    To support commonly used non-printable characters escaped strings are
@@ -762,7 +766,7 @@ end subroutine filset
 !!##RETURNS
 !!    ESC    The ADE for the substituted character
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -827,11 +831,11 @@ end function esc
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! integer function omatch(lin, i, pat, j)
+!!     integer function omatch(lin, i, pat, j)
 !!##DESCRIPTION
 !!    try to match a single pattern at pat(j)
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -926,7 +930,7 @@ end function omatch_
 !!    PAT            coded regular expression encoded by GETPAT(3f) or MAKPAT(3f)
 !!##RETURNS
 !!    LOC   returns location match was found or zero (0) if no match remains
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1044,11 +1048,11 @@ end function amatch__
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!! integer function makpat(arg, from, delim, pat)
+!!     integer function makpat(arg, from, delim, pat)
 !!##DESCRIPTION
 !!  make pattern from arg(from), terminate on delim
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!   John S. Urban
@@ -1136,7 +1140,7 @@ end function makpat_
 !!##DESCRIPTION
 !!    print message and stop program execution
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!    John S. Urban

@@ -10,7 +10,7 @@
 !!    The M_readline(3fm) module uses the ISO_C_BINDING module to create a
 !!    binding to the GNU readline(3c) procedure from Fortran programs.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    The test program is basically just a read loop that prompts for
@@ -100,7 +100,7 @@ contains
 !!    The system_readline(3f) uses the ISO_C_BINDING module to create a
 !!    binding to the GNU readline(3c) procedure from Fortran programs.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    The test program is basically just a read loop that prompts for

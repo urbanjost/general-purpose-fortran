@@ -29,25 +29,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    prep_template(1f) - [PREP] write a template of a prep source file
-!!    (LICENSE:MIT)
-!!##SYNOPSIS
-!!
-!!    prep_template [ --version| --help]
-!!##DESCRIPTION
-!!    A simple program that writes an example input file for prep(1).
-!!##OPTIONS
-!!   --version  display version and quit
-!!   --help     display help text and quit
-!!##EXAMPLE
-!!
-!!    prep_template
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    MIT License
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -64,7 +45,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180223>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2024-11-24 04:45:39 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:41:18 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

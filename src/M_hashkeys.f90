@@ -156,7 +156,7 @@ contains
 !!
 !!    If you found this useful, please let Mikael Leetmaa know.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1504,12 +1504,12 @@ end subroutine test_luhn_checksum
 !!
 !!##SYNOPSIS
 !!
-!!    function djb2_hash_arr(anything,continue) result(hash_128)
+!!     function djb2_hash_arr(anything,continue) result(hash_128)
 !!
-!!     class(*),intent(in)          :: anything(:)
-!!     logical,intent(in),optional  :: continue
-!!     !! use,intrinsic : ISO_FORTRAN_ENV, only : int64
-!!     integer(kind=int128)         :: hash_128
+!!      class(*),intent(in)          :: anything(:)
+!!      logical,intent(in),optional  :: continue
+!!      !! use,intrinsic : ISO_FORTRAN_ENV, only : int64
+!!      integer(kind=int128)         :: hash_128
 !!
 !!##DESCRIPTION
 !!     djb2_hash(3f) is based on the string hash routine commonly known as
@@ -1549,7 +1549,7 @@ end subroutine test_luhn_checksum
 !!##RETURNS
 !!     djb2_hash   A 128-bit INTEGER hash value for the (possibly accumulated) data.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -1641,11 +1641,11 @@ end function djb2_hash_scalar
 !!
 !!##SYNOPSIS
 !!
-!!   function crc32_hash(a,continue) result (crc)
+!!     function crc32_hash(a,continue) result (crc)
 !!
-!!    class(*),intent(in)          :: anything(:)
-!!    logical,intent(in),optional  :: continue
-!!    integer(int64)               :: crc_out
+!!      class(*),intent(in)          :: anything(:)
+!!      logical,intent(in),optional  :: continue
+!!      integer(int64)               :: crc_out
 !!
 !!##DESCRIPTION
 !!    This ia 32-bit version of the Cyclic Redundancy Check(CRC).
@@ -1676,7 +1676,7 @@ end function djb2_hash_scalar
 !!##AUTHOR
 !!    This was derived from an unattributed example on http://rosettacode.org,
 !!    but has been modified.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1804,12 +1804,13 @@ end function crc32_hash_scalar
 !!
 !!##SYNOPSIS
 !!
-!!    use,intrinsic : ISO_FORTRAN_ENV, only : int64
-!!    function sdbm_hash_arr(anything,continue) result(hash_128)
+!!     use,intrinsic : ISO_FORTRAN_ENV, only : int64
 !!
-!!     class(*),intent(in)          :: anything(:)
-!!     logical,intent(in),optional  :: continue
-!!     integer(kind=int128)         :: hash_128
+!!      function sdbm_hash_arr(anything,continue) result(hash_128)
+!!
+!!       class(*),intent(in)          :: anything(:)
+!!       logical,intent(in),optional  :: continue
+!!       integer(kind=int128)         :: hash_128
 !!
 !!##DESCRIPTION
 !!    sdbm_hash(3f) is based on the string hash routine commonly known as
@@ -1863,7 +1864,7 @@ end function crc32_hash_scalar
 !!##RETURNS
 !!     sdbm_hash   A 128-bit INTEGER hash value for the (possibly accumulated) data.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -2003,11 +2004,11 @@ end function djb2
 !!
 !!##SYNOPSIS
 !!
-!!   function b3hs_hash_key_jenkins (key, range) result (code)
+!!     function b3hs_hash_key_jenkins (key, range) result (code)
 !!
-!!    character(*), intent(in) :: key
-!!    integer, intent(in)      :: range
-!!    integer                  :: code
+!!      character(*), intent(in) :: key
+!!      integer, intent(in)      :: range
+!!      integer                  :: code
 !!
 !!##DESCRIPTION
 !!   Based on implementation of Bob Jenkins hash function by Rich Townsen,

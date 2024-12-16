@@ -1,91 +1,88 @@
 module M_ephemeris
 contains
-!>
-!!##NAME
-!!    ephemeris(3f) - [M_time] ephemeris position of planets for adjusting an equatorial telescope
-!!    (LICENSE:???)
-!!
-!!##SYNOPSIS
-!!
-!!    subroutine ephemeris(itime,planet,declination_d,declination_m,declination_compass,ascent_hours,ascent_minutes)
-!!
-!!     integer,intent(in)           :: itime(8)
-!!     class(*),intent(in)          :: planet
-!!      !!integer                   :: planet
-!!      !!character(len=*)          :: planet
-!!
-!!     integer,intent(out)          :: declination_d, declination_m
-!!     character(len=1),intent(out) :: declination_compass
-!!     integer,intent(out)          :: ascent_hours,ascent_minutes
-!!
-!!##DESCRIPTION
-!!    ephemeris(3f) calculates the ephemeris of a planet in our solar system
-!!    in order to adjust an equatorial telescope.
-!!
-!!     Ref.: "Mathematiques par l'informatique individuelle
-!!           - Programmes en BASIC, MASSON,
-!!           Paris, 1982, p 100 - 105" [BIBLI 06].
-!!
-!!##OPTIONS
-!!      itime   provide the date and time using the same eight values used
-!!              by the DATE_AND_TIME(3f) intrinsic.
-!!
-!!              1. The year
-!!              2. The month
-!!              3. The day of the month
-!!              4. Time difference with UTC in minutes
-!!              5. The hour of the day
-!!              6. The minutes of the hour
-!!              7. The seconds of the minute
-!!              8. The milliseconds of the second
-!!
-!!      planet  Planet number  1 to 8  or planet name (Mercury:1 Venus:2
-!!              Mars:4 Jupiter:5 Saturn:6 Uranus:7 Neptune:8)
-!!
-!!##RESULTS
-!!    declination_d,        :
-!!    declination_m,        :
-!!    declination_compass   Declination in degrees and minutes (-90 to 90 North or South)
-!!    ascent_hours,         :
-!!    ascent_minutes        Ascent in hours (0 to 24) and minutes
-!!
-!!##EXAMPLE
-!!
-!!    Find ascent and declination of planet Mars on March 10th, 1982 at 6h UT
-!!
-!!      program demo_ephemeris
-!!      use M_time, only : ephemeris, fmtdate
-!!      implicit none
-!!      integer            :: itime(8)
-!!      integer            :: planet
-!!      integer            :: declination_d, declination_m
-!!      character(len=1)   :: declination_compass
-!!      integer            :: ascent_hours, ascent_minutes
-!!
-!!      planet=4
-!!      itime=[1982,3,10,0,6,0,0,0]
-!!      call ephemeris(itime, planet,                    &
-!!      declination_d,declination_m,declination_compass, &
-!!      ascent_hours,ascent_minutes)
-!!
-!!      write(*, '(" For: ",a)')fmtdate(itime)
-!!      write(*, "(' Planet: ',I1,1X)",advance='no')                       &
-!!              planet
-!!      write(*, "(' Ascent: ',I2,' H ',I2,' MN',1X)",advance='no')        &
-!!              ascent_hours, ascent_minutes
-!!      write(*, "(' Declination: ',I2,' D ',I2,' MN ',A1)",advance='yes') &
-!!              declination_d, declination_m, declination_compass
-!!
-!!      end program demo_ephemeris
-!!
-!!    Expected output:
-!!
-!!      For: Wednesday, March 10th, 1982 6:00:00 AM UTC+00:00
-!!      Planet: 4  Ascent: 13 H  8 MN  Declination:  3 D 45 MN S
-!!
-!!##AUTHOR
-!!    o F90 Version By J-P Moreau, Paris. (www.jpmoreau.fr)
-!!    o Revised By John S. Urban, 20170910
+! NAME
+!    ephemeris(3f) - [M_time] ephemeris position of planets for adjusting an equatorial telescope
+!    (LICENSE:???)
+! 
+! SYNOPSIS
+!    subroutine ephemeris(itime,planet,declination_d,declination_m,declination_compass,ascent_hours,ascent_minutes)
+! 
+!     integer,intent(in)           :: itime(8)
+!     class(*),intent(in)          :: planet
+!      !!integer                   :: planet
+!      !!character(len=*)          :: planet
+! 
+!     integer,intent(out)          :: declination_d, declination_m
+!     character(len=1),intent(out) :: declination_compass
+!     integer,intent(out)          :: ascent_hours,ascent_minutes
+! 
+! DESCRIPTION
+!    ephemeris(3f) calculates the ephemeris of a planet in our solar system
+!    in order to adjust an equatorial telescope.
+! 
+!     Ref.: "Mathematiques par l'informatique individuelle
+!           - Programmes en BASIC, MASSON,
+!           Paris, 1982, p 100 - 105" [BIBLI 06].
+! 
+! OPTIONS
+!      itime   provide the date and time using the same eight values used
+!              by the DATE_AND_TIME(3f) intrinsic.
+! 
+!              1. The year
+!              2. The month
+!              3. The day of the month
+!              4. Time difference with UTC in minutes
+!              5. The hour of the day
+!              6. The minutes of the hour
+!              7. The seconds of the minute
+!              8. The milliseconds of the second
+! 
+!      planet  Planet number  1 to 8  or planet name (Mercury:1 Venus:2
+!              Mars:4 Jupiter:5 Saturn:6 Uranus:7 Neptune:8)
+! 
+! RESULTS
+!    declination_d,        :
+!    declination_m,        :
+!    declination_compass   Declination in degrees and minutes (-90 to 90 North or South)
+!    ascent_hours,         :
+!    ascent_minutes        Ascent in hours (0 to 24) and minutes
+! 
+! EXAMPLE
+!    Find ascent and declination of planet Mars on March 10th, 1982 at 6h UT
+! 
+!      program demo_ephemeris
+!      use M_time, only : ephemeris, fmtdate
+!      implicit none
+!      integer            :: itime(8)
+!      integer            :: planet
+!      integer            :: declination_d, declination_m
+!      character(len=1)   :: declination_compass
+!      integer            :: ascent_hours, ascent_minutes
+! 
+!      planet=4
+!      itime=[1982,3,10,0,6,0,0,0]
+!      call ephemeris(itime, planet,                    &
+!      declination_d,declination_m,declination_compass, &
+!      ascent_hours,ascent_minutes)
+! 
+!      write(*, '(" For: ",a)')fmtdate(itime)
+!      write(*, "(' Planet: ',I1,1X)",advance='no')                       &
+!              planet
+!      write(*, "(' Ascent: ',I2,' H ',I2,' MN',1X)",advance='no')        &
+!              ascent_hours, ascent_minutes
+!      write(*, "(' Declination: ',I2,' D ',I2,' MN ',A1)",advance='yes') &
+!              declination_d, declination_m, declination_compass
+! 
+!      end program demo_ephemeris
+! 
+!    Expected output:
+! 
+!      For: Wednesday, March 10th, 1982 6:00:00 AM UTC+00:00
+!      Planet: 4  Ascent: 13 H  8 MN  Declination:  3 D 45 MN S
+! 
+! AUTHOR
+!    o F90 Version By J-P Moreau, Paris. (www.jpmoreau.fr)
+!    o Revised By John S. Urban, 20170910
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -409,64 +406,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!
-!!    planets(1f) - [FUNIX] ephemeris position of planets for adjusting an equatorial telescope
-!!
-!!##SYNOPSIS
-!!
-!!
-!!    planets yyyy mm dd utc hh mm ss [ -planet [N|name] ]
-!!
-!!##DESCRIPTION
-!!
-!!    planets(1) calculates the ephemeris of a planet in our solar system
-!!    in order to  adjust an equatorial telescope. See ephemeris(3f) for
-!!    more details. The outputs are
-!!
-!!      o Ascent in hours (0 to 24) and minutes (0 to 60)
-!!      o Declination in degrees and minutes (-90 to 90 North or South)
-!!
-!!##OPTIONS
-!!
-!!      date    provide the same eight values used by the DATE_AND_TIME(3f)
-!!              intrinsic.
-!!
-!!              value(1)  The year
-!!              value(2)  The month
-!!              value(3)  The day of the month
-!!              value(4)  Time difference with UTC in minutes
-!!              value(5)  The hour of the day
-!!              value(6)  The minutes of the hour
-!!              value(7)  The seconds of the minute
-!!              value(8)  The milliseconds of the second
-!!
-!!      N|Name  Planet numbers in range 1 to 8 (Mercury:1 Venus:2 Mars:4
-!!              Jupiter:5 Saturn:6 Uranus:7 Neptune:8). If not specified
-!!              the default is "1 2 4 5 6 7 8".
-!!
-!!##EXAMPLE
-!!
-!!    (Find ascent and declination of planet Mars on March 10th, 1982 at 6h UT)
-!!
-!!     planets 1982 03 10 00 06 00 00 00  -planet  4
-!!
-!!      Wednesday, March 10th, 1982 6:00:00 AM UTC+00:00
-!!      Planet: 4  Ascent: 13 H  8 MN  Declination:  3 D 45 MN S
-!!
-!!     no planet number(s) specified:
-!!
-!!     planets 1982 03 10 00 06 00 00 00
-!!
-!!      Wednesday, March 10th, 1982 6:00:00 AM UTC+00:00
-!!      Planet: 1  Ascent: 21 H 51 MN  Declination: 14 D 45 MN S
-!!      Planet: 2  Ascent: 20 H 26 MN  Declination: 14 D 57 MN S
-!!      Planet: 4  Ascent: 13 H  8 MN  Declination:  3 D 45 MN S
-!!      Planet: 5  Ascent: 14 H 32 MN  Declination: 13 D 30 MN S
-!!      Planet: 6  Ascent: 13 H 22 MN  Declination:  5 D 42 MN S
-!!      Planet: 7  Ascent: 16 H 11 MN  Declination: 20 D 54 MN S
-!!      Planet: 8  Ascent: 17 H 46 MN  Declination: 22 D  7 MN S
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -482,7 +421,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    ephemeris position of planets for adjusting an equitorial telescope>',&
 '@(#)VERSION:        1.0, 20170910>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2024-11-24 04:43:23 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:36:34 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

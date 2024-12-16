@@ -101,7 +101,7 @@ contains
 !!##RETURNS
 !!    almost   TRUE if the input values compare up to the specified number
 !!             of values
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample:
 !!
@@ -276,7 +276,7 @@ end function almost
 !!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
 !!    here the accuracy reported is -0.30103000.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Example program:
@@ -463,7 +463,7 @@ END SUBROUTINE sp_accdig
 !!    two numbers which do not agree in sign in X=-1.2345678 and Y=1.2345678;
 !!    here the accuracy reported is -0.30103000.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Example program:
@@ -611,7 +611,7 @@ end subroutine accdig
 !!   measured_value   Second value
 !!   allowed_margin   Allowed relative margin
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -765,7 +765,7 @@ end function round
 !!                                   which may correspond to one of the
 !!                                   other modes.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program
 !!

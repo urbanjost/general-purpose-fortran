@@ -1,6 +1,6 @@
      program demo_rect
      use M_calcomp, only : plots, plot, newpen, rect
-     use M_calcomp, only : END,MOVE,DRAW
+     use M_calcomp, only : END,MOVE
      implicit none
      real  :: xmax=8.5,ymax=7.0
      real  :: xstart=2.5, ystart=1.0 ! lower left corner before rotation

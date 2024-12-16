@@ -2037,7 +2037,7 @@ CONTAINS
 !! effect when the routine is entered, and restore these settings before
 !! returning from the routine.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !! An example is:

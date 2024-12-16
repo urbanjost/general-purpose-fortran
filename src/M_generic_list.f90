@@ -42,6 +42,8 @@
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
+!! Usage:
+!!
 !!   public :: list_node_t, list_data
 !!   public :: list_init, list_free
 !!   public :: list_insert, list_put, list_get, list_next
@@ -62,7 +64,7 @@
 !!     Department of Economics, Duke University
 !!     May18,2009
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -134,8 +136,6 @@ public :: list_node_t, list_data
 public :: list_init, list_free
 public :: list_insert, list_put, list_get, list_next
 
-public test_suite_M_generic_list
-
 ! A public variable used as a MOLD for transfer()
 integer, dimension(:), allocatable :: list_data
 
@@ -156,10 +156,10 @@ contains
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine list_init(self, data)
+!!     subroutine list_init(self, data)
 !!
-!!     type(list_node_t), pointer :: self
-!!     integer, dimension(:), intent(in), optional :: data
+!!      type(list_node_t), pointer :: self
+!!      integer, dimension(:), intent(in), optional :: data
 !!##DESCRIPTION
 !!    Initialize a head node SELF and optionally store the provided DATA.
 !!
@@ -172,7 +172,7 @@ contains
 !!##SEE ALSO
 !!   M_generic_list(3fm), list_free(3f)
 !!   list_insert(3f), list_put(3f), list_get(3f), list_next(3f)
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -269,7 +269,7 @@ end subroutine list_init
 !!##SEE ALSO
 !!   M_generic_list(3fm), list_init(3f)
 !!   list_insert(3f), list_put(3f), list_get(3f), list_next(3f)
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -367,11 +367,11 @@ end subroutine list_free
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine list_insert(self, data)
+!!     subroutine list_insert(self, data)
 !!
-!!     type(list_node_t), pointer :: self
-!!     integer, dimension(:), intent(in), optional :: data
-!!     type(list_node_t), pointer :: next
+!!      type(list_node_t), pointer :: self
+!!      integer, dimension(:), intent(in), optional :: data
+!!      type(list_node_t), pointer :: next
 !!
 !!##DESCRIPTION
 !!##AUTHOR
@@ -383,7 +383,7 @@ end subroutine list_free
 !!##SEE ALSO
 !!   M_generic_list(3fm), list_init(3f), list_free(3f)
 !!   list_put(3f), list_get(3f), list_next(3f)
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -481,10 +481,10 @@ end subroutine list_insert
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    subroutine list_put(self, data)
+!!     subroutine list_put(self, data)
 !!
-!!     type(list_node_t), pointer :: self
-!!     integer, dimension(:), intent(in) :: data
+!!      type(list_node_t), pointer :: self
+!!      integer, dimension(:), intent(in) :: data
 !!##DESCRIPTION
 !!##AUTHOR
 !!    Fortran 95 Implementation by:
@@ -495,7 +495,7 @@ end subroutine list_insert
 !!##SEE ALSO
 !!   M_generic_list(3fm), list_init(3f), list_free(3f)
 !!   list_insert(3f), list_get(3f), list_next(3f)
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -586,10 +586,10 @@ end subroutine list_put
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    function list_get(self) result(data)
+!!     function list_get(self) result(data)
 !!
-!!     type(list_node_t), pointer :: self
-!!     integer, dimension(:), pointer :: data
+!!      type(list_node_t), pointer :: self
+!!      integer, dimension(:), pointer :: data
 !!
 !!##DESCRIPTION
 !!    Return the DATA stored in the node SELF
@@ -602,7 +602,7 @@ end subroutine list_put
 !!##SEE ALSO
 !!   M_generic_list(3fm), list_init(3f), list_free(3f)
 !!   list_insert(3f), list_put(3f), list_next(3f)
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -689,10 +689,10 @@ end function list_get
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    function list_next(self)
+!!     function list_next(self)
 !!
-!!     type(list_node_t), pointer :: self
-!!     type(list_node_t), pointer :: list_next
+!!      type(list_node_t), pointer :: self
+!!      type(list_node_t), pointer :: list_next
 !!
 !!##DESCRIPTION
 !!##AUTHOR
@@ -704,7 +704,7 @@ end function list_get
 !!##SEE ALSO
 !!   M_generic_list(3fm), list_init(3f), list_free(3f)
 !!   list_insert(3f), list_put(3f), list_get(3f)
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -782,65 +782,6 @@ type(list_node_t), pointer :: list_next
     list_next => self%next
 
 end function list_next
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_generic_list()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg,unit_check_level
-
-!! setup
-   call test_list_free()
-   call test_list_get()
-   call test_list_init()
-   call test_list_insert()
-   call test_list_next()
-   call test_list_put()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_list_free()
-
-   call unit_check_start('list_free',msg='')
-   !!call unit_check('list_free', 0.eq.0, 'checking',100)
-   call unit_check_done('list_free',msg='')
-end subroutine test_list_free
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_list_get()
-
-   call unit_check_start('list_get',msg='')
-   !!call unit_check('list_get', 0.eq.0, 'checking',100)
-   call unit_check_done('list_get',msg='')
-end subroutine test_list_get
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_list_init()
-
-   call unit_check_start('list_init',msg='')
-   !!call unit_check('list_init', 0.eq.0, 'checking',100)
-   call unit_check_done('list_init',msg='')
-end subroutine test_list_init
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_list_insert()
-
-   call unit_check_start('list_insert',msg='')
-   !!call unit_check('list_insert', 0.eq.0, 'checking',100)
-   call unit_check_done('list_insert',msg='')
-end subroutine test_list_insert
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_list_next()
-
-   call unit_check_start('list_next',msg='')
-   !!call unit_check('list_next', 0.eq.0, 'checking',100)
-   call unit_check_done('list_next',msg='')
-end subroutine test_list_next
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_list_put()
-
-   call unit_check_start('list_put',msg='')
-   !!call unit_check('list_put', 0.eq.0, 'checking',100)
-   call unit_check_done('list_put',msg='')
-end subroutine test_list_put
-!===================================================================================================================================
-end subroutine test_suite_M_generic_list
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

@@ -38,7 +38,7 @@
 !! transferring small amounts of data between programs or assisting in
 !! debugging and development, unit testing and macro-level timing.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -795,7 +795,7 @@ end subroutine usersub_placeholder
 !!    If a CMD is passed and no previous initialization call was made the
 !!    scratch space will be allocated to 200000.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Example 1:
@@ -6697,7 +6697,7 @@ end function mat_eqid
 !!
 !!##RETURNS
 !!     ifin_lala  TRUE if varname exists in lala, else FALSE.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample program:
 !!
@@ -6774,7 +6774,7 @@ end function ifin_lala
 !!           May be a scalar, vector, or MxN matrix.
 !!    IERR   Zero if no error occurred
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample program:
 !!
@@ -6934,7 +6934,7 @@ end function rowpack
 !!##RETURNS
 !!    IERR   Zero if no error occurred
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample program:
 !!

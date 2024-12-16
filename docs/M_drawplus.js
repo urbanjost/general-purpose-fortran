@@ -4,6 +4,7 @@ append("arrowhead.3m_drawplus.html");
 append("call_draw.3m_drawplus.html");
 append("draw_interpret.3m_drawplus.html");
 append("ellipse.3m_drawplus.html");
+append("plain_rect.3m_drawplus.html");
 append("polyline2.3m_drawplus.html");
 append("rdbox.3m_drawplus.html");
 append("rdpnt.3m_drawplus.html");

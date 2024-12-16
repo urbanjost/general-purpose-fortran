@@ -19,7 +19,7 @@
 !!    Pixel          Pixel values 0 to ncol
 !!    ColorMap       Color map (RGB 0:255 for colours 0:ncol)
 !!    Transparent    Optional
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample call:
 !!

@@ -771,26 +771,33 @@ end subroutine julfit1
 !!     Murray Hill NJ 07974
 !>
 !! AUTHOR:     Bill Cleveland
-subroutine lowess(x, y, n, f, nsteps, delta, ys, rw, res)
-use M_sort, only : sort_shell
-! ident_4="@(#) M_math lowess(3f) data smoothing using locally weighted regression"
-integer n
-integer nsteps
-real x(n), y(n), f, delta, ys(n), rw(n)
-real res(n)
-integer nright, i, j, iter, last, m1, m2, ns, nleft
-real cut, cmad, r, d1, d2
-real c1, c9, alpha, denom
-logical ok
-      if (n .ge. 2) goto 1
-         ys(1) = y(1)
-         return
+SUBROUTINE lowess(X,Y,N,F,Nsteps,Delta,Ys,Rw,Res)
+   USE m_sort , only:sort_shell
+   IMPLICIT NONE
+   INTEGER N
+   INTEGER Nsteps
+   REAL X(N) , Y(N) , F , Delta , Ys(N) , Rw(N)
+   REAL Res(N)
+   INTEGER nright , i , j , iter , last , m1 , m2 , ns , nleft
+   REAL cut , cmad , r , d1 , d2
+   REAL c1 , c9 , alpha , denom
+   LOGICAL ok
+   INTEGER :: spag_nextblock_1
+   spag_nextblock_1 = 1
+   SPAG_DispatchLoop_1: DO
+      SELECT CASE (spag_nextblock_1)
+      CASE (1)
+         IF ( N>=2 ) THEN
 ! at least two, at most n points
-   1  ns = max0(min0(int(f*float(n)), n), 2)
-      iter = 1
-         goto  3
-   2     iter = iter+1
-   3     if (iter .gt. nsteps+1) goto  22
+            ns = max0(min0(int(F*float(N)),N),2)
+            iter = 1
+         ELSE
+            Ys(1) = Y(1)
+            RETURN
+         ENDIF
+         spag_nextblock_1 = 2
+      CASE (2)
+         IF ( iter>Nsteps+1 ) RETURN
 ! robustness iterations
          nleft = 1
          nright = ns
@@ -798,155 +805,165 @@ logical ok
          last = 0
 ! index of current point
          i = 1
-   4        if (nright .ge. n) goto  5
+         spag_nextblock_1 = 3
+      CASE (3)
+         SPAG_Loop_1_1: DO WHILE ( nright<N )
 ! move nleft, nright to right if radius decreases
-               d1 = x(i)-x(nleft)
+            d1 = X(i) - X(nleft)
 ! if d1<=d2 with x(nright+1)==x(nright), lowest fixes
-               d2 = x(nright+1)-x(i)
-               if (d1 .le. d2) goto  5
+            d2 = X(nright+1) - X(i)
+            IF ( d1<=d2 ) EXIT SPAG_Loop_1_1
 ! radius will not decrease by move right
-               nleft = nleft+1
-               nright = nright+1
-               goto  4
+            nleft = nleft + 1
+            nright = nright + 1
+         ENDDO SPAG_Loop_1_1
 ! fitted value at x(i)
-   5        call lowest(x, y, n, x(i), ys(i), nleft, nright, res, iter .gt. 1, rw, ok)
-            if (.not. ok) ys(i) = y(i)
+         CALL lowest(X,Y,N,X(i),Ys(i),nleft,nright,Res,iter>1,Rw,ok)
+         IF ( .NOT.ok ) Ys(i) = Y(i)
 ! all weights zero - copy over value (all rw==0)
-            if (last .ge. i-1) goto 9
-               denom = x(i)-x(last)
+         IF ( last<i-1 ) THEN
+            denom = X(i) - X(last)
 ! skipped points -- interpolate
 ! non-zero - proof?
-               j = last+1
-                  goto  7
-   6              j = j+1
-   7              if (j .ge. i) goto  8
-                  alpha = (x(j)-x(last))/denom
-                  ys(j) = alpha*ys(i)+(1.0-alpha)*ys(last)
-                  goto  6
-   8           continue
+            j = last + 1
+            DO WHILE ( j<i )
+               alpha = (X(j)-X(last))/denom
+               Ys(j) = alpha*Ys(i) + (1.0-alpha)*Ys(last)
+               j = j + 1
+            ENDDO
+         ENDIF
 ! last point actually estimated
-   9        last = i
+         last = i
 ! x coord of close points
-            cut = x(last)+delta
-            i = last+1
-               goto  11
-  10           i = i+1
-  11           if (i .gt. n) goto  13
+         cut = X(last) + Delta
+         i = last + 1
+         SPAG_Loop_1_2: DO WHILE ( i<=N )
 ! find close points
-               if (x(i) .gt. cut) goto  13
+            IF ( X(i)>cut ) EXIT SPAG_Loop_1_2
 ! i one beyond last pt within cut
-               if (x(i) .ne. x(last)) goto 12
-                  ys(i) = ys(last)
+            IF ( X(i)==X(last) ) THEN
+               Ys(i) = Ys(last)
 ! exact match in x
-                  last = i
-  12           continue
-               goto  10
+               last = i
+            ENDIF
+            i = i + 1
+         ENDDO SPAG_Loop_1_2
 ! back 1 point so interpolation within delta, but always go forward
-  13        i = max0(last+1, i-1)
-            if (last .lt. n) goto  4
+         i = max0(last+1,i-1)
+         IF ( last<N ) THEN
+            spag_nextblock_1 = 3
+            CYCLE SPAG_DispatchLoop_1
+         ENDIF
 ! residuals
-         do  15 i = 1, n
-            res(i) = y(i)-ys(i)
-  15        continue
-         if (iter .gt. nsteps) goto  22
+         DO i = 1 , N
+            Res(i) = Y(i) - Ys(i)
+         ENDDO
+         IF ( iter<=Nsteps ) THEN
 ! compute robustness weights except last time
-         do  16 i = 1, n
-            rw(i) = abs(res(i))
-  16        continue
-         call sort_shell(rw, order='A')             ! sort in ascending order
-         m1 = n/2+1
-         m2 = n-m1+1
+            DO i = 1 , N
+               Rw(i) = abs(Res(i))
+            ENDDO
+            CALL sort_shell(Rw,order='A')           ! sort in ascending order
+            m1 = N/2 + 1
+            m2 = N - m1 + 1
 ! 6 median abs resid
-         cmad = 3.0*(rw(m1)+rw(m2))
-         c9 = .999*cmad
-         c1 = .001*cmad
-         do  21 i = 1, n
-            r = abs(res(i))
-            if (r .gt. c1) goto 17
-               rw(i) = 1.
+            cmad = 3.0*(Rw(m1)+Rw(m2))
+            c9 = .999*cmad
+            c1 = .001*cmad
+            DO i = 1 , N
+               r = abs(Res(i))
+               IF ( r<=c1 ) THEN
 ! near 0, avoid underflow
-               goto  20
-  17           if (r .le. c9) goto 18
-                  rw(i) = 0.
+                  Rw(i) = 1.
+               ELSEIF ( r<=c9 ) THEN
+                  Rw(i) = (1.0-(r/cmad)**2)**2
+               ELSE
 ! near 1, avoid underflow
-                  goto  19
-  18              rw(i) = (1.0-(r/cmad)**2)**2
-  19        continue
-  20        continue
-  21        continue
-         goto  2
-  22  return
-end subroutine lowess
-subroutine lowest(x, y, n, xs, ys, nleft, nright, w, userw, rw, ok)
-integer n
-integer nleft, nright
-real x(n), y(n), xs, ys, w(n), rw(n)
-logical userw, ok
-integer nrt, j
-real a, b, c, h, r
-real h1, sqrt, h9, amax1, range
-   range = x(n)-x(1)
-   h = amax1(xs-x(nleft), x(nright)-xs)
+                  Rw(i) = 0.
+               ENDIF
+            ENDDO
+            iter = iter + 1
+            spag_nextblock_1 = 2
+            CYCLE SPAG_DispatchLoop_1
+         ENDIF
+         EXIT SPAG_DispatchLoop_1
+      END SELECT
+   ENDDO SPAG_DispatchLoop_1
+END SUBROUTINE lowess
+
+SUBROUTINE lowest(X,Y,N,Xs,Ys,Nleft,Nright,W,Userw,Rw,Ok)
+   IMPLICIT NONE
+   INTEGER N
+   INTEGER Nleft , Nright
+   REAL X(N) , Y(N) , Xs , Ys , W(N) , Rw(N)
+   LOGICAL Userw , Ok
+   INTEGER nrt , j
+   REAL a , b , c , h , r
+   REAL h1 , sqrt , h9 , amax1 , range
+   range = X(N) - X(1)
+   h = amax1(Xs-X(Nleft),X(Nright)-Xs)
    h9 = .999*h
    h1 = .001*h
 ! sum of weights
    a = 0.0
-   j = nleft
-         goto  2
-   1     j = j+1
-   2     if (j .gt. n) goto  7
+   j = Nleft
+   SPAG_Loop_1_1: DO WHILE ( j<=N )
 ! compute weights (pick up all ties on right)
-         w(j) = 0.
-         r = abs(x(j)-xs)
-         if (r .gt. h9) goto 5
-            if (r .le. h1) goto 3
-               w(j) = (1.0-(r/h)**3)**3
-! small enough for non-zero weight
-               goto  4
-   3           w(j) = 1.
-   4        if (userw) w(j) = rw(j)*w(j)
-            a = a+w(j)
-            goto  6
-   5        if (x(j) .gt. xs) goto  7
+      W(j) = 0.
+      r = abs(X(j)-Xs)
+      IF ( r>h9 ) THEN
+         IF ( X(j)>Xs ) EXIT SPAG_Loop_1_1
+         j = j + 1
 ! get out at first zero wt on right
-   6     continue
-         goto  1
+      ELSE
+         IF ( r<=h1 ) THEN
+            W(j) = 1.
+         ELSE
+! small enough for non-zero weight
+            W(j) = (1.0-(r/h)**3)**3
+         ENDIF
+         IF ( Userw ) W(j) = Rw(j)*W(j)
+         a = a + W(j)
+         j = j + 1
+      ENDIF
+   ENDDO SPAG_Loop_1_1
 ! rightmost pt (may be greater than nright because of ties)
-   7  nrt = j-1
-      if (a .gt. 0.0) goto 8
-         ok = .false.
-         goto  16
-   8     ok = .true.
+   nrt = j - 1
+   IF ( a>0.0 ) THEN
+      Ok = .TRUE.
 ! weighted least squares
-         do  9 j = nleft, nrt
+      DO j = Nleft , nrt
 ! make sum of w(j) == 1
-            w(j) = w(j)/a
-   9        continue
-         if (h .le. 0.) goto 14
-            a = 0.0
+         W(j) = W(j)/a
+      ENDDO
+      IF ( h>0. ) THEN
+         a = 0.0
 ! use linear fit
-            do  10 j = nleft, nrt
+         DO j = Nleft , nrt
 ! weighted center of x values
-               a = a+w(j)*x(j)
-  10           continue
-            b = xs-a
-            c = 0.0
-            do  11 j = nleft, nrt
-               c = c+w(j)*(x(j)-a)**2
-  11           continue
-            if (sqrt(c) .le. .001*range) goto 13
-               b = b/c
+            a = a + W(j)*X(j)
+         ENDDO
+         b = Xs - a
+         c = 0.0
+         DO j = Nleft , nrt
+            c = c + W(j)*(X(j)-a)**2
+         ENDDO
+         IF ( sqrt(c)>.001*range ) THEN
+            b = b/c
 ! points are spread out enough to compute slope
-               do  12 j = nleft, nrt
-                  w(j) = w(j)*(b*(x(j)-a)+1.0)
-  12              continue
-  13        continue
-  14     ys = 0.0
-         do  15 j = nleft, nrt
-            ys = ys+w(j)*y(j)
-  15        continue
-  16  return
-end subroutine lowest
+            DO j = Nleft , nrt
+               W(j) = W(j)*(b*(X(j)-a)+1.0)
+            ENDDO
+         ENDIF
+      ENDIF
+      Ys = 0.0
+      DO j = Nleft , nrt
+         Ys = Ys + W(j)*Y(j)
+      ENDDO
+   ELSE
+      Ok = .FALSE.
+   ENDIF
+END SUBROUTINE lowest
 !>
 !!##NAME
 !!    splift(3f) - [M_math:fit] fits a spline to the n data points given in x and y
@@ -1029,13 +1046,13 @@ end subroutine lowest
 !! AUTHOR:         John S. Urban
 !! REPORTING BUGS: http://www.urbanjost.altervista.org/
 !===================================================================================================================================
-SUBROUTINE SPLIFT(X,Y,YP,YPP,N,ierr,a1,b1,an,bn)
+subroutine splift(x,y,yp,ypp,n,ierr,a1,b1,an,bn)
 !-----------------------------------------------------------------------------------------------------------------------------------
 use M_framework__journal, only : journal
-! ident_5="@(#) M_math splift(3f) fits a spline to the n data points given in x and y"
-integer,intent(in)            :: N
-real,intent(in)               :: X(N),Y(N)
-real,intent(out)              :: YP(N),YPP(N)
+! ident_4="@(#) M_math splift(3f) fits a spline to the n data points given in x and y"
+integer,intent(in)            :: n
+real,intent(in)               :: x(n),y(n)
+real,intent(out)              :: yp(n),ypp(n)
 integer,intent(out)           :: ierr           ! error status.
 real,intent(in)               :: a1
 real,intent(in)               :: b1
@@ -1045,10 +1062,10 @@ real,intent(in)               :: bn
    character(len=255)         :: ctemp
    real                       :: w(n,3)         ! w is a work array that must be able to hold at least N*3 numbers
    integer                    :: i, j
-   integer                    :: NM1
-   integer                    :: NM2
-   real                       :: DOLD
-   real                       :: DNEW
+   integer                    :: nm1
+   integer                    :: nm2
+   real                       :: dold
+   real                       :: dnew
 !-----------------------------------------------------------------------------------------------------------------------------------
    if (n.lt.4) then
       ierr=1
@@ -1056,75 +1073,75 @@ real,intent(in)               :: bn
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   DO I=2,N     ! make sure x(:) values are increasing monotonically
-      IF ( (X(I)-X(I-1)) .gt. 0 ) cycle
-      IERR=2
+   do i=2,n     ! make sure x(:) values are increasing monotonically
+      if ( (x(i)-x(i-1)) .gt. 0 ) cycle
+      ierr=2
       call journal('sc','*splift* abscissa not strictly increasing, index=',i)
       write(ctemp,"('*splift* x,y=',g20.13,1x,g20.13)")x(i),y(i)
       call journal(ctemp)
       return
    enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
-      NM1  = N-1                                                          ! SPLITF.62
-      NM2  = N-2                                                          ! SPLITF.63
+      nm1  = n-1                                                          ! SPLITF.62
+      nm2  = n-2                                                          ! SPLITF.63
 !-----------------------------------------------------------------------------------------------------------------------------------
 !     DEFINE THE TRIDIAGONAL MATRIX                                       ! SPLITF.68
 !                                                                         ! SPLITF.69
-      W(1,3) = X(2)-X(1)                                                  ! SPLITF.70
-      DO I=2,NM1                                                          ! SPLITF.71
-         W(I,2) = W(I-1,3)                                                ! SPLITF.72
-         W(I,3) = X(I+1)-X(I)                                             ! SPLITF.73
-         W(I,1) = 2.0*(W(I,2)+W(I,3))                                     ! SPLITF.74
+      w(1,3) = x(2)-x(1)                                                  ! SPLITF.70
+      do i=2,nm1                                                          ! SPLITF.71
+         w(i,2) = w(i-1,3)                                                ! SPLITF.72
+         w(i,3) = x(i+1)-x(i)                                             ! SPLITF.73
+         w(i,1) = 2.0*(w(i,2)+w(i,3))                                     ! SPLITF.74
       enddo
-      W(1,1) = 4.0                                                        ! SPLITF.75
-      W(1,3) =-4.0*A1                                                     ! SPLITF.76
-      W(N,1) = 4.0                                                        ! SPLITF.77
-      W(N,2) =-4.0*AN                                                     ! SPLITF.78
+      w(1,1) = 4.0                                                        ! SPLITF.75
+      w(1,3) =-4.0*a1                                                     ! SPLITF.76
+      w(n,1) = 4.0                                                        ! SPLITF.77
+      w(n,2) =-4.0*an                                                     ! SPLITF.78
 !                                                                         ! SPLITF.79
 !     L U DECOMPOSITION                                                   ! SPLITF.80
 !                                                                         ! SPLITF.81
-      DO I=2,N                                                            ! SPLITF.82
-         W(I-1,3) = W(I-1,3)/W(I-1,1)                                     ! SPLITF.83
-         W(I,1)   = W(I,1) - W(I,2)*W(I-1,3)                              ! SPLITF.84
+      do i=2,n                                                            ! SPLITF.82
+         w(i-1,3) = w(i-1,3)/w(i-1,1)                                     ! SPLITF.83
+         w(i,1)   = w(i,1) - w(i,2)*w(i-1,3)                              ! SPLITF.84
       enddo
 !                                                                         ! SPLITF.85
 !     DEFINE *CONSTANT* VECTOR                                            ! SPLITF.86
 !                                                                         ! SPLITF.87
-      YPP(1) = 4.0*B1                                                     ! SPLITF.88
-      DOLD   = (Y(2)-Y(1))/W(2,2)                                         ! SPLITF.89
-      DO I=2,NM2                                                          ! SPLITF.90
-         DNEW   = (Y(I+1) - Y(I))/W(I+1,2)                                ! SPLITF.91
-         YPP(I) = 6.0*(DNEW - DOLD)                                       ! SPLITF.92
-         YP(I)  = DOLD                                                    ! SPLITF.93
-         DOLD   = DNEW                                                    ! SPLITF.94
+      ypp(1) = 4.0*b1                                                     ! SPLITF.88
+      dold   = (y(2)-y(1))/w(2,2)                                         ! SPLITF.89
+      do i=2,nm2                                                          ! SPLITF.90
+         dnew   = (y(i+1) - y(i))/w(i+1,2)                                ! SPLITF.91
+         ypp(i) = 6.0*(dnew - dold)                                       ! SPLITF.92
+         yp(i)  = dold                                                    ! SPLITF.93
+         dold   = dnew                                                    ! SPLITF.94
       enddo
-      DNEW   = (Y(N)-Y(N-1))/(X(N)-X(N-1))                                ! SPLITF.95
-      YPP(NM1) = 6.0*(DNEW - DOLD)                                        ! SPLITF.96
-      YPP(N) = 4.0*BN                                                     ! SPLITF.97
-      YP(NM1)= DOLD                                                       ! SPLITF.98
-      YP(N)  = DNEW                                                       ! SPLITF.99
+      dnew   = (y(n)-y(n-1))/(x(n)-x(n-1))                                ! SPLITF.95
+      ypp(nm1) = 6.0*(dnew - dold)                                        ! SPLITF.96
+      ypp(n) = 4.0*bn                                                     ! SPLITF.97
+      yp(nm1)= dold                                                       ! SPLITF.98
+      yp(n)  = dnew                                                       ! SPLITF.99
 !                                                                         ! SPLITF.100
 !     FORWARD SUBSTITUTION                                                ! SPLITF.101
 !                                                                         ! SPLITF.102
-      YPP(1) = YPP(1)/W(1,1)                                              ! SPLITF.103
-      DO I=2,N                                                            ! SPLITF.104
-         YPP(I) = (YPP(I) - W(I,2)*YPP(I-1))/W(I,1)                       ! SPLITF.105
+      ypp(1) = ypp(1)/w(1,1)                                              ! SPLITF.103
+      do i=2,n                                                            ! SPLITF.104
+         ypp(i) = (ypp(i) - w(i,2)*ypp(i-1))/w(i,1)                       ! SPLITF.105
       enddo
 !                                                                         ! SPLITF.106
 !     BACKWARD SUBSTITUTION                                               ! SPLITF.107
 !                                                                         ! SPLITF.108
-      DO J=1,NM1                                                          ! SPLITF.109
-         I = N-J                                                          ! SPLITF.110
-         YPP(I) = YPP(I) - W(I,3)*YPP(I+1)                                ! SPLITF.111
+      do j=1,nm1                                                          ! SPLITF.109
+         i = n-j                                                          ! SPLITF.110
+         ypp(i) = ypp(i) - w(i,3)*ypp(i+1)                                ! SPLITF.111
       enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
 !     COMPUTE FIRST DERIVATIVES                                           ! SPLITF.113
 !                                                                         ! SPLITF.114
-      YP(1)  = (Y(2)-Y(1))/(X(2)-X(1)) - (X(2)-X(1))*(2.0*YPP(1) + YPP(2))/6.0
-      DO I=2,NM1
-         YP(I)  = YP(I) + W(I,2)*(YPP(I-1) + 2.0*YPP(I))/6.0              ! SPLITF.118
+      yp(1)  = (y(2)-y(1))/(x(2)-x(1)) - (x(2)-x(1))*(2.0*ypp(1) + ypp(2))/6.0
+      do i=2,nm1
+         yp(i)  = yp(i) + w(i,2)*(ypp(i-1) + 2.0*ypp(i))/6.0              ! SPLITF.118
       enddo
-      YP(N)  = YP(N) + (X(N)-X(NM1))*(YPP(NM1) + 2.0*YPP(N))/6.0          ! SPLITF.119
+      yp(n)  = yp(n) + (x(n)-x(nm1))*(ypp(nm1) + 2.0*ypp(n))/6.0          ! SPLITF.119
 !-----------------------------------------------------------------------------------------------------------------------------------
    ierr=0
 end subroutine splift
@@ -1190,89 +1207,120 @@ end subroutine splift
 !!##VERSION:        5.0: 20170129
 !! AUTHOR:         John S. Urban
 !! REPORTING BUGS: http://www.urbanjost.altervista.org/
-subroutine splint (x,y,ypp,n,xi,yi,ypi,yppi,ni,kerr)
-! ident_6="@(#) M_math splint(3f) interpolates and twice differentiates a cubic spline"
-integer,intent(in)  :: n
-integer,intent(in)  :: ni
-real,intent(in)     :: x(n),y(n),ypp(n),xi(ni)
-real,intent(out)    :: yi(ni),ypi(ni),yppi(ni)
-integer,intent(out) :: kerr
+!*==splint.f90 processed by SPAG 8.01RF 03:45 14 Dec 2024
+subroutine splint(x,y,ypp,n,xi,yi,ypi,yppi,ni,kerr)
+implicit none
+! ident_5="@(#) M_math splint(3f) interpolates and twice differentiates a cubic spline"
+integer, intent(in)  :: n
+integer, intent(in)  :: ni
+real, intent(in)     :: x(n), y(n), ypp(n), xi(ni)
+real, intent(out)    :: yi(ni), ypi(ni), yppi(ni)
+integer, intent(out) :: kerr
 
-integer            :: nm1, k, il, ir, i
-real               :: h, h2, xx
-real               :: xr, xr2, xr3, xl, xl2, xl3
-
+integer              :: nm1, k, il, ir, i
+real                 :: h, h2, xx
+real                 :: xr, xr2, xr3, xl, xl2, xl3
+integer              :: spag_nextblock_1
+   spag_nextblock_1 = 1
+   spag_dispatchloop_1: do
+      select case (spag_nextblock_1)
+      case (1)
 !  CHECK INPUT
-   if (ni .le. 0)then
-      kerr=2
-      return
-   endif
-   kerr=0
-   nm1= n-1
+         if ( ni<=0 ) then
+            kerr = 2
+            return
+         endif
+         kerr = 0
+         nm1 = n - 1
 !  K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !  I IS CURRENT INDEX INTO X ARRAY.
-   k  = 1
-   xx = xi(1)
-   if (xx.lt.x(1)) goto 90
-   if (xx.gt.x(n)) goto 80
-   il = 1
-   ir = n
+         k = 1
+         xx = xi(1)
+         if ( xx<x(1) ) then
+            spag_nextblock_1 = 3
+            cycle spag_dispatchloop_1
+         endif
+         if ( xx<=x(n) ) then
+            il = 1
+            ir = n
 !------------------------------------
 !  BISECTION SEARCH
-   10 continue
-      i  = (il+ir)/2
-      if (i.eq.il) goto 100
-      if (xx-x(i)) 20,100,30
-   20 continue
-      ir = i
-      goto 10
-   30 continue
-      il = i
-      goto 10
+            do
+               i = (il+ir)/2
+               if ( i==il ) then
+                  spag_nextblock_1 = 4
+                  cycle spag_dispatchloop_1
+               endif
+               if ( xx<x(i) ) then
+                  ir = i
+               elseif ( xx==x(i) ) then
+                  spag_nextblock_1 = 4
+                  cycle spag_dispatchloop_1
+               else
+                  il = i
+               endif
+            enddo
+         endif
+         spag_nextblock_1 = 2
 !------------------------------------
-!     LINEAR FORWARD SEARCH
-   50 continue
-      if (xx-x(i+1)) 100,100,60
-   60 continue
-      if (i.ge.nm1) goto 80
-      i  = i+1
-      goto 50
-!------------------------------------
+      case (2)
 !     EXTRAPOLATION
-   80 continue
-      kerr=1
-      i  = nm1
-      goto 100
-   90 continue
-      kerr=1
-      i  = 1
+         kerr = 1
+         i = nm1
+         spag_nextblock_1 = 4
+         cycle spag_dispatchloop_1
+      case (3)
+         kerr = 1
+         i = 1
+         spag_nextblock_1 = 4
 !------------------------------------
+      case (4)
 !     INTERPOLATION
-  100 continue
-      h  = x(i+1) - x(i)
-      h2 = h*h
-      xr = (x(i+1)-xx)/h
-      xr2= xr*xr
-      xr3= xr*xr2
-      xl = (xx-x(i))/h
-      xl2= xl*xl
-      xl3= xl*xl2
-      yi(k) = y(i)*xr + y(i+1)*xl -h2*(ypp(i)*(xr-xr3) + ypp(i+1)*(xl-xl3))/6.0
-      ypi(k) = (y(i+1)-y(i))/h +h*(ypp(i)*(1.0-3.0*xr2) - ypp(i+1)*(1.0-3.0*xl2))/6.0
-      yppi(k) = ypp(i)*xr + ypp(i+1)*xl
+         spag_loop_1_1: do
+            h = x(i+1) - x(i)
+            h2 = h*h
+            xr = (x(i+1)-xx)/h
+            xr2 = xr*xr
+            xr3 = xr*xr2
+            xl = (xx-x(i))/h
+            xl2 = xl*xl
+            xl3 = xl*xl2
+            yi(k) = y(i)*xr + y(i+1)*xl - h2*(ypp(i)*(xr-xr3)+ypp(i+1)*(xl-xl3))/6.0
+            ypi(k) = (y(i+1)-y(i))/h + h*(ypp(i)*(1.0-3.0*xr2)-ypp(i+1)*(1.0-3.0*xl2))/6.0
+            yppi(k) = ypp(i)*xr + ypp(i+1)*xl
 !------------------------------------
 !     NEXT POINT
-      if (k.ge.ni) goto 120
-      k = k+1
-      xx = xi(k)
-      if (xx.lt.x(1)) goto 90
-      if (xx.gt.x(n)) goto 80
-      if (xx-xi(k-1)) 110,100,50
-  110 continue
-      il = 1
-      ir = i+1
-  120 continue
-END SUBROUTINE SPLINT
+            if ( k>=ni ) exit spag_loop_1_1
+            k = k + 1
+            xx = xi(k)
+            if ( xx<x(1) ) then
+               spag_nextblock_1 = 3
+               cycle spag_dispatchloop_1
+            endif
+            if ( xx>x(n) ) then
+               spag_nextblock_1 = 2
+               cycle spag_dispatchloop_1
+            endif
+            if ( xx<xi(k-1) ) then
+               il = 1
+               ir = i + 1
+               exit spag_loop_1_1
+            elseif ( xx/=xi(k-1) ) then
+!------------------------------------
+!     LINEAR FORWARD SEARCH
+               do while ( xx>x(i+1) )
+                  if ( i>=nm1 ) then
+                     spag_nextblock_1 = 2
+                     cycle spag_dispatchloop_1
+                  endif
+                  i = i + 1
+               enddo
+            endif
+         enddo spag_loop_1_1
+         exit spag_dispatchloop_1
+      end select
+   enddo spag_dispatchloop_1
+end subroutine splint
 !>
 !!##NAME
 !!      linearint(3f) - [M_math:fit] interpolates a curve defined by X(i),Y(i) using linear interpolation at given XI(j) values
@@ -1308,90 +1356,123 @@ END SUBROUTINE SPLINT
 !!##VERSION:        1.0, 20031123
 !! AUTHOR:         John S. Urban (hacked from splint)
 !! HOME PAGE:      http://www.urbanjost.altervista.org/index.html
-SUBROUTINE linearint(X,Y,N,XI,YI,NI,KERR)
+! ident_6="@(#) M_math linearint(3f) linear interpolation of curve X(i) Y(i) at given XI(j) values"
+subroutine linearint(x,y,n,xi,yi,ni,kerr)
 implicit none
-! ident_7="@(#) M_math linearint(3f) linear interpolation of curve X(i) Y(i) at given XI(j) values"
 !
-   INTEGER,intent(in)  :: N, NI
-   REAL,intent(in)     :: X(N),Y(N),XI(NI)
-   REAL,intent(out)    :: YI(NI)
-   INTEGER,intent(out) :: KERR
-!=======================================================================
-   integer             :: k, i, il, ir, nm1
-   real                :: xx, delta, h, v, h2, delta2
-!=======================================================================
+integer, intent(in) :: n, ni
+real, intent(in) :: x(n), y(n), xi(ni)
+real, intent(out) :: yi(ni)
+integer, intent(out) :: kerr
+
+integer :: k, i, il, ir, nm1
+real :: xx, delta, h, v, h2, delta2
+integer :: spag_nextblock_1
+   spag_nextblock_1 = 1
+   spag_dispatchloop_1: do
+      select case (spag_nextblock_1)
+       case (1)
+
 !     CHECK INPUT
-      if(ni.le.0)then
-         kerr=2
-         return
-      endif
-      kerr=0
-!=======================================================================
+         if ( ni<=0 ) then
+            kerr = 2
+            return
+         endif
+         kerr = 0
+!
 !     K IS INDEX ON VALUE OF XI BEING WORKED ON.  XX IS THAT VALUE.
 !     I IS CURRENT INDEX INTO X ARRAY.
-      K  = 1
-      XX = XI(1)
-      IF (XX.LT.X(1)) GOTO 90 ! extrapolation
-      IF (XX.GT.X(N)) GOTO 80 ! extrapolation
-      IL = 1
-      IR = N
-      NM1= N-1
-!=======================================================================
+         k = 1
+         xx = xi(1)
+         if ( xx<x(1) ) then  ! extrapolation
+            spag_nextblock_1 = 4
+            cycle spag_dispatchloop_1
+         endif
+         if ( xx>x(n) ) then  ! extrapolation
+            spag_nextblock_1 = 3
+            cycle spag_dispatchloop_1
+         endif
+         il = 1
+         ir = n
+         nm1 = n - 1
+         spag_nextblock_1 = 2
+       case (2)
+         do
+!
 !     BISECTION SEARCH
-   10 continue
-      I  = (IL+IR)/2
-      IF (I.EQ.IL) GOTO 100
-      DELTA=XX-X(I)
-      IF (DELTA.lt.0)then
-        IR=I
-        GOTO 10
-      elseif(DELTA.gt.0)then
-        IL = I
-        GOTO 10
-      else
-        goto 100
-      endif
-!=======================================================================
-!     LINEAR FORWARD SEARCH
-   50 CONTINUE
-      IF (XX-X(I+1).le.0)goto 100  ! interpolation
-      IF (I.GE.NM1) GOTO 80        ! extrapolation
-      I  = I+1                     ! go forward again
-      GOTO 50
-!=======================================================================
+            i = (il+ir)/2
+            if ( i==il ) then
+               spag_nextblock_1 = 5
+               cycle spag_dispatchloop_1
+            endif
+            delta = xx - x(i)
+            if ( delta<0 ) then
+               ir = i
+            elseif ( delta>0 ) then
+               il = i
+            else
+               spag_nextblock_1 = 5
+               cycle spag_dispatchloop_1
+            endif
+         enddo
+         spag_nextblock_1 = 3
+       case (3)
+!
 !     EXTRAPOLATION
-   80 CONTINUE
-      KERR=1
-      I  = NM1
-      GOTO 100
-!=======================================================================
-   90 KERR=1
-      I  = 1
-!=======================================================================
+         kerr = 1
+         i = nm1
+         spag_nextblock_1 = 5
+         cycle spag_dispatchloop_1
+       case (4)
+!
+         kerr = 1
+         i = 1
+         spag_nextblock_1 = 5
+       case (5)
+         do
+!
 !     INTERPOLATION
-  100 continue
-      H  = X(I+1) - X(I)
-      V  = Y(I+1) - Y(I)
-      H2 = XX-X(I)
-      YI(K) = Y(I) + V*(H2/H)
+            h = x(i+1) - x(i)
+            v = y(i+1) - y(i)
+            h2 = xx - x(i)
+            yi(k) = y(i) + v*(h2/h)
 !     NEXT POINT
-      IF (K.GE.NI) RETURN
-      K = K+1
-      XX = XI(K)
-      IF (XX.LT.X(1)) GOTO 90
-      IF (XX.GT.X(N)) GOTO 80
-      DELTA2=XX-XI(K-1)
-      IF (DELTA2.lt.0)then
-         IL = 1
-         IR = I+1
-         GOTO 10
-      elseif(delta2.eq.0)then
-         goto 100         ! interpolate
-      else
-        goto 50           ! linear forward search
-      endif
-!=======================================================================
-END SUBROUTINE linearint
+            if ( k>=ni ) return
+            k = k + 1
+            xx = xi(k)
+            if ( xx<x(1) ) then
+               spag_nextblock_1 = 4
+               cycle spag_dispatchloop_1
+            endif
+            if ( xx>x(n) ) then
+               spag_nextblock_1 = 3
+               cycle spag_dispatchloop_1
+            endif
+            delta2 = xx - xi(k-1)
+            if ( delta2<0 ) then
+               il = 1
+               ir = i + 1
+               spag_nextblock_1 = 2
+               cycle spag_dispatchloop_1
+            elseif ( delta2/=0 ) then
+!
+!     LINEAR FORWARD SEARCH
+               do while ( xx>x(i+1) )
+                  ! interpolation
+                  if ( i>=nm1 ) then
+                     ! extrapolation
+                     spag_nextblock_1 = 3
+                     cycle spag_dispatchloop_1
+                  endif
+                  i = i + 1        ! go forward again
+               enddo
+            endif
+         enddo
+         exit spag_dispatchloop_1
+      end select
+   enddo spag_dispatchloop_1
+!
+end subroutine linearint
 
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -1438,106 +1519,108 @@ END SUBROUTINE linearint
 !!    Fred Taylor, Computer Analysis Branch USAEWES, Vicksburg, MS. 39180
 !!##LICENSE
 !!    Public Domain
-subroutine gcsgau1(n,a,b)
-use M_framework__journal, only : journal
-implicit none
-integer,parameter  :: dp=kind(0.0d0)
-integer,intent(in) :: n
-real(kind=dp)      :: a(11,11)
-real(kind=dp)      :: b(*)
+!*==gcsgau1.f90 processed by SPAG 8.01RF 03:35 14 Dec 2024
+SUBROUTINE gcsgau1(N,A,B)
+   USE m_framework__journal , only:journal
+   IMPLICIT NONE
+   INTEGER , PARAMETER :: DP = kind(0.0D0)
+   INTEGER , INTENT(IN) :: N
+   REAL(KIND=DP) :: A(11,11)
+   REAL(KIND=DP) :: B(*)
 
-real(kind=dp)      :: amx
-real(kind=dp)      :: d
-real(kind=dp)      :: eps
-real(kind=dp)      :: fa
-real(kind=dp)      :: fm
-real(kind=dp)      :: sum
-real(kind=dp)      :: x(11)
-integer            :: i, j, k
-integer            :: kpl1
-integer            :: m
-integer            :: mpl1
-integer            :: ncq
-integer            :: nm1
+   REAL(KIND=DP) :: amx
+   REAL(KIND=DP) :: d
+   REAL(KIND=DP) :: eps
+   REAL(KIND=DP) :: fa
+   REAL(KIND=DP) :: fm
+   REAL(KIND=DP) :: sum
+   REAL(KIND=DP) :: x(11)
+   INTEGER :: i , j , k
+   INTEGER :: kpl1
+   INTEGER :: m
+   INTEGER :: mpl1
+   INTEGER :: ncq
+   INTEGER :: nm1
 !-----------------------------------------------------------------------------------------------------------------------------------
-   eps = 1.0d-30
+   eps = 1.0D-30
    ! Obtain upper triangular matrix and modified b matrix.
-   nm1=n-1
-   do 110 k=1,nm1
+   nm1 = N - 1
+   DO k = 1 , nm1
       ! Perform K "th" step of Gauss Elimination.462C
-      kpl1=k+1
+      kpl1 = k + 1
       ! Perform partial pivoting.
       ! Find maximum element in absolute value of the elements, A(K,K),
       ! A(K+1,K), ... A(N,K).
-      amx=0.0d0
-      do 50 i=k,n
-         fa=abs(a(i,k))
-         if (fa-amx) 50,50,45
-45       amx=fa
-         ncq=i
-50    continue
+      amx = 0.0D0
+      DO i = k , N
+         fa = abs(A(i,k))
+         IF ( fa>amx ) THEN
+            amx = fa
+            ncq = i
+         ENDIF
+      ENDDO
 
       ! Check for no solution.
-      if (amx-eps) 60,75,75
+      IF ( amx<eps ) THEN
 
       ! The Gauss Elimination process has broken down because no pivot
       ! greater than the input tolerance could be found for !K! step
 
-60    continue
-      call journal('*gauss* elimination process has broken down')
-      return
+         CALL journal('*gauss* elimination process has broken down')
+         RETURN
+      ELSE
 
       ! Interchange rows K and NCQ.
-75    continue
-      do j=k,n
-         d=a(k,j)
-         a(k,j)=a(ncq,j)
-         a(ncq,j)=d
-      enddo
-      d=b(k)
-      b(k)=b(ncq)
-      b(ncq)=d
+         DO j = k , N
+            d = A(k,j)
+            A(k,j) = A(ncq,j)
+            A(ncq,j) = d
+         ENDDO
+         d = B(k)
+         B(k) = B(ncq)
+         B(ncq) = d
 
       ! Perform elimination process.
-      do i=kpl1,n
+         DO i = kpl1 , N
          ! Calculate multipliers.
-         fm=-a(i,k)/a(k,k)
-         do j=kpl1,n
-            a(i,j)=a(k,j)*fm+a(i,j)
-         enddo
-         b(i)=b(k)*fm+b(i)
-      enddo
-110 continue
+            fm = -A(i,k)/A(k,k)
+            DO j = kpl1 , N
+               A(i,j) = A(k,j)*fm + A(i,j)
+            ENDDO
+            B(i) = B(k)*fm + B(i)
+         ENDDO
+      ENDIF
+   ENDDO
 
    ! Check for no solution.
-   if (abs(a(n,n))-eps) 112,115,115
+   IF ( abs(A(N,N))<eps ) THEN
 
    ! A(N,N) is smaller than the allowable tolerance for a pivot
 
-112 continue
-   call journal('*gauss* elimination process has broken down')
-   return
+      CALL journal('*gauss* elimination process has broken down')
+      RETURN
+   ELSE
 
    ! Calculate matrix X.
 
    ! Perform back substitution.
-115 continue
-   x(n)=b(n)/a(n,n)
-   do k=2,n
-      m=n-k+1
-      mpl1=m+1
-      sum=0.
-      do j=mpl1,n
-         sum=a(m,j)*x(j)+sum
-      enddo
-      x(m)=(b(m)-sum)/a(m,m)
-   enddo
+      x(N) = B(N)/A(N,N)
+      DO k = 2 , N
+         m = N - k + 1
+         mpl1 = m + 1
+         sum = 0.
+         DO j = mpl1 , N
+            sum = A(m,j)*x(j) + sum
+         ENDDO
+         x(m) = (B(m)-sum)/A(m,m)
+      ENDDO
 
-   do i=1,n
-      b(i)=x(i)
-   enddo
+      DO i = 1 , N
+         B(i) = x(i)
+      ENDDO
+   ENDIF
 
-end subroutine gcsgau1
+END SUBROUTINE gcsgau1
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1707,110 +1790,112 @@ end subroutine glstsq
 !!    F. T. Tracy, Computer Analysis Branch USAEWES, Vicksburg, MS. 39180
 !!##LICENSE
 !!    Public Domain
-subroutine gcsgau2(n,a,b)
-use M_framework__journal, only : journal
-implicit doubleprecision(a-h,o-z)
-integer      :: n
-real         :: a(11,11)
-real         :: b(*)
+!*==gcsgau2.f90 processed by SPAG 8.01RF 03:35 14 Dec 2024
+SUBROUTINE gcsgau2(N,A,B)
+   USE m_framework__journal , only:journal
+   IMPLICIT NONE
+   INTEGER :: N
+   REAL :: A(11,11)
+   REAL :: B(*)
 
-integer      :: i
-integer      :: j
-integer      :: k
-integer      :: kpl1
-integer      :: m
-integer      :: mpl1
-integer      :: ncq
-integer      :: nm1
-real         :: amx
-real         :: d
-real         :: eps
-real         :: fa
-real         :: fm
-real         :: sum
-real         :: x(11)
+   INTEGER :: i
+   INTEGER :: j
+   INTEGER :: k
+   INTEGER :: kpl1
+   INTEGER :: m
+   INTEGER :: mpl1
+   INTEGER :: ncq
+   INTEGER :: nm1
+   REAL :: amx
+   REAL :: d
+   REAL :: eps
+   REAL :: fa
+   REAL :: fm
+   REAL :: sum
+   REAL :: x(11)
 !-----------------------------------------------------------------------
-   eps = 1.0d-30
+   eps = 1.0D-30
 !     OBTAIN UPPER TRIANGULAR MATRIX AND MODIFIED B MATRIX.
-   nm1=n-1
-   do 110 k=1,nm1
+   nm1 = N - 1
+   DO k = 1 , nm1
 !     PERFORM K "TH" STEP OF GAUSS ELIMINATION.462C
-      kpl1=k+1
+      kpl1 = k + 1
 !     PERFORM PARTIAL PIVOTING.
 !     FIND MAXIMUM ELEMENT IN ABSOLUTE VALUE OF THE ELEMENTS, A(K,K),
 !     A(K+1,K), ... A(N,K).
-      amx=0.0d0
-      do 50 i=k,n
-         fa=abs(a(i,k))
-         if (fa-amx) 50,50,45
-45       amx=fa
-         ncq=i
-50    continue
+      amx = 0.0D0
+      DO i = k , N
+         fa = abs(A(i,k))
+         IF ( fa>amx ) THEN
+            amx = fa
+            ncq = i
+         ENDIF
+      ENDDO
 !
 !     CHECK FOR NO SOLUTION.
-      if (amx-eps) 60,75,75
+      IF ( amx<eps ) THEN
 !
 !     THE GAUSS ELIMINATION PROCESS HAS BROKEN DOWN BECAUSE NO PIVOT
 !     GREATER THAN THE INPUT TOLERANCE COULD BE FOUND FOR !K! STEP
 !
-60    continue
-      call journal('*gauss* elimination process has broken down')
-      return
+         CALL journal('*gauss* elimination process has broken down')
+         RETURN
+      ELSE
 !
 !     INTERCHANGE ROWS K AND NCQ.
-75    continue
-      do j=k,n
-         d=a(k,j)
-         a(k,j)=a(ncq,j)
-         a(ncq,j)=d
-      enddo
-      d=b(k)
-      b(k)=b(ncq)
-      b(ncq)=d
+         DO j = k , N
+            d = A(k,j)
+            A(k,j) = A(ncq,j)
+            A(ncq,j) = d
+         ENDDO
+         d = B(k)
+         B(k) = B(ncq)
+         B(ncq) = d
 !
 !     PERFORM ELIMINATION PROCESS.
-      do i=kpl1,n
+         DO i = kpl1 , N
 !
 !     CALCULATE MULTIPLIERS.
-         fm=-a(i,k)/a(k,k)
+            fm = -A(i,k)/A(k,k)
 !
-         do j=kpl1,n
-            a(i,j)=a(k,j)*fm+a(i,j)
-         enddo
-         b(i)=b(k)*fm+b(i)
-      enddo
-110 continue
+            DO j = kpl1 , N
+               A(i,j) = A(k,j)*fm + A(i,j)
+            ENDDO
+            B(i) = B(k)*fm + B(i)
+         ENDDO
+      ENDIF
+   ENDDO
 !
 !     CHECK FOR NO SOLUTION.
-   if (abs(a(n,n))-eps) 112,115,115
+   IF ( abs(A(N,N))<eps ) THEN
 !
 !      A(N,N) IS SMALLER THAN THE ALLOWABLE
 !      TOLERANCE FOR A PIVOT
 !
-112 continue
-   call journal('*gauss* elimination process has broken down')
-   return
+      CALL journal('*gauss* elimination process has broken down')
+      RETURN
+   ELSE
 !
 !     CALCULATE MATRIX X.
 !
 !     PERFORM BACK SUBSTITUTION.
-115 continue
-   x(n)=b(n)/a(n,n)
-   do k=2,n
-      m=n-k+1
-      mpl1=m+1
-      sum=0.0
-      do j=mpl1,n
-         sum=a(m,j)*x(j)+sum
-      enddo
-      x(m)=(b(m)-sum)/a(m,m)
-   enddo
+      x(N) = B(N)/A(N,N)
+      DO k = 2 , N
+         m = N - k + 1
+         mpl1 = m + 1
+         sum = 0.0
+         DO j = mpl1 , N
+            sum = A(m,j)*x(j) + sum
+         ENDDO
+         x(m) = (B(m)-sum)/A(m,m)
+      ENDDO
 !
-   do i=1,n
-      b(i)=x(i)
-   enddo
+      DO i = 1 , N
+         B(i) = x(i)
+      ENDDO
+   ENDIF
 !
-end subroutine gcsgau2
+END SUBROUTINE gcsgau2
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -1944,359 +2029,420 @@ end subroutine gcsgau2
 !!    L. F. Shampine, S. M. Davenport and R. E. Huddleston,
 !!    Curve fitting by polynomials in one variable, Report
 !!    SLA-74-0270, Sandia Laboratories, June 1974.
-subroutine ju_polfit (n, x, y, w, maxdeg, ndeg, eps, r, ierr, a)
-integer      :: i100
-integer      :: i20
-integer      :: i200
-integer      :: i30
-integer      :: i300
-integer      :: i40
-integer      :: i400
-integer      :: i50
-integer      :: i500
-integer      :: i60
-integer      :: i70
-integer      :: i80
-integer      :: i88
-integer      :: i90
-integer      :: idegf
-integer      :: ierr
-integer      :: iii
-integer      :: j
-integer      :: jp1
-integer      :: jpas
-integer      :: k1
-integer      :: k1pj
-integer      :: k2
-integer      :: k2pj
-integer      :: k3
-integer      :: k3pi
-integer      :: k4
-integer      :: k4pi
-integer      :: k5
-integer      :: k5pi
-integer      :: ksig
-integer      :: m
-integer      :: maxdeg
-integer      :: mop1
-integer      :: n
-integer      :: ndeg
-integer      :: nder
-integer      :: nfail
-real         :: a
-real         :: co
-real         :: degf
-real         :: den
-real         :: eps
-real         :: etst
-real         :: f
-real         :: fcrit
-real         :: r
-real         :: sig
-real         :: sigj
-real         :: sigjm1
-real         :: sigpas
-real         :: temp
-real         :: w
-real         :: w1
-real         :: w11
-real         :: x
-real         :: xm
-real         :: y
-real         :: yp(0)
-double precision temd1,temd2
+subroutine ju_polfit(n,x,y,w,maxdeg,ndeg,eps,r,ierr,a)
+implicit none
+integer :: i100
+integer :: i20
+integer :: i200
+integer :: i30
+integer :: i300
+integer :: i40
+integer :: i400
+integer :: i50
+integer :: i500
+integer :: i60
+integer :: i70
+integer :: i80
+integer :: i88
+integer :: i90
+integer :: idegf
+integer :: ierr
+integer :: iii
+integer :: j
+integer :: jp1
+integer :: jpas
+integer :: k1
+integer :: k1pj
+integer :: k2
+integer :: k2pj
+integer :: k3
+integer :: k3pi
+integer :: k4
+integer :: k4pi
+integer :: k5
+integer :: k5pi
+integer :: ksig
+integer :: m
+integer :: maxdeg
+integer :: mop1
+integer :: n
+integer :: ndeg
+integer :: nder
+integer :: nfail
+real :: a
+real :: co
+real :: degf
+real :: den
+real :: eps
+real :: etst
+real :: f
+real :: fcrit
+real :: r
+real :: sig
+real :: sigj
+real :: sigjm1
+real :: sigpas
+real :: temp
+real :: w
+real :: w1
+real :: w11
+real :: x
+real :: xm
+real :: y
+real :: yp(0)
+double precision temd1, temd2
 dimension x(*), y(*), w(*), r(*), a(*)
 dimension co(4,3)
 save co
-data  co(1,1), co(2,1), co(3,1), co(4,1), co(1,2), co(2,2),   &
-&      co(3,2), co(4,2), co(1,3), co(2,3), co(3,3),           &
-&  co(4,3)/-13.086850,-2.4648165,-3.3846535,-1.2973162,       &
-&          -3.3381146,-1.7812271,-3.2578406,-1.6589279,       &
-&          -1.6282703,-1.3152745,-3.2640179,-1.9829776/
-!***FIRST EXECUTABLE STATEMENT  JU_POLFIT
-      write(*,*)'JU_POLFIT N=',n
+integer :: nextblock_1
+data co(1,1), co(2,1), co(3,1), co(4,1), co(1,2), co(2,2), co(3,2), co(4,2), co(1,3), co(2,3), co(3,3), co(4,3)  &
+& / - 13.086850, -2.4648165, -3.3846535, -1.2973162, -3.3381146, -1.7812271, -3.2578406, -1.6589279, -1.6282703, &
+& -1.3152745, -3.2640179, -1.9829776/
+   nextblock_1 = 1
+   dispatchloop_1: do
+!=======================================================================
+    select case (nextblock_1)
+!=======================================================================
+       case (1)
+         write (*,*) 'JU_POLFIT N=', n
 
-      do i90=1,n
-         write(*,*)i90,x(i90),y(i90),w(i90),r(i90)
-      enddo
-
-      write(*,*)'MAXDEG=',maxdeg
-      write(*,*)'eps=',eps
-!***FIRST EXECUTABLE STATEMENT  JU_POLFIT
-      m = abs(n)
-      if (m .eq. 0) goto 888
-      if (maxdeg .lt. 0) goto 888
-      a(1) = maxdeg
-      mop1 = maxdeg + 1
-      if (m .lt. mop1) goto 888
-      if (eps .lt. 0.0  .and.  m .eq. mop1) goto 888
-      xm = m
-      etst = eps*eps*xm
-      if (w(1) .ge. 0.0)then
-         do i20 = 1,m
-            if (w(i20) .le. 0.0) goto 888
+         do i90 = 1, n
+            write (*,*) i90, x(i90), y(i90), w(i90), r(i90)
          enddo
-      else
-         do i30 = 1,m
-            w(i30) = 1.0
-         enddo
-      endif
 
-      if (eps .ge. 0.0) goto 8
+         write (*,*) 'MAXDEG=', maxdeg
+         write (*,*) 'eps=', eps
+         m = abs(n)
+         if ( m==0 ) then
+            nextblock_1 = 8
+            cycle dispatchloop_1
+         endif
+         if ( maxdeg<0 ) then
+            nextblock_1 = 8
+            cycle dispatchloop_1
+         endif
+         a(1) = maxdeg
+         mop1 = maxdeg + 1
+         if ( m<mop1 ) then
+            nextblock_1 = 8
+            cycle dispatchloop_1
+         endif
+         if ( eps<0.0 .and. m==mop1 ) then
+            nextblock_1 = 8
+            cycle dispatchloop_1
+         endif
+         xm = m
+         etst = eps*eps*xm
+         if ( w(1)>=0.0 ) then
+            do i20 = 1, m
+               if ( w(i20)<=0.0 ) then
+                  nextblock_1 = 8
+                  cycle dispatchloop_1
+               endif
+            enddo
+         else
+            do i30 = 1, m
+               w(i30) = 1.0
+            enddo
+         endif
+
+         if ( eps<0.0 ) then
 !
 ! DETERMINE SIGNIFICANCE LEVEL INDEX TO BE USED IN STATISTICAL TEST FOR
 ! CHOOSING DEGREE OF POLYNOMIAL FIT
 !
-      if (eps .gt. (-.55)) goto 5
-      idegf = m - maxdeg - 1
-      ksig = 1
-      if (idegf .lt. 10) ksig = 2
-      if (idegf .lt. 5) ksig = 3
-      goto 8
-5     continue
-      ksig = 1
-      if (eps .lt. (-.03)) ksig = 2
-      if (eps .lt. (-.07)) ksig = 3
+            if ( eps>(-.55) ) then
+               ksig = 1
+               if ( eps<(-.03) ) ksig = 2
+               if ( eps<(-.07) ) ksig = 3
+            else
+               idegf = m - maxdeg - 1
+               ksig = 1
+               if ( idegf<10 ) ksig = 2
+               if ( idegf<5 ) ksig = 3
+            endif
+         endif
 !
 ! INITIALIZE INDEXES AND COEFFICIENTS FOR FITTING
 !
-8     continue
-      k1 = maxdeg + 1
-      k2 = k1 + maxdeg
-      k3 = k2 + maxdeg + 2
-      k4 = k3 + m
-      k5 = k4 + m
+         k1 = maxdeg + 1
+         k2 = k1 + maxdeg
+         k3 = k2 + maxdeg + 2
+         k4 = k3 + m
+         k5 = k4 + m
 
-      do i40 = 2,k4
-         a(i40) = 0.0
-      enddo
+         do i40 = 2, k4
+            a(i40) = 0.0
+         enddo
 
-      w11 = 0.0
-      if (n .lt. 0) goto 11
-!
-! UNCONSTRAINED CASE
-!
-      do i50 = 1,m
-         k4pi = k4 + i50
-         a(k4pi) = 1.0
-         w11 = w11 + w(i50)
-      enddo
-
-      goto 13
+         w11 = 0.0
+         if ( n<0 ) then
 !
 ! CONSTRAINED CASE
 !
-11    continue
-      do i60 = 1,m
-         k4pi = k4 + i60
-         w11 = w11 + w(i60)*a(k4pi)**2
-      enddo
+            do i60 = 1, m
+               k4pi = k4 + i60
+               w11 = w11 + w(i60)*a(k4pi)**2
+            enddo
+         else
+!
+! UNCONSTRAINED CASE
+!
+            do i50 = 1, m
+               k4pi = k4 + i50
+               a(k4pi) = 1.0
+               w11 = w11 + w(i50)
+
+            enddo
+         endif
 !
 ! COMPUTE FIT OF DEGREE ZERO
 !
-13    continue
-      temd1 = 0.0d0
-      do i70 = 1,m
-         k4pi = k4 + i70
-         temd1 = temd1 + dble(w(i70))*dble(y(i70))*dble(a(k4pi))
-      enddo
-      temd1 = temd1/dble(w11)
-      a(k2+1) = temd1
-      sigj = 0.0
-      do i80 = 1,m
-         k4pi = k4 + i80
-         k5pi = k5 + i80
-         temd2 = temd1*dble(a(k4pi))
-         r(i80) = temd2
-         a(k5pi) = temd2 - dble(r(i80))
-         sigj = sigj + w(i80)*((y(i80)-r(i80)) - a(k5pi))**2
-      enddo
-      j = 0
+         temd1 = 0.0d0
+         do i70 = 1, m
+            k4pi = k4 + i70
+            temd1 = temd1 + dble(w(i70))*dble(y(i70))*dble(a(k4pi))
+         enddo
+         temd1 = temd1/dble(w11)
+         a(k2+1) = temd1
+         sigj = 0.0
+         do i80 = 1, m
+            k4pi = k4 + i80
+            k5pi = k5 + i80
+            temd2 = temd1*dble(a(k4pi))
+            r(i80) = temd2
+            a(k5pi) = temd2 - dble(r(i80))
+            sigj = sigj + w(i80)*((y(i80)-r(i80))-a(k5pi))**2
+         enddo
+         j = 0
 !
 ! SEE IF POLYNOMIAL OF DEGREE 0 SATISFIES THE DEGREE SELECTION CRITERION
 !
-      if (eps) 24,26,27
+         if ( eps<0 ) then
+            nextblock_1 = 3
+            cycle dispatchloop_1
+         endif
+         if ( eps==0 ) then
+            nextblock_1 = 4
+            cycle dispatchloop_1
+         endif
+         nextblock_1 = 5
+         cycle dispatchloop_1
 !=======================================================================
+       case (2)
+         loop_1_1: do
 !
 ! INCREMENT DEGREE
 !
-16    continue
-      j = j + 1
-      jp1 = j + 1
-      k1pj = k1 + j
-      k2pj = k2 + j
-      sigjm1 = sigj
+            j = j + 1
+            jp1 = j + 1
+            k1pj = k1 + j
+            k2pj = k2 + j
+            sigjm1 = sigj
 !
 ! COMPUTE NEW B COEFFICIENT EXCEPT WHEN J = 1
 !
-      if (j .gt. 1) a(k1pj) = w11/w1
+            if ( j>1 ) a(k1pj) = w11/w1
 !
 ! COMPUTE NEW A COEFFICIENT
 !
-      temd1 = 0.0d0
-      do i100 = 1,m
-         k4pi = k4 + i100
-         temd2 = a(k4pi)
-         temd1 = temd1 + dble(x(i100))*dble(w(i100))*temd2*temd2
-      enddo
-      a(jp1) = temd1/dble(w11)
+            temd1 = 0.0d0
+            do i100 = 1, m
+               k4pi = k4 + i100
+               temd2 = a(k4pi)
+               temd1 = temd1 + dble(x(i100))*dble(w(i100))*temd2*temd2
+            enddo
+            a(jp1) = temd1/dble(w11)
 !
 ! EVALUATE ORTHOGONAL POLYNOMIAL AT DATA POINTS
 !
-      w1 = w11
-      w11 = 0.0
-      do i200 = 1,m
-         k3pi = k3 + i200
-         k4pi = k4 + i200
-         temp = a(k3pi)
-         a(k3pi) = a(k4pi)
-         a(k4pi) = (x(i200)-a(jp1))*a(k3pi) - a(k1pj)*temp
-         w11 = w11 + w(i200)*a(k4pi)**2
-      enddo
+            w1 = w11
+            w11 = 0.0
+            do i200 = 1, m
+               k3pi = k3 + i200
+               k4pi = k4 + i200
+               temp = a(k3pi)
+               a(k3pi) = a(k4pi)
+               a(k4pi) = (x(i200)-a(jp1))*a(k3pi) - a(k1pj)*temp
+               w11 = w11 + w(i200)*a(k4pi)**2
+            enddo
 !
 ! GET NEW ORTHOGONAL POLYNOMIAL COEFFICIENT USING PARTIAL DOUBLE
 ! PRECISION
 !
-      temd1 = 0.0d0
-      do i300 = 1,m
-         k4pi = k4 + i300
-         k5pi = k5 + i300
-         temd2=dble(w(i300))*dble((y(i300)-r(i300))-a(k5pi))*dble(a(k4pi))
-         temd1=temd1 + temd2
-      enddo
-      temd1 = temd1/dble(w11)
-      a(k2pj+1) = temd1
+            temd1 = 0.0d0
+            do i300 = 1, m
+               k4pi = k4 + i300
+               k5pi = k5 + i300
+               temd2 = dble(w(i300))*dble((y(i300)-r(i300))-a(k5pi))*dble(a(k4pi))
+               temd1 = temd1 + temd2
+            enddo
+            temd1 = temd1/dble(w11)
+            a(k2pj+1) = temd1
 !
 ! UPDATE POLYNOMIAL EVALUATIONS AT EACH OF THE DATA POINTS, AND
 ! ACCUMULATE SUM OF SQUARES OF ERRORS.  THE POLYNOMIAL EVALUATIONS ARE
 ! COMPUTED AND STORED IN EXTENDED PRECISION.  FOR THE I-TH DATA POINT,
-! THE MOST SIGNIFICANT BITS ARE STORED IN  R(I) , AND THE LEAST
+! THE MOST SIGNIFICANT BITS ARE STORED IN  R(I), AND THE LEAST
 ! SIGNIFICANT BITS ARE IN  A(K5PI) .
 !
-      sigj = 0.0
-      do i400 = 1,m
-         k4pi = k4 + i400
-         k5pi = k5 + i400
-         temd2 = dble(r(i400)) + dble(a(k5pi)) + temd1*dble(a(k4pi))
-         r(i400) = temd2
-         a(k5pi) = temd2 - dble(r(i400))
-         sigj = sigj + w(i400)*((y(i400)-r(i400)) - a(k5pi))**2
-      enddo
+            sigj = 0.0
+            do i400 = 1, m
+               k4pi = k4 + i400
+               k5pi = k5 + i400
+               temd2 = dble(r(i400)) + dble(a(k5pi)) + temd1*dble(a(k4pi))
+               r(i400) = temd2
+               a(k5pi) = temd2 - dble(r(i400))
+               sigj = sigj + w(i400)*((y(i400)-r(i400))-a(k5pi))**2
+            enddo
 !
 ! SEE IF DEGREE SELECTION CRITERION HAS BEEN SATISFIED OR IF DEGREE
 ! MAXDEG  HAS BEEN REACHED
 !
 !=======================================================================
-      if (eps) 23,26,27
+            if ( eps<0 ) then
 !
 ! COMPUTE F STATISTICS  (INPUT EPS .LT. 0.)
 !
-23    continue
-      if (sigj .eq. 0.0) goto 29
-      degf = m - j - 1
-      den = (co(4,ksig)*degf + 1.0)*degf
-      fcrit = (((co(3,ksig)*degf) + co(2,ksig))*degf + co(1,ksig))/den
-      fcrit = fcrit*fcrit
-      f = (sigjm1 - sigj)*degf/sigj
-      if (f .lt. fcrit) goto 25
-!
-! POLYNOMIAL OF DEGREE J SATISFIES F TEST
-!
-24    continue
-      sigpas = sigj
-      jpas = j
-      nfail = 0
-      if (maxdeg .eq. j) goto 32
-      iii=24
-      goto 16
+               if ( sigj==0.0 ) then
+                  nextblock_1 = 7
+                  cycle dispatchloop_1
+               endif
+               degf = m - j - 1
+               den = (co(4,ksig)*degf+1.0)*degf
+               fcrit = (((co(3,ksig)*degf)+co(2,ksig))*degf+co(1,ksig))/den
+               fcrit = fcrit*fcrit
+               f = (sigjm1-sigj)*degf/sigj
+               if ( f>=fcrit ) exit loop_1_1
 !=======================================================================
 !
 ! POLYNOMIAL OF DEGREE J FAILS F TEST.  IF THERE HAVE BEEN THREE
 ! SUCCESSIVE FAILURES, A STATISTICALLY BEST DEGREE HAS BEEN FOUND.
 !
-25    continue
-      nfail = nfail + 1
-      if (nfail .ge. 3) goto 29
-      if (maxdeg .eq. j) goto 32
-      iii=25
-      goto 16
-!=======================================================================
+               nfail = nfail + 1
+               if ( nfail>=3 ) then
+                  nextblock_1 = 7
+                  cycle dispatchloop_1
+               endif
+               if ( maxdeg==j ) then
+                  nextblock_1 = 9
+                  cycle dispatchloop_1
+               endif
+               iii = 25
+            elseif ( eps==0 ) then
+               nextblock_1 = 4
+               cycle dispatchloop_1
+            else
+               nextblock_1 = 5
+               cycle dispatchloop_1
+            endif
+         enddo loop_1_1
+         nextblock_1 = 3
+       case (3)
 !
-! RAISE THE DEGREE IF DEGREE  MAXDEG  HAS NOT YET BEEN REACHED  (INPUT
-! EPS = 0.)
+! POLYNOMIAL OF DEGREE J SATISFIES F TEST
 !
-26    continue
-      if (maxdeg .eq. j) goto 28
-      iii=26
-      goto 16
+         sigpas = sigj
+         jpas = j
+         nfail = 0
+         if ( maxdeg==j ) then
+            nextblock_1 = 9
+            cycle dispatchloop_1
+         endif
+         iii = 24
+         nextblock_1 = 2
+         cycle dispatchloop_1
 !=======================================================================
+       case (4)
+!
+! RAISE THE DEGREE IF DEGREE  MAXDEG  HAS NOT YET BEEN REACHED  (INPUT EPS = 0.)
+!
+         if ( maxdeg==j ) then
+            nextblock_1 = 6
+            cycle dispatchloop_1
+         endif
+         iii = 26
+         nextblock_1 = 2
+         cycle dispatchloop_1
+!=======================================================================
+       case (5)
 !
 ! SEE IF RMS ERROR CRITERION IS SATISFIED  (INPUT EPS .GT. 0.)
 !
-27    continue
-      if (sigj .le. etst) goto 28
-      if (maxdeg .eq. j) goto 31
-      iii=27
-      goto 16
+         if ( sigj>etst ) then
+            if ( maxdeg==j ) then
+               ierr = 3
+               ndeg = maxdeg
+               sig = sigj
+               nextblock_1 = 10
+               cycle dispatchloop_1
+            else
+               iii = 27
+               nextblock_1 = 2
+               cycle dispatchloop_1
+            endif
+         endif
+         nextblock_1 = 6
 !=======================================================================
+       case (6)
 ! RETURNS
-28    continue
-      ierr = 1
-      ndeg = j
-      sig = sigj
-      goto 777
+         ierr = 1
+         ndeg = j
+         sig = sigj
+         nextblock_1 = 10
+         cycle dispatchloop_1
 !=======================================================================
-29    continue
-      ierr = 1
-      ndeg = jpas
-      sig = sigpas
-      goto 777
+       case (7)
+         ierr = 1
+         ndeg = jpas
+         sig = sigpas
+         nextblock_1 = 10
+         cycle dispatchloop_1
 !=======================================================================
-888   continue
-      ierr = 2
-      call ju_xermsg ('SLATEC', 'JU_POLFIT', 'INVALID INPUT PARAMETER.', &
-      &2, 1)
-      goto 999
+       case (8)
+         ierr = 2
+         call ju_xermsg('SLATEC','JU_POLFIT','INVALID INPUT PARAMETER.',2,1)
+         nextblock_1 = 11
+         cycle dispatchloop_1
 !=======================================================================
-31    continue
-      ierr = 3
-      ndeg = maxdeg
-      sig = sigj
-      goto 777
+       case (9)
+         ierr = 4
+         ndeg = jpas
+         sig = sigpas
+         nextblock_1 = 10
 !=======================================================================
-32    continue
-      ierr = 4
-      ndeg = jpas
-      sig = sigpas
-      goto 777
-!=======================================================================
-777   continue
-      a(k3) = ndeg
+       case (10)
+         a(k3) = ndeg
 !
 ! WHEN STATISTICAL TEST HAS BEEN USED, EVALUATE THE BEST POLYNOMIAL AT
 ! ALL THE DATA POINTS IF  R  DOES NOT ALREADY CONTAIN THESE VALUES
 !
-      if(eps .ge. 0.0  .or.  ndeg .eq. maxdeg)then
+         if ( eps>=0.0 .or. ndeg==maxdeg ) then
+            eps = sqrt(sig/xm)
+            nextblock_1 = 11
+            cycle dispatchloop_1
+         endif
+         nder = 0
+         do i500 = 1, m
+            call ju_pvalue(ndeg,nder,x(i500),r(i500),yp,a)
+         enddo
          eps = sqrt(sig/xm)
-         goto 999
-      endif
-      nder = 0
-      do i500 = 1,m
-         call ju_pvalue (ndeg,nder,x(i500),r(i500),yp,a)
-      enddo
-      eps = sqrt(sig/xm)
+         nextblock_1 = 11
 !=======================================================================
-999   continue
-      !----------------------------------------------
-      write(*,*)'exiting ju_polfit'
-      write(*,*)'ndeg=',ndeg
-      write(*,*)'eps(RMS error)=',eps
-      do i88=1,ndeg
-         write(*,*)i88,r(i88)
-      enddo
-      write(*,*)'ierr=',ierr
-      !----------------------------------------------
-   end subroutine ju_polfit
+       case (11)
+         write (*,*) 'exiting ju_polfit'
+         write (*,*) 'ndeg=', ndeg
+         write (*,*) 'eps(RMS error)=', eps
+         do i88 = 1, ndeg
+            write (*,*) i88, r(i88)
+         enddo
+         write (*,*) 'ierr=', ierr
+         exit dispatchloop_1
+      end select
+!=======================================================================
+   enddo dispatchloop_1
+
+end subroutine ju_polfit
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2414,7 +2560,8 @@ end subroutine ju_xermsg
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 !*DECK JU_PVALUE
-   subroutine ju_pvalue (l, nder, x, yfit, yp, a)
+subroutine ju_pvalue(l,nder,x,yfit,yp,a)
+   implicit none
 !***BEGIN PROLOGUE  JU_PVALUE
 !***PURPOSE  Use the coefficients generated by POLFIT to evaluate the
 !            polynomial fit of degree L, along with the first NDER of
@@ -2432,7 +2579,7 @@ end subroutine ju_xermsg
 !     Abstract
 !
 !     The subroutine  JU_PVALUE  uses the coefficients generated by  POLFIT
-!     to evaluate the polynomial fit of degree  L , along with the first
+!     to evaluate the polynomial fit of degree  L, along with the first
 !     NDER  of its derivatives, at a specified point.  Computationally
 !     stable recurrence relations are used to perform this task.
 !
@@ -2441,7 +2588,7 @@ end subroutine ju_xermsg
 !     Input --
 !         L -      the degree of polynomial to be evaluated.  L  may be
 !                  any non-negative integer which is less than or equal
-!                  to  NDEG , the highest degree polynomial provided
+!                  to  NDEG, the highest degree polynomial provided
 !                  by  POLFIT .
 !         NDER -   the number of derivatives to be evaluated.  NDER
 !                  may be 0 or any positive value.  If NDER is less
@@ -2470,45 +2617,51 @@ end subroutine ju_xermsg
 !   900510  Convert XERRWV calls to XERMSG calls.  (RWC)
 !   920501  Reformatted the REFERENCES section.  (WRB)
 !***END PROLOGUE  JU_PVALUE
-      dimension yp(*),a(*)
-      character*8 xern1, xern2
-integer      :: i10
-integer      :: i20
-integer      :: i30
-integer      :: i40
-integer      :: i50
-integer      :: ic
-integer      :: ilo
-integer      :: in
-integer      :: inp1
-integer      :: iup
-integer      :: k1
-integer      :: k1i
-integer      :: k2
-integer      :: k3
-integer      :: k3p1
-integer      :: k3pn
-integer      :: k4
-integer      :: k4p1
-integer      :: k4pn
-integer      :: kc
-integer      :: l
-integer      :: lm1
-integer      :: lp1
-integer      :: maxord
-integer      :: nder
-integer      :: ndo
-integer      :: ndp1
-integer      :: nord
-real         :: a
-real         :: cc
-real         :: dif
-real         :: val
-real         :: x
-real         :: yfit
-real         :: yp
+   dimension yp(*), a(*)
+   character*8 xern1, xern2
+   integer :: i10
+   integer :: i20
+   integer :: i30
+   integer :: i40
+   integer :: i50
+   integer :: ic
+   integer :: ilo
+   integer :: in
+   integer :: inp1
+   integer :: iup
+   integer :: k1
+   integer :: k1i
+   integer :: k2
+   integer :: k3
+   integer :: k3p1
+   integer :: k3pn
+   integer :: k4
+   integer :: k4p1
+   integer :: k4pn
+   integer :: kc
+   integer :: l
+   integer :: lm1
+   integer :: lp1
+   integer :: maxord
+   integer :: nder
+   integer :: ndo
+   integer :: ndp1
+   integer :: nord
+   real :: a
+   real :: cc
+   real :: dif
+   real :: val
+   real :: x
+   real :: yfit
+   real :: yp
 !***FIRST EXECUTABLE STATEMENT  JU_PVALUE
-      if (l .lt. 0) goto 12
+   if ( l<0 ) then
+!=======================================================================
+!
+      call ju_xermsg('SLATEC','JU_PVALUE','INVALID INPUT PARAMETER.  ORDER OF POLYNOMIAL EVALUATION '//  &
+      &'REQUESTED IS NEGATIVE -- EXECUTION TERMINATED.',2,2)
+      return
+   else
       ndo = max(nder,0)
       ndo = min(ndo,l)
       maxord = a(1) + 0.5
@@ -2516,105 +2669,97 @@ real         :: yp
       k2 = k1 + maxord
       k3 = k2 + maxord + 2
       nord = a(k3) + 0.5
-      if (l .gt. nord) goto 888
-      k4 = k3 + l + 1
-      if (nder .lt. 1) goto 2
+      if ( l<=nord ) then
+         k4 = k3 + l + 1
+         if ( nder>=1 ) then
 
-      do i10= 1,nder
-         yp(i10) = 0.0
-      enddo
+            do i10 = 1, nder
+               yp(i10) = 0.0
+            enddo
+         endif
 
-2     continue
-      if (l .ge. 2) goto 4
-      if (l .eq. 1) goto 3
-!
-! L IS 0
-!
-      val = a(k2+1)
-      goto 999
-!
-! L IS 1
-!
-3     continue
-      cc = a(k2+2)
-      val = a(k2+1) + (x-a(2))*cc
-      if (nder .ge. 1) yp(1) = cc
-      goto 999
+         if ( l>=2 ) then
 !
 ! L IS GREATER THAN 1
 !
-4     continue
-      ndp1 = ndo + 1
-      k3p1 = k3 + 1
-      k4p1 = k4 + 1
-      lp1 = l + 1
-      lm1 = l - 1
-      ilo = k3 + 3
-      iup = k4 + ndp1
+            ndp1 = ndo + 1
+            k3p1 = k3 + 1
+            k4p1 = k4 + 1
+            lp1 = l + 1
+            lm1 = l - 1
+            ilo = k3 + 3
+            iup = k4 + ndp1
 
-      do i20 = ilo,iup
-         a(i20) = 0.0
-      enddo
+            do i20 = ilo, iup
+               a(i20) = 0.0
+            enddo
 
-      dif = x - a(lp1)
-      kc = k2 + lp1
-      a(k4p1) = a(kc)
-      a(k3p1) = a(kc-1) + dif*a(k4p1)
-      a(k3+2) = a(k4p1)
+            dif = x - a(lp1)
+            kc = k2 + lp1
+            a(k4p1) = a(kc)
+            a(k3p1) = a(kc-1) + dif*a(k4p1)
+            a(k3+2) = a(k4p1)
 !
 ! EVALUATE RECURRENCE RELATIONS FOR FUNCTION VALUE AND DERIVATIVES
 !
-      do 30 i30 = 1,lm1
-         in = l - i30
-         inp1 = in + 1
-         k1i = k1 + inp1
-         ic = k2 + in
-         dif = x - a(inp1)
-         val = a(ic) + dif*a(k3p1) - a(k1i)*a(k4p1)
-         if (ndo .le. 0) goto 8
+            do i30 = 1, lm1
+               in = l - i30
+               inp1 = in + 1
+               k1i = k1 + inp1
+               ic = k2 + in
+               dif = x - a(inp1)
+               val = a(ic) + dif*a(k3p1) - a(k1i)*a(k4p1)
+               if ( ndo>0 ) then
 
-         do i50 = 1,ndo
-            k3pn = k3p1 + i50
-            k4pn = k4p1 + i50
-            yp(i50) = dif*a(k3pn) + i50*a(k3pn-1) - a(k1i)*a(k4pn)
-         enddo
+                  do i50 = 1, ndo
+                     k3pn = k3p1 + i50
+                     k4pn = k4p1 + i50
+                     yp(i50) = dif*a(k3pn) + i50*a(k3pn-1) - a(k1i)*a(k4pn)
+                  enddo
 
 !
 ! SAVE VALUES NEEDED FOR NEXT EVALUATION OF RECURRENCE RELATIONS
 !
-         do i40 = 1,ndo
-            k3pn = k3p1 + i40
-            k4pn = k4p1 + i40
-            a(k4pn) = a(k3pn)
-            a(k3pn) = yp(i40)
-         enddo
+                  do i40 = 1, ndo
+                     k3pn = k3p1 + i40
+                     k4pn = k4p1 + i40
+                     a(k4pn) = a(k3pn)
+                     a(k3pn) = yp(i40)
+                  enddo
+               endif
 
-8        continue
-         a(k4p1) = a(k3p1)
-         a(k3p1) = val
-30    continue
+               a(k4p1) = a(k3p1)
+               a(k3p1) = val
+            enddo
+         elseif ( l==1 ) then
+!
+! L IS 1
+!
+            cc = a(k2+2)
+            val = a(k2+1) + (x-a(2))*cc
+            if ( nder>=1 ) yp(1) = cc
+         else
+!
+! L IS 0
+!
+            val = a(k2+1)
+         endif
 !=======================================================================
 !
 ! NORMAL RETURN OR ABORT DUE TO ERROR
 !
-999   yfit = val
-      return
+         yfit = val
+         return
+      endif
+   endif
 !=======================================================================
-888   continue
-      write (xern1, '(I8)') l
-      write (xern2, '(I8)') nord
-      call ju_xermsg ('SLATEC', 'JU_PVALUE',                             &
-      &   'THE ORDER OF POLYNOMIAL EVALUATION, L = ' // xern1 //          &
-      &   ' REQUESTED EXCEEDS THE HIGHEST ORDER FIT, NORD = ' // xern2 // &
-      &   ', COMPUTED BY POLFIT -- EXECUTION TERMINATED.', 8, 2)
-      return
+   write (xern1,'(I8)') l
+   write (xern2,'(I8)') nord
+   call ju_xermsg('SLATEC','JU_PVALUE','THE ORDER OF POLYNOMIAL EVALUATION, L = '//xern1// &
+   &' REQUESTED EXCEEDS THE HIGHEST ORDER FIT, NORD = '//xern2//', COMPUTED BY POLFIT -- EXECUTION TERMINATED.',8,2)
+   return
 !=======================================================================
-!
-12    call ju_xermsg ('SLATEC', 'JU_PVALUE',                             &
-      &   'INVALID INPUT PARAMETER.  ORDER OF POLYNOMIAL EVALUATION ' //  &
-      &   'REQUESTED IS NEGATIVE -- EXECUTION TERMINATED.', 2, 2)
-!=======================================================================
-   end subroutine ju_pvalue
+end subroutine ju_pvalue
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2663,14 +2808,14 @@ real         :: yp
 !!       Physiker, Springer, Berlin/Goettingen/Heidelberg, 1963,
 !!       pp.227-230.
 subroutine qhfg(x,y,dery,z,ndim)
-real          :: x(*)
-real          :: y(*)
-real          :: dery(*)
-real          :: z(*)
-integer       :: ndim
-integer       :: i
-real          :: sum1
-real          :: sum2
+real    :: x(*)
+real    :: y(*)
+real    :: dery(*)
+real    :: z(*)
+integer :: ndim
+integer :: i
+real    :: sum1
+real    :: sum2
 
    sum2=0.0
    if((ndim-1).eq.0)then
@@ -2694,7 +2839,8 @@ end subroutine qhfg
 !===================================================================================================================================
 !>
 !!##NAME
-!!    qhsg(3f) - [M_math] Compute integral values for given table of argument, function, 1st derivative, and 2nd derivative values.
+!!    qhsg(3f) - [M_math] Compute integral values for given table of
+!!    argument, function, 1st derivative, and 2nd derivative values.
 !!
 !!##SYNOPSIS
 !!
@@ -2729,30 +2875,34 @@ end subroutine qhfg
 !!       R.Zurmuehl, Praktische Mathematik fuer Ingenieure und
 !!       Physiker, Springer, Berlin/Goettingen/Heidelberg, 1963,
 !!       pp.227-230.
+!*==qhsg.f90 processed by SPAG 8.01RF 04:52 14 Dec 2024
 subroutine qhsg(x,y,fdy,sdy,z,ndim)
-real,intent(in)    :: x(*)
-real,intent(in)    :: y(*)
-real,intent(in)    :: fdy(*)
-real,intent(in)    :: sdy(*)
-real,intent(out)   :: z(*)
-integer,intent(in) :: ndim
-integer            :: i
-real               :: sum1
-real               :: sum2
-   sum2=0.0
-   if(ndim-1)4,3,1
+implicit none
+real, intent(in)    :: x(*)
+real, intent(in)    :: y(*)
+real, intent(in)    :: fdy(*)
+real, intent(in)    :: sdy(*)
+real, intent(out)   :: z(*)
+integer, intent(in) :: ndim
+integer             :: i
+real                :: sum1
+real                :: sum2
+   sum2 = 0.0
+
+   if ( ndim < 1 ) return
+
+   if ( ndim /= 1 ) then
 
 !     integration loop
-1  continue
-   do i=2,ndim
-      sum1=sum2
-      sum2=.5*(x(i)-x(i-1))
-      sum2=sum1+sum2*((y(i-1)+y(i))+.4*sum2*((fdy(i-1)-fdy(i))+ 0.1666667*sum2*(sdy(i-1)+sdy(i))))
-      z(i-1)=sum1
-   enddo
-3  continue
-   z(ndim)=sum2
-4  continue
+      do i = 2, ndim
+         sum1 = sum2
+         sum2 = .5*(x(i)-x(i-1))
+         sum2 = sum1 + sum2*((y(i-1)+y(i))+.4*sum2*((fdy(i-1)-fdy(i))+0.1666667*sum2*(sdy(i-1)+sdy(i))))
+         z(i-1) = sum1
+      enddo
+   endif
+
+   z(ndim) = sum2
 end subroutine qhsg
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -2792,11 +2942,11 @@ end subroutine qhsg
 !!       F.B.Hildebrand, Introduction to Numerical Analysis,
 !!       McGraw-Hill, New York/Toronto/London, 1956, pp.75.
 subroutine qtfg(x,y,z,ndim)
-integer,intent(in)  :: ndim
-real,intent(in)     :: x(ndim),y(ndim)
-real,intent(out)    :: z(ndim)
-integer             :: i
-real                :: sum1, sum2
+integer,intent(in) :: ndim
+real,intent(in)    :: x(ndim),y(ndim)
+real,intent(out)   :: z(ndim)
+integer            :: i
+real               :: sum1, sum2
 
    if(ndim.le.0)then
       return
@@ -2844,7 +2994,7 @@ end subroutine qtfg
 !!
 subroutine trapezoidal_integral(x,y,ivals,y2)
 
-! ident_8="@(#) trapezoidal integration"
+! ident_7="@(#) trapezoidal integration"
 
 real,intent(in)    :: x(*), y(*)
 real,intent(out)   :: y2(*)
@@ -2915,7 +3065,7 @@ end subroutine trapezoidal_integral
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine citer(a,r,h,s,c,dadh)
 use M_framework__journal, only : journal
-! ident_9="@(#) M_math citer(3f) determine various geometric properties of circle segment given radius and area of the segment."
+! ident_8="@(#) M_math citer(3f) determine various geometric properties of circle segment given radius and area of the segment."
 !
 ! COPYRIGHT (C) John S. Urban, 08/31/1995
 !
@@ -2925,14 +3075,14 @@ use M_framework__journal, only : journal
 !
 !     Internal Variable Declarations
 !
-      doubleprecision aors
-      doubleprecision thetahi,thetalo,theta
-      doubleprecision flo,fhi,f
-      doubleprecision pi,tol,x
-      doubleprecision funct
-      integer icount
-      data pi/3.14159265358979d0/,tol/1.d-10/
-!
+doubleprecision           :: aors
+doubleprecision           :: thetahi,thetalo,theta
+doubleprecision           :: flo,fhi,f
+doubleprecision,parameter :: pi=3.14159265358979d0
+doubleprecision,parameter :: tol=1.d-10
+doubleprecision           :: x
+doubleprecision           :: funct
+integer                   :: icount
 !-----------------------------------------------------------------------
 !
 !     Statement Function Definition
@@ -2995,7 +3145,7 @@ use M_framework__journal, only : journal
       theta=thetalo+(thetahi-thetalo)*(aors-flo)/(fhi-flo)
       f=funct(theta)
       icount=1
-10    continue
+      INFINITE: do
       if (abs(f-aors).gt.tol)then
         icount=icount+2
         if(icount.gt.100) then
@@ -3038,8 +3188,10 @@ use M_framework__journal, only : journal
 !
         theta=thetalo+(thetahi-thetalo)*(aors-flo)/(fhi-flo)
         f=funct(theta)
-        goto 10
+      else
+         exit
       endif
+      enddo INFINITE
 !
 !     The iteration on THETA has converged.
 !
@@ -3161,7 +3313,7 @@ end subroutine citer
 subroutine envelope(x, y, n, vertex, nvert) !-- saved from url=(0048)http://users.bigpond.net.au/amiller/envelope.f90
 implicit none
 
-! ident_10="@(#) M_math envelope(3f) Find the vertices (in clockwise order) of a polygon enclosing the points (x(i) y(i) i=1 ... n."
+! ident_9="@(#) M_math envelope(3f) Find the vertices (in clockwise order) of a polygon enclosing the points (x(i) y(i) i=1 ... n."
 
 integer,intent(in) :: n
 real,intent(in)    :: x(n), y(n)
@@ -3173,8 +3325,7 @@ integer :: iwk(n)                  ! iwk() is an integer work array which must h
 !       Local variables
 
 integer :: next(n), i, i1, i2, j, jp1, jp2, i2save, i3, i2next
-real    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
-&  dx1, dx2, dmax1, dmax2, dy1, dy2, temp, zero = 0.0
+real    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, dx1, dx2, dmax1, dmax2, dy1, dy2, temp, zero = 0.0
 
    if (n < 2) return
 
@@ -3285,11 +3436,11 @@ real    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
 !  Introduce new vertex between vertices j & j+1, if one has been found.
 !  Otherwise increase j.   Exit if no more vertices.
 
-40 continue
+   INFINITE: do
    if (next(j) < 0) then
       if (j == nvert) return
       j = j + 1
-      goto 40
+      cycle INFINITE
    endif
 
    jp1 = j + 1
@@ -3328,42 +3479,42 @@ real    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, &
    iwk(i1) = -1
    iwk(i2) = -1
 
-60 continue
-   if (i /= i2save) then
-      dist = (y(i) - y1)*dx1 - (x(i) - x1)*dy1
-      if (dist > zero) then
-         iwk(i1) = i
-         i1 = i
-         if (dist > dmax1) then
-            next(j) = i
-            dmax1 = dist
-         endif
-      else
-         dist = (y(i) - y2)*dx2 - (x(i) - x2)*dy2
+   WORKFOREVER: do
+      if (i /= i2save) then
+         dist = (y(i) - y1)*dx1 - (x(i) - x1)*dy1
          if (dist > zero) then
-            iwk(i2) = i
-            i2 = i
-            if (dist > dmax2) then
-               next(jp1) = i
-               dmax2 = dist
+            iwk(i1) = i
+            i1 = i
+            if (dist > dmax1) then
+               next(j) = i
+               dmax1 = dist
+            endif
+         else
+            dist = (y(i) - y2)*dx2 - (x(i) - x2)*dy2
+            if (dist > zero) then
+               iwk(i2) = i
+               i2 = i
+               if (dist > dmax2) then
+                  next(jp1) = i
+                  dmax2 = dist
+               endif
             endif
          endif
+         i = iwk(i)
+      else
+         i = i2next
       endif
-      i = iwk(i)
-   else
-      i = i2next
-   endif
 
+      if (i <= 0) exit WORKFOREVER
 !  Get next point from old list at vertex j.
-
-   if (i > 0) goto 60
+   enddo WORKFOREVER
 
 !  End lists with -ve values.
 
    iwk(i1) = -1
    iwk(i2) = -1
 
-   goto 40
+   enddo INFINITE
 end subroutine envelope
 !>
 !!##NAME
@@ -3389,8 +3540,8 @@ end subroutine envelope
 !!    nconv   the number of points in the polygon
 !!
 !!##RESULT
-!!    INPOLYGON returns .true if the point
-!!    lies inside the polygon, otherwise it returns .false.
+!!    INPOLYGON returns .true if the point lies inside the polygon, otherwise
+!!    it returns .false.
 !!##EXAMPLE
 !!
 !!   Sample program
@@ -3450,10 +3601,10 @@ end subroutine envelope
 !!    write(*,*)'polyarea=',polyarea( xy(1,vertex(1:nvert)), xy(2,vertex(1:nvert)))
 !!    contains
 !!    subroutine pickrandom()
-!!       ! randomly pick a point in the plot area and color it according to whether it is inside
-!!       ! the original polygon
-!!       real :: pointx, pointy
-!!       integer :: l, m
+!!    ! randomly pick a point in the plot area and color it according to whether it is inside
+!!    ! the original polygon
+!!    real :: pointx, pointy
+!!    integer :: l, m
 !!       call random_number(pointx)
 !!       call random_number(pointy)
 !!       pointx=int(pointx*20.0-10.0)
@@ -3469,59 +3620,66 @@ end subroutine envelope
 !!    end program demo_inpolygon
 logical function inpolygon(xin, yin, xconv, yconv, nconv)
 
-! ident_11="@(#) M_math inpolygon(3f) Subroutine to determine whether or not an integer point is in a polygon of integer points"
+! ident_10="@(#) M_math inpolygon(3f) Subroutine to determine whether or not an integer point is in a polygon of integer points"
 
 integer,intent(in)  :: xin,yin                       ! coordinates of the point to be checked
 integer,intent(in)  :: nconv                         !
 integer             :: xconv(nconv), yconv(nconv)
 real                :: x,y                           ! real copy of input point
+real                :: temp                          ! real copy of input point
 integer             :: z(4)= [-32701,-32701,32701,32701]
 integer             :: i, j, m
 
-      x=xin
-      y=yin
-      if (z(1).eq.-32701) then
-         do i = 1,nconv
-            z(1)=max(z(1),xconv(i))
-            z(2)=max(z(2),yconv(i))
-            z(3)=min(z(3),xconv(i))
-            z(4)=min(z(4),yconv(i))
-         enddo
+   x=xin
+   y=yin
+   if (z(1).eq.-32701) then
+      do i = 1,nconv
+         z(1)=max(z(1),xconv(i))
+         z(2)=max(z(2),yconv(i))
+         z(3)=min(z(3),xconv(i))
+         z(4)=min(z(4),yconv(i))
+      enddo
+   endif
+   inpolygon=.true.
+   if(x .lt. z(3) .or. x .gt. z(1)) inpolygon=.false.
+   if(y .lt. z(4) .or. y .gt. z(2)) inpolygon=.false.
+   if(.not. inpolygon) return
+
+   j=0
+   do i = 2,nconv
+      m=0
+
+      if ((yconv(i-1)-yin)*(yin-yconv(i)).lt.0) cycle
+
+      select case(yconv(i-1)-yconv(i))
+      case(:-1)
+         m=m-1
+      case(1:)
+         m=m-2
+         m=m-1
+      case(0)
+         if ((xconv(i-1)-x)*(x-xconv(i)).lt.0)then
+            cycle
+         else
+            return
+         endif
+      end select
+
+      m=m+2
+      temp=(y-yconv(i-1))*(float(xconv(i))-xconv(i-1))/(yconv(i)-float(yconv(i-1)))+xconv(i-1)-x
+      if (temp < 0)then
+         cycle
+      elseif(temp == 0 )then
+         return
       endif
-      inpolygon=.true.
-      if(x .lt. z(3) .or. x .gt. z(1)) inpolygon=.false.
-      if(y .lt. z(4) .or. y .gt. z(2)) inpolygon=.false.
-      if(.not. inpolygon) return
+      j=j+m
+   enddo
 
-      j=0
-      do 90 i = 2,nconv
-         m=0
-   !-----------------------------------------------------
-         select case ((yconv(i-1)-yin)*(yin-yconv(i)))
-         case(:-1); cycle
-         case(0)  ;
-         case(1:) ;
-         end select
-   !-----------------------------------------------------
-         select case (yconv(i-1)-yconv(i))
-         case(:-1); m=m-1; goto 70
-         case(0)  ;
-         case(1:) ; m=m-2 ;m=m-1;goto 70
-         end select
-   !-----------------------------------------------------
-         if ((xconv(i-1)-x)*(x-xconv(i))) 90,100,100
-   !-----------------------------------------------------
-   70 continue
-         m=m+2
-         if ((y-yconv(i-1))*(float(xconv(i))-xconv(i-1))/(yconv(i)-float(yconv(i-1)))+xconv(i-1)-x) 90,100,80
-   80 continue
-         j=j+m
-   90 continue
-
-      inpolygon=.false.
-      if(j/4*4 .ne. j) inpolygon=.true.
-  100 continue
-      end function inpolygon
+   inpolygon=.false.
+   if(j/4*4 .ne. j) inpolygon=.true.
+100 continue
+end function inpolygon
+! ident_11="@(#) M_math inpolygon(3f) Subroutine to determine whether or not an integer point is in a polygon of integer points"
 !>
 !!##NAME
 !!   locpt(3f) - [M_math:geometry] find if a point is inside a polygonal path
@@ -3530,18 +3688,19 @@ integer             :: i, j, m
 !!   Usage:
 !!
 !!    subroutine locpt (x0,y0,x,y,n,l,m)
-!!    real, intent(in)     :: x0, y0, x(:), y(:)
-!!    integer, intent(in)  :: n
-!!    integer, intent(out) :: l, m
+!!
+!!     real, intent(in)     :: x0, y0, x(:), y(:)
+!!     integer, intent(in)  :: n
+!!     integer, intent(out) :: l, m
 !!
 !!##DESCRIPTION
 !!   Given a polygonal line connecting the vertices (X(I),Y(I)) (I = 1,...,N)
 !!   taken in this order. it is assumed that the polygonal path is a loop,
-!!   where (X(N),Y(N)) = (X(1),Y(1)) or there is an arc from (X(N),Y(N)) to
-!!   (X(1),Y(1)). N.B. The polygon may cross itself any number of times.
+!!   where (X(N),Y(N)) = (X(1),Y(1)) or there is an arc from (X(N),Y(N))
+!!   to (X(1),Y(1)). N.B. The polygon may cross itself any number of times.
 !!
-!!   (X0,Y0) is an arbitrary point and l and m are variables.
-!!   On output, L and M are assigned the following values ...
+!!   (X0,Y0) is an arbitrary point and l and m are variables.  On output,
+!!   L and M are assigned the following values ...
 !!
 !!      L = -1   If (X0,Y0) is outside the polygonal path
 !!      L =  0   If (X0,Y0) lies on the polygonal path
@@ -3557,9 +3716,10 @@ integer             :: i, j, m
 !!##EXAMPLE
 !!
 !!
-!!   Draw a polygon and the envelope of the polygon, and find the area of
-!!   each polygon. Also place a number of small circles in the plot area colored
-!!   according to whether they fall within the border of the original polygon.
+!!   Draw a polygon and the envelope of the polygon, and find the area
+!!   of each polygon. Also place a number of small circles in the plot
+!!   area colored according to whether they fall within the border of the
+!!   original polygon.
 !!
 !!    program demo_envelope
 !!    use M_draw
@@ -3634,25 +3794,23 @@ integer             :: i, j, m
 !!       call circle(pointx,pointy,0.2)
 !!    end subroutine pickrandom
 !!    end program demo_envelope
-!-----------------------------------------------------------------------------------------------------------------------------------
-subroutine locpt (x0, y0, x, y, n, l, m)
+!*==locpt.f90 processed by SPAG 8.01RF 04:02 14 Dec 2024
+subroutine locpt(x0,y0,x,y,n,l,m)
 implicit none
-! ident_12="@(#) M_math locpt(3f) find if a point is inside a polygonal path"
-!-----------------------------------------------------------------------------------------------------------------------------------
-   real, intent(in)     :: x0, y0, x(:), y(:)
-   integer, intent(in)  :: n
-   integer, intent(out) :: l, m
 
-   !     Local variables
-   integer :: i, n0
-   real    :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
-!-----------------------------------------------------------------------------------------------------------------------------------
+! ident_12="@(#) M_math locpt(3f) find if a point is inside a polygonal path"
+
+real, intent(in)     :: x0, y0, x(:), y(:)
+integer, intent(in)  :: n
+integer, intent(out) :: l, m
+
+integer              :: i, n0
+real                 :: angle, eps, pi, pi2, sum, theta, theta1, thetai, tol, u, v
+
    eps = epsilon(1.0)   ! EPS is a machine dependent constant. EPS is the smallest number such that 1.0 + EPS > 1.0
    n0 = n
-   if (x(1) == x(n) .and. y(1) == y(n))then
-      n0 = n - 1
-   endif
-   pi = atan2(0.0, -1.0)
+   if ( x(1)==x(n) .and. y(1)==y(n) ) n0 = n - 1
+   pi = atan2(0.0,-1.0)
    pi2 = 2.0*pi
    tol = 4.0*eps*pi
    l = -1
@@ -3660,62 +3818,48 @@ implicit none
 
    u = x(1) - x0
    v = y(1) - y0
-   if (u == 0.0 .and. v == 0.0)then
-      goto 20
-   endif
-   if (n0 < 2)then
+   if ( u==0.0 .and. v==0.0 ) then
+      l = 0
       return
    endif
-   theta1 = atan2(v, u)
+   if ( n0<2 ) return
+   theta1 = atan2(v,u)
 
    sum = 0.0
    theta = theta1
    do i = 2, n0
       u = x(i) - x0
       v = y(i) - y0
-      if (u == 0.0 .and. v == 0.0) then
-         goto 20
+      if ( u==0.0 .and. v==0.0 ) then
+         l = 0
+         return
       endif
-      thetai = atan2(v, u)
+      thetai = atan2(v,u)
 
-      angle = abs(thetai - theta)
-      if (abs(angle - pi) < tol)then
-         goto 20
+      angle = abs(thetai-theta)
+      if ( abs(angle-pi)<tol ) then
+         l = 0
+         return
       endif
-      if (angle > pi)then
-         angle = angle - pi2
-      endif
-      if (theta > thetai)then
-         angle = -angle
-      endif
+      if ( angle>pi ) angle = angle - pi2
+      if ( theta>thetai ) angle = -angle
       sum = sum + angle
       theta = thetai
    enddo
-   angle = abs(theta1 - theta)
-   if (abs(angle - pi) < tol)then
-      goto 20
-   endif
-   if (angle > pi)then
-      angle = angle - pi2
-   endif
-   if (theta > theta1)then
-      angle = -angle
-   endif
-   sum = sum + angle            ! SUM = 2*PI*M WHERE M IS THE WINDING NUMBER
-   m = int(abs(sum)/pi2 + 0.2)
-   if (m == 0) then
+   angle = abs(theta1-theta)
+   if ( abs(angle-pi)<tol ) then
+      l = 0
       return
    endif
+   if ( angle>pi ) angle = angle - pi2
+   if ( theta>theta1 ) angle = -angle
+   sum = sum + angle            ! SUM = 2*PI*M WHERE M IS THE WINDING NUMBER
+   m = int(abs(sum)/pi2+0.2)
+   if ( m==0 ) return
    l = 1
-   if (sum < 0.0)then
-      m = -m
-   endif
+   if ( sum<0.0 ) m = -m
    return
-
-20 continue                     ! (X0, Y0) IS ON THE BOUNDARY OF THE PATH
-   l = 0
 end subroutine locpt
-!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!      poly_intercept(3f) - [M_math:geometry] intersection of a straight line and polygonal path
@@ -4296,8 +4440,9 @@ end subroutine test_closest
 !!##SYNOPSIS
 !!
 !!    pure function hypot(x,y) result(z)
-!!    real,intent(in):: x,y
-!!    real:: z
+!!
+!!     real,intent(in):: x,y
+!!     real:: z
 !!##DESCRIPTION
 !!    hypot(x,y) is the Euclidean distance function. It is equal to
 !!    sqrt{X**2 + Y**2}, without undue underflow or overflow.
@@ -5109,8 +5254,8 @@ implicit none
    ! (sqr is an array of geometric means of adjacent values of vint).
    doubleprecision,parameter :: sqr(3)=  [sqrt(2.0d0), sqrt(10.0d0), sqrt(50.0d0)]
 
-   doubleprecision      :: fn, a, al, b, fm1
-   integer              :: i, nal, m1, ivint
+   doubleprecision           :: fn, a, al, b, fm1
+   integer                   :: i, nal, m1, ivint
    doubleprecision,parameter :: del = 0.000002d0
 !-----------------------------------------------------------------------------------------------------------------------------------
    xmin=dble(xmin0)
@@ -5223,8 +5368,7 @@ end subroutine scale1
 !!    Typically used to find nice ranges for axis scales. Given XMIN, XMAX
 !!    and N, where N is greater than 1, find new log range. Finds a new
 !!    range XMINP and XMAXP divisible into exactly N LOGARITHMIC intervals,
-!!    where the ratio of adjacent uniformly spaced scale values
-!!    is DIST.
+!!    where the ratio of adjacent uniformly spaced scale values is DIST.
 !!
 !!##EXAMPLE
 !!
@@ -5236,22 +5380,18 @@ end subroutine scale1
 !!     real :: start, end
 !!     real :: xminp, xmaxp, dist
 !!     integer :: intervals
-!!     integer :: ios
-!!     ! real :: treme(2)
+!!     integer :: iostat
 !!     intervals=5
-!!     write(*,*)'Enter start and end values'
+!!     write(*,'(a)',advance='no')'Enter start and end values:'
 !!     do
-!!       read(*,*,iostat=ios)start,end
-!!       if(ios.ne.0)exit
+!!       read(*,*,iostat=iostat)start,end
+!!       if(iostat.ne.0)exit
 !!       call scale3(start,end,intervals,xminp,xmaxp,dist)
-!!       ! treme(1)=log10(xminp)
-!!       ! treme(2)=log10(xmaxp)
-!!       ! treme(1)=floor(treme(1))
-!!       ! treme(2)=ceiling(treme(2))
-!!       ! if(treme(2).eq.treme(1))treme(2)=treme(2)+1
-!!       write(*,'(a,g0,a,g0,a,i0,a,g0)') &
-!!               & 'nice range is 10**',log10(xminp),' to 10**',log10(xmaxp),' by ', &
-!!               & nint((log10(xmaxp)-log10(xminp))/dist),' intervals of ',dist
+!!       write(*,'(*(g0))')                                &
+!!       & 'nice log range is 10**', log10(xminp),         &
+!!       & ' to 10**',log10(xmaxp),                        &
+!!       & ' by ', nint((log10(xmaxp)-log10(xminp))/dist), &
+!!       & ' intervals of 10**',dist
 !!     enddo
 !!     end program demo_scale3
 !===================================================================================================================================
@@ -5262,16 +5402,16 @@ use M_framework__journal, only : journal
 implicit none
 ! ident_23="@(#) M_math scale3(3f) find nice log range."
 
-real,intent(in)               :: xmin0, xmax0
-integer,intent(in)            :: n0
-real,intent(out)              :: xminp, xmaxp, dist
+real,intent(in)           :: xmin0, xmax0
+integer,intent(in)        :: n0
+real,intent(out)          :: xminp, xmaxp, dist
 
-   doubleprecision,parameter  :: del = 0.000002d0
-   doubleprecision xmin, xmax, hold
-   integer n
-   doubleprecision xminl, xmaxl, fn, a, al, b, distl, fm1, fm2
-   integer     nal, i, m1, m2, np, nx, iv
-   doubleprecision,save :: vint(11) = [10.0d0,9.0d0,8.0d0,7.0d0,6.0d0,5.0d0,4.0d0,3.0d0,2.0d0,1.0d0,0.5d0]
+doubleprecision,parameter :: del = 0.000002d0
+doubleprecision           :: xmin, xmax, hold
+integer                   :: n
+doubleprecision           :: xminl, xmaxl, fn, a, al, b, distl, fm1, fm2
+integer                   :: nal, i, m1, m2, np, nx, iv
+doubleprecision,save      :: vint(11) = [10.0d0,9.0d0,8.0d0,7.0d0,6.0d0,5.0d0,4.0d0,3.0d0,2.0d0,1.0d0,0.5d0]
 !-----------------------------------------------------------------------------------------------------------------------------------
 !  Check whether proper input values were supplied.
    xmin=xmin0
@@ -5325,33 +5465,35 @@ real,intent(out)              :: xminp, xmaxp, dist
   endblock CLOSEST
 !===================================================================================================================================
 !     The interval size is computed
-30    continue
-   distl = 10.0d0**(nal + 1) / vint(iv)
-   fm1 = xminl / distl
-   m1 = int(fm1)
-   if (fm1 .lt. 0.0d0) then
-      m1 = m1 -1
-   endif
-   if (abs(dble(m1) + 1.0d0 - fm1) .lt. del)then
-      m1 = m1 - 1
-   endif
+   INTERVAL_SIZE: do
+      distl = 10.0d0**(nal + 1) / vint(iv)
+      fm1 = xminl / distl
+      m1 = int(fm1)
+      if (fm1 .lt. 0.0d0) then
+         m1 = m1 -1
+      endif
+      if (abs(dble(m1) + 1.0d0 - fm1) .lt. del)then
+         m1 = m1 - 1
+      endif
+   !
+   !  The new minimum and maximum limits are found
+      xminp = distl * dble(m1)
+      fm2 = xmaxl / distl
+      m2 = int(fm2 + 1.0d0)
+      if (fm2 .lt. -1.0d0)then
+         m2 = m2 -1
+      endif
+      if (abs(fm2 + 1.0d0 - dble(m2)) .lt. del)then
+         m2 = m2 -1
+      endif
+      xmaxp = distl * dble(m2)
+   !
+   !  Check whether another pass is necessary
+      np = m2 - m1
+      iv = iv + 1
+      if( np .le. n) exit INTERVAL_SIZE
+   enddo INTERVAL_SIZE
 !===================================================================================================================================
-!  The new minimum and maximum limits are found
-   xminp = distl * dble(m1)
-   fm2 = xmaxl / distl
-   m2 = int(fm2 + 1.0d0)
-   if (fm2 .lt. -1.0d0)then
-      m2 = m2 -1
-   endif
-   if (abs(fm2 + 1.0d0 - dble(m2)) .lt. del)then
-      m2 = m2 -1
-   endif
-   xmaxp = distl * dble(m2)
-!===================================================================================================================================
-!  Check whether another pass is necessary
-   np = m2 - m1
-   iv = iv + 1
-   if( np .gt. n) goto 30
    nx = (n - np) / 2
    xminp = xminp - nx * distl
    xmaxp = xminp + n * distl

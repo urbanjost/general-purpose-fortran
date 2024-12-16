@@ -17,6 +17,8 @@
 !!
 !!##SYNOPSIS
 !!
+!! Usage:
+!!
 !!   use M_getopt, only : getopt
 !!   use M_getopt, only : option_s
 !!   use M_getopt, only : optarg,optopt,optind
@@ -78,7 +80,7 @@
 !!   - does not support "--opt=value" syntax, only "--opt value"
 !!   - knows the length of longopts, so does not need an empty last record
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!

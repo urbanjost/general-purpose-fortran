@@ -30,7 +30,7 @@
 !!    Precise getopt functionality is not really desirable. The biggest
 !!    drawback of getopt is the use of globals. (It was designed a long
 !!    time ago.). This interface uses OOP with a derived-type data object.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!

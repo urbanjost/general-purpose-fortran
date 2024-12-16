@@ -115,10 +115,11 @@ contains
 !!##SYNOPSIS
 !!
 !!    use, intrinsic :: iso_fortran_env, only : int64
+!!
 !!     integer function least_common_multiple(i,j)
 !!     integer,intent(in):: i,j
 !!      or
-!!    integer function(kind=int32) least_common_multiple(m)
+!!     integer function(kind=int32) least_common_multiple(m)
 !!     integer,intent(in):: m(:)
 !!      or
 !!     integer,intent(in):: m(:,:)
@@ -143,11 +144,11 @@ contains
 !!    is also well-defined: it is the smallest positive integer that is
 !!    divisible by each of them.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample Program:
 !!
-!!    program demo_lcm
+!!    program demo_least_common_multiple
 !!    use M_factor, only : lcm=>least_common_multiple
 !!    implicit none
 !!       write(*,*)'SCALAR:'
@@ -190,7 +191,7 @@ contains
 !!             & lcm(array),lcm(array).eq.answer
 !!       end subroutine writeit_v
 !!
-!!    end program demo_lcm
+!!    end program demo_least_common_multiple
 !!
 !!   Expected results:
 !!
@@ -328,9 +329,9 @@ end function lcm_matrix
 !!
 !!##SYNOPSIS
 !!
-!!    integer function lcm_cuboid(m)
+!!     integer function lcm_cuboid(m)
 !!
-!!     integer,intent(in)  :: m(:,:,:)
+!!      integer,intent(in)  :: m(:,:,:)
 !!
 !!##DESCRIPTION
 !!    Find the Least Common Denominator of an INTEGER cuboid M(:,:,:).
@@ -358,15 +359,15 @@ end function lcm_cuboid
 !!   The function is generic and may take either two integers or an integer
 !!   vector, matrix, or cuboid.
 !!
-!!    integer function greatest_common_divisor(i,j)
-!!    integer,intent(in)::  i,j
+!!     integer function greatest_common_divisor(i,j)
+!!     integer,intent(in)::  i,j
+!!       or
+!!     integer function greatest_common_divisor(m)
+!!     integer,intent(in)::  m(:)
 !!      or
-!!    integer function greatest_common_divisor(m)
-!!    integer,intent(in)::  m(:)
-!!     or
-!!    integer,intent(in)::  m(:,:)
-!!     or
-!!    integer,intent(in)::  m(:,:,:)
+!!     integer,intent(in)::  m(:,:)
+!!      or
+!!     integer,intent(in)::  m(:,:,:)
 !!
 !!##DESCRIPTION
 !!
@@ -382,7 +383,7 @@ end function lcm_cuboid
 !!
 !!    3. Repeat both steps until remainder becomes zero.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  Sample program:
@@ -594,12 +595,12 @@ end function gcd_cuboid
 !>
 !!##NAME
 !!    i_is_prime(3f) - [M_factor] Determine if a number is prime using Sieve of Erasthosthenes
-!!    (LICENSE:???)
+!!    (LICENSE:UNKNOWN)
 !!##SYNOPSIS
 !!
-!!    function i_is_prime ( n )
+!!     function i_is_prime(n)
 !!
-!!     integer,intent(in) :: n
+!!      integer,intent(in) :: n
 !!
 !!##DESCRIPTION
 !!    A simple, unoptimized sieve of Erasthosthenes is used to check whether
@@ -617,7 +618,7 @@ end function gcd_cuboid
 !!    Output  logical I_IS_PRIME(3f) is TRUE if N is prime, and FALSE
 !!            otherwise. Note that negative numbers and 0 are not
 !!            considered prime.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample program
 !!
@@ -641,7 +642,6 @@ end function gcd_cuboid
 !!    write(*,*)all(.not.i_is_prime([4,6,8,9,10,12,14,15,16,18]))
 !!    write(*,*)any(.not.i_is_prime([4,6,8,9,10,12,14,15,16,18]))
 !!    end program demo_i_is_prime
-!! end program demo_i_is_prime
 !===================================================================================================================================
 pure elemental function i_is_prime(n)
 implicit none
@@ -684,13 +684,13 @@ end function I_IS_PRIME
 !!    prime_factors(3f) - [M_factor] decompose a number into its prime factors
 !!##SYNOPSIS
 !!
-!!    call prime_factors(number,nprm,iprm,iexp[,verbose])
+!!     call prime_factors(number,nprm,iprm,iexp[,verbose])
 !!
-!!     integer, intent(in)          :: number
-!!     integer, intent(out)         :: nprm
-!!     integer, intent(out)         :: iprm(:)
-!!     integer, intent(out)         :: iexp(:)
-!!     logical, intent(in),optional :: verbose
+!!      integer, intent(in)          :: number
+!!      integer, intent(out)         :: nprm
+!!      integer, intent(out)         :: iprm(:)
+!!      integer, intent(out)         :: iexp(:)
+!!      logical, intent(in),optional :: verbose
 !!##DESCRIPTION
 !!
 !!    1. Upon return from PRIME_FACTORS,
@@ -720,7 +720,7 @@ end function I_IS_PRIME
 !!
 !!              o false - Results are not printed.
 !!              o true - Results are printed.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  Sample program:

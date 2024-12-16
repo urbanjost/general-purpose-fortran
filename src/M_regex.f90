@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -445,7 +434,7 @@ contains
 !!      NMATCH   number of subexpressions in regular expression
 !!      STATUS   If absent, errors are fatal
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -570,7 +559,7 @@ end subroutine regcomp
 !!
 !!##RETURNS
 !!    regexec    LOGICAL value is .TRUE. if a match was found
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -691,7 +680,7 @@ end function regexec
 !!##RETURNS
 !!    regmatch   the selected substring extracted from STRING.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -804,7 +793,7 @@ end function regmatch
 !!      ERRMSG       the error message
 !!      ERRMSG_LEN   size required of ERRMSG to display the entire message
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -904,7 +893,7 @@ end function regerror
 !!##OPTIONS
 !!   THIS  a compiled regular expression previously allocated using regcomp(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -1252,7 +1241,7 @@ end function s2c
 !!##RETURNS
 !!    f_string          Fortran character variable to return
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR

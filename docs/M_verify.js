@@ -1,5 +1,4 @@
 function loadthem(){
-append("M_framework__verify.3m_verify.html");
 append("M_verify.3m_verify.html");
 append("accdig.3m_verify.html");
 append("almost.3m_verify.html");

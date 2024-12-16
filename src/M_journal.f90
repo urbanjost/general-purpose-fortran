@@ -269,7 +269,7 @@ private
 !!   TFORMAT     when WHERE="%" the message is treated as a time format
 !!               specification as described under now(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!

@@ -15,11 +15,13 @@
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    use M_drawplus, only : spirograph ,call_draw ,draw_interpret
-!!    use M_drawplus, only : arrowhead ,plain_rect ,rdpnt ,rdbox ,barcode
-!!    use M_drawplus, only : uconic ,ellipse ,uarc ,polyline2, seefont
-!!    use M_drawplus, only : smoot, ismoo,ismoo1,ismoo2,ismoo3,perin
-!!    use M_drawplus, only : ismoo,ismoo1,ismoo2,ismoo3, perin
+!!  Usage:
+!!
+!!      use M_drawplus, only : spirograph ,call_draw ,draw_interpret
+!!      use M_drawplus, only : arrowhead ,plain_rect ,rdpnt ,rdbox ,barcode
+!!      use M_drawplus, only : uconic ,ellipse ,uarc ,polyline2, seefont
+!!      use M_drawplus, only : smoot, ismoo,ismoo1,ismoo2,ismoo3,perin
+!!      use M_drawplus, only : ismoo,ismoo1,ismoo2,ismoo3, perin
 !!
 !!##DESCRIPTION
 !!    M_drawplus(3f) is a collection of higher level graphic routines that call the
@@ -157,12 +159,12 @@ contains
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine arrowhead(xpoint,ypoint,xstart,ystart,size,idraw)
+!!     subroutine arrowhead(xpoint,ypoint,xstart,ystart,size,idraw)
 !!
-!!    real,intent(in)    :: xpoint,ypoint
-!!    real,intent(in)    :: xstart,ystart
-!!    real,intent(in)    :: size
-!!    integer,intent(in) :: idraw
+!!      real,intent(in)    :: xpoint,ypoint
+!!      real,intent(in)    :: xstart,ystart
+!!      real,intent(in)    :: size
+!!      integer,intent(in) :: idraw
 !!
 !!##DESCRIPTION
 !!    given line segment
@@ -305,12 +307,12 @@ end subroutine arrowhead
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!   subroutine plain_rect(x1,y1,x2,y2)
+!!     subroutine plain_rect(x1,y1,x2,y2)
 !!
-!!    real,intent(in) :: x1
-!!    real,intent(in) :: y1
-!!    real,intent(in) :: x2
-!!    real,intent(in) :: y2
+!!      real,intent(in) :: x1
+!!      real,intent(in) :: y1
+!!      real,intent(in) :: x2
+!!      real,intent(in) :: y2
 !!##DESCRIPTION
 !!    The M_draw(3fm) routine rect(3f) is treated as a polygon. This simple routine ensures just the
 !!    outline of the box is draw regardless of whether polygon fill or hatchfill mode is on.
@@ -351,10 +353,10 @@ end subroutine plain_rect
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine polyline2(arrx,arry)
+!!     subroutine polyline2(arrx,arry)
 !!
-!!    integer,intent(in)          :: arrx(:)
-!!    integer,intent(in),optional :: arry(:)
+!!      integer,intent(in)          :: arrx(:)
+!!      integer,intent(in),optional :: arry(:)
 !!
 !!##DESCRIPTION
 !!    Given either a single array composed of pairs <x(i),y(i)> of values
@@ -467,11 +469,11 @@ end subroutine polyline2_r
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine uarc(x,y,angle)
+!!     subroutine uarc(x,y,angle)
 !!
-!!     real,intent(in) :: x
-!!     real,intent(in) :: y
-!!     real,intent(in) :: angle
+!!      real,intent(in) :: x
+!!      real,intent(in) :: y
+!!      real,intent(in) :: angle
 !!
 !!##DESCRIPTION
 !!     given center point and angle in degrees, draw circular arc from
@@ -570,13 +572,13 @@ real :: ynow
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine arc2(x, y, radius, startang, endang)
+!!     subroutine arc2(x, y, radius, startang, endang)
 !!
-!!     real,intent(in) :: x
-!!     real,intent(in) :: y
-!!     real,intent(in) :: radius
-!!     real,intent(in) :: startang
-!!     real,intent(in) :: endang
+!!      real,intent(in) :: x
+!!      real,intent(in) :: y
+!!      real,intent(in) :: radius
+!!      real,intent(in) :: startang
+!!      real,intent(in) :: endang
 !!
 !!##DESCRIPTION
 !!    M_DASH arc(3f) routine does a move so it cannot be included in a
@@ -638,7 +640,7 @@ end subroutine arc2
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine ellipse (XPAGE,YPAGE,RMAJ,RMIN,ANGLE,THO,THF,IPEN)
+!!     subroutine ellipse (XPAGE,YPAGE,RMAJ,RMIN,ANGLE,THO,THF,IPEN)
 !!
 !!##DESCRIPTION
 !!    ellipse(3f) is a FORTRAN subroutine which draws an ellipse or
@@ -772,15 +774,15 @@ end subroutine ellipse
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    uconic(x,y,p,e,theta1,theta2,orientation)
+!!     uconic(x,y,p,e,theta1,theta2,orientation)
 !!
-!!     real, intent=(in) :: x
-!!     real, intent=(in) :: y
-!!     real, intent=(in) :: p
-!!     real, intent=(in) :: e
-!!     real, intent=(in) :: theta1
-!!     real, intent=(in) :: theta2
-!!     real, intent=(in) :: orientation
+!!      real, intent=(in) :: x
+!!      real, intent=(in) :: y
+!!      real, intent=(in) :: p
+!!      real, intent=(in) :: e
+!!      real, intent=(in) :: theta1
+!!      real, intent=(in) :: theta2
+!!      real, intent=(in) :: orientation
 !!
 !!##DESCRIPTION
 !!
@@ -1246,8 +1248,9 @@ end subroutine barcode
 !!##SYNOPSIS
 !!
 !!     subroutine draw_interpret(array,delimiters)
-!!     character(len=*) :: array(*)
-!!     character(len=*) :: delimiters
+!!
+!!      character(len=*) :: array(*)
+!!      character(len=*) :: delimiters
 !!
 !!##DESCRIPTION
 !!     takes an array of strings and treats them as requests for simple calls
@@ -1334,11 +1337,11 @@ end subroutine draw_interpret
 !!     (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!   subroutine call_draw(verb,parameters,found)
+!!     subroutine call_draw(verb,parameters,found)
 !!
-!!    character(len=*),intent(in)  :: verb
-!!    character(len=*),intent(in)  :: parameters
-!!    logical,intent(out)          :: found
+!!      character(len=*),intent(in)  :: verb
+!!      character(len=*),intent(in)  :: parameters
+!!      logical,intent(out)          :: found
 !!
 !!##DESCRIPTION
 !!    Used to allow input files to directly call arbitrary low-level graphics procedures.
@@ -1882,15 +1885,15 @@ end function iflogic
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine spirograph(xcenter,ycenter,sunr0,planet0,offset0,radius,ilines,ang,angs,ifill)
+!!     subroutine spirograph(xcenter,ycenter,sunr0,planet0,offset0,radius,ilines,ang,angs,ifill)
 !!
-!!    real,intent(in)    :: xcenter, ycenter
-!!    real,intent(in)    :: sunr0,planet0,offset0
-!!    real,intent(in)    :: radius
-!!    integer,intent(in) :: ilines
-!!    real,intent(in)    :: ang
-!!    real,intent(in)    :: angs
-!!    integer,intent(in) :: ifill
+!!      real,intent(in)    :: xcenter, ycenter
+!!      real,intent(in)    :: sunr0,planet0,offset0
+!!      real,intent(in)    :: radius
+!!      integer,intent(in) :: ilines
+!!      real,intent(in)    :: ang
+!!      real,intent(in)    :: angs
+!!      integer,intent(in) :: ifill
 !!
 !!##DESCRIPTION
 !!    Draw a hypotrochoid generated by a fixed point on a circle rolling inside a
@@ -2022,12 +2025,13 @@ end subroutine spirograph
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine smoot(xn,yn,ic)
-use M_draw
+SUBROUTINE smoot(Xn,Yn,Ic)
+   USE m_draw
+   IMPLICIT NONE
 
 !! public :: ismoo,ismoo1,ismoo2,ismoo3,perin
 
-! ident_11="@(#) M_drawplus smoot(3f) draw smooth curve thru set up points using spline-fitting technique"
+!$@(#) M_drawplus::smoot(3f): draw smooth curve thru set up points using spline-fitting technique
 
 !
 ! 4.4  subroutine smoot
@@ -2129,267 +2133,320 @@ use M_draw
 !     the plot mode let ic be less than -23.
 ! earlier version of this procedure was
 !     subroutine smooth (xn,yn,ic)
-real :: xn
-real :: yn
-integer :: ic
-integer :: ismoo
-integer :: ismoo1
-integer :: ismoo2
-integer :: ismoo3
-real :: perin
-real :: ax
-real :: ay
-real :: bx
-real :: by
-real :: d
-real :: d1
-real :: d2
-real :: d3
-real :: dv
-integer :: i
-integer :: ipc
-integer :: irep
-integer :: isw
-integer :: jsw
-integer :: kc
-integer :: lc
-integer :: mc
-integer :: n
-integer :: nc
-real :: pxn
-real :: pyn
-real :: sx1
-real :: sx2
-real :: sx3
-real :: sy1
-real :: sy2
-real :: sy3
-real :: t
-real :: uux1
-real :: uux2
-real :: uuy1
-real :: uuy2
-real :: ux1
-real :: ux2
-real :: uy1
-real :: uy2
-real :: vx2
-real :: vx3
-real :: vy2
-real :: vy3
-real :: x
-real :: x1
-real :: x2
-real :: x3
-real :: y
-real :: y1
-real :: y2
-real :: y3
+   REAL :: Xn
+   REAL :: Yn
+   INTEGER :: Ic
+   INTEGER :: ismoo
+   INTEGER :: ismoo1
+   INTEGER :: ismoo2
+   INTEGER :: ismoo3
+   REAL :: perin
+   REAL :: ax
+   REAL :: ay
+   REAL :: bx
+   REAL :: by
+   REAL :: d
+   REAL :: d1
+   REAL :: d2
+   REAL :: d3
+   REAL :: dv
+   INTEGER :: i
+   INTEGER :: ipc
+   INTEGER :: irep
+   INTEGER :: isw
+   INTEGER :: jsw
+   INTEGER :: kc
+   INTEGER :: lc
+   INTEGER :: mc
+   INTEGER :: n
+   INTEGER :: nc
+   REAL :: pxn
+   REAL :: pyn
+   REAL :: sx1
+   REAL :: sx2
+   REAL :: sx3
+   REAL :: sy1
+   REAL :: sy2
+   REAL :: sy3
+   REAL :: t
+   REAL :: uux1
+   REAL :: uux2
+   REAL :: uuy1
+   REAL :: uuy2
+   REAL :: ux1
+   REAL :: ux2
+   REAL :: uy1
+   REAL :: uy2
+   REAL :: vx2
+   REAL :: vx3
+   REAL :: vy2
+   REAL :: vy3
+   REAL :: x
+   REAL :: x1
+   REAL :: x2
+   REAL :: x3
+   REAL :: y
+   REAL :: y1
+   REAL :: y2
+   REAL :: y3
 
 
-      save
-      data nc/0/,ipc/0/
-      kc=ic-(ic/10)*10  ! kc is last digit of ic, of same sign as ic
-      lc=nc-ipc
-      pxn=xn
-      pyn=yn
-      irep=0
-      if(kc)1,4,14
-    1 continue
-      if(kc+1)2,5,4
-    2 continue
-      if(ipc)3,3,14
-    3 continue
-      if(ic+24)10,10,17
-    4 continue
-      isw=-1
-      goto 6
-    5 continue
-      isw=1
-    6 continue
-      jsw=-1
-      nc=-kc/10*10
-      x3=pxn
-      y3=pyn
-      mc=nc+3
-    9 continue
-      ipc=kc
-      return
-   10 continue
-      if(ipc+1)11,13,13
-   11 continue
-      if(isw-1)12,15,14
-   12 continue
-      if(isw+1)14,16,14
-   13 continue
-      kc=nc+2
-      ipc=1
-      call plot_in (x3,y3,mc)
-   14 continue
-      call plot_in (pxn,pyn,kc)
-      return
-   15 continue
-      irep=2
-   16 continue
-      irep=irep+1
-      kc=1
-   17 continue
-      if(iabs(jsw)-1)14,18,14
-   18 continue
-       x1=x2
-       y1=y2
-       x2=x3
-       y2=y3
-       x3=pxn
-       y3=pyn
-      if((ipc+1).ge.0)then
-         vx3=x3-x2
-         vy3=y3-y2
-         d3 = vx3*vx3+vy3*vy3
-         sx1=x2
-         sx2=x3
-         sy1=y2
-         sy2=y3
-         goto 40
-      endif
-      if(jsw.eq.0)then
-         goto 14
-      elseif(jsw.lt.0)then
-         if(isw.eq.0)then
-            goto 14
-         elseif(isw.lt.0)then
-            vx2=x3-x2
-            vy2=y3-y2
-            call reflx (vx3,vy3,vx2,vy2)
-            d2=vx2*vx2+vy2*vy2
-            goto 26
-         else
-            goto 24
-         endif
-      endif
-   23 continue
-      jsw=1
-   24 continue
-      vx2=vx3
-      vy2=vy3
-      vx3=x3-x2
-      vy3=y3-y2
-   25 continue
-      d2=d3
-      ux1=ux2
-      uy1=uy2
-   26 continue
-      d3=vx3*vx3+vy3*vy3
-      ux2=d2*vx3+d3*vx2
-      uy2=d2*vy3+d3*vy2
-      dv = 1.0/sqrt(ux2*ux2+uy2*uy2+0.000001)
-      ux2=dv*ux2
-        uy2=dv*uy2
-      if((isw-jsw).le.0)then
-        if(jsw)23,14,28
-      else
-        jsw=1
-        sx3=x3
-        sy3=y3
-        goto 40
-      endif
-   28 continue
-      t=0.
-      call getgp2(x,y)  ! d is current scaling factor (call where(x,y,d)
-      d=1.0/100.0 ! playing with this to see if controls number of points
-      if(abs(x1-x)-0.01*d.ge.0 .or. abs(y1-y)-0.01*d.ge.0)then
-         call plot_in (x1,y1,mc)
-      endif
-      if(ipc+3.ne.0)then
-         d=abs (ux1*vx2+uy1*vy2)
-         d1=d
-         uux1=d*ux1
-         uuy1=d*uy1
-         d=abs (ux2*vx2+uy2*vy2)
-         uux2=d*ux2
-         uuy2=d*uy2
-         d=d+d1
-         ax=uux2+uux1-vx2-vx2
-         bx=vx2-uux1-ax
-         ay=uuy2+uuy1-vy2-vy2
-         by=vy2-uuy1-ay
+   SAVE
+   INTEGER :: spag_nextblock_1
+   DATA nc/0/ , ipc/0/
+   spag_nextblock_1 = 1
+   SPAG_DispatchLoop_1: DO
+      SELECT CASE (spag_nextblock_1)
+      CASE (1)
+         kc = Ic - (Ic/10)*10
+                        ! kc is last digit of ic, of same sign as ic
+         lc = nc - ipc
+         pxn = Xn
+         pyn = Yn
+         irep = 0
+         IF ( kc<0 ) THEN
+            IF ( kc+1<0 ) THEN
+               IF ( ipc>0 ) THEN
+                  spag_nextblock_1 = 3
+                  CYCLE SPAG_DispatchLoop_1
+               ENDIF
+               IF ( Ic+24>0 ) THEN
+                  spag_nextblock_1 = 5
+                  CYCLE SPAG_DispatchLoop_1
+               ENDIF
+               IF ( ipc+1>=0 ) THEN
+                  kc = nc + 2
+                  ipc = 1
+                  CALL plot_in(x3,y3,mc)
+                  spag_nextblock_1 = 3
+                  CYCLE SPAG_DispatchLoop_1
+               ELSEIF ( isw<1 ) THEN
+                  IF ( isw+1==0 ) THEN
+                     spag_nextblock_1 = 4
+                     CYCLE SPAG_DispatchLoop_1
+                  ENDIF
+                  spag_nextblock_1 = 3
+                  CYCLE SPAG_DispatchLoop_1
+               ELSEIF ( isw==1 ) THEN
+                  irep = 2
+                  spag_nextblock_1 = 4
+                  CYCLE SPAG_DispatchLoop_1
+               ELSE
+                  spag_nextblock_1 = 3
+                  CYCLE SPAG_DispatchLoop_1
+               ENDIF
+            ELSEIF ( kc+1==0 ) THEN
+               isw = 1
+            ELSE
+               isw = -1
+            ENDIF
+         ELSEIF ( kc==0 ) THEN
+            isw = -1
+         ELSE
+            spag_nextblock_1 = 3
+            CYCLE SPAG_DispatchLoop_1
+         ENDIF
+         jsw = -1
+         nc = -kc/10*10
+         x3 = pxn
+         y3 = pyn
+         mc = nc + 3
+         spag_nextblock_1 = 2
+      CASE (2)
+         ipc = kc
+         RETURN
+      CASE (3)
+         CALL plot_in(pxn,pyn,kc)
+         RETURN
+      CASE (4)
+         irep = irep + 1
+         kc = 1
+         spag_nextblock_1 = 5
+      CASE (5)
+         IF ( iabs(jsw)/=1 ) THEN
+            spag_nextblock_1 = 3
+            CYCLE SPAG_DispatchLoop_1
+         ENDIF
+         spag_nextblock_1 = 6
+      CASE (6)
+         x1 = x2
+         y1 = y2
+         x2 = x3
+         y2 = y3
+         x3 = pxn
+         y3 = pyn
+         IF ( (ipc+1)>=0 ) THEN
+            vx3 = x3 - x2
+            vy3 = y3 - y2
+            d3 = vx3*vx3 + vy3*vy3
+            sx1 = x2
+            sx2 = x3
+            sy1 = y2
+            sy2 = y3
+            spag_nextblock_1 = 11
+            CYCLE SPAG_DispatchLoop_1
+         ENDIF
+         IF ( jsw==0 ) THEN
+            spag_nextblock_1 = 3
+            CYCLE SPAG_DispatchLoop_1
+         ENDIF
+         IF ( jsw<0 ) THEN
+            IF ( isw==0 ) THEN
+               spag_nextblock_1 = 3
+               CYCLE SPAG_DispatchLoop_1
+            ENDIF
+            IF ( isw<0 ) THEN
+               vx2 = x3 - x2
+               vy2 = y3 - y2
+               CALL reflx(vx3,vy3,vx2,vy2)
+               d2 = vx2*vx2 + vy2*vy2
+               spag_nextblock_1 = 10
+               CYCLE SPAG_DispatchLoop_1
+            ELSE
+               spag_nextblock_1 = 8
+               CYCLE SPAG_DispatchLoop_1
+            ENDIF
+         ENDIF
+         spag_nextblock_1 = 7
+      CASE (7)
+         jsw = 1
+         spag_nextblock_1 = 8
+      CASE (8)
+         vx2 = vx3
+         vy2 = vy3
+         vx3 = x3 - x2
+         vy3 = y3 - y2
+         spag_nextblock_1 = 9
+      CASE (9)
+         d2 = d3
+         ux1 = ux2
+         uy1 = uy2
+         spag_nextblock_1 = 10
+      CASE (10)
+         d3 = vx3*vx3 + vy3*vy3
+         ux2 = d2*vx3 + d3*vx2
+         uy2 = d2*vy3 + d3*vy2
+         dv = 1.0/sqrt(ux2*ux2+uy2*uy2+0.000001)
+         ux2 = dv*ux2
+         uy2 = dv*uy2
+         IF ( (isw-jsw)<=0 ) THEN
+            IF ( jsw<0 ) THEN
+               spag_nextblock_1 = 7
+               CYCLE SPAG_DispatchLoop_1
+            ENDIF
+            IF ( jsw==0 ) THEN
+               spag_nextblock_1 = 3
+               CYCLE SPAG_DispatchLoop_1
+            ENDIF
+            t = 0.
+            CALL getgp2(x,y)
+                        ! d is current scaling factor (call where(x,y,d)
+            d = 1.0/100.0
+                  ! playing with this to see if controls number of points
+            IF ( abs(x1-x)-0.01*d>=0 .OR. abs(y1-y)>=0.01*d ) CALL plot_in(x1,y1,mc)
+            IF ( ipc+3/=0 ) THEN
+               d = abs(ux1*vx2+uy1*vy2)
+               d1 = d
+               uux1 = d*ux1
+               uuy1 = d*uy1
+               d = abs(ux2*vx2+uy2*vy2)
+               uux2 = d*ux2
+               uuy2 = d*uy2
+               d = d + d1
+               ax = uux2 + uux1 - vx2 - vx2
+               bx = vx2 - uux1 - ax
+               ay = uuy2 + uuy1 - vy2 - vy2
+               by = vy2 - uuy1 - ay
 !        perin is number of points to interpolate per unit distance between
 !        point1 and point2
-         n=int(perin*d+1.0)
-         d=1.0/float(n)
-         do 33 i=1,n
-            t=t+d
-            x=((ax*t+bx)*t+uux1)*t+x1
-            y=((ay*t+by)*t+uuy1)*t+y1
-            call plot_in (x,y,lc)
-   33    continue
-      endif
-   40 continue
-      if(irep.le.0)goto 9
-      irep=irep-1
-      if(isw.lt.0)then
-         call reflx (vx3,vy3,vx2,vy2)
-         x=vx3
-         y=vy3
-         vx3=vx2
-         vy3=vy2
-         vx2=x
-         vy2=y
-         x1=x2
-         y1=y2
-         goto 25
-      elseif(isw.gt.0)then
-         pxn=sx1
-         pyn=sy1
-         sx1=sx2
-         sy1=sy2
-         sx2=sx3
-         sy2=sy3
-         goto 18
-      else         ! isw.eq.0
-         goto 14
-      endif
-      contains
+               n = int(perin*d+1.0)
+               d = 1.0/float(n)
+               DO i = 1 , n
+                  t = t + d
+                  x = ((ax*t+bx)*t+uux1)*t + x1
+                  y = ((ay*t+by)*t+uuy1)*t + y1
+                  CALL plot_in(x,y,lc)
+               ENDDO
+            ENDIF
+         ELSE
+            jsw = 1
+            sx3 = x3
+            sy3 = y3
+         ENDIF
+         spag_nextblock_1 = 11
+      CASE (11)
+         IF ( irep<=0 ) THEN
+            spag_nextblock_1 = 2
+            CYCLE SPAG_DispatchLoop_1
+         ENDIF
+         irep = irep - 1
+         IF ( isw<0 ) THEN
+            CALL reflx(vx3,vy3,vx2,vy2)
+            x = vx3
+            y = vy3
+            vx3 = vx2
+            vy3 = vy2
+            vx2 = x
+            vy2 = y
+            x1 = x2
+            y1 = y2
+            spag_nextblock_1 = 9
+            CYCLE SPAG_DispatchLoop_1
+         ELSEIF ( isw>0 ) THEN
+            pxn = sx1
+            pyn = sy1
+            sx1 = sx2
+            sy1 = sy2
+            sx2 = sx3
+            sy2 = sy3
+            spag_nextblock_1 = 6
+            CYCLE SPAG_DispatchLoop_1
+         ELSE      ! isw.eq.0
+            spag_nextblock_1 = 3
+            CYCLE SPAG_DispatchLoop_1
+         ENDIF
+      END SELECT
+   ENDDO SPAG_DispatchLoop_1
+CONTAINS
 !===================================================================================================================================
-subroutine reflx(vx1,vy1,vx2,vy2)
-implicit none
+   SUBROUTINE reflx(Vx1,Vy1,Vx2,Vy2)
 
-! ident_12="@(#) M_drawplus reflx(3fp) internal routine called by SMOOT"
+!$@(#) M_drawplus::reflx(3fp): internal routine called by SMOOT
 
-real,intent(in)  :: vx1
-real,intent(in)  :: vy1
-real,intent(out) :: vx2
-real,intent(out) :: vy2
-real ps
-real ds
-real ss
-real temp
-   ps=vy1*vy1
-   ds=vx1*vx1
-   ss = ds+ps+0.00001
-   ds=ds-ps
-   ps=2.0*vx1*vy1
-   temp=(ps*vy2+vx2*ds)/ss
-   vy2=(ps*vx2-vy2*ds)/ss
-   vx2=temp
-end subroutine reflx
+      REAL , INTENT(IN) :: Vx1
+      REAL , INTENT(IN) :: Vy1
+      REAL , INTENT(OUT) :: Vx2
+      REAL , INTENT(OUT) :: Vy2
+      REAL ps
+      REAL ds
+      REAL ss
+      REAL temp
+      ps = Vy1*Vy1
+      ds = Vx1*Vx1
+      ss = ds + ps + 0.00001
+      ds = ds - ps
+      ps = 2.0*Vx1*Vy1
+      temp = (ps*Vy2+Vx2*ds)/ss
+      Vy2 = (ps*Vx2-Vy2*ds)/ss
+      Vx2 = temp
+   END SUBROUTINE reflx
 !===================================================================================================================================
-subroutine plot_in(x,y,lc)
-use M_draw
+   SUBROUTINE plot_in(X,Y,Lc)
+      USE m_draw
 
-! ident_13="@(#) M_drawplus plot_in(3fp) internal routine called by SMOOT"
+!$@(#) M_drawplus::plot_in(3fp): internal routine called by SMOOT
 
-real,intent(in) :: x
-real,intent(in) :: y
-integer,intent(in) :: lc
-   if(abs(lc).eq.3.and.ismoo1.ne.1)call move2(x,y)
-   if(abs(lc).eq.3.and.ismoo1.eq.1)call draw2(x,y)
-   if(abs(lc).eq.2)call draw2(x,y)
-end subroutine plot_in
+      REAL , INTENT(IN) :: X
+      REAL , INTENT(IN) :: Y
+      INTEGER , INTENT(IN) :: Lc
+      IF ( abs(Lc)==3 .AND. Ismoo1/=1 ) CALL move2(X,Y)
+      IF ( abs(Lc)==3 .AND. Ismoo1==1 ) CALL draw2(X,Y)
+      IF ( abs(Lc)==2 ) CALL draw2(X,Y)
+   END SUBROUTINE plot_in
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-end subroutine smoot
+END SUBROUTINE smoot
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -2400,11 +2457,11 @@ end subroutine smoot
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine rdbox(returnx1,returny1,returnx2,returny2,ikey)
+!!     subroutine rdbox(returnx1,returny1,returnx2,returny2,ikey)
 !!
-!!    real,intent(out)    :: returnx1, returny1
-!!    real,intent(out)    :: returnx2, returny2
-!!    integer,intent(out) :: ikey
+!!      real,intent(out)    :: returnx1, returny1
+!!      real,intent(out)    :: returnx2, returny2
+!!      integer,intent(out) :: ikey
 !!
 !!##DESCRIPTION
 !!
@@ -2477,7 +2534,7 @@ use M_journal, only : journal
 use M_draw
 implicit none
 
-! ident_14="@(#) M_drawplus rdbox(3f) reads two points and outline defined box and return points"
+! ident_11="@(#) M_drawplus rdbox(3f) reads two points and outline defined box and return points"
 
 real,intent(out)    :: returnx1, returny1
 real,intent(out)    :: returnx2, returny2
@@ -2535,7 +2592,7 @@ end subroutine rdbox
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine rdpnt(oldx,oldy,sx,sy,ibut)
+!!     subroutine rdpnt(oldx,oldy,sx,sy,ibut)
 !!
 !!##DESCRIPTION
 !!    Move to the initial point given, and then move to the next point selected by
@@ -2593,7 +2650,7 @@ use M_journal,  only : journal
 use M_draw
 implicit none
 
-! ident_15="@(#) M_drawplus rdpnt(3f) reads coordinates of point locator clicked at"
+! ident_12="@(#) M_drawplus rdpnt(3f) reads coordinates of point locator clicked at"
 
 ! see M_DRAW locator(3f) description for more details
 real,intent(in)     :: oldx, oldy
@@ -2657,7 +2714,7 @@ end subroutine rdpnt
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!    seefont(fontin)
+!!     seefont(fontin)
 !!
 !!     character(len=128),intent(in) :: fontin
 !!##DESCRIPTION
@@ -2698,7 +2755,7 @@ use m_calculator,      only : dnum0
 use M_draw
 implicit none
 
-! ident_16="@(#) display sample page of a font"
+! ident_13="@(#) display sample page of a font"
 
 character(len=*),intent(in)   :: fontin
 character(len=80)             :: line

@@ -512,7 +512,7 @@ contains
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_init_globals()
 implicit none
@@ -530,7 +530,7 @@ end subroutine plot_init_globals
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_init()
 implicit none
@@ -555,7 +555,7 @@ end subroutine plot_init
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_init_labels()
 implicit none
@@ -1056,7 +1056,7 @@ end subroutine xy_init_labels
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_init_markers()
 implicit none
@@ -1104,7 +1104,7 @@ end subroutine xy_init_markers
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_setfill()
 implicit none
@@ -1610,7 +1610,7 @@ end subroutine plot_hcopy
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 logical function xy_noclose(dev_name)
 implicit none
@@ -1638,7 +1638,7 @@ end function xy_noclose
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_set_xmin(name,imaxv)
 use M_journal, only : journal
@@ -1754,7 +1754,7 @@ end subroutine plot_set_xmin
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_storage()
 use M_draw, only : vgetdev
@@ -1779,7 +1779,7 @@ end subroutine plot_storage
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_setmark(parms,pat,ipen)
 !  1992 John S. Urban
@@ -1909,7 +1909,7 @@ end subroutine plot_setmark
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_page_aspect()
 !     1992 John S. Urban
@@ -1947,7 +1947,7 @@ end subroutine plot_page_aspect
 !!    so they can not only be displayed, but copied by the hcopy(1) command if
 !!    it is used before any other graphics-generating commands.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -2191,7 +2191,7 @@ end subroutine plot_marks
 !!    NOTE: assume they are stored sequentially when printing
 !!    and stop printing when a blank title line is encountered
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_title()
 !     1992 John S. Urban
@@ -2248,7 +2248,7 @@ end subroutine plot_title
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_jut(parms)
 ! 1993 John S. Urban
@@ -2522,7 +2522,7 @@ end subroutine plot_jut
 !!    the new size because the M_plot graphics library does not in general
 !!    support changing the device size and position except when the device
 !!    is initialized.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !===================================================================================================================================
 subroutine plot_sz()
@@ -2621,7 +2621,7 @@ end subroutine plot_sz
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_drawplot(lclear)
 use M_journal, only : journal
@@ -2947,7 +2947,7 @@ end subroutine plot_drawplot
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_juparea()
 !      'parea -oo -a 1 -rows 0 -cols 0 -g 0'
@@ -3010,7 +3010,7 @@ end subroutine plot_juparea
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_jupage()
 use M_journal, only : journal
@@ -3111,7 +3111,7 @@ end subroutine plot_jupage
 !!    If no parameters are given a chart showing curve styles is displayed
 !!    and the current pen settings are written out.
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_id(icmdlen)
 ! 1992 John S. Urban
@@ -3334,7 +3334,7 @@ end subroutine plot_id
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_clear(ctype)
 use M_draw
@@ -3380,7 +3380,7 @@ end subroutine plot_clear
 !!    bug occurs if a window edge (at least xsmall) is zero in determining
 !!    length of hardware characters.
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_aspct(xsmall,xlarge,ysmall,ylarge)
 implicit none
@@ -3408,7 +3408,7 @@ end subroutine xy_aspct
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_bans()
 use M_draw
@@ -3529,7 +3529,7 @@ end subroutine xy_bans
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_printban(name,startx,starty,slenfac,iprinted)
 use M_draw
@@ -3567,7 +3567,7 @@ end subroutine xy_printban
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_printbanv(name,startx,starty,slenfac,iprinted)
 use M_draw
@@ -3606,7 +3606,7 @@ end subroutine xy_printbanv
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_fxed(string,llisub)
 implicit none
@@ -3636,7 +3636,7 @@ end subroutine xy_fxed
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_init_graphics()
 use M_journal,    only : journal
@@ -3747,7 +3747,7 @@ end subroutine xy_init_graphics
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 logical function xy_ifdrawn()
 implicit none
@@ -3775,7 +3775,7 @@ end function xy_ifdrawn
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_iftext()
 use M_journal, only : journal
@@ -3949,7 +3949,7 @@ end subroutine xy_iftext
 !!    set icrvsq and icrvs2q
 !!    note that you have to "skip over" a 0 curve when assigning line attributes and legend labels
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jucurv(xlowa,xhigha,ylowa,yhigha,iunits,ierr)
 use M_journal,         only : journal
@@ -4221,7 +4221,7 @@ end subroutine xy_jucurv
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jumapc(mode)
 use M_journal, only : journal
@@ -4542,7 +4542,7 @@ end subroutine xy_jumapc
 !!    ipausq=-1  pause until a character is entered from graphics input.
 !!
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_pause()
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -4617,7 +4617,7 @@ end subroutine xy_pause
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jutitl(ifile,idonly)
 ! making xy_jutitlX PLT-independent to make generic plotting routines
@@ -4650,7 +4650,7 @@ end subroutine xy_jutitl
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jutitlX(idonly,ftitle,isize)
 ! not printing title lines beginning with #,$ allows comment information to be stored in input files
@@ -4801,7 +4801,7 @@ end subroutine xy_jutitlX
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_set_bigger(tallest,width,height,factor)
 use M_draw
@@ -4831,7 +4831,7 @@ end subroutine xy_set_bigger
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_laxis(ixdiv,iydiv) ! draw the axes
 use M_journal, only : journal
@@ -5015,7 +5015,7 @@ end subroutine xy_laxis
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_pickpnt(itype,xecho,yecho,ibut)
 use M_journal, only : journal
@@ -5138,7 +5138,7 @@ end subroutine xy_pickpnt
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_setlbl(ii)
 !     1992 John S. Urban
@@ -5213,7 +5213,7 @@ end subroutine xy_setlbl
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_setsize(string)
 use M_draw
@@ -5253,7 +5253,7 @@ end subroutine xy_setsize
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_tidybox()
 use M_journal,         only : journal
@@ -5325,7 +5325,7 @@ end subroutine xy_tidybox
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_arrow(xleft,ybot,xright,ytop,xto,yto,where,asz)
 use M_drawplus, only : arrowhead
@@ -5408,7 +5408,7 @@ end subroutine xy_arrow
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_idbox(r10a,icolsa,idonly)
 use M_journal, only : journal
@@ -5611,7 +5611,7 @@ end subroutine xy_idbox
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_idbox0(r10,idonly)
 use M_journal, only : journal
@@ -5807,7 +5807,7 @@ end subroutine xy_idbox0
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_iflou(iflag)
 use M_journal, only : journal
@@ -5845,7 +5845,7 @@ end subroutine xy_iflou
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_judraw(ifile0)
 use M_journal, only : journal
@@ -6037,7 +6037,7 @@ end subroutine xy_judraw
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_loadtl(ifile,ftitle,isize,ititles)
 !     not printing title lines beginning with #,$ allows comment information to be stored in input files
@@ -6192,7 +6192,7 @@ end subroutine xy_loadtl
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_tidybox1(itextc,ichars,iwchar,ibox,plot_setmark_size,cwhere,xmint0,xmaxt0,ymint0,ymaxt0,xmark)
 use M_journal, only : journal
@@ -6475,7 +6475,7 @@ end subroutine xy_tidybox1
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_tidybox2(itextc,ichars,iwchar,ibox,plot_setmark_size,cwhere,xmint,xmaxt,ymint,ymaxt,xmark)
 use M_journal, only : journal
@@ -6703,7 +6703,7 @@ end subroutine xy_tidybox2
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_listout3(rcurve_in,iszin,rcurve_out,iszout,isize,inums)
 !===================================================================================================================================
@@ -7000,7 +7000,7 @@ end subroutine plot_toggle
 !!    o header data is put into q variables in common
 !!
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_getdat(ifile,iff,ymin,ymax,itime,iread,icurve)
 !     1992 John S. Urban
@@ -7201,7 +7201,7 @@ end subroutine xy_getdat
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_juput(ifile,irecord,rmin,rmax,ionend,iquiet)
 use M_journal, only    : journal
@@ -7338,7 +7338,7 @@ end subroutine xy_juput
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 real function xy_slide(xmin,xmax,value,bottom)
 implicit none
@@ -7362,7 +7362,7 @@ end function xy_slide
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_z()
 use M_journal, only : journal
@@ -7446,7 +7446,7 @@ end subroutine plot_z
 !!    The plot_zmode() procedure is used to allow you to use the keyboard to zoom in
 !!    and around a plot.
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_zmode(percent0)
 use M_journal, only : journal
@@ -7828,7 +7828,7 @@ end subroutine plot_zmode
 !!    given an input unit, get the output unit, rmultiplier, and constant.
 !!    since unit 0 is blank, assume not to convert if a 0 iunito is found.
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_getrel(iuniti,iunito,rmult,const)
 implicit none
@@ -7862,7 +7862,7 @@ end subroutine xy_getrel
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_units(n0,eunit)
 use M_strings,only: upper
@@ -7890,7 +7890,7 @@ end subroutine xy_units
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_juprint(x,y,line,icenter)
 use M_draw
@@ -7924,7 +7924,7 @@ end subroutine xy_juprint
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_justrlen(line,xlen,ylen,ydown,yup)
 implicit none
@@ -7975,7 +7975,7 @@ end subroutine priv_justrlen
 !! !     itype=0    draw the string with centering or size data set (must be second call)
 !! !     itype=1    getting string size and centering shift
 !! !     itype=2    blank out centering values
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_justr(x,y,l0,itype,xmin,xmax,ymin,ymax)
 use M_draw
@@ -8167,7 +8167,7 @@ end subroutine priv_justr
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_fontchng(xnow,ynow,width,height,string,x0,y0,ilines,ii,ione)
 !     does not check if STRING is longer than LINE
@@ -8337,7 +8337,7 @@ end subroutine priv_fontchng
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_zqjreset()
 implicit none
@@ -8377,7 +8377,7 @@ end subroutine priv_zqjreset
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 ! too many calls to calculator. Do one pass at end like earlier version?
 subroutine priv_doescape(ii,fonts,width,height,xnow,ynow,ilines,x0,y0,ione)
@@ -8593,7 +8593,7 @@ end subroutine priv_doescape
 !!    THE CURRENT Y-VALUE IS THE HEIGHT OF THE BASE OF LETTERS WITHOUT DESCENDERS
 !!    need to make a lower level option in M_DASH for this
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jucp2(line,ilen)
 use M_draw
@@ -8671,7 +8671,7 @@ end subroutine xy_jucp2
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_juprints(x,y,l)
 use M_draw
@@ -8718,7 +8718,7 @@ end subroutine xy_juprints
 !!    THE CURRENT Y-VALUE IS THE HEIGHT OF THE BASE OF LETTERS WITHOUT DESCENDERS
 !!    need to make a lower level option in M_DASH for this
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jucp(line)
 use M_draw
@@ -8766,7 +8766,7 @@ end subroutine xy_jucp
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jufont(name)
 use M_journal, only : journal
@@ -8819,7 +8819,7 @@ end subroutine xy_jufont
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_getxy_jufont(name)
 implicit none
@@ -8840,7 +8840,7 @@ end subroutine xy_getxy_jufont
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_rasters(iwidth)
 use M_draw
@@ -8883,7 +8883,7 @@ end subroutine xy_rasters
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 real function xy_ustrlen(string)
 use M_draw
@@ -8908,7 +8908,7 @@ end function xy_ustrlen
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 real function xy_ustrlen2(string,ichars)
 use M_draw
@@ -8931,7 +8931,7 @@ end function xy_ustrlen2
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_get_plot_area(xsmall,xlarge,ysmall,ylarge)
 implicit none
@@ -8959,7 +8959,7 @@ end subroutine plot_get_plot_area
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_set_plot_area(xsmall,xlarge,ysmall,ylarge)
 implicit none
@@ -9005,7 +9005,7 @@ end subroutine plot_set_plot_area
 !!
 !!      V.5.0.2 Error Correction --> DUAL AXIS failure was caused by a missing line in loop 10.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine plot_axes() ! draw the axes
@@ -10086,7 +10086,7 @@ end subroutine xy_setdatarange
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_getdatarange(X8)
 implicit none
@@ -10427,7 +10427,7 @@ end subroutine xy_line
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_drawseg_using_pen(ipen,x1,y1,x2,y2)
 implicit none
@@ -10471,7 +10471,7 @@ end subroutine priv_drawseg_using_pen
 !!                make nice intersections when used as a grid
 !!       o reset: set back to default values
 !!       o something else: store a pattern
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine plot_setdash(parms,iwhich,patout,isize,ipatout)
 
@@ -10719,7 +10719,7 @@ end subroutine plot_setdash
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_resetpens()
 implicit none
@@ -10784,7 +10784,7 @@ end subroutine xy_resetpens
 !!
 !!    caution: changes xlow,ylow,xhigh,yhigh
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jurang(iside,xlow,ylow,xhigh,yhigh,      &
 & xtreme,ytreme,ideltax,ideltay,RANGE,ilogx,ilogy,     &
@@ -10910,7 +10910,7 @@ end subroutine xy_jurang
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 function xy_con_x(xvalue0) result(xvalue)
 use M_journal, only : journal
@@ -10942,7 +10942,7 @@ end function xy_con_x
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 function xy_con_y(yvalue0) result(yvalue)
 use M_journal, only : journal
@@ -10974,7 +10974,7 @@ end function xy_con_y
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_setcnv(ilogx,ilogy)
 use M_draw, only : pop, push
@@ -11004,7 +11004,7 @@ end subroutine xy_setcnv
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_jugetwn(xsmall,xlarge,ysmall,ylarge)
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -11057,7 +11057,7 @@ end subroutine xy_jugetwn
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_zoom(xmin,ymin,xmax,ymax,iend)
 use M_journal,  only : journal
@@ -11235,7 +11235,7 @@ end subroutine xy_zoom
 !!        if the intercept is left off, it defaults to a value of 0.
 !!
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Showing usage from ush(1):
 !!
@@ -11280,7 +11280,7 @@ end subroutine xy_convert
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_hilow(rmin,rmax)
 implicit none
@@ -11316,7 +11316,7 @@ end subroutine priv_hilow
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_jubox(imidl,XMIN,YMIN,XMAX,YMAX)
 use M_draw
@@ -11346,7 +11346,7 @@ end subroutine priv_jubox
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_jugrid(ixdiv,iydiv,igrid,vals,XMIN,XMAX,YMIN,YMAX,     &
      &idcol,idwid,ilogx,ilogy,TICLNY,TICLNX,TICLNY2,TICLNX2,            &
@@ -11649,7 +11649,7 @@ end subroutine priv_jugrid
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_logrng(logtype,itic,ilog,rmin,rmax,idiv,treme,idel)
 use M_math, only : scale1
@@ -11698,7 +11698,7 @@ end subroutine priv_logrng
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_obj12345(string)
 ! create or close M_plot object 12345
@@ -11743,7 +11743,7 @@ end subroutine xy_obj12345
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_setrng(rin,value,ichange)
 implicit none
@@ -11772,7 +11772,7 @@ end subroutine priv_setrng
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_solidline(mode)  ! override dash code and symbol drawing and draw solid line for error bars
 implicit none
@@ -11802,7 +11802,7 @@ end subroutine priv_solidline
 !!    symbols, under/over fill style) either to an axis or the current plot
 !!    window.
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_toscale(x, y, n,con,keyword)
 use M_journal, only : journal
@@ -11964,7 +11964,7 @@ end subroutine priv_toscale
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_endgrid(iflag,endnew,rmax,rmin,ticlen,istyle)
 !
@@ -12006,7 +12006,7 @@ end subroutine priv_endgrid
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_judash(x,y,n,pat,ipat,offset)
 use M_draw
@@ -12153,7 +12153,7 @@ end subroutine priv_judash
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_jufill(x,y,n,istep,ifill)
 use M_draw
@@ -12288,7 +12288,7 @@ end subroutine priv_jufill
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine priv_jusym(x,y,n,istep,im,ipennum)
 use M_journal, only : journal
@@ -12451,7 +12451,7 @@ end subroutine priv_jusym
 !!
 !!##DESCRIPTION
 !!##OPTIONS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 subroutine xy_getmark(pat,imarker,ipennum)
 use M_draw
@@ -12518,7 +12518,7 @@ end subroutine xy_getmark
 !!    LEFT     short left banner label
 !!    RIGHT    short right banner label
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!

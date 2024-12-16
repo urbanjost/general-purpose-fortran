@@ -46,7 +46,7 @@ module M_sets
 !!  The subsequent data may be produced sorted, or left in the order
 !!  encountered.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program:
@@ -285,7 +285,7 @@ contains
 !!     All the values that occur in the input occur in the output
 !!     just once. All duplicates are removed.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program:
@@ -360,7 +360,7 @@ end function unique_c
 !!               returned in the order discovered. The default is
 !!               "sorted", which returns the data in ascending order.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program:
@@ -440,7 +440,7 @@ end function union_c
 !!               returned in the order discovered. The default is
 !!               "sorted", which returns the data in ascending order.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program:
@@ -515,7 +515,7 @@ end function intersect_c
 !!               returned in the order discovered. The default is
 !!               "sorted", which returns the data in ascending order.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program:
@@ -601,7 +601,7 @@ end function setdiff_c
 !!     position in A is also a value that occurs in B, and with a 0 at
 !!     locations where that value in A was not found in B.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program:
@@ -684,7 +684,7 @@ end function ismember_c
 !!               returned in the order discovered. The default is
 !!               "sorted", which returns the data in ascending order.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program:
@@ -777,7 +777,7 @@ end function setxor_c
 !!
 !!     1 if input array A is sorted in ascending order, 0 otherwise
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program:

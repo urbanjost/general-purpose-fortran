@@ -14,8 +14,6 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 'SYNOPSIS                                                                        ',&
 '                                                                                ',&
-'  \                                                                             ',&
-'                                                                                ',&
 '    exchange [[ -feet VALUES] [ -meters VALUES]                                 ',&
 '             [ -celsius VALUES] [ -fahrenheit VALUES]                           ',&
 '             [ -degrees VALUES] [ -radians VALUES]]                             ',&
@@ -66,62 +64,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!     exchange(1f) - [CONVERT] test of basic unit conversion functions
-!!     (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!
-!!   \
-!!
-!!     exchange [[ -feet VALUES] [ -meters VALUES]
-!!              [ -celsius VALUES] [ -fahrenheit VALUES]
-!!              [ -degrees VALUES] [ -radians VALUES]]
-!!              |[ --help| -version]
-!!
-!!##DESCRIPTION
-!!      Makes common unit conversions such as between feet and meters,
-!!      celsius and fahrenheit, and degrees and radians.
-!!
-!!##OPTIONS
-!!     -feet VALUES        convert feet to meters
-!!     -meters VALUES      convert meters to feet
-!!     -fahrenheit VALUES  convert fahrenheit to celsius
-!!     -celsius VALUES     convert celsius to fahrenheit
-!!     -radians VALUES     convert radians to degrees
-!!     -degrees VALUES     convert degrees to radians
-!!     --help              display this help and exit
-!!     --version           output version information and exit
-!!
-!!##EXAMPLES
-!!
-!!
-!!      Sample commands:
-!!
-!!       exchange -degrees 0 90 180 360
-!!
-!!       > 0.00000000      degrees is    0.00000000      radians
-!!       > 90.0000000      degrees is    1.57079637      radians
-!!       > 180.000000      degrees is    3.14159274      radians
-!!       > 360.000000      degrees is    6.28318548      radians
-!!
-!!       exchange -fahrenheit -40 32 98.6 212 -celsius -40 0 37 100
-!!
-!!       > -40.0000000      celsius is   -40.0000000      fahrenheit
-!!       >  0.00000000      celsius is    32.0000000      fahrenheit
-!!       >  37.0000000      celsius is    98.6000061      fahrenheit
-!!       >  100.000000      celsius is    212.000000      fahrenheit
-!!       > -40.0000000      fahrenheit is   -40.0000000      celsius
-!!       >  32.0000000      fahrenheit is    0.00000000      celsius
-!!       >  98.5999985      fahrenheit is    37.0000000      celsius
-!!       >  212.000000      fahrenheit is    100.000000      celsius
-!!
-!!##AUTHOR
-!!     John S. Urban
-!!##LICENSE
-!!     Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -140,7 +82,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2024-11-24 04:44:53 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:39:37 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

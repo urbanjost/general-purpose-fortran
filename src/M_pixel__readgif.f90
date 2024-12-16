@@ -25,7 +25,7 @@
 !!    color_map   RGB for each level, range 0.0 to 1.0
 !!    verbose     .true.for verbose output
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!

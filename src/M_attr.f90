@@ -78,7 +78,7 @@
 !!     mode on MSWindows. It does work as-is with CygWin and MinGW and
 !!     Putty windows and mintty(1) as tested.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -403,7 +403,7 @@ contains
 !!      the raw mode will create correct input for the attr(3f) function
 !!      if read back in.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -802,7 +802,7 @@ end subroutine vt102
 !!         reload         restore original keyword meanings deleted or
 !!                        replaced by calls to attr_update(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -920,7 +920,7 @@ end subroutine wipe_dictionary
 !!      ul,underline
 !!      it,italics (often produces inverse colors on many devices
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -1192,7 +1192,7 @@ end subroutine insert
 !!    if no parameters are supplied the macros are updated but no output
 !!    is generated.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!

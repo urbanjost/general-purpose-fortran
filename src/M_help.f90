@@ -103,7 +103,7 @@ contains
 !!    position   A small array with two values. The second value is the size
 !!               of the page to be used between pauses. The first one indicates
 !!               how many lines on the current page have been displayed.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!

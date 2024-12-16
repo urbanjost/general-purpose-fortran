@@ -24,6 +24,8 @@
 !!
 !!##SYNOPSIS
 !!
+!!  Syntax:
+!!
 !!      use M_anything,only : anyscalar_to_string
 !!      use M_anything,only : anyscalar_to_int64
 !!      use M_anything,only : anyscalar_to_real
@@ -46,7 +48,7 @@
 !!       get_type                return array of strings containing type names of arguments
 !!       empty                   create an empty array
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !! At the cost of casting to a different type these functions can
@@ -167,7 +169,7 @@ contains
 !!    use M_anything, only : empty, assignment(=)
 !!##DESCRIPTION
 !!    A convenience routine that sets an array to an empty set.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program:
@@ -273,7 +275,7 @@ contains
 !!              REAL(kind=real32, REAL(kind=real64),
 !!              REAL(kind=real128), complex, or CHARACTER(len=*)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -487,7 +489,7 @@ end subroutine bytes_to_anything_scalar
 !!
 !!    CHARS    The returned value is an array of bytes (character(len=1)).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -551,8 +553,8 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
-      !chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      !stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
    end select
 
 end function anything_to_bytes_arr
@@ -631,7 +633,7 @@ end function  anything_to_bytes_scalar
 !!    D_OUT    The value of VALUIN converted to REAL128 (assuming
 !!             it is actually in the range of type REAL128).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -723,7 +725,7 @@ end function anyscalar_to_real128
 !!    D_OUT    The value of VALUIN converted to doubleprecision (assuming
 !!             it is actually in the range of type DOUBLEPRECISION).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -823,7 +825,7 @@ end function anyscalar_to_double
 !!    R_OUT    The value of VALUIN converted to real (assuming it is actually
 !!             in the range of type REAL).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -918,7 +920,7 @@ end function anyscalar_to_real
 !!
 !!##RESULTS
 !!             The value of VALUIN converted to INTEGER(KIND=INT64).
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -1176,7 +1178,7 @@ end function anyscalar_to_string
 !!##RESULTS
 !!             The value of VALUIN converted to a CHARACTER string.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -1261,18 +1263,15 @@ end function anyinteger_to_string
 !!    argument types as input options.
 !!
 !!##OPTIONS
-!!
 !!    VALUEIN  input array or scalar to return type of
 !!             May be of KIND INTEGER(kind=int8), INTEGER(kind=int16),
 !!             INTEGER(kind=int32), INTEGER(kind=int64),
 !!             REAL(kind=real32, REAL(kind=real64),
 !!             REAL(kind=real128), complex, or CHARACTER(len=*)
 !!##RETURN
-!!
 !!    CHARS    The returned value is an array of names
 !!
-!!##EXAMPLE
-!!
+!!##EXAMPLES
 !!
 !!   Sample program
 !!

@@ -16,6 +16,8 @@
 !!
 !!##SYNOPSIS
 !!
+!! Usage:
+!!
 !!    use M_list, only : insert, replace, remove, locate
 !!    use M_list, only : dictionary
 !!

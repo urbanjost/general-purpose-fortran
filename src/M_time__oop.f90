@@ -67,7 +67,7 @@
 !!    An object-oriented interface to the M_time module. The following
 !!    example program demonstrates and documents the interface
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  sample program

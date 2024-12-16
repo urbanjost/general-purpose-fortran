@@ -39,7 +39,7 @@
 !!    Detailed descriptions of each procedure and example programs are
 !!    included.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !! Sample minimal program:
@@ -370,7 +370,7 @@ contains
 !!
 !!         strings demo_commandline|grep '@(#)'|tr '>' '\n'|sed -e 's/  */ /g'
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !! Typical usage:
@@ -642,7 +642,7 @@ end subroutine check_commandline
 !!        line the rest of the command line goes into the character array
 !!        "UNNAMED".
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !! Sample program:
@@ -1082,7 +1082,7 @@ end subroutine set_args
 !!##RETURNS
 !!    NAME   name of subcommand
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!
@@ -1296,7 +1296,7 @@ end function change_leading_underscore_to_prefix
 !!     DESCRIPTION  a brief one-line description of the keyword
 !!
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! sample program:
 !!
@@ -1374,7 +1374,7 @@ end subroutine set_usage
 !!
 !!##RETURNS
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! sample program:
 !!
@@ -1572,7 +1572,7 @@ end subroutine prototype_to_dictionary
 !!    SPECIFIED  returns .TRUE. if specified NAME was present on the command
 !!               line when the program was invoked.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!
@@ -1712,7 +1712,7 @@ end function specified
 !!           present remove keyword entry from dictionary.
 !!
 !!           If "present" is true, a value will be appended
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -1829,7 +1829,7 @@ end subroutine update
 !!      subroutine wipe_dictionary()
 !!##DESCRIPTION
 !!      reset private M_CLI2(3fm) dictionary to empty
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!
@@ -1871,7 +1871,7 @@ end subroutine wipe_dictionary
 !!    dictionary.
 !!##OPTIONS
 !!##RETURNS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !===================================================================================================================================
 function get(key) result(valout)
@@ -1904,7 +1904,7 @@ end function get
 !!    using the routines for maintaining a list from command line arguments.
 !!##OPTIONS
 !!      prototype
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program
 !!
@@ -2433,7 +2433,7 @@ end function basename
 !!    Therefore can be very system dependent. If the queries fail the
 !!    default returned is "/".
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    sample usage
@@ -2797,7 +2797,7 @@ end subroutine cmd_args_to_dictionary
 !!             argument list.
 !!     STOP    logical value that if true stops the program after displaying
 !!             the dictionary.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!
@@ -2937,7 +2937,7 @@ end subroutine print_dictionary
 !!    If the functions are called with no argument they will return the
 !!    UNNAMED array converted to the specified type.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !! Sample program:
@@ -3014,7 +3014,7 @@ end subroutine print_dictionary
 !!                colon, and whitespace. A string containing an alternate
 !!                list of delimiter characters may be supplied.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!
@@ -3073,7 +3073,7 @@ end subroutine print_dictionary
 !!                colon, and whitespace. A string containing an alternate
 !!                list of delimiter characters may be supplied.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!
@@ -3613,9 +3613,9 @@ end subroutine get_scalar_logical
 !!##DESCRIPTION
 !!    length of longest argument on command line. Useful when allocating
 !!    storage for holding arguments.
-!!##RESULT
+!!##RETURNS
 !!    longest_command_argument  length of longest command argument
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program
 !!
@@ -4446,9 +4446,9 @@ end function replace_str
 !!                string. If CLIP
 !!                is .FALSE. spaces are not trimmed
 !!
-!!##RESULT
+!!##RETURNS
 !!    quoted_str  The output string, which is based on adding quotes to STR.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!
@@ -4558,10 +4558,10 @@ end function quote
 !!    esc         optional character used to protect the next quote
 !!                character from being processed as a quote, but simply as
 !!                a plain character.
-!!##RESULT
+!!##RETURNS
 !!    unquoted_str  The output string, which is based on removing quotes
 !!                  from quoted_str.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!
@@ -4705,7 +4705,7 @@ end function unquote
 !!    basein   base of input string; either 0 or from 2 to 36.
 !!    out10    output value in base 10
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!
@@ -5789,7 +5789,7 @@ end subroutine locate_key
 !!           Set to .false. to deactivate the mode.
 !!           It is .true. by default.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program:
 !!

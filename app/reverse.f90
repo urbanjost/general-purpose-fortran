@@ -88,29 +88,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    reverse(1f) - [FUNIX] print file in reverse
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    reverse INPUT_FILE [OUTPUT_FILE] [ --help][ --version]
-!!
-!!##DESCRIPTION
-!!    Read entire file into memory as a stream and write it in reverse
-!!    byte order
-!!##OPTIONS
-!!    INPUT_FILE   input file
-!!    OUTPUT_FILE  output file
-!!    --help       display help text and exit
-!!    --version    display version information and exit
-!!##SEE ALSO
-!!    reverse(1), rev(1)
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -131,7 +108,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-11-24 04:43:22 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:36:32 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -8,7 +8,7 @@
      real                     :: major_axis_length, minor_axis_length
      real                     :: start_angle, finish_angle
      integer                  :: ipen
-     integer,parameter        :: END=999, MOVE=3, DRAW=2
+     integer,parameter        :: END=999
      lines=[character(len=80) :: &
      '#---------------------------------------------------------------------#-',&
      '#  move over in the x direction the same amount you change axis length  ',&

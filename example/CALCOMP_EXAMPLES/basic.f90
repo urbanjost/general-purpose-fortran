@@ -1,17 +1,17 @@
 program qa1
 ! (LICENSE:Public Domain)
-   use M_calcomp
-   implicit none
-   character*10 ichr1
-   character*14 ichr2, ichr3
-   character*5 ichr4, ichr6
-   character*4 ichr5, ichr7
-   character*29 ichr8
-   character*32 ichr9, ichr10, ichr11, ichr12
-   character*1 ibcd
-   integer :: i, j, inteq
-   real    :: x, y, thick, wdth, tx, wx
-   real    :: tsqr, wsqr, psi
+use M_calcomp
+implicit none
+character(len=10) :: ichr1
+character(len=14) :: ichr2, ichr3
+character(len=5)  :: ichr4, ichr6
+character(len=4)  :: ichr5, ichr7
+character(len=29) :: ichr8
+character(len=32) :: ichr9, ichr10, ichr11, ichr12
+character(len=1)  :: ibcd
+integer           :: i, j, inteq
+real              :: x, y, thick, wdth, tx, wx
+real              :: tsqr, wsqr, psi
    ichr1 = 'WIDTH (FT)'
    ichr2 = 'THICKNESS (IN)'
    ichr3 = 'PRESSURE (PSI)'

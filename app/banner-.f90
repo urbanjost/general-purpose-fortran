@@ -75,50 +75,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!     banner-(1f) - [FUNIX] print large block letters
-!!     (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!   banner- [[-c LETTER] STRING(S)]| --help| --version
-!!
-!!##DESCRIPTION
-!!   Print strings as large block letters.
-!!
-!!##OPTIONS
-!!   STRING(S)  strings to print as large block letters
-!!   -c         letter to use to create block letters
-!!   --help     display this help and exit
-!!   --version  output version information and exit
-!!
-!!##EXAMPLE
-!!
-!!   To generate a large banner enter
-!!
-!!    >banner- HELLO
-!!    >
-!!    >  XXX XXX XXXXXXX XXXXX   XXXXX     XXX
-!!    >   X   X   X    X   X       X      X   X
-!!    >   X   X   X        X       X     X     X
-!!    >   X   X   X  X     X       X     X     X
-!!    >   XXXXX   XXXX     X       X     X     X
-!!    >   X   X   X  X     X       X     X     X
-!!    >   X   X   X        X       X     X     X
-!!    >   X   X   X    X   X   X   X   X  X   X
-!!    >  XXX XXX XXXXXXX XXXXXXX XXXXXXX   XXX
-!!
-!!    >banner -c L HELLO
-!!    >  LLL LLL LLLLLLL LLLLL   LLLLL     LLL
-!!    >   L   L   L    L   L       L      L   L
-!!    >   L   L   L        L       L     L     L
-!!    >   L   L   L  L     L       L     L     L
-!!    >   LLLLL   LLLL     L       L     L     L
-!!    >   L   L   L  L     L       L     L     L
-!!    >   L   L   L        L       L     L     L
-!!    >   L   L   L    L   L   L   L   L  L   L
-!!    >  LLL LLL LLLLLLL LLLLLLL LLLLLLL   LLL
 !----------------------------------------------------------------------------------------------------------------------------------!
 subroutine help_version(l_version)
 implicit none
@@ -140,7 +96,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      Copyright (c) 1984, 1996 John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-11-24 04:43:45 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 14:58:24 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

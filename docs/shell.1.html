@@ -114,93 +114,95 @@ output version information and exit
 At the command prompt the following example commands may be used:
 <P>
 <PRE>
-  #----------------------------------------------------------------------------#
-  | command                     |exercises       | description                 |
-  #----------------------------------------------------------------------------#
-  | r                           | M_HISTORY      | enter history editor;       |
-  |                             |                | ? will produce help         |
-  #----------------------------------------------------------------------------#
-  | today format [-help]        | M_TIME         | display current time using  |
-  |                             |                | fmtdate(3f)                 |
-  #----------------------------------------------------------------------------#
-  | if/else/elseif expression   | M_LOGIC        | conditionally process input |
-  |                             |                | lines                       |
-  | endif                       | M_LOGIC        | end IF block                |
-  #----------------------------------------------------------------------------#
-  | set dump                    | M_CALCULATOR   | dump currently defined      |
-  |                             |                | variable names              |
-  | set funcs                   | M_CALCULATOR   | describe functions available|
-  |                             |                | in expressions              |
-  | set nc()                    | JUOWN1/CALC_NC | display list of ncurses()   |
-  |                             |                | functions                   |
-  | set expression [-q]         | M_CALCULATOR   | anything else is assumed to |
-  |                             |                | be a numeric expression     |
-  | set                         | M_CALCULATOR   | If no expression switch to  |
-  |                             |                | calculator mode till "." is |
-  |                             |                | entered.                    |
-  #----------------------------------------------------------------------------#
-  | read file [-q]              | M_KRACKEN      | read from another input file|
-  | test1 -x -y --help --version| M_KRACKEN      | test of DISSECT(3f)         |
-  #----------------------------------------------------------------------------#
-  |                             | M_PIXEL        | pixel graphics              |
-  |prefsize:        specify size of pixel array
-  |vinit:           initialize pixel array drawing module
-  |
-  |rect:            draw line rectangle given two opposite corners
-  |line:            draw line between two points applying line width and color
-  |polyline:        draw lines between points
-  |rmove2:          relative move
-  |move2:           move current position
-  |rdraw2:          relative draw
-  |draw2:           draw a line from current position to specified point
-  |
-  |point2:          Draw a point at x, y
-  |
-  |arc:             draw a arc using current line width and color
-  |circle:          draw a circle using current line width and color
-  |circleprecision: set number of line segments making up a circle
-  |
-  |drawchar:        draw text at the current position
-  |drawstr:         draw text at the current position
-  |
-  |linewidth:       set line width for lines drawn in pixel image
-  |color:           set current color for lines drawn in pixel image
-  |textsize:        set text size in world units
-  |ycentertext:     set text centering mode on for drawstr(3f) and drawc(3f) in Y direction
-  |xcentertext:     set text centering mode for drawstr(3f) and drawc(3f) in X direction
-  |centertext:      set text centering mode for drawstr(3f) and drawc(3f)
-  |textang:         set angle in degrees to draw text at using drawstr(3f)
-  |
-  |mapcolor:        set a color index using RGB values
-  |
-  |strlength:       length of string using current font size
-  |getviewport:     return viewport in screen pixel coordinates
-  |getdisplaysize:  Returns the width and height of the device in pixels
-  |state:           print graphics state of M_pixel graphics module
-  |getgp2:          get current graphics position
-  |
-  |viewport:        Specify which part of the screen to draw in.
-  |ortho2:          define the area of the virtual world coordinates to map to the viewport
-  |ortho2_biggest:  given a window size, find and set to largest accommodating viewport
-  |
-  |print_ppm:       print pixel array as a P3 PPM file
-  |print_ascii:     print pixel array as an ASCII block of text
-  |
-  |clear:           set background color all to specified color index
-  |
-  |vexit:           exit pixel array drawing module
-  |                             |                |                             |
-  #----------------------------------------------------------------------------#
-  | help                        |                | display this information    |
-  |                             |                | this information            |
-  | quit|.                      |                | exit program                |
-  #----------------------------------------------------------------------------#
-  | anything_else               | execute as system command                    |
-  #----------------------------------------------------------------------------#
+ #--------------------------------------------------------------------------#
+ | command                   |exercises       | description                 |
+ #--------------------------------------------------------------------------#
+ | r                         | M_HISTORY      | enter history editor;       |
+ |                           |                | ? will produce help         |
+ #--------------------------------------------------------------------------#
+ | today format [-help]      | M_TIME         | display current time using  |
+ |                           |                | fmtdate(3f)                 |
+ #--------------------------------------------------------------------------#
+ | if/else/elseif expression | M_LOGIC        | conditionally process input |
+ |                           |                | lines                       |
+ | endif                     | M_LOGIC        | end IF block                |
+ #--------------------------------------------------------------------------#
+ | set dump                  | M_CALCULATOR   | dump currently defined      |
+ |                           |                | variable names              |
+ | set funcs                 | M_CALCULATOR   | describe functions available|
+ |                           |                | in expressions              |
+ | set nc()                  | JUOWN1/CALC_NC | display list of ncurses()   |
+ |                           |                | functions                   |
+ | set expression [-q]       | M_CALCULATOR   | anything else is assumed to |
+ |                           |                | be a numeric expression     |
+ | set                       | M_CALCULATOR   | If no expression switch to  |
+ |                           |                | calculator mode till "." is |
+ |                           |                | entered.                    |
+ #--------------------------------------------------------------------------#
+ | read file [-q]              | M_KRACKEN    | read from another input file|
+ | test1 -x -y --help --version| M_KRACKEN    | test of DISSECT(3f)         |
+ #--------------------------------------------------------------------------#
+ |                             | M_PIXEL      | pixel graphics              |
+ |prefsize:        specify size of pixel array
+ |vinit:           initialize pixel array drawing module
+ |
+ |rect:            draw line rectangle given two opposite corners
+ |line:            draw line between two points applying line width and color
+ |polyline:        draw lines between points
+ |rmove2:          relative move
+ |move2:           move current position
+ |rdraw2:          relative draw
+ |draw2:           draw a line from current position to specified point
+ |
+ |point2:          Draw a point at x, y
+ |
+ |arc:             draw a arc using current line width and color
+ |circle:          draw a circle using current line width and color
+ |circleprecision: set number of line segments making up a circle
+ |
+ |drawchar:        draw text at the current position
+ |drawstr:         draw text at the current position
+ |
+ |linewidth:       set line width for lines drawn in pixel image
+ |color:           set current color for lines drawn in pixel image
+ |textsize:        set text size in world units
+ |ycentertext:     set centering mode for drawstr(3f)/drawc(3f) in Y direction
+ |xcentertext:     set centering mode for drawstr(3f)/drawc(3f) in X direction
+ |centertext:      set centering mode for drawstr(3f)/drawc(3f)
+ |textang:         set angle in degrees to draw text at using drawstr(3f)
+ |
+ |mapcolor:        set a color index using RGB values
+ |
+ |strlength:       length of string using current font size
+ |getviewport:     return viewport in screen pixel coordinates
+ |getdisplaysize:  Returns the width and height of the device in pixels
+ |state:           print graphics state of M_pixel graphics module
+ |getgp2:          get current graphics position
+ |
+ |viewport:        Specify which part of the screen to draw in.
+ |ortho2:          define area of virtual world coordinates to map to viewport
+ |ortho2_biggest:  given window size, set to largest accommodating viewport
+ |
+ |print_ppm:       print pixel array as a P3 PPM file
+ |print_ascii:     print pixel array as an ASCII block of text
+ |
+ |clear:           set background color all to specified color index
+ |
+ |vexit:           exit pixel array drawing module
+ |                          |                |                             |
+ #-------------------------------------------------------------------------#
+ | help                     |                | display this information    |
+ |                          |                | this information            |
+ | quit|.                   |                | exit program                |
+ #-------------------------------------------------------------------------#
+ | anything_else            | execute as system command                    |
+ #-------------------------------------------------------------------------#
+<P>
+ It can be confusing if you make variables that are command names.
+ An expression on the command line is evaluated and then the program
+ exits.
 <P>
 </PRE>
-It can be confusing if you make variables that are command names.
-An expression on the command line is evaluated and then the program exits.
 </BLOCKQUOTE>
 <A name=5>
 
@@ -314,7 +316,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shell (1)</TD> <TD align=right width=33%><I>November 24, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4bfd180c-6a34-4846-8505-b60d17c9f9b3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>shell (1)</TD> <TD align=right width=33%><I>December 14, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7c9784c9-523a-4e80-90c7-d342c65ce4db using man macros.</FONT>
 <br><br><center><img src="images/shell.1.gif"></center>
 </div>
 </div>

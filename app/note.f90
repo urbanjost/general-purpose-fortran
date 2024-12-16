@@ -63,59 +63,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!     note(1f) - [M_messages] print large block letters
-!!     (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!     note STRING(S) [ -font FontName] | -test| -help| -version
-!!
-!!##DESCRIPTION
-!!     Print strings as large block letters using the blocks(3f) or
-!!     signs(3f) procedure.
-!!
-!!##OPTIONS
-!!     STRING(S)  strings to print as large block letters
-!!     --font alpha|banner  select font style
-!!     --test     the selected character set is printed, one letter at a time.
-!!     --help     display this help and exit
-!!     --version  output version information and exit
-!!
-!!##EXAMPLE
-!!
-!!     To generate a large banner enter
-!!
-!!        note HELLO
-!!
-!!        >  HH      HH  EEEEEEEEEE  LL          LL           OOOOOOOO
-!!        >  HH      HH  EEEEEEEEEE  LL          LL          OOOOOOOOOO
-!!        >  HH      HH  EE          LL          LL          OO     OOO
-!!        >  HH      HH  EE          LL          LL          OO    O OO
-!!        >  HHHHHHHHHH  EEEEE       LL          LL          OO   O  OO
-!!        >  HHHHHHHHHH  EEEEE       LL          LL          OO  O   OO
-!!        >  HH      HH  EE          LL          LL          OO O    OO
-!!        >  HH      HH  EE          LL          LL          OOO     OO
-!!        >  HH      HH  EEEEEEEEEE  LLLLLLLLLL  LLLLLLLLLL  OOOOOOOOOO
-!!        >  HH      HH  EEEEEEEEEE  LLLLLLLLLL  LLLLLLLLLL   OOOOOOOO
-!!
-!!        note HELLO -font banner
-!!
-!!        >  XXX XXX XXXXXXX XXXXX   XXXXX     XXX
-!!        >   X   X   X    X   X       X      X   X
-!!        >   X   X   X        X       X     X     X
-!!        >   X   X   X  X     X       X     X     X
-!!        >   XXXXX   XXXX     X       X     X     X
-!!        >   X   X   X  X     X       X     X     X
-!!        >   X   X   X        X       X     X     X
-!!        >   X   X   X    X   X   X   X   X  X   X
-!!        >  XXX XXX XXXXXXX XXXXXXX XXXXXXX   XXX
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public License
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -136,7 +83,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      Copyright (c) 1984, 1996 John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-11-24 04:45:25 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:40:46 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -44,7 +44,7 @@ logical             :: verbose=.false.
       endif
    endif
 
-end program find_lcm
+contains
 subroutine help_usage(l_help)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
@@ -79,7 +79,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '       --help     display this help and exit                                    ',&
 '       --version  output version information and exit                           ',&
 '       --verbose  produce verbose answer instead of simple integer result       ',&
-'EXAMPLE                                                                         ',&
+'EXAMPLES                                                                        ',&
 ' Sample Usage:                                                                  ',&
 '                                                                                ',&
 '  >lcm 10 34 82                                                                 ',&
@@ -101,49 +101,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!        lcm(1f) - [NUMBERS] display least common multiple of a list of whole numbers
-!!        (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!        lcm [NUMBERS]...
-!!
-!!##DESCRIPTION
-!!    Print the LCM (Least Common Multiple) of a list of integer whole
-!!    NUMBERS. If none are specified on the command line, read them from
-!!    standard input, one list per line.
-!!
-!!    Typically, the numbers must be positive integers where
-!!
-!!       2 <= NUMBER <= (2**31)-1 or 2147483647.
-!!
-!!    but if the result would be larger than (2**31)-1 an error is returned
-!!
-!!##OPTIONS
-!!        NUMBERS    list of numbers whose least common multiple is to be
-!!                   determined
-!!        --help     display this help and exit
-!!        --version  output version information and exit
-!!        --verbose  produce verbose answer instead of simple integer result
-!!##EXAMPLE
-!!
-!!  Sample Usage:
-!!
-!!   >lcm 10 34 82
-!!   >6970
-!!
-!!   >lcm 10 34 82 -verbose
-!!   >6970=lcm([10,34,82])
-!!
-!!   >lcm 202023 2147483647
-!!   >STOP 1
-!!   >*lcm* result larger than a standard integer = 433841088817881
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -162,9 +119,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)UUID:           8f39b1e5-592f-4a22-946f-b8da2aa49633>',&
-'@(#)COMPILED:       2024-11-24 04:45:00 UTC-300>',&
+'@(#)COMPILED:       2024-12-14 21:39:53 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
+end program find_lcm

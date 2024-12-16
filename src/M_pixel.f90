@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_pixel(3f) - [M_pixel::INTRO] module for drawing into a pixel array
@@ -66,7 +55,7 @@
 !!    higher level graphing routines are being worked on. If anyone is
 !!    interested in collaborating on the module, contact the author.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -1468,7 +1457,7 @@ contains
 !!    X1,Y1  coordinates of a corner of the rectangle
 !!    X2,Y2  coordinates of corner point opposite first point
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2382,7 +2371,7 @@ end subroutine draw_line_single
 !!
 !!    programmed in FORTRAN-77
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Show all Hershey characters
 !!
@@ -2739,7 +2728,6 @@ subroutine chrcod(text,ntext)
 !  K IS CURRENT ADDRESS OF CHARACTER IN TEXT
 !  J IS INDEX OF NEXT SYMBOL CODE IN P_ICHR
    INFINITE: do
-20 continue
       IF(K.GT.N)THEN
         P_NCHR=J-1
         RETURN
@@ -2752,7 +2740,6 @@ subroutine chrcod(text,ntext)
           J=J+1
           K=K+1
           CYCLE INFINITE
-          GOTO 20
         ENDIF
         !  ICHAR RETURNS INTEGER ASCII VALUE OF CHARACTER
         !  OFFSET BY NONPRINTING CHARACTERS TO GET ENTRY IN LOOK-UP TABLE
@@ -2768,7 +2755,6 @@ subroutine chrcod(text,ntext)
           J=J+1
           K=K+1
           CYCLE INFINITE
-          GOTO 20
         ELSE                                      !  BACKSLASH FOUND
           !  CHECK NEXT FOUR CHARACTERS FOR FOUR DIGIT NUMBER
           K=K+1
@@ -2796,7 +2782,6 @@ subroutine chrcod(text,ntext)
              K=K+L
            ENDIF
           CYCLE INFINITE
-           GOTO 20
    50      CONTINUE
            !  NOT A NUMBER
            !  CHECK FOR FONT CHANGE COMMAND
@@ -2817,7 +2802,6 @@ subroutine chrcod(text,ntext)
            P_ICHR(J)=1004
            J=J+1
            K=K+3
-           GO TO 20
           CYCLE INFINITE
            !  CHECK FOR SUPER/SUB-SCRIPT COMMAND
          ELSEIF(TEXT(K:K+3).EQ.'SUP{'.OR.TEXT(K:K+3).EQ.'sup{')THEN
@@ -2825,14 +2809,12 @@ subroutine chrcod(text,ntext)
            P_ICHR(J)=1001
            J=J+1
            K=K+4
-           GOTO 20
           CYCLE INFINITE
          ELSEIF (TEXT(K:K+3).EQ.'SUB{'.OR.TEXT(K:K+3).EQ.'sub{')THEN
            !  BEGIN SUBSCRIPTING
            P_ICHR(J)=1002
            J=J+1
            K=K+4
-           GOTO 20
           CYCLE INFINITE
          ELSE
            !  GREEK CHARACTER OR INVALID CHARACTER
@@ -2857,7 +2839,6 @@ subroutine chrcod(text,ntext)
              ELSE
                K=K+L
              ENDIF
-             GOTO 20
           CYCLE INFINITE
            ENDIF
            !  LOOK UP THE CHARACTER
@@ -2918,7 +2899,6 @@ subroutine chrcod(text,ntext)
         ELSE
           K=K+L
         ENDIF
-        GOTO 20
         CYCLE INFINITE
       ENDIF
       exit INFINITE
@@ -2945,7 +2925,7 @@ END SUBROUTINE CHRCOD
 !!##RETURNS
 !!    STRLENGTH  length of string using current font size
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample Program:
 !!
@@ -3067,7 +3047,7 @@ end function strlength
 !!    o S(3)  to the right edge of the last nonblank character
 !!    o S(4)  to the right edge of the last character of the string.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -3168,7 +3148,7 @@ end subroutine justfy
 !!
 !!        ARRY   An optional array of Y values
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3255,7 +3235,7 @@ end subroutine polyline2
 !!##OPTIONS
 !!    INDX   color index to set pixel array to. Optional
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -3328,7 +3308,7 @@ end subroutine clear
 !!
 !!    INDX     color index to set pixel array to. Optional
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -3436,7 +3416,7 @@ end subroutine if_init
 !!    STARTANG   Start angle
 !!    ENDANG     End angle
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3521,7 +3501,7 @@ end subroutine arc
 !!    X,Y        Coordinates for the center of the circle
 !!    RADIUS     Radius of the circle
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3607,7 +3587,7 @@ end subroutine circle
 !!    Set the current line width in units of 1/10,000 of the X size of the
 !!    display surface
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3684,7 +3664,7 @@ end subroutine linewidth
 !!     COL  A color number from 0 to 255. To define additional
 !!          colors see mapcolor(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3767,7 +3747,7 @@ end subroutine color
 !!    GREEN   green component of color being defined, in range 0 to 255
 !!    BLUE    blue component of color being defined, in range 0 to 255
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Color wheel example:
 !!
@@ -3971,7 +3951,7 @@ end subroutine mapcolor
 !!##OPTIONS
 !!    NSEGS   number of line segments making up a circle
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4118,7 +4098,7 @@ end subroutine getviewport
 !!           #------------------------------------#
 !!      (left=0,bottom=400)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program
 !!
@@ -4189,7 +4169,7 @@ end subroutine viewport
 !!##DESCRIPTION
 !!    calculate conversion factors between viewport and world window
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -4270,7 +4250,7 @@ end subroutine viewport2world
 !!    matrix, and consequently the world units. Parallel projections are
 !!    defined by ortho2.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -4312,7 +4292,7 @@ end subroutine ortho2
 !!    the viewport. Automatically use the largest viewport that provides
 !!    one-to-one correspondence between the window and the viewport.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -4445,7 +4425,7 @@ end subroutine page
 !!    X  new X position
 !!    Y  new Y position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4509,7 +4489,7 @@ end subroutine rmove2
 !!    X  new X position
 !!    Y  new Y position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4570,7 +4550,7 @@ end subroutine move2
 !!    X  new X position
 !!    Y  new Y position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4656,7 +4636,7 @@ end subroutine rdraw2
 !!    X  new X position
 !!    Y  new Y position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4747,7 +4727,7 @@ end subroutine draw2
 !!    WIDTH   width of pixel array to create when vinit(3f) is called
 !!    HEIGHT  height of pixel array to create when vinit(3f) is called
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4821,7 +4801,7 @@ end subroutine prefsize
 !!
 !!##OPTIONS
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4880,7 +4860,7 @@ end subroutine vexit
 !!
 !!##OPTIONS
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -4981,7 +4961,7 @@ end subroutine vinit
 !!    MAKEPOLY(3f) opens up a polygon which will then be constructed by a
 !!    series of move-draws and closed by a CLOSEPOLY(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -5175,7 +5155,7 @@ end subroutine closepoly
 !!##OPTIONS
 !!   FILENAME  name of output file to create or append to.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5244,7 +5224,7 @@ end subroutine print_ppm
 !!##OPTIONS
 !!   FILENAME  name of output file to create.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5342,7 +5322,7 @@ end function num2bytes2
 !!##OPTIONS
 !!   FILENAME  name of output file to create or replace
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5415,7 +5395,7 @@ end subroutine print_p3
 !!##OPTIONS
 !!   FILENAME  name of output file. If blank write to stdout.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample Program:
@@ -5508,7 +5488,7 @@ end subroutine print_ansi
 !!##OPTIONS
 !!   FILENAME  name of output file. If blank write to stdout.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample Program:
@@ -5703,7 +5683,7 @@ end subroutine print_ascii
 !!    text of different sizes aligned along the same baseline note that you
 !!    typically need to subtrace the descender height from the Y position.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5773,7 +5753,7 @@ end subroutine textsize
 !!    that its center line is aligned with the current y position. Top
 !!    justification and Bottom justification are turned off.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -5813,7 +5793,7 @@ end subroutine ycentertext
 !!    point to the right of the current position. Left justification and
 !!    Right justification are turned off.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!##AUTHOR
@@ -5852,7 +5832,7 @@ end subroutine xcentertext
 !!##OPTIONS
 !!    ONOFF  set centering mode on or off
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -5945,7 +5925,7 @@ end subroutine centertext
 !!          Angles are measured counterclockwise with zero degrees at the
 !!          horizontal line to the right of the original.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -6018,7 +5998,7 @@ end subroutine textang
 !!       o times.r   COMPLEX
 !!       o times.i   ITALIC
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample Program:
 !!
@@ -6115,7 +6095,7 @@ end subroutine font
 !!    Draw a character at the current position. Uses current line color
 !!    and thickness and text justification mode.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -6190,7 +6170,7 @@ end subroutine drawchar
 !!    Draw a text string at the current position. Uses current line color
 !!    and thickness and text centering mode.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -6342,7 +6322,7 @@ end subroutine drawstr_
 !!    X  X coordinate of current position
 !!    Y  Y coordinate of current position
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -6434,7 +6414,7 @@ end subroutine getdisplaysize
 !!    Draw a point at x, y. Points are drawn with the current color as
 !!    a circle with a diameter equal to the current linewidth.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -6493,7 +6473,7 @@ end subroutine point2
 !!            o default
 !!            o colormap
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -6585,7 +6565,7 @@ end subroutine state
 !!##DESCRIPTION
 !!    Construct a polygon from an array of points
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -7373,7 +7353,7 @@ end function anyscalar_to_double
 !!       2   modei was invalid
 !!       3   modeo was invalid
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !! Sample program
 !!
@@ -8026,7 +8006,7 @@ end subroutine rgbyiq
 !!##RETURNS
 !!     CLOSESTNAME   name of color found closest to given RGB value</li>
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -8102,7 +8082,7 @@ end SUBROUTINE closest_color_name
 !!     for a given known color name. Most X11 Windows color names are
 !!     supported. If the name is not found, ECHONAME is set to "Unknown".
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    A sample program:
 !!
@@ -8827,7 +8807,7 @@ end subroutine polar_to_cartesian
 !!##OPTIONS
 !!    degrees    any standard scalar value supported by anyscalar_to_real(3f).
 !!               This includes REAL, INTEGER, DOUBLEPRECISION, ... .
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!

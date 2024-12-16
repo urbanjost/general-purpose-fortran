@@ -60,7 +60,7 @@ contains
 !!           of JOURNAL() for a meaning for the I/O flag. To write to stdout
 !!           use 's'.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Example program:
 !!
@@ -164,7 +164,7 @@ end subroutine junbad
 !!
 !!  See the description of JOURNAL() for a meaning for the I/O flag.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -241,7 +241,7 @@ end subroutine junbat
 !!
 !!  See the description of JOURNAL() for a meaning for the I/O flag.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -312,7 +312,7 @@ end subroutine junbuster
 !!##DESCRIPTION
 !!    Prints out a pretty message shaped like a dragon puffing smoke
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -398,7 +398,7 @@ end subroutine jundragon
 !!           To write to stdout use 's'.
 !!           See the description of JOURNAL() for a meaning for the I/O flag.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Typical Usage:
 !!
@@ -511,7 +511,7 @@ end subroutine junroach
 !!       where    the I/O flag to pass on to JOURNAL().
 !!                See the description of JOURNAL() for a meaning for the I/O flag.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -591,7 +591,7 @@ end subroutine junsun
 !!
 !!  See the description of JOURNAL() for a meaning for the I/O flag.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  Sample program:
@@ -720,7 +720,7 @@ end subroutine juntrolls
 !!             0=> fit into line of 132 characters unless scale becomes narrower
 !!             than ICMIN characters, then fit into 255 character line.)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program:
@@ -985,7 +985,7 @@ end subroutine tabgraph
 !!    STRING  The string to represent in block characters
 !!    IOUNIT  The unit number (the LUN) for the file to write to
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1717,7 +1717,7 @@ end subroutine signs
 !!    whole  total number of elements to be completed. Should take any
 !!           scalar numeric value.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program:

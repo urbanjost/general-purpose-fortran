@@ -1,21 +1,19 @@
 program qa2
 ! (LICENSE:Public Domain)
-   use M_calcomp, only: plots, plot, symbol, number, nframe
-   use M_calcomp, only: move, draw
-   implicit none
+use M_calcomp, only: plots, plot, symbol, number, nframe
+implicit none
 !
 !     THIS ROUTINE PRODUCES A SYMBOL TABLE, WHICH SHOWS THE CHARACTERS
 !     AVAILABLE IN THE SYMBOL ROUTINE.
 !
-   character*38 ichr1, ichr2
-   character*60 ichr3
-   character*28 ichr4
-   character*1 ibcd
-   integer :: i, m, ia, ib, inteq
-   real :: xs, ys, x, y, z
-   real :: znum
-   dimension znum(4)
-   data znum/10293.84756, 193.75, -204.86, -12345.6789/
+character(len=38) :: ichr1, ichr2
+character(len=60) :: ichr3
+character(len=28) :: ichr4
+character(len=1)  :: ibcd
+integer           :: m, ia, ib, inteq
+real              :: xs, ys, x, y, z
+real              :: znum(4)
+data znum/10293.84756, 193.75, -204.86, -12345.6789/
    ichr1 = 'CHARACTERS AVAILABLE IN SYMBOL ROUTINE'
    ichr2 = '  FOR CALCOMP'
    ichr3 = 'INTEGER FOR USE IN SYMBOL CALL SHOWN TO LEFT OF EACH SYMBOL'

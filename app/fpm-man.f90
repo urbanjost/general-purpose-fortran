@@ -218,7 +218,7 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                               remember=paws
                              iinf=0
                              remember=paws
-                  case('/','n','N','?')
+                  case('/','n','N','\')
                              i=i-1
                              irestore=i
                              if(irestore.ge.size(manual))then
@@ -234,7 +234,7 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                                 if(paws(2:).ne.'') regex=paws(2:)
                                 direction=1
                                 search_end=size(manual)
-                             case('?','N')
+                             case('\','N')
                                 i=max(0,i-1*lines+3) ! back
                                 if(paws(2:).ne.'') regex=paws(2:)
                                 direction=-1
@@ -461,49 +461,15 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                         if(color)manual=crayons(manual)
                      endif
                      remember='f'
+                  case('h','?')
+                     call cribsheet()
+                     i=max(0,i-2*lines+2) ! back
+                     remember='f'
                   case default
-                     if(cmdmode.and.paws.ne.'h')then
+                     if(cmdmode)then
                         call execute_command_line(paws)
                      else
-                        ! '123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 '
-                        write(stdout,'(a)')[character(len=80) :: &
-                        & ' +------------+-----+----------------------+------+---------------------------+ ', &
-                        & ' |POSITIONING:| b   | back one page        | f    | forward one page(default) | ', &
-                        & ' |            | u   | up 1/2 page          | d    | down 1/2 page             | ', &
-                        & ' |            | e   | up 1 line, eeeeee... | y    | down 1 line, yyyyyy...    | ', &
-                        & ' |            | gN  | goto Nth line        | [+-]N| [relative] moveto Nth line| ', &
-                        & ' +------------+-----+----------------------+------+---------------------------+ ', &
-                        & ' |SEARCH:     | /RE | search for expression| ?RE  | backward search           | ', &
-                        & ' |            | n   | repeat last search   | N    | repeat last search upward | ', &
-                        & ' +------------+-----+----------------------+------+---------------------------+ ', &
-                        & ' |SYSTEM:     | s F | save to filename     | xcmd | execute system_command    | ', &
-                        & ' +------------+-----+----------------------+------+---------------------------+ ', &
-                        & ' |OPTIONS:    | #   | toggle line numbers  | lNNN | change lines per page     | ', &
-                        & ' |            | i   | toggle search by case| c    | toggle color mode         | ', &
-                        & ' +------------+-----+----------------------+------+---------------------------+ ', &
-                        & ' |GENERAL:    | q   | quit                 | r    | refresh                   | ', &
-                        & ' |            | h   | display help         | T    | reload Table Of Contents  | ', &
-                        & ' |            | tstr| load specified topic |      |                           | ', &
-                        & ' +------------+-----+----------------------+------+---------------------------+ ', &
-                        & ' | An empty string repeats the last positioning or toggle command. So if you  | ', &
-                        & ' | searched for a string or did an "e" or "y" and then just hit return the    | ', &
-                        & ' | previous command is repeated until a non-blank command like "r" is entered.| ', &
-                        & ' |                                                                            | ', &
-                        & ' +----------------------------------------------------------------------------+ ']
-                        if(paws(1:1).eq.'X')then
-                        write(stdout,'(a)')[character(len=80) :: &
-                        & ' +------------+-----+----------------------+------+---------------------------+ ', &
-                        & ' |DEVELOPER:  | C   | toggle color mode    | D    | toggle demo mode          | ', &
-                        & ' |            | Cstr| change colors        | P    | toggle prefix mode        | ', &
-                        & ' |            | C?  | show current colors  | X    | show developer help       | ', &
-                        & ' |            | H   | command help         | L    | load file                 | ', &
-                        & ' |            | V   | version information  |      |                           | ', &
-                        & ' +------------+-----+----------------------+------+---------------------------+ ', &
-                        & ' a loaded file cannot display a prefix string accept for the filename currently.']
-                        endif
-                        flush(stdout,iostat=iostat)
-                        write(stdout,gen,advance='no')'[',i,']Continue...'
-                        read(stdin,'(a)',iostat=iostat)paws
+                        call cribsheet()
                         i=max(0,i-2*lines+2) ! back
                         remember='f'
                      endif
@@ -529,6 +495,47 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
       enddo INFINITE
    endif
 contains
+subroutine cribsheet()
+   ! '123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 '
+   write(stdout,'(a)')[character(len=80) :: &
+   & ' +------------+-----+----------------------+------+---------------------------+ ', &
+   & ' |POSITIONING:| b   | back one page        | f    | forward one page(default) | ', &
+   & ' |            | u   | up 1/2 page          | d    | down 1/2 page             | ', &
+   & ' |            | e   | up 1 line, eeeeee... | y    | down 1 line, yyyyyy...    | ', &
+   & ' |            | gN  | goto Nth line        | [+-]N| [relative] moveto Nth line| ', &
+   & ' +------------+-----+----------------------+------+---------------------------+ ', &
+   & ' |SEARCH:     | /RE | search for expression| \RE  | backward search           | ', &
+   & ' |            | n   | repeat last search   | N    | repeat last search upward | ', &
+   & ' +------------+-----+----------------------+------+---------------------------+ ', &
+   & ' |SYSTEM:     | s F | save to filename     | xcmd | execute system_command    | ', &
+   & ' +------------+-----+----------------------+------+---------------------------+ ', &
+   & ' |OPTIONS:    | #   | toggle line numbers  | lNNN | change lines per page     | ', &
+   & ' |            | i   | toggle search by case| c    | toggle color mode         | ', &
+   & ' +------------+-----+----------------------+------+---------------------------+ ', &
+   & ' |GENERAL:    | q   | quit                 | r    | refresh                   | ', &
+   & ' |            | h   | display help         | T    | reload Table Of Contents  | ', &
+   & ' |            | tstr| load specified topic |      |                           | ', &
+   & ' +------------+-----+----------------------+------+---------------------------+ ', &
+   & ' | An empty string repeats the last positioning or toggle command. So if you  | ', &
+   & ' | searched for a string or did an "e" or "y" and then just hit return the    | ', &
+   & ' | previous command is repeated until a non-blank command like "r" is entered.| ', &
+   & ' |                                                                            | ', &
+   & ' +----------------------------------------------------------------------------+ ']
+   if(paws(1:1).eq.'X')then
+   write(stdout,'(a)')[character(len=80) :: &
+   & ' +------------+-----+----------------------+------+---------------------------+ ', &
+   & ' |DEVELOPER:  | C   | toggle color mode    | D    | toggle demo mode          | ', &
+   & ' |            | Cstr| change colors        | P    | toggle prefix mode        | ', &
+   & ' |            | C?  | show current colors  | X    | show developer help       | ', &
+   & ' |            | H   | command help         | L    | load file                 | ', &
+   & ' |            | V   | version information  |      |                           | ', &
+   & ' +------------+-----+----------------------+------+---------------------------+ ', &
+   & ' a loaded file cannot display a prefix string accept for the filename currently.']
+   endif
+   flush(stdout,iostat=iostat)
+   write(stdout,gen,advance='no')'[',i,']Continue...'
+   read(stdin,'(a)',iostat=iostat)paws
+end subroutine cribsheet
 subroutine load_manual()
 ! use topics list to load the manual variable
 integer :: i

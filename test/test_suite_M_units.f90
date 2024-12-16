@@ -3,8 +3,8 @@ use,intrinsic :: iso_fortran_env, only: real32, real64, real128
 use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
 use M_framework__verify, only : unit_test_level
 use M_framework__msg,    only : str
+use M_framework
 use M_anything,          only : anyscalar_to_real, anyscalar_to_double
-USE M_Compare_Float_Numbers
 use M_framework,         only : accdig
 use M_units
 

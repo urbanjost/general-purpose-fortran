@@ -19,7 +19,7 @@
      write(*,*)'['//string//']'
      contains
      subroutine makefile(lun)
-     integer :: iostat,lun
+     integer :: lun
      integer :: i
      character(len=80),parameter  :: fakefile(*)=[character(len=80) :: &
      'col1'//t//'col2' ,&
@@ -29,8 +29,8 @@
      'dddd'//t//'four' ,&
      '']
      ! create input file
-     open(newunit=lun,status='scratch')
-     write(lun,'(a)')(trim(fakefile(i)),i=1,size(fakefile))
-     rewind(lun)
+        open(newunit=lun,status='scratch')
+        write(lun,'(a)')(trim(fakefile(i)),i=1,size(fakefile))
+        rewind(lun)
      end subroutine makefile
      end program demo_notabs

@@ -144,7 +144,7 @@ end interface w2d
 !!
 !!    ierr        Error code. If 0 no error occurred.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample Program:
 !!
@@ -269,7 +269,7 @@ end subroutine date_to_julian
 !!
 !!    ierr      Error code. If 0 no error occurred.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!     Sample program:
 !!
@@ -410,7 +410,7 @@ end subroutine julian_to_date
 !!
 !!    ierr      Error code. If 0 no error occurred.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!     Sample program:
 !!
@@ -496,7 +496,7 @@ end subroutine date_to_unix
 !!
 !!    ierr      Error code. If 0 no error occurred.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!     Sample program:
 !!
@@ -593,7 +593,7 @@ end subroutine unix_to_date
 !!     ordinal  The day of the year calculated for the given input date,
 !!              where Jan 1st=1.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -683,7 +683,7 @@ end function d2o
 !!   Before using this routine consider the consequences if the application
 !!   is running at the moment a new year begins.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    sample program
 !!
@@ -691,17 +691,17 @@ end function d2o
 !!     use M_time, only : ordinal_seconds
 !!     implicit none
 !!     character(len=*),parameter :: gen='(*(g0))'
-!!     integer          :: i, ios, istart, iend
+!!     integer          :: i, istart, iend
 !!     real,volatile    :: x
-!!     istart = ordinal_seconds()
-!!     x = 0.0
-!!     do i = 1, 1000000000
-!!        x = x+sqrt(real(i))
-!!     enddo
-!!     print gen, 'x=',x
-!!     iend = ordinal_seconds()
-!!     print gen, 'that took ',iend-istart,' seconds'
-!!     print gen, iend,'-',istart,'=',iend-istart
+!!        istart = ordinal_seconds()
+!!        x = 0.0
+!!        do i = 1, 1000000000
+!!           x = x+sqrt(real(i))
+!!        enddo
+!!        print gen, 'x=',x
+!!        iend = ordinal_seconds()
+!!        print gen, 'that took ',iend-istart,' seconds'
+!!        print gen, iend,'-',istart,'=',iend-istart
 !!     end program demo_ordinal_seconds
 !!
 !!    Results:
@@ -750,7 +750,7 @@ end function ordinal_seconds
 !!       ddd   known ordinal day of the year
 !!##RETURNS
 !!       dat   DAT array describing the date
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -833,7 +833,7 @@ end subroutine ordinal_to_date
 !!           The timezone value is from the current time on the current
 !!           platform.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -913,7 +913,7 @@ end function o2d
 !!##RETURNS
 !!    month_name  A string representing a month name or the word 'UNKNOWN'
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -1030,7 +1030,7 @@ end function v2mo
 !!                 dat=[ year,month,day,timezone,hour,&
 !!                  & minutes,seconds,milliseconds]
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -1099,7 +1099,7 @@ end function mo2d
 !!    imonth      month number returned. If the name is not recognized a -1
 !!                is returned.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -1180,7 +1180,7 @@ end function mo2v
 !!##RETURNS
 !!     timestr     formatted output string representing date
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample Program:
 !!
@@ -1260,7 +1260,7 @@ end function now
 !!##RETURNS
 !!     timestr  formatted output string representing date
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -1408,7 +1408,7 @@ real(kind=realtime),save             :: unixtime_last
    keyword=.FALSE.
    iout=1
 
-   do i10=1,len(local_format)                  ! Read the FORMAT string and replace the "%" strings per the following rules:
+   do i10=1,len(local_format)               ! Read the FORMAT string and replace the "%" strings per the following rules:
       chara=local_format(i10:i10)
       if(chara=='%'.and..not.keyword)then
             keyword=.TRUE.
@@ -1597,7 +1597,7 @@ end function fmtdate
 !!                 calling programs can position the output. Default
 !!                 for this optional parameter is three (3).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample Program:
 !!
@@ -1653,7 +1653,7 @@ end function fmtdate
 !!         %Q -- double quote
 !!      Duration:
 !!         %a -- Time since now as d-h:m:s               1-12:34:30
-!!         %A -- TIme since now as seconds               12810.4500
+!!         %A -- Time since now as seconds               12810.4500
 !!      Program timing:
 !!         %c -- CPU_TIME(3f) output                     .21875000000000000
 !!         %C -- number of times this routine is used    1
@@ -1940,7 +1940,7 @@ end subroutine fmtdate_usage
 !!                 dat=[ year,month,day,timezone,hour,&
 !!                  & minutes,seconds,milliseconds]
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -2202,7 +2202,7 @@ integer                           :: loops
 
       do i=1,12
          ind=index(buff,amon(i))
-         if(ind/=0) then                                  ! Found a matching month
+         if(ind/=0) then                                    ! Found a matching month
             mon=i
             buff(ind:ind+2)='   '                           ! Delete month
             alpha=.true.                                    ! Alphabetic month
@@ -2210,7 +2210,7 @@ integer                           :: loops
          endif
       enddo
 
-      do i=1,len(buff)                                      ! First remove all non-numeric characters
+      do i=1,len(buff)                                          ! First remove all non-numeric characters
          idum=iachar(buff(i:i))
          if(idum<48.or.idum>57)then
             buff(i:i)=' '
@@ -2225,9 +2225,9 @@ integer                           :: loops
          if(ios/=0)cycle INFINITE
       endif
       !x!if(iye<=99)then
-      !x!   iye=iye+2000                                       ! Cope with two digit year (assume 21st century.)
+      !x!   iye=iye+2000                                    ! Cope with two digit year (assume 21st century.)
       !x!endif
-      if(mon<1.or.mon>12) cycle INFINITE              ! Check range of months
+      if(mon<1.or.mon>12) cycle INFINITE                    ! Check range of months
       if(mon==2) then                                     ! Special check for Feb.
          if((iye/4)*4==iye) then                          ! Leap year
             if(idy<1.or.idy>29) cycle INFINITE
@@ -2299,7 +2299,7 @@ end subroutine guessdate
 !!             If the error code is not returned and an error occurs,
 !!             the program is stopped.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -2451,7 +2451,7 @@ end subroutine dow
 !!    iso_weekday  ISO-8601 weekday number for the given date
 !!    iso_name     ISO-8601 Week string for the data in the form "yyyy-Www-d".
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -2643,7 +2643,7 @@ end subroutine d2w
 !!   The returned dat array is currently always assumed to have the local
 !!   timezone. This might be changed to always assume ZULU time.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!  Sample program:
@@ -2910,7 +2910,7 @@ end subroutine w2d_string
 !!    calen  returned character array holding a display of the
 !!           specified month
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -2959,7 +2959,7 @@ integer              :: location,ierr,i
    dat_1st=[dat(1),dat(2),1,dat(4),0,0,0,0]                        ! create date array for first day in month specified
    call dow(dat_1st, weekday, ierr=ierr)                           ! return the day of the week for first of month
 !-----------------------------------------------------------------------------------------------------------------------------------
-   calen(1)=adjustc(v2mo(dat(2))//' '//v2s(dat(1)),len(calen(1)))  ! build first line with month and year centered
+   calen(1)=adjustc(v2mo(dat(2))//' '//v2s(dat(1)),len(calen(1)))   ! build first line with month and year centered
    calen(2)='Mo Tu We Th Fr Sa Su'                                 ! build second line with days of week
 !-----------------------------------------------------------------------------------------------------------------------------------
    location=1+((weekday-1)*3)                                      ! if data were one row where would 3-character day value start?
@@ -3008,7 +3008,7 @@ end subroutine box_month
 !!              noon Universal Time on January 1, 4713 BC (on the Julian
 !!              calendar).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -3079,7 +3079,7 @@ end function d2j
 !!                 dat=[ year,month,day,timezone,hour,&
 !!                  & minutes,seconds,milliseconds]
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -3152,7 +3152,7 @@ end function j2d
 !!    unixtime  The "Unix Epoch" time, or the number of seconds since 00:00:00 on
 !!              January 1st, 1970, UTC.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -3225,7 +3225,7 @@ end function d2u
 !!                 dat=[ year,month,day,timezone,hour,&
 !!                  & minutes,seconds,milliseconds]
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -3347,7 +3347,7 @@ end function get_timezone
 !!##RETURNS
 !!    dmhs       the returned string of form [d:h:]m:s
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample Program:
 !!
@@ -3571,7 +3571,7 @@ end function sec2days
 !!##RETURNS
 !!       time  the number of seconds represented by the input string
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -3636,7 +3636,7 @@ logical                        :: negative
    time=0.0_dp
    strlocal=compact(str,'')                            ! remove whitespace
    strlocal=transliterate(strlocal,"_,",'')            ! remove commas, and underscores sometimes used in numbers in Java, perl, ...
-   strlocal=lower(strlocal)//repeat(' ',len(strlocal)) ! change to lowercase and add whitespace to make room for spaces
+   strlocal=lower(strlocal)//repeat(' ',len(strlocal))  ! change to lowercase and add whitespace to make room for spaces
 
    if(len(strlocal)==0)then
       time=0.0_dp
@@ -3729,6 +3729,8 @@ end function days2sec
 !!
 !!##SYNOPSIS
 !!
+!! syntax:
+!!
 !!    subroutine locale(name,month_names,weekday_names, &
 !!    & month_names_abbr,weekday_names_abbr,IERR)
 !!
@@ -3789,7 +3791,7 @@ end function days2sec
 !!    o show    print user-defined values to stdout
 !!    o chars   dump characters from chars([(i,i=0,255)])
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -5744,16 +5746,16 @@ end function get_env
 !!   use M_time, only : moon_fullness
 !!   implicit none
 !!   integer             :: dat(8)
-!!    ! generate DAT array
-!!    call date_and_time(values=dat)
-!!    ! show DAT array
-!!    write(*,'(" Today is:",*(i0:,":"))')dat
-!!    ! the %p and %P fields are supported by fmtdate(3f)
-!!    write(*,*)&
-!!    & now('The phase of the moon is %p, with a fullness of %P')
-!!    write(*,'(1x,*(a))',advance='no')&
-!!    & 'The phase of the moon is ',trim( phase_of_moon(dat)),','
-!!    write(*,'(1x,a,i0,a)')'with a fullness of ',moon_fullness(dat),'%'
+!!      ! generate DAT array
+!!      call date_and_time(values=dat)
+!!      ! show DAT array
+!!      write(*,'(" Today is:",*(i0:,":"))')dat
+!!      ! the %p and %P fields are supported by fmtdate(3f)
+!!      write(*,*)&
+!!      & now('The phase of the moon is %p, with a fullness of %P')
+!!      write(*,'(1x,*(a))',advance='no')&
+!!      & 'The phase of the moon is ',trim( phase_of_moon(dat)),','
+!!      write(*,'(1x,a,i0,a)')'with a fullness of ',moon_fullness(dat),'%'
 !!   end program demo_phase_of_moon
 !!
 !!  Sample output:
@@ -5928,7 +5930,7 @@ end function moon_fullness
 !!##RESULTS
 !!      dat     Date array for noon on Easter for the specified year
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    Sample program:
@@ -6021,7 +6023,7 @@ end subroutine Easter
 !!    wait_seconds  integer,real or doubleprecision number of seconds for
 !!                  process to sleep.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -6152,7 +6154,7 @@ end function getnow
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 end module M_time
-! M_time calls now_ex as a regular procedure t)o prevent a dependency loop
+! M_time calls now_ex as a regular procedure to prevent a dependency loop
 function now_ex(format)
 use M_time, only: now
 

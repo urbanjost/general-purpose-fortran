@@ -71,7 +71,7 @@
 !!
 !!    %realpath()    resolve the pathname using the Posix C routine realpath(3c)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!

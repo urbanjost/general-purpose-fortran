@@ -11192,8 +11192,9 @@ END SUBROUTINE GEORAN
 !!##SYNOPSIS
 !!
 !!       SUBROUTINE HFNCDF(X,Cdf)
-!!       REAL(kind=wp),intent(in) :: X
-!!       REAL(kind=wp),intent(out) :: Cdf
+!!
+!!        REAL(kind=wp),intent(in) :: X
+!!        REAL(kind=wp),intent(out) :: Cdf
 !!
 !!##DESCRIPTION
 !!    HFNCDF(3f) computes the cumulative distribution function value for
@@ -21806,8 +21807,8 @@ END SUBROUTINE PLOTCT
 !!
 !!     Subroutine plot (X, Y, N)
 !!
-!!    Real(kind=wp) :: (In) ::  X(:)
-!!    Real(kind=wp) :: (In) ::  Y(:)
+!!      Real(kind=wp) :: (In) ::  X(:)
+!!      Real(kind=wp) :: (In) ::  Y(:)
 !!      Integer, Intent (In) ::  N
 !!
 !!##DESCRIPTION

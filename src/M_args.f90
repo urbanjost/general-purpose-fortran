@@ -39,7 +39,7 @@
 !!    variable names may be equivalenced to allow for short and long versions of
 !!    a keyword.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -172,7 +172,7 @@ contains
 !!    one at a time, this function returns an array of the command line
 !!    arguments
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -237,7 +237,7 @@ end function get_command_arguments_stack
 !!    STRING  composed of all command arguments concatenated into a string
 !!    ISTATUS status (non-zero means error)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample usage
 !!
@@ -791,7 +791,7 @@ end function get_namelist
 !!    STRING  composed of all command arguments concatenated into a string
 !!            prepared for reading as a NAMELIST.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample usage
 !!
@@ -887,7 +887,7 @@ integer :: command_line_length
 !!
 !!##RETURNS
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample program:
 !!
@@ -1056,7 +1056,7 @@ end subroutine prototype_to_dictionary
 !!    val  if present add or replace value associated with keyword. If not
 !!         present remove keyword entry from dictionary.
 !!##RETURNS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!##AUTHOR
 !!    John S. Urban, 2019
@@ -1120,7 +1120,7 @@ end subroutine update
 !!    subroutine wipe_dictionary()
 !!##DESCRIPTION
 !!    reset private M_args(3fm) dictionary to empty
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    program demo_wipe_dictionary
 !!    use M_args, only : dictionary
@@ -1151,7 +1151,7 @@ end subroutine wipe_dictionary
 !!    Get dictionary value associated with key name in private M_args(3fm) dictionary.
 !!##OPTIONS
 !!##RETURNS
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 function get(key) result(valout)
 character(len=*),intent(in)   :: key
@@ -1185,7 +1185,7 @@ end function get
 !!    prototype
 !!##RETURNS
 !!    nml
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!    program demo_prototype_and_cmd_args_to_nlist
@@ -1457,7 +1457,7 @@ end subroutine dictionary_to_namelist
 !!##OPTIONS
 !!   HEADER  label to print before printing the state of the command
 !!           argument list.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Typical usage:
 !!
@@ -1553,9 +1553,9 @@ end subroutine print_dictionary
 !!
 !!##DESCRIPTION
 !!    length of longest argument on command line. Useful when allocating storage for holding arguments.
-!!##RESULT
+!!##RETURNS
 !!    longest_command_argument  length of longest command argument
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -1609,7 +1609,7 @@ end function longest_command_argument
 !!##OPTIONS
 !!    STRING   string is character input string to define command
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Typical string:
 !!
@@ -1796,7 +1796,7 @@ end function oneline
 !!           argument list.
 !!   IERR    an error occurred if not zero.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Typical usage:
 !!

@@ -81,7 +81,7 @@
 !!    scale), orange-blue chrominance, and purple-green chrominance
 !!    components
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -274,7 +274,7 @@ contains
 !!       3     modeo was invalid
 !!       999   unknown error
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -763,7 +763,7 @@ end subroutine cmyrgb
 !!    rgbcmy(3fp) calculates the cyan, magenta, and yellow
 !!    components given the red, green, and blue component values.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample values:
 !!
@@ -1245,7 +1245,7 @@ end subroutine rgbyiq
 !!##RETURNS
 !!    CLOSESTNAME   name of color found closest to given RGB value
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample program
@@ -1338,7 +1338,7 @@ end subroutine closest_color_name
 !!                as it just echoes the input name unless the input name was
 !!                a numeric string.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    A sample program:
 !!

@@ -10,6 +10,7 @@
      real              :: angle(19)
      real              :: bang
      real              :: beta
+     real              :: dr
      real              :: r(19)
      real              :: theta
      real              :: x
@@ -47,7 +48,8 @@
            x=x+10.0
         enddo
         call plot(5.0,0.75,-3)
-        call polar(r,angle,19,1,0,1,0.0,1.0)
+        dr=1.0
+        call polar(r,angle,19,1,0,1,0.0,dr)
         angl =30.0
         a=1.0
         do  i=1,5
@@ -76,7 +78,8 @@
            r(i) = 1.0
            xx=xx+10.0
         enddo
-        call polar(r,angle,19,1,0,1,0.0,1.0)
+        dr=1.0
+        call polar(r,angle,19,1,0,1,0.0,dr)
         call plot(-5.0,-0.75,-3)
      ! AXIS IS DRAWN
         ibcd=''

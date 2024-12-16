@@ -110,11 +110,11 @@ contains
 !!
 !!##SYNOPSIS
 !!
-!!    function random_string(chars,length) result(out)
+!!     function random_string(chars,length) result(out)
 !!
-!!     character(len=*),intent(in)     :: chars
-!!     integer,intent(in)              :: length
-!!     character(len=:),allocatable    :: out
+!!      character(len=*),intent(in)     :: chars
+!!      integer,intent(in)              :: length
+!!      character(len=:),allocatable    :: out
 !!
 !!##DESCRIPTION
 !!    Given a set of characters and a length, generate a random string of
@@ -124,11 +124,11 @@ contains
 !!    chars   list of characters to generate random string with
 !!    length  number of characters to place in output string
 !!
-!!##RESULT
+!!##RETURNS
 !!    out     string of LENGTH characters randomly filled with characters
 !!            from CHARS
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -185,11 +185,11 @@ end function random_string
 !!
 !!##SYNOPSIS
 !!
-!!    function random_hex(chars,length) result(out)
+!!     function random_hex(chars,length) result(out)
 !!
-!!     character(len=*),intent(in)     :: chars
-!!     integer,intent(in)              :: length
-!!     character(len=:),allocatable    :: out
+!!      character(len=*),intent(in)     :: chars
+!!      integer,intent(in)              :: length
+!!      character(len=:),allocatable    :: out
 !!
 !!##DESCRIPTION
 !!    Generate a random string representing a hexadecimal value of a given length
@@ -197,11 +197,11 @@ end function random_string
 !!##OPTIONS
 !!    length  number of characters to place in output string
 !!
-!!##RESULT
+!!##RETURNS
 !!    out     string of LENGTH characters randomly filled with characters
 !!            representing a hexadecimal value
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -242,19 +242,22 @@ end function random_hex
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
-!!   function random_int(first,last) result(rand_int)
+!!     function random_int(first,last) result(rand_int)
 !!
-!!    integer,intent(in) :: first,last
-!!    integer            :: rand_int
+!!      integer,intent(in) :: first,last
+!!      integer            :: rand_int
 !!
 !!##DESCRIPTION
 !!    Return an integer uniformly distributed from the set {first,,first+1,...,last-1,last}.
+!!
 !!##OPTIONS
 !!    first       lowest value of range of integer values to randomly return
 !!    last        highest value of range of integer values to randomly return
+!!
 !!##RETURNS
 !!    rand_int    a random integer value between FIRST LAST inclusive
-!!##EXAMPLE
+!!
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -314,8 +317,9 @@ end function random_int
 !!
 !!##SYNOPSIS
 !!
-!!    function scramble( number_of_values )
-!!    integer,intent(in) :: number_of_values
+!!     function scramble( number_of_values )
+!!
+!!      integer,intent(in) :: number_of_values
 !!
 !!##DESCRIPTION
 !!    Return an integer array of the size specified populated with the
@@ -339,9 +343,10 @@ end function random_int
 !!    number_of_values  size of integer array to create
 !!
 !!##RETURNS
-!!    scramble    Integer array filled with integers 1 to NUMBER_OF_VALUES in random order
+!!    scramble    Integer array filled with integers 1 to NUMBER_OF_VALUES
+!!                in random order
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -422,14 +427,16 @@ end function scramble
 !!       random_kiss64(3f) - [M_random] A 64-bit KISS random number generator by George Margaglia.
 !!##SYNOPSIS
 !!
-!!    function random_kiss64()
-!!    integer, parameter         :: i8b = selected_int_kind(18)  ! eight-byte integer
-!!    integer(i8b)               :: random_kiss64
+!!     function random_kiss64()
+!!
+!!      integer, parameter  :: i8b = selected_int_kind(18)
+!!      integer(i8b)        :: random_kiss64
 !!
 !!##DESCRIPTION
 !!    A simple random number generator that returns a random 64-bit INTEGER. The same
 !!    sequence is returned.
-!!##EXAMPLE
+!!
+!!##EXAMPLES
 !!
 !!
 !!   Sample usage:
@@ -498,13 +505,13 @@ end function random_kiss64
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine init_random_seed_by_system_clock()
+!!     subroutine init_random_seed_by_system_clock()
 !!
 !!##DESCRIPTION
 !!    A simple wrapper around random_seed(3f) that uses the system clock to initialize the seed so you can
 !!    easily call random_number(3f) with varying pseudo-random real number sequences
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -562,14 +569,14 @@ end subroutine init_random_seed_by_system_clock
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine init_random_seed_by_dat()
+!!     subroutine init_random_seed_by_dat()
 !!
 !!##DESCRIPTION
 !!    A simple wrapper around random_seed(3f) that uses the date_and_time(3f)
 !!    intrinsic to initialize the seed so you can easily call
 !!    random_number(3f) with varying pseudo-random real number sequences
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -635,9 +642,9 @@ end subroutine init_random_seed_by_dat
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine init_random_seed(mine)
+!!     subroutine init_random_seed(mine)
 !!
-!!     integer,intent(in) :: mine
+!!      integer,intent(in) :: mine
 !!
 !!##DESCRIPTION
 !!    A simple wrapper around random_seed(3f) that uses the single given
@@ -645,7 +652,7 @@ end subroutine init_random_seed_by_dat
 !!    with varying pseudo-random real number sequences simply, much like
 !!    srand(3c) and rand(3c).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program:
 !!
@@ -808,9 +815,10 @@ end subroutine init_random_seed
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine mtprng_init(seed, state)
-!!    integer(INT32),     intent(in)  :: seed
-!!    type(mtprng_state), intent(out) :: state
+!!     subroutine mtprng_init(seed, state)
+!!
+!!      integer(INT32),     intent(in)  :: seed
+!!      type(mtprng_state), intent(out) :: state
 !!
 !!##DESCRIPTION
 !!    Initializes the Mersenne Twister random number generator with "seed"
@@ -819,7 +827,7 @@ end subroutine init_random_seed
 !!    seed   A seed value is used to start a specific sequence of pseudo-random numbers
 !!    state  generator state initialized by mtprng_init(3f) or mtprng_init_array(3f)
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -874,17 +882,23 @@ end subroutine mtprng_init
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine mtprng_init_by_array(init_key, state)
-!!    integer(INT32), dimension(:), intent(in) :: init_key
-!!    type(mtprng_state), intent(out) :: state
+!!     subroutine mtprng_init_by_array(init_key, state)
+!!
+!!      integer(INT32), dimension(:), intent(in) :: init_key
+!!      type(mtprng_state), intent(out) :: state
 !!
 !!##DESCRIPTION
-!!    Initialize the Mersenne Twister random number generator with "seed" array
+!!    Initialize the Mersenne Twister random number generator with "seed"
+!!    array
 !!
 !!##OPTIONS
-!!    state  generator state initialized by mtprng_init(3f) or mtprng_init_array(3f)
+!!    init_key  seed array
+!!
 !!##RETURNS
-!!##EXAMPLE
+!!    state  generator state initialized by mtprng_init(3f) or
+!!           mtprng_init_array(3f)
+!!
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -967,9 +981,10 @@ end subroutine mtprng_init_by_array
 !!
 !!##SYNOPSIS
 !!
-!!    function mtprng_rand64(state) result(r)
-!!    type(mtprng_state), intent(inout) :: state
-!!    integer(INT64) :: r
+!!     function mtprng_rand64(state) result(r)
+!!
+!!      type(mtprng_state), intent(inout) :: state
+!!      integer(INT64) :: r
 !!
 !!##DESCRIPTION
 !!    Obtain the next 64-bit integer in the pseudo-random sequence in the range 0 to 2^32-1.
@@ -981,7 +996,7 @@ end subroutine mtprng_init_by_array
 !!##RETURNS
 !!    r      next pseudo-random value in the range 0 to 2^32-1
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1071,9 +1086,10 @@ end function mtprng_rand64
 !!
 !!##SYNOPSIS
 !!
-!!    function mtprng_rand(state) result(r)
-!!    type(mtprng_state), intent(inout) :: state
-!!    integer(INT32) :: r
+!!     function mtprng_rand(state) result(r)
+!!
+!!      type(mtprng_state), intent(inout) :: state
+!!      integer(INT32) :: r
 !!
 !!##DESCRIPTION
 !!    Obtain the next 32-bit integer in the pseudo-random sequence
@@ -1084,7 +1100,7 @@ end function mtprng_rand64
 !!##RETURNS
 !!    r      The next 32-bit integer in the pseudo-random sequence
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1135,11 +1151,12 @@ end function mtprng_rand
 !!    (LICENSE:CUSTOM OPEN)
 !!##SYNOPSIS
 !!
-!!    function mtprng_rand_range(state, lo, hi) result(r)
-!!    type(mtprng_state), intent(inout) :: state
-!!    integer, intent(in) :: lo
-!!    integer, intent(in) :: hi
-!!    integer(INT32) :: r
+!!     function mtprng_rand_range(state, lo, hi) result(r)
+!!
+!!      type(mtprng_state), intent(inout) :: state
+!!      integer, intent(in) :: lo
+!!      integer, intent(in) :: hi
+!!      integer(INT32) :: r
 !!
 !!##DESCRIPTION
 !!    Obtain a pseudo-random integer in the range [lo,hi]
@@ -1152,7 +1169,7 @@ end function mtprng_rand
 !!##RETURNS
 !!    r      returned pseudo-random value in range from LO to HI
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1196,17 +1213,21 @@ end function mtprng_rand_range
 !!
 !!##SYNOPSIS
 !!
-!!    function mtprng_rand_real1(state) result(r)
-!!    type(mtprng_state), intent(inout) :: state
-!!    real(IEEE64) :: r
+!!     function mtprng_rand_real1(state) result(r)
+!!
+!!      type(mtprng_state), intent(inout) :: state
+!!      real(IEEE64) :: r
+!!
 !!##DESCRIPTION
 !!    Obtain a pseudo-random real number in the range [0,1], i.e., a number
 !!    greater than or equal to 0 and less than or equal to 1.
+!!
 !!##OPTIONS
 !!    state  generator state initialized by mtprng_init(3f) or mtprng_init_array(3f)
+!!
 !!##RETURNS
 !!     r      ...
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1248,18 +1269,29 @@ end function mtprng_rand_real1
 !==================================================================================================================================!
 !>
 !!##NAME
-!!    mtprng_rand_real2(3f) - [M_random:MERSENNE TWISTER] Obtain a pseudo-random real number in the range [0,<1)
+!!    mtprng_rand_real2(3f) - [M_random:MERSENNE TWISTER] Obtain a
+!!    pseudo-random real number in the range [0,<1)
 !!    (LICENSE:CUSTOM OPEN)
 !!
 !!##SYNOPSIS
 !!
+!!     function mtprng_rand_real2(state) result(r)
+!!
+!!      type(mtprng_state), intent(inout) :: state
+!!      real(IEEE64)                      :: r
+!!
 !!##DESCRIPTION
 !!    Obtain a pseudo-random real number in the range [0,1), i.e., a number
 !!    greater than or equal to 0 and less than 1.
+!!
 !!##OPTIONS
-!!    state  generator state initialized by mtprng_init(3f) or mtprng_init_array(3f)
+!!    state  generator state initialized by mtprng_init(3f) or
+!!           mtprng_init_array(3f)
+!!
 !!##RETURNS
-!!##EXAMPLE
+!!    r  pseudo-random value in the range [0,<1)
+!!
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -1284,7 +1316,7 @@ function mtprng_rand_real2(state) result(r)
 
 type(mtprng_state), intent(inout) :: state                                   ! arguments
 real(IEEE64)                      :: r                                       ! return type
-   real(IEEE64), parameter        :: factor=1.0_IEEE64 / 4294967296.0_IEEE64 ! Local constant; precalculated to avoid division below
+real(IEEE64), parameter           :: factor=1.0_IEEE64 / 4294967296.0_IEEE64 ! Local constant; precalculated to avoid division below
 
    r = real(mtprng_rand64(state),IEEE64) * factor                            ! compute
 
@@ -1300,8 +1332,9 @@ end function mtprng_rand_real2
 !!##SYNOPSIS
 !!
 !!     function mtprng_rand_real3(state) result(r)
-!!     type(mtprng_state), intent(inout) :: state
-!!     real(IEEE64) :: r
+!!
+!!      type(mtprng_state), intent(inout) :: state
+!!      real(IEEE64) :: r
 !!
 !!##DESCRIPTION
 !!    Obtain a pseudo-random real number in the range (0,1), i.e., a number
@@ -1309,9 +1342,10 @@ end function mtprng_rand_real2
 !!
 !!##OPTIONS
 !!    state  generator state initialized by mtprng_init(3f) or mtprng_init_array(3f)
+!!
 !!##RETURNS
 !!    r      a pseudo-random real number greater than 0 and less than 1.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!

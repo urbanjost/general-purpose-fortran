@@ -3581,7 +3581,7 @@ end function dnum0
 !!   function snum0(inline0,ierr)
 !!
 !!    character(len=:),allocatable :: snum0(inline0)
-!!    character(len=*),intent(in)  :: inline0                           ! input string
+!!    character(len=*),intent(in)  :: inline0
 !!    integer,optional,intent(out) :: ierr
 !!
 !!##DESCRIPTION

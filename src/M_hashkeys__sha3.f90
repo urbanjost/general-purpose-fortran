@@ -73,7 +73,7 @@ module M_hashkeys__sha3
 !!
 !!       https://github.com/gvanas/KeccakCodePackage.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
