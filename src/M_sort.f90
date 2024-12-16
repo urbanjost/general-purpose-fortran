@@ -5460,8 +5460,8 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
-      !stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+      !BUG!chars=transfer(anything,chars) ! should work for everything, does not with some compilers
    end select
 
 end function anything_to_bytes_arr
@@ -5489,7 +5489,8 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+      !BUG!chars=transfer(anything,chars) ! should work for everything, does not with some compilers
    end select
 
 end function  anything_to_bytes_scalar

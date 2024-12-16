@@ -2782,7 +2782,7 @@ subroutine chrcod(text,ntext)
              K=K+L
            ENDIF
           CYCLE INFINITE
-   50      CONTINUE
+   50     CONTINUE
            !  NOT A NUMBER
            !  CHECK FOR FONT CHANGE COMMAND
          IF(TEXT(K:K+2).EQ.'SIM'.OR.TEXT(K:K+2).EQ.'sim')THEN
