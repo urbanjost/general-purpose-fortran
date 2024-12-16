@@ -8,7 +8,6 @@ MODULE M_contourplot__Smooth
    public  :: Polyx2
    private :: Hypot
    private :: SolveSVD,SVD,SVDbackSubstitution
-   public  :: test_suite_M_smooth
 
 CONTAINS
 !===================================================================================================================================
@@ -776,29 +775,6 @@ END Subroutine SVDbackSubstitution
    END Function Hypot
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_smooth
-use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_framework__verify, only : unit_check_level
-   call test_polyx2()
-   call test_smoothsurface()
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_polyx2()
-
-   call unit_check_start('polyx2',msg='')
-   !!call unit_check('polyx2', 0.eq.0, 'checking', 100)
-   call unit_check_done('polyx2',msg='')
-end subroutine test_polyx2
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_smoothsurface()
-
-   call unit_check_start('smoothsurface',msg='')
-   !!call unit_check('smoothsurface', 0.eq.0, 'checking', 100)
-   call unit_check_done('smoothsurface',msg='')
-end subroutine test_smoothsurface
-!===================================================================================================================================
-end subroutine test_suite_M_smooth
 !===================================================================================================================================
 END MODULE M_contourplot__Smooth
 !===================================================================================================================================
