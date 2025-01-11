@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_strings__oop(3f) - [M_strings::INTRO::OOPS] OOP Fortran string module
