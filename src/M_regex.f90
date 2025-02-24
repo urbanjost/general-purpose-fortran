@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -773,15 +784,15 @@ end function regmatch
 !!      REG_BADPAT    invalid regular expression
 !!      REG_ECOLLATE  invalid collating element
 !!      REG_ECTYPE    invalid character class
-!!      REG_EESCAPE      \    applied to unescapable character
+!!      REG_EESCAPE   "\" applied to unescapable character
 !!      REG_ESUBREG   invalid backreference number
-!!      REG_EBRACK    brackets    [ ]    not balanced
-!!      REG_EPAREN    parentheses    ( )    not balanced
-!!      REG_EBRACE    braces    { }    not balanced
-!!      REG_BADBR     invalid repetition count(s) in    { }
-!!      REG_ERANGE    invalid character range in    [ ]
+!!      REG_EBRACK    brackets "[ ]" not balanced
+!!      REG_EPAREN    parentheses "( )" not balanced
+!!      REG_EBRACE    braces "{ }" not balanced
+!!      REG_BADBR     invalid repetition count(s) in "{ }"
+!!      REG_ERANGE    invalid character range in " [ ]"
 !!      REG_ESPACE    ran out of memory
-!!      REG_BADRPT       ?   ,    *   , or    +    operand invalid
+!!      REG_BADRPT    "?", "*", or "+" operand invalid
 !!      REG_EMPTY     empty (sub)expression
 !!      REG_ASSERT    cannot happen - you found a bug
 !!      REG_INVARG    invalid argument, e.g. negative-length string

@@ -2,9 +2,9 @@
       use M_calculator, only : iclen_calc
       use M_calculator, only : expression
       implicit none
-      character(len=iclen_calc) ::  outlin0
-      doubleprecision :: outval
-      integer :: ierr, ilen
+      character(len=iclen_calc) :: outlin0
+      doubleprecision           :: outval
+      integer                   :: ierr, ilen
          call expression('A=3.4**5    ',outval,outlin0,ierr,ilen)
          write(*,*)'value of expression is ',outval
          write(*,*)'string representation of value is ',trim(outlin0)

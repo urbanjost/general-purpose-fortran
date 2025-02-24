@@ -1,8 +1,8 @@
      program demo_setdiff
      use M_sets, only: setdiff
      character(len=*),parameter :: g='(*(g0,1x))'
-     integer, allocatable      :: A(:)
-     integer, allocatable      :: B(:)
+     integer, allocatable       :: A(:)
+     integer, allocatable       :: B(:)
 
         write(*,g) 'SETDIFF','Find the values in A that are not in B.'
          A=[3, 6, 2, 1, 5, 1, 1]

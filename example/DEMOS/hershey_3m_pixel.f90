@@ -6,14 +6,14 @@
      integer,parameter :: topsym=432
      integer           :: movie(1:topsym,0:isize-1,0:isize-1)
      integer           :: i
-     !! set up environment
+     !-! set up environment
         call prefsize(isize,isize)
         call vinit()
         call ortho2(-150.0,150.0,-150.0,150.0)
 
-        !! draw all characters using hershey numeric strings
+        !-! draw all characters using hershey numeric strings
         do i=1,topsym
-           !! draw reference circle and crosshairs
+           !-! draw reference circle and crosshairs
            call color(0)
            call clear()
 
@@ -43,7 +43,7 @@
            movie(i,:,:)=P_pixel
         enddo
         call vexit()
-        !! write to file and display with display(1)
+        !-! write to file and display with display(1)
         call write_animated_gif('hershey.3m_pixel.gif',&
         & movie,P_colormap,delay=40)
         !call execute_command_line('display hershey.3m_pixel.gif')

@@ -3,8 +3,8 @@
     & stdin=>input_unit, &
     & stdout=>output_unit, &
     & stderr=>error_unit
-    use M_process ,ONLY: process_open_write, process_writeline
-    use M_process ,ONLY: streampointer, process_close
+    use M_process,only: process_open_write, process_writeline
+    use M_process,only: streampointer, process_close
     implicit none
     type(streampointer) :: fp
     ! line of data to write

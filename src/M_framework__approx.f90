@@ -961,7 +961,7 @@ end function anyscalar_to_double_
 !!    noting any result changes.
 !!
 !!    As a convenience relational operators .EqualTo., .GreaterThan.,
-!!    and .LessThan. are provided. Note the comparisions return .TRUE>
+!!    and .LessThan. are provided. Note the comparisons return .TRUE>
 !!    if the difference between the two values is .lt., .ge., and .le. .
 !!    The algorithm for each operator is shown in the following OPERATORS
 !!    section.
@@ -983,7 +983,7 @@ end function anyscalar_to_double_
 !!
 !!    The Fortran standard does not specify functions or operators
 !!    specifically for comparing float values, but leaves some latitude
-!!    in how the compilers address floating point comparisions. It does
+!!    in how the compilers address floating point comparisons. It does
 !!    specify functions that return platform-specific values useful in
 !!    applying different methods to the problem such as
 !!
@@ -1029,7 +1029,7 @@ end function anyscalar_to_double_
 !!          in order to relax or tighten what is considered "equal". That
 !!          is, the ULP value can be used to scale the comparison based
 !!          on knowledge of the "numerical quality" of the values being used
-!!          in the comparision.
+!!          in the comparison.
 !!
 !!          The value should be positive. The absolute value of the value is
 !!          taken if it is negative.

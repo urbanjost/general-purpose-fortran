@@ -1,10 +1,12 @@
 color_name2rgb (3m_color) - [M_color] returns the RGB values in the range 0 to 100 for a given known color name. (LICENSE:PD)
 color_name2rgb (3m_pixel) - [M_pixel:COLOR] returns the RGB values in the range 0 to 100 for a given known color name. (LICENSE:PD)
 hue (3m_color)	     - [M_color] converts a color's components from one color model to another. (LICENSE:PD)
-hue (3m_pixel)	     - [M_pixel:COLOR] converts color components from one color model to another (LICENSE:PD)
+hue (3m_pixel)	     - [M_pixel] converts a color's components from one color model to another. (LICENSE:PD)
 intro_blas1 (3)      - Introduction to vector-vector linear algebra (matrix) (LICENSE:PD) subprograms
 M_strings__oop (3m_strings) - [M_strings::INTRO::OOPS] OOP Fortran string module
 M_strings__oop (3m_strings__oop) - [M_strings::INTRO::OOPS] OOP Fortran string module
+rgbmono (3m_color)   - [M_color] converts RGB colors to a reasonable grayscale intensity (LICENSE:PD)
+rgbmono (3m_pixel)   - [M_pixel] converts RGB colors to a reasonable grayscale intensity (LICENSE:PD)
 system_stat (3m_system) - [M_system:QUERY_FILE] Get file status information (LICENSE:PD)
 abs (3fortran)	     - [NUMERIC] Absolute value
 accdig (3m_framework__approx) - [M_framework__approx] compare two numbers only up to a specified number of digits (LICENSE:PD)
@@ -50,7 +52,7 @@ asinh (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Inverse hyperbolic sine funct
 asinpi (3fortran)    - [MATHEMATICS:TRIGONOMETRIC] Circular arc sine function
 assert (3m_framework__msg) - [M_framework__msg] print filename, linenumber, and message to stderr and stop program (LICENSE:PD)
 assert (3m_verify)   - [M_verify] print filename, linenumber, and message to stderr and stop program (LICENSE:PD)
-associate (7fortran) - [EXECUTION CONTROL] aliases complex variable names and creates parameters from expressions
+associate (7fortran) - [EXECUTION CONTROL] aliases selected variable identifiers as well as creates constants within the block from runtime expressions at entry into the block (LICENSE:PD)
 associated (3fortran) - [STATE:INQUIRY] Association status of a pointer or pointer/target pair
 atan (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Arctangent AKA inverse tangent function
 atan2 (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Arctangent (inverse tangent) function
@@ -84,6 +86,7 @@ attr_update (3m_attr) - [M_attr] update internal dictionary given keyword and va
 attr_update (3m_framework__attr) - [M_framework__attr] update internal dictionary given keyword and value (LICENSE:MIT)
 autoco (3m_datapac)  - [M_datapac:STATISTICS] compute the sample autocorrelation coefficient
 axis (3m_calcomp)    - [M_calcomp:basic] draw linear axis with numeric scale and axis label (LICENSE:PD)
+b2d (3m_time)	     - [M_time:BAS] given a BAS (Baseday and Seconds) returns a date-time array DAT. (LICENSE:MIT)
 b3hs_hash_key_jenkins (3m_hashkeys) - [M_hashkeys] hash key algorithm by Bob Jenkins (LICENSE:PD)
 backbuffer (3m_draw) - [M_draw:DOUBLE_BUFFERING] Draw in the backbuffer. Returns -1 if the device is not up to it. (LICENSE:PD)
 backface (3m_draw)   - [M_draw:POLYGONS] Turns on culling of backfacing polygons. (LICENSE:PD)
@@ -91,6 +94,7 @@ backfacedir (3m_draw) - [M_draw:POLYGONS] Sets backfacing direction to clockwise
 backspace (7fortran) - [IO:FILE POSITIONING] - backspace one record on specified I/O unit
 write (7fortran)     - (unknown subject)
 banner- (1)	     - [FUNIX] print large block letters (LICENSE:PD)
+bas_to_date (3m_time) - [M_time:BAS] converts a BAS(Baseday and Seconds) to a DAT date-time array. (LICENSE:MIT)
 base (1)	     - [CONVERT] convert numbers between bases (LICENSE:PD)
 base (3m_strings)    - [M_strings:BASE] convert whole number string in base [2-36] to string in alternate base [2-36] (LICENSE:PD)
 base2 (3m_strings)   - [M_strings:BASE] convert whole number to string in base 2 (LICENSE:PD)
@@ -123,6 +127,8 @@ ble (3fortran)	     - [BIT:COMPARE] Bitwise less than or equal to
 block (7fortran)     - [FORTRAN:EXECUTION CONTROL] construct (LICENSE:PD)
 blocks (3m_messages) - [M_messages] write large block letters (LICENSE:PD)
 blt (3fortran)	     - [BIT:COMPARE] Bitwise less than
+bool (3m_overload)   - [M_overload::LOGICAL] returns One if expression is TRUE, else returns Zero. (LICENSE:PD)
+bool (3m_sets)	     - [M_sets::LOGICAL] returns One if expression is TRUE, else returns Zero. (LICENSE:PD)
 bottomjustify (3m_draw) - [M_draw:TEXT] bottom justify text (LICENSE:PD)
 bound (3m_math)      - [M_math] constrain a value to a range
 box_month (3m_time)  - [M_time:DATE_PRINTING] create specified month in a character array (LICENSE:MIT)
@@ -202,8 +208,9 @@ closeobj (3m_draw)   - [M_draw:OBJECT] Close the current object. (LICENSE:PD)
 closepoly (3m_draw)  - [M_draw:POLYGONS] Terminates a polygon opened by makepoly(3f) (LICENSE:PD)
 closepoly (3m_pixel) - [M_pixel:POLYGONS] Terminates a polygon opened by makepoly(3f) (LICENSE:PD)
 closest (3m_math)    - [M_math:geometry] find the data point that is closest to the target point
+closest_color (3m_pixel) - [M_pixel:COLOR] find name of color closest to given RGB values (LICENSE:PD)
 closest_color_name (3m_color) - [M_color] returns the closest name for the given RGB values. (LICENSE:PD)
-closest_color_name (3m_pixel) - [M_pixel:COLOR] returns the closest name for the given RGB values. (LICENSE:PD)
+closest_color_name (3m_pixel) - [M_pixel] returns the closest name for the given RGB values. (LICENSE:PD)
 clr (3m_list)	     - [M_list::dictionary::OOPS] clear basic dictionary (LICENSE:PD)
 cmp- (1)	     - [FUNIX] compare two files byte by byte (LICENSE:PD)
 cmplx (3fortran)     - [TYPE:CONVERSION] Conversion to a complex type
@@ -288,7 +295,9 @@ curvx (3m_calcomp)   - [M_calcomp:scientific] plots a function of X over a given
 curvy (3m_calcomp)   - [M_calcomp:scientific] plots a function of Y over a given range (LICENSE:PD)
 cycle (7fortran)     - [FORTRAN:EXECUTION CONTROL] construct (LICENSE:PD)
 cylinder (1)	     - [GEOMETRY] calculate the surface area of a cylinder (LICENSE:PD)
+d2b (3m_time)	     - [M_time:BAS] given DAT date-time array returns Baseday and Seconds type (LICENSE:MIT)
 d2j (3m_time)	     - [M_time:JULIAN] given DAT date-time array returns Julian Date (LICENSE:MIT)
+d2m (3m_time)	     - [M_time:MODIFIED_JULIAN] given DAT date-time array returns Modified Julian Date (LICENSE:MIT)
 d2o (3m_time)	     - [M_time:ORDINAL_DAY] converts DAT date-time array to Ordinal day (LICENSE:MIT)
 d2r (3m_pixel)	     - [M_pixel:TRIGONOMETRY] convert degrees to radians (LICENSE:PD)
 d2r (3m_units)	     - [M_units:TRIGONOMETRY] convert degrees to radians (LICENSE:PD)
@@ -299,12 +308,14 @@ dashl (3m_calcomp)   - [M_calcomp:general] draws a polyline with dashed lines (L
 dashp (3m_calcomp)   - [M_calcomp:general] draw from current position to new point with dashed line (LICENSE:PD)
 dasum (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] takes the sum of the absolute values.
 data (7fortran)      - [FORTRAN] DATA statement
-date_and_time (3fortran) - [SYSTEM:TIME] Gets current date time
+date_and_time (3fortran) - [SYSTEM:TIME] Gets current date and time
+date_to_bas (3m_time) - [M_time:BAS] converts DAT date-time array to Baseday and Seconds (LICENSE:MIT)
 date_to_julian (3m_time) - [M_time:JULIAN] converts DAT date-time array to Julian Date (LICENSE:MIT)
+date_to_modified_julian (3m_time) - [M_time:MODIFIED_JULIAN] converts DAT date-time array to Modified Julian Date (LICENSE:MIT)
 date_to_unix (3m_time) - [M_time:UNIX_EPOCH] converts DAT date-time array to Unix Epoch Time (LICENSE:MIT)
 daxpy (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] constant times a vector plus a vector.
 days2sec (1)	     - [TIME] Convert [[-]dd-][[hh:]mm:]ss to seconds (LICENSE:PD)
-days2sec (3m_time)   - [M_time:DURATION] convert string of form [[-]dd-]hh:mm:ss.nn to seconds (LICENSE:MIT)
+days2sec (3m_time)   - [M_time:DURATION] convert string of form [[-]dd-]hh:mm:ss.nn or dNNhNNmNNsNN to seconds (LICENSE:MIT)
 dble (3fortran)      - [TYPE:CONVERSION] Converstion to double precision real
 dble (3m_overload)   - [M_overload::TYPE] allow dble(3f), real(3f), int(3f) to take character arguments (LICENSE:PD)
 dble (3m_strings)    - [M_strings:TYPE] overloads DBLE(3f) so it can handle character arguments (LICENSE:PD)
@@ -312,6 +323,7 @@ dcabs1 (3m_blas)     - [BLAS:DOUBLE_BLAS_LEVEL1] DCABS1 computes |Re(.)| + |Im(.
 dcopy (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] copies elements of a vector, x, to a vector, y.
 ddot (3m_blas)	     - [BLAS:DOUBLE_BLAS_LEVEL1] forms the dot product of two vectors.
 deallocate (7fortran) - [FORTRAN:STATEMENT] causes allocated variables and targets to be deallocated
+decode_base64 (3m_strings) - [M_strings:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
 decodebase (3m_strings) - [M_strings:BASE] convert whole number string in base [2-36] to base 10 number (LICENSE:PD)
 define (3m_datapac)  - [M_datapac:VECTOR_OPERATION] set all elements of a vector equal to a specified constant
 degrees (1)	     - [CONVERT] Convert between Fahrenheit and Celsius temperature values (LICENSE:PD)
@@ -411,6 +423,7 @@ elementcopy (3m_la)  - [M_LA] copy elements from IN to OUT regardless of rank un
 elips (3m_calcomp)   - [M_calcomp:general] draw an elliptical arc (LICENSE:PD)
 ellipse (3m_drawplus) - [M_drawplus] draws an ellipse or elliptical arc. (LICENSE:MIT)
 empty (3m_anything)  - [M_anything] set an allocatable array to zero (LICENSE:MIT)
+encode_base64 (3m_strings) - [M_strings:ENCODE] encode data using base64 encoding as defined in RFC-4648 (LICENSE:MIT)
 end_pause_watch (3m_stopwatch) - [M_stopwatch] resumes a paused M_StopWatch watch (LICENSE:PD)
 endfile (7fortran)   - [NUMERIC] Absolute value
 ends_with (3m_strings) - [M_strings:COMPARE] test if string ends with specified suffix(es) (LICENSE:PD)
@@ -604,7 +617,6 @@ huegif (1)	     - [M_pixel] generate color wheels as GIF pixmap files (LICENSE:P
 huge (3fortran)      - [MODEL:NUMERIC] Largest number of a type and kind
 hypocycloidal (1)    - [M_draw] display hypocycloidal curves (LICENSE:PD)
 hypot (3fortran)     - [MATHEMATICS] Returns the Euclidean distance - the distance between a point and the origin.
-hypot (3m_math)      - [M_math:geometry] Euclidean distance function
 i_is_prime (3m_factor) - [M_factor] Determine if a number is prime using Sieve of Erasthosthenes (LICENSE:UNKNOWN)
 iachar (3fortran)    - [CHARACTER:CONVERSION] Return integer ASCII code of a character
 iall (3fortran)      - [BIT:LOGICAL] Bitwise and of array elements
@@ -783,15 +795,16 @@ ls- (1) 	     - [FUNIX:FILESYSTEM] list files in a directory (LICENSE:PD)
 lsame (3m_blas)      - [BLAS:AUX_BLAS] compare two letters ignoring case
 lsup (1)	     - [FUNIX:FILESYSTEM] list permissions of pathname and directories in pathname (LICENSE:PD)
 luhn_checksum (3m_hashkeys) - [M_hashkeys] Luhn checksum algorithm applied to a string of numeric values
+m2d (3m_time)	     - [M_time:MODIFIED_JULIAN] given a MJD (Modified Julian Date) returns a date-time array DAT. (LICENSE:MIT)
 M_anything (3m_anything) - [M_anything::INTRO] procedures that use polymorphism to allow arguments of different types generically (LICENSE:MIT)
-M_args (3m_args)     - [ARGUMENTS::M_args::INTRO] define a NAMELIST in a module template to provide command line argument parsing (LICENSE:PD)
+M_args (3m_args)     - [ARGUMENTS:M_args::INTRO] define a NAMELIST in a module template to provide command line argument parsing (LICENSE:PD)
 M_attr (3m_attr)     - [M_attr::INTRO] control text attributes on terminals (LICENSE:MIT)
 M_big_integer (3m_big_integer) - [M_big_integer] define new data type BIG_INTEGER and operators
 M_calcomp (3m_calcomp) - [M_calcomp::INTRO] emulate old Calcomp graphics library (LICENSE:PD)
 M_calculator (3m_calculator) - [M_calculator::INTRO] module of routines for parsing expressions and returning values (LICENSE:PD)
 M_calculator_programmer_notes (3m_calculator) - [M_calculator] Programmer notes for module M_calculator (LICENSE:PD)
-M_CLI (3m_cli)	     - [ARGUMENTS::M_CLI::INTRO] command line argument parsing using a prototype command and NAMELIST (LICENSE:PD)
-M_CLI2 (3m_cli2)     - [ARGUMENTS::M_CLI2::INTRO] command line argument parsing using a prototype command (LICENSE:PD)
+M_CLI (3m_cli)	     - [ARGUMENTS:M_CLI::INTRO] command line argument parsing using a prototype command and NAMELIST (LICENSE:PD)
+M_CLI2 (3m_cli2)     - [ARGUMENTS:M_CLI2::INTRO] command line argument parsing using a prototype command (LICENSE:PD)
 M_color (3m_color)   - [M_color::INTRO] a Fortran module that lets you convert between common color models (LICENSE:PD)
 M_Compare_Float_Numbers (3m_compare_float_numbers) - [M_Compare_Float_Numbers::INTRO] perform relational comparisons on real numbers (LICENSE:GPL)
 M_constants (3m_constants) - [M_constants:INTRO] Useful constants
@@ -825,6 +838,7 @@ M_process (3m_process) - [M_process::INTRO] Fortran Module for calling process-r
 M_random (3m_random) - [M_random::INTRO] Routines for generating random numbers and strings
 M_readline (3m_readline) - [M_readline::INTRO] Calling readline(3c) from Fortran (LICENSE:PD)
 M_regex (3m_regex)   - [M_regex] Fortran interface to POSIX 1003.2 regular expression library using ISO_C_BINDING.
+M_roman_numbers (3m_roman_numbers) - [M_roman_numbers::INTRO] overloads of standard operators for Roman numbers (LICENSE:MIT)
 M_sets (3m_sets)     - [M_sets::INTRO] functions reminiscent of Matlab set functions
 M_sort (3m_sort)     - [M_sort::INTRO] Fortran module containing sorting algorithms for arrays of standard scalar types (LICENSE:PD)
 M_sqlite (3m_sqlite) - [M_sqlite] Fortran interface to SQLite3 API
@@ -884,6 +898,7 @@ mo2v (3m_time)	     - [M_time:MONTH_NAME] given month name return month number (
 mod (3fortran)	     - [NUMERIC] Remainder function
 model (1)	     - [FORTRAN:iso_fortran_env] fortran numeric model information (LICENSE:PD)
 modif (3m_strings)   - [M_strings:EDITING] emulate the MODIFY command from the line editor XEDIT (LICENSE:PD)
+modified_julian_to_date (3m_time) - [M_time:MODIFIED_JULIAN] converts a MJD(Modified Julian Date) to a DAT date-time array. (LICENSE:MIT)
 modulo (3fortran)    - [NUMERIC] Modulo function
 month (1)	     - [TIME] display a calendar (LICENSE:PD)
 moon_fullness (3m_time) - [M_time:ASTROLOGICAL] return percentage of moon phase from new to full (LICENSE:MIT)
@@ -1199,7 +1214,6 @@ rev- (1)	     - [FUNIX] reverse lines in a file (LICENSE:PD)
 reverse (1)	     - [FUNIX] print file in reverse (LICENSE:PD)
 reverse (3m_strings) - [M_strings:EDITING] Return a string reversed (LICENSE:PD)
 rewind (7fortran)    - [FILE_POSITIONING] rewind specified sequential access I/O unit
-rgbmono (3m_color)   - [M_color] converts RGB colors to a reasonable grayscale intensity (LICENSE:PD)
 rget (3m_kracken)    - [ARGUMENTS:M_kracken] given keyword fetch real value from command argument (LICENSE:PD)
 rgets (3m_kracken)   - [ARGUMENTS:M_kracken] given keyword fetch real array from command arguments (LICENSE:PD)
 rgetvalue (3m_calculator) - [M_calculator] given numeric variable name return real value directly from calculator dictionary for efficiency (LICENSE:PD)
@@ -1210,6 +1224,7 @@ rmove (3m_draw)      - [M_draw:MOVE] Relative move (LICENSE:PD)
 rmove2 (3m_draw)     - [M_draw:MOVE] Relative move in world units. (LICENSE:PD)
 rmove2 (3m_pixel)    - [M_pixel:DRAW] relative move (LICENSE:PD)
 rnum0 (3m_calculator) - [M_calculator] returns real number from string expression using CALCULATOR(3f) (LICENSE:PD)
+roman (1)	     - [FUNIX:CONVERT] display roman numbers as integers and vice versa
 rotate (3m_draw)     - [M_draw:TRANSFORMATION] Set up a rotation in axis axis where axis is one of 'x', 'y', or 'z'. (LICENSE:PD)
 rotate13 (3m_strings) - [M_strings:ENCODE] apply trivial ROT13 encryption to a string (LICENSE:PD)
 rpad (3m_strings)    - [M_strings:LENGTH] convert to a string and pad on the right to requested length (LICENSE:PD)
@@ -1271,6 +1286,7 @@ set_mode (3m_cli2)   - [ARGUMENTS:M_CLI2] turn on optional modes+ (LICENSE:PD)
 set_usage (3m_cli2)  - [ARGUMENTS:M_CLI2] allow setting a short description for keywords for the --usage switch (LICENSE:PD)
 setdiff (3m_sets)    - [M_sets] Find the values in A that are not in B
 setprompts (3m_kracken) - [ARGUMENTS:M_kracken] set explicit prompts for keywords in interactive mode (LICENSE:PD)
+settheory (1)	     - [M_sets:SETTHEORY] combine two sets of values and display union, intersection, values found in both sets, values found only in one set, ... (LICENSE:MIT)
 setxor (3m_sets)     - [M_sets] Find values of A and B not in both arrays
 sgbmv (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL2] SY:=alpha*A*SX+beta*SY, A a band matrix.
 sgemm (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL3] C:=alpha*A*B+beta*C, A, B, C rectangular.
@@ -1440,6 +1456,7 @@ system_chown (3m_system) - [M_system:FILE_SYSTEM] change file owner and group (L
 system_clearenv (3m_system) - [M_system:ENVIRONMENT] clear environment by calling clearenv(3c) (LICENSE:PD)
 system_clock (3fortran) - [SYSTEM:TIME] Query system clock
 system_closedir (3m_system) - [M_system:QUERY_FILE] close a directory stream by calling closedir(3c) (LICENSE:PD)
+system_cmd (3m_system) - [M_system:SYSTEM_COMMAND] call execute_command_line(3f) (LICENSE:PD)
 system_cpu_time (3m_system) - [M_system] get processor time by calling times(3c) (LICENSE:PD)
 system_dir (3m_system) - [M_system] return filenames in a directory matching specified wildcard string (LICENSE:PD)
 system_errno (3m_system) - [M_system:ERROR_PROCESSING] C error return value (LICENSE:PD)
@@ -1638,7 +1655,7 @@ which (3m_io)	     - [M_io:SCANNAMES] given a command name find the pathname by 
 which- (1)	     - [FUNIX:FILESYSTEM] shows the full path of (shell) commands. (LICENSE:PD)
 whoami- (1)	     - [FUNIX] display login name (LICENSE:PD)
 width (3m_calcomp)   - [M_calcomp:basic] select pen width (LICENSE:PD)
-wind (3m_datapac)    - [M_datapac:STATISTICS] compute the sample Winsorized mean of a vector of observations
+wind (3m_datapac)    - [M_datapac:STATISTICS] compute the sample Windsorized mean of a vector of observations
 window (3m_draw)     - [M_draw:PROJECTION] Specify a perspective viewing pyramid (LICENSE:PD)
 wrt (3m_framework__msg) - [M_framework__msg] write multiple scalar values to any number of files (LICENSE:PD)
 wrt (3m_msg)	     - [M_msg] write multiple scalar values to any number of files (LICENSE:PD)
@@ -1659,7 +1676,7 @@ xterm_get_iconstate (3m_xterm) - [M_xterm] obtain xterm(1) icon state using esca
 xterm_get_pencolor (3m_xterm) - [M_xterm] query xterm(1) color by number (LICENSE:MIT)
 xterm_get_position (3m_xterm) - [M_xterm] obtain xterm(1) screen position (LICENSE:MIT)
 xterm_keywords (3m_xterm) - [M_xterm] sent hints to X11 Window manager and select modes (LICENSE:MIT)
-xterm_labels (3m_xterm) - [M_xterm] set xterm(1) X11 WIndow labels using escape sequences (LICENSE:MIT)
+xterm_labels (3m_xterm) - [M_xterm] set xterm(1) X11 Window labels using escape sequences (LICENSE:MIT)
 xterm_occupancy (3m_xterm) - [M_xterm] try to move xterm(1) to specified virtual display (LICENSE:MIT)
 xterm_pencolor (3m_xterm) - [M_xterm] set xterm(1) color by number using escape sequences (LICENSE:MIT)
 xterm_position (3m_xterm) - [M_xterm] set xterm(1) window position using escape sequences (LICENSE:MIT)

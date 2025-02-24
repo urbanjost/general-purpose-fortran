@@ -959,9 +959,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 upper(3): function to return a trimmed uppercase-only string', &<br/>
 	 print small 2d logical scalar, vector, or matrix', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
+	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d logical scalar, vector, matrix in row-column format', &<br/>
 	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
-	 print_inquire(3f) INQUIRE a file by name/number and print results', &<br/>
+	 print_inquire(3f) print INQUIRE of file by name/number', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
@@ -1310,6 +1311,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_pixel sind(3f) sin(3f) with degrees as input instead of radians<br/>
 	M_pixel::anyscalar_to_real(3f): convert integer or real parameter of any kind to real<br/>
 	M_pixel::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision<br/>
+	 M_pixel hue(3f) convert color components from one color model to another<br/>
 	 M_pixel rgbmono(3f) convert RGB colors to a reasonable grayscale<br/>
 	 M_pixel closest_color_name(3f) given RGB values try to find closest named color<br/>
 	 M_pixel color_name2rgb(3f) given a color name return rgb color values in range 0 to 100<br/>
@@ -1374,9 +1376,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings s2c(3f) copy string(1 Clen(string)) to char array with null terminator<br/>
 	 M_strings c2s(3f) copy pointer to C char array till a null is encountered to a Fortran string up to 4096 characters<br/>
 </td>
+<tr><td><a href="../src/M_roman_numbers.f90">../src/M_roman_numbers.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_sets.f90">../src/M_sets.f90</a></td>
 <td>
 	 M_strings lower(3f) Changes a string to lowercase<br/>
+	 M_sets bool(3f) logical to integer TRUE results in 1 FALSE results in 0<br/>
 </td>
 <tr><td><a href="../src/M_slices.f90">../src/M_slices.f90</a></td>
 <td>
@@ -1496,6 +1502,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings visible(3f) expand escape sequences in a string to control and meta-control representations<br/>
 	 M_strings expand(3f) return string with escape sequences expanded<br/>
 	 M_strings notabs(3f) convert tabs to spaces while maintaining columns remove CRLF chars<br/>
+	 M_strings dilate(3f) convert tabs to spaces and trim line removing CRLF chars<br/>
 	 M_strings dilate(3f) convert tabs to spaces and trims line removing CRLF chars<br/>
 	 M_strings adjustc(3f) center text<br/>
 	 M_strings nospace(3f) remove all whitespace from input string<br/>
@@ -1618,7 +1625,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings matchw(3f) function compares text strings one of which can have wildcards ('*' or '?').<br/>
 	 M_system lower(3f) Changes a string to lowercase<br/>
 	 M_anything::anyinteger_to_64(3f): convert integer parameter of any kind to 64-bit integer<br/>
-	 M_system system_system(3f) call execute_command_line as a function<br/>
+	 M_system system_cmd(3f) call execute_command_line as a function<br/>
 	 M_system system_sleep(3f) call sleep(3c) or usleep(3c)<br/>
 	 M_time julian_to_date(3f) Converts Julian Date to DAT date-time array<br/>
 </td>
@@ -1656,6 +1663,23 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_time j2d(3f) Given Julian Date returns DAT date-time array<br/>
 	 M_time d2u(3f) Given DAT date-time array returns Unix Epoch time<br/>
 	 M_time u2d(3f) Given Unix Epoch Time returns DAT date-time array<br/>
+	 M_time date_to_modified_julian(3f) Converts proleptic Gregorian DAT date-time array to Modified Julian Date<br/>
+	 M_time modified_julian_to_date(3f) Converts Modified Julian Date to DAT date-time array<br/>
+	 M_time d2m(3f) Given DAT date-time array returns Julian Date<br/>
+	 M_time m2d(3f) Given Modified Julian Date returns DAT date-time array<br/>
+	 M_time date_to_bas(3f) Converts proleptic Gregorian DAT date-time array to Baseday and Seconds<br/>
+	 M_time bas_to_date(3f) Converts Baseday and Seconds to DAT date-time array<br/>
+	 M_time d2b(3f) Given DAT date-time array returns Basedate and Seconds<br/>
+	 M_time b2d(3f) Given Baseday and Seconds (BAS) returns DAT date-time array<br/>
+	 M_time eq(3f) compare or change derived type BAStime objects (eq lt gt le ge ne + -)<br/>
+	 M_time bas_minus(3f) subtract derived type BAStime object and BAStime or number<br/>
+	 M_time bas_plus(3f) add derived type BAStime object and BAStime or number<br/>
+	 M_time bas_multiply(3f) multiply derived type BAStime object and BAStime or number<br/>
+	 M_time bas_divide(3f) divide derived type BAStime object and BAStime or number<br/>
+	 M_time delta_MJD(3f) add derived type BAStime object and BAStime value<br/>
+	 M_time bas_format(3f) convert derived type BAStime to formatted string<br/>
+	 M_time bas_reduce(3f) reduce seconds to less than one day<br/>
+	 M_time anyscalar_to_mjd(3f) convert integer or real parameter of almost any intrinsc kind to BAStime<br/>
 	 M_time sec2days(3f) converts seconds or string of form IId JJh KKm LLs to string showing days of form D-HH MM SS<br/>
 	 M_time days2sec(3f) convert string [[-]dd-]hh mm ss.nn to seconds or string IId JJh KKm LLs to seconds<br/>
 	 M_time phase_of_moon(3f) return name for phase of moon for given date<br/>
@@ -1673,6 +1697,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_time dt2d_(3f) convert derived type date_time to DAT date-time array<br/>
 	 M_time epoch_(3f) convert derived type date_time to unix epoch seconds<br/>
 	 M_time format(3f) convert derived type date_time to formatted string<br/>
+	 M_time mjd_(3f) convert derived type date_time to mjd date<br/>
 	 M_time julian_(3f) convert derived type date_time to julian date<br/>
 	 M_time ordinal(3f) convert derived type date_time to ordinal date<br/>
 	 M_time weekday(3f) convert derived type date_time to weekday (1=Monday 7=Sunday)<br/>

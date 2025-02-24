@@ -1,5 +1,5 @@
      program demo_r2d
-     use M_units, only :  r2d
+     use M_units, only : r2d
      use M_units, only : pi8=>pi
      implicit none
      real :: pi=real(pi8)

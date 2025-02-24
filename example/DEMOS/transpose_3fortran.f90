@@ -1,13 +1,18 @@
       program demo_transpose
       implicit none
-      integer,save :: xx(3,5)= reshape([&
+      integer,allocatable :: array(:,:)
+      integer,parameter   :: values(3,5)= reshape([&
           1,  2,  3,  4,  5,    &
          10, 20, 30, 40, 50,    &
          11, 22, 33, 44, -1055  &
-       ],shape(xx),order=[2,1])
+       ],shape(values),order=[2,1])
 
-      call print_matrix_int('xx array:',xx)
-      call print_matrix_int('xx array transposed:',transpose(xx))
+         array=values
+         call print_matrix_int('array:',array)
+         array=transpose(array)
+         call print_matrix_int('array transposed:',array)
+         array=transpose(array)
+         call print_matrix_int('transposed transpose:',array)
 
       contains
 
@@ -18,12 +23,12 @@
       integer,intent(in)           :: arr(:,:)
       integer                      :: i
       character(len=:),allocatable :: biggest
-         write(*,*)trim(title)  ! print title
+         write(*,'(a," shape(",i0,",",i0,")")')trim(title),shape(arr)  ! print title
          biggest='           '  ! make buffer to write integer into
          ! find how many characters to use for integers
          write(biggest,'(i0)')ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2
          ! use this format to write a row
-         biggest='(" > [",*(i'//trim(biggest)//':,","))'
+         biggest='("   [",*(i'//trim(biggest)//':,","))'
          ! print one row of array at a time
          do i=1,size(arr,dim=1)
             write(*,fmt=biggest,advance='no')arr(i,:)

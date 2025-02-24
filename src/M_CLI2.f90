@@ -9,7 +9,7 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!    M_CLI2(3fm) - [ARGUMENTS::M_CLI2::INTRO] command line argument
+!!    M_CLI2(3fm) - [ARGUMENTS:M_CLI2::INTRO] command line argument
 !!    parsing using a prototype command
 !!    (LICENSE:PD)
 !!##SYNOPSIS
@@ -404,7 +404,7 @@ character(len=:),allocatable         :: line
 integer                              :: i
 integer                              :: istart
 integer                              :: iback
-character(len=255)                   :: string
+!character(len=255)                   :: string
    if(get('usage') == 'T')then
       ! kludge to test interactive mode concept
       !   do
@@ -743,7 +743,7 @@ end subroutine check_commandline
 !!  before processing continues.
 !!
 !!   TRAILING AT IS EQUIVALENT TO LEADING AT
-!!  Alternatively To accomdate special handling of leading "@" characters
+!!  Alternatively To accommodate special handling of leading "@" characters
 !!  the "@" character may alternatively appear on the end
 !!  of the name instead of the beginning. It will be internally moved to
 !!  the beginning before processing commences.
@@ -1197,7 +1197,6 @@ character(len=:),allocatable  :: prototype
 integer                       :: ilongest
 integer                       :: i
 integer                       :: j
-integer                       :: iend
    G_RESPONSE_PREFIX=get_env('CLI_RESPONSE_PREFIX','@')
    G_subcommand=''
    G_options_only=.true.
@@ -1262,7 +1261,6 @@ end subroutine move_from_end
 !===================================================================================================================================
 function change_leading_underscore_to_prefix(string) result(newstring)
 character(len=*) :: string
-integer          :: iend
 character(len=:),allocatable :: newstring
 ! @ is treated as a special character in powershell so allow the underscore to be a prefix
    if(string.eq.'')then

@@ -1,7 +1,10 @@
       program demo_compiler_version
       use, intrinsic :: iso_fortran_env, only : compiler_version
+      use, intrinsic :: iso_fortran_env, only : compiler_options
       implicit none
-         print '(2a)', &
+         print '(4a)', &
             'This file was compiled by ', &
-            compiler_version()
+            compiler_version(),           &
+            ' using the options ',        &
+            compiler_options()
       end program demo_compiler_version

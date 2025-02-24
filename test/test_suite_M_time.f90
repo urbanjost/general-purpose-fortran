@@ -1,34 +1,55 @@
 program runtest
 use,intrinsic :: iso_c_binding, only: c_int, c_char, c_null_char
-use M_framework__verify, only : unit_test, unit_test_end
+use, intrinsic :: iso_fortran_env, only : stdout=>OUTPUT_UNIT, stderr=>ERROR_UNIT
+use M_framework__verify, only : unit_test, unit_test_end, unit_test_mode
 use M_framework__verify, only : unit_test_start, unit_test_msg, unit_test_level
 use M_framework__verify, only : unit_test_stop
 use M_time,  only: &
-             d2o,             d2u,      d2w,      date_to_julian, date_to_unix,    &
-             days2sec,        dow,      easter,   fmtdate,        guessdate,       &
-             julian_to_date,  mo2v,     now,      o2d,            ordinal_seconds, &
-             ordinal_to_date, realtime, sec2days, w2d,            moon_fullness,   &
-             phase_of_moon,   u2d,      j2d,      d2j,            box_month,       &
-             mo2d,            v2mo,                               unix_to_date
+&     dow,                      guessdate,                                      &
+&     mo2v,                     now,          ordinal_seconds,                  &
+&     realtime,                 BAStime,                                        &
+&     fmtdate,                  box_month,                                      &
+&     days2sec,                 sec2days,                                       &
+&     phase_of_moon,            moon_fullness,            easter,               &
+&     ordinal_to_date,                                    o2d,                  &
+&     unix_to_date,             date_to_unix,             u2d,          d2u,    &
+&     julian_to_date,           date_to_julian,           j2d,          d2j,    &
+&     modified_julian_to_date,  date_to_modified_julian,  m2d,          d2m,    &
+&     bas_to_date,              date_to_bas,              b2d,          d2b,    &
+&                                                         w2d,          d2w,    &
+&                                                                       d2o,    &
+&                                                        mo2d,                  &
+&     v2mo
 use M_time, only : locale
 implicit none
 integer :: dat(8)
 integer :: ierr
 character(len=*),parameter :: SAME='' ! '-library libGPF -section 3 -description "'
 character(len=*),parameter :: SAMEEND='' ! '"'
+logical, parameter :: T=.true., F=.false.
+integer,parameter  :: dp=kind(0.0d0)
+
+call unit_test_mode(  &
+   keep_going=T,      &
+   flags=[0],         &
+   luns=[stdout],     &
+   command='',        &
+   brief=F,           &
+   match='',          &
+   interactive=F,     &
+   CMDLINE=T,         &
+   debug=F)
 
 unit_test_level=0
 
 !! no not use M_system version or will create a circular dependency
-!call put_environment_variable('TZ','America/New_York',ierr) ! some of the test values assume EST
-!call put_environment_variable('TZ','UTC+04:00',ierr) ! some of the test values assume EST
+call put_environment_variable('TZ','America/New_York',ierr) ! some of the test values assume EST
+call put_environment_variable('TZ','UTC+04:00',ierr) ! some of the test values assume EST
 
 call unit_test_msg('M_time','This section contains unit tests for procedures in the M_time(3f) module.')
 
 call unit_test_start('box_month      ',SAME//'print specified month into character array'//SAMEEND)
 call test_box_month()
-call unit_test_start('d2j            ',SAME//'Convert date array to Julian Date'//SAMEEND)
-call test_d2j()
 call unit_test_start('d2o            ',SAME//'Converts date-time array to Ordinal day'//SAMEEND)
 call test_d2o()
 call unit_test_start('ordinal_seconds',SAME//'seconds since begiing of year'//SAMEEND)
@@ -37,8 +58,6 @@ call unit_test_start('d2u            ',SAME//'Convert date array to Unix Time'//
 call test_d2u()
 call unit_test_start('d2w            ',SAME//'Calculate iso-8601 Week-numbering year date yyyy-Www-d'//SAMEEND)
 call test_d2w()
-call unit_test_start('date_to_julian ',SAME//'Converts Proleptic Gregorian date array to Julian Date'//SAMEEND)
-call test_date_to_julian()
 call unit_test_start('date_to_unix   ',SAME//'Converts date array to Unix Time (UT starts at 0000 on 1 Jan. 1970, UTC)'//SAMEEND)
 call test_date_to_unix()
 call unit_test_start('days2sec       ',SAME//'converts string D-HH:MM:SS to seconds from small to large'//SAMEEND)
@@ -58,10 +77,34 @@ call unit_test_start('fmtdate_usage  ',SAME//'display macros recognized by fmtda
 call test_fmtdate_usage()
 call unit_test_start('guessdate      ',SAME//'Reads in a date, in various formats'//SAMEEND)
 call test_guessdate()
-call unit_test_start('j2d            ',SAME//'Convert Julian Date to date array'//SAMEEND)
-call test_j2d()
+!-----------------------------------------------------------------------------------------------------------------------------------
 call unit_test_start('julian_to_date ',SAME//'Converts Julian Date to (year, month, day, hour, minute, second)'//SAMEEND)
 call test_julian_to_date()
+call unit_test_start('j2d            ',SAME//'Convert Julian Date to date array'//SAMEEND)
+call test_j2d()
+call unit_test_start('date_to_julian ',SAME//'Converts Proleptic Gregorian date array to Julian Date'//SAMEEND)
+call test_date_to_julian()
+call unit_test_start('d2j            ',SAME//'Convert date array to Julian Date'//SAMEEND)
+call test_d2j()
+!-----------------------------------------------------------------------------------------------------------------------------------
+call unit_test_start('modified_julian_to_date',SAME//'Convert Modified Julian Date to (year,month,day,hour,minute,second)'//SAMEEND)
+call test_modified_julian_to_date()
+call unit_test_start('m2d            ',SAME//'Convert Modified Julian Date to date array'//SAMEEND)
+call test_m2d()
+call unit_test_start('date_to_modified_julian ',SAME//'Converts Proleptic Gregorian date array to Modified Julian Date'//SAMEEND)
+call test_date_to_julian()
+call unit_test_start('d2m            ',SAME//'Convert date array to Modified Julian Date'//SAMEEND)
+call test_d2m()
+!-----------------------------------------------------------------------------------------------------------------------------------
+call unit_test_start('bas_to_date    ',SAME//'Converts Baseday and Seconds to (year, month, day, hour, minute, second)'//SAMEEND)
+call test_bas_to_date()
+call unit_test_start('b2d            ',SAME//'Convert Baseday and Seconds to date array'//SAMEEND)
+call test_b2d()
+call unit_test_start('date_to_bas    ',SAME//'Converts Proleptic Gregorian date array to Baseday and Seconds'//SAMEEND)
+call test_date_to_bas()
+call unit_test_start('d2b            ',SAME//'Convert date array to Baseday and Seconds'//SAMEEND)
+call test_d2b()
+!-----------------------------------------------------------------------------------------------------------------------------------
 call unit_test_start('mo2d           ',SAME//'return date array for beginning of given month name in specified year'//SAMEEND)
 call test_mo2d()
 call unit_test_start('mo2v           ',SAME//'given month as name return month number (1-12) of that month'//SAMEEND)
@@ -108,6 +151,48 @@ weekday_names_abbr= weekday_names(:)(1:3)
 call locale('user', month_names, weekday_names, month_names_abbr, weekday_names_abbr )
 
 end subroutine to_upper_extended_ascii
+!===================================================================================================================================
+#ifndef _WIN32
+
+subroutine put_environment_variable(name,value,status)
+
+!  This is an private copy of the set_environment_variable routine(3f) routine from
+!  M_system.FF that is duplicated in order to prevent a circular dependency.
+
+! ident_33="@(#)M_system::put_environment_variable(3f): call setenv(3c) to set environment variable"
+
+character(len=*)               :: NAME
+character(len=*)               :: VALUE
+integer, optional, intent(out) :: STATUS
+integer                        :: loc_err
+character(kind=c_char,len=1),allocatable :: temp_chars1(:)
+character(kind=c_char,len=1),allocatable :: temp_chars2(:)
+
+interface
+   integer(kind=c_int) function c_setenv(c_name,c_VALUE) bind(C,NAME="setenv")
+      import c_int, c_char
+      character(kind=c_char)   :: c_name(*)
+      character(kind=c_char)   :: c_VALUE(*)
+   end function
+end interface
+
+   temp_chars1=str2arr(trim(NAME))
+   temp_chars2=str2arr(VALUE)
+   loc_err =  c_setenv(temp_chars1,temp_chars2)
+   if (present(STATUS)) STATUS = loc_err
+end subroutine put_environment_variable
+
+#else
+
+subroutine put_environment_variable(name,value,status)
+character(len=*)               :: NAME
+character(len=*)               :: VALUE
+integer, optional, intent(out) :: STATUS
+   write(*,*)'<WARNING>put_environment_variable is not working on this platform'
+   if (present(STATUS)) STATUS = -1
+end subroutine put_environment_variable
+
+#endif
 !===================================================================================================================================
 pure function str2arr(string) result (array)
 
@@ -163,26 +248,87 @@ real(kind=realtime)          :: juliandate
 integer                      :: dat(8)
 integer                      :: ierr
 character(len=:),allocatable :: expected
-character(len=:),allocatable :: style
 
    juliandate=2457589.129d0                 ! set sample Julian Date
    call julian_to_date(juliandate,dat,ierr) ! create DAT array for this date
-
    expected='2016-07-19 11:05:45'
-   style='year-month-day hour:minute:second'
-   call unit_test('julian_to_date',fmtdate(dat,style) == expected, juliandate,'==> EXPECTED',expected,'GOT',fmtdate(dat),style)
+   call unit_test('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & juliandate,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
 
-   expected='2016-07-18 11:05:45'
    call julian_to_date(juliandate-1.0d0,dat,ierr) ! go back one day
-   call unit_test('julian_to_date',fmtdate(dat,style) == expected, juliandate,'==> EXPECTED',expected,'GOT',fmtdate(dat),style)
+   expected='2016-07-18 11:05:45'
+   call unit_test('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & juliandate-1,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
 
-   expected='2016-07-20 11:05:45'
    call julian_to_date(juliandate+1.0d0,dat,ierr) ! go forward one day
-   call unit_test('julian_to_date',fmtdate(dat,style) == expected,juliandate,'==> EXPECTED',expected,'GOT',fmtdate(dat),style)
+   expected='2016-07-20 11:05:45'
+   call unit_test('julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & juliandate+1,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
 
    call unit_test_end('julian_to_date')
 
 end subroutine test_julian_to_date
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_d2j
+real(kind=realtime)         :: julian
+integer :: dat(8)
+
+   dat=[1970, 1, 1,0, 0,0,0,0]
+   julian=d2j( dat )
+   call unit_test('d2j',abs(julian-2440587.5d0) < 0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
+
+   dat=[1995, 1, 1,0,12,0,0,0]
+   julian=d2j( dat )
+   call unit_test('d2j',int(julian) == 2449719 ,msg="Jan  1st, 1995 12:00(2449719)")
+
+   dat=[1995,10,19,0,12,0,0,0]
+   julian=d2j( dat )
+   call unit_test('d2j',int(julian) == 2450010, msg="Oct 19th, 1995 12:00(2450010)")
+
+   dat=[1995,12,31,0,12,0,0,0]
+   julian=d2j( dat )
+   call unit_test('d2j',int(julian) == 2450083, msg="Dec 31st, 1995 12:00(2450083)")
+
+   dat=[1996, 1, 1,0,12,0,0,0]
+   julian=d2j( dat )
+   call unit_test('d2j',int(julian) == 2450084, msg="Jan  1st, 1996 12:00(2450084)")
+
+   dat=[1996,12,31,0,12,0,0,0]
+   julian=d2j( dat )
+   call unit_test('d2j',int(julian) == 2450449, msg="Dec 31th, 1996 12:00(2450449)")
+
+call unit_test_end('d2j')
+
+end subroutine test_d2j
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_j2d
+real(kind=realtime)          :: juliandate
+character(len=:),allocatable :: expected
+character(len=:),allocatable :: resulted
+integer                      :: dat(8)
+
+   juliandate=2457589.129d0                 ! set sample Julian Date
+
+   expected='2016-07-19 11:05:45'
+   dat=j2d(juliandate)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('j2d',resulted == expected, juliandate,'==> EXPECTED ',expected,' GOT ',resulted)
+
+   ! go back one day
+   expected='2016-07-18 11:05:45'
+   dat=j2d(juliandate-1.0d0)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('j2d',resulted == expected, juliandate-1,'==> EXPECTED ',expected,' GOT ',resulted)
+
+   ! go forward one day
+   expected='2016-07-20 11:05:45'
+   dat=j2d(juliandate+1.0d0)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('j2d',resulted == expected, juliandate+1,'==> EXPECTED ',expected,' GOT ',resulted)
+
+call unit_test_end('j2d')
+
+end subroutine test_j2d
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_date_to_unix
 real(kind=realtime)              :: unixtime
@@ -363,7 +509,6 @@ integer          :: dat(8)     ! input date array
 integer          :: weekday
 character(len=9) :: day
 integer          :: ierr
-character(len=:),allocatable :: month_names(:), weekday_names(:), month_names_abbreviated(:), weekday_names_abbreviated(:)
 real(kind=realtime) :: julian
 character(len=:),allocatable   :: expected
 character(len=:),allocatable   :: returned
@@ -449,8 +594,8 @@ expected='|Mar|March|Sat|Saturday|'
 returned=fmtdate(dat,'|%l|%L|%w|%W|')
 call unit_test('locale',returned.eq.expected,'after reset macros: expected',expected,'returned',returned)
 
-expected='|March|Mar|Mar|Sat|Sat|Saturday|'
-returned=fmtdate(dat,'|MONTH|Month|Mth|Weekday|wkday|WEEKDAY|')
+expected='|March|Mar|Mar|Sat|Sat|Saturday|Sat|Saturday|Mar|March'
+returned=fmtdate(dat,'|MONTH|Month|Mth|Weekday|wkday|WEEKDAY|shortweekday|longweekday|shortmonth|longmonth')
 call unit_test('locale',returned.eq.expected,'after reset keywords: expected',expected,'returned',returned)
 
 call unit_test_end('locale')
@@ -464,7 +609,6 @@ character(len=132)             :: comment
 character(len=372),allocatable :: line(:)
 integer                        :: dat(8)
 integer                        :: i
-real(kind=realtime)            :: julian
 character(len=:),allocatable   :: expected
 character(len=:),allocatable   :: returned
 ! the data file with dates to read and expected answers and comments
@@ -506,9 +650,13 @@ expected='|Mar|March|Sat|Saturday|'
 returned=fmtdate(dat,'|%l|%L|%w|%W|')
 call unit_test('fmtdate',returned.eq.expected,'macros: expected',expected,'returned',returned)
 
-expected='|March|Mar|Mar|Sat|Sat|Saturday|'
-returned=fmtdate(dat,'|MONTH|Month|Mth|Weekday|wkday|WEEKDAY|')
+expected='|March|Mar|Mar|Sat|Sat|Saturday|Sat|Saturday'
+returned=fmtdate(dat,'|MONTH|Month|Mth|Weekday|wkday|WEEKDAY|shortweekday|longweekday')
 call unit_test('fmtdate',returned.eq.expected,'keywords: expected',expected,'returned',returned)
+
+expected='|2nd|second|02|'
+returned=fmtdate(dat,'|shortday|longday|day|')
+call unit_test('fmtdate',returned.eq.expected,'macros: expected',expected,'returned',returned)
 
 call unit_test_end('fmtdate')
 
@@ -661,67 +809,6 @@ endif
 call unit_test('box_month',all(calendar == mnth),'July 2016')
 call unit_test_end('box_month')
 end subroutine test_box_month
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_d2j
-real(kind=realtime)         :: julian
-integer :: dat(8)
-
-   dat=[1970, 1, 1,0, 0,0,0,0]
-   julian=d2j( dat )
-   call unit_test('d2j',abs(julian-2440587.5d0) < 0.00001 ,msg="Dec 31st, 1969  8:00(2440587.5)")
-
-   dat=[1995, 1, 1,0,12,0,0,0]
-   julian=d2j( dat )
-   call unit_test('d2j',int(julian) == 2449719 ,msg="Jan  1st, 1995 12:00(2449719)")
-
-   dat=[1995,10,19,0,12,0,0,0]
-   julian=d2j( dat )
-   call unit_test('d2j',int(julian) == 2450010, msg="Oct 19th, 1995 12:00(2450010)")
-
-   dat=[1995,12,31,0,12,0,0,0]
-   julian=d2j( dat )
-   call unit_test('d2j',int(julian) == 2450083, msg="Dec 31st, 1995 12:00(2450083)")
-
-   dat=[1996, 1, 1,0,12,0,0,0]
-   julian=d2j( dat )
-   call unit_test('d2j',int(julian) == 2450084, msg="Jan  1st, 1996 12:00(2450084)")
-
-   dat=[1996,12,31,0,12,0,0,0]
-   julian=d2j( dat )
-   call unit_test('d2j',int(julian) == 2450449, msg="Dec 31th, 1996 12:00(2450449)")
-
-call unit_test_end('d2j')
-
-end subroutine test_d2j
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_j2d
-real(kind=realtime)          :: juliandate
-character(len=:),allocatable :: expected
-character(len=:),allocatable :: resulted
-integer                      :: dat(8)
-
-   juliandate=2457589.129d0                 ! set sample Julian Date
-
-   expected='2016-07-19 11:05:45'
-   dat=j2d(juliandate)
-   resulted=fmtdate(dat,'year-month-day hour:minute:second')
-   call unit_test('j2d',resulted == expected, juliandate,'==> EXPECTED ',expected,' GOT ',resulted)
-
-   ! go back one day
-   expected='2016-07-18 11:05:45'
-   dat=j2d(juliandate-1.0d0)
-   resulted=fmtdate(dat,'year-month-day hour:minute:second')
-   call unit_test('j2d',resulted == expected, juliandate,'==> EXPECTED ',expected,' GOT ',resulted)
-
-   ! go forward one day
-   expected='2016-07-20 11:05:45'
-   dat=j2d(juliandate+1.0d0)
-   resulted=fmtdate(dat,'year-month-day hour:minute:second')
-   call unit_test('j2d',resulted == expected, juliandate,'==> EXPECTED ',expected,' GOT ',resulted)
-
-call unit_test_end('j2d')
-
-end subroutine test_j2d
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_d2u()
 integer,parameter :: aday(*)= [2017,03,29,-240,01,46,47,0]
@@ -932,6 +1019,299 @@ character(len=10):: name
    call d2w(dat,iyear,iweek,iweekday,name)
    call unit_test('d2w', name == string ,iyear,iweek,iweekday,name,string)
 end subroutine showme
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_date_to_modified_julian()
+real(kind=realtime) :: mjd
+integer             :: ierr
+integer             :: dat(8)
+real(kind=realtime),parameter :: conv=2400000.5_realtime
+
+   dat = [1970, 1, 1,0, 0,0,0,0]
+   call date_to_modified_julian( dat,mjd,ierr)
+   call unit_test('date_to_modified_julian',abs(mjd-2440587.5d0-conv) < 0.00001 ,msg="Dec 31st, 1969  8:00")
+
+   dat = [1995, 1, 1,0,12,0,0,0]
+   call date_to_modified_julian( dat,mjd,ierr)
+   call unit_test('date_to_modified_julian',int(mjd) == 2449719-conv ,msg="Jan  1st, 1995 12:00")
+
+   dat = [1995,10,19,0,12,0,0,0]
+   call date_to_modified_julian( dat,mjd,ierr)
+   call unit_test('date_to_modified_julian',int(mjd) == 2450010-conv, msg="Oct 19th, 1995 12:00")
+
+   dat = [1995,12,31,0,12,0,0,0]
+   call date_to_modified_julian( dat,mjd,ierr)
+   call unit_test('date_to_modified_julian',int(mjd) == 2450083-conv, msg="Dec 31st, 1995 12:00")
+
+   dat = [1996, 1, 1,0,12,0,0,0]
+   call date_to_modified_julian( dat,mjd,ierr)
+   call unit_test('date_to_modified_julian',int(mjd) == 2450084-conv, msg="Jan  1st, 1996 12:00")
+
+   dat = [1996,12,31,0,12,0,0,0]
+   call date_to_modified_julian( dat,mjd,ierr)
+   call unit_test('date_to_modified_julian',int(mjd) == 2450449-conv, msg="Dec 31th, 1996 12:00")
+
+   call unit_test_end('date_to_modified_julian')
+
+end subroutine test_date_to_modified_julian
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_modified_julian_to_date()
+real(kind=realtime)          :: mjd
+integer                      :: dat(8)
+integer                      :: ierr
+character(len=:),allocatable :: expected
+real(kind=realtime),parameter :: conv=2400000.5_realtime
+
+   mjd=2457589.129d0-conv            ! set sample Modified Julian Date
+   call modified_julian_to_date(mjd,dat,ierr) ! create DAT array for this date
+   expected='2016-07-19 11:05:45'
+   call unit_test('modified_julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & mjd,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
+
+   call modified_julian_to_date(mjd-1.0d0,dat,ierr) ! go back one day
+   expected='2016-07-18 11:05:45'
+   call unit_test('modified_julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & mjd-1,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
+
+   call modified_julian_to_date(mjd+1.0d0,dat,ierr) ! go forward one day
+   expected='2016-07-20 11:05:45'
+   call unit_test('modified_julian_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & mjd+1,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
+
+   call unit_test_end('modified_julian_to_date')
+
+end subroutine test_modified_julian_to_date
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_d2m
+real(kind=realtime)           :: mjd 
+integer                       :: dat(8) 
+real(kind=realtime),parameter :: conv=2400000.5_realtime
+
+   dat=[1970, 1, 1,0, 0,0,0,0]
+   mjd=d2m( dat )
+   call unit_test('d2m',abs(mjd-(2440587.5d0-conv)) < 0.00001 ,msg="Dec 31st, 1969  8:00")
+
+   dat=[1995, 1, 1,0,12,0,0,0]
+   mjd=d2m( dat )
+   call unit_test('d2m',int(mjd) == int(2449719-conv) ,msg="Jan  1st, 1995 12:00")
+
+   dat=[1995,10,19,0,12,0,0,0]
+   mjd=d2m( dat )
+   call unit_test('d2m',int(mjd) == int(2450010-conv), msg="Oct 19th, 1995 12:00")
+
+   dat=[1995,12,31,0,12,0,0,0]
+   mjd=d2m( dat )
+   call unit_test('d2m',int(mjd) == int(2450083-conv), msg="Dec 31st, 1995 12:00")
+
+   dat=[1996, 1, 1,0,12,0,0,0]
+   mjd=d2m( dat )
+   call unit_test('d2m',int(mjd) == int(2450084-conv), msg="Jan  1st, 1996 12:00")
+
+   dat=[1996,12,31,0,12,0,0,0]
+   mjd=d2m( dat )
+   call unit_test('d2m',int(mjd) == int(2450449-conv), msg="Dec 31th, 1996 12:00")
+
+call unit_test_end('d2m')
+
+end subroutine test_d2m
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_m2d
+real(kind=realtime)          :: mjd
+character(len=:),allocatable :: expected
+character(len=:),allocatable :: resulted
+integer                      :: dat(8)
+
+   mjd=2457589.129d0 - 2400000.5_realtime                ! set sample Modified Julian Date
+
+   expected='2016-07-19 11:05:45'
+   dat=m2d(mjd)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('m2d',resulted == expected, mjd,'==> EXPECTED ',expected,' GOT ',resulted)
+
+   ! go back one day
+   expected='2016-07-18 11:05:45'
+   dat=m2d(mjd-1.0d0)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('m2d',resulted == expected, mjd-1,'==> EXPECTED ',expected,' GOT ',resulted)
+
+   ! go forward one day
+   expected='2016-07-20 11:05:45'
+   dat=m2d(mjd+1.0d0)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('m2d',resulted == expected, mjd+1,'==> EXPECTED ',expected,' GOT ',resulted)
+
+call unit_test_end('m2d')
+
+end subroutine test_m2d
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_date_to_bas()
+type(BAStime)       :: bas
+real(kind=realtime) :: mjd
+integer             :: ierr
+integer             :: dat(8)
+real(kind=realtime),parameter :: conv=2400000.5_realtime
+
+   dat = [1970, 1, 1,0, 0,0,0,0]
+   call date_to_bas( dat,bas,ierr)
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('date_to_bas',abs(mjd-(2440587.5d0-conv)) < 0.00001 ,msg="Dec 31st, 1969  8:00")
+
+   dat = [1995, 1, 1,0,12,0,0,0]
+   call date_to_bas( dat,bas,ierr)
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('date_to_bas',int(mjd+conv) == 2449719,msg="Jan  1st, 1995 12:00")
+
+   dat = [1995,10,19,0,12,0,0,0]
+   call date_to_bas( dat,bas,ierr)
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('date_to_bas',int(mjd+conv) == 2450010, msg="Oct 19th, 1995 12:00")
+
+   dat = [1995,12,31,0,12,0,0,0]
+   call date_to_bas( dat,bas,ierr)
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('date_to_bas',int(mjd+conv) == 2450083, msg="Dec 31st, 1995 12:00")
+
+   dat = [1996, 1, 1,0,12,0,0,0]
+   call date_to_bas( dat,bas,ierr)
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('date_to_bas',int(mjd+conv) == 2450084, msg="Jan  1st, 1996 12:00")
+
+   dat = [1996,12,31,0,12,0,0,0]
+   call date_to_bas( dat,bas,ierr)
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('date_to_bas',int(mjd+conv) == 2450449, msg="Dec 31th, 1996 12:00")
+
+   call unit_test_end('date_to_bas')
+
+end subroutine test_date_to_bas
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_bas_to_date()
+type(BAStime)                :: bas
+real(kind=realtime)          :: mjd
+integer                      :: dat(8)
+integer                      :: ierr
+character(len=:),allocatable :: expected
+real(kind=realtime),parameter :: conv=2400000.5_realtime
+
+   mjd=2457589.129d0-conv         ! set sample Modified Julian Date
+   bas=BAStime(int(mjd),mod(mjd,1.0d0)*86400.0_realtime)
+   call bas_to_date(bas,dat,ierr) ! create DAT array for this date
+   expected='2016-07-19 11:05:45'
+   call unit_test('bas_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & mjd,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
+
+   call bas_to_date(bas-86400.0d0,dat,ierr) ! go back one day
+   expected='2016-07-18 11:05:45'
+   call unit_test('bas_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & mjd,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
+
+   call bas_to_date(bas+86400.0d0,dat,ierr) ! go forward one day
+   expected='2016-07-20 11:05:45'
+   call unit_test('bas_to_date',fmtdate(dat,'year-month-day hour:minute:second') == expected,&
+          & mjd,'==> EXPECTED ',expected,' GOT ',fmtdate(dat),'year-month-day hour:minute:second')
+
+   call unit_test_end('bas_to_date')
+
+end subroutine test_bas_to_date
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_d2b
+type(BAStime)                 :: bas
+real(kind=realtime)           :: mjd 
+integer                       :: dat(8) 
+real(kind=realtime),parameter :: conv=2400000.5_realtime
+!                            Modified Julian Dates
+!
+!   To use this table, add the day-of-month to the tabulated entry.
+!   For example, 30 Jan 2000 = MJD 51573.
+! __________________________________________________________________
+!  2000  2001  2002  2003  2004  2005  2006  2007  2008  2009
+integer,parameter :: array(1:12,2000:2009)=reshape([ &
+ 51543,51909,52274,52639,53004,53370,53735,54100,54465,54831, & ! Jan
+ 51574,51940,52305,52670,53035,53401,53766,54131,54496,54862, & ! Feb
+ 51603,51968,52333,52698,53064,53429,53794,54159,54525,54890, & ! Mar
+ 51634,51999,52364,52729,53095,53460,53825,54190,54556,54921, & ! Apr
+ 51664,52029,52394,52759,53125,53490,53855,54220,54586,54951, & ! May
+ 51695,52060,52425,52790,53156,53521,53886,54251,54617,54982, & ! Jun
+ 51725,52090,52455,52820,53186,53551,53916,54281,54647,55012, & ! Jul
+ 51756,52121,52486,52851,53217,53582,53947,54312,54678,55043, & ! Aug
+ 51787,52152,52517,52882,53248,53613,53978,54343,54709,55074, & ! Sep
+ 51817,52182,52547,52912,53278,53643,54008,54373,54739,55104, & ! Oct
+ 51848,52213,52578,52943,53309,53674,54039,54404,54770,55135, & ! Nov
+ 51878,52243,52608,52973,53339,53704,54069,54434,54800,55165],& ! Dec
+ shape=shape(array),order=[2,1])
+integer :: month,year
+
+   dat=[1970, 1, 1,0, 0,0,0,0]
+   bas=d2b( dat )
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('d2b',abs(mjd-(2440587.5d0-conv)) < 0.00001 ,msg="Dec 31st, 1969  8:00")
+
+   dat=[1995, 1, 1,0,12,0,0,0]
+   bas=d2b( dat )
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('d2b',int(mjd+conv) == 2449719,msg="Jan  1st, 1995 12:00")
+
+   dat=[1995,10,19,0,12,0,0,0]
+   bas=d2b( dat )
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('d2b',int(mjd+conv) == 2450010, msg="Oct 19th, 1995 12:00")
+
+   dat=[1995,12,31,0,12,0,0,0]
+   bas=d2b( dat )
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('d2b',int(mjd+conv) == 2450083, msg="Dec 31st, 1995 12:00")
+
+   dat=[1996, 1, 1,0,12,0,0,0]
+   bas=d2b( dat )
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('d2b',int(mjd+conv) == 2450084, msg="Jan  1st, 1996 12:00")
+
+   dat=[1996,12,31,0,12,0,0,0]
+   bas=d2b( dat )
+   mjd=bas%base_day+bas%secs/86400.0_realtime
+   call unit_test('d2b',int(mjd+conv) == 2450449, msg="Dec 31th, 1996 12:00")
+
+   do month=1,12
+      do year=2000,2009
+         !dat=[ year,month,day,timezone,hour,minutes,seconds,milliseconds]
+         dat=[year,month,1,0,0,0,0,0]
+         bas=d2b(dat)
+         call unit_test('d2b', array(month,year)+1 == bas%base_day, year,month,array(month,year)+1,bas%base_day)
+      enddo
+   enddo
+call unit_test_end('d2b')
+
+end subroutine test_d2b
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_b2d
+type(BAStime)                :: bas
+real(kind=realtime)          :: mjd
+character(len=:),allocatable :: expected
+character(len=:),allocatable :: resulted
+integer                      :: dat(8)
+
+   mjd=2457589.129d0 - 2400000.5_realtime                ! set sample Modified Julian Date
+   bas=BAStime(int(mjd),mod(mjd,1.0d0)*86400.0_realtime)
+
+   expected='2016-07-19 11:05:45'
+   dat=b2d(bas)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('b2d',resulted == expected, mjd,'==> EXPECTED ',expected,' GOT ',resulted)
+
+   ! go back one day
+   expected='2016-07-18 11:05:45'
+   dat=b2d(bas-86400.0d0)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('b2d',resulted == expected, mjd-1.0,'==> EXPECTED ',expected,' GOT ',resulted)
+
+   ! go forward one day
+   expected='2016-07-20 11:05:45'
+   dat=b2d(bas+86400.0d0)
+   resulted=fmtdate(dat,'year-month-day hour:minute:second')
+   call unit_test('b2d',resulted == expected, mjd+1.0,'==> EXPECTED ',expected,' GOT ',resulted)
+
+call unit_test_end('b2d')
+
+end subroutine test_b2d
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 end program runtest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

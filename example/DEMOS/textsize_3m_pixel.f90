@@ -3,7 +3,7 @@
      use M_pixel__writegif, only : writegif
      implicit none
      integer :: i,ii
-        !! set up long bar as plotting area
+        !-! set up long bar as plotting area
         call prefsize(900,150)
         call vinit()
         call ortho2(-30.0, 30.0, -5.0, 5.0)

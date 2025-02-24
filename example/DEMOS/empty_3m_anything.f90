@@ -2,7 +2,7 @@
      use M_anything, only : empty, assignment(=)
      integer, allocatable      :: ints(:)
      character(:), allocatable :: strs(:)
-     real, allocatable      :: reals(:)
+     real, allocatable         :: reals(:)
         ints=empty
         write(*,*)size(ints)
 

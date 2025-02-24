@@ -1,7 +1,20 @@
+
+
+
+
+
+
+
+
+
+
+
 !===================================================================================================================================
 ! This module and the example function squarei() that uses it shows how you
 ! can use polymorphism to allow arguments of different types generically by casting
 !===================================================================================================================================
+
+
 
 !===================================================================================================================================
 !>
@@ -94,7 +107,7 @@ use, intrinsic :: ISO_FORTRAN_ENV, only : CSZ => CHARACTER_STORAGE_SIZE
 use, intrinsic :: iso_fortran_env, only : stderr => error_unit !! ,input_unit,output_unit
 implicit none
 private
-integer,parameter        :: dp=kind(0.0d0)
+integer,parameter :: dp=kind(0.0d0)
 public anyscalar_to_string   ! convert integer parameter of any kind to string
 public anyscalar_to_int64    ! convert integer parameter of any kind to 64-bit integer
 public anyscalar_to_real     ! convert integer or real parameter of any kind to real
@@ -165,7 +178,7 @@ contains
 !!    use M_anything, only : empty, assignment(=)
 !!    integer, allocatable      :: ints(:)
 !!    character(:), allocatable :: strs(:)
-!!    real, allocatable      :: reals(:)
+!!    real, allocatable         :: reals(:)
 !!       ints=empty
 !!       write(*,*)size(ints)
 !!
@@ -203,33 +216,33 @@ contains
 !!
 !!##LICENSE
 !!    MIT
-   subroutine ints_empty_( x, emp )
-       integer, allocatable, intent(inout) :: x(:)
-       type(Empty_t), intent(in) :: emp
-       if ( allocated( x ) ) deallocate( x )
-       allocate( x( 0 ) )
-   end subroutine ints_empty_
+subroutine ints_empty_( x, emp )
+integer, allocatable, intent(inout)         :: x(:)
+type(Empty_t), intent(in)                   :: emp
+   if ( allocated( x ) ) deallocate( x )
+   allocate( x( 0 ) )
+end subroutine ints_empty_
 
-   subroutine doubles_empty_( x, emp )
-       doubleprecision, allocatable, intent(inout) :: x(:)
-       type(Empty_t), intent(in) :: emp
-       if ( allocated( x ) ) deallocate( x )
-       allocate( x( 0 ) )
-   end subroutine doubles_empty_
+subroutine doubles_empty_( x, emp )
+doubleprecision, allocatable, intent(inout) :: x(:)
+type(Empty_t), intent(in)                   :: emp
+    if ( allocated( x ) ) deallocate( x )
+    allocate( x( 0 ) )
+end subroutine doubles_empty_
 
-   subroutine reals_empty_( x, emp )
-       real, allocatable, intent(inout) :: x(:)
-       type(Empty_t), intent(in) :: emp
-       if ( allocated( x ) ) deallocate( x )
-       allocate( x( 0 ) )
-   end subroutine reals_empty_
+subroutine reals_empty_( x, emp )
+real, allocatable, intent(inout)            :: x(:)
+type(Empty_t), intent(in)                   :: emp
+    if ( allocated( x ) ) deallocate( x )
+    allocate( x( 0 ) )
+end subroutine reals_empty_
 
-   subroutine strings_empty_( x, emp )
-       character(:), allocatable, intent(inout) :: x(:)
-       type(Empty_t), intent(in) :: emp
-       if ( allocated( x ) ) deallocate( x )
-       allocate( character(0) :: x( 0 ) )
-   end subroutine strings_empty_
+subroutine strings_empty_( x, emp )
+character(:), allocatable, intent(inout)    :: x(:)
+type(Empty_t), intent(in)                   :: emp
+    if ( allocated( x ) ) deallocate( x )
+    allocate( character(0)                  :: x( 0 ) )
+end subroutine strings_empty_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -276,9 +289,9 @@ contains
 !!       character(len=1), allocatable :: chars(:)
 !!       character(len=:), allocatable :: line
 !!       character(len=:), allocatable :: lines(:)
-!!       integer :: ints(10)
-!!       integer :: i, int
-!!       integer,allocatable :: somesize(:)
+!!       integer                       :: ints(10)
+!!       integer                       :: i, int
+!!       integer,allocatable           :: somesize(:)
 !!
 !!       call header('integer array to bytes')
 !!       chars = anything_to_bytes([(i*i, i=1, size(ints))])
@@ -392,8 +405,8 @@ contains
 !!##LICENSE
 !!    MIT
 subroutine bytes_to_anything_arr(chars,anything)
-   character(len=1),intent(in) :: chars(:)
-   class(*),intent(out) :: anything(:)
+character(len=1),intent(in) :: chars(:)
+class(*),intent(out)        :: anything(:)
    select type(anything)
     type is (character(len=*));
             anything=transfer(chars,anything)
@@ -414,8 +427,8 @@ subroutine bytes_to_anything_arr(chars,anything)
 end subroutine bytes_to_anything_arr
 
 subroutine bytes_to_anything_scalar(chars,anything)
-   character(len=1),intent(in):: chars(:)
-   class(*),intent(out) :: anything
+character(len=1),intent(in) :: chars(:)
+class(*),intent(out)        :: anything
    select type(anything)
     ! caller must ensure string passed in is long enough for results
     type is (character(len=*));     anything=transfer(chars,repeat('x',size(chars)))
@@ -540,8 +553,8 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
-      !BUG!chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      !stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
    end select
 
 end function anything_to_bytes_arr
@@ -568,8 +581,7 @@ character(len=1),allocatable :: chars(:)
     type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
-      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
-      !BUG!chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+      chars=transfer(anything,chars) ! should work for everything, does not with some compilers
    end select
 
 end function  anything_to_bytes_scalar
@@ -641,8 +653,8 @@ end function  anything_to_bytes_scalar
 !!
 !!     function minall(a,b,c,d,e,f,g) result (value)
 !!     use M_anything, only : x=>anyscalar_to_real128
-!!     class(*),intent(in)  :: a,b,c,d,e,f,g
-!!     real(kind=qp)   :: value
+!!     class(*),intent(in) :: a,b,c,d,e,f,g
+!!     real(kind=qp)       :: value
 !!        value=min( x(a),x(b),x(c),x(d),x(e),x(f),x(g) )
 !!     end function minall
 !!
@@ -992,10 +1004,10 @@ end function anyscalar_to_int64
 !!
 !!      pure function anyscalar_to_string(g0,g1,g2,g3,g4,g5,g6,g7,g8,g9,&
 !!      & ga,gb,gc,gd,ge,gf,gg,gh,gi,gj,sep)
-!!      class(*),intent(in),optional  :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
-!!      class(*),intent(in),optional  :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
+!!      class(*),intent(in),optional         :: g0,g1,g2,g3,g4,g5,g6,g7,g8,g9
+!!      class(*),intent(in),optional         :: ga,gb,gc,gd,ge,gf,gg,gh,gi,gj
 !!      character(len=*),intent(in),optional :: sep
-!!      character,len=(:),allocatable :: anyscalar_to_string
+!!      character,len=(:),allocatable        :: anyscalar_to_string
 !!
 !!##DESCRIPTION
 !!    anyscalar_to_string(3f) builds a space-separated string from up to twenty scalar values.
@@ -1071,16 +1083,16 @@ pure function anyscalar_to_string(gen0, gen1, gen2, gen3, gen4, gen5, gen6, gen7
 
 ! ident_7="@(#) M_anything anyscalar_to_string(3fp) writes a message to a string composed of any standard scalar types"
 
-class(*),intent(in),optional  :: gen0, gen1, gen2, gen3, gen4
-class(*),intent(in),optional  :: gen5, gen6, gen7, gen8, gen9
-class(*),intent(in),optional  :: gena, genb, genc, gend, gene
-class(*),intent(in),optional  :: genf, geng, genh, geni, genj
-character(len=:),allocatable  :: anyscalar_to_string
-character(len=4096)           :: line
-integer                       :: istart
-integer                       :: increment
+class(*),intent(in),optional         :: gen0, gen1, gen2, gen3, gen4
+class(*),intent(in),optional         :: gen5, gen6, gen7, gen8, gen9
+class(*),intent(in),optional         :: gena, genb, genc, gend, gene
+class(*),intent(in),optional         :: genf, geng, genh, geni, genj
+character(len=:),allocatable         :: anyscalar_to_string
+character(len=4096)                  :: line
+integer                              :: istart
+integer                              :: increment
 character(len=*),intent(in),optional :: sep
-character(len=:),allocatable  :: sep_local
+character(len=:),allocatable         :: sep_local
    if(present(sep))then
       increment=len(sep)+1
       sep_local=sep
@@ -1115,11 +1127,11 @@ character(len=:),allocatable  :: sep_local
 contains
 !===================================================================================================================================
 pure subroutine print_generic(generic,line,istart,increment,sep)
-class(*),intent(in) :: generic
+class(*),intent(in)               :: generic
 character(len=4096),intent(inout) :: line
-integer,intent(inout) :: istart
-integer,intent(in) :: increment
-character(len=*),intent(in) :: sep
+integer,intent(inout)             :: istart
+integer,intent(in)                :: increment
+character(len=*),intent(in)       :: sep
    select type(generic)
       type is (integer(kind=int8));     write(line(istart:),'(i0)') generic
       type is (integer(kind=int16));    write(line(istart:),'(i0)') generic

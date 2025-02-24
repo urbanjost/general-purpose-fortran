@@ -7,9 +7,9 @@
         character(len=1), allocatable :: chars(:)
         character(len=:), allocatable :: line
         character(len=:), allocatable :: lines(:)
-        integer :: ints(10)
-        integer :: i, int
-        integer,allocatable :: somesize(:)
+        integer                       :: ints(10)
+        integer                       :: i, int
+        integer,allocatable           :: somesize(:)
 
         call header('integer array to bytes')
         chars = anything_to_bytes([(i*i, i=1, size(ints))])

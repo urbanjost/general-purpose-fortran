@@ -1,6 +1,6 @@
 program hline_test
 !(LICENSE:PD)
-! @(#) draw horizonal lines using mvhline(3f)
+! @(#) draw horizontal lines using mvhline(3f)
    use M_ncurses                                    ! enable the Fortran module interface to ncurses(3c)
    implicit none
    integer        :: ierr
@@ -9,8 +9,8 @@ program hline_test
    call getmaxyx(stdscr,maxy,maxx)                ! get dimensions of display size
    halfx = maxx/2                                  
    len = 1
-   do y=0,maxy-1                                  ! draw horizonal lines of various length
-      ierr=mvhline(y,halfx-len,0_C_LONG,len+len)  ! draws a horizonal line on stdscr
+   do y=0,maxy-1                                  ! draw horizontal lines of various length
+      ierr=mvhline(y,halfx-len,0_C_LONG,len+len)  ! draws a horizontal line on stdscr
       len=len+1                                   ! change length of string
    enddo
    ierr=refresh()                                 ! post your data to the screen

@@ -2,12 +2,12 @@
      use M_kracken, only : parse, sget, iget, rget
      use M_strings, only : chomp
      implicit none
-     character(len=:),allocatable  :: verb
-     character(len=*),parameter    :: delimiters=' ;,'
-     integer     :: i
-     integer     :: ierr
-     character(len=132) :: line
-     character(len=132), parameter :: commands(5)= [character(len=132) :: &
+     character(len=:),allocatable :: verb
+     character(len=*),parameter   :: delimiters=' ;,'
+     integer                      :: i
+     integer                      :: ierr
+     character(len=132)           :: line
+     character(len=132),parameter :: commands(5)= [character(len=132) :: &
        'start -i 10 -message this is a message', &
        'end -i 20 -j 30 -k 55.55 ', &
        'list', &

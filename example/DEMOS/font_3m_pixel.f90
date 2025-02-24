@@ -5,7 +5,7 @@
      real    :: left
      real    :: baseline=80.0
      integer :: icolor=1
-        !! set up drawing surface
+        !-! set up drawing surface
         call prefsize(400, 400)
         call vinit()
         call viewport(0.0, 400.0, 400.0, 0.0)
@@ -13,17 +13,17 @@
         call color(7)
         call clear()
         call textsize(10.0, 10.0)
-        !! place a vertical line along the edge
+        !-! place a vertical line along the edge
         call color(1)
         call move2(-90.0, -90.0)
         call draw2(-90.0, 90.0)
-        !! make a centered title at top a bit bolder and bigger
+        !-! make a centered title at top a bit bolder and bigger
         call xcentertext()
         call textsize(13.0, 13.0)
         call linewidth(90)
         left=0
         call nextline('Font Samples')
-        !! print the font samples
+        !-! print the font samples
         left=-90
         call linewidth(0)
         call textsize(10.0, 10.0)
@@ -42,7 +42,7 @@
      contains
      subroutine nextline(string)
      character(len=*) :: string
-     !! reduce some duplicate code; very specific to this example
+     !-! reduce some duplicate code; very specific to this example
      integer :: iend
         iend=index(string,',')  ! if comma, assume font name found
         if(iend.ne.0)call font(string(:iend-1)) ! change font

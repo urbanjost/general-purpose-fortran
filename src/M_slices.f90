@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 ! ==================================================================================================================================
 module M_slices
 !
@@ -58,12 +69,12 @@ contains
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!    subroutine dl_slices(a,inx,inz,nx,nz,alpha,beta,xh,yh,zh,iflag,iaxis, &
+!!     subroutine dl_slices(a,inx,inz,nx,nz,alpha,beta,xh,yh,zh,iflag,iaxis, &
 !!
-!!                          & xt,nxt,xastart,xaend,nmx,nnx,mlx,tsx,ndx,smx, &
-!!                          & yt,nyt,              nmy,nny,mly,tsy,ndy,smy, &
-!!                          & zt,nzt,zastart,zaend,nmz,nnz,mlz,tsz,ndz,smz, &
-!!                          & aminin,amaxin,icol,maxsize)
+!!      & xt,nxt,xastart,xaend,nmx,nnx,mlx,tsx,ndx,smx, &
+!!      & yt,nyt,              nmy,nny,mly,tsy,ndy,smy, &
+!!      & zt,nzt,zastart,zaend,nmz,nnz,mlz,tsz,ndz,smz, &
+!!      & aminin,amaxin,icol,maxsize)
 !!
 !!##DESCRIPTION
 !!    Routine to plot data in 3-D overlay form.
@@ -721,7 +732,7 @@ end subroutine vxpt3_
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-      subroutine intersect_(flag,x,y,ax1,ay1,ax2,ay2,bx1,by1,bx2,by2,a)
+subroutine intersect_(flag,x,y,ax1,ay1,ax2,ay2,bx1,by1,bx2,by2,a)
 !
 !     CREATED BY D. LONG     AUG, 1983 AT JPL; revised 19931208
 !     SUBPROGRAM OF dl_slices
@@ -815,7 +826,7 @@ logical :: a
                   endif
                   flag=.true.
                   return
-      end subroutine intersect_
+end subroutine intersect_
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -1023,7 +1034,7 @@ end subroutine clipit_
 !!      (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!       SUBROUTINE DL_SYMBOL(X,Y,S,T,A,NN,IS)
+!!     SUBROUTINE DL_SYMBOL(X,Y,S,T,A,NN,IS)
 !!##DESCRIPTION
 !!
 !!      Routine to plot characters and symbols
@@ -2015,108 +2026,102 @@ subroutine number_(x,y,hght,z,t,f0,ipf)
 !        =+2 NO PLOT OUTPUT
 !
 implicit none
-real :: alg
-real :: f
-real :: f0
-real :: fa
-real :: hg
-real :: hght
-integer :: i
-integer :: iff
-integer :: ipf
-integer :: nd
-integer :: nn
-real :: t
-real :: t1
-real :: x
-real :: y
-real :: z
+real              :: alg
+real              :: f
+real              :: f0
+real              :: fa
+real              :: hg
+real              :: hght
+integer           :: i
+integer           :: iff
+integer           :: ipf
+integer           :: nd
+integer           :: nn
+real              :: t
+real              :: t1
+real              :: x
+real              :: y
+real              :: z
 character(len=18) :: b   ! WORKING BUFFERS
 character(len=8)  :: fb  ! WORKING BUFFERS
 character(len=8)  :: fb1 ! WORKING BUFFERS
-integer           :: spag_nextblock_1
-!
-         iff = 0
-         hg = hght
-         if ( hg==0.0 ) hg = 0.15
-         t1 = t
-         nd = 0
-         nn = 0
-         fa = f0
-         if ( abs(fa)>1022.0 ) fa = 0.0
-         if ( fa/=0.0 ) then
-                           ! INTEGER FORMAT
-            if ( fa>999.0 ) then
-                          ! PLOT FORMATTED INTEGER
-               nn = amod(fa,1000.)
-               fa = 0.0
-            else  ! PLOT FLOAT OR EXPON NUMBER
-               f = abs(fa)*1.000002
-               nn = f
-               f = (f-nn)*100.
-               nd = f
-            endif
+
+   iff = 0
+   hg = hght
+   if ( hg==0.0 ) hg = 0.15
+   t1 = t
+   nd = 0
+   nn = 0
+   fa = f0
+   if ( abs(fa)>1022.0 ) fa = 0.0
+   if ( fa/=0.0 ) then                  ! INTEGER FORMAT
+      if ( fa>999.0 ) then              ! PLOT FORMATTED INTEGER
+         nn = amod(fa,1000.)
+         fa = 0.0
+      else                              ! PLOT FLOAT OR EXPON NUMBER
+         f = abs(fa)*1.000002
+         nn = f
+         f = (f-nn)*100.
+         nd = f
+      endif
+   endif
+   if ( nd>17 ) nd = nd/10
+   ! CORRECT SIMPLE INPUT ERRORS
+   if ( nn==0 ) then
+      ! DIGITS TO LEFT OF DECIMAL POINT
+      nn = nd + 2
+      if ( z==0 .and. fa==0.0 ) nn = 1
+      if ( z/=0.0 ) then
+         alg = alog10(abs(z))
+         if ( alg<0.0 ) alg = 0.0
+         nn = nd + 2 + alg
+         if ( fa==0.0 ) nn = 1 + alg
+      endif
+      if ( z<0.0 ) nn = nn + 1
+      if ( fa<0.0 ) nn = nn + 4
+   endif
+   if ( nd>nn ) goto 20 ! FORMAT ERROR
+   if ( nn>18 ) nn = 18 ! MAX CHARACTERS
+   if ( fa==0.0 ) then  ! INTEGER
+      i = z
+      fb = char(nn-10*(nn/10)+48)//')'
+      fb1 = fb
+      if ( nn/10>0 ) fb = char(nn/10+48)//fb1
+      fb1 = '(I'//fb
+      write (b,fb1,err=20) i
+   else     ! FLOATING POINT OR EXPONENTIAL
+      if ( nn>1 ) then
+         fb = char(nd-10*(nd/10)+48)//')'
+         fb1 = fb
+         if ( nd/10>0 ) fb = char(nd/10+48)//fb1
+         fb1 = char(nn-10*(nn/10)+48)//'.'//fb
+         fb = fb1
+         if ( nn/10>0 ) fb = char(nn/10+48)//fb1
+         if ( fa>0.0 ) then
+            fb1 = '(F'//fb
+         else
+            fb1 = '(E'//fb
          endif
-         if ( nd>17 ) nd = nd/10
-                           ! CORRECT SIMPLE INPUT ERRORS
-         if ( nn==0 ) then
-                      ! DIGITS TO LEFT OF DECIMAL POINT
-            nn = nd + 2
-            if ( z==0 .and. fa==0.0 ) nn = 1
-            if ( z/=0.0 ) then
-               alg = alog10(abs(z))
-               if ( alg<0.0 ) alg = 0.0
-               nn = nd + 2 + alg
-               if ( fa==0.0 ) nn = 1 + alg
-            endif
-            if ( z<0.0 ) nn = nn + 1
-            if ( fa<0.0 ) nn = nn + 4
+      else
+         if ( fa>0.0 ) then
+            fb1 = '(F)'
+         else
+            fb1 = '(E)'
          endif
-         if ( nd>nn ) goto 20
-                          ! FORMAT ERROR
-         if ( nn>18 ) nn = 18
-                        ! MAX CHARACTERS
-         if ( fa==0.0 ) then
-                        ! INTEGER
-            i = z
-            fb = char(nn-10*(nn/10)+48)//')'
-            fb1 = fb
-            if ( nn/10>0 ) fb = char(nn/10+48)//fb1
-            fb1 = '(I'//fb
-            write (b,fb1,err=20) i
-         else     ! FLOATING POINT OR EXPONENTIAL
-            if ( nn>1 ) then
-               fb = char(nd-10*(nd/10)+48)//')'
-               fb1 = fb
-               if ( nd/10>0 ) fb = char(nd/10+48)//fb1
-               fb1 = char(nn-10*(nn/10)+48)//'.'//fb
-               fb = fb1
-               if ( nn/10>0 ) fb = char(nn/10+48)//fb1
-               if ( fa>0.0 ) then
-                  fb1 = '(F'//fb
-               else
-                  fb1 = '(E'//fb
-               endif
-            else
-               if ( fa>0.0 ) then
-                  fb1 = '(F)'
-               else
-                  fb1 = '(E)'
-               endif
-               nn = 16
-               iff = 1
-            endif
-            write (b,fb1,err=20) z
-            if ( iff==1 ) b = adjustl(b)
-                          ! REMOVE LEADING SPACES
-         endif
-         call dl_symbol(x,y,hg,b,t1,nn,ipf)
-         return
- 20   continue
-      do i = 1 , 18
-         b(i:i) = '*'
-         if ( i==nn-nd ) b(i:i) = '.'
-      enddo
+         nn = 16
+         iff = 1
+      endif
+      write (b,fb1,err=20) z
+      if ( iff==1 ) b = adjustl(b)
+      ! REMOVE LEADING SPACES
+   endif
+   call dl_symbol(x,y,hg,b,t1,nn,ipf)
+   return
+20 continue
+   do i = 1 , 18
+      b(i:i) = '*'
+      if ( i==nn-nd ) b(i:i) = '.'
+   enddo
 end subroutine number_
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2311,8 +2316,10 @@ data q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
    dx = 1.0
    xmin = xmin - 0.5
    call spag_block_1
+
 contains
-   subroutine spag_block_1
+
+subroutine spag_block_1
 !
 !     BEFORE EXIT, CHECK TO BE SURE THAT DATA IS CONTAINED WITHIN
 !     THE LIMITS XMIN AND XMIN+DX*S.  IF NOT, RESET DX
@@ -2322,7 +2329,8 @@ contains
          if ( s>0.0 ) dx = (xmax-xmin)/s
          if ( dx<=0.0 ) dx = 1.0
       endif
-   end subroutine spag_block_1
+end subroutine spag_block_1
+
 end subroutine range_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

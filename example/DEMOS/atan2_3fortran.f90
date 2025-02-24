@@ -1,5 +1,5 @@
       program demo_atan2
-      real :: z
+      real    :: z
       complex :: c
        !
        ! basic usage
@@ -7,10 +7,10 @@
         z=atan2(1.5574077, 1.0)
         write(*,*) 'radians=',z,'degrees=',r2d(z)
        !
-       ! elemental arrays
+       ! elemental : arrays
         write(*,*)'elemental',atan2( [10.0, 20.0], [30.0,40.0] )
        !
-       ! elemental arrays and scalars
+       ! elemental : arrays and scalars
         write(*,*)'elemental',atan2( [10.0, 20.0], 50.0 )
        !
        ! break complex values into real and imaginary components
@@ -25,23 +25,16 @@
         integer             :: i
        !
         vals=[ &
-          ( 1.0, 0.0 ), & ! 0
-          ( 1.0, 1.0 ), & ! 45
-          ( 0.0, 1.0 ), & ! 90
-          (-1.0, 1.0 ), & ! 135
-          (-1.0, 0.0 ), & ! 180
-          (-1.0,-1.0 ), & ! 225
-          ( 0.0,-1.0 )]   ! 270
+          !     0            45            90           135
+          ( 1.0, 0.0 ), ( 1.0, 1.0 ), ( 0.0, 1.0 ), (-1.0, 1.0 ), &
+          !    180           225          270
+          (-1.0, 0.0 ), (-1.0,-1.0 ), ( 0.0,-1.0 ) ]
         do i=1,size(vals)
-           call cartesian_to_polar(vals(i)%re, vals(i)%im, radius,ang)
+           call cartesian_to_polar(vals(i), radius,ang)
            write(*,101)vals(i),ang,r2d(ang),radius
         enddo
-        101 format(             &
-        & 'X= ',f5.2,           &
-        & ' Y= ',f5.2,          &
-        & ' ANGLE= ',g0,        &
-        & T38,'DEGREES= ',g0.4, &
-        & T54,'DISTANCE=',g0)
+        101 format( 'X= ',f5.2,' Y= ',f5.2,' ANGLE= ',g0, &
+        & T38,'DEGREES= ',g0.4, T54,'DISTANCE=',g0)
        endblock COMPLEX_VALS
       !
       contains
@@ -53,18 +46,16 @@
          r2d=radians / DEGREE ! do the conversion
       end function r2d
       !
-      subroutine cartesian_to_polar(x,y,radius,inclination)
+      subroutine cartesian_to_polar(xy,radius,inclination)
       ! return angle in radians in range 0 to 2*PI
       implicit none
-      real,intent(in)  :: x,y
+      complex,intent(in)  :: xy
       real,intent(out) :: radius,inclination
-         radius=sqrt(x**2+y**2)
-         if(radius.eq.0)then
-            inclination=0.0
-         else
-            inclination=atan2(y,x)
-            if(inclination < 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)
-         endif
+         radius=abs( xy )
+         ! arbitrarily set angle to zero when radius is zero
+         inclination=merge(0.0,atan2(x=xy%re, y=xy%im),radius==0.0)
+         ! bring into range 0 <= inclination < 2*PI
+         if(inclination < 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)
       end subroutine cartesian_to_polar
       !
       end program demo_atan2

@@ -29,7 +29,6 @@ private
   public polyarea_shoelace  ! find area of a polygon using shoelace algorithm
   public polyarea_mid_point ! find area of a polygon
   public closest            ! find point in <X,Y> arrays closest to target point
-  public hypot              ! Euclidean distance
   ! FIT
   public julfit             ! linear least square fit
   public julfit1            ! linear least square fit(y=a*x+b)
@@ -4431,55 +4430,6 @@ end subroutine test_closest
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-!>
-!!##NAME
-!!    hypot(3f) - [M_math:geometry] Euclidean distance function
-!!##SYNOPSIS
-!!
-!!    pure function hypot(x,y) result(z)
-!!
-!!     real,intent(in):: x,y
-!!     real:: z
-!!##DESCRIPTION
-!!    hypot(x,y) is the Euclidean distance function. It is equal to
-!!    sqrt{X**2 + Y**2}, without undue underflow or overflow.
-!!
-!!    That is, solve for SQRT(x*x+y*y) carefully to avoid overflow
-!!    (will be an intrinsic in Fortran 2008).
-!!##OPTIONS
-!!    X   The type shall be REAL.
-!!    Y   The type and kind type parameter shall be the same as X.
-!!##RESULT
-!!    HYPOT  The return value has the same type and kind type parameter as X.
-!!##STANDARD
-!!        [[Fortran 2008]] and later
-!!##EXAMPLE
-!!
-!!   Sample program:
-!!
-!!    program demo_hypot
-!!    real(4) :: x = 1.e0_4, y = 0.5e0_4
-!!       x = hypot(x,y)
-!!    end program demo_hypot
-pure function hypot(x,y) result(z)
-real,intent(in):: x,y
-real  :: z
-real  :: a,b
-   a=ABS(x)
-   b=ABS(y)
-
-   if(a > b)then
-      z=a*sqrt(1.0+(b/a)**2)
-   elseif (b==0) then
-      z=0.0
-   else
-      z=b*sqrt(1.0+(a/b)**2)
-   endif
-
-end function hypot
 
 !>
 !!##NAME

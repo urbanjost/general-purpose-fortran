@@ -22,7 +22,7 @@
 !!    ! use /= like .neqv.; ie. logical/=logical
 !!
 !!    use M_overload, only : operator(//)
-!!    ! convert intrinsics to strings and contatenate
+!!    ! convert intrinsics to strings and concatenate
 !!
 !!  overloads on INTRINSICS to take strings, logicals, and metamorphic numeric intrinsic values
 !!
@@ -265,6 +265,12 @@ interface merge
 end interface
 
 public :: fmt
+
+! aliases
+interface bool
+   module procedure oz
+end interface
+public bool
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
@@ -280,7 +286,7 @@ public :: fmt
 !!
 !!    In order to be able to rename intrinsics they are all loaded in
 !!    the M_overload module.  That allows for them to be renamed via a
-!!    USE statment.
+!!    USE statement.
 !!
 !!##EXAMPLES
 !!
@@ -1413,7 +1419,6 @@ pure elemental integer function oz(expr)
 logical, intent(in) :: expr
    oz = merge(1, 0, expr) ! One and Zero
 end function oz
-
 !>
 !!##NAME
 !!    zo(3f) - [M_overload::LOGICAL] returns Zero if expression is TRUE, else returns One.

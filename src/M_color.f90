@@ -907,8 +907,8 @@ end subroutine rgbmono
 !!     subroutine rgbval(clr1,clr2,h)
 !!
 !!      integer, intent(in) :: h ! H is the hue value in degrees
-!!      real, intent(in) :: clr1 !
-!!      real, intent(in) :: clr2 !
+!!      real, intent(in)    :: clr1 !
+!!      real, intent(in)    :: clr2 !
 !!
 !!##DESCRIPTION
 !!    Function RGBVAL(3f) is an internal private function used by
@@ -923,9 +923,9 @@ real function rgbval(clr1,clr2,h)
 
 ! ident_8="@(#) M_color rgbval(3fp) ensure a value is in the appropriate range and quadrant"
 
-real    :: clr1,clr2
-real    :: h
-real    :: h2
+real :: clr1,clr2
+real :: h
+real :: h2
    h2=h
    do
       if(h2 > 360.0 ) then
@@ -1281,13 +1281,13 @@ subroutine closest_color_name(r,g,b,closestname)
 
 ! ident_13="@(#) M_color closest_color_name(3f) given RGB values try to find closest named color"
 
-real,intent(in)               :: r,g,b
+real,intent(in)              :: r,g,b
 character(len=*),intent(out) :: closestname
-real                          :: rn,gn,bn
-real                          :: distance, minimum_distance
-character(len=20)             :: echoname
-integer                       :: i
-character(len=20)             :: string
+real                         :: rn,gn,bn
+real                         :: distance, minimum_distance
+character(len=20)            :: echoname
+integer                      :: i
+character(len=20)            :: string
 !-----------------------------------------------------------------------------------------------------------------------------------
    minimum_distance=1000.0
    closestname='Unknown'
@@ -1315,9 +1315,9 @@ end subroutine closest_color_name
 !!
 !!    subroutine color_name2rgb(name,r,g,b,echoname)
 !!
-!!     character(len=20),intent(in)   :: name
-!!     real,intent(out)               :: r,g,b
-!!     character(len=20),intent(out)  :: echoname
+!!     character(len=20),intent(in)  :: name
+!!     real,intent(out)              :: r,g,b
+!!     character(len=20),intent(out) :: echoname
 !!
 !!##DESCRIPTION
 !!    COLOR_NAME2RGB(3f) returns the RGB values in the range 0 to 100
@@ -1374,10 +1374,10 @@ subroutine color_name2rgb(name,r,g,b,echoname)
 
 ! ident_14="@(#) M_color color_name2rgb(3f) given a color name return rgb color values in range 0 to 100"
 
-character(len=*),intent(in)            :: name
-real,intent(out)                       :: r,g,b
-character(len=*),intent(out),optional  :: echoname
-character(len=20)                      :: newname
+character(len=*),intent(in)           :: name
+real,intent(out)                      :: r,g,b
+character(len=*),intent(out),optional :: echoname
+character(len=20)                     :: newname
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! returns name in ECHONAME; which is usually not useful unless NAME represents an integer string.
 ! Note that an integer converted to a string can be used to go sequentially thru the names until NEWNAME="Unknown"
@@ -1959,9 +1959,9 @@ elemental pure function lower(str) result (string)
 
 ! ident_15="@(#) M_strings lower(3f) Changes a string to lowercase over specified range"
 
-character(*), intent(In)     :: str
-character(len(str))          :: string
-integer                      :: i
+character(*), intent(In) :: str
+character(len(str))      :: string
+integer                  :: i
    string = str
    do i = 1, len_trim(str) ! step thru each letter in the string
       select case (str(i:i))

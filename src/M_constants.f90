@@ -28,14 +28,27 @@ module M_constants
 !!       uc%sp%golden_ratio
 !!       uc%sp%euler
 !!
-!!    use M_constants,  only : f
+!!    use M_constants,  only : fmt
 !!       ! formats
+!!       fmt%all
+!!       fmt%commas
 !!
-!!       f%all
+!!   use M_constants,  only : lets
+!!       ! ASCII character set strings
+!!       lets%upper
+!!       lets%lower
+!!       lets%hexadecimal
+!!       lets%digits
+!!
+!!    use M_constants,  only : calen
+!!       ! English Civil Calendar names
+!!       calen%months
+!!       calen%mths
+!!       calen%weekdays
+!!       calen%wkds
 !!
 !!##DESCRIPTION
 !!  Useful universal constants, physical constants, formats, ...
-!!
 !!
 !!  UNIVERSAL CONSTANTS
 !!
@@ -56,7 +69,6 @@ module M_constants
 !!
 !!  PHYSICAL CONSTANTS
 !!
-!!
 !!      "deg_per_rad"
 !!      "rad_per_deg"
 !!      "c__m_per_sec"   Speed of light in a vacuum
@@ -72,22 +84,62 @@ module M_constants
 !!
 !!  Sample program:
 !!
-!!     program test_universal_constants
-!!     use M_constants, only : uc, f
-!!     ! give a local name to a constant
-!!     real,parameter :: e=uc%sp%e ! universal constant, single-precision, e
-!!     character(len=*),parameter :: all=f%all
+!!    program demo_M_constants
+!!    use, intrinsic :: iso_fortran_env, only : stdout=>OUTPUT_UNIT
+!!    use M_constants, only : uc, fmt, lets, calen
+!!    implicit none
+!!    ! give a local name to a constant:
+!!    ! universal constant, single-precision, e
+!!    real,parameter             :: e=uc%sp%e
+!!    character(len=*),parameter :: all=fmt%all
+!!    integer                    :: i
 !!
-!!     ! just use it
-!!     print f%all, 'gamma=',uc%qp%gamma    ! universal constant, quad-precision, gamma
-!!     print all, 'e=',e
+!!       ! or just use full name
+!!       ! universal constant, quad-precision, gamma
+!!       print fmt%all, 'gamma=',uc%qp%gamma
+!!       print all, 'e=',e
+!!       !
+!!       ! or rename it with ASSOCIATE
+!!       associate (gamma => uc%dp%gamma)
+!!          print all,'gamma=',gamma
+!!       end associate
+!!       !
+!!       ! string constants:
+!!       !
+!!       ! strings of letter sets
+!!       print all,'lets%upper=',lets%upper
+!!       print all,'lets%lower=',lets%lower
+!!       print all,'lets%hexadecimal=',lets%hexadecimal
+!!       print all,'lets%digits=',lets%digits
+!!       !
+!!       ! English civil calendar names
+!!       print fmt%commas,'calen%months=',new_line('a'),(calen%months(i:i+2) &
+!!              & ,new_line('a'),i=1,size(calen%months),3)
+!!       print fmt%commas,'calen%mths=',calen%mths
+!!       print fmt%commas,'calen%weekdays=',&
+!!               & (trim(calen%weekdays(i)),i=1,size(calen%weekdays))
+!!       print fmt%commas,'calen%wkds=',calen%wkds
 !!
-!!     ! or rename it with ASSOCIATE
-!!     associate (gamma => uc%dp%gamma)
-!!        print all,'gamma=',gamma
-!!     end associate
+!!    end program demo_M_constants
 !!
-!!     end program test_universal_constants
+!! Results:
+!!
+!!  > gamma= 0.577215664901532860606512090082402471
+!!  > e= 2.71828175
+!!  > gamma= 0.57721566490153287
+!!  > lets%upper= ABCDEFGHIJKLMNOPQRSTUVWXYZ
+!!  > lets%lower= abcdefghijklmnopqrstuvwxyz
+!!  > lets%hexadecimal= ABCDEFabcdef0123456789
+!!  > lets%digits= 0123456789
+!!  > calen%months=,
+!!  > ,January  ,February ,March    ,
+!!  > ,April    ,May      ,June     ,
+!!  > ,July     ,August   ,September,
+!!  > ,October  ,November ,December ,
+!!  >
+!!  > calen%mths=,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec
+!!  > calen%weekdays=,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday
+!!  > calen%wkds=,Mon,Tue,Wed,Thu,Fri,Sat,Sun
 use,intrinsic :: iso_fortran_env, only : real32, real64, real128
 use,intrinsic :: iso_fortran_env, only : int8,   int16,  int32,  int64
 use,intrinsic :: iso_fortran_env, only : r4 => real32, r8 => real64, r16 => real128
@@ -141,10 +193,35 @@ type(rall),parameter,public :: uc=rall( &
 &  r32(pi=real(pi,r4),gamma=real(gamma,r4),e=real(e,r4),golden_ratio=real(golden_ratio,r4),euler=real(euler,r4) )  &
 & )
 
-type fmt
+type formats
    character(len=128) :: all='(*(g0,1x))'
-end type fmt
+   character(len=128) :: commas='(*(g0:,","))'
+end type formats
+type(formats),public,parameter  :: fmt=formats( )
 
-type(fmt),public,parameter  :: f=fmt( )
+type glyphs
+! make some arrays of characters for later use
+   !character(len=1),parameter :: upper(*)=[(achar(i),i=65,90)]
+   !character(len=1),parameter :: lower(*)=[(achar(i),i=97,112)]
+   character(len=10) ::      digits='0123456789'
+   character(len=26) ::       lower='abcdefghijklmnopqrstuvwxyz'
+   character(len=26) ::       upper='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+   character(len=22) :: hexadecimal='ABCDEFabcdef0123456789'
+end type glyphs
+type(glyphs),public,parameter        :: lets=glyphs( )
+
+character(len=*),parameter           :: month_names(12)=[                         &
+   &'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', &
+   &'July     ', 'August   ', 'September', 'October  ', 'November ', 'December ']
+character(len=*),parameter           :: weekday_names(7)=[character(len=9) :: &
+   & 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ]
+character(len=3),parameter           :: weekday_names_abbr(7)=weekday_names(:)(1:3)
+type calendar
+   character(len=len(month_names))   :: months(size(month_names))=month_names
+   character(len=3)                  :: mths(size(month_names))=month_names(:)(1:3)
+   character(len=len(weekday_names)) :: weekdays(size(weekday_names))=weekday_names
+   character(len=3)                  :: wkds(size(weekday_names))=weekday_names(:)(1:3)
+end type calendar
+type(calendar),public,parameter      :: calen=calendar( )
 
 end module M_constants

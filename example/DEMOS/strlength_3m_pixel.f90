@@ -6,7 +6,7 @@
      real    :: baseline
      integer :: icolor=0
      real    :: texth=10.0
-        !! set up drawing surface
+        !-! set up drawing surface
         call prefsize(800, 400)
         call vinit()
         call viewport(0.0, 800.0, 400.0, 0.0)
@@ -46,7 +46,7 @@
      subroutine nextline(string)
      character(len=*) :: string
      real :: xx
-     !! reduce some duplicate code; very specific to this example
+     !-! reduce some duplicate code; very specific to this example
         call color(icolor)
         baseline=baseline-texth*1.5    ! move down before drawing line
         call makepoly()

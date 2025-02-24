@@ -3,7 +3,7 @@
 ! Fortran 2008 ISO C binding interfaces to libcurl.
 !
 ! Author:  Philipp Engel
-! Licence: ISC
+! License: ISC
 module M_curl
     use, intrinsic :: iso_c_binding, only: c_associated, c_char, c_f_pointer, c_funptr, &
                                            c_int, c_int64_t, c_loc, c_long, c_ptr, c_size_t

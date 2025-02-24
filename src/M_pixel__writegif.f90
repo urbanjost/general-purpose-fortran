@@ -205,7 +205,7 @@ subroutine InitTable()
   end do                          ! Initially no multi-pixel codes exist
   follow(0:maxbase) = nocode
   next(0:maxbase) = nocode
-  CC = maxbase+1                  ! `clear code-tabel', a control code
+  CC = maxbase+1                  ! `clear code-label', a control code
   EOI = maxbase+2                 ! `end of image', another control code
   ncod = CC + 2                   ! ncod = number of currently defined codes
   slen = blen + 1                 ! current number of bits to write one code

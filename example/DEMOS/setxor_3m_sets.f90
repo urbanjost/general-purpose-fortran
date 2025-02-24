@@ -1,8 +1,8 @@
      program demo_setxor
      use M_sets, only: setxor
      character(len=*),parameter :: g='(*(g0,1x))'
-     integer, allocatable      :: A(:)
-     integer, allocatable      :: B(:)
+     integer, allocatable       :: A(:)
+     integer, allocatable       :: B(:)
 
         write(*,g) 'SETXOR','Find values of A and B not in their intersection.'
         A = [5,1,3,3,3]

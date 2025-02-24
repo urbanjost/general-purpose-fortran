@@ -437,21 +437,21 @@ end subroutine graph_table
 !!    use m_graph, only : graph, graph_init
 !!    use M_draw
 !!    implicit none
-!!
 !!    integer,parameter            :: numlines=3
 !!    integer,parameter            :: numpts=25
 !!    integer,parameter            :: nf=255
 !!    real                         :: x(numpts),y(numpts,numlines)
-!!    character(len=80)            :: c(numlines+3)
-!!    integer                      :: nc(numlines+3)
+!!    real                         :: value
 !!    real                         :: f(nf)
+!!    character(len=80)            :: c(numlines+3)
 !!    character(len=20)            :: device
+!!    character(len=:),allocatable :: filename
+!!    integer                      :: nc(numlines+3)
 !!    integer                      :: ixsize
 !!    integer                      :: iysize
-!!    character(len=:),allocatable :: filename
 !!    integer                      :: w, ndl, ndp
-!!    integer                      :: i20, i70, i60, indx
-!!    real                         :: value
+!!    integer                      :: i
+!!    integer                      :: indx
 !!       device='x11'
 !!       ixsize=1200*.75*0.5
 !!       iysize=900*.75*0.5
@@ -469,18 +469,18 @@ end subroutine graph_table
 !!       call linewidth(w)
 !!
 !!    !     fill some arrays with data we can plot
-!!       DO i20=1,25
-!!          X(i20)=i20
-!!          Y(i20,1)=i20**2+5.0
-!!          Y(i20,2)=i20*20.0
-!!          Y(i20,3)=(-3.0)*(i20/4.0)**3
+!!       DO i=1,25
+!!          X(i)=i
+!!          Y(i,1)=i**2+5.0
+!!          Y(i,2)=i*20.0
+!!          Y(i,3)=(-3.0)*(i/4.0)**3
 !!       enddo
 !!
 !!       f=0.0 !     zero out option array
 !!    !     set up color and linetype in option array
-!!       do i70=55,nf,2
-!!          f(i70)=mod(i70,7)
-!!          f(i70-1)=mod(i70,7)
+!!       do i=55,nf,2
+!!          f(i)=mod(i,7)
+!!          f(i-1)=mod(i,7)
 !!       enddo
 !!       f(52)=1
 !!       f(53)=1
@@ -495,8 +495,8 @@ end subroutine graph_table
 !!       c(5)='LABEL 2'  !  c(n) : line N-3 legend (optionally used)
 !!       c(6)='LABEL 3'  !  c(n) : line N-3 legend (optionally used)
 !!       !nc       ! array of string lengths in c() dimensioned nc(3+numpts)
-!!       do i60=1,6
-!!          nc(i60)=len_trim(c(i60))
+!!       do i=1,6
+!!          nc(i)=len_trim(c(i))
 !!       enddo
 !!       !f(39)= 0.25
 !!       !f(40)= 0.25
@@ -1543,7 +1543,7 @@ SUBROUTINE plot_(XPLOT0,YPLOT0,ISELECT0)
 ! or should start where last clear left off for easier animation for display
 ! devices? CLEAR SHOULD BE SEPARATE FROM EJECT? EJECT RESETS, CLEAR JUST CLEARS?
 ! *************************************************************************
-      use M_draw
+use M_draw
 integer            :: i110
 integer            :: i130
 integer            :: i30

@@ -12,7 +12,7 @@ program nc_events                                ! @(#) event driven loop that I
 
    stdscr=initscr()                                    ! initialize ncurses(3c)
    ierr=cbreak()                                       ! pass all keypresses to ncurses(3c); even ctrl-C, ctrl-S, ctrl-Q.
-   ierr=noecho()                                       ! nothing echos to screen unless it is explicity put there with a call
+   ierr=noecho()                                       ! nothing echos to screen unless it is explicitly put there with a call
    ierr=curs_set(0)                                    ! Invisible cursor
    ierr=halfdelay(1)                                   ! Don't wait for more than 1/10 seconds for a keypress
    ierr=keypad(stdscr, TRUE)                           ! Enable keypad mode

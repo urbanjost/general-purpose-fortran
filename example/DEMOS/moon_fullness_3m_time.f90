@@ -3,7 +3,7 @@
       use M_time, only : phase_of_moon
       use M_time, only : moon_fullness
       implicit none
-      integer             :: dat(8)
+      integer :: dat(8)
          ! generate DAT array
          call date_and_time(values=dat)
          ! show DAT array

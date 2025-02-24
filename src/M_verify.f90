@@ -890,7 +890,7 @@ integer                              :: clicks_now
        & "check_stop:  TALLY                ",a,&
        & " GOOD:",i9,                           &
        & " BAD:",i9,                            &
-       & " DURATION:",i20.20                    &
+       & " DURATION:",i14.14                    &
        & )')                                    &
        & trim(unit_check_prefix),               &
        & PF,                                    &
@@ -1010,7 +1010,7 @@ integer                              :: clicks_now
        & 1x,a,                            &
        & " GOOD:",i9,                     &
        & " BAD:",i9,                      &
-       & " DURATION:",i20.20              &
+       & " DURATION:",i14.14              &
        & )')                              &
        & trim(unit_check_prefix),         &
        & atleast(name,20),                &

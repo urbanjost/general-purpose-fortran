@@ -5,7 +5,7 @@
      implicit none
      real    :: x1, y1, xx, yy, ang, r
      integer :: i, j
-     !! set up drawing environment
+     !-! set up drawing environment
      call prefsize(600,600)
      call vinit()
      call ortho2(-300.0,300.0,-300.0,300.0)
@@ -20,14 +20,14 @@
         case(3);  call  centertext(.true.);   x1=-150;  y1=+150;  r=100
         case(4);  call  centertext(.false.);  x1=+150;  y1=+150;  r= 30
         end select
-        !! draw radial lines
+        !-! draw radial lines
         call color(1)
         do i=1,80
            call move2(x1,y1)
            call draw2(x1+150.0*cosd(i*12), y1+150.0*sind(i*12))
         enddo
 
-        !! draw rotated text
+        !-! draw rotated text
         call color(2)
         do i=1,30
            ang=i*12.0

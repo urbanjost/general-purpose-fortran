@@ -1149,7 +1149,7 @@ DOUBLE PRECISION :: dppar
 !     AND UPPER BOUND ARE EXACTLY 1 UNIT APART.
 !     CHECK TO SEE IF IX1 = IX0 + 1;
 !     IF SO, THE ITERATIONS ARE COMPLETE;
-!     IF NOT, THEN BISECT, COMPUTE PROBABILIIES,
+!     IF NOT, THEN BISECT, COMPUTE PROBABILITIES,
 !     CHECK PROBABILITIES, AND CONTINUE ITERATING
 !     UNTIL IX1 = IX0 + 1.
 !
@@ -1367,7 +1367,7 @@ INTEGER       :: i , ig , isum , j
 !
 !   NOTE THAT EVEN THOUGH THE OUTPUT FROM THIS DISCRETE RANDOM NUMBER
 !   GENERATOR MUST NECESSARILY BE A SEQUENCE OF ***INTEGER*** VALUES,
-!   THE OUTPUT VECTOR X IS SINGLE PRECISION IN MODE.  X HAS BEEN SPECIFIED
+!   THE OUTPUT VECTOR X IS SINGLE PRECISION IN MODE. X HAS BEEN SPECIFIED
 !   AS SINGLE PRECISION SO AS TO CONFORM WITH THE DATAPAC CONVENTION THAT
 !   ALL OUTPUT VECTORS FROM ALL THIS CONVENTION IS BASED ON THE BELIEF THAT
 !
@@ -1548,7 +1548,7 @@ subroutine caucdf(X,Cdf)
 real(kind=wp),intent(in)  :: X
 real(kind=wp),intent(out) :: Cdf
 
-   ! CHECK THE INPUT ARGUMENTS FOR ERRORS ...  NO INPUT ARGUMENT ERRORS POSSIBLE FOR THIS DISTRIBUTION.
+   ! CHECK THE INPUT ARGUMENTS FOR ERRORS ... NO INPUT ARGUMENT ERRORS POSSIBLE FOR THIS DISTRIBUTION.
 
    Cdf = 0.5_wp + ((1.0_wp/G_pi)*atan(X))
 
@@ -2477,7 +2477,7 @@ DATA b43/17.0D0/
 !!    Chsplt(3f) generates a Chi-squared probability plot (with integer
 !!    degrees of freedom parameter value = NU).
 !!
-!!    The prototype Chi-squared distribution used herein is defIned for all
+!!    The prototype Chi-squared distribution used herein is defined for all
 !!    non-negative X, and its probability density function is given in the
 !!    references below.
 !!
@@ -2706,7 +2706,7 @@ END SUBROUTINE CHSPLT
 !!##ACCURACY
 !!    (On the UNIVAC 1108, EXEC 8 System at NBS) Compared to the known NU
 !!    = 2 (exponential) results, agreement was had out to 6 significant
-!!    digits for all tested P in the range P = .001 to P = .999.  for P =
+!!    digits for all tested P in the range P = .001 to P = .999. For P =
 !!    .95 And smaller, The agreement was even better--7 significant digits.
 !!    (Note that the tabulated values given in the Wilk, Gnanadesikan,
 !!    and Huyett reference below, page 20, are in error for at least the
@@ -3147,9 +3147,9 @@ END SUBROUTINE CHSRAN
 !!        to the observations in the vector X. It must be at least as large
 !!        as X.
 !!
-!!          o All occurrances of the minimum are coded as 1.0;
-!!          o All occurances of the next larger value are coded as 2.0;
-!!          o All occurances of the next larger value are coded as 3.0, etc.
+!!          o All occurrences of the minimum are coded as 1.0;
+!!          o All occurrences of the next larger value are coded as 2.0;
+!!          o All occurrences of the next larger value are coded as 3.0, etc.
 !!
 !!##EXAMPLES
 !!
@@ -3954,7 +3954,7 @@ EQUIVALENCE (IPIvot(1),WS(12551)) !     IPIVOT--PERMANENTLY DEFINED
          ENDIF
       ENDDO
 !
-!     END STEP NUMBER     IS     INTHE DECOMPOSITION
+!     END STEP NUMBER     IS     IN THE DECOMPOSITION
 !
       Insing = 1
 END SUBROUTINE DECOMP
@@ -4169,7 +4169,7 @@ INTEGER :: i , k , N , ndel , Newn , newnp1 , nold
 !              LOCATIONS IN X, WHILE THE REMAINDER
 !              OF THE N LOCATIONS IN X WILL BE ZERO-FILLED.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSABLE (IF THE ANALYST SO DESIRES)
+!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE FIFTH ARGUMENT AS USED IN THE SECOND
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -5241,7 +5241,7 @@ end subroutine dexran
 !!   * Filliben, Simple and Robust Linear Estimation of the Location
 !!     Parameter of a Symmetric Distribution (Unpublished PH.D. Dissertation,
 !!     Princeton University), 1969, pages 21-44, 229-231.
-!!   * Filliben, 'The Percent Point Function', (UNpublished Manuscript),
+!!   * Filliben, 'The Percent Point Function', (Unpublished Manuscript),
 !!     1970, pages 28-31.
 !!   * Johnson and Kotz, Continuous Univariate Distributions--2, 1970,
 !!     pages 22-36.
@@ -5366,13 +5366,13 @@ INTEGER i , icount , ip , iupncl , N , Numcla
 !     MODE OF INTERNAL OPERATIONS--.
 !     COMMENT--THIS SUBROUTINE DIFFERS FROM THE DISCR3
 !              SUBROUTINE INASMUCH AS THIS SUBROUTINE
-!              PERFORMS ITS DISCRETIZATION BY OUTPUTING
+!              PERFORMS ITS DISCRETIZATION BY OUTPUTTING
 !              CLASS MIDPOINTS, WHEREAS THE DISCR3
 !              SUBROUTINE OUTPUTS CLASS NUMBERS
 !              (1, 2, ... , NUMCLA).
 !     COMMENT--THE INPUT VECTOR X REMAINS UNALTERED.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSABLE (IF THE ANALYST SO DESIRES)
+!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE FOURTH ARGUMENT AS USED IN THE FIRST
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -5619,13 +5619,13 @@ INTEGER i , icount , ip , iupncl , N , Numcla
 !     MODE OF INTERNAL OPERATIONS--.
 !     COMMENT--THIS SUBROUTINE DIFFERS FROM THE DISCR2
 !              SUBROUTINE INASMUCH AS THIS SUBROUTINE
-!              PERFORMS ITS DISCRETIZATION BY OUTPUTING
+!              PERFORMS ITS DISCRETIZATION BY OUTPUTTING
 !              CLASS NUMBERS (1, 2,, ..., NUMCLA);
 !              WHEREAS THE DISCR2 SUBROUTINE
 !              OUTPUTS CLASS MIDPOINTS.
 !     COMMENT--THE INPUT VECTOR X REMAINS UNALTERED.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSABLE (IF THE ANALYST SO DESIRES)
+!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE FOURTH ARGUMENT AS USED IN THE FIRST
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -5875,7 +5875,7 @@ INTEGER :: i , icounl , icount , icounu , ip , N , numcla
 !              EXACTLY ON THE BOUNDARY POINT
 !              BETWEEN 2 ADJACENT CLASSES.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSABLE (IF THE ANALYST SO DESIRES)
+!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE SIXTH ARGUMENT AS USED IN THE FIRST
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -6897,7 +6897,7 @@ INTEGER i , iupper , N
 !
          CALL UNIMED(N,W)
 !
-!     COMPUTE EXREME VALUE TYPE 2 DISTRIBUTION ORDER STATISTIC MEDIANS
+!     COMPUTE EXTREME VALUE TYPE 2 DISTRIBUTION ORDER STATISTIC MEDIANS
 !
          DO i = 1 , N
             W(i) = (-LOG(W(i)))**(-1.0_wp/Gamma)
@@ -9291,7 +9291,7 @@ END SUBROUTINE FRAN
 !!    Several (for large data sets) pages of automatic plots (with
 !!    approximately 55 values per page) consisting of an ordered listing
 !!    of each distinct value in the data set along with the frequency of
-!!    occurance of that value and the cumulative frequency.
+!!    occurrence of that value and the cumulative frequency.
 !!
 !!##EXAMPLES
 !!
@@ -9466,7 +9466,7 @@ END SUBROUTINE FREQ
 !!   (On the UNIVAC 1108, EXEC 8 system at NBS)
 !!
 !!    Compared to the known GAMMA = 1 (exponential) results, agreement
-!!    was had out to 7 significant digits for all tested X.  The tested X
+!!    was had out to 7 significant digits for all tested X. The tested X
 !!    values covered the entire range of the distribution--from the 0.00001
 !!    percent point up to the 99.99999 percent point of the distribution.
 !!
@@ -9805,11 +9805,11 @@ DATA d(6), d(7), d(8), d(9), d(10)/ - .191752691752691753D-2,&
 !     ORDER STATISTIC MEDIAN.
 !     FOR EACH I, A LOWER BOUND IS GIVEN BY
 !     (Y(I)*GAMMA*THE GAMMA FUNCTION OF GAMMA)**(1.0/GAMMA)
-!     WHERE Y(I) IS THE CORRESPONDING UNIFORM (0,1) ORDER STATISIC
+!     WHERE Y(I) IS THE CORRESPONDING UNIFORM (0,1) ORDER STATISTIC
 !     MEDIAN.
 !     FOR EACH I EXCEPT I = N, AN UPPER BOUND IS GIVEN BY THE
 !     (I+1)-ST GAMMA ORDER STATISTIC MEDIAN (ASSUMEDLY ALREADY
-!     CALCULTATED).
+!     CALCULATED).
 !     FOR I = N, AN UPPER BOUND IS DETERMINED BY COMPUTING
 !     MULTIPLES OF THE LOWER BOUND FOR I = N UNTIL A LARGER
 !     VALUE IS OBTAINED.
@@ -9819,7 +9819,7 @@ DATA d(6), d(7), d(8), d(9), d(10)/ - .191752691752691753D-2,&
 !     NOTE ALSO THAT 1) THE CODE IS COMPLICATED SLIGHTLY BY THE
 !     FACT THAT PERCENT POINT VALUES INVOLVED IN THE CALCULATION OF
 !     THE TAIL LENGTH MEASURE TAU (SEE LABEL 605) ARE GOING ON
-!     'SIMULATNEOUSLY'. AND 2) THE VECTOR W WILL AT VARIOUS TIMES
+!     'SIMULTANEOUSLY'. AND 2) THE VECTOR W WILL AT VARIOUS TIMES
 !     IN THE PROGRAM HAVE UNIFORM ORDER STATISTIC MEDIANS AND
 !     THEN LATER GRADUALLY FILL UP WITH GAMMA ORDER STATISTIC
 !     MEDIANS.
@@ -9846,9 +9846,9 @@ DATA d(6), d(7), d(8), d(9), d(10)/ - .191752691752691753D-2,&
  300  xmid = (xmin+xmax)/2.0_wp
 !
 !     AT THIS STAGE WE NOW HAVE LOWER AND UPPER LIMITS ON
-!     THE DESIRED I-TH GAMMA ORDER STATISITC MEDIAN W(I).
+!     THE DESIRED I-TH GAMMA ORDER STATISTIC MEDIAN W(I).
 !     NOW ITERATE BY BISECTION UNTIL THE DESIRED ACCURACY IS ACHIEVED
-!     FOR THE I-TH GAMMA ORDER STATISITIC MEDIAN.
+!     FOR THE I-TH GAMMA ORDER STATISTIC MEDIAN.
 !
       iloop = 2
       xlower = xmin
@@ -10066,7 +10066,7 @@ INTEGER :: icount , iloop , j , maxit
 !               COMPARED TO THE KNOWN GAMMA = 1 (EXPONENTIAL)
 !               RESULTS, AGREEMENT WAS HAD OUT TO 6 SIGNIFICANT
 !               DIGITS FOR ALL TESTED P IN THE RANGE P = .001 TO
-!               P = .999.  FOR P = .95 AND SMALLER, THE AGREEMENT
+!               P = .999. FOR P = .95 AND SMALLER, THE AGREEMENT
 !               WAS EVEN BETTER--7 SIGNIFICANT DIGITS.
 !               (NOTE THAT THE TABULATED VALUES GIVEN IN THE WILK,
 !               GNANADESIKAN, AND HUYETT REFERENCE BELOW, page 20,
@@ -10514,7 +10514,7 @@ END SUBROUTINE GAMRAN
 !!    X      The value at which the cumulative distribution function is
 !!           to be evaluated. X should be non-negative and integral-valued.
 !!    P      The value of the 'Bernoulli probability' parameter for the
-!!           geometric distribution.  P should be between 0.0 (exclusively)
+!!           geometric distribution. P should be between 0.0 (exclusively)
 !!           and 1.0 (exclusively).
 !!
 !!##OUTPUT ARGUMENTS
@@ -11215,7 +11215,7 @@ END SUBROUTINE GEORAN
 !!##INPUT ARGUMENTS
 !!
 !!    X     The value at which the cumulative distribution function is
-!!          to be evaluated.  X should be non-negative.
+!!          to be evaluated. X should be non-negative.
 !!
 !!##OUTPUT ARGUMENTS
 !!
@@ -11393,7 +11393,7 @@ end subroutine hfncdf
 !!     Eighteenth Conference on the Design of Experiments in Army Research
 !!     Development and Testing (Aberdeen, Maryland, October, 1972), pages
 !!     425-450.
-!!   * Hahn anD Shapiro, Statistical Methods in Engineering, 1967, pages
+!!   * Hahn and Shapiro, Statistical Methods in Engineering, 1967, pages
 !!     260-308.
 !!   * Johnson and Kotz, Continuous Univariate Distributions--1, 1970,
 !!     pages 53, 59, 81, 83.
@@ -11745,7 +11745,7 @@ end subroutine hfnran
 !!
 !!##OUTPUT
 !!    One page of automatic printout consisting of 2 half-page histograms (with
-!!    class widths = 0.1 and 0.2 sAmple standard deviations, respectively)
+!!    class widths = 0.1 and 0.2 sample standard deviations, respectively)
 !!    of the data in the input vector X.
 !!
 !!
@@ -12255,7 +12255,7 @@ END SUBROUTINE INVXWX
 !!    CC0-1.0
 !!
 !!##REFERENCES
-!!   * Hastings, Mosteller, Tukey, and windsor, 'Low MOments for Small
+!!   * Hastings, Mosteller, Tukey, and Windsor, 'Low Moments for Small
 !!     Samples:  A Comparative Study of Order Statistics', Annals of
 !!     Mathematical Statistics, 18, 1947, pages 413-426.
 !!   * Filliben, Simple and Robust Linear Estimation of the Location
@@ -12453,7 +12453,7 @@ INTEGER       :: icount
 !!
 !!##REFERENCES
 !!  * Hastings, Mosteller, Tukey, and Windsor, 'Low Moments for Small
-!!    Samples:  A Comparative Study of Order Statistics', Annals of MAthematical
+!!    Samples:  A Comparative Study of Order Statistics', Annals of Mathematical
 !!    Statistics, 18, 1947, pages 413-426.
 !!  * Filliben, Simple and Robust Linear Estimation of the Location Parameter
 !!    of a Symmetric Distribution (Unpublished PH.D. Dissertation, Princeton
@@ -13807,7 +13807,7 @@ INTEGER i, ip1
          !     GENERATE N LOGNORMAL RANDOM NUMBERS
          !     USING THE DEFINITION THAT
          !     A LOGNORMAL VARIATE
-         !     EQUALS AN EXPONETIATED NORMAL VARIATE.
+         !     EQUALS AN EXPONENTIATED NORMAL VARIATE.
          !
          DO i = 1 , N
             X(i) = EXP(X(i))
@@ -15797,7 +15797,7 @@ END SUBROUTINE MOVE
 !!          P should be between 0.0 (exclusively) and 1.0 (exclusively).
 !!
 !!    N     The integer value of the 'number of successes in Bernoulli
-!!          trials' parameter.  N should be a positive integer.
+!!          trials' parameter. N should be a positive integer.
 !!
 !!##OUTPUT ARGUMENTS
 !!
@@ -16387,7 +16387,7 @@ INTEGER :: i , isd , ix0 , ix0p1 , ix1 , ix2 , N
 !     AND UPPER BOUND ARE EXACTLY 1 UNIT APART.
 !     CHECK TO SEE IF IX1 = IX0 + 1;
 !     IF SO, THE ITERATIONS ARE COMPLETE;
-!     IF NOT, THEN BISECT, COMPUTE PROBABILIIES,
+!     IF NOT, THEN BISECT, COMPUTE PROBABILITIES,
 !     CHECK PROBABILITIES, AND CONTINUE ITERATING
 !     UNTIL IX1 = IX0 + 1.
 !
@@ -17667,7 +17667,7 @@ REAL(kind=wp) :: aden , anum , P , p0 , p1 , p2 , p3 , p4 , Ppf , q0 , q1 , q2 ,
 !               MINOR STYLISTIC CHANGES.
 !             --AS POINTED OUT BY ODEH AND EVANS
 !               IN APPLIED STATISTICS,
-!               THEIR ALGORITHM REPRESENTES A
+!               THEIR ALGORITHM REPRESENTS A
 !               SUBSTANTIAL IMPROVEMENT OVER THE
 !               PREVIOUSLY EMPLOYED
 !               HASTINGS APPROXIMATION FOR THE
@@ -21502,7 +21502,7 @@ INTEGER :: i , ia , icol , icolmx , irow , ixdel , N , n2 ,    &
 !              THEY WILL SUBSEQUENTLY BE IGNORED IN THE PLOTC
 !              SUBROUTINE.
 !            --NOTE THAT THE STORAGE REQUIREMENTS FOR THIS
-!              (AND THE OTHER) TERMINAL PLOT SUBROUTINESS ARE .
+!              (AND THE OTHER) TERMINAL PLOT SUBROUTINES ARE .
 !              VERY SMALL.
 !              THIS IS DUE TO THE 'ONE LINE AT A TIME' ALGORITHM
 !              EMPLOYED FOR THE PLOT.
@@ -23325,7 +23325,7 @@ INTEGER :: i , icol , icolmx , irow , ixdel , N , n2 , numcol ,&
 !              THEY WILL SUBSEQUENTLY BE IGNORED IN THE PLOT
 !              SUBROUTINE.
 !            --NOTE THAT THE STORAGE REQUIREMENTS FOR THIS
-!              (AND THE OTHER) TERMINAL PLOT SUBROUTINESS ARE .
+!              (AND THE OTHER) TERMINAL PLOT SUBROUTINES ARE .
 !              VERY SMALL.
 !              THIS IS DUE TO THE 'ONE LINE AT A TIME' ALGORITHM
 !              EMPLOYED FOR THE PLOT.
@@ -24133,7 +24133,7 @@ CHARACTER(len=4) :: alpham , alphaa , alphad , alphan , equal
 !
 !     DETERMINE THE VERTICAL AXIS VECTOR Y2, THE HORIZONTAL
 !     AXIS VECTOR X2, AND THE PLOT SAMPLE SIZE N2 FOR THIS
-!     PARTICUAR PLOT.
+!     PARTICULAR PLOT.
 !
  100  n2 = N
       DO i = 1 , n2
@@ -24350,7 +24350,7 @@ CHARACTER(len=4) :: alpham , alphaa , alphad , alphan , equal
 !
 !     DETERMINE THE VERTICAL AXIS VECTOR Y2, THE HORIZONTAL
 !     AXIS VECTOR X2, AND THE PLOT SAMPLE SIZE N2 FOR THIS
-!     PARTICUAR PLOT.
+!     PARTICULAR PLOT.
 !
          n2 = N
          CALL SORT(X,N,Y2)
@@ -24832,7 +24832,7 @@ END SUBROUTINE PLOTX
 !!    ignored in the PLOTXT(3f) subroutine.
 !!
 !!    Note that the storage requirements for this (and the other) terminal
-!!    plot subroutiness are very small. This is due to the 'one line at a
+!!    plot subroutines are very small. This is due to the 'one line at a
 !!    time' algorithm employed for the plot.
 !!
 !!##INPUT ARGUMENTS
@@ -25919,7 +25919,7 @@ INTEGER :: i , icol , icolmx , im1 , irow , ixdel , N ,        &
 !              THEY WILL SUBSEQUENTLY BE IGNORED IN THE PLTXXT
 !              SUBROUTINE.
 !            --NOTE THAT THE STORAGE REQUIREMENTS FOR THIS
-!              (AND THE OTHER) TERMINAL PLOT SUBROUTINESS ARE .
+!              (AND THE OTHER) TERMINAL PLOT SUBROUTINES ARE .
 !              VERY SMALL.
 !              THIS IS DUE TO THE 'ONE LINE AT A TIME' ALGORITHM
 !              EMPLOYED FOR THE PLOT.
@@ -26895,7 +26895,7 @@ INTEGER :: i, isd, ix0, ix0p1, ix1, ix2
 !     AND UPPER BOUND ARE EXACTLY 1 UNIT APART.
 !     CHECK TO SEE IF IX1 = IX0 + 1;
 !     IF SO, THE ITERATIONS ARE COMPLETE;
-!     IF NOT, THEN BISECT, COMPUTE PROBABILIIES,
+!     IF NOT, THEN BISECT, COMPUTE PROBABILITIES,
 !     CHECK PROBABILITIES, AND CONTINUE ITERATING
 !     UNTIL IX1 = IX0 + 1.
 !
@@ -27019,7 +27019,7 @@ END SUBROUTINE POIPPF
 !!
 !!    X has been specified as REAL so as to conform with the DATAPAC
 !!    convention that all output vectors from all DATAPAC subroutines
-!!    are REAL.  this convention is based on the belief that
+!!    are REAL. This convention is based on the belief that
 !!
 !!    1. A mixture of modes (floating point versus integer) is inconsistent
 !!       and an unnecessary complication in a data analysis; and
@@ -27517,12 +27517,12 @@ END SUBROUTINE RANGE
 !!   vector X will be placed in the second position of the vector XR, etc.
 !!
 !!   The smallest element in the vector X will have a rank of 1 (unless
-!!   ties exist).  the largest element in the vector X will have a rank of N
+!!   ties exist). The largest element in the vector X will have a rank of N
 !!   (unless ties exist).
 !!
 !!   Although ranks are usually (unless ties exist) integral values from
 !!   1 to N, it is to be noted that they are outputted as REAL values in
-!!   the vector XR.  XR is so as to be consistent with the fact that all
+!!   the vector XR. XR is so as to be consistent with the fact that all
 !!   vector arguments in all other datapac subroutines are REAL; but more
 !!   importantly, because ties frequently do exist in data sets and so some
 !!   of the resulting ranks will be non-integral and so the output vector
@@ -27539,10 +27539,10 @@ END SUBROUTINE RANGE
 !!   that is, an 'in place' ranking is permitted. The calling sequence
 !!   call RANK(X,N,X) is valid, if desired.
 !!
-!!   The sorting algorthm used herein is the binary sort. This algorthim
-!!   is extremely fast as the following time trials indicate.  These time
+!!   The sorting algorithm used herein is the binary sort. This algorithm
+!!   is extremely fast as the following time trials indicate. These time
 !!   trials were carried out on the UNIVAC 1108 EXEC 8 system at NBS in
-!!   August of 1974.  by way of comparison, the time trial values for the
+!!   August of 1974. By way of comparison, the time trial values for the
 !!   easy-to-program but extremely inefficient bubble sort algorithm have
 !!   also been included--
 !!
@@ -28090,7 +28090,7 @@ INTEGER :: i , k , N , ndel
 !              BY SOME LARGE VALUE (LIKE, SAY, 10.0**10) AND
 !              THEY WILL SUBSEQUENTLY BE IGNORED IN THE PLOTTING
 !              SUBROUTINES.
-!     COMMENT--THIS IS ONE OF THE FEW SUBRUTINES IN DATAPAC
+!     COMMENT--THIS IS ONE OF THE FEW SUBROUTINES IN DATAPAC
 !              IN WHICH THE INPUT VECTOR X IS ALTERED.
 !     ORIGINAL VERSION--NOVEMBER  1972.
 !     UPDATED         --NOVEMBER  1975.
@@ -28259,7 +28259,7 @@ INTEGER :: i , k , N , ndel , Newn , newnp1 , nold
 !              LOCATIONS IN X, WHILE THE REMAINDER
 !              OF THE N LOCATIONS IN X WILL BE ZERO-FILLED.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSABLE (IF THE ANALYST SO DESIRES)
+!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE FIFTH ARGUMENT AS USED IN THE SECOND
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -28562,7 +28562,7 @@ EQUIVALENCE (Y(1),WS(1))
          ENDDO
 !
 !     DETERMINE THE NUMBER OF POSITIVE, ZERO, AND NEGATIVE ENTRIES
-!     IN THE DIFFERENCE TABLE.  IF RANDOM, THE NUMBER OF POSITIVE SHOULD BE
+!     IN THE DIFFERENCE TABLE. IF RANDOM, THE NUMBER OF POSITIVE SHOULD BE
 !     APPROXIMATELY EQUAL TO THE NUMBER OF NEGATIVE
 !
          nneg = 0
@@ -29079,7 +29079,7 @@ INTEGER i , N
             xrange = xmax - xmin
 !
 !     COMPUTE THE SAMPLE VARIANCE,
-!     AND THEN THE SAMPLE STANDARDD DEVIATION.
+!     AND THEN THE SAMPLE STANDARD DEVIATION.
 !
             sum = 0.0_wp
             DO i = 1 , N
@@ -29689,9 +29689,9 @@ DIMENSION iu(36), il(36)
 !              CALL SORT(X,N,X)
 !              IS ALLOWABLE AND WILL RESULT IN
 !              THE DESIRED 'IN-PLACE' SORT.
-!     COMMENT--THE SORTING ALGORTHM USED HEREIN
+!     COMMENT--THE SORTING ALGORITHM USED HEREIN
 !              IS THE BINARY SORT.
-!              THIS ALGORTHIM IS EXTREMELY FAST AS THE
+!              THIS ALGORITHM IS EXTREMELY FAST AS THE
 !              FOLLOWING TIME TRIALS INDICATE.
 !              THESE TIME TRIALS WERE CARRIED OUT ON THE
 !              UNIVAC 1108 EXEC 8 SYSTEM AT NBS
@@ -29958,7 +29958,7 @@ INTEGER :: i , il , ip1 , itt , iu , j , jmi , jmk , k , l ,lmi , m , mid , N , 
 !              ETC.
 !              ALTHOUGH THESE POSITIONS ARE NECESSARILY
 !              INTEGRAL VALUES FROM 1 TO N, IT IS TO BE
-!              NOTED THAT THEY ARE OUTPUTED AS SINGLE
+!              NOTED THAT THEY ARE OUTPUTTED AS SINGLE
 !              PRECISION INTEGERS IN THE
 !              VECTOR XPOS.
 !              XPOS IS  SO AS TO BE
@@ -29973,9 +29973,9 @@ INTEGER :: i , il , ip1 , itt , iu , j , jmi , jmk , k , l ,lmi , m , mid , N , 
 !              CALL SORTP(X,N,X,XPOS)
 !              IS ALLOWABLE AND WILL RESULT IN
 !              THE DESIRED 'IN-PLACE' SORT.
-!     COMMENT--THE SORTING ALGORTHM USED HEREIN
+!     COMMENT--THE SORTING ALGORITHM USED HEREIN
 !              IS THE BINARY SORT.
-!              THIS ALGORTHIM IS EXTREMELY FAST AS THE
+!              THIS ALGORITHM IS EXTREMELY FAST AS THE
 !              FOLLOWING TIME TRIALS INDICATE.
 !              THESE TIME TRIALS WERE CARRIED OUT ON THE
 !              UNIVAC 1108 EXEC 8 SYSTEM AT NBS
@@ -30723,11 +30723,11 @@ INTEGER i , k , N , ndel , Ny
 !              LOCATIONS IN Y, WHILE THE REMAINDER
 !              OF THE N LOCATIONS IN Y WILL BE ZERO-FILLED.
 !     COMMENT--ALTHOUGH THERE
-!              MAY BE A CORRESPONDANCE BETWEEN THE
+!              MAY BE A CORRESPONDENCE BETWEEN THE
 !              ELEMENTS OF THE X AND D VECTORS
 !              BEFORE APPLICATION OF
 !              THIS SUBROUTINE, THERE WILL
-!              BE NO CORRESPONDANCE BETWEEN
+!              BE NO CORRESPONDENCE BETWEEN
 !              Y AND D (DUE TO THE PACKING OF
 !              THE RETAINED ELEMENTS IN Y)
 !              AFTER APPLICATION OF THIS SUBROUTINE.
@@ -30946,12 +30946,12 @@ INTEGER       :: i, k, N, ndel, Ny
 !              LOCATIONS IN Y, WHILE THE REMAINDER
 !              OF THE N LOCATIONS IN Y WILL BE ZERO-FILLED.
 !     COMMENT--ALTHOUGH THERE
-!              MAY BE A CORRESPONDANCE BETWEEN
+!              MAY BE A CORRESPONDENCE BETWEEN
 !              THE ELEMENTS OF THE X AND D1 VECTORS
 !              AND ELEMENTS OF THE X AND D2 VECTORS
 !              BEFORE APPLICATION OF
 !              THIS SUBROUTINE, THERE WILL
-!              BE NO CORRESPONDANCE BETWEEN
+!              BE NO CORRESPONDENCE BETWEEN
 !              Y AND D1, AND Y AND D2
 !              (DUE TO THE PACKING OF
 !              THE RETAINED ELEMENTS IN Y)
@@ -31154,11 +31154,11 @@ INTEGER :: i , k , N , ndel , Newn , newnp1 , nold
 !              FOLLOWING REASON--THE INPUT VECTOR X
 !              IS IRREVOCABLY ALTERED BY APPLICATION
 !              OF THIS SUBROUTINE.  ALTHOUGH THERE
-!              MAY BE A CORRESPONDANCE BETWEEN THE
+!              MAY BE A CORRESPONDENCE BETWEEN THE
 !              ELEMENTS OF THE X AND D VECTORS
 !              BEFORE APPLICATION OF
 !              THIS SUBROUTINE, THERE WILL
-!              BE NO CORRESPONDANCE BETWEEN
+!              BE NO CORRESPONDENCE BETWEEN
 !              X AND D (DUE TO THE PACKING OF
 !              THE RETAINED ELEMENTS OF X)
 !              AFTER APPLICATION OF THIS SUBROUTINE.
@@ -31172,7 +31172,7 @@ INTEGER :: i , k , N , ndel , Newn , newnp1 , nold
 !              RETAINED ELEMENTS IN A
 !              SEPARATE SECOND VECTOR Y.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSABLE (IF THE ANALYST SO DESIRES)
+!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE SIXTH ARGUMENT AS USED IN THE SECOND
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -31604,7 +31604,7 @@ DATA constn/.3989422804_wp/
          zwilks = (wilksh-ewilks)/sdwilk
 !
 !     COMPUTE THE CORRELATION COEFFICIENT BETWEEN THE ORDERED OBSERVATIONS
-!     AND THE ORDER STATISIC MEDIANS FROM 44 DIFFERENT SYMMETRIC DISTRIBUTIONS
+!     AND THE ORDER STATISTIC MEDIANS FROM 44 DIFFERENT SYMMETRIC DISTRIBUTIONS
 !
          numdis = 44
          nhalf = N/2
@@ -31922,11 +31922,11 @@ DATA constn/.3989422804_wp/
             ELSEIF ( idis==22 ) THEN
                WRITE (G_IO,99038) N , corr(idis) , iflag1(idis) , iflag2(idis) , iflag3(idis)
                99038 FORMAT (' ','THE CORRELATION BETWEEN THE ',I0, &
-               &' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE LOGISTIC DIST.      IS ',F8.5,1X,3A1)
+               &' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE LOGISTIC DIST. IS ',F8.5,1X,3A1)
             ELSEIF ( idis==23 ) THEN
                WRITE (G_IO,99039) N , corr(idis) , iflag1(idis) , iflag2(idis) , iflag3(idis)
                99039 FORMAT (' THE CORRELATION BETWEEN THE ',I0, &
-               & ' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE DOUBLE EXP. DIST.   IS ',F8.5,1X,3A1)
+               & ' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE DOUBLE EXP. DIST. IS ',F8.5,1X,3A1)
             ELSEIF ( idis==33 ) THEN
                WRITE (G_IO,99040) N , corr(idis) , iflag1(idis) , iflag2(idis) , iflag3(idis)
                99040 FORMAT (' ','THE CORRELATION BETWEEN THE ',I0, &
@@ -32584,7 +32584,7 @@ INTEGER :: maxlag, N, n2, ndiv, nmk, numout, numsp
 !     COMPUTE BANDWIDTHS
 !     REFERENCE--JENKINS AND WATTS, pages 257 AND 252
 !
-!     COMPUTE DEGREES OF FREEDOM FOR THE SPECTAL DENSITY ESTIMATE AT INDIVIDUAL
+!     COMPUTE DEGREES OF FREEDOM FOR THE SPECTRAL DENSITY ESTIMATE AT INDIVIDUAL
 !     FREQUENCIES
 !     REFERENCE--JENKINS AND WATTS, pages 254 AND 252
 !
@@ -33082,7 +33082,7 @@ END SUBROUTINE TOL
 !!   * Hahn and Shapiro, Statistical Methods in Engineering, 1967, pages
 !!     260-308.
 !!   * National Bureau of Standards Applied Mathematics Series 55, 1964,
-!!     page 949, FormulA 26.7.5.
+!!     page 949, Formula 26.7.5.
 !!   * Johnson and Kotz, Continuous Univariate Distributions--2, 1970,
 !!     page 102, Formula 11.
 !!   * Federighi, 'Extended Tables of the Percentage Points of Student's
@@ -34310,7 +34310,7 @@ END SUBROUTINE UNIPDF
 !!
 !!##REFERENCES
 !!   * Filliben, 'Techniques for Tail Length Analysis', Proceedings of the
-!!     Eighteenth Conference on the Design of Experiments in Army REsearch
+!!     Eighteenth Conference on the Design of Experiments in Army Research
 !!     Development and Testing (Aberdeen, Maryland, October, 1972), pages
 !!     425-450.
 !!   * Hahn and Shapiro, Statistical Methods in Engineering, 1967, pages
@@ -34742,7 +34742,7 @@ INTEGER m(17)
 !     NOTE--THE SEED MAY BE ANY POSITIVE INTEGER.
 !           NO APPRECIABLE DIFFERENCE IN THE QUALITY
 !           OF THE RANDOM NUMBERS HAS BEEN NOTED
-!           BY THE CHOICE OF THE SEED.  THERE IS NO
+!           BY THE CHOICE OF THE SEED. THERE IS NO
 !           NEED TO USE PRIMES, NOR TO USE EXCEPTIONALLY
 !           LARGE NUMBERS, ETC.
 !
@@ -34912,7 +34912,7 @@ END SUBROUTINE UNIRAN
 !!
 !!##REFERENCES
 !!   * Filliben, Simple and Robust Linear Estimation of the Location
-!!     Parameter of a Symmetric Distribution (Unpublished PH.D. DIssertation,
+!!     Parameter of a Symmetric Distribution (Unpublished PH.D. Dissertation,
 !!     Princeton University), 1969, pages 21-44, 229-231.
 !!   * Filliben, 'The Percent Point Function', (Unpublished Manuscript),
 !!     1970, pages 28-31.
@@ -35135,7 +35135,7 @@ END SUBROUTINE VAR
 !!   * Filliben (1972), 'Techniques for Tail Length Analysis', Proceedings
 !!     of the Eighteenth Conference on the Design of Experiments in Army
 !!     Research and Testing, pages 425-450.
-!!   * Filliben, 'The Percent Point Function', UNpublished Manuscript.
+!!   * Filliben, 'The Percent Point Function', Unpublished Manuscript.
 !!   * Johnson and Kotz (1970), Continuous Univariate Distributions-1,
 !!     pages 250-271.
 !     ORIGINAL VERSION--JUNE      1972.
@@ -36019,7 +36019,7 @@ INTEGER       :: i
 END SUBROUTINE WEIRAN
 !>
 !!##NAME
-!!    wind(3f) - [M_datapac:STATISTICS] compute the sample Winsorized mean
+!!    wind(3f) - [M_datapac:STATISTICS] compute the sample Windsorized mean
 !!    of a vector of observations
 !!
 !!##SYNOPSIS
@@ -36110,7 +36110,7 @@ INTEGER i , istart , istop , iupper , Iwrite , k , N , np1 , np2
 !                                WHERE 100*P1 % OF THE SMALLEST
 !                                AND 100*P2 % OF THE LARGEST
 !                                ORDERED OBSERVATIONS HAVE BEEN
-!                                WINSORIZED BEFORE COMPUTING THE
+!                                WINDSORIZED BEFORE COMPUTING THE
 !                                MEAN.
 !     OUTPUT--THE COMPUTED VALUE OF THE
 !             SAMPLE WINDSORIZED MEAN

@@ -1,6 +1,6 @@
     program demo_process_open_read
-    use M_process ,ONLY: process_open_read, process_readline
-    use M_process ,ONLY: streampointer, process_close
+    use M_process ,only: process_open_read, process_readline
+    use M_process ,only: streampointer, process_close
     implicit none
     type(streampointer) :: fp
     ! line of data to read (assumed long enough to hold any output line)

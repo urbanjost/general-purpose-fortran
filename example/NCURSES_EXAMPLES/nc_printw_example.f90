@@ -7,7 +7,7 @@ program printw_example
 !    and does not process escaped characters such as \t, \n ....
 use M_ncurses
 character(len=80) :: mesg                           ! message to appear on the screen
-integer(C_INT)    :: row, col                       ! to store the number of rows and number of colums of the screen
+integer(C_INT)    :: row, col                       ! to store the number of rows and number of columns of the screen
 integer           :: ierr
 
    mesg = "Just a string in the middle"             ! set message to appear on the screen

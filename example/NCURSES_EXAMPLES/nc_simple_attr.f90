@@ -36,7 +36,7 @@ PROGRAM simple_attr
      IF( ios /= 0 )THEN                                                         ! check for EOF or read error
         exit INFINITE
      ENDIF
-     CALL getyx(stdscr, y, x)                                                   ! get the current curser position
+     CALL getyx(stdscr, y, x)                                                   ! get the current cursor position
      IF(y == (maxrow - 1))THEN                                                  ! are we are at the end of the screen
         ierr=addstr("<-Press Any Key{biglnopruRGB}->"//C_NULL_CHAR)             ! tell the user to press a key
         ilet=getch()
@@ -46,7 +46,7 @@ PROGRAM simple_attr
       ENDIF
       IF(prev =='/' .AND. ch=='*')THEN                                          ! If it is / and * then only switch bold on
          ierr=attron(ATTR)                                                      ! cut attribute on
-         CALL getyx(stdscr, y, x)                                               ! get the current curser position
+         CALL getyx(stdscr, y, x)                                               ! get the current cursor position
          ierr=move(y, x - 1)                                                    ! back up one space
          ierr=addstr("/"//ch//C_NULL_CHAR)                                      ! The actual printing is done here
       ELSE

@@ -4,7 +4,7 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!    M_CLI(3fm) - [ARGUMENTS::M_CLI::INTRO] command line argument parsing using
+!!    M_CLI(3fm) - [ARGUMENTS:M_CLI::INTRO] command line argument parsing using
 !!    a prototype command and NAMELIST
 !!    (LICENSE:PD)
 !!##SYNOPSIS
@@ -1423,7 +1423,7 @@ integer :: istatus
 integer :: ilongest
    ilength=0
    ilongest=0
-   GET_LONGEST: do i=1,command_argument_count()                             ! loop throught command line arguments to find longest
+   GET_LONGEST: do i=1,command_argument_count()                             ! loop through command line arguments to find longest
       call get_command_argument(number=i,length=ilength,status=istatus)     ! get next argument
       if(istatus /= 0) then                                                 ! stop program on error
          write(stderr,*)'*prototype_and_cmd_args_to_nlist* error obtaining length for argument ',i

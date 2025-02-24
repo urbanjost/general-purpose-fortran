@@ -13,8 +13,8 @@
 
       function minall(a,b,c,d,e,f,g) result (value)
       use M_anything, only : x=>anyscalar_to_real128
-      class(*),intent(in)  :: a,b,c,d,e,f,g
-      real(kind=qp)   :: value
+      class(*),intent(in) :: a,b,c,d,e,f,g
+      real(kind=qp)       :: value
          value=min( x(a),x(b),x(c),x(d),x(e),x(f),x(g) )
       end function minall
 

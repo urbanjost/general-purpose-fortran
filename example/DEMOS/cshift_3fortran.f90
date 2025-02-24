@@ -1,6 +1,6 @@
       program demo_cshift
       implicit none
-      integer, dimension(5)   :: i1,i2,i3
+      integer, dimension(5)   :: i1
       integer, dimension(3,4) :: a, b
          !basics
           i1=[10,20,30,40,50]

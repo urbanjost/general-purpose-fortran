@@ -25,60 +25,60 @@ implicit none
    private
    logical,save :: debug=.false.
 !-----------------------------------------------------------------------------------------------------------------------------------
-   public :: kracken                ! define command and default parameter values from command arguments
+   public       :: kracken                ! define command and default parameter values from command arguments
 !-----------------------------------------------------------------------------------------------------------------------------------
-   public :: rget                   ! fetch real    value of name VERB_NAME from the Language Dictionary
-   public :: dget                   ! fetch double  value of name VERB_NAME from the Language Dictionary
-   public :: iget                   ! fetch integer value of name VERB_NAME from the Language Dictionary
-   public :: lget                   ! fetch logical value of name VERB_NAME from the Language Dictionary
-   public :: sget                   ! fetch string  value of name VERB_NAME from the Language Dictionary.
+   public       :: rget                   ! fetch real    value of name VERB_NAME from the Language Dictionary
+   public       :: dget                   ! fetch double  value of name VERB_NAME from the Language Dictionary
+   public       :: iget                   ! fetch integer value of name VERB_NAME from the Language Dictionary
+   public       :: lget                   ! fetch logical value of name VERB_NAME from the Language Dictionary
+   public       :: sget                   ! fetch string  value of name VERB_NAME from the Language Dictionary.
 !-----------------------------------------------------------------------------------------------------------------------------------
-   public :: rgets                  ! fetch real    values of name VERB_NAME from the Language Dictionary
-   public :: dgets                  ! fetch double  values of name VERB_NAME from the Language Dictionary
-   public :: igets                  ! fetch integer values of name VERB_NAME from the Language Dictionary
-   public :: lgets                  ! fetch logical values of name VERB_NAME from the Language Dictionary
-   public :: sgets                  ! fetch string  values of name VERB_NAME from the Language Dictionary.
+   public       :: rgets                  ! fetch real    values of name VERB_NAME from the Language Dictionary
+   public       :: dgets                  ! fetch double  values of name VERB_NAME from the Language Dictionary
+   public       :: igets                  ! fetch integer values of name VERB_NAME from the Language Dictionary
+   public       :: lgets                  ! fetch logical values of name VERB_NAME from the Language Dictionary
+   public       :: sgets                  ! fetch string  values of name VERB_NAME from the Language Dictionary.
 !-----------------------------------------------------------------------------------------------------------------------------------
-   public :: retrev                 ! retrieve token value as string from Language Dictionary when given NAME
+   public       :: retrev                 ! retrieve token value as string from Language Dictionary when given NAME
 !-----------------------------------------------------------------------------------------------------------------------------------
 !  SPECIAL-PURPOSE PUBLIC ROUTINES:
-   public :: setprompts             ! define prompts for commands in interactive mode
+   public       :: setprompts             ! define prompts for commands in interactive mode
 !  Only needs to be public for building languages, not cracking command line arguments
-   public :: dissect                ! for user-defined commands: define defaults, then process user input
-   public :: parse                  ! parse user command and store tokens into Language Dictionary
-   public :: store                  ! replace dictionary name's value (if allow=add add name if necessary)
-   public :: show                   ! display dictionary contents for information
+   public       :: dissect                ! for user-defined commands: define defaults, then process user input
+   public       :: parse                  ! parse user command and store tokens into Language Dictionary
+   public       :: store                  ! replace dictionary name's value (if allow=add add name if necessary)
+   public       :: show                   ! display dictionary contents for information
 !-----------------------------------------------------------------------------------------------------------------------------------
-   private :: subscript_            ! return the subscript value of a string when given its name
-   private :: menu                  ! generate an interactive menu when -? option is used
+   private      :: subscript_             ! return the subscript value of a string when given its name
+   private      :: menu                   ! generate an interactive menu when -? option is used
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! length of verbs and entries in Language dictionary
 ! NOTE:   many parameters may be  reduced in size so as to just accommodate being used as a command line parser.
 !         In particular, some might want to change:
-   logical,public            :: stop_command=.false.               ! indication to return stop_command as false in interactive mode
-   integer,parameter,public  :: IPvalue=4096*16                    ! length of keyword value
-   integer,parameter,public  :: IPverb=20                          ! length of verb
+   logical,public                           :: stop_command=.false. ! indication to return stop_command as false in interactive mode
+   integer,parameter,public                 :: IPvalue=4096*16      ! length of keyword value
+   integer,parameter,public                 :: IPverb=20            ! length of verb
 !-----------------------------------------------------------------------------------------------------------------------------------
-   integer, parameter        :: dp = kind(0.d0)
-   integer, parameter        :: k_int = SELECTED_INT_KIND(9)       ! integer*4
-   integer, parameter        :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
+   integer, parameter                       :: dp = kind(0.d0)
+   integer, parameter                       :: k_int = SELECTED_INT_KIND(9)       ! integer*4
+   integer, parameter                       :: k_dbl = SELECTED_REAL_KIND(15,300) ! real*8
 !-----------------------------------------------------------------------------------------------------------------------------------
    ! dictionary for Language routines
-   character(len=:),allocatable               :: dict_vals(:)      ! contains the values of string variables
-   character(len=:),allocatable               :: dict_verbs(:)     ! string variable names
-   integer(kind=k_int),allocatable            :: dict_lens(:)      ! significant lengths of string variable values
-   integer(kind=k_int),allocatable            :: dict_calls(:)     ! number of times this keyword stored on a call to parse
+   character(len=:),allocatable             :: dict_vals(:)      ! contains the values of string variables
+   character(len=:),allocatable             :: dict_verbs(:)     ! string variable names
+   integer(kind=k_int),allocatable          :: dict_lens(:)      ! significant lengths of string variable values
+   integer(kind=k_int),allocatable          :: dict_calls(:)     ! number of times this keyword stored on a call to parse
 !-----------------------------------------------------------------------------------------------------------------------------------
-   character(len=1),save,public               :: kracken_comment='#'
-   character(len=:),public,allocatable,save   :: leftover          ! remaining command(s) on line
-   integer,public,save                        :: current_command_length=0 ! length of options for current command
+   character(len=1),save,public             :: kracken_comment='#'
+   character(len=:),public,allocatable,save :: leftover                 ! remaining command(s) on line
+   integer,public,save                      :: current_command_length=0 ! length of options for current command
 !-----------------------------------------------------------------------------------------------------------------------------------
-   public :: cmd_args_to_dictionary
-   public :: print_kracken_dictionary
+   public                                   :: cmd_args_to_dictionary
+   public                                   :: print_kracken_dictionary
    public unnamed
    public kracken_method
-   character(len=:),allocatable,save :: unnamed(:)
-   character(len=10),save            :: kracken_method='kracken'
+   character(len=:),allocatable,save        :: unnamed(:)
+   character(len=10),save                   :: kracken_method='kracken'
 contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -241,10 +241,10 @@ function dget(keyword)
 
 ! ident_3="@(#) M_kracken dget(3f) given keyword fetch dble value from Language Dictionary (zero on err)"
 
-real(kind=dp)                :: dget              ! function type
-character(len=*),intent(in)  :: keyword           ! keyword to retrieve value for from dictionary
+real(kind=dp)               :: dget               ! function type
+character(len=*),intent(in) :: keyword            ! keyword to retrieve value for from dictionary
 !-----------------------------------------------------------------------------------------------------------------------------------
-   integer                      :: ier            ! error flag on call to retrieve value
+   integer                  :: ier                ! error flag on call to retrieve value
 !-----------------------------------------------------------------------------------------------------------------------------------
    call string_to_value(sget(keyword), dget, ier) ! convert the string to a numeric value
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -338,8 +338,8 @@ end function rget
 !!
 !!    function iget(keyword) result(value)
 !!
-!!     character(len=*),intent(in)  :: keyword
-!!     integer              :: value
+!!     character(len=*),intent(in) :: keyword
+!!     integer                     :: value
 !!
 !!##DESCRIPTION
 !!     The iget(3f) function returns a scalar integer value from a command line
@@ -482,7 +482,7 @@ function lget(keyword)
 logical                      :: lget                  ! procedure type
 character(len=*),intent(in)  :: keyword               ! the dictionary keyword (in form VERB_KEYWORD) to retrieve
 !-----------------------------------------------------------------------------------------------------------------------------------
-   character(len=:),allocatable :: value              ! value corresponding to the requested keyword
+character(len=:),allocatable :: value                 ! value corresponding to the requested keyword
 !-----------------------------------------------------------------------------------------------------------------------------------
 !  ignore a leading dot character. Then, any word starting in "T" or "Y" is true, any word starting in "F" or "N" is false.
    if(len(sget(keyword)).ne.0)then
@@ -650,8 +650,8 @@ end function sget
 !!    program demo_dgets
 !!    use M_kracken, only: kracken, dgets
 !!    implicit none
-!!    doubleprecision,allocatable  :: vals(:)
-!!    integer :: i
+!!    doubleprecision,allocatable :: vals(:)
+!!    integer                     :: i
 !!    ! define command arguments and parse user command
 !!    call kracken('demo','-nums 1 2 3 1000 100,000 11.11111 77.77777 -77.7777' )
 !!    vals=dgets('demo_nums') ! get any values specified for -nums
@@ -685,26 +685,26 @@ function dgets(keyword,ier) result(darray)
 
 ! ident_8="@(#) M_kracken dgets(3f) given keyword fetch dble value from Language Dictionary (0 on err)"
 
-character(len=*),intent(in) :: keyword                      ! keyword to retrieve value for from dictionary
-real(kind=dp),allocatable   :: darray(:)                    ! function type
+character(len=*),intent(in)  :: keyword                      ! keyword to retrieve value for from dictionary
+real(kind=dp),allocatable    :: darray(:)                    ! function type
 
-   character(len=:),allocatable  :: carray(:)          ! convert value to an array using split(3f)
-   integer                       :: i
-   integer,optional              :: ier
-   integer                       :: ier_local
+character(len=:),allocatable :: carray(:)                    ! convert value to an array using split(3f)
+integer                      :: i
+integer,optional             :: ier
+integer                      :: ier_local
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(sget(keyword).ne.' ')then
-      call split(sget(keyword),carray)                      ! find value associated with keyword and split it into an array
+      call split(sget(keyword),carray)                       ! find value associated with keyword and split it into an array
    else
       allocate(character(len=0) :: carray(0))
    endif
-   allocate(darray(size(carray)))                           ! create the output array
+   allocate(darray(size(carray)))                            ! create the output array
    ier_local=0
    if(present(ier))then
          ier=0
    endif
    do i=1,size(carray)
-      call string_to_value(carray(i), darray(i), ier_local)       ! convert the string to a numeric value
+      call string_to_value(carray(i), darray(i), ier_local)  ! convert the string to a numeric value
       if(present(ier).and.ier_local.ne.0)then
          ier=ier_local
       endif
@@ -799,7 +799,7 @@ integer,optional            :: ier
    if(present(ier))then
       darray=dgets(keyword,ier)
       if(ier.eq.0)then
-         iarray=int(darray)                           ! just call DGETS(3f) but change returned value to type INTEGER
+         iarray=int(darray)                        ! just call DGETS(3f) but change returned value to type INTEGER
       else
          iarray=[integer ::]
       endif
@@ -906,19 +906,19 @@ function rgets(keyword,ier) result(rarray)
 
 ! ident_10="@(#) M_kracken rgets(3f) given keyword fetch real array from string in dictionary (0 on err)"
 
-character(len=*),intent(in) :: keyword             ! keyword to retrieve value for from dictionary
-real,allocatable            :: rarray(:)           ! convert value to an array
-doubleprecision,allocatable :: darray(:)           ! convert value to an array
+character(len=*),intent(in) :: keyword       ! keyword to retrieve value for from dictionary
+real,allocatable            :: rarray(:)     ! convert value to an array
+doubleprecision,allocatable :: darray(:)     ! convert value to an array
 integer,optional            :: ier
    if(present(ier))then
       darray=dgets(keyword,ier)
       if(ier.eq.0)then
-         rarray=real(darray)              ! just call DGETS(3f) but change returned value to type REAL
+         rarray=real(darray)                 ! just call DGETS(3f) but change returned value to type REAL
       else
          rarray=[real ::]
       endif
    else
-      rarray=real(dgets(keyword))                  ! just call DGETS(3f) but change returned value to type REAL
+      rarray=real(dgets(keyword))            ! just call DGETS(3f) but change returned value to type REAL
    endif
 end function rgets
 !===================================================================================================================================
@@ -1003,10 +1003,10 @@ logical,allocatable          :: larray(:)                  ! convert value to an
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(len(sget(keyword)).ne.0)then
    call split(adjustl(upper(sget(keyword))),carray)        ! convert value to uppercase, left spaces trimmed; then parse into array
-   if(size(carray).gt.0)then                                  ! if not a null string
-      allocate(larray(size(carray)))                          ! allocate output array
+   if(size(carray).gt.0)then                               ! if not a null string
+      allocate(larray(size(carray)))                       ! allocate output array
       do i=1,size(carray)
-         larray(i)=.false.                                    ! initialize return value to .false.
+         larray(i)=.false.                                 ! initialize return value to .false.
          if(carray(i).ne."#N#".and.carray(i).ne.'"#N#"')then
             if(carray(i)(1:1).eq.'.')then                     ! looking for fortran logical syntax .STRING.
                ichar=2
@@ -1114,20 +1114,20 @@ function sgets(name,delim) result(strings)
 
 ! This routine trusts that the desired name exists. A blank is returned if the name is not in the dictionary
 character(len=:),allocatable         :: strings(:)
-character(len=*),intent(in)          :: name                       ! name to look up in dictionary
+character(len=*),intent(in)          :: name               ! name to look up in dictionary
 character(len=*),intent(in),optional :: delim
 
-integer                              :: isub                      ! index where verb_oo is stored or -1 if this is an unknown name
+integer                              :: isub               ! index where verb_oo is stored or -1 if this is an unknown name
 !-----------------------------------------------------------------------------------------------------------------------------------
-   isub=subscript_(name)                                          ! given name return index name is stored at
+   isub=subscript_(name)                                   ! given name return index name is stored at
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(isub > 0)then                                               ! if index is valid return strings
+   if(isub > 0)then                                        ! if index is valid return strings
       if(present(delim))then
          call split(dict_vals(isub),strings,delim)
       else
          call split(dict_vals(isub),strings)
       endif
-   else                                                           ! if index is not valid return NULL string
+   else                                                    ! if index is not valid return NULL string
       allocate(character(len=1) :: strings(1))
       strings(1)=char(0)
    endif
@@ -1288,8 +1288,8 @@ integer                              :: ibig
       deallocate(unnamed)
    endif
    ibig=longest_command_argument() ! bug in gfortran. len=0 should be fine
-   allocate(character(len=ibig) ::unnamed(0))
-   unnamed=[character(len=ibig) ::]            ! kludge
+   allocate(character(len=ibig) :: unnamed(0))
+   unnamed=[character(len=ibig) :: ]            ! kludge
 !-----------------------------------------------------------------------------------------------------------------------------------
    select case(upper(kracken_method))
     case('ARGS')
@@ -1458,12 +1458,12 @@ subroutine dissect(verb,init,pars,error_return)
 
 ! ident_15="@(#) M_kracken dissect(3f) convenient call to parse() will define defaults then process"
 
-character(len=*),intent(in)  :: verb                     ! the name of the command to be reset/defined  and then set
-character(len=*),intent(in)  :: init                     ! used to define or reset command options; usually hard-set in the program.
-character(len=*),intent(in)  :: pars                     ! defines the command options to be set, usually from a user input file
+character(len=*),intent(in)  :: verb                  ! the name of the command to be reset/defined  and then set
+character(len=*),intent(in)  :: init                  ! used to define or reset command options; usually hard-set in the program.
+character(len=*),intent(in)  :: pars                  ! defines the command options to be set, usually from a user input file
 integer,intent(out),optional :: error_return
 !-----------------------------------------------------------------------------------------------------------------------------------
-   integer                :: ier
+integer                      :: ier
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(debug) call journal('sc','START DISSECT ',trim(verb)//'::'//trim(init)//'::'//trim(pars))
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1543,12 +1543,12 @@ end subroutine dissect
 !!    use M_kracken, only : parse, sget, iget, rget
 !!    use M_strings, only : chomp
 !!    implicit none
-!!    character(len=:),allocatable  :: verb
-!!    character(len=*),parameter    :: delimiters=' ;,'
-!!    integer     :: i
-!!    integer     :: ierr
-!!    character(len=132) :: line
-!!    character(len=132), parameter :: commands(5)= [character(len=132) :: &
+!!    character(len=:),allocatable :: verb
+!!    character(len=*),parameter   :: delimiters=' ;,'
+!!    integer                      :: i
+!!    integer                      :: ierr
+!!    character(len=132)           :: line
+!!    character(len=132),parameter :: commands(5)= [character(len=132) :: &
 !!      'start -i 10 -message this is a message', &
 !!      'end -i 20 -j 30 -k 55.55 ', &
 !!      'list', &
@@ -1635,31 +1635,31 @@ recursive subroutine parse(verb,string,allow,error_return)
       ! number of characters left over,
       ! number of non-blank characters in actual parameter list
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=*),intent(in)     ::  verb   ! command name to process
-character(len=*),intent(in)     ::  string ! string is character input string with first verb removed (options + other commands)
-character(len=*),intent(in)     ::  allow  ! keyword indicating whether commands may be added or only replaced
-integer,optional,intent(out)    ::  error_return
+character(len=*),intent(in)         :: verb   ! command name to process
+character(len=*),intent(in)         :: string ! string is character input string with first verb removed (options + other commands)
+character(len=*),intent(in)         :: allow  ! keyword indicating whether commands may be added or only replaced
+integer,optional,intent(out)        :: error_return
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=:),allocatable         ::  dummy  ! working copy of string
-character(len=IPvalue),dimension(2)  ::  var
-character(len=3)                     ::  delmt
-character(len=2)                     ::  init
-character(len=1)                     ::  currnt  ! current character being processed
-character(len=1)                     ::  prev    ! character to left of CURRNT
-character(len=1)                     ::  forwrd  ! character to right of CURRNT
-character(len=IPvalue)               ::  val
-character(len=IPverb)                ::  name
-integer,dimension(2)                 ::  ipnt
-integer,save                         ::  ileave=1 ! if 0, leave " where you find them; else if 1 remove them. Normally removed
-integer                              ::  ilist
-integer                              ::  ier
-integer                              ::  islen
-integer                              ::  ipln
-integer                              ::  ipoint
-integer                              ::  itype
-integer                              ::  ifwd
-integer                              ::  ibegin
-integer                              ::  iend
+character(len=:),allocatable        :: dummy  ! working copy of string
+character(len=IPvalue),dimension(2) :: var
+character(len=3)                    :: delmt
+character(len=2)                    :: init
+character(len=1)                    :: currnt  ! current character being processed
+character(len=1)                    :: prev    ! character to left of CURRNT
+character(len=1)                    :: forwrd  ! character to right of CURRNT
+character(len=IPvalue)              :: val
+character(len=IPverb)               :: name
+integer,dimension(2)                :: ipnt
+integer,save                        :: ileave=1 ! if 0, leave " where you find them; else if 1 remove them. Normally removed
+integer                             :: ilist
+integer                             :: ier
+integer                             :: islen
+integer                             :: ipln
+integer                             :: ipoint
+integer                             :: itype
+integer                             :: ifwd
+integer                             :: ibegin
+integer                             :: iend
 !-----------------------------------------------------------------------------------------------------------------------------------
    if(.not.allocated(dict_verbs)) call initd()
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2238,32 +2238,32 @@ subroutine menu(verb)
 ! ident_19="@(#) M_kracken menu(3fp) prompt for values using a menu interface"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=*),intent(in)  :: verb
+character(len=*),intent(in)   :: verb
 !-----------------------------------------------------------------------------------------------------------------------------------
-   character(len=IPvalue)    :: reply
-   character(len=IPvalue)    :: prompt
-   integer                   :: ii
-   integer                   :: icount
-   integer                   :: ios
-   integer                   :: i10
-   integer                   :: i20
-   integer                   :: istart
-   integer                   :: iend
-   integer                   :: iend_OK   ! last open actually printed
-   integer                   :: ifound
-   integer                   :: ireply
-   integer                   :: ivalu
-   integer                   :: ierr
-   integer                   :: indx
-   character(len=IPvalue)    :: mssge     ! the message/error/string  value returned by BOUNCE(3f)
-   character(len=1)          :: prefix
-   integer                   :: icurrent  ! current menu item
-   integer                   :: icmd
-   integer                   :: imenu
-   character(len=80),allocatable :: help_text(:)
-   integer                       :: i
-   integer                       :: cstat
-   character(len=256)            :: sstat
+character(len=IPvalue)        :: reply
+character(len=IPvalue)        :: prompt
+integer                       :: ii
+integer                       :: icount
+integer                       :: ios
+integer                       :: i10
+integer                       :: i20
+integer                       :: istart
+integer                       :: iend
+integer                       :: iend_OK   ! last open actually printed
+integer                       :: ifound
+integer                       :: ireply
+integer                       :: ivalu
+integer                       :: ierr
+integer                       :: indx
+character(len=IPvalue)        :: mssge     ! the message/error/string  value returned by BOUNCE(3f)
+character(len=1)              :: prefix
+integer                       :: icurrent  ! current menu item
+integer                       :: icmd
+integer                       :: imenu
+character(len=80),allocatable :: help_text(:)
+integer                       :: i
+integer                       :: cstat
+character(len=256)            :: sstat
 !-----------------------------------------------------------------------------------------------------------------------------------
    stop_command=.false.
    ii=len_trim(verb)
@@ -2601,10 +2601,10 @@ end subroutine show
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 subroutine initd()
-   dict_verbs=[character(len=0) ::]  ! string variable names
-   dict_vals=[character(len=0)  ::]  ! contains the values of string variables
-   dict_calls=[integer ::]           ! number of times this keyword stored on a call to parse
-   dict_lens=[integer ::]            ! significant lengths of string variable values
+   dict_verbs=[character(len=0) :: ]  ! string variable names
+   dict_vals=[character(len=0)  :: ]  ! contains the values of string variables
+   dict_calls=[integer :: ]           ! number of times this keyword stored on a call to parse
+   dict_lens=[integer :: ]            ! significant lengths of string variable values
 end subroutine initd
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

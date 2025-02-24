@@ -1,3 +1,14 @@
+
+
+
+
+
+
+
+
+
+
+
 !>
 !!##NAME
 !!    M_pixel(3f) - [M_pixel::INTRO] module for drawing into a pixel array
@@ -1467,12 +1478,12 @@ contains
 !!    implicit none
 !!       integer :: i
 !!
-!!       !! set up graphics area
+!!       !-! set up graphics area
 !!       call prefsize(400,400)
 !!       call vinit()
 !!       call ortho2(left=-100.0, right=100.0, bottom=-100.0, top=100.0)
 !!
-!!       !! draw some filled rectangles
+!!       !-! draw some filled rectangles
 !!       do i=95,5,-10
 !!          call makepoly()
 !!          call color(i/10)
@@ -1480,20 +1491,20 @@ contains
 !!          call closepoly()
 !!       enddo
 !!
-!!       !! draw some rectangles
+!!       !-! draw some rectangles
 !!       call linewidth(50)
 !!       call color(7)
 !!       do i=5,95,5
 !!          call rect( -1.0*i, -1.0*i, 1.0*i, 1.0*i )
 !!       enddo
 !!
-!!       !! render pixel array to a file
+!!       !-! render pixel array to a file
 !!       call writegif('rect.3m_pixel.gif',P_pixel,P_colormap)
 !!
-!!       !! display graphic assuming display(1) is available
+!!       !-! display graphic assuming display(1) is available
 !!       call execute_command_line('display rect.3m_pixel.gif')
 !!
-!!       !! wrap up graphics
+!!       !-! wrap up graphics
 !!       call vexit()
 !!
 !!    end program demo_rect
@@ -2383,14 +2394,14 @@ end subroutine draw_line_single
 !!    integer,parameter :: topsym=432
 !!    integer           :: movie(1:topsym,0:isize-1,0:isize-1)
 !!    integer           :: i
-!!    !! set up environment
+!!    !-! set up environment
 !!       call prefsize(isize,isize)
 !!       call vinit()
 !!       call ortho2(-150.0,150.0,-150.0,150.0)
 !!
-!!       !! draw all characters using hershey numeric strings
+!!       !-! draw all characters using hershey numeric strings
 !!       do i=1,topsym
-!!          !! draw reference circle and crosshairs
+!!          !-! draw reference circle and crosshairs
 !!          call color(0)
 !!          call clear()
 !!
@@ -2420,7 +2431,7 @@ end subroutine draw_line_single
 !!          movie(i,:,:)=P_pixel
 !!       enddo
 !!       call vexit()
-!!       !! write to file and display with display(1)
+!!       !-! write to file and display with display(1)
 !!       call write_animated_gif('hershey.3m_pixel.gif',&
 !!       & movie,P_colormap,delay=40)
 !!       !call execute_command_line('display hershey.3m_pixel.gif')
@@ -2493,7 +2504,7 @@ subroutine hershey(x,y,height,itext,theta,ntext)
      &                           (2**NBITS-MIN0(1,MOD(-IWORD, &
      &                           2**(NSTART-NBITS))))
 !-----------------------------------------------------------------------------------------------------------------------------------
-      !!write(*,*)'GOT HERE A','X=',x,'Y=',y,'HEIGHT=',height,'ITEXT=',itext,'THETA=',theta,'NTEXT=',ntext
+      !-!write(*,*)'GOT HERE A','X=',x,'Y=',y,'HEIGHT=',height,'ITEXT=',itext,'THETA=',theta,'NTEXT=',ntext
       yoff=0.0
       si=sind(theta)
       co=cosd(theta)
@@ -2673,237 +2684,237 @@ subroutine chrcod(text,ntext)
 !   o HAT (1006)
 !  Change of font commands are decoded and executed internally
 !
-   CHARACTER(len=*),intent(in) :: TEXT
-   integer,intent(in)          :: ntext
-   INTEGER,save :: IRLU(95),IILU(95),IGLU(26)
-   integer :: number
-   integer :: nt
-   integer :: igoff
-   integer :: igr
-   integer :: ib
-   integer :: ic
-   integer :: ig
-   integer :: ico
-   integer :: k,l,n
+character(len=*),intent(in) :: text
+integer,intent(in)          :: ntext
+integer,save                :: irlu(95),iilu(95),iglu(26)
+integer                     :: number
+integer                     :: nt
+integer                     :: igoff
+integer                     :: igr
+integer                     :: ib
+integer                     :: ic
+integer                     :: ig
+integer                     :: ico
+integer                     :: k,l,n
 !  IRLU IS A LOOK-UP TABLE FOR ROMAN CHARACTERS ARRANGED BY
 !  INTEGER VALUE FOR THE ASCII CHARACTER SET WITH AN
 !  OFFSET TO REMOVE THE 31 NONPRINTING CONTROL CHARACTERS.
 !  IRLU RETURNS WITH THE SYMBOL NUMBER OR, IF NO SYMBOL
 !  EXISTS, THE CODE FOR SPACE.
-   data irlu/1000,416,428,411,72,418,419,432,67,68,69,63,70, &
-     &          64,71,65,53,54,55,56,57,58,59,60,61,62,414,415, &
-     &          385,66,386,417,407,1,2,3,4,5,6,7,8,9,10,11,12,13, &
-     &          14,15,16,17,18,19,20,21,22,23,24,25,26,409,1000, &
-     &          410,408,1000,1000,27,28,29,30,31,32,33,34,35,36, &
-     &          37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52, &
-     &          405,427,406,424/
+data irlu/1000,416,428,411,72,418,419,432,67,68,69,63,70, &
+   &          64,71,65,53,54,55,56,57,58,59,60,61,62,414,415, &
+   &          385,66,386,417,407,1,2,3,4,5,6,7,8,9,10,11,12,13, &
+   &          14,15,16,17,18,19,20,21,22,23,24,25,26,409,1000, &
+   &          410,408,1000,1000,27,28,29,30,31,32,33,34,35,36, &
+   &          37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52, &
+   &          405,427,406,424/
 !  IILU IS A LOOK-UP TABLE FOR ITALIC CHARACTERS ONLY. IT IS
 !  IDENTICAL TO IRLU WITH FOUR ITALIC SPECIAL SYMBOLS SUBSTITUTED
 !  FOR REGULAR ONES.
-   data iilu/1000,422,1000,411,72,418,419,1000,67,68,69,63,70, &
-     &          64,71,65,53,54,55,56,57,58,59,60,61,62,420,421, &
-     &          385,66,386,423,407,1,2,3,4,5,6,7,8,9,10,11,12,13, &
-     &          14,15,16,17,18,19,20,21,22,23,24,25,26,409,1000, &
-     &          410,1000,1000,1000,27,28,29,30,31,32,33,34,35,36, &
-     &          37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52, &
-     &          405,427,406,424/
+data iilu/1000,422,1000,411,72,418,419,1000,67,68,69,63,70, &
+   &          64,71,65,53,54,55,56,57,58,59,60,61,62,420,421, &
+   &          385,66,386,423,407,1,2,3,4,5,6,7,8,9,10,11,12,13, &
+   &          14,15,16,17,18,19,20,21,22,23,24,25,26,409,1000, &
+   &          410,1000,1000,1000,27,28,29,30,31,32,33,34,35,36, &
+   &          37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52, &
+   &          405,427,406,424/
 !  IGLU IS A LOOK-UP TABLE FOR GREEK CHARACTERS ARRANGED BY THE
 !  INTEGER VALUE OF THEIR ROMAN EXPRESSION WITH A=1, B=2, ETC.
 !  AMBIGUOUS CASES GIVE 25 FOR EPSILON OR ETA, 26 FOR OMEGA OR
 !  OMICRON, 27 FOR PHI,PI,OR PSI, AND 28 FOR TAU OR THETA. ADDITIONAL
 !  LETTERS MUST BE CHECKED FOR THESE CASE. A VALUE OF 50 IS RETURNED
 !  FOR THOSE ROMAN LETTERS WHICH HAVE NO CORRESPONDING GREEK LETTER.
-   data iglu/1,2,22,4,25,50,3,50,9,50,10,11,12,13,26,27,50,17,18,28,20,50,50,14,50,6/
+data iglu/1,2,22,4,25,50,3,50,9,50,10,11,12,13,26,27,50,17,18,28,20,50,50,14,50,6/
 ! FINDS LENGTH OF STRING WITH BLANKS TRIMMED FROM RIGHT END.
-   DO N=NTEXT,1,-1
-      IF(TEXT(N:N).NE.' ')GOTO 15
+   do n=ntext,1,-1
+      if(text(n:n).ne.' ')goto 15
    enddo
-   P_NCHR=0
-   RETURN
+   p_nchr=0
+   return
 15 continue
-   NT=N
+   nt=n
 !  SCAN TEXT CHARACTER BY CHARACTER
-   K=1
-   J=1
+   k=1
+   j=1
 !  K IS CURRENT ADDRESS OF CHARACTER IN TEXT
 !  J IS INDEX OF NEXT SYMBOL CODE IN P_ICHR
-   INFINITE: do
-      IF(K.GT.N)THEN
-        P_NCHR=J-1
-        RETURN
-      ENDIF
-      IF(TEXT(K:K).NE.'\')THEN
-        !  ROMAN CHARACTER OR KEYBOARD SYMBOL
-        IF(TEXT(K:K).EQ.'}')THEN
-          !  CHECK FOR CLOSING CURLY BRACKET-IF FOUND, RETURN 1003
-          P_ICHR(J)=1003
-          J=J+1
-          K=K+1
-          CYCLE INFINITE
-        ENDIF
-        !  ICHAR RETURNS INTEGER ASCII VALUE OF CHARACTER
-        !  OFFSET BY NONPRINTING CHARACTERS TO GET ENTRY IN LOOK-UP TABLE
-        IC=ICHAR(TEXT(K:K))-ICHAR(' ')+1
-        IF(IC.LE.0)THEN                           !  NONPRINTING CONTROL CHARACTER-ERROR RETURN
-          P_ICHR(J)=1000
-        ELSEIF (P_IOFF.NE.240)THEN                !  NOT ITALIC FONT
-          P_ICHR(J)=IRLU(IC)
-        ELSE                                      !  ITALIC FONT
-          P_ICHR(J)=IILU(IC)
-        ENDIF
-        IF(P_ICHR(J).LT.385)P_ICHR(J)=P_ICHR(J)+P_IOFF    !  ADD OFFSET FOR FONT IF NOT A SPECIAL SYMBOL
-          J=J+1
-          K=K+1
-          CYCLE INFINITE
-        ELSE                                      !  BACKSLASH FOUND
-          !  CHECK NEXT FOUR CHARACTERS FOR FOUR DIGIT NUMBER
-          K=K+1
-          READ(TEXT(K:K+3),'(i4)',ERR=50)NUMBER
-          !  NUMBER FOUND-CHECK ITS VALIDITY
-          IC=NUMBER-1000
-          IF((IC.GT.0).AND.(IC.LT.433))THEN
+   infinite: do
+      if(k.gt.n)then
+         p_nchr=j-1
+         return
+      endif
+      if(text(k:k).ne.'\')then
+         !  ROMAN CHARACTER OR KEYBOARD SYMBOL
+         if(text(k:k).eq.'}')then
+            !  CHECK FOR CLOSING CURLY BRACKET-IF FOUND, RETURN 1003
+            p_ichr(j)=1003
+            j=j+1
+            k=k+1
+            cycle infinite
+         endif
+         !  ICHAR RETURNS INTEGER ASCII VALUE OF CHARACTER
+         !  OFFSET BY NONPRINTING CHARACTERS TO GET ENTRY IN LOOK-UP TABLE
+         ic=ichar(text(k:k))-ichar(' ')+1
+         if(ic.le.0)then                           !  NONPRINTING CONTROL CHARACTER-ERROR RETURN
+            p_ichr(j)=1000
+         elseif (p_ioff.ne.240)then                !  NOT ITALIC FONT
+            p_ichr(j)=irlu(ic)
+         else                                      !  ITALIC FONT
+            p_ichr(j)=iilu(ic)
+         endif
+         if(p_ichr(j).lt.385)p_ichr(j)=p_ichr(j)+p_ioff    !  ADD OFFSET FOR FONT IF NOT A SPECIAL SYMBOL
+         j=j+1
+         k=k+1
+         cycle infinite
+      else                                      !  BACKSLASH FOUND
+         !  CHECK NEXT FOUR CHARACTERS FOR FOUR DIGIT NUMBER
+         k=k+1
+         read(text(k:k+3),'(i4)',err=50)number
+         !  NUMBER FOUND-CHECK ITS VALIDITY
+         ic=number-1000
+         if((ic.gt.0).and.(ic.lt.433))then
             !  VALID SYMBOL CODE
-            P_ICHR(J)=IC
-          ELSEIF ((IC.GT.999).AND.(IC.LT.1004))THEN
+            p_ichr(j)=ic
+         elseif ((ic.gt.999).and.(ic.lt.1004))then
             !  VALID COMMAND CODE
-            P_ICHR(J)=IC
-          ELSE
+            p_ichr(j)=ic
+         else
             ! NOT RECOGNIZED-ERROR RETURN
-            P_ICHR(J)=1000
-          ENDIF
-          J=J+1
-           !  MOVE BEYOND CLOSING BACKSLASH-IGNORE EXTRA CHARACTERS
-           !  FUNCTION INDEX RETURNS OFFSET OF SECOND SUBSTRING IN FIRST
-           !  RETURNS 0 IF SUBSTRING NOT FOUND
-           L=INDEX(TEXT(K:NT),'\')
-           IF(L.EQ.0)THEN
-             K=NT+1
-           ELSE
-             K=K+L
-           ENDIF
-          CYCLE INFINITE
-   50     CONTINUE
-           !  NOT A NUMBER
-           !  CHECK FOR FONT CHANGE COMMAND
-         IF(TEXT(K:K+2).EQ.'SIM'.OR.TEXT(K:K+2).EQ.'sim')THEN
-           !  SIMPLEX FONT
-           P_IOFF=0
-         ELSEIF(TEXT(K:K+1).EQ.'CO'.OR.TEXT(K:K+1).EQ.'co')THEN
-           !  COMPLEX FONT
-           P_IOFF=120
-         ELSEIF(TEXT(K:K+1).EQ.'IT'.OR.TEXT(K:K+1).EQ.'it')THEN
-           !  ITALIC FONT
-           P_IOFF=240
-         ELSEIF (TEXT(K:K+1).EQ.'DU'.OR.TEXT(K:K+1).EQ.'du')THEN
-           !  DUPLEX FONT
-           P_IOFF=312
-           !  FOUND THE BACK-SPACE CODE
-         ELSEIF(TEXT(K:K+1).EQ.'BS'.OR.TEXT(K:K+1).EQ.'bs') THEN
-           P_ICHR(J)=1004
-           J=J+1
-           K=K+3
-          CYCLE INFINITE
-           !  CHECK FOR SUPER/SUB-SCRIPT COMMAND
-         ELSEIF(TEXT(K:K+3).EQ.'SUP{'.OR.TEXT(K:K+3).EQ.'sup{')THEN
-           !  BEGIN SUPERSCRIPTING
-           P_ICHR(J)=1001
-           J=J+1
-           K=K+4
-          CYCLE INFINITE
-         ELSEIF (TEXT(K:K+3).EQ.'SUB{'.OR.TEXT(K:K+3).EQ.'sub{')THEN
-           !  BEGIN SUBSCRIPTING
-           P_ICHR(J)=1002
-           J=J+1
-           K=K+4
-          CYCLE INFINITE
-         ELSE
-           !  GREEK CHARACTER OR INVALID CHARACTER
-           IC=ICHAR(TEXT(K:K))
-           IGOFF=MIN0(P_IOFF, 120)
-           IF(P_IOFF.EQ.312)IGOFF=0
-           IF((IC.GE.ICHAR('A')).AND.(IC.LE.ICHAR('Z')))THEN
-             !  UPPER CASE
-             IGR=72
-             ICO=ICHAR('A')-1
-           ELSEIF((IC.GE.ICHAR('a')).AND.(IC.LE.ICHAR('z')))THEN
-             !  LOWER CASE
-             IGR=96
-             ICO=ICHAR('a')-1
-           ELSE
-             !  NOT A LETTER-ERROR RETURN
-             P_ICHR(J)=1000
-             J=J+1
-             L=INDEX(TEXT(K:NT),'\')
-             IF(L.EQ.0)THEN
-               K=NT+1
-             ELSE
-               K=K+L
-             ENDIF
-          CYCLE INFINITE
-           ENDIF
-           !  LOOK UP THE CHARACTER
-           IG=IGLU(IC-ICO)
-           IF(IG.LT.25)THEN                !  UNAMBIGUOUS GREEK LETTER
-             P_ICHR(J)=IG+IGR+IGOFF
-           ELSEIF (IG.EQ.25)THEN           !  EPSILON OR ETA
-             IB=ICHAR(TEXT(K+1:K+1))-ICO
-             IF(IB.EQ.16)THEN              !  EPSILON
-               P_ICHR(J)=5+IGR+IGOFF
-             ELSEIF (IB.EQ.20)THEN         !  ETA
-               P_ICHR(J)=7+IGR+IGOFF
-             ELSE                          !  NOT A GREEK CHARACTER--ERROR RETURN
-               P_ICHR(J)=1000
-             ENDIF
-         ELSEIF (IG.EQ.26)THEN             !  OMEGA OR OMICRON
-           IB=ICHAR(TEXT(K+1:K+1))-ICO
-           IF(IB.NE.13)THEN                ! NOT A GREEK CHARACTER-ERROR RETURN
-             P_ICHR(J)=1000
-           ELSE
-             IC=ICHAR(TEXT(K+2:K+2))-ICO
-             IF(IC.EQ.5)THEN               !  OMEGA
-               P_ICHR(J)=24+IGR+IGOFF
-             ELSEIF (IC.EQ.9)THEN          !  OMICRON
-               P_ICHR(J)=15+IGR+IGOFF
-             ELSE                          !  NOT A GREEK CHARACTER-ERROR RETURN
-               P_ICHR(J)=1000
-             ENDIF
-           ENDIF
-         ELSEIF (IG.EQ.27)THEN             !  PHI,PI, OR PSI
-           IB=ICHAR(TEXT(K+1:K+1))-ICO
-           IF(IB.EQ.8)THEN                 !  PHI
-             P_ICHR(J)=21+IGR+IGOFF
-           ELSEIF (IB.EQ.9)THEN            !  PI
-             P_ICHR(J)=16+IGR+IGOFF
-           ELSEIF (IB.EQ.19)THEN           !  PSI
-             P_ICHR(J)=23+IGR+IGOFF
-           ELSE                            !  NOT A GREEK CHARACTER-ERROR RETURN
-             P_ICHR(J)=1000
-           ENDIF
-           ELSEIF (IG.EQ.28)THEN           ! TAU OR THETA
-             IB=ICHAR(TEXT(K+1:K+1))-ICO
-             IF(IB.EQ.1)THEN               !  TAU
-               P_ICHR(J)=19+IGR+IGOFF
-             ELSEIF(IB.EQ.8)THEN           !  THETA
-               P_ICHR(J)=8+IGR+IGOFF
-             ELSE                          !  NOT A GREEK CHARACTER-ERROR RETURN
-               P_ICHR(J)=1000
-             ENDIF
-           ELSE                            !  NOT A GREEK CHARACTER-ERROR RETURN
-             P_ICHR(J)=1000
-           ENDIF
-          J=J+1
-        ENDIF
-        L=INDEX(TEXT(K:NT),'\')
-        IF(L.EQ.0)THEN
-          K=NT+1
-        ELSE
-          K=K+L
-        ENDIF
-        CYCLE INFINITE
-      ENDIF
-      exit INFINITE
-      enddo INFINITE
-END SUBROUTINE CHRCOD
+            p_ichr(j)=1000
+         endif
+         j=j+1
+         !  MOVE BEYOND CLOSING BACKSLASH-IGNORE EXTRA CHARACTERS
+         !  FUNCTION INDEX RETURNS OFFSET OF SECOND SUBSTRING IN FIRST
+         !  RETURNS 0 IF SUBSTRING NOT FOUND
+         l=index(text(k:nt),'\')
+         if(l.eq.0)then
+            k=nt+1
+         else
+            k=k+l
+         endif
+         cycle infinite
+50       continue
+         !  NOT A NUMBER
+         !  CHECK FOR FONT CHANGE COMMAND
+         if(text(k:k+2).eq.'SIM'.or.text(k:k+2).eq.'sim')then
+            !  SIMPLEX FONT
+            p_ioff=0
+         elseif(text(k:k+1).eq.'CO'.or.text(k:k+1).eq.'co')then
+            !  COMPLEX FONT
+            p_ioff=120
+         elseif(text(k:k+1).eq.'IT'.or.text(k:k+1).eq.'it')then
+            !  ITALIC FONT
+            p_ioff=240
+         elseif (text(k:k+1).eq.'DU'.or.text(k:k+1).eq.'du')then
+            !  DUPLEX FONT
+            p_ioff=312
+            !  FOUND THE BACK-SPACE CODE
+         elseif(text(k:k+1).eq.'BS'.or.text(k:k+1).eq.'bs') then
+            p_ichr(j)=1004
+            j=j+1
+            k=k+3
+            cycle infinite
+            !  CHECK FOR SUPER/SUB-SCRIPT COMMAND
+         elseif(text(k:k+3).eq.'SUP{'.or.text(k:k+3).eq.'sup{')then
+            !  BEGIN SUPERSCRIPTING
+            p_ichr(j)=1001
+            j=j+1
+            k=k+4
+            cycle infinite
+         elseif (text(k:k+3).eq.'SUB{'.or.text(k:k+3).eq.'sub{')then
+            !  BEGIN SUBSCRIPTING
+            p_ichr(j)=1002
+            j=j+1
+            k=k+4
+            cycle infinite
+         else
+            !  GREEK CHARACTER OR INVALID CHARACTER
+            ic=ichar(text(k:k))
+            igoff=min0(p_ioff, 120)
+            if(p_ioff.eq.312)igoff=0
+            if((ic.ge.ichar('A')).and.(ic.le.ichar('Z')))then
+               !  UPPER CASE
+               igr=72
+               ico=ichar('A')-1
+            elseif((ic.ge.ichar('a')).and.(ic.le.ichar('z')))then
+               !  LOWER CASE
+               igr=96
+               ico=ichar('a')-1
+            else
+               !  NOT A LETTER-ERROR RETURN
+               p_ichr(j)=1000
+               j=j+1
+               l=index(text(k:nt),'\')
+               if(l.eq.0)then
+                  k=nt+1
+               else
+                  k=k+l
+               endif
+               cycle infinite
+            endif
+            !  LOOK UP THE CHARACTER
+            ig=iglu(ic-ico)
+            if(ig.lt.25)then                    !  UNAMBIGUOUS GREEK LETTER
+               p_ichr(j)=ig+igr+igoff
+            elseif (ig.eq.25)then               !  EPSILON OR ETA
+               ib=ichar(text(k+1:k+1))-ico
+               if(ib.eq.16)then                 !  EPSILON
+                  p_ichr(j)=5+igr+igoff
+               elseif (ib.eq.20)then            !  ETA
+                  p_ichr(j)=7+igr+igoff
+               else                             !  NOT A GREEK CHARACTER--ERROR RETURN
+                  p_ichr(j)=1000
+               endif
+            elseif (ig.eq.26)then               !  OMEGA OR OMICRON
+               ib=ichar(text(k+1:k+1))-ico
+               if(ib.ne.13)then                 ! NOT A GREEK CHARACTER-ERROR RETURN
+                  p_ichr(j)=1000
+               else
+                  ic=ichar(text(k+2:k+2))-ico
+                  if(ic.eq.5)then               !  OMEGA
+                     p_ichr(j)=24+igr+igoff
+                  elseif (ic.eq.9)then          !  OMICRON
+                     p_ichr(j)=15+igr+igoff
+                  else                          !  NOT A GREEK CHARACTER-ERROR RETURN
+                     p_ichr(j)=1000
+                  endif
+               endif
+            elseif (ig.eq.27)then              !  PHI,PI, OR PSI
+               ib=ichar(text(k+1:k+1))-ico
+               if(ib.eq.8)then                 !  PHI
+                  p_ichr(j)=21+igr+igoff
+               elseif (ib.eq.9)then            !  PI
+                  p_ichr(j)=16+igr+igoff
+               elseif (ib.eq.19)then           !  PSI
+                  p_ichr(j)=23+igr+igoff
+               else                            !  NOT A GREEK CHARACTER-ERROR RETURN
+                  p_ichr(j)=1000
+               endif
+            elseif (ig.eq.28)then            ! TAU OR THETA
+               ib=ichar(text(k+1:k+1))-ico
+               if(ib.eq.1)then               !  TAU
+                  p_ichr(j)=19+igr+igoff
+               elseif(ib.eq.8)then           !  THETA
+                  p_ichr(j)=8+igr+igoff
+               else                          !  NOT A GREEK CHARACTER-ERROR RETURN
+                  p_ichr(j)=1000
+               endif
+            else                             !  NOT A GREEK CHARACTER-ERROR RETURN
+               p_ichr(j)=1000
+            endif
+            j=j+1
+         endif
+         l=index(text(k:nt),'\')
+         if(l.eq.0)then
+            k=nt+1
+         else
+            k=k+l
+         endif
+         cycle infinite
+      endif
+      exit infinite
+   enddo infinite
+end subroutine chrcod
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -2937,7 +2948,7 @@ END SUBROUTINE CHRCOD
 !!    real    :: baseline
 !!    integer :: icolor=0
 !!    real    :: texth=10.0
-!!       !! set up drawing surface
+!!       !-! set up drawing surface
 !!       call prefsize(800, 400)
 !!       call vinit()
 !!       call viewport(0.0, 800.0, 400.0, 0.0)
@@ -2977,7 +2988,7 @@ END SUBROUTINE CHRCOD
 !!    subroutine nextline(string)
 !!    character(len=*) :: string
 !!    real :: xx
-!!    !! reduce some duplicate code; very specific to this example
+!!    !-! reduce some duplicate code; very specific to this example
 !!       call color(icolor)
 !!       baseline=baseline-texth*1.5    ! move down before drawing line
 !!       call makepoly()
@@ -3005,8 +3016,8 @@ character(len=*),intent(in)    :: string
 real                           :: strlength
 
    real                        :: s(4)
-   !!character(len=:),allocatable :: fontstring
-   !!fontstring='\'//trim(P_FONT)//'\'//trim(string)
+   !-!character(len=:),allocatable :: fontstring
+   !-!fontstring='\'//trim(P_FONT)//'\'//trim(string)
 
    call justfy(s, P_TEXT_HEIGHT, trim(string), len_trim(string))
 
@@ -3133,10 +3144,11 @@ end subroutine justfy
 !!
 !!##SYNOPSIS
 !!
-!!        subroutine polyline2(arrx,arry)
+!!  definition:
 !!
-!!           integer,intent(in)          :: arrx(:)
-!!           integer,intent(in),optional :: arry(:)
+!!     subroutine polyline2(arrx,arry)
+!!     integer,intent(in)          :: arrx(:)
+!!     integer,intent(in),optional :: arry(:)
 !!
 !!##DESCRIPTION
 !!        Given either a single array composed of pairs <x(i),y(i)> of
@@ -3509,7 +3521,7 @@ end subroutine arc
 !!    use M_pixel
 !!    use M_pixel__writegif, only : writegif
 !!    implicit none
-!!       !! set up drawing surface
+!!       !-! set up drawing surface
 !!       call prefsize(400,400)
 !!       call vinit()
 !!       call ortho2(left=-100.0, right=100.0, bottom=-100.0, top=100.0)
@@ -3517,7 +3529,7 @@ end subroutine arc
 !!       call clear()
 !!       call color(4)
 !!       call linewidth(200)
-!!       !! draw some circles
+!!       !-! draw some circles
 !!       call circle(0.0, 0.0, 90.0)
 !!       call color(1)
 !!       call circle(0.0, 0.0, 40.0)
@@ -3526,11 +3538,11 @@ end subroutine arc
 !!       call circle(-25.0,-25.0, 20.0)
 !!       call circle( 25.0, 25.0, 20.0)
 !!       call circle( 25.0,-25.0, 20.0)
-!!       !! render the pixel map
+!!       !-! render the pixel map
 !!       call writegif('circle.3m_pixel.gif',P_pixel,P_colormap)
-!!       !! display the graphic assuming display(1) is available
+!!       !-! display the graphic assuming display(1) is available
 !!       call execute_command_line('display circle.3m_pixel.gif')
-!!       !! exit graphics mode
+!!       !-! exit graphics mode
 !!       call vexit()
 !!    end program demo_circle
 !!
@@ -3676,7 +3688,7 @@ end subroutine linewidth
 !!     real    :: y1,y2,ym,x1,x2
 !!     real    :: width=50.0/8.0,width2
 !!     integer :: i
-!!        !! set up long bar as plotting area
+!!        !-! set up long bar as plotting area
 !!        call prefsize(1000,200)
 !!        call vinit()
 !!        call ortho2(-25.0-b, 25.0+b, -5.0-b, 5.0+b)
@@ -3964,7 +3976,7 @@ end subroutine mapcolor
 !!    real              :: width=50.0/8.0,width2
 !!    integer,parameter :: ivals(*)=[3,5,7,10,20,30,60,100]
 !!    integer           :: i
-!!       !! set up long bar as plotting area
+!!       !-! set up long bar as plotting area
 !!       call prefsize(1000,200)
 !!       call vinit()
 !!       call ortho2(-25.0-b, 25.0+b, -5.0-b, 5.0+b)
@@ -4163,6 +4175,8 @@ end subroutine viewport
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
+!!
+!!  definition:
 !!
 !!    subroutine mapping()
 !!
@@ -5014,7 +5028,7 @@ end subroutine vinit
 !!          enddo
 !!          movie(ilines,:,:)=P_pixel
 !!          write(filename,'("hypoc.",i0,".gif")')ilines
-!!          !!call writegif(filename,P_pixel,P_colormap)
+!!          !-!call writegif(filename,P_pixel,P_colormap)
 !!       enddo
 !!       call write_animated_gif('makepoly.3m_pixel.gif',&
 !!               movie,P_colormap,delay=70)
@@ -5692,7 +5706,7 @@ end subroutine print_ascii
 !!    use M_pixel__writegif, only : writegif
 !!    implicit none
 !!    integer :: i,ii
-!!       !! set up long bar as plotting area
+!!       !-! set up long bar as plotting area
 !!       call prefsize(900,150)
 !!       call vinit()
 !!       call ortho2(-30.0, 30.0, -5.0, 5.0)
@@ -5843,7 +5857,7 @@ end subroutine xcentertext
 !!    implicit none
 !!    real    :: x1, y1, xx, yy, ang, r
 !!    integer :: i, j
-!!    !! set up drawing environment
+!!    !-! set up drawing environment
 !!    call prefsize(600,600)
 !!    call vinit()
 !!    call ortho2(-300.0,300.0,-300.0,300.0)
@@ -5858,14 +5872,14 @@ end subroutine xcentertext
 !!       case(3);  call  centertext(.true.);   x1=-150;  y1=+150;  r=100
 !!       case(4);  call  centertext(.false.);  x1=+150;  y1=+150;  r= 30
 !!       end select
-!!       !! draw radial lines
+!!       !-! draw radial lines
 !!       call color(1)
 !!       do i=1,80
 !!          call move2(x1,y1)
 !!          call draw2(x1+150.0*cosd(i*12), y1+150.0*sind(i*12))
 !!       enddo
 !!
-!!       !! draw rotated text
+!!       !-! draw rotated text
 !!       call color(2)
 !!       do i=1,30
 !!          ang=i*12.0
@@ -5935,18 +5949,18 @@ end subroutine centertext
 !!    use :: M_pixel__writegif, only : writegif
 !!    implicit none
 !!    integer :: i
-!!    !! set up drawing environment
+!!    !-! set up drawing environment
 !!    call prefsize(600,600)
 !!    call vinit()
 !!    call ortho2(-100.0,100.0,-100.0,100.0)
 !!    call textsize(7.0,7.0)
 !!    call linewidth(20)
 !!    do i=1,30
-!!       !! draw radial lines
+!!       !-! draw radial lines
 !!       call color(1)
 !!       call move2(0.0,0.0)
 !!       call draw2(100.0*cosd(i*12),100.0*sind(i*12))
-!!       !! draw rotated text
+!!       !-! draw rotated text
 !!       call color(7)
 !!       call move2(30.0*cosd(i*12),30.0*sind(i*12))
 !!       call textang(i*12.0)
@@ -5984,11 +5998,12 @@ end subroutine textang
 !!    font(3f) - [M_pixel:TEXT] select font style by name
 !!    (LICENSE:PD)
 !!
-!!##SYNOPSIS:
+!!##SYNOPSIS
+!!
 !!  definition:
 !!
-!!         subroutine font(fontname)
-!!         character(len=*),intent(in) :: fontname
+!!     subroutine font(fontname)
+!!     character(len=*),intent(in) :: fontname
 !!
 !!##DESCRIPTION
 !!    Set the current font. Allowed names are
@@ -6009,7 +6024,7 @@ end subroutine textang
 !!    real    :: left
 !!    real    :: baseline=80.0
 !!    integer :: icolor=1
-!!       !! set up drawing surface
+!!       !-! set up drawing surface
 !!       call prefsize(400, 400)
 !!       call vinit()
 !!       call viewport(0.0, 400.0, 400.0, 0.0)
@@ -6017,17 +6032,17 @@ end subroutine textang
 !!       call color(7)
 !!       call clear()
 !!       call textsize(10.0, 10.0)
-!!       !! place a vertical line along the edge
+!!       !-! place a vertical line along the edge
 !!       call color(1)
 !!       call move2(-90.0, -90.0)
 !!       call draw2(-90.0, 90.0)
-!!       !! make a centered title at top a bit bolder and bigger
+!!       !-! make a centered title at top a bit bolder and bigger
 !!       call xcentertext()
 !!       call textsize(13.0, 13.0)
 !!       call linewidth(90)
 !!       left=0
 !!       call nextline('Font Samples')
-!!       !! print the font samples
+!!       !-! print the font samples
 !!       left=-90
 !!       call linewidth(0)
 !!       call textsize(10.0, 10.0)
@@ -6046,7 +6061,7 @@ end subroutine textang
 !!    contains
 !!    subroutine nextline(string)
 !!    character(len=*) :: string
-!!    !! reduce some duplicate code; very specific to this example
+!!    !-! reduce some duplicate code; very specific to this example
 !!    integer :: iend
 !!       iend=index(string,',')  ! if comma, assume font name found
 !!       if(iend.ne.0)call font(string(:iend-1)) ! change font
@@ -6106,7 +6121,7 @@ end subroutine font
 !!    integer,parameter :: isize=600
 !!    integer           :: movie(32:124,0:isize-1,0:isize-1)
 !!    integer           :: i
-!!    !! set up environment
+!!    !-! set up environment
 !!    call prefsize(isize,isize)
 !!    call vinit()
 !!    call ortho2(-100.0,100.0,-100.0,100.0)
@@ -6114,7 +6129,7 @@ end subroutine font
 !!    call centertext(.true.)
 !!
 !!    do i=33,124
-!!       !! draw reference circle and crosshairs
+!!       !-! draw reference circle and crosshairs
 !!       call linewidth(100)
 !!       call color(0)
 !!       call clear()
@@ -6132,7 +6147,7 @@ end subroutine font
 !!       movie(i,:,:)=P_pixel
 !!    enddo
 !!    call vexit()
-!!    !! write to file and display with display(1)
+!!    !-! write to file and display with display(1)
 !!    call write_animated_gif('drawchar.3m_pixel.gif',movie,P_colormap)
 !!    call execute_command_line('display drawchar.3m_pixel.gif')
 !!    end program demo_drawchar
@@ -6206,9 +6221,9 @@ end subroutine drawchar
 !!       call textang(45.0)     ! change text angle
 !!
 !!       call drawstr(' World!')! draw string at current position
-!!       !! render pixel array to a file
+!!       !-! render pixel array to a file
 !!       call writegif('drawstr.3m_pixel.gif',P_pixel,P_colormap)
-!!       !! display graphic assuming display(1) is available
+!!       !-! display graphic assuming display(1) is available
 !!       call execute_command_line('display drawstr.3m_pixel.gif')
 !!
 !!       call vexit()           !  wrap up and exit graphics mode
@@ -7141,14 +7156,14 @@ end function sind
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 pure elemental function anyscalar_to_real(valuein) result(r_out)
-use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
+use, intrinsic :: iso_fortran_env, only : error_unit !-! ,input_unit,output_unit
 implicit none
 
 ! ident_5="@(#)M_pixel::anyscalar_to_real(3f): convert integer or real parameter of any kind to real"
 
 class(*),intent(in) :: valuein
 real                :: r_out
-real,parameter      :: big=huge(0.0)
+!-!real,parameter      :: big=huge(0.0)
    select type(valuein)
    type is (integer(kind=int8));   r_out=real(valuein)
    type is (integer(kind=int16));  r_out=real(valuein)
@@ -7156,14 +7171,14 @@ real,parameter      :: big=huge(0.0)
    type is (integer(kind=int64));  r_out=real(valuein)
    type is (real(kind=real32));    r_out=real(valuein)
    type is (real(kind=real64))
-      !!if(valuein.gt.big)then
-      !!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
-      !!endif
+      !-!if(valuein.gt.big)then
+      !-!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
+      !-!endif
       r_out=real(valuein)
    type is (real(kind=real128))
-      !!if(valuein.gt.big)then
-      !!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
-      !!endif
+      !-!if(valuein.gt.big)then
+      !-!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
+      !-!endif
       r_out=real(valuein)
    type is (logical);              r_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));     read(valuein,*) r_out
@@ -7174,7 +7189,7 @@ end function anyscalar_to_real
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 pure function invert_4x4(A) result(B)
-   !! Performs a direct calculation of the inverse of a 4 x 4 matrix.
+   !-! Performs a direct calculation of the inverse of a 4 x 4 matrix.
    integer,parameter            :: wp=kind(0.0)
    real(kind=wp), intent(in) :: A(4,4)   !! Matrix
    real(kind=wp)             :: B(4,4)   !! Inverse matrix
@@ -7261,14 +7276,14 @@ end subroutine sort_shell_integers_hl
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 pure elemental function anyscalar_to_double(valuein) result(d_out)
-use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
+use, intrinsic :: iso_fortran_env, only : error_unit !-! ,input_unit,output_unit
 implicit none
 
 ! ident_4="@(#)M_pixel::anyscalar_to_double(3f): convert integer or real parameter of any kind to doubleprecision"
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out
-doubleprecision,parameter :: big=huge(0.0d0)
+!-!doubleprecision,parameter :: big=huge(0.0d0)
    select type(valuein)
    type is (integer(kind=int8));   d_out=dble(valuein)
    type is (integer(kind=int16));  d_out=dble(valuein)
@@ -7277,257 +7292,181 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
    Type is (real(kind=real128))
-      !!if(valuein.gt.big)then
-      !!   write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
-      !!endif
+      !-!if(valuein.gt.big)then
+      !-!   write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
+      !-!endif
       d_out=dble(valuein)
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
-   !type is (real(kind=real128))
-   !   if(valuein.gt.big)then
-   !      write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
-   !   endif
-   !   d_out=dble(valuein)
+   !-!type is (real(kind=real128))
+   !-!   if(valuein.gt.big)then
+   !-!      write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
+   !-!   endif
+   !-!   d_out=dble(valuein)
    class default
      d_out=0.0d0
-     !!stop '*M_pixel::anyscalar_to_double: unknown type'
+     !-!stop '*M_pixel::anyscalar_to_double: unknown type'
    end select
 end function anyscalar_to_double
 !===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-
 !>
 !!##NAME
-!!    HUE(3f) - [M_pixel:COLOR] converts color components from one color
-!!              model to another
-!!    (LICENSE:PD)
+!!    HUE(3f) - [M_pixel] converts a color's components from one color
+!!    model to another. (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!    subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
+!!     subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
 !!
-!!     character(len=*),intent(in) :: modei
-!!     character(len=*),intent(in) :: modeo
-!!     real,intent(in)             :: clr1i,clr2i,clr3i
-!!     real,intent(out)            :: clr1o,clr2o,clr3o
-!!     integer,intent(out)         :: status
+!!      character(len=*),intent(in) :: modei
+!!      character(len=*),intent(in) :: modeo
+!!      real,intent(in)             :: clr1i,clr2i,clr3i
+!!      real,intent(out)            :: clr1o,clr2o,clr3o
+!!      integer,intent(out)         :: status
 !!
 !!##DESCRIPTION
-!!    Basic color models:
 !!
-!!     +----------------------------------------------------------+
-!!     | valid values for modei and modeo as well as the          |
-!!     | corresponding meanings for clr1*, clr2*, and clr3* are:  |
-!!     +----------------------------------------------------------+
-!!     |model| clr1         |         clr2      |         clr3    |
-!!     |-----+--------------+-------------------+-----------------|
-!!     |hls  |hue           |lightness          |saturation       |
-!!     |-----+--------------+-------------------+-----------------|
-!!     |hsl  |hue           |saturation         |lightness        |
-!!     |-----+--------------+-------------------+-----------------|
-!!     |hvs  |hue           |value              |saturation       |
-!!     |-----+--------------+-------------------+-----------------|
-!!     |hsv  |hue           |saturation         |value            |
-!!     |-----+--------------+-------------------+-----------------|
-!!     |rgb  |red           |green              |blue             |
-!!     |-----+--------------+-------------------+-----------------|
-!!     |cmy  |cyan          |magenta            |yellow           |
-!!     |-----+--------------+-------------------+-----------------|
-!!     |yiq  |gray scale)   |orange-blue        |purple-green     |
-!!     |     |              |chrominance        |chrominance      |
-!!     +----------------------------------------------------------+
+!!    HUE(3f) translates from the first model type to the second.
 !!
-!!    *  lightness, value, saturation, red, green, blue, cyan, magenta, and
-!!       yellow range from 0 to 100,
+!!    MODEI specifies the color model that applies to the input color
+!!    components CLR1I, CLR2I, and CLR3I.
 !!
-!!       * hue ranges from 0 to 360 degrees,
-!!       * y ranges from 0 to 100,
-!!       * i ranges from -60 to 60,
-!!       * q ranges from -52 to 52
+!!    MODEO specifies the color model desired for the output color components
+!!    CLR1O, CLR2O, and CLR3O.
+!!
+!!    At a minimum, this procedure equates the output color values to the
+!!    input color values.
+!!
+!!    Valid values for MODEI and MODEO as well as the corresponding meanings
+!!    for CLR1*, CLR2*, and CLR3* are:
+!!
+!!       | mode  | clr1             | clr2         | clr3
+!!       | ----- | ---------------- |--------------|---------------
+!!       | 'hls' | hue              | lightness    | saturation
+!!       | 'hsl' | hue              | saturation   | lightness
+!!       | 'hvs' | hue              | value        | saturation
+!!       | 'hsv' | hue              | saturation   | value
+!!       | 'rgb' | red              | green        | blue
+!!       | 'cmy' | cyan             | magenta      | yellow
+!!       | 'yiq' | luma(gray-scale) | orange-blue  | purple-green
+!!       |       |                  | chrominance  | chrominance
+!!
+!!           + lightness, value, saturation, red, green, blue, cyan, magenta,
+!!             and yellow range from 0 to 100,
+!!           + hue ranges from 0 to 360 degrees,
+!!           + y ranges from 0 to 100,
+!!           + i ranges from -60 to 60,
+!!           + q ranges from -52 to 52
 !!
 !!    The STATUS variable can signal the following conditions:
 !!
-!!      -1   modei = modeo, so no substantial conversion was done,
-!!       1   one of the input color values was outside the allowable range,
-!!       2   modei was invalid
-!!       3   modeo was invalid
+!!      -1     modei = modeo, so no substantial conversion was done,
+!!       1     one of the input color values was outside the allowable range,
+!!       2     modei was invalid
+!!       3     modeo was invalid
+!!       999   unknown error
 !!
 !!##EXAMPLES
 !!
-!! Sample program
 !!
-!!     program demo_hue
-!!     use M_pixel, only : hue
-!!     implicit none
-!!        !                      NAME       RGB(0-255)            HLS(0-100)
-!!        call check_name('hls','red',      [ 100, 0,   0   ],[ 0,   50,  100 ])
-!!        call check_name('hls','orange',   [ 100, 65,  0   ],[ 39,  50,  100 ])
-!!        call check_name('hls','yellow',   [ 100, 100, 0   ],[ 60,  50,  100 ])
-!!        call check_name('hls','green',    [ 0,   100, 0   ],[ 120, 50,  100 ])
-!!        call check_name('hls','cyan',     [ 0,   100, 100 ],[ 180, 50,  100 ])
-!!        call check_name('hls','blue',     [ 0,   0,   100 ],[ 240, 50,  100 ])
-!!        call check_name('hls','magenta',  [ 100, 0,   100 ],[ 300, 50,  100 ])
-!!        call check_name('hls','black',    [ 0,   0,   0   ],[ 0,   0,   0   ])
-!!        call check_name('hls','white',    [ 100, 100, 100 ],[ 0,   100, 0   ])
-!!        call check_name('hsv','black',    [ 0,   0,   0   ],[ 0,   0,   0   ])
-!!        !                      NAME        RGB(0-255)            HSV(0-100)
-!!        call check_name('hsv','gray50',   [ 50,  50,  50  ],[ 0,   0,   50  ])
-!!        call check_name('hsv','silver',   [ 75,  75,  75  ],[ 0,   0,   75  ])
-!!        call check_name('hsv','white',    [ 100, 100, 100 ],[ 0,   0,   100 ])
-!!        call check_name('hsv','red4',     [ 55,  0,   0   ],[ 0,   100, 55  ])
-!!        call check_name('hsv','red',      [ 100, 0,   0   ],[ 0,   100, 100 ])
-!!        call check_name('hsv','olive',    [ 50,  50,  0   ],[ 60,  100, 50  ])
-!!        call check_name('hsv','yellow',   [ 100, 100, 0   ],[ 60,  100, 100 ])
-!!        call check_name('hsv','green',    [ 0,   100, 0   ],[ 120, 100, 100 ])
-!!        call check_name('hsv','lime',     [ 0,   100, 0   ],[ 120, 100, 100 ])
-!!        call check_name('hsv','teal',     [ 0,   50,  50  ],[ 180, 100, 50  ])
-!!        call check_name('hsv','cyan',     [ 0,   100, 100 ],[ 180, 100, 100 ])
-!!        call check_name('hsv','navy',     [ 0,   0,   50  ],[ 240, 100, 50  ])
-!!        call check_name('hsv','blue',     [ 0,   0,   100 ],[ 240, 100, 100 ])
-!!        call check_name('hsv','purple',   [ 63,  13,  94  ],[ 277, 87,  94  ])
-!!        call check_name('hsv','magenta4', [ 55,  0,   55  ],[ 300, 100, 55  ])
-!!        call check_name('hsv','magenta',  [ 100, 0,   100 ],[ 300, 100, 100 ])
-!!        call check_name('hsv','maroon',   [ 69,  19,  38  ],[ 338, 73,  69  ])
-!!     contains
-!!     subroutine check_name(modelout,name,rgb,other)
-!!     ! given a color convert to MODELOUT and compare to expected values
-!!     character(len=*),intent(in)   :: name
-!!     integer,intent(in)            :: rgb(3), other(3)
-!!     character(len=*),intent(in)   :: modelout
-!!        real                       :: val1,val2,val3
-!!        integer                    :: status
-!!        ! convert RGB values to MODELOUT values
-!!        call hue('rgb',REAL(rgb(1)),REAL(rgb(2)),REAL(rgb(3)), &
-!!        & modelout,val1,val2,val3,status)
-!!           write(*,*)'COLOR '//trim(name)
-!!           write(*,*)'EXPECTED '//modelout//' ====>',other
-!!           write(*,*)'RETURNED '//modelout//' ====>', &
-!!           & int([val1+0.5,val2+0.5,val3+0.5])
-!!           write(*,*)'STATUS ==========>',status
-!!     end subroutine check_name
-!!     end program demo_hue
+!!   Sample program
 !!
-!!    Results:
+!!    program demo_hue
+!!    use M_pixel, only : hue
+!!    implicit none
+!!       !               NAME        RGB(0-255)            HLS(0-100)
+!!       call chk('hls','red',     [100, 0,   0  ], [0,   50,  100])
+!!       call chk('hls','orange',  [100, 65,  0  ], [39,  50,  100])
+!!       call chk('hls','yellow',  [100, 100, 0  ], [60,  50,  100])
+!!       call chk('hls','green',   [0,   100, 0  ], [120, 50,  100])
+!!       call chk('hls','cyan',    [0,   100, 100], [180, 50,  100])
+!!       call chk('hls','blue',    [0,   0,   100], [240, 50,  100])
+!!       call chk('hls','magenta', [100, 0,   100], [300, 50,  100])
+!!       call chk('hls','black',   [0,   0,   0  ], [0,   0,   0  ])
+!!       call chk('hls','white',   [100, 100, 100], [0,   100, 0  ])
+!!       !               NAME        RGB(0-255)           HSV(0-100)
+!!       call chk('hsv','red',     [100, 0,   0  ], [0,   100, 100])
+!!       call chk('hsv','yellow',  [100, 100, 0  ], [60,  100, 100])
+!!       call chk('hsv','green',   [0,   100, 0  ], [120, 100, 100])
+!!       call chk('hsv','cyan',    [0,   100, 100], [180, 100, 100])
+!!       call chk('hsv','blue',    [0,   0,   100], [240, 100, 100])
+!!       call chk('hsv','magenta', [100, 0,   100], [300, 100, 100])
+!!       call chk('hsv','black',   [0,   0,   0  ], [0,   0,   0  ])
+!!       call chk('hsv','white',   [100, 100, 100], [0,   0,   100])
 !!
-!!     COLOR red
-!!     EXPECTED hls ====>           0          50         100
-!!     RETURNED hls ====>           0          50         100
-!!     STATUS ==========>           0
-!!     COLOR orange
-!!     EXPECTED hls ====>          39          50         100
-!!     RETURNED hls ====>          39          50         100
-!!     STATUS ==========>           0
-!!     COLOR yellow
-!!     EXPECTED hls ====>          60          50         100
-!!     RETURNED hls ====>          60          50         100
-!!     STATUS ==========>           0
-!!     COLOR green
-!!     EXPECTED hls ====>         120          50         100
-!!     RETURNED hls ====>         120          50         100
-!!     STATUS ==========>           0
-!!     COLOR cyan
-!!     EXPECTED hls ====>         180          50         100
-!!     RETURNED hls ====>         180          50         100
-!!     STATUS ==========>           0
-!!     COLOR blue
-!!     EXPECTED hls ====>         240          50         100
-!!     RETURNED hls ====>         240          50         100
-!!     STATUS ==========>           0
-!!     COLOR magenta
-!!     EXPECTED hls ====>         300          50         100
-!!     RETURNED hls ====>         300          50         100
-!!     STATUS ==========>           0
-!!     COLOR black
-!!     EXPECTED hls ====>           0           0           0
-!!     RETURNED hls ====>           0           0           0
-!!     STATUS ==========>           0
-!!     COLOR white
-!!     EXPECTED hls ====>           0         100           0
-!!     RETURNED hls ====>           0         100           0
-!!     STATUS ==========>           0
-!!     COLOR black
-!!     EXPECTED hsv ====>           0           0           0
-!!     RETURNED hsv ====>           0           0           0
-!!     STATUS ==========>           0
-!!     COLOR gray50
-!!     EXPECTED hsv ====>           0           0          50
-!!     RETURNED hsv ====>           0           0          50
-!!     STATUS ==========>           0
-!!     COLOR silver
-!!     EXPECTED hsv ====>           0           0          75
-!!     RETURNED hsv ====>           0           0          75
-!!     STATUS ==========>           0
-!!     COLOR white
-!!     EXPECTED hsv ====>           0           0         100
-!!     RETURNED hsv ====>           0           0         100
-!!     STATUS ==========>           0
-!!     COLOR red4
-!!     EXPECTED hsv ====>           0         100          55
-!!     RETURNED hsv ====>           0         100          55
-!!     STATUS ==========>           0
-!!     COLOR red
-!!     EXPECTED hsv ====>           0         100         100
-!!     RETURNED hsv ====>           0         100         100
-!!     STATUS ==========>           0
-!!     COLOR olive
-!!     EXPECTED hsv ====>          60         100          50
-!!     RETURNED hsv ====>          60         100          50
-!!     STATUS ==========>           0
-!!     COLOR yellow
-!!     EXPECTED hsv ====>          60         100         100
-!!     RETURNED hsv ====>          60         100         100
-!!     STATUS ==========>           0
-!!     COLOR green
-!!     EXPECTED hsv ====>         120         100         100
-!!     RETURNED hsv ====>         120         100         100
-!!     STATUS ==========>           0
-!!     COLOR lime
-!!     EXPECTED hsv ====>         120         100         100
-!!     RETURNED hsv ====>         120         100         100
-!!     STATUS ==========>           0
-!!     COLOR teal
-!!     EXPECTED hsv ====>         180         100          50
-!!     RETURNED hsv ====>         180         100          50
-!!     STATUS ==========>           0
-!!     COLOR cyan
-!!     EXPECTED hsv ====>         180         100         100
-!!     RETURNED hsv ====>         180         100         100
-!!     STATUS ==========>           0
-!!     COLOR navy
-!!     EXPECTED hsv ====>         240         100          50
-!!     RETURNED hsv ====>         240         100          50
-!!     STATUS ==========>           0
-!!     COLOR blue
-!!     EXPECTED hsv ====>         240         100         100
-!!     RETURNED hsv ====>         240         100         100
-!!     STATUS ==========>           0
-!!     COLOR purple
-!!     EXPECTED hsv ====>         277          87          94
-!!     RETURNED hsv ====>         277          86          94
-!!     STATUS ==========>           0
-!!     COLOR magenta4
-!!     EXPECTED hsv ====>         300         100          55
-!!     RETURNED hsv ====>         300         100          55
-!!     STATUS ==========>           0
-!!     COLOR magenta
-!!     EXPECTED hsv ====>         300         100         100
-!!     RETURNED hsv ====>         300         100         100
-!!     STATUS ==========>           0
-!!     COLOR maroon
-!!     EXPECTED hsv ====>         338          73          69
-!!     RETURNED hsv ====>         337          72          69
-!!     STATUS ==========>           0
+!!       call chk('hsv','gray50',  [50,  50,  50 ], [0,   0,   50 ])
+!!       call chk('hsv','silver',  [75,  75,  75 ], [0,   0,   75 ])
+!!       call chk('hsv','red4',    [55,  0,   0  ], [0,   100, 55 ])
+!!       call chk('hsv','olive',   [50,  50,  0  ], [60,  100, 50 ])
+!!       call chk('hsv','lime',    [0,   100, 0  ], [120, 100, 100])
+!!       call chk('hsv','teal',    [0,   50,  50 ], [180, 100, 50 ])
+!!       call chk('hsv','navy',    [0,   0,   50 ], [240, 100, 50 ])
+!!       call chk('hsv','purple',  [63,  13,  94 ], [277, 87,  94 ])
+!!       call chk('hsv','magenta4',[55,  0,   55 ], [300, 100, 55 ])
+!!       call chk('hsv','maroon',  [69,  19,  38 ], [338, 73,  69 ])
+!!    contains
+!!    subroutine chk(modelout,name,rgb,other)
+!!    ! given a color convert to MODELOUT and compare to expected values
+!!    character(len=*),intent(in)   :: name
+!!    integer,intent(in)            :: rgb(3), other(3)
+!!    character(len=*),intent(in)   :: modelout
+!!       real                       :: val1,val2,val3
+!!       integer                    :: status
+!!       ! convert RGB values to MODELOUT values
+!!       call hue('rgb',REAL(rgb(1)),REAL(rgb(2)),REAL(rgb(3)),&
+!!       & modelout,val1,val2,val3,status)
+!!          ! left-justify name to 10 characters or more
+!!          write(*,'(a,1x)',advance='no') &
+!!          & [ character(len=max(10,len_trim(name))) ::' '//trim(name)]
+!!          write(*,'(a,1x,3(i3,1x))',advance='no') &
+!!          & modelout//' EXPECTED',other
+!!          write(*,'(a,1x,3(i3,1x))',advance='no') &
+!!          & 'GOT',int([val1+0.5,val2+0.5,val3+0.5])
+!!          write(*,'(a,i0)')'STATUS ',status
+!!    end subroutine chk
+!!    end program demo_hue
+!!
+!!   Results:
+!!
+!!     red       hls EXPECTED   0  50 100 GOT   0  50 100 STATUS 0
+!!     orange    hls EXPECTED  39  50 100 GOT  39  50 100 STATUS 0
+!!     yellow    hls EXPECTED  60  50 100 GOT  60  50 100 STATUS 0
+!!     green     hls EXPECTED 120  50 100 GOT 120  50 100 STATUS 0
+!!     cyan      hls EXPECTED 180  50 100 GOT 180  50 100 STATUS 0
+!!     blue      hls EXPECTED 240  50 100 GOT 240  50 100 STATUS 0
+!!     magenta   hls EXPECTED 300  50 100 GOT 300  50 100 STATUS 0
+!!     black     hls EXPECTED   0   0   0 GOT   0   0   0 STATUS 0
+!!     white     hls EXPECTED   0 100   0 GOT   0 100   0 STATUS 0
+!!     black     hsv EXPECTED   0   0   0 GOT   0   0   0 STATUS 0
+!!     gray50    hsv EXPECTED   0   0  50 GOT   0   0  50 STATUS 0
+!!     silver    hsv EXPECTED   0   0  75 GOT   0   0  75 STATUS 0
+!!     white     hsv EXPECTED   0   0 100 GOT   0   0 100 STATUS 0
+!!     red4      hsv EXPECTED   0 100  55 GOT   0 100  55 STATUS 0
+!!     red       hsv EXPECTED   0 100 100 GOT   0 100 100 STATUS 0
+!!     olive     hsv EXPECTED  60 100  50 GOT  60 100  50 STATUS 0
+!!     yellow    hsv EXPECTED  60 100 100 GOT  60 100 100 STATUS 0
+!!     green     hsv EXPECTED 120 100 100 GOT 120 100 100 STATUS 0
+!!     lime      hsv EXPECTED 120 100 100 GOT 120 100 100 STATUS 0
+!!     teal      hsv EXPECTED 180 100  50 GOT 180 100  50 STATUS 0
+!!     cyan      hsv EXPECTED 180 100 100 GOT 180 100 100 STATUS 0
+!!     navy      hsv EXPECTED 240 100  50 GOT 240 100  50 STATUS 0
+!!     blue      hsv EXPECTED 240 100 100 GOT 240 100 100 STATUS 0
+!!     purple    hsv EXPECTED 277  87  94 GOT 277  86  94 STATUS 0
+!!     magenta4  hsv EXPECTED 300 100  55 GOT 300 100  55 STATUS 0
+!!     magenta   hsv EXPECTED 300 100 100 GOT 300 100 100 STATUS 0
+!!     maroon    hsv EXPECTED 338  73  69 GOT 337  72  69 STATUS 0
 !!
 !!##AUTHOR
 !!    John S. Urban
 !!
 !!##LICENSE
 !!    Public Domain
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
+
+! ident_63="@(#) M_pixel hue(3f) convert color components from one color model to another"
+
 character(len=*),intent(in) :: modei
 real,intent(in)             :: clr1i,clr2i,clr3i
 character(len=*),intent(in) :: modeo
@@ -7548,7 +7487,7 @@ real                        :: c1, c2, c3, r, g, b
    output_color_model=lower(modeo)
 !-----------------------------------------------------------------------------------------------------------------------------------
 !-- check for a trivial instance where the input and output model names are the same
-   if(input_color_model .eq. output_color_model) then
+   if(input_color_model  ==  output_color_model) then
       clr1o=clr1i
       clr2o=clr2i
       clr3o=clr3i
@@ -7559,10 +7498,10 @@ real                        :: c1, c2, c3, r, g, b
 !-- check for a transpose of terms, another trivial instance.
    SELECT CASE (input_color_model)
    CASE ('hls','hsl','hvs','hsv')
-      if( input_color_model.eq.'hls' .and. output_color_model.eq.'hsl'   &
-    & .or.input_color_model.eq.'hsl' .and. output_color_model.eq.'hls'   &
-    & .or.input_color_model.eq.'hvs' .and. output_color_model.eq.'hsv'   &
-    & .or.input_color_model.eq.'hsv' .and. output_color_model.eq.'hvs') then
+      if( input_color_model == 'hls' .and. output_color_model == 'hsl'   &
+    & .or.input_color_model == 'hsl' .and. output_color_model == 'hls'   &
+    & .or.input_color_model == 'hvs' .and. output_color_model == 'hsv'   &
+    & .or.input_color_model == 'hsv' .and. output_color_model == 'hvs') then
          clr1o=clr1i
          clr2o=clr3i
          clr3o=clr2i
@@ -7590,7 +7529,7 @@ real                        :: c1, c2, c3, r, g, b
       return
    END SELECT
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(status .ne. 0 )then
+   if(status  /=  0 )then
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -7609,7 +7548,7 @@ real                        :: c1, c2, c3, r, g, b
       return
    END SELECT
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(status .ne. 0 )then
+   if(status  /=  0 )then
       return
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -7617,7 +7556,54 @@ end subroutine hue
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    RGBHLS(3fp) - [M_pixel] Given red, green, and blue color components
+!!    calculates the hue, lightness, and saturation for a color (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine rgbhls(r,g,b,h,l,s,status)
+!!
+!!      ! red component as a value of 0 to 100
+!!      real, intent(in)  :: r
+!!      ! green component as a value of 0 to 100
+!!      real, intent(in)  :: g
+!!      ! blue component as a value of 0 to 100
+!!      real, intent(in)  :: b
+!!      ! hue value in the range of 0 to 360 degrees
+!!      real, intent(out) :: h
+!!      ! lightness as a percent value from 0 to 100
+!!      real, intent(out) :: l
+!!      ! saturation as a percent from 0 to 100
+!!      real, intent(out) :: s
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    RGB values are in the range 0-100; hue is 0-360 degrees;
+!!    lightness and saturation have a range of 0-100.
+!!
+!!      Color   RGB                 HLS
+!!      Red     100.0   0.0   0.0     0  50.0 100.0
+!!      Yellow  100.0 100.0   0.0    60  50.0 100.0
+!!      Green     0.0 100.0   0.0   120  50.0 100.0
+!!      Cyan      0.0 100.0 100.0   180  50.0 100.0
+!!      Blue      0.0   0.0 100.0   240  50.0 100.0
+!!      Magenta 100.0   0.0 100.0   300  50.0 100.0
+!!      White   100.0 100.0 100.0 (any) 100.0 (any)
+!!      Black     0.0   0.0   0.0 (any)   0.0 (any)
+!!      Maroon   50.0   0.0   0.0     0  25.0 100.0
+!!      Pink    100.0  50.0  50.0     0  75.0 100.0
+!!
+!!    AUTHOR
+!!           John S. Urban
+!!
+!!    LICENSE
+!!           Public Domain
 subroutine rgbhls(r0,g0,b0,h,l,s,status)
+
+! ident_64="@(#) M_pixel rgbhls(3fp) given red green blue values calculate hue lightness saturation"
 
 !     given  : r, g, b each as a value of 0 to 100
 !     desired: h as a value of 0 to 360 degrees.
@@ -7627,9 +7613,9 @@ real    :: r0,g0,b0
 real    :: r,g,b,h,l,s
 real    :: clrmax,clrmin,clrdel,clrsum,rr,gg,bb
 integer :: status
-   if(r0 .lt. 0.0 .or. r0 .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
-   if(g0 .lt. 0.0 .or. g0 .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
-   if(b0 .lt. 0.0 .or. b0 .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
+   if(r0  <  0.0 .or. r0  >  100.0 ) status = 1 !---- passive check for valid range of values.
+   if(g0  <  0.0 .or. g0  >  100.0 ) status = 1 !---- passive check for valid range of values.
+   if(b0  <  0.0 .or. b0  >  100.0 ) status = 1 !---- passive check for valid range of values.
    r=r0/100.0
    g=g0/100.0
    b=b0/100.0
@@ -7638,24 +7624,24 @@ integer :: status
    clrdel=clrmax-clrmin
    clrsum=clrmax+clrmin
    l=clrsum/2.0
-   if(clrdel.ne.0.0 ) then
+   if(clrdel /= 0.0 ) then
       rr=(clrmax-r)/clrdel
       gg=(clrmax-g)/clrdel
       bb=(clrmax-b)/clrdel
-      if(l.le.0.5) then
+      if(l <= 0.5) then
          s=clrdel/clrsum
       else
          s=clrdel/(2.0-clrsum)
       endif
-      if(r.eq.clrmax) then
+      if(r == clrmax) then
          h=bb-gg
-      else if(g.eq.clrmax) then
+      else if(g == clrmax) then
          h=2.0 +rr-bb
-      else if(b.eq.clrmax) then
+      else if(b == clrmax) then
          h=4.0 +gg-rr
       endif
       h=h*60.0
-      if(h.lt.0.0 ) then
+      if(h < 0.0 ) then
          h=h+360.0
       endif
    else
@@ -7664,19 +7650,73 @@ integer :: status
    endif
    l=l*100.0
    s=s*100.0
-   if(h .lt. 0.0 ) h = 0.0   !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(h .gt. 360.0 ) h = 360.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(l .lt. 0.0 ) l=0.0
-   if(l .gt. 100.0 ) l = 100.0
-   if(s .lt. 0.0 ) s=0.0
-   if(s .gt. 100.0 ) s = 100.0
+   if(h  <    0.0 ) h = 0.0   !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(h  >  360.0 ) h = 360.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(l  <    0.0 ) l=0.0
+   if(l  >  100.0 ) l = 100.0
+   if(s  <    0.0 ) s=0.0
+   if(s  >  100.0 ) s = 100.0
 end subroutine rgbhls
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    RGBHVS(3fp) - [M_pixel] calculates the hue, value, & saturation
+!!    for a color given in red, green, & blue components values.
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine rgbhvs(r,g,b,h,v,s,status)
+!!
+!!      ! the red component as a value of 0 to 100.
+!!      real, intent(in)  :: r
+!!      ! the green component as a value of 0 to 100.
+!!      real, intent(in)  :: g
+!!      ! the blue component as a value of 0 to 100.
+!!      real, intent(in)  :: b
+!!      ! the hue value in the range of 0 to 360 degrees
+!!      real, intent(out) :: h
+!!      ! the "value" as a percent value from 0 to 100.
+!!      real, intent(out) :: v
+!!      ! the saturation as a percent from 0 to 100.
+!!      real, intent(out) :: s
+!!      integer           :: status
+!!
+!!
+!!##DESCRIPTION
+!!    RGBHVS(3f) calculates the hue, value, & saturation for a color
+!!    given in red, green, & blue components values.
+!!
+!!       Color    Color
+!!       name     Hex      (R,G,B)        (H,S,V)
+!!       Black    #000000  (0,0,0)        (0º,0%,0%)
+!!       White    #FFFFFF  (100,100,100)  (0º,0%,100%)
+!!       Red      #FF0000  (100,0,0)      (0º,100%,100%)
+!!       Lime     #00FF00  (0,100,0)      (120º,100%,100%)
+!!       Blue     #0000FF  (0,0,100)      (240º,100%,100%)
+!!       Yellow   #FFFF00  (100,100,0)    (60º,100%,100%)
+!!       Cyan     #00FFFF  (0,100,100)    (180º,100%,100%)
+!!       Magenta  #FF00FF  (100,0,100)    (300º,100%,100%)
+!!       Silver   #C0C0C0  (75,75,75)     (0º,0%,75%)
+!!       Gray     #808080  (50,50,50)     (0º,0%,50%)
+!!       Maroon   #800000  (50,0,0)       (0º,100%,50%)
+!!       Olive    #808000  (50,50,0)      (60º,100%,50%)
+!!       Green    #008000  (0,50,0)       (120º,100%,50%)
+!!       Purple   #800080  (50,0,50)      (300º,100%,50%)
+!!       Teal     #008080  (0,50,50)      (180º,100%,50%)
+!!       Navy     #000080  (0,0,50)       (240º,100%,50%)
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 subroutine rgbhvs(r0,g0,b0,h,v,s,status)
 
-! ident_63="@(#) M_pixel rgbhvs(3fp) given red green blue calculate hue saturation value components"
+! ident_65="@(#) M_pixel rgbhvs(3fp) given red green blue calculate hue saturation value components"
 
 !---- this procedure calculates a hue, saturation, value equivalent for a
 !     color given in red, green, & blue components.
@@ -7689,9 +7729,9 @@ real,intent(out) :: h,v,s
 integer          :: status
 real             :: r,g,b
 real             :: clrmax,clrmin,clrdel,rr,gg,bb
-   if(r0 .lt. 0.0 .or. r0 .gt. 100.0 ) status = 1 !---- check for valid range of values.
-   if(g0 .lt. 0.0 .or. g0 .gt. 100.0 ) status = 1 !---- check for valid range of values.
-   if(b0 .lt. 0.0 .or. b0 .gt. 100.0 ) status = 1 !---- check for valid range of values.
+   if(r0  <  0.0 .or. r0  >  100.0 ) status = 1 !---- check for valid range of values.
+   if(g0  <  0.0 .or. g0  >  100.0 ) status = 1 !---- check for valid range of values.
+   if(b0  <  0.0 .or. b0  >  100.0 ) status = 1 !---- check for valid range of values.
    r=r0
    g=g0
    b=b0
@@ -7702,51 +7742,85 @@ real             :: clrmax,clrmin,clrdel,rr,gg,bb
    clrmin=amin1(r,g,b)
    clrdel=clrmax-clrmin
    v=clrmax
-   if(clrmax.ne.0.0 )then
+   if(clrmax /= 0.0 )then
          s=clrdel/clrmax
    else
          s=0.0
    endif
-   if(s.ne.0.0 )then
+   if(s /= 0.0 )then
          rr=(clrmax-r)/clrdel
          gg=(clrmax-g)/clrdel
          bb=(clrmax-b)/clrdel
-         if(r.eq.clrmax)then
+         if(r == clrmax)then
             h=bb-gg
-         else if(g.eq.clrmax) then
+         else if(g == clrmax) then
             h=2.0 +rr-bb
-         else if(b.eq.clrmax) then
+         else if(b == clrmax) then
             h=4.0 +gg-rr
          endif
          h=h*60.0
-         if(h.lt.0.0 ) then
+         if(h < 0.0 ) then
             h=h+360.0
          endif
    endif
    v=v*100.0
    s=s*100.0
-   if(h .gt. 360.0 ) h = 360.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(h .lt. 0.0 ) h =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(v .gt. 100.0 ) v = 100.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(v .lt. 0.0 ) v =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(s .gt. 100.0 ) s = 100.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
-   if(s .lt. 0.0 ) s =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(h  >  360.0 ) h = 360.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(h  <    0.0 ) h =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(v  >  100.0 ) v = 100.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(v  <    0.0 ) v =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(s  >  100.0 ) s = 100.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
+   if(s  <    0.0 ) s =   0.0 !---- Eliminate any roundoff that exceeds the limits (or hide formula bug!)
 end subroutine rgbhvs
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    cmyrgb(3fp) - [M_pixel] calculates the cyan, magenta, and yellow
+!!    components given the red, green, and blue component values.
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine cmyrgb(c,m,y,r,g,b,status)
+!!
+!!      ! cyan component as a value in the range of 0 to 100
+!!      real, intent(in)  :: c
+!!      ! magenta component as a value in the range of 0 to 100
+!!      real, intent(in)  :: m
+!!      ! yellow component as a value in the range of 0 to 100
+!!      real, intent(in)  :: y
+!!      ! red component as a value in the range of 0 to 100
+!!      real, intent(out) :: r
+!!      ! green component as a value in the range of 0 to 100
+!!      real, intent(out) :: g
+!!      ! blue component as a value in the range of 0 to 100
+!!      real, intent(out) :: b
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    CMYRGB(3f) calculates the cyan, magenta, and yellow components
+!!    given the red, green, and blue component values.
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 subroutine cmyrgb(c,m,y,r,g,b,status)
 
-! ident_64="@(#) M_pixel cmyrgb(3fp) given cyan magenta yellow calculate red green blue components"
+! ident_66="@(#) M_pixel cmyrgb(3fp) given cyan magenta yellow calculate red green blue components"
 
 ! given  : r, g, b each as a value of 0 to 100
 ! desired: c, m, y each as a value of 0 to 100
 real,intent(in)   :: c,m,y
 real,intent(out)  :: r,g,b
 integer           :: status
-   if(c .lt. 0.0 .or. c .gt. 100.0 ) status = 1 !---- passively check for valid range of values.
-   if(m .lt. 0.0 .or. m .gt. 100.0 ) status = 1 !---- passively check for valid range of values.
-   if(y .lt. 0.0 .or. y .gt. 100.0 ) status = 1 !---- passively check for valid range of values.
+   if(c  <  0.0 .or. c  >  100.0 ) status = 1 !---- passively check for valid range of values.
+   if(m  <  0.0 .or. m  >  100.0 ) status = 1 !---- passively check for valid range of values.
+   if(y  <  0.0 .or. y  >  100.0 ) status = 1 !---- passively check for valid range of values.
    r= 100.0 - c
    g= 100.0 - m
    b= 100.0 - y
@@ -7754,18 +7828,67 @@ end subroutine cmyrgb
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    rgbcmy(3fp) - [M_pixel] calculates the cyan, magenta, and yellow
+!!    components given the red, green, and blue component values.
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine rgbcmy(r,g,b,c,m,y,status)
+!!
+!!      ! the red component as a value in the range of 0 to 100
+!!      real, intent(in)  :: r
+!!      ! the green component as a value in the range of 0 to 100
+!!      real, intent(in)  :: g
+!!      ! the blue component as a value in the range of 0 to 100
+!!      real, intent(in)  :: b
+!!      ! the cyan component as a value in the range of 0 to 100
+!!      real, intent(out) :: c
+!!      ! the magenta component as a value in the range of 0 to 100
+!!      real, intent(out) :: m
+!!      ! the yellow component as a value in the range of 0 to 100
+!!      real, intent(out) :: y
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    rgbcmy(3fp) calculates the cyan, magenta, and yellow
+!!    components given the red, green, and blue component values.
+!!
+!!##EXAMPLES
+!!
+!!  Sample values:
+!!
+!!       Color
+!!       name     (C,M,Y)        (R,G,B)        Hex
+!!       Black    (100,100,100)  (0,0,0)        #000000
+!!       White    (0,0,0)        (100,100,100)  #FFFFFF
+!!       Red      (0,100,100)    (100,0,0)      #FF0000
+!!       Green    (100,0,100)    (0,100,0)      #00FF00
+!!       Blue     (100,100,0)    (0,0,100)      #0000FF
+!!       Yellow   (0,0,100)      (100,100,0)    #FFFF00
+!!       Cyan     (100,0,0)      (0,100,100)    #00FFFF
+!!       Magenta  (0,100,0)      (100,0,100)    #FF00FF
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 subroutine rgbcmy(r,g,b,c,m,y,status)
 
-! ident_65="@(#) M_pixel rgbcmy(3fp) given red green blue calculate cyan magenta yellow components"
+! ident_67="@(#) M_pixel rgbcmy(3fp) given red green blue calculate cyan magenta yellow components"
 
 !     given  : r, g, b each as a value of 0 to 100
 !     desired: c, m, y each as a value of 0 to 100
 real,intent(in)  :: r,g,b
 real,intent(out) :: c,m,y
 integer          :: status
-   if(r .lt. 0.0 .or. r .gt. 100.0 ) status = 1 !---- check for valid range of values.
-   if(g .lt. 0.0 .or. g .gt. 100.0 ) status = 1 !---- check for valid range of values.
-   if(b .lt. 0.0 .or. b .gt. 100.0 ) status = 1 !---- check for valid range of values.
+   if(r  <  0.0 .or. r  >  100.0 ) status = 1 !---- check for valid range of values.
+   if(g  <  0.0 .or. g  >  100.0 ) status = 1 !---- check for valid range of values.
+   if(b  <  0.0 .or. b  >  100.0 ) status = 1 !---- check for valid range of values.
    c = 100.0 - r
    m = 100.0 - g
    y = 100.0 - b
@@ -7774,9 +7897,82 @@ end subroutine rgbcmy
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    RGBMONO(3f) - [M_pixel] converts RGB colors to a reasonable grayscale
+!!    intensity
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    subroutine rgbmono(rr,rg,rb,ri,status)
+!!
+!!     real, intent(in)  :: RR
+!!     real, intent(in)  :: RG
+!!     real, intent(in)  :: RB
+!!     real, intent(out) :: RI
+!!     integer           :: status
+!!
+!!##DESCRIPTION
+!!    RGBMONO(3f) converts RGB colors to a reasonable grayscale intensity.
+!!    This can be used to produce monochrome images from color images.
+!!    Intensity is calculated from the specified Red, Green, Blue intensities
+!!    as 0.30*R + 0.59*G + 0.11*B, as in U.S. color television systems,
+!!    NTSC encoding. Note that most devices do not have an infinite range
+!!    of monochrome intensities available.
+!!
+!!##OPTIONS
+!!     RR      red component of the input color in the range 0 to 100
+!!     RG      green component of the input color in the range 0 to 100
+!!     RB      blue component of the input color in the range 0 to 100
+!!
+!!##RETURNS
+!!     RI      grayscale intensity calculated in the range 0 to 100
+!!     status  zero (0) if no error occurred, otherwise result is out
+!!             of bounds
+!!
+!!##EXAMPLES
+!!
+!!   Sample:
+!!
+!!    program demo_rgbmono
+!!    use M_pixel, only : rgbmono
+!!    implicit none
+!!    real    :: gray
+!!    integer :: ierr
+!!    call rgbmono(100.0,  0.0,  0.0,gray,ierr); write(*,*)'red     ',gray
+!!    call rgbmono(  0.0,100.0,  0.0,gray,ierr); write(*,*)'green   ',gray
+!!    call rgbmono(  0.0,  0.0,100.0,gray,ierr); write(*,*)'blue    ',gray
+!!    call rgbmono(100.0,100.0,  0.0,gray,ierr); write(*,*)'Yellow  ',gray
+!!    call rgbmono(  0.0,100.0,100.0,gray,ierr); write(*,*)'Cyan    ',gray
+!!    call rgbmono(100.0,  0.0,100.0,gray,ierr); write(*,*)'Magenta ',gray
+!!    call rgbmono(100.0,100.0,100.0,gray,ierr); write(*,*)'White   ',gray
+!!    call rgbmono( 00.0,  0.0,  0.0,gray,ierr); write(*,*)'Black   ',gray
+!!    call rgbmono( 50.0,  0.0,  0.0,gray,ierr); write(*,*)'Maroon  ',gray
+!!    call rgbmono(100.0, 50.0, 50.0,gray,ierr); write(*,*)'Pink    ',gray
+!!    end program demo_rgbmono
+!!
+!!   Results:
+!!
+!!     red        30.0000019
+!!     green      58.9999962
+!!     blue       11.0000000
+!!     Yellow     89.0000000
+!!     Cyan       70.0000000
+!!     Magenta    41.0000000
+!!     White      100.000000
+!!     Black      0.00000000
+!!     Maroon     15.0000010
+!!     Pink       65.0000000
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 subroutine rgbmono(rr,rg,rb,ri,status)
 
-! ident_66="@(#) M_pixel rgbmono(3f) convert RGB colors to a reasonable grayscale"
+! ident_68="@(#) M_pixel rgbmono(3f) convert RGB colors to a reasonable grayscale"
 
 ! monochrome devices that support intensity can have intensity calculated from the specified Red, Green, Blue
 ! intensities as 0.30*R + 0.59*G + 0.11*B, as in US color television systems, NTSC encoding.
@@ -7786,24 +7982,47 @@ real,intent(in)      :: rr,rg,rb                ! red, green, blue, & intensity 
 real,intent(out)     :: ri
 integer,intent(out)  :: status
    status=0
-   if(rr .lt. 0.0 .or. rr .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
-   if(rg .lt. 0.0 .or. rg .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
-   if(rb .lt. 0.0 .or. rb .gt. 100.0 ) status = 1 !---- passive check for valid range of values.
+   if(rr  <  0.0 .or. rr  >  100.0 ) status = 1 !---- passive check for valid range of values.
+   if(rg  <  0.0 .or. rg  >  100.0 ) status = 1 !---- passive check for valid range of values.
+   if(rb  <  0.0 .or. rb  >  100.0 ) status = 1 !---- passive check for valid range of values.
    ri = 0.30*rr + 0.59*rg + 0.11*rb
 end subroutine rgbmono
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    RGBVAL(3fp) - [M_pixel] is an internal private function used by
+!!    hlsrgb(3fp). (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine rgbval(clr1,clr2,h)
+!!
+!!      integer, intent(in) :: h ! H is the hue value in degrees
+!!      real, intent(in) :: clr1 !
+!!      real, intent(in) :: clr2 !
+!!
+!!##DESCRIPTION
+!!    Function RGBVAL(3f) is an internal private function used by
+!!    hlsrgb().
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 real function rgbval(clr1,clr2,h)
 
-! ident_67="@(#) M_pixel rgbval(3fp) ensure a value is in the appropriate range and quadrant"
+! ident_69="@(#) M_pixel rgbval(3fp) ensure a value is in the appropriate range and quadrant"
 
 real    :: clr1,clr2
 real    :: h
 real    :: h2
    h2=h
    do
-      if(h2.gt.360.0 ) then
+      if(h2 > 360.0 ) then
          h2=h2-360.0
          cycle
       endif
@@ -7811,18 +8030,18 @@ real    :: h2
    enddo
 
    do
-      if( h2 .lt. 0.0 ) then
+      if( h2  <  0.0 ) then
          h2=h2+360.0
          cycle
       endif
       exit
    enddo
 
-   if(h2.lt.60.0 ) then
+   if(h2 < 60.0 ) then
       rgbval=clr1+(clr2-clr1)*h2/60.0
-   else if(h2.lt.180.0) then
+   else if(h2 < 180.0) then
       rgbval=clr2
-   else if(h2.lt.240.0) then
+   else if(h2 < 240.0) then
       rgbval=clr1+(clr2-clr1)*(240.0-h2)/60.0
    else
       rgbval=clr1
@@ -7832,9 +8051,43 @@ end function rgbval
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    HLSRGB(3fp) - [M_pixel] calculates the red, green, & blue
+!!    components for a color given in hue, lightness, & saturation
+!!    values. (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine hlsrgb (h,l,s,r,g,b,status)
+!!
+!!      ! hue value in the range of 0 to 360 degrees
+!!      real, intent(in)  :: h
+!!      ! lightness as a percent value from 0 to 100.
+!!      real, intent(in)  :: l
+!!      ! saturation as a percent from 0 to 100.
+!!      real, intent(in)  :: s
+!!      ! red component as a value of 0 to 100.
+!!      real, intent(out) :: r
+!!      ! green component as a value of 0 to 100.
+!!      real, intent(out) :: g
+!!      ! blue component as a value of 0 to 100.
+!!      real, intent(out) :: b
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    HLSRGB(3f) calculates the red, green, & blue components for a
+!!    color given in hue, lightness, & saturation values.
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 subroutine hlsrgb(H,L,S,R,G,B,status)
 
-! ident_68="@(#) M_pixel hlsrgb(3fp) convert HLS(hue lightness saturation) values to RGB components"
+! ident_70="@(#) M_pixel hlsrgb(3fp) convert HLS(hue lightness saturation) values to RGB components"
 
 !     given  : hue as a value of 0 to 360 degrees.
 !     .        lightness and saturation each as a value of 0 to 100.
@@ -7845,18 +8098,18 @@ real,intent(out)  :: R,G,B
 integer           :: status
 real              :: hue,lightness,saturation
 real              :: clr1,clr2
-   if(h .lt. 0.0 .or. h .gt.360.0 ) status = 1 ! passively report on bad input values
-   if(l .lt. 0.0 .or. l .gt.100.0 ) status = 1 ! passively report on bad input values
-   if(s .lt. 0.0 .or. s .gt.100.0 ) status = 1 ! passively report on bad input values
+   if(h  <  0.0 .or. h  > 360.0 ) status = 1 ! passively report on bad input values
+   if(l  <  0.0 .or. l  > 100.0 ) status = 1 ! passively report on bad input values
+   if(s  <  0.0 .or. s  > 100.0 ) status = 1 ! passively report on bad input values
    hue =           H
    lightness =     L/100.0
    saturation =    S/100.0
-   if( saturation .eq. 0.0 ) then
+   if( saturation  ==  0.0 ) then
       R = lightness
       G = lightness
       B = lightness
    endif
-   if(lightness .le. 0.50) then
+   if(lightness  <=  0.50) then
       clr2= lightness*( 1.0 + saturation )
    else
       clr2= lightness + saturation - lightness * saturation
@@ -7869,9 +8122,43 @@ end subroutine hlsrgb
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    HVSRGB(3fp) - [M_pixel] calculates the red, green, & blue
+!!    components for a color given in hue, value, & saturation values.
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine hvsrgb(h,v,s,r,g,b,status)
+!!
+!!      ! H is the hue value in the range of 0 to 360 degrees
+!!      real, intent(in)  :: h
+!!      ! V is the "value" as a percent value from 0 to 100.
+!!      real, intent(in)  :: v
+!!      ! S is the saturation as a percent from 0 to 100.
+!!      real, intent(in)  :: s
+!!      ! R is the red component as a value of 0 to 100.
+!!      real, intent(out) :: r
+!!      ! G is the green component as a value of 0 to 100.
+!!      real, intent(out) :: g
+!!      ! B is the blue component as a value of 0 to 100.
+!!      real, intent(out) :: b
+!!      integer           :: status
+!!
+!!##DESCRIPTION
+!!    HVSRGB(3f) calculates the red, green, & blue components for a
+!!    color given in hue, value, & saturation values.
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 subroutine hvsrgb(h,v,s,r,g,b,status)
 
-! ident_69="@(#) M_pixel hvsrgb(3fp) given hue saturation value calculate red green blue components"
+! ident_71="@(#) M_pixel hvsrgb(3fp) given hue saturation value calculate red green blue components"
 
 !     given  : hue as value of 0 to 360 degrees.
 !     .        saturation and value each as a value of 0 to 100.
@@ -7882,20 +8169,20 @@ integer            :: status
 real               :: hue,value,saturation
 integer            :: ifloor
 real               :: f,p,q,t
-   if(h .lt. 0.0 .or. h .gt.360.0 ) status = 1 ! passively report on bad input values
-   if(v .lt. 0.0 .or. v .gt.100.0 ) status = 1 ! passively report on bad input values
-   if(s .lt. 0.0 .or. s .gt.100.0 ) status = 1 ! passively report on bad input values
+   if(h  <  0.0 .or. h  > 360.0 ) status = 1 ! passively report on bad input values
+   if(v  <  0.0 .or. v  > 100.0 ) status = 1 ! passively report on bad input values
+   if(s  <  0.0 .or. s  > 100.0 ) status = 1 ! passively report on bad input values
    hue=h
    value=v/100.0
    saturation=s/100.0
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(saturation.eq.0.0) then
+   if(saturation == 0.0) then
       r=value
       g=value
       b=value
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   if(hue.eq.360.0) then
+   if(hue == 360.0) then
       hue=0.0
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -7905,15 +8192,15 @@ real               :: f,p,q,t
    p=value*(1.0-saturation)
    q=value*(1.0-(saturation*f))
    t=value*(1.0-(saturation*(1-f)))
-   SELECT CASE (ifloor)
-   CASE (0) ;r=value; g=t; b=p
-   CASE (1) ;r=q; g=value; b=p
-   CASE (2) ;r=p; g=value; b=t
-   CASE (3) ;r=p; g=q; b=value
-   CASE (4) ;r=t; g=p; b=value
-   CASE (5) ;r=value; g=p; b=q
-   CASE DEFAULT
-   END SELECT
+   select case (ifloor)
+   case (0) ;r=value; g=t; b=p
+   case (1) ;r=q; g=value; b=p
+   case (2) ;r=p; g=value; b=t
+   case (3) ;r=p; g=q; b=value
+   case (4) ;r=t; g=p; b=value
+   case (5) ;r=value; g=p; b=q
+   case default
+   end select
    r=r*100.0
    g=g*100.0
    b=b*100.0
@@ -7921,20 +8208,43 @@ end subroutine hvsrgb
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    YIQRGB(3fp) - [M_pixel] Convert luma, orange-blue chrominance,
+!!    and purple-green chrominance to RGB values. (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine yiqrgb(y,i,q,r,g,b,status)
+!!
+!!      real,intent(in)  :: y,i,q
+!!      real,intent(out) :: r,g,b
+!!      integer          :: status
+!!
+!!##DESCRIPTION
+!!    Convert luma, orange-blue chrominance, and purple-green
+!!    chrominance to RGB values.
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 subroutine yiqrgb(y,i,q,r,g,b,status)
 
-! ident_70="@(#) M_pixel yiqrgb(3fp) convert luma orange-blue chrominance purple-green chrominance to RGB"
+! ident_72="@(#) M_pixel yiqrgb(3fp) convert luma orange-blue chrominance purple-green chrominance to RGB"
 
 real,intent(in)  :: y,i,q
 real,intent(out) :: r,g,b
 integer          :: status
 !
 !----    i don't believe that this is an exhaustive test of value ranges
-!        for yiq. for example yiq=(100.0,60.0,52.0) when converted to
+!        for yiq.  for example yiq=(100.0,60.0,52.0) when converted to
 !        rgb produces values greater than 100!?
 !
-      if(i .lt. -60.0 .or. i .gt.  60.0) status = 1
-      if(q .lt. -53.0 .or. q .gt.  53.0) status = 1
+      if(i  <  -60.0 .or. i  >   60.0) status = 1
+      if(q  <  -53.0 .or. q  >   53.0) status = 1
 
       r = 1.0 * y + 0.956 * i + 0.621 * q
       g = 1.0 * y - 0.272 * i - 0.647 * q
@@ -7957,35 +8267,58 @@ end subroutine yiqrgb
 !=============================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+!>
+!!##NAME
+!!    RGBYIQ(3fp) - [M_pixel] Convert RGB values to luma, orange-blue
+!!    chrominance, and purple-green chrominance. (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!
+!!     subroutine rgbyiq(r,g,b,y,i,q,status)
+!!
+!!      real,intent(in)  :: r,g,b
+!!      real,intent(out) :: y,i,q
+!!      integer          :: status
+!!
+!!##DESCRIPTION
+!!    Convert RGB values to luma, orange-blue chrominance, and
+!!    purple-green chrominance.
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
 subroutine rgbyiq(r,g,b,y,i,q,status)
 
-! ident_71="@(#) M_pixel rgbyiq(3fp) convert RGB to luma orange-blue chrominance purple-green chrominance"
+! ident_73="@(#) M_pixel rgbyiq(3fp) convert RGB to luma orange-blue chrominance purple-green chrominance"
 
 real,intent(in)  :: r,g,b
 real,intent(out) :: y,i,q
 integer          :: status
-   if(r.lt.0.0 .or. r.gt.100.0) status=1
-   if(g.lt.0.0 .or. g.gt.100.0) status=1
-   if(b.lt.0.0 .or. b.gt.100.0) status=1
+   if(r < 0.0 .or. r > 100.0) status=1
+   if(g < 0.0 .or. g > 100.0) status=1
+   if(b < 0.0 .or. b > 100.0) status=1
 
    y= 0.299 * r + 0.587 * g + 0.114 * b
    i= 0.596 * r - 0.274 * g - 0.322 * b
    q= 0.211 * r - 0.523 * g + 0.312 * b
 
 !-- Eliminate any roundoff that exceeds the limits.
-   if(i .lt. -59.57 ) i = -59.57
-   if(i .gt.  59.57 ) i =  59.57
-   if(q .lt. -52.26 ) q = -52.26
-   if(q .gt.  52.26 ) q =  52.26
+   if(i  <  -59.57 ) i = -59.57
+   if(i  >   59.57 ) i =  59.57
+   if(q  <  -52.26 ) q = -52.26
+   if(q  >   52.26 ) q =  52.26
 end subroutine rgbyiq
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !>
 !!##NAME
-!!     closest_color_name(3f) - [M_pixel:COLOR] returns the closest name
-!!     for the given RGB values.
-!!     (LICENSE:PD)
+!!    closest_color_name(3f) - [M_pixel] returns the closest name for the
+!!    given RGB values.
+!!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
@@ -7995,51 +8328,52 @@ end subroutine rgbyiq
 !!     character(len=20),intent(out) :: closestname
 !!
 !!##DESCRIPTION
-!!     closest_color_name() returns the closest name for the given RGB
-!!     values. Most X11 Windows color names are supported.
+!!    CLOSEST_COLOR_NAME(3f) returns the closest name for the given RGB values.
+!!    Most X11 Windows color names are supported.
 !!
 !!##OPTIONS
-!!     R   red component, range of 0 to 100
-!!     G   green component, range of 0 to 100
-!!     B   blue component, range of 0 to 100
+!!    R   red component, range of 0 to 100
+!!    G   green component, range of 0 to 100
+!!    B   blue component, range of 0 to 100
 !!
 !!##RETURNS
-!!     CLOSESTNAME   name of color found closest to given RGB value</li>
+!!    CLOSESTNAME   name of color found closest to given RGB value
 !!
 !!##EXAMPLES
 !!
-!!    Sample program
 !!
-!!        program demo_closest_color_name
-!!        use M_pixel, only : closest_color_name
-!!        implicit none
-!!        character(len=100) :: string ! at least 20 characters
-!!           string=' '
+!!   Sample program
 !!
-!!           call closest_color_name(100.0,  0.0,  0.0,string)
-!!           write(*,*)trim(string)
+!!    program demo_closest_color_name
+!!    use M_pixel, only : closest_color_name
+!!    character(len=100) :: string ! at least 20 characters
+!!       string=' '
 !!
-!!           call closest_color_name(  0.0,100.0,  0.0,string)
-!!           write(*,*)trim(string)
+!!       call closest_color_name(100.0,  0.0,  0.0,string)
+!!       write(*,*)trim(string)
 !!
-!!           call closest_color_name(  0.0,  0.0,100.0,string)
-!!           write(*,*)trim(string)
+!!       call closest_color_name(  0.0,100.0,  0.0,string)
+!!       write(*,*)trim(string)
 !!
-!!        end program demo_closest_color_name
+!!       call closest_color_name(  0.0,  0.0,100.0,string)
+!!       write(*,*)trim(string)
 !!
-!!    Results:
+!!    end program demo_closest_color_name
 !!
-!!        red
-!!        green
-!!        blue
+!!   Results:
+!!
+!!    red
+!!    green
+!!    blue
+!!
 !!##AUTHOR
 !!    John S. Urban
 !!
 !!##LICENSE
 !!    Public Domain
-SUBROUTINE closest_color_name(r,g,b,closestname)
+subroutine closest_color_name(r,g,b,closestname)
 
-! ident_72="@(#) M_pixel closest_color_name(3f) given RGB values try to find closest named color"
+! ident_74="@(#) M_pixel closest_color_name(3f) given RGB values try to find closest named color"
 
 real,intent(in)               :: r,g,b
 character(len=*),intent(out) :: closestname
@@ -8047,19 +8381,21 @@ real                          :: rn,gn,bn
 real                          :: distance, minimum_distance
 character(len=20)             :: echoname
 integer                       :: i
+character(len=20)             :: string
 !-----------------------------------------------------------------------------------------------------------------------------------
    minimum_distance=1000.0
    closestname='Unknown'
    INFINITE: do i=1,1000
-      call color_name2rgb(i2s(i),rn,gn,bn,echoname)       ! get next color
-      if(echoname.eq.'Unknown') exit INFINITE
+      write(string,'(i0)')i
+      call color_name2rgb(string,rn,gn,bn,echoname)       ! get next color
+      if(echoname == 'Unknown') exit INFINITE
       distance=sqrt( (r-rn)**2 + (g-gn)**2 + (b-bn)**2 )
-      if(distance.lt.minimum_distance)then
+      if(distance < minimum_distance)then
          closestname=echoname
          minimum_distance=min(minimum_distance,distance)
       endif
    enddo INFINITE
-end SUBROUTINE closest_color_name
+end subroutine closest_color_name
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -8070,6 +8406,8 @@ end SUBROUTINE closest_color_name
 !!     (LICENSE:PD)
 !!
 !!##SYNOPSIS
+!!
+!!  definition:
 !!
 !!    subroutine color_name2rgb(name,r,g,b,echoname)
 !!
@@ -8117,7 +8455,7 @@ end SUBROUTINE closest_color_name
 !!    Public Domain
 subroutine color_name2rgb(name,r,g,b,echoname)
 
-! ident_73="@(#) M_pixel color_name2rgb(3f) given a color name return rgb color values in range 0 to 100"
+! ident_75="@(#) M_pixel color_name2rgb(3f) given a color name return rgb color values in range 0 to 100"
 
 character(len=*),intent(in)            :: name
 real,intent(out)                       :: r,g,b
@@ -8702,7 +9040,7 @@ END SUBROUTINE color_name2rgb
 !===================================================================================================================================
 elemental pure function lower(str) result (string)
 
-! ident_74="@(#) M_pixel lower(3f) Changes a string to lowercase"
+! ident_76="@(#) M_pixel lower(3f) Changes a string to lowercase"
 
 character(*), intent(In)     :: str
 character(len(str))          :: string
@@ -8726,6 +9064,8 @@ end function lower
 !!     (LICENSE:PD)
 !!
 !!##SYNOPSIS
+!!
+!!  definition:
 !!
 !!    subroutine polar_to_cartesian(radius,inclination,x,y)
 !!
@@ -8758,15 +9098,15 @@ end function lower
 !!    implicit none
 !!    real    :: x,y
 !!    real    :: r,i
-!!    !!integer :: ios
+!!    !-!integer :: ios
 !!
-!!     !!INFINITE: do
-!!     !!   write(*,advance='no')'Enter radius and inclination(in radians):'
-!!     !!   read(*,*,iostat=ios) r, i
-!!     !!   if(ios.ne.0)exit INFINITE
+!!     !-!INFINITE: do
+!!     !-!   write(*,advance='no')'Enter radius and inclination(in radians):'
+!!     !-!   read(*,*,iostat=ios) r, i
+!!     !-!   if(ios.ne.0)exit INFINITE
 !!        call polar_to_cartesian(r,i,x,y)
 !!        write(*,*)'x=',x,' y=',y,'radius=',r,'inclination=',i
-!!     !!enddo INFINITE
+!!     !-!enddo INFINITE
 !!    end program demo_polar_to_cartesian
 !!
 !!##AUTHOR
@@ -8776,7 +9116,7 @@ end function lower
 !!    Public Domain
 subroutine polar_to_cartesian(radius,inclination,x,y)
 implicit none
-! ident_75="@(#) M_pixel polar_to_cartesian(3f) convert polar coordinates to cartesian coordinates"
+! ident_77="@(#) M_pixel polar_to_cartesian(3f) convert polar coordinates to cartesian coordinates"
 real,intent(in) :: radius,inclination
 real,intent(out)  :: x,y
    if(radius.eq.0)then
@@ -8796,6 +9136,8 @@ end subroutine polar_to_cartesian
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
+!!
+!!  definition:
 !!
 !!    elemental real function d2r(degrees)
 !!
@@ -8838,7 +9180,7 @@ end subroutine polar_to_cartesian
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental real function d2r_r(degrees)
 
-! ident_76="@(#) M_pixel d2r_r(3f) Convert degrees to radians"
+! ident_78="@(#) M_pixel d2r_r(3f) Convert degrees to radians"
 
 real,intent(in)           :: degrees                ! input degrees to convert to radians
    d2r_r=dble(degrees)/Deg_Per_Rad                  ! do the unit conversion
@@ -8846,7 +9188,7 @@ end function d2r_r
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental doubleprecision function d2r_d(degrees)
 
-! ident_77="@(#) M_pixel d2r_d(3f) Convert degrees to radians"
+! ident_79="@(#) M_pixel d2r_d(3f) Convert degrees to radians"
 
 doubleprecision,intent(in) :: degrees               ! input degrees to convert to radians
    d2r_d=degrees/Deg_Per_Rad                        ! do the unit conversion
@@ -8854,7 +9196,7 @@ end function d2r_d
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental doubleprecision function d2r_i(idegrees)
 
-! ident_78="@(#) M_pixel d2r_i(3f) Convert degrees to radians"
+! ident_80="@(#) M_pixel d2r_i(3f) Convert degrees to radians"
 
 integer,intent(in) :: idegrees                      ! input degrees to convert to radians
    d2r_i=nint(dble(idegrees)/Deg_Per_Rad)           ! do the unit conversion

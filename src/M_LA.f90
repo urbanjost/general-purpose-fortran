@@ -4971,7 +4971,7 @@ double precision xr(ldx,*), xi(ldx,*), sr(*), si(*), er(*), ei(*), ur(ldu,*), ui
 !         V         DOUBLE-COMPLEX(LDV,P), WHERE LDV.GE.P.
 !                   V CONTAINS THE MATRIX OF RIGHT SINGULAR VECTORS.
 !                   V IS NOT REFERENCED IF JOBB.EQ.0. IF P.LE.N,
-!                   THEN V MAY BE IDENTIFIED WHTH X IN THE
+!                   THEN V MAY BE IDENTIFIED WITH X IN THE
 !                   SUBROUTINE ML_CALL.
 !
 !         INFO      INTEGER.

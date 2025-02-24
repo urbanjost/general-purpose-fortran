@@ -13,15 +13,16 @@
 !!     use M_process, only : streampointer, process_debug
 !!
 !!##DESCRIPTION
-!!   Module M_process(3f) lets Fortran code read/write lines from/to processes.
+!!   Module M_process(3f) lets Fortran code read/write lines from/to
+!!   processes.
 !!
 !!   These Fortran procedures use the ISO_C_BINDING interface to define
 !!   Fortran-callable versions of the C procedures popen(3c)/pclose(3c)
 !!   and fgets(3c)/fputs(3c). A set of record-oriented wrapper routines
 !!   are then used to create a simple Fortran-callable interface.
 !!
-!!   A POSIX C interface is generally available but may require using a Linux
-!!   subwindow or an application such as CygWin on MSWindows platforms.
+!!   A POSIX C interface is generally available but may require using a
+!!   Linux subwindow or an application such as CygWin on MSWindows platforms.
 !!
 !!   Basically, you
 !!
@@ -366,9 +367,9 @@ end interface
 ! popen
 interface
    function system_popen(path, mode) bind(C, name='popen')
-      use, intrinsic :: ISO_C_BINDING
-      character(kind=c_char), dimension(*) :: path, mode
-      type (c_ptr) :: system_popen
+      use,intrinsic                       :: ISO_C_BINDING
+      character(kind=c_char),dimension(*) :: path, mode
+      type(c_ptr)                         :: system_popen
    end function
 end interface
 !-------------------------------------------------------------------------------
@@ -396,11 +397,11 @@ end interface
 ! fgets
 interface
    function system_fgets(buf, siz, handle) bind(C, name='fgets')
-      use, intrinsic :: ISO_C_BINDING
-      type (c_ptr) :: system_fgets
+      use, intrinsic                       :: ISO_C_BINDING
+      type (c_ptr)                         :: system_fgets
       character(kind=c_char), dimension(*) :: buf
-      integer(kind=c_int), value :: siz
-      type (c_ptr), value :: handle
+      integer(kind=c_int), value           :: siz
+      type (c_ptr), value                  :: handle
    end function
 end interface
 !-------------------------------------------------------------------------------
@@ -409,8 +410,8 @@ end interface
 ! pclose
 interface
    function system_pclose(handle) bind(C, name='pclose')
-      use, intrinsic :: ISO_C_BINDING
-      integer(c_int) :: system_pclose
+      use, intrinsic      :: ISO_C_BINDING
+      integer(c_int)      :: system_pclose
       type (c_ptr), value :: handle
    end function
 end interface
@@ -436,10 +437,10 @@ end interface
 !!    success must be `0'; any non-negative value is permitted.
 interface
    function system_fputs(buf, handle) bind(C, name='fputs')
-      use, intrinsic :: ISO_C_BINDING
-      integer(c_int) :: system_fputs
-      character(kind=c_char), dimension(*) :: buf
-      type (c_ptr), value :: handle
+      use,intrinsic                       :: ISO_C_BINDING
+      integer(c_int)                      :: system_fputs
+      character(kind=c_char),dimension(*) :: buf
+      type(c_ptr),value                   :: handle
    end function
 end interface
 !-------------------------------------------------------------------------------
@@ -533,8 +534,8 @@ contains
 !!  This example shows a routine to read the output of a system command.
 !!
 !!   program demo_process_open_read
-!!   use M_process ,ONLY: process_open_read, process_readline
-!!   use M_process ,ONLY: streampointer, process_close
+!!   use M_process ,only: process_open_read, process_readline
+!!   use M_process ,only: streampointer, process_close
 !!   implicit none
 !!   type(streampointer) :: fp
 !!   ! line of data to read (assumed long enough to hold any output line)
@@ -582,14 +583,10 @@ subroutine process_open_read(cmd,fp,ierr)
 
 ! ident_2="@(#) M_process process_open_read(3f) open process to read from"
 
-! shell command to start process with
-character(len=*),intent(in)     :: cmd
-! file pointer returned for process
-type(streampointer),intent(out) :: fp
-! status for attempt to open process (0= no error)
-integer,intent(out)             :: ierr
-! read/write mode parameter to pass to popen(3c)
-character(len=3),parameter      :: mode='r'
+character(len=*),intent(in)     :: cmd      ! shell command to start process with
+type(streampointer),intent(out) :: fp       ! file pointer returned for process
+integer,intent(out)             :: ierr     ! status for attempt to open process (0= no error)
+character(len=3),parameter      :: mode='r' ! read/write mode parameter to pass to popen(3c)
 !-------------------------------------------------------------------------------
    ierr=0
    call process_open(cmd,mode,fp,ierr)
@@ -644,8 +641,8 @@ end subroutine process_open_read
 !!   & stdin=>input_unit, &
 !!   & stdout=>output_unit, &
 !!   & stderr=>error_unit
-!!   use M_process ,ONLY: process_open_write, process_writeline
-!!   use M_process ,ONLY: streampointer, process_close
+!!   use M_process,only: process_open_write, process_writeline
+!!   use M_process,only: streampointer, process_close
 !!   implicit none
 !!   type(streampointer) :: fp
 !!   ! line of data to write
@@ -699,14 +696,10 @@ subroutine process_open_write(cmd,fp,ierr)
 
 ! ident_3="@(#) M_process process_open_write(3f) open process to write to"
 
-! shell command to start process with
-character(len=*),intent(in)     :: cmd
-! file pointer returned for process
-type(streampointer),intent(out) :: fp
-! status for attempt to open process (0= no error)
-integer,intent(out)             :: ierr
-! read/write mode parameter to pass to popen(3c)
-character(len=3),parameter      :: mode='w'
+character(len=*),intent(in)     :: cmd      ! shell command to start process with
+type(streampointer),intent(out) :: fp       ! file pointer returned for process
+integer,intent(out)             :: ierr     ! status for attempt to open process (0= no error)
+character(len=3),parameter      :: mode='w' ! read/write mode parameter to pass to popen(3c)
 !-------------------------------------------------------------------------------
    ierr=0
    call process_open(cmd,mode,fp,ierr)
@@ -731,14 +724,10 @@ subroutine process_open(cmd,mode,fp,ierr)
 
 ! ident_4="@(#) M_process process_open(3fp) open process"
 
-! shell command to start process with
-character(len=*),intent(in)     :: cmd
-! read/write/mode parameter to pass to popen(3c)
-character(len=*),intent(in)     :: mode
-! file pointer returned for process
-type(streampointer),intent(out) :: fp
-! status for attempt to open process (0= no error)
-integer,intent(out)             :: ierr
+character(len=*),intent(in)     :: cmd  ! shell command to start process with
+character(len=*),intent(in)     :: mode ! read/write/mode parameter to pass to popen(3c)
+type(streampointer),intent(out) :: fp   ! file pointer returned for process
+integer,intent(out)             :: ierr ! status for attempt to open process (0= no error)
 !-------------------------------------------------------------------------------
    ierr=0
    fp%handle = system_popen(trim(cmd) // C_NULL_CHAR, trim(mode) // C_NULL_CHAR)
@@ -806,7 +795,7 @@ integer,intent(out)             :: ierr
 !!
 !!  Sample output:
 !!
-!!     CLOSE   : process is opened with status            0
+!!     CLOSE   : process is opened with status         0
 !!     CLOSE   : process closed with status           13
 !!
 !!##SEE ALSO
@@ -945,9 +934,9 @@ character(len=*),intent(out)   :: readfrom
 type(streampointer),intent(in) :: fp
 integer,intent(out)            :: ierr
 
-integer (kind=c_int) :: clen
-integer :: eos, i
-integer :: ios
+integer (kind=c_int)           :: clen
+integer                        :: eos, i
+integer                        :: ios
    clen=len(readfrom)-1
    readfrom=' '
 
@@ -990,10 +979,10 @@ end subroutine process_readline
 !!
 !!    function process_readall(cmd,delim,ierr)  result(string)
 !!
-!!       character(len=*),intent(in)              :: cmd
-!!       character(len=*),intent(in),optional     :: delim
-!!       integer,intent(out),optional             :: ierr
-!!       character(len=:),allocatable             :: string
+!!       character(len=*),intent(in)          :: cmd
+!!       character(len=*),intent(in),optional :: delim
+!!       integer,intent(out),optional         :: ierr
+!!       character(len=:),allocatable         :: string
 !!##OPTIONS
 !!       cmd        command to pass to system
 !!       delim      delimiter to place between output lines when they
@@ -1012,7 +1001,7 @@ end subroutine process_readline
 !!     program demo_process_readall
 !!      use M_process, only: process_readall
 !!      implicit none
-!!      integer :: ierr
+!!      integer                      :: ierr
 !!      character(len=:),allocatable :: string
 !!          string=process_readall('ls',ierr=ierr)
 !!          write(*,*)ierr,string
@@ -1068,16 +1057,16 @@ function process_readall(cmd,delim,ierr)  result(string)      !! not hardened
 
 ! ident_7="@(#) M_process process_readall(3f) read all lines from process"
 
-character(len=*),intent(in)    :: cmd
-character(len=:),allocatable   :: string  !! assume will not run out of memory
-character(len=*),intent(in),optional  :: delim
-integer,intent(out),optional   :: ierr
+character(len=*),intent(in)          :: cmd
+character(len=:),allocatable         :: string  !! assume will not run out of memory
+character(len=*),intent(in),optional :: delim
+integer,intent(out),optional         :: ierr
 
-character(len=:),allocatable   :: delim_local
-integer                        :: ierr_local(3), ierr_read
-integer                        :: i
-type(streampointer)            :: fp
-character(len=4096)            :: line    !! assumed long enough
+character(len=:),allocatable         :: delim_local
+integer                              :: ierr_local(3), ierr_read
+integer                              :: i
+type(streampointer)                  :: fp
+character(len=4096)                  :: line    !! assumed long enough
 !-------------------------------------------------------------------------------
    if(present(delim))then
       delim_local=delim

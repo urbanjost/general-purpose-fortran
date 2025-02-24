@@ -1,8 +1,8 @@
      program demo_ismember
      use M_sets, only: ismember
      character(len=*),parameter :: g='(*(g0,1x))'
-     integer, allocatable      :: A(:)
-     integer, allocatable      :: B(:)
+     integer, allocatable       :: A(:)
+     integer, allocatable       :: B(:)
 
         write(*,g) 'ISMEMBER', 'Determine which elements of A are also in B.'
 

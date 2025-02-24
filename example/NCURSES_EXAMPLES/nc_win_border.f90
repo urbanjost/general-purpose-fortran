@@ -13,7 +13,7 @@ program win_border ! @(#) draw box that can be moved around screen with ncurses(
    call getmaxyx(stdscr,LINES,COLS)                            ! get the number of rows and columns
    ierr=noecho()
    ierr=raw()
-   ierr=cbreak()                                               ! Line buffering disabled, Pass on everthing to me
+   ierr=cbreak()                                               ! Line buffering disabled, Pass on everything to me
    ierr=keypad(stdscr, TRUE)                            ! I need that nifty F1
    height = 3                                                  ! box size
    width = 10

@@ -2,20 +2,20 @@
       implicit none
       integer,parameter  :: wp=kind(0.0d0)
       real(kind=wp)      :: value
-      integer            :: ios
+      integer            :: iostat
       integer            :: lun
       character(len=256) :: message
          ! make a scratch input file for demonstration purposes
          call makefile(lun)
          write(*,*)'Begin entering numeric values, one per line'
          do
-            read(lun,*,iostat=ios,iomsg=message)value
-            if(ios.eq.0)then
+            read(lun,*,iostat=iostat,iomsg=message)value
+            if(iostat.eq.0)then
                write(*,*)'VALUE=',value
-            elseif( is_iostat_end(ios) ) then
+            elseif( is_iostat_end(iostat) ) then
                stop 'end of file. Goodbye!'
             else
-               write(*,*)'ERROR:',ios,trim(message)
+               write(*,*)'ERROR:',iostat,trim(message)
                exit
             endif
             !
@@ -23,7 +23,7 @@
       contains
       subroutine makefile(lun)
       ! make a scratch file just for demonstration purposes
-      integer :: iostat,lun
+      integer :: lun
       integer :: i
       character(len=255),parameter  :: fakefile(*)=[character(len=255) :: &
 

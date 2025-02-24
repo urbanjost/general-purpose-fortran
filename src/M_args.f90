@@ -3,7 +3,7 @@
 !===================================================================================================================================
 !>
 !!##NAME
-!!    M_args(3fm) - [ARGUMENTS::M_args::INTRO] define a NAMELIST in a module template to provide command line argument parsing
+!!    M_args(3fm) - [ARGUMENTS:M_args::INTRO] define a NAMELIST in a module template to provide command line argument parsing
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -1817,7 +1817,7 @@ function get_arg(iarg,ierr) result(value)
 integer,intent(in)           :: iarg
 integer,optional,intent(out) :: ierr
 character(len=:),allocatable :: value
-character(len=255)           :: errmsg
+!character(len=255)           :: errmsg
 integer                      :: argument_length
 integer                      :: status
    call get_command_argument( number=iarg, length=argument_length )

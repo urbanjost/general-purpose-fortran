@@ -52,8 +52,9 @@ real                         :: rr(isz)
 integer                      :: ii(isz)
 character(len=:),allocatable :: array(:)
 integer                      :: csz
+integer                      :: i
 !-----------------------------------------------------------------------------------------------------------------------------------
-call unit_check_start('sort_quick_compact','-library libGPF') ! start tests
+call unit_check_start('sort_quick_compact','') ! start tests
 !-----------------------------------------------------------------------------------------------------------------------------------
 array= [ 'red    ','green  ','blue   ','yellow ','orange ','black  ','white  ','brown  ','gray   ','cyan   ','magenta','purple ']
 array=sort_quick_compact(array)
@@ -69,10 +70,14 @@ rr=sort_quick_compact(Rn)
 call unit_check('sort_quick_compact',all(rr(1:isz-1) .ge. rr(2:isz)),msg='sort real')
 dd=sort_quick_compact(Rn*20000.0d0)
 call unit_check('sort_quick_compact',all(dd(1:isz-1) .ge. dd(2:isz)),msg='sort doubleprecision')
+
 cc=sort_quick_compact(cmplx(Rn*20000.0,Rn2*20000.0))
-call unit_check('sort_quick_compact', all(abs(cc(1:isz-1)) .ge. abs(cc(2:isz))), msg='sort complex array by magnitude')
-cd=sort_quick_compact(cmplx(Rn*20000.0,Rn2*20000.0,kind=dp))
-call unit_check('sort_quick_compact', all(abs(cd(1:isz-1)) .ge. abs(cd(2:isz))), msg='sort double complex by magnitude')
+write(10,'(7(g0,1x))')(i,Rn(i)*20000.0,Rn2(i)*20000.0,cc(i),abs(cc(i)),abs(cc(i)).gt.abs(cc(i+1)),i=1,size(cc)-1)
+call unit_check('sort_quick_compact', all(abs(cc(1:isz-1)) .ge. abs(cc(2:isz))), msg='sort complex array by magnitude, single')
+
+cd=sort_quick_compact(cmplx(Rn*20000.0d0,Rn2*20000.0d0,kind=dp))
+call unit_check('sort_quick_compact', all(abs(cd(1:isz-1)) .ge. abs(cd(2:isz))), msg='sort double complex by magnitude, double')
+
 !-----------------------------------------------------------------------------------------------------------------------------------
 call unit_check_done('sort_quick_compact') ! assume if got here passed checks
 !-----------------------------------------------------------------------------------------------------------------------------------

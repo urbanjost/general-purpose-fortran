@@ -32,7 +32,7 @@
 !!    system_realpath,                                       &
 !!    system_access,                                         &
 !!    system_utime, system_time, system_sleep,               &
-!!    system_system,                                         &
+!!    system_cmd,                                            &
 !!    system_issock, system_perm,                            &
 !!    system_stat_print,                                     &
 !!    epoch_to_calendar,                                     &
@@ -149,7 +149,7 @@
 !!        o  system_getgrgid(3f): get group name associated with given GID
 !!        o  system_cpu_time(3f) : get processor time in seconds using times(3c)
 !!##SYSTEM COMMANDS
-!!        o  system_system(3f): call execute_command_line(3c) outputting messages
+!!        o  system_cmd(3f): call execute_command_line(3f) outputting messages
 !!
 !!##FUTURE DIRECTIONS
 !!    A good idea of what system routines are commonly required is to refer
@@ -216,7 +216,7 @@ public :: system_clearenv
 
 public :: system_stat                    ! call stat(3c) to determine system information of file by name
 public :: system_stat_print              ! call stat(3f) and print principal pathname information
-public :: epoch_to_calendar              ! convert integer 1 epoch time to calendard string
+public :: epoch_to_calendar              ! convert integer 1 epoch time to calendar string
 public :: system_perm                    ! create string representing file permission and type
 public :: system_access                  ! determine filename access or existence
 public :: system_isdir                   ! determine if filename is a directory
@@ -240,7 +240,7 @@ public :: system_chown
 public :: system_link
 public :: system_unlink
 public :: system_utime
-public :: system_system
+public :: system_cmd
 
 public :: system_setumask
 public :: system_getumask
@@ -1202,6 +1202,12 @@ interface
    end function C_getchar
 end interface
 !===================================================================================================================================
+! aliases for backward compatibility
+interface system_system
+   module procedure system_cmd
+end interface system_system
+public system_system
+
 contains
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -5804,54 +5810,61 @@ end function anyinteger_to_64bit
 !===================================================================================================================================
 !>
 !!##NAME
-!!    system_system(3f) - [M_system:SYSTEM_COMMAND] call execute_command_line
+!!    system_cmd(3f) - [M_system:SYSTEM_COMMAND] call execute_command_line(3f)
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
 !!
-!!     function system_system(command)
+!!     function system_cmd(command)
 !!
 !!      character(len=*),intent(in) :: command
+!!      logical :: system_cmd
 !!
 !!##DESCRIPTION
-!!    If a function that calls execute_command_line(3f). That is,
-!!    system_system(3f) executes a string as a system command after
+!!    Is a function that calls execute_command_line(3f).
+!!    system_cmd(3f) executes a string as a system command after
 !!    trimming the string.
 !!
 !!##OPTIONS
+!!    command  string specifying system command to execute
 !!
 !!##RETURN VALUE
 !!    Upon successful completion .TRUE. is returned. Otherwise,
 !!    .FALSE. is returned.
 !!    If an error occurs an error message is written to stdout.
 !!
-!!##ERRORS
 !!##EXAMPLES
 !!
 !!   Sample program
 !!
-!!        program demo_system_system
-!!        use M_system, only : system_system
+!!        program demo_system_cmd
+!!        use M_system, only : system_cmd
 !!        implicit none
-!!        end program demo_system_system
-function system_system(command)
+!!        logical,allocatable :: status(:)
+!!           status=system_cmd([character(len=1024) :: 'date','pwd','logname'])
+!!           write(*,*)'status=',status
+!!        end program demo_system_cmd
+impure elemental function system_cmd(command)
 implicit none
 
-! ident_35="@(#) M_system system_system(3f) call execute_command_line as a function"
+! ident_35="@(#) M_system system_cmd(3f) call execute_command_line as a function"
 
 character(len=*),intent(in) :: command
 integer                     :: exitstat
 integer                     :: cmdstat
-integer                     :: system_system
 character(len=256)          :: cmdmsg
-
+logical                     :: system_cmd
+   exitstat=0
+   cmdstat=0
    cmdmsg=' '
    call execute_command_line(trim(command), wait=.true., exitstat=exitstat, cmdstat=cmdstat, cmdmsg=cmdmsg)
-   if(cmdstat.ne.0)then
-      write(*,*)trim(cmdmsg)
+   if(cmdstat.ne.0.or.exitstat.ne.0)then
+      write(*,'(*(g0))')'exitstat=',exitstat,' cmdstat=',cmdstat,' cmd=',trim(command),' msg=',trim(cmdmsg)
+      system_cmd=.false.
+   else
+      system_cmd=.true.
    endif
-   system_system=cmdstat
-end function system_system
+end function system_cmd
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

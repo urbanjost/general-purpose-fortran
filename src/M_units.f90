@@ -191,6 +191,7 @@
 !===================================================================================================================================
 module M_units
 use M_anything,only : anyscalar_to_real, anyscalar_to_double
+use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 implicit none                        ! require all variables to be declared
 private
 !  common trigonometric functions using degrees instead of radians for units
@@ -262,7 +263,7 @@ real(kind=DP), public, parameter ::              &
 !---------------------!------------------------------------------------------------
    euler              = 0.577215664901532860606512090082402431042d+00,            &
 !---------------------!------------------------------------------------------------
-                      ! The Euler-Mascheroni constant is often denoted by a lower-case Gamma.  Gamma is defined as
+                      ! The Euler-Mascheroni constant is often denoted by a lower-case Gamma. Gamma is defined as
                       ! Gamma = limit ( M -> Infinity ) ( Sum ( 1 <= N <= M ) 1 / N ) - Log ( M )
    gamma              = 0.577215664901532860606512090082402431042d+00,            &
 !---------------------!------------------------------------------------------------
@@ -292,6 +293,11 @@ real(kind=DP), public, parameter ::              &
       module procedure d2r_r
       module procedure d2r_i
    end interface
+
+   interface cartesian_to_polar
+      module procedure cartesian_to_polar_real
+      procedure cartesian_to_polar_complex
+   end interface cartesian_to_polar
 
 contains
 !***********************************************************************************************************************************
@@ -410,7 +416,7 @@ end function f2c
 !!   Sample program
 !!
 !!    program demo_r2d
-!!    use M_units, only :  r2d
+!!    use M_units, only : r2d
 !!    use M_units, only : pi8=>pi
 !!    implicit none
 !!    real :: pi=real(pi8)
@@ -477,7 +483,7 @@ end function r2d_r
 !!   Sample program
 !!
 !!    program demo_d2r
-!!    use M_units, only :  d2r
+!!    use M_units, only : d2r
 !!    implicit none
 !!       write(*,*)'With REAL array input    ', d2r([0.0,45.0,90.0,135.0,180.0])
 !!       write(*,*)'With INTEGER array input ', d2r([0,  45,  90,  135,  180  ])
@@ -938,9 +944,9 @@ end function atan2d
 !!    Public Domain
 elemental function feet_to_meters(feet)
 ! ident_16="@(#) M_units feet_to_meters(3f) converts a measurement in feet to meters"
-class(*),intent(in)           :: feet                           ! the input length in feet.
-doubleprecision               :: feet_to_meters                 ! OUTPUT, the corresponding length in meters.
-doubleprecision               :: feet_local
+class(*),intent(in) :: feet                           ! the input length in feet.
+doubleprecision     :: feet_to_meters                 ! OUTPUT, the corresponding length in meters.
+doubleprecision     :: feet_local
    feet_local=anyscalar_to_double(feet)
    !!feet_to_meters = 0.0254 * 12.0 * feet_local
    feet_to_meters = 0.3048d0 * feet_local
@@ -989,9 +995,9 @@ end function feet_to_meters
 !!    Public Domain
 elemental function meters_to_feet(meters)
 ! ident_17="@(#) M_units meters_to_feet(3f) converts a measurement in meters to feet"
-class(*),intent(in)           :: meters                         ! the input length in meters.
-doubleprecision               :: meters_to_feet                 ! OUTPUT, the corresponding length in feet.
-   doubleprecision            :: meters_local
+class(*),intent(in) :: meters                         ! the input length in meters.
+doubleprecision     :: meters_to_feet                 ! OUTPUT, the corresponding length in feet.
+doubleprecision     :: meters_local
    meters_local=anyscalar_to_double(meters)
    meters_to_feet = meters_local/12.0d0/0.0254d0
 end function meters_to_feet
@@ -1054,7 +1060,6 @@ end function meters_to_feet
 !!##LICENSE
 !!    Public Domain
 subroutine cartesian_to_spherical(x,y,z,radius,inclination,azimuth)
-implicit none
 ! ident_18="@(#) M_units cartesian_to_spherical(3f) convert Cartesian coordinates to ISO polar coordinates"
 real,intent(in)  :: x,y,z
 real,intent(out) :: radius,inclination,azimuth
@@ -1078,8 +1083,8 @@ end subroutine cartesian_to_spherical
 !!
 !!     subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
 !!
-!!      real,intent(in) :: radius,inclination,azimuth
-!!      real,intent(out)  :: x,y,z
+!!      real,intent(in)  :: radius,inclination,azimuth
+!!      real,intent(out) :: x,y,z
 !!
 !!##DESCRIPTION
 !!
@@ -1127,10 +1132,9 @@ end subroutine cartesian_to_spherical
 !!##LICENSE
 !!    Public Domain
 subroutine spherical_to_cartesian(radius,inclination,azimuth,x,y,z)
-implicit none
 ! ident_19="@(#) M_units spherical_to_cartesian(3f) convert spherical coordinates to cartesian coordinates"
-real,intent(in) :: radius,inclination,azimuth
-real,intent(out)  :: x,y,z
+real,intent(in)  :: radius,inclination,azimuth
+real,intent(out) :: x,y,z
    if(radius.eq.0)then
       x=0.0
       y=0.0
@@ -1142,71 +1146,147 @@ real,intent(out)  :: x,y,z
    endif
 end subroutine spherical_to_cartesian
 !***********************************************************************************************************************************
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+   !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !***********************************************************************************************************************************
 !>
 !!##NAME
-!!     cartesian_to_polar(3f) - [M_units:TRIGONOMETRY] convert Cartesian coordinates to polar coordinates
-!!     (LICENSE:PD)
+!!    cartesian_to_polar(3f) - [M_units:TRIGONOMETRY] convert Cartesian coordinates to polar coordinates
+!!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
 !!     subroutine cartesian_to_polar(x,y,radius,inclination)
 !!
-!!      real,intent(in)  :: y,z
+!!      real,intent(in)  :: x,y
+!!      real,intent(out) :: radius,inclination
+!!
+!!     subroutine cartesian_to_polar(xy,radius,inclination)
+!!
+!!      complex,intent(in) :: xy
 !!      real,intent(out) :: radius,inclination
 !!
 !!##DESCRIPTION
 !!
-!!     Convert a cartesian point <X,Y,Z> to polar coordinates <radius,
-!!     inclination> with angles in radians using the formulas
+!!    Convert a cartesian point <X,Y> to polar coordinates <radius,
+!!    inclination> with angles in radians equivalent to using the
+!!    formulas
 !!
-!!       radius=sqrt(x**2+y**2)
-!!       inclination=atan2(y,x)
+!!        radius=sqrt(x**2+y**2)
+!!        inclination=atan2(y,x)
+!!
+!!    where if inclination is negative, add PI.
 !!
 !!##OPTIONS
-!!    X  The distance along the x-axis
-!!    Y  The distance along the y-axis
+!!    X   The distance along the x-axis
+!!    Y   The distance along the y-axis
+!!    XY  Alternatively to using X and Y a complex value may be used. The
+!!        real component will be treated as the X coordinate, and the
+!!        imaginary component defines the Y coordinate of the input point.
+!!
+!!    If the input point <0.0,0.0> is used the inclination is arbitrarily
+!!    returned as zero.
 !!
 !!##RESULTS
 !!
-!!    RADIUS       The radial distance from the origin (O) to the point (P)
-!!    INCLINATION  The inclination angle in radians between the inclination reference direction
-!!                 (x-axis) and the orthogonal projection of the line OP of the
-!!                 reference plane (x-y plane).
-!!
+!!    RADIUS       The radial distance from the origin (O) to the point
+!!                 <X,Y>. If it exceeds huge(0.0), (-1)-huge(0.0)
+!!                 is returned.
+!!    INCLINATION  The inclination angle in radians between the
+!!                 inclination reference direction (x-axis) and the
+!!                 orthogonal projection of the line OP of the reference
+!!                 plane (x-y plane) in the range 0 <= INCLINATION < 2*PI
+!!                 radians. If the radius value exceeds huge(0) -1 is
+!!                 returned, else zero (0) is returned if no error occurs.
 !!##EXAMPLES
 !!
-!!   examples of usage
+!!   sample program:
 !!
 !!    program demo_cartesian_to_polar
 !!    use M_units, only : cartesian_to_polar
-!!    implicit none
-!!    real    :: x,y
-!!    real    :: r,i
-!!    integer :: ios
-!!    INFINITE: do
-!!       read(*,*,iostat=ios) x, y
-!!       if(ios.ne.0)exit INFINITE
-!!       call cartesian_to_polar(x,y,r,i)
-!!       write(*,*)'x=',x,' y=',y,'radius=',r,'inclination=',i
-!!    enddo INFINITE
+!!    ! basic cardinal directions
+!!       call  printme( +1.0, +0.0)
+!!       call  printme( +0.0, +1.0)
+!!       call  printme( -1.0, +0.0)
+!!       call  printme( +0.0, -1.0)
+!!    ! the 3-4-5 right triangle
+!!       call  printme( +4.0, +3.0)
+!!       call  printme( +3.0, +4.0)
+!!       call  printme( -3.0, +4.0)
+!!       call  printme( -4.0, +3.0)
+!!       call  printme( -4.0, -3.0)
+!!       call  printme( -3.0, -4.0)
+!!       call  printme( +3.0, -4.0)
+!!       call  printme( +4.0, -3.0)
+!!       write(*,'(*(g0))') 'cases where input is too large:'
+!!       call  printme( huge(0.0),huge(0.0))
+!!       stopit: block
+!!          real :: radius, inclination
+!!          call cartesian_to_polar( huge(0.0), huge(0.0), radius, inclination)
+!!       endblock stopit
+!!    contains
+!!    subroutine printme(x,y)
+!!    real,intent(in):: x,y
+!!    real :: radius,inclination
+!!    integer :: ierr
+!!       call cartesian_to_polar(x,y,radius,inclination,ierr)
+!!       write(*,*)ierr, x,y,radius,inclination,inclination*180/acos(-1.0)
+!!    end subroutine printme
 !!    end program demo_cartesian_to_polar
+!!
+!!  Results:
+!!
+!!   >            0   1.00000000       0.00000000       1.00000000       0.00000000       0.00000000
+!!   >            0   0.00000000       1.00000000       1.00000000       1.57079637       90.0000000
+!!   >            0  -1.00000000       0.00000000       1.00000000       3.14159274       180.000000
+!!   >            0   0.00000000      -1.00000000       1.00000000       4.71238899       270.000000
+!!   >            0   4.00000000       3.00000000       5.00000000      0.643501103       36.8698959
+!!   >            0   3.00000000       4.00000000       5.00000000      0.927295208       53.1301003
+!!   >            0  -3.00000000       4.00000000       5.00000000       2.21429753       126.869896
+!!   >            0  -4.00000000       3.00000000       5.00000000       2.49809170       143.130096
+!!   >            0  -4.00000000      -3.00000000       5.00000000       3.78509378       216.869904
+!!   >            0  -3.00000000      -4.00000000       5.00000000       4.06888771       233.130081
+!!   >            0   3.00000000      -4.00000000       5.00000000       5.35589027       306.869904
+!!   >            0   4.00000000      -3.00000000       5.00000000       5.63968420       323.130096
+!!   > cases where input is too large:
+!!   >            1   3.40282347E+38   3.40282347E+38  -3.40282347E+38  0.785398185       45.0000000
+!!   > STOP <ERROR> *cartesian_to_polar* overflow. radius=0.48123190965235028E+39
+!!
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine cartesian_to_polar(x,y,radius,inclination)
-implicit none
+subroutine cartesian_to_polar_real(x,y,radius,inclination,ierr)
+real,intent(in)              :: x,y
+real,intent(out)             :: radius,inclination
+integer,intent(out),optional :: ierr
+   call cartesian_to_polar(cmplx(x,y),radius,inclination,ierr)
+end subroutine cartesian_to_polar_real
+
+subroutine cartesian_to_polar_complex(xy,radius,inclination,ierr)
+
 ! ident_20="@(#) M_units cartesian_to_polar(3f) convert Cartesian coordinates to polar coordinates"
-real,intent(in)  :: x,y
-real,intent(out) :: radius,inclination
-   radius=sqrt(x**2+y**2)
-   if(radius.eq.0)then
-      inclination=0.0
+
+complex,intent(in)           :: xy
+real,intent(out)             :: radius,inclination
+integer,intent(out),optional :: ierr
+real(kind=kind(0.0d0))       :: d_radius
+character(len=255)           :: message
+real,parameter               :: PI=acos(-1.0)
+   if(present(ierr))ierr=0
+   d_radius=abs(cmplx(xy,kind=kind(0.0d0)))
+   if(d_radius.gt.huge(0.0))then
+      if(present(ierr))then
+         ierr=-1
+         radius=(-1)-huge(0.0)
+      else
+          write(message,'(*(g0))') "<ERROR> *cartesian_to_polar* overflow. radius=",d_radius
+          stop message
+      endif
    else
-      inclination=atan2(y,x)
+      radius=real(d_radius,kind=kind(0.0))
    endif
-end subroutine cartesian_to_polar
+   inclination=merge(0.0, atan2(x=xy%re,y=xy%im), radius.eq.0)
+   if(inclination.lt.0)inclination=inclination+2*PI
+end subroutine cartesian_to_polar_complex
 !***********************************************************************************************************************************
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !***********************************************************************************************************************************
@@ -1218,8 +1298,8 @@ end subroutine cartesian_to_polar
 !!
 !!     subroutine polar_to_cartesian(radius,inclination,x,y)
 !!
-!!      real,intent(in) :: radius,inclination
-!!      real,intent(out)  :: x,y
+!!      real,intent(in)  :: radius,inclination
+!!      real,intent(out) :: x,y
 !!
 !!##DESCRIPTION
 !!
@@ -1264,10 +1344,9 @@ end subroutine cartesian_to_polar
 !!##LICENSE
 !!    Public Domain
 subroutine polar_to_cartesian(radius,inclination,x,y)
-implicit none
 ! ident_21="@(#) M_units polar_to_cartesian(3f) convert polar coordinates to cartesian coordinates"
-real,intent(in) :: radius,inclination
-real,intent(out)  :: x,y
+real,intent(in)  :: radius,inclination
+real,intent(out) :: x,y
    if(radius.eq.0)then
       x=0.0
       y=0.0
@@ -1432,7 +1511,6 @@ end subroutine polar_to_cartesian
 !!    Public Domain
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine atomnum2symbol(atomnum,symbol)
-implicit none
 ! ident_22="@(#) M_units atomnum2symbol(3f) return element symbol given atomic number"
 integer,intent(in)           :: atomnum
 character(len=2),intent(out) :: symbol
@@ -1506,7 +1584,6 @@ end subroutine atomnum2symbol
 !!    Public Domain
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine symbol2atomnum(symbol,atomnum)
-implicit none
 ! ident_23="@(#) M_units symbol2atomnum(3f) return atomic number given element symbol name"
 character(len=2),intent(in) :: symbol
 integer,intent(out)         :: atomnum
@@ -1550,7 +1627,7 @@ end subroutine symbol2atomnum
 !!
 !!     elemental function pounds_to_kilograms ( pounds )
 !!
-!!      class(*),intent(in) ::  pounds
+!!      class(*),intent(in) :: pounds
 !!      doubleprecision     :: pounds_to_kilograms
 !!
 !!##DESCRIPTION
@@ -1598,8 +1675,8 @@ end subroutine symbol2atomnum
 elemental function pounds_to_kilograms ( pounds )
 ! ident_24="@(#) M_units pounds_to_kilograms(3f) converts a measurement in pounds to kilograms."
 class(*),intent(in) :: pounds
-   doubleprecision  :: pounds_to_kilograms
-   doubleprecision  :: pounds_local
+doubleprecision     :: pounds_to_kilograms
+doubleprecision     :: pounds_local
    pounds_local=anyscalar_to_double(pounds)
    pounds_to_kilograms = 0.45359237d0 * pounds_local
 end function pounds_to_kilograms
@@ -1838,35 +1915,29 @@ end function norm_angle_deg_integer
 !!##LICENSE
 !!    Public Domain
 function inf32(value)
-use,intrinsic :: iso_fortran_env, only: real32
-implicit none
 
 ! ident_30="@(#) M_units inf32(3fp) Returns an inf (Infinity) of type real32"
 
 character(len=3),save :: STRING='inf'
-real(kind=real32) :: inf32,value
+real(kind=real32)     :: inf32,value
    read(STRING,*)inf32
 end function inf32
 !===================================================================================================================================
 function inf64(value)
-use,intrinsic :: iso_fortran_env, only: real64
-implicit none
 
 ! ident_31="@(#) M_units inf64(3fp) Returns an inf (Infinity) of type real64"
 
 character(len=3),save :: STRING='inf'
-real(kind=real64) :: inf64,value
+real(kind=real64)     :: inf64,value
    read(STRING,*)inf64
 end function inf64
 !===================================================================================================================================
 function inf128(value)
-use,intrinsic :: iso_fortran_env, only: real128
-implicit none
 
 ! ident_32="@(#) M_units inf128(3fp) Returns an inf (Infinity) of type real128"
 
 character(len=3),save :: STRING='inf'
-real(kind=real128) :: inf128,value
+real(kind=real128)    :: inf128,value
    read(STRING,*)inf128
 end function inf128
 !===================================================================================================================================
@@ -1975,7 +2046,7 @@ implicit none
 ! ident_33="@(#) M_units nan32(3fp) Returns a NAN (Not a number) of type real32"
 
 character(len=3),save :: STRING='NaN'
-real(kind=real32) :: nan32,value
+real(kind=real32)     :: nan32,value
    read(STRING,*)nan32
    ! (if X is NaN the comparison with 0. is always false.)
    !if ( (nan32<=0.0_real32) .or. (nan32>=0.0_real32) )then
@@ -1991,7 +2062,7 @@ implicit none
 ! ident_34="@(#) M_units nan64(3fp) Returns a NAN (Not a number) of type real64"
 
 character(len=3),save :: STRING='NaN'
-real(kind=real64) :: nan64,value
+real(kind=real64)     :: nan64,value
    read(STRING,*)nan64
    ! (if X is NaN the comparison with 0. is always false.)
    !if ( (nan64<=0.0_real64) .or. (nan64>=0.0_real64) )then
@@ -2001,13 +2072,11 @@ real(kind=real64) :: nan64,value
 end function nan64
 !===================================================================================================================================
 function nan128(value)
-use,intrinsic :: iso_fortran_env, only: real128
-implicit none
 
 !$@(#) M_units:: nan128(3fp): Returns a NAN (Not a number) of type real128
 
 character(len=3),save :: STRING='NaN'
-real(kind=real128) :: nan128,value
+real(kind=real128)    :: nan128,value
    read(STRING,*)nan128
    ! (if X is NaN the comparison with 0. is always false.)
    !if ( (nan128<=0.0_real128) .or. (nan128>=0.0_real128) )then
@@ -2060,7 +2129,6 @@ end function nan128
 !!##LICENSE
 !!    Public Domain
 elemental pure function is_even(ival)
-use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 
 ! ident_35="@(#) M_units is_even(3f) determine if integer is even"
 
@@ -2124,8 +2192,7 @@ end function is_even
 !!    Public Domain
 elemental pure function is_nan(x)
 !!use IEEE_EXCEPTIONS, only : ieee_support_nan ! is IEEE NaNs supported?
-use,intrinsic :: IEEE_ARITHMETIC, only : IEEE_IS_NAN       ! Determine if value is IEEE Not-a-Number.
-use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
+use,intrinsic :: ieee_arithmetic, only : IEEE_IS_NAN       ! Determine if value is IEEE Not-a-Number.
 
 ! ident_36="@(#) M_units is_nan(3f) determine if value is IEEE Not-a-Number"
 

@@ -6,8 +6,9 @@ MODULE M_contourplot__Smooth
    integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
    public  :: SmoothSurface
    public  :: Polyx2
-   private :: Hypot
+   private :: Hypot_
    private :: SolveSVD,SVD,SVDbackSubstitution
+   public  :: test_suite_M_smooth
 
 CONTAINS
 !===================================================================================================================================
@@ -338,14 +339,14 @@ SUBROUTINE svd(A,U,W,V,Ierr)
 !        RV1 is a one-dimensional REAL array used for temporary storage,
 !          dimensioned RV1(N).
 !
-!     CALLS Hypot(A,B) for sqrt(A**2 + B**2).
+!     CALLS Hypot_(A,B) for sqrt(A**2 + B**2).
 !
 !     Questions and comments should be directed to B. S. Garbow,
 !     APPLIED MATHEMATICS DIVISION, ARGONNE NATIONAL LABORATORY
 !     ------------------------------------------------------------------
 !
 !***SEE ALSO  EISDOC
-!***ROUTINES CALLED  Hypot
+!***ROUTINES CALLED  Hypot_
 !***REVISION HISTORY  (YYMMDD)
 !   811101  DATE WRITTEN
 !   890531  Changed all specific intrinsics to generic.  (WRB)
@@ -614,7 +615,7 @@ SUBROUTINE svd(A,U,W,V,Ierr)
                      rv1(i) = c*rv1(i)
                      IF ( s1+abs(f)==s1 ) EXIT SPAG_Loop_2_2
                      g = W(i)
-                     h = hypot(f,g)
+                     h = hypot_(f,g)
                      W(i) = h
                      c = g/h
                      s = -f/h
@@ -643,7 +644,7 @@ SUBROUTINE svd(A,U,W,V,Ierr)
                      g = rv1(k1)
                      h = rv1(k)
                      f = HALF*(((g+z)/h)*((g-z)/y)+y/h-h/y)
-                     g = hypot(f,ONE)
+                     g = hypot_(f,ONE)
                      f = x - (z/x)*z + (h/x)*(y/(f+sign(g,f))-h)
 
 !     .......... NEXT QR TRANSFORMATION ..........
@@ -656,7 +657,7 @@ SUBROUTINE svd(A,U,W,V,Ierr)
                         y = W(i)
                         h = s*g
                         g = c*g
-                        z = hypot(f,h)
+                        z = hypot_(f,h)
                         rv1(i1) = z
                         c = f/z
                         s = h/z
@@ -672,7 +673,7 @@ SUBROUTINE svd(A,U,W,V,Ierr)
                            V(j,i) = -x*s + z*c
                         ENDDO
 !
-                        z = hypot(f,h)
+                        z = hypot_(f,h)
                         W(i1) = z
 
 !     .......... ROTATION CAN BE ARBITRARY IF Z IS ZERO ..........
@@ -752,29 +753,51 @@ END Subroutine SVDbackSubstitution
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-   PURE FUNCTION Hypot(x,y) RESULT(z)   ! a PURE function
-! ---------------------------------------------------------------------------
+pure function hypot_(x,y) result(z)   ! a PURE function
+
 ! PURPOSE - Solve for SQRT(x*x+y*y) carefully to avoid overflow
 !  (will be an intrinsic in Fortran 2008)
-      REAL,INTENT(IN):: x,y
-      REAL:: z
+real,intent(in) :: x,y
+real            :: z
+real            :: a,b
 
-      REAL:: a,b
-!----------------------------------------------------------------------------
-      a=ABS(x)
-      b=ABS(y)
+      a=abs(x)
+      b=abs(y)
 
-      IF (a > b) THEN
-         z=a*SQRT(1.0+(b/a)**2)
-      ELSEIF (b==0) THEN
+      if (a > b) then
+         z=a*sqrt(1.0+(b/a)**2)
+      elseif (b==0) then
          z=0.0
-      ELSE
-         z=b*SQRT(1.0+(a/b)**2)
-      ENDIF
+      else
+         z=b*sqrt(1.0+(a/b)**2)
+      endif
 
-   END Function Hypot
+end function hypot_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+subroutine test_suite_M_smooth
+use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_check_level
+   call test_polyx2()
+   call test_smoothsurface()
+contains
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_polyx2()
+
+   call unit_check_start('polyx2',msg='')
+   !!call unit_check('polyx2', 0.eq.0, 'checking', 100)
+   call unit_check_done('polyx2',msg='')
+end subroutine test_polyx2
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_smoothsurface()
+
+   call unit_check_start('smoothsurface',msg='')
+   !!call unit_check('smoothsurface', 0.eq.0, 'checking', 100)
+   call unit_check_done('smoothsurface',msg='')
+end subroutine test_smoothsurface
+!===================================================================================================================================
+end subroutine test_suite_M_smooth
 !===================================================================================================================================
 END MODULE M_contourplot__Smooth
 !===================================================================================================================================
@@ -1269,7 +1292,7 @@ SUBROUTINE triangulate(Xd,Yd,N,L,E,Be,Te)
 !        the current edge than p(j1).
 !
             k3 = k2 + 1
-                   ! was labelled 100
+                   ! was labeled 100
             IF ( k3>k ) k3 = 1
             pk3 = b(k3)
             term = (y(pk3)-y(b1))*(x(b2)-x(b1)) - (x(pk3)-x(b1))*(y(b2)-y(b1))

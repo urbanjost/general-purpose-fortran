@@ -17,7 +17,6 @@ use M_math
    call test_polyarea_shoelace()  ! find area of a polygon using shoelace algorithm
    call test_polyarea_mid_point() ! find area of a polygon
    call test_closest()            ! find point closest to target
-   call test_hypot()              ! Euclidean distance
 ! FIT
    call test_julfit()             ! linear least square fit
    call test_julfit1()            ! linear least square fit(y=a*x+b)
@@ -293,13 +292,6 @@ subroutine test_closest()
    !*!call unit_check('closest', 0.eq.0, 'checking', 100)
    call unit_check_done('closest',msg='')
 end subroutine test_closest
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_hypot()
-
-   call unit_check_start('hypot',msg='')
-   !*!call unit_check('hypot', 0.eq.0, 'checking', 100)
-   call unit_check_done('hypot',msg='')
-end subroutine test_hypot
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_qhfg()
 

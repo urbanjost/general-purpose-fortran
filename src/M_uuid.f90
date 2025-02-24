@@ -62,7 +62,7 @@ module M_uuid
 !!      !
 !!      function generate_uuid(version) result(uuid)
 !!      integer, intent(in), optional :: version
-!!      character(len=36) :: uuid
+!!      character(len=36)             :: uuid
 !!
 !!##DESCRIPTION
 !!
@@ -162,7 +162,7 @@ contains
 !!
 !!        function generate_uuid(version) result(uuid)
 !!        integer, intent(in), optional :: version
-!!        character(len=36) :: uuid
+!!        character(len=36)             :: uuid
 !!
 !!##DESCRIPTION
 !!    A universally unique identifier (UUID) is a 128-bit number used to
@@ -228,16 +228,16 @@ function generate_uuid(version) result(uuid)
 ! ident_2="@(#) M_uuid generate_uuid(3f) generate(approximately) a UUID (Universally Unique IDentifier) string per RFC 4122"
 
 integer, intent(in), optional :: version
-character(len=36) :: uuid
+character(len=36)             :: uuid
 
-integer(kind=i8b) :: timestamp, node
-integer(kind=i4b) :: clock_sequence
+integer(kind=i8b)             :: timestamp, node
+integer(kind=i4b)             :: clock_sequence
 
-integer(kind=i4b) :: time_low, time_mid, time_hi_and_version
-integer(kind=i4b) :: clk_seq_hi_res, clk_seq_low
+integer(kind=i4b)             :: time_low, time_mid, time_hi_and_version
+integer(kind=i4b)             :: clk_seq_hi_res, clk_seq_low
 
-integer :: values(8) ! must be default for date_and_time
-integer(kind=i4b) :: variant, v
+integer                       :: values(8) ! must be default for date_and_time
+integer(kind=i4b)             :: variant, v
 
    if (.not.initialized) then
       ! Use the current date and time to init mtprng but this gives limited variability, so mix the result up.
@@ -311,8 +311,8 @@ function int32ToHexOctets(b, n) result(s)
 integer(i4b), intent(in) :: b
 integer, intent(in)      :: n ! number of octets to print
 character(len=2*n)       :: s
-character, parameter  :: hexdigits(0:15) = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
-integer               :: i
+character, parameter     :: hexdigits(0:15) = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+integer                  :: i
 
    do i = 0, 2*n-1
       s(2*n-i:2*n-i) = hexdigits(ibits(b, i*4, 4))
@@ -324,8 +324,8 @@ function int64ToHexOctets(b, n) result(s)
 integer(i8b), intent(in) :: b
 integer, intent(in)      :: n ! number of octets to print
 character(len=2*n)       :: s
-character, parameter  :: hexdigits(0:15) = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
-integer               :: i
+character, parameter     :: hexdigits(0:15) = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+integer                  :: i
 
   do i = 0, 2*n-1
      s(2*n-i:2*n-i) = hexdigits(ibits(b, i*4, 4))

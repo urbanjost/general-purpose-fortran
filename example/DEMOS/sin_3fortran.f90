@@ -2,7 +2,7 @@
       implicit none
       real :: d
           d = haversine(36.12,-86.67, 33.94,-118.40) ! BNA to LAX
-          print '(A,F9.4,A)', 'distance: ',d,' km'
+          print '(*(A,1x,F9.4,1x))','distance:',d,'km, or',d*0.62137119,'miles'
       contains
       function haversine(latA,lonA,latB,lonB) result (dist)
       !

@@ -1,7 +1,7 @@
 !(LICENSE:PD)
 ! @(#) draw a simple menu using ncurses(3c) from Fortran
 ! differences between Fortran and C usage
-! printw(3c) is not implimented; do internal WRITE(3f) into a character variable and call addstr(3c)
+! printw(3c) is not implemented; do internal WRITE(3f) into a character variable and call addstr(3c)
 ! add C_NULL_CHAR to the end of strings when calling addstr(3c)
 ! C arrays start at 0, Fortran at 1 by default; so defined "choices(0:4)" instead of "choices(5)"
 !
@@ -84,7 +84,7 @@ program simple_key
       case(KEY_UP)                                         ! if the up-arrow was pressed change which item to highlight
          if(highlight == 1)then                            ! already at top of menu and going up
             highlight = n_choices                          ! to wrap down to the bottom choice
-         else                                              ! move hightlight up an option
+         else                                              ! move highlight up an option
             highlight=highlight-1
          endif
       case(KEY_DOWN)                                       ! move highlight choice according to down-arrow being pressed

@@ -1052,7 +1052,7 @@ end subroutine xterm_width
 !===================================================================================================================================
 !>
 !!##NAME
-!!    xterm_labels(3f) - [M_xterm] set xterm(1) X11 WIndow labels using escape sequences
+!!    xterm_labels(3f) - [M_xterm] set xterm(1) X11 Window labels using escape sequences
 !!    (LICENSE:MIT)
 !!##SYNOPSIS
 !!
@@ -1160,7 +1160,7 @@ character(len=:),allocatable    :: readback
    ! sequences to convert them to correct VT102 sequences
    ! it ignores unrecognized (as far as it is concerned,
    ! as the sequences are not know to termcaps.) sequences
-   ! like Tektronix commands and xterm(1) X11 WIndows
+   ! like Tektronix commands and xterm(1) X11 Windows
    ! attribute extensions
    path=''
    call get_environment_variable('OTHERTTY',path)

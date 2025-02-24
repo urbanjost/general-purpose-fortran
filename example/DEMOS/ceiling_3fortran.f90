@@ -4,12 +4,11 @@
       character(len=*),parameter :: gen='(1x,*(g0:,1x))'
       real              :: x
       real              :: y
+      integer           :: ierr
       real,parameter    :: arr(*)=[ &
          &  -2.7,  -2.5, -2.2, -2.0, -1.5, &
          &  -1.0,  -0.5,  0.0, +0.5, +1.0, &
          &  +1.5,  +2.0, +2.2, +2.5, +2.7  ]
-      integer           :: i
-      integer           :: ierr
       character(len=80) :: message
          print *, 'Basic Usage'
          x = 63.29

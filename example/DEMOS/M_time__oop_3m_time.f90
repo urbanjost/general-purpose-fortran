@@ -111,6 +111,7 @@
          ! DOUBLE PRECISION VALUES EASILY MANIPULATED MATHEMATICALLY
          write(*,202)'%epoch      Unix epoch time........ ',  event%epoch()
          write(*,202)'%julian     Julian date............ ',  event%julian()
+         write(*,202)'%mjd        Modiied Julian date.... ',  event%mjd()
          202 format(1x,a,g0)
 
          ! FORMATTED STRINGS (many strings possible.

@@ -6,7 +6,7 @@
       real    :: y1,y2,ym,x1,x2
       real    :: width=50.0/8.0,width2
       integer :: i
-         !! set up long bar as plotting area
+         !-! set up long bar as plotting area
          call prefsize(1000,200)
          call vinit()
          call ortho2(-25.0-b, 25.0+b, -5.0-b, 5.0+b)

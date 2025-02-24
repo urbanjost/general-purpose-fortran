@@ -11480,7 +11480,7 @@ real            :: yystep2
       endif
 
       call priv_endgrid(igrid(3),ymaxend2,YMAX,YMIN,TICLNX2,iy2) ! minor x-axis grid style
-      ! iflag  <- 0 = full grid, 1= tic makrs, 2= plain
+      ! iflag  <- 0 = full grid, 1= tic marks, 2= plain
       ! endnew -> where to end line
       ! rmin   <- value of starting point of tic or grid line
       ! rmax   <- value of far edge line must end at before going out of plot
@@ -11973,7 +11973,7 @@ implicit none
 
 ! ident_101="@(#) M_xyplot priv_endgrid(3fp) determine length of major and minor grid lines"
 
-integer,intent(in)    :: iflag  !-> 0 = full grid, 1= tic makrs, 2= plain
+integer,intent(in)    :: iflag  !-> 0 = full grid, 1= tic marks, 2= plain
 real,intent(out)      :: endnew !-> where to end line
 real,intent(in)       :: rmin   !-> value of starting point of tic or grid line
 real,intent(in)       :: rmax   !-> value of far edge line must end at before going out of plot

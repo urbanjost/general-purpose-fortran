@@ -732,7 +732,7 @@ contains
     doubleprecision :: value
     ikeep=0
     do i=1,size(page,dim=1)
-       ! do this more rigourously
+       ! do this more rigorously
        ! [+-]NNNNNN[.NNNN][ED][+-]NN
        line=''
        ! get rid of all characters not in a number and

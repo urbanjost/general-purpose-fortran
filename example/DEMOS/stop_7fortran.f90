@@ -2,7 +2,7 @@
          ! select which STOP call to make from command line
          use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT
          implicit none
-         integer :: i, istat, argument_length, stopcode
+         integer :: istat, argument_length, stopcode
          character(len=:),allocatable :: which, message
             ! allocate string array big enough to hold command line
             call get_command_argument(number=1,length=argument_length)

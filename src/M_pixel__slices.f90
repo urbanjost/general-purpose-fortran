@@ -1498,6 +1498,11 @@ SUBROUTINE dl_number(X,Y,Hght,Z,T,F0,Ipf)
    REAL :: Y
    REAL :: Z
    CHARACTER b*18 , fb*8 , fb1*8   ! WORKING BUFFERS
+   INTEGER :: spag_nextblock_1
+   spag_nextblock_1 = 1
+   SPAG_DispatchLoop_1: DO
+      SELECT CASE (spag_nextblock_1)
+      CASE (1)
 !
          iff = 0
          hg = Hght
@@ -1572,15 +1577,21 @@ SUBROUTINE dl_number(X,Y,Hght,Z,T,F0,Ipf)
             IF ( iff==1 ) b = adjustl(b)
                              ! REMOVE LEADING SPACES
          ENDIF
+         spag_nextblock_1 = 2
+      CASE (2)
          CALL dl_symbol(X,Y,hg,b,t1,nn,Ipf)
          RETURN
+      END SELECT
+      cycle
  20   continue
       DO i = 1 , 18
          b(i:i) = '*'
          IF ( i==nn-nd ) b(i:i) = '.'
       ENDDO
+      spag_nextblock_1 = 2
+      CYCLE SPAG_DispatchLoop_1
+   ENDDO SPAG_DispatchLoop_1
 END SUBROUTINE dl_number
-
 !*==dl_plot.f90 processed by SPAG 8.01RF 02:19 13 Dec 2024
 SUBROUTINE dl_plot(Xplot0,Yplot0,Iselect0)
 !
@@ -1880,8 +1891,8 @@ SUBROUTINE dl_slices(A,Inx,Inz,Nx,Nz,Alpha,Beta,Xh,Yh,Zh,Iflag,Iaxis,Xt,Nxt,Xast
                ENDDO
             ENDDO
          ENDIF
-         IF ( Alpha<0. .OR. Alpha>88. .OR. Beta<1. .OR. Beta>90. ) THEN
-            WRITE (*,'(*(g0))') '(" *** dl_slices INPUT ANGLE ERROR ***")ALPHA=' , Alpha , '(allowed 0 to 88) BETA=' , Beta , &
+         IF ( Alpha < 0.0 .OR. Alpha > 88.0 .OR. Beta < 1.0 .OR. Beta > 90.0 ) THEN
+            WRITE (*,'(*(g0))') '(" *dl_slices* INPUT ANGLE ERROR: ALPHA=' , Alpha , '(allowed 0 to 88) BETA=' , Beta , &
                                &'(allowed 1 to 90)'
             RETURN
          ENDIF

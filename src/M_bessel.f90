@@ -111,7 +111,7 @@ contains
 !!    RSLT2 = output,contains the doubleprecision function value for Y(X)
 !!            or K(X) in a manner similar to RSLT1.
 !!
-!!    T1    = output,a work area which will contain the array oF
+!!    T1    = output,a work area which will contain the array of
 !!            doubleprecision function values for J(X) or I(X) of orders
 !!            zero through NO, depending on KODE.
 !!            T1 must be dimensioned in the calling program and
@@ -161,62 +161,60 @@ subroutine bes(x,no,kode,rslt1,rslt2,t1,t2,ierr)
 !
 ! Dummy argument declarations rewritten by SPAG
 !
-real(kind=dp),intent(inout) :: x
-integer,intent(in) :: no
-integer,intent(in) :: kode
-real(kind=dp),intent(out) :: rslt1
-real(kind=dp),intent(out) :: rslt2
-real(kind=dp),intent(inout) , dimension(*) :: t1
-real(kind=dp),intent(inout) , dimension(*) :: t2
-integer,intent(out) :: ierr
+real(kind=dp),intent(inout)        :: x
+integer,intent(in)                 :: no
+integer,intent(in)                 :: kode
+real(kind=dp),intent(out)          :: rslt1
+real(kind=dp),intent(out)          :: rslt2
+real(kind=dp),intent(inout)        :: t1(*)
+real(kind=dp),intent(inout)        :: t2(*)
+integer,intent(out)                :: ierr
 !
 ! Local variable declarations rewritten by SPAG
 !
-real(kind=dp), dimension(18) , save :: a
-real(kind=dp) :: a0 , ano , ax , bigval , dchk , dx , dx2 , dxk , dxord ,&
-     &          dxx , f , sign , sum , sumj1 , sumj2 , sumjin , sumjn , &
-     &          temp , xchk , xk , xn , xnkm1 , xord , xsqfr , xx
-real(kind=dp), dimension(21) , save :: b
-real(kind=dp), dimension(19) , save :: c
-real(kind=dp), save :: euler , pi
-integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
-     &           largor , mask1 , mask2 , mo , n , nk , nord
+real(kind=dp), dimension(18), save :: a
+real(kind=dp)                      :: a0, ano, ax, bigval, dchk, dx, dx2, dxk, dxord , dxx, f, sign, &
+                                   &  sum, sumj1, sumj2, sumjin, sumjn, temp, xchk, xk, xn, xnkm1, xord, xsqfr, xx
+real(kind=dp), dimension(21), save :: b
+real(kind=dp), dimension(19), save :: c
+real(kind=dp), save                :: euler, pi
+integer                            :: i, i2, iend, ik, iloop, imo, j, jo, kend, ko , largor, mask1, mask2, mo, n, nk, nord
 !
 ! End of declarations rewritten by SPAG
 !
 ! ident_1="@(#) M_bessel bes(3f) calculate Bessel functions J(x) Y(x) I(x) K(x) for doubleprecision arguments and integer orders"
 
-      data pi/3.1415926535897932384626434d0/ ,                          &
+      data pi/3.1415926535897932384626434d0/,                         &
      &     euler/0.57721566490153286060651209d0/
-      data (a(i),i=1,18)/0.15999999999999999996d+02 ,                   &
-     &      0.96000000000000000392d+02 , 0.20859259259259257733d+03 ,   &
-     &      0.23703703703703736105d+03 , 0.16626725925925503356d+03 ,   &
-     &      0.79290469135839064596d+02 , 0.27400431054739774751d+02 ,   &
-     &      0.71803471197186985165d+01 , 0.14763245818980230758d+01 ,   &
-     &      0.24456169711179137024d+00 , 0.33342447857340252160d-01 ,   &
-     &      0.380697152755597312d-02 , 0.36933105872797696d-03 ,        &
-     &      0.30849206583296d-04 , 0.222445483065344d-05 ,              &
-     &      0.14811194720256d-06 , 0.635655159808d-08 ,                 &
+      data (a(i),i=1,18)/0.15999999999999999996d+02,                  &
+     &      0.96000000000000000392d+02, 0.20859259259259257733d+03,   &
+     &      0.23703703703703736105d+03, 0.16626725925925503356d+03,   &
+     &      0.79290469135839064596d+02, 0.27400431054739774751d+02,   &
+     &      0.71803471197186985165d+01, 0.14763245818980230758d+01,   &
+     &      0.24456169711179137024d+00, 0.33342447857340252160d-01,   &
+     &      0.380697152755597312d-02, 0.36933105872797696d-03,        &
+     &      0.30849206583296d-04, 0.222445483065344d-05,              &
+     &      0.14811194720256d-06, 0.635655159808d-08,                 &
      &      0.68719476736d-09/
-      data (b(i),i=1,21)/0.98813927043864915927d+00 ,                   &
-     &      -.11277407316570291310d-01 , 0.5340716774420596d-03 ,       &
-     &      -.435456758226194d-04 , 0.488456084594416d-05 ,             &
-     &      -.68181429589264d-06 , 0.11199290865952d-06 ,               &
-     &      -.2089895303616d-07 , 0.4325898624d-08 , -.97628537856d-09 ,&
-     &      0.23715879424d-09 , -.6140542976d-10 , 0.1680852992d-10 ,   &
-     &      -.481501184d-11 , 0.144621568d-11 , -.47808512d-12 ,        &
-     &      0.1572864d-12 , -.31457280d-13 , 0.9175040d-14 ,            &
-     &      -.1310720d-13 , 0.524288d-14/
-      data (c(i),i=1,19)/ - 0.73804295108687506715d-01 ,                &
-     &      0.11366785079620443739d+02 , -0.65838973034256501712d+02 ,  &
-     &      0.14119145750221817396d+03 , -0.15929975325701922684d+03 ,  &
-     &      0.11122328958866232246d+03 , -0.52866443153661476803d+02 ,  &
-     &      0.18223597971689250243d+02 , -0.47661469297599122637d+01 ,  &
-     &      0.97840283604837466112d+00 , -0.16191400580768858112d+00 ,  &
-     &      0.2212712874183229440d-01 , -0.2606907391286968320d-02 ,    &
-     &      0.316831265267384320d-03 , -0.6102072906743808d-04 ,        &
-     &      0.1658373309202432d-04 , -0.3439710458347520d-05 ,          &
-     &      0.338099825541120d-06 , -0.343597383680d-09/
+      data (b(i),i=1,21)/0.98813927043864915927d+00,                   &
+     &      -.11277407316570291310d-01, 0.5340716774420596d-03,       &
+     &      -.435456758226194d-04, 0.488456084594416d-05,             &
+     &      -.68181429589264d-06, 0.11199290865952d-06,               &
+     &      -.2089895303616d-07, 0.4325898624d-08, -.97628537856d-09 ,&
+     &      0.23715879424d-09, -.6140542976d-10, 0.1680852992d-10,   &
+     &      -.481501184d-11, 0.144621568d-11, -.47808512d-12,        &
+     &      0.1572864d-12, -.31457280d-13, 0.9175040d-14,            &
+     &      -.1310720d-13, 0.524288d-14/
+      data (c(i),i=1,19)/ - 0.73804295108687506715d-01,                &
+     &      0.11366785079620443739d+02, -0.65838973034256501712d+02,  &
+     &      0.14119145750221817396d+03, -0.15929975325701922684d+03,  &
+     &      0.11122328958866232246d+03, -0.52866443153661476803d+02,  &
+     &      0.18223597971689250243d+02, -0.47661469297599122637d+01,  &
+     &      0.97840283604837466112d+00, -0.16191400580768858112d+00,  &
+     &      0.2212712874183229440d-01, -0.2606907391286968320d-02,    &
+     &      0.316831265267384320d-03, -0.6102072906743808d-04,        &
+     &      0.1658373309202432d-04, -0.3439710458347520d-05,          &
+     &      0.338099825541120d-06, -0.343597383680d-09/
       ierr = 0
 !      bigval=1.0d322
       bigval = 1.0d307
@@ -306,7 +304,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
 !     ---------
 !     FILL OUT ARRAY FOR J(X) OR I(X) WHEN (NO.NE.0).
 !     ---------
-         do ik = 2 , ko
+         do ik = 2, ko
             t1(ik) = 0.0d0
          enddo
          rslt1 = 0.0d0
@@ -329,13 +327,13 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
       if ( x/=0 ) goto 600
  500  continue
       if ( mask1==2 ) then
-         do ik = 1 , ko
+         do ik = 1, ko
             t2(ik) = bigval
          enddo
          rslt2 = bigval
          return
       else
-         do ik = 1 , ko
+         do ik = 1, ko
             t2(ik) = -bigval
          enddo
          rslt2 = -bigval
@@ -382,7 +380,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
                   i2 = i2 - 1
                else
                   sum = t1(1)
-                  do j = 3 , imo , 2
+                  do j = 3, imo, 2
                      sum = sum + 2.0d0*t1(j)
                   enddo
                   f = 1.0d0/sum
@@ -403,7 +401,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
                   f = f - 2.0d0
                else
                   sum = t1(1)
-                  do j = 2 , imo
+                  do j = 2, imo
                      sum = sum + 2.0d0*t1(j)
                   enddo
                   f = 1.0d0/sum*exp(x)
@@ -412,7 +410,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
                   elseif ( xx==0 ) then
                      goto 200
                   endif
-                  do j = 1 , ko , 2
+                  do j = 1, ko, 2
                      t1(j) = t1(j)*f
                      t1(j+1) = t1(j+1)*f*sign
                   enddo
@@ -433,7 +431,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
          if ( mo>1 ) then
             a0 = 1.0d0
             iend = mo - 1
-            do ik = 1 , iend
+            do ik = 1, iend
                xk = ik
                dxk = xk
                a0 = a0*dxk
@@ -457,7 +455,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
          if ( mo>1 ) then
             a0 = 1.0d0
             iend = mo - 1
-            do ik = 1 , iend
+            do ik = 1, iend
                xk = ik
                dxk = xk
                a0 = a0*dxk
@@ -475,7 +473,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
       sumjin = dx2
       dx = x
       dxx = 0.25d0*dx*dx
-      spag_loop_1_1: do ik = 1 , 200
+      spag_loop_1_1: do ik = 1, 200
          xk = ik
          dxk = xk
          temp = -dx2*dxx/(dxk*(dxord+dxk))
@@ -490,7 +488,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
          t1(ko-1) = dble(sumjin*(0.5d0*dx)**(mo-1))
          if ( ko>2 ) then
             iend = ko - 2
-            do ik = 1 , iend
+            do ik = 1, iend
                nk = ko - ik
                xnkm1 = nk - 1
                t1(nk-1) = 2.0d0*xnkm1*t1(nk)/x - t1(nk+1)
@@ -521,12 +519,12 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
       endif
       if ( mask2==0 ) then
          if ( x>=1.0d0 ) then
-            do j = 1 , ko
+            do j = 1, ko
                t1(j) = t1(j)*f
             enddo
          endif
          if ( mo/=0 ) then
-            do j = 2 , ko , 2
+            do j = 2, ko, 2
                t1(j) = t1(j)*sign
             enddo
          endif
@@ -542,7 +540,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
             dxx = dx*dx/64.0d0
             dx2 = 1.0d0
             temp = c(1)
-            spag_loop_1_2: do j = 2 , 19
+            spag_loop_1_2: do j = 2, 19
                dx2 = dx2*dxx
                a0 = c(j)*dx2
                temp = temp + a0
@@ -554,7 +552,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
             a0 = (2.0d0/pi)*log(dx)
             t2(1) = a0*t1(1) + temp
          else
-            do j = 1 , imo
+            do j = 1, imo
                t1(j) = t1(j)*f
             enddo
             sumj1 = 0.0d0
@@ -566,11 +564,11 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
             else
                kend = ko/2
             endif
-            do n = 1 , kend , 2
+            do n = 1, kend, 2
                xn = n
                sumj1 = sumj1 + t1(2*n+1)/xn
             enddo
-            do n = 2 , kend , 2
+            do n = 2, kend, 2
                xn = n
                sumj2 = sumj2 + t1(2*n+1)/xn
             enddo
@@ -581,17 +579,17 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
             t2(2) = (t1(2)*t2(1)-2.0d0/(pi*x))/t1(1)
             if ( mo/=1 ) then
                nord = ko - 1
-               do n = 2 , nord
+               do n = 2, nord
                   xn = n - 1
                   t2(n+1) = (2.0d0*xn)/x*t2(n) - t2(n-1)
                enddo
             endif
-            do j = 2 , ko , 2
+            do j = 2, ko, 2
                t2(j) = t2(j)*sign
             enddo
             rslt2 = t2(ko)
             if ( mask2/=1 ) then
-               do j = 2 , ko , 2
+               do j = 2, ko, 2
                   t1(j) = t1(j)*sign
                enddo
                rslt1 = t1(ko)
@@ -609,7 +607,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
       sumjin = dx2
       dx = x
       dxx = 0.25d0*dx*dx
-      spag_loop_1_3: do ik = 1 , 200
+      spag_loop_1_3: do ik = 1, 200
          xk = ik
          dxk = xk
          temp = dx2*dxx/(dxk*(dxord+dxk))
@@ -622,7 +620,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
          t1(ko-1) = dble(sumjin*(0.5d0*dx)**(mo-1))
          if ( ko>2 ) then
             iend = ko - 2
-            do ik = 1 , iend
+            do ik = 1, iend
                nk = ko - ik
                xnkm1 = nk - 1
                t1(nk-1) = 2.0d0*xnkm1*t1(nk)/x + t1(nk+1)
@@ -644,7 +642,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
          goto 200
       endif
       if ( mo/=0 ) then
-         do j = 2 , ko , 2
+         do j = 2, ko, 2
             t1(j) = t1(j)*sign
          enddo
       endif
@@ -659,7 +657,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
       if ( x<=6.0d0 ) then
          dxx = dx*dx/64.0d0
          temp = 0.0d0
-         spag_loop_1_4: do j = 1 , 18
+         spag_loop_1_4: do j = 1, 18
             dx2 = dx2*dxx
             a0 = a(j)*dx2
             temp = temp + a0
@@ -672,7 +670,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
       else
          dxx = 10.0d0/dx - 1.0d0
          temp = b(1)
-         spag_loop_1_5: do j = 2 , 21
+         spag_loop_1_5: do j = 2, 21
             dx2 = dx2*dxx
             a0 = b(j)*dx2
             temp = temp + a0
@@ -687,7 +685,7 @@ integer :: i , i2 , iend , ik , iloop , imo , j , jo , kend , ko ,&
       t2(2) = (1.0d0/x-t2(1)*t1(2))/t1(1)
       if ( ko>2 ) then
          nord = ko - 1
-         do n = 2 , nord
+         do n = 2, nord
             xn = n - 1
             t2(n+1) = (2.0d0*xn)/x*t2(n) + t2(n-1)
          enddo
@@ -753,15 +751,15 @@ subroutine besi(x,n,bi,ier)
 !
 ! Dummy argument declarations rewritten by SPAG
 !
-real(kind=dp),intent(in) :: x
-integer,intent(in) :: n
+real(kind=dp),intent(in)    :: x
+integer,intent(in)          :: n
 real(kind=dp),intent(inout) :: bi
-integer,intent(out) :: ier
+integer,intent(out)         :: ier
 !
 ! Local variable declarations rewritten by SPAG
 !
-real(kind=dp) :: fi , fk , fn , pi , term , tol , xx
-integer :: i , k
+real(kind=dp)               :: fi, fk, fn, pi, term, tol, xx
+integer                     :: i, k
 !
 ! End of declarations rewritten by SPAG
 !
@@ -802,7 +800,7 @@ integer :: i , k
             xx = 1.0d0/(8.0d0*x)
             term = 1.0d0
             bi = 1.0d0
-            do k = 1 , 30
+            do k = 1, 30
                if ( abs(term)<=abs(tol*bi) ) goto 200
                fk = (2*k-1)**2
                term = term*xx*(fk-fn)/dble(k)
@@ -823,7 +821,7 @@ integer :: i , k
    xx = x/2.0d0
    term = 1.00d0
    if ( n>0 ) then
-      do i = 1 , n
+      do i = 1, n
          fi = i
          if ( abs(term)<1.0d-68 ) then
             ier = 3
@@ -840,7 +838,7 @@ integer :: i , k
 !     COMPUTE TERMS, STOPPING WHEN ABS(TERM) LE ABS(SUM OF TERMS)
 !     TIMES TOLERANCE
 !
-   spag_loop_1_1: do k = 1 , 1000
+   spag_loop_1_1: do k = 1, 1000
       if ( abs(term)<=abs(bi*tol) ) exit spag_loop_1_1
       fk = k*(n+k)
       term = term*(xx/fk)
@@ -906,21 +904,19 @@ subroutine besj(x,n,bj,d,ier)
 !
 ! Dummy argument declarations rewritten by SPAG
 !
-real(kind=dp),intent(in) :: x
-integer,intent(in) :: n
+real(kind=dp),intent(in)    :: x
+integer,intent(in)          :: n
 real(kind=dp),intent(inout) :: bj
-real(kind=dp),intent(in) :: d
-integer,intent(out) :: ier
+real(kind=dp),intent(in)    :: d
+integer,intent(out)         :: ier
 !
 ! Local variable declarations rewritten by SPAG
 !
-real(kind=dp) :: alpha , bmk , bprev , fm , fm1 , s
-integer :: jt , k , m , m2 , ma , mb , mk , mmax , mzero , n1 ,   &
-&           ntest
+real(kind=dp)               :: alpha, bmk, bprev, fm, fm1, s
+integer                     :: jt, k, m, m2, ma, mb, mk, mmax, mzero, n1, ntest
 !
 ! End of declarations rewritten by SPAG
 !
-
 ! ident_3="@(#) M_bessel besj(3f) compute the J Bessel function for a given argument and order" --"
 
    bj = 0.0d0
@@ -954,7 +950,7 @@ integer :: jt , k , m , m2 , ma , mb , mk , mmax , mzero , n1 ,   &
 !     SET UPPER LIMIT OF M
 !
          mmax = ntest
-         do m = mzero , mmax , 3
+         do m = mzero, mmax, 3
 !
 !     SET F(M),F(M-1)
 !
@@ -967,7 +963,7 @@ integer :: jt , k , m , m2 , ma , mb , mk , mmax , mzero , n1 ,   &
                jt = -1
             endif
             m2 = m - 2
-            do k = 1 , m2
+            do k = 1, m2
                mk = m - k
                bmk = 2.0d0*dble(mk)*fm1/x - fm
                fm = fm1
@@ -1052,25 +1048,24 @@ function besj0(xx)
 !
 ! Function and Dummy argument declarations rewritten by SPAG
 !
-real(kind=dp) :: besj0
-real(kind=dp) :: xx
+real(kind=dp)                 :: besj0
+real(kind=dp)                 :: xx
 !
 ! Local variable declarations rewritten by SPAG
 !
-real(kind=dp) :: chi , eightx , exfour , exsix , exsq , factor , p , q , &
-&          r2 , x
-integer :: ierr
-real(kind=dp), save :: p1 , p2 , p3 , piov4 , q1 , q2 , q3 , twovpi
-real(kind=dp), dimension(101) :: t1 , t2
+real(kind=dp)                 :: chi, eightx, exfour, exsix, exsq, factor, p, q, r2, x
+integer                       :: ierr
+real(kind=dp), save           :: p1, p2, p3, piov4, q1, q2, q3, twovpi
+real(kind=dp), dimension(101) :: t1, t2
 !
 ! End of declarations rewritten by SPAG
 !
 ! ident_4="@(#) M_bessel besj0(3f) calculates the Bessel function J(X) of order zero."
 
-data twovpi/0.63661977236758d0/ , piov4/0.78539816339745d0/
+data twovpi/0.63661977236758d0/, piov4/0.78539816339745d0/
 ! for bug in Intel 11.1.046 compiler Sun Aug 23 15:27:46 EDT 2009
-data p1/4.5d0/ , p2/4.59375d02/ , p3/1.500778125d05/
-data q1/37.5d0/ , q2/7.441875d03/ , q3/3.623307187d06/
+data p1/4.5d0/, p2/4.59375d02/, p3/1.500778125d05/
+data q1/37.5d0/, q2/7.441875d03/, q3/3.623307187d06/
 
    x = abs(xx)
    if ( x<=25.0d0 ) then
@@ -1133,6 +1128,7 @@ end function besj0
 !!
 !!    program demo_besj1
 !!    use, intrinsic :: iso_fortran_env, only : real32, real64, real128
+!!    use M_bessel, only: besj1
 !!    implicit none
 !!    real(kind=real64) :: x = 1.0_real64
 !!       write(*,*)'value:   ',x
@@ -1144,25 +1140,24 @@ function besj1(xx)
 !
 ! Function and Dummy argument declarations rewritten by SPAG
 !
-real(kind=dp) :: besj1
-real(kind=dp) :: xx
+real(kind=dp)                 :: besj1
+real(kind=dp)                 :: xx
 !
 ! Local variable declarations rewritten by SPAG
 !
-real(kind=dp) :: chi , eightx , exfour , exsix , exsq , factor , p , q , &
-&          r2 , x
-integer :: ierr
-real(kind=dp), save :: p1 , p2 , p3 , pi , q1 , q2 , q3 , twovpi
-real(kind=dp), dimension(101) :: t1 , t2
+real(kind=dp)                 :: chi, eightx, exfour, exsix, exsq, factor, p, q, r2, x
+integer                       :: ierr
+real(kind=dp), save           :: p1, p2, p3, pi, q1, q2, q3, twovpi
+real(kind=dp), dimension(101) :: t1, t2
 !
 ! End of declarations rewritten by SPAG
 !
 ! ident_5="@(#) M_bessel besj1(3f) calculates the Bessel function J(X) of order one."
 
-data pi/3.1415926535898d0/ , twovpi/0.63661977236758d0/
+data pi/3.1415926535898d0/, twovpi/0.63661977236758d0/
 ! for Intel compiler bug 11.1.046 Sun Aug 23 2009
-data p1/7.5d0/ , p2/5.90625d02/ , p3/1.773646875d05/
-data q1/5.25d01/ , q2/9.095625d03/ , q3/4.180739062d06/
+data p1/7.5d0/, p2/5.90625d02/, p3/1.773646875d05/
+data q1/5.25d01/, q2/9.095625d03/, q3/4.180739062d06/
 
    x = abs(xx)
    if ( x<=25.0d0 ) then
@@ -1229,15 +1224,15 @@ subroutine besk(x,n,bk,ier)
 !
 ! Dummy argument declarations rewritten by SPAG
 !
-real(kind=dp),intent(in) :: x
-integer,intent(in) :: n
-real(kind=dp),intent(out) :: bk
-integer,intent(out) :: ier
+real(kind=dp),intent(in)     :: x
+integer,intent(in)           :: n
+real(kind=dp),intent(out)    :: bk
+integer,intent(out)          :: ier
 !
 ! Local variable declarations rewritten by SPAG
 !
-real(kind=dp) :: a , b , c , fact , g0 , g1 , gj , hj , rj , x2j
-integer :: j , l
+real(kind=dp)                :: a, b, c, fact, g0, g1, gj, hj, rj, x2j
+integer                      :: j, l
 real(kind=dp), dimension(12) :: t
 !
 ! End of declarations rewritten by SPAG
@@ -1267,7 +1262,7 @@ real(kind=dp), dimension(12) :: t
             x2j = 1.0d0
             fact = 1.0d0
             hj = 0.0d0
-            do j = 1 , 6
+            do j = 1, 6
                rj = 1.0d0/dble(j)
                x2j = x2j*c
                fact = fact*rj*rj
@@ -1282,7 +1277,7 @@ real(kind=dp), dimension(12) :: t
             b = 1.0d0/x
             c = sqrt(b)
             t(1) = b
-            do l = 2 , 12
+            do l = 2, 12
                t(l) = t(l-1)*b
             enddo
             if ( n/=1 ) then
@@ -1325,7 +1320,7 @@ real(kind=dp), dimension(12) :: t
 !
 !     FROM KO,K1 COMPUTE KN USING RECURRENCE RELATION
 !
-100 spag_loop_1_1: do j = 2 , n
+100 spag_loop_1_1: do j = 2, n
       gj = 2.d0*(dble(j)-1.d0)*g1/x + g0
       if ( gj<=1.0d70 ) then
          g0 = g1
@@ -1344,7 +1339,7 @@ real(kind=dp), dimension(12) :: t
    fact = 1.0d0
    hj = 1.0d0
    g1 = 1.0d0/x + x2j*(0.5d0+a-hj)
-   do j = 2 , 8
+   do j = 2, 8
       x2j = x2j*c
       rj = 1.0d0/dble(j)
       fact = fact*rj*rj
@@ -1410,9 +1405,8 @@ integer,intent(out)       :: ier
 !
 ! Local variable declarations rewritten by SPAG
 !
-real(kind=dp) :: a , b , fl , fl1 , p0 , p1 , pi , pi2 , q0 , q1 , sum , &
-&          t , term , ts , x2 , xx , y0 , y1 , ya , yb , yc
-integer :: k , l
+real(kind=dp)             :: a, b, fl, fl1, p0, p1, pi, pi2, q0, q1, sum, t, term, ts, x2, xx, y0, y1, ya, yb, yc
+integer                   :: k, l
 !
 ! End of declarations rewritten by SPAG
 !
@@ -1444,7 +1438,7 @@ integer :: k , l
             sum = 0.0d0
             term = t
             y0 = t
-            do l = 1 , 15
+            do l = 1, 15
                if ( l/=1 ) sum = sum + 1.0d0/dble(l-1)
                fl = l
                ts = t - sum
@@ -1454,7 +1448,7 @@ integer :: k , l
             term = xx*(t-0.5d0)
             sum = 0.0d0
             y1 = term
-            do l = 2 , 16
+            do l = 2, 16
                sum = sum + 1.0d0/dble(l-1)
                fl = l
                fl1 = fl - 1.0d0

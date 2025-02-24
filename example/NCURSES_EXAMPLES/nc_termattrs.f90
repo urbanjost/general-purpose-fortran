@@ -14,7 +14,7 @@ program seeattr
       stop
    endif
    ierr=raw()
-   ierr=cbreak()    ! Line buffering disabled, Pass on everthing to me
+   ierr=cbreak()    ! Line buffering disabled, Pass on everything to me
    ierr=noecho()    ! only put on screen what is explicitly placed there, do not echo input
    attributes = termattrs()
    ierr=addstr("This terminal is capable of the following attributes:"//C_NEW_LINE//C_NULL_CHAR)

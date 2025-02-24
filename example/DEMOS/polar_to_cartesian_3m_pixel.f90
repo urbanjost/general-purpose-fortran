@@ -3,13 +3,13 @@
      implicit none
      real    :: x,y
      real    :: r,i
-     !!integer :: ios
+     !-!integer :: ios
 
-      !!INFINITE: do
-      !!   write(*,advance='no')'Enter radius and inclination(in radians):'
-      !!   read(*,*,iostat=ios) r, i
-      !!   if(ios.ne.0)exit INFINITE
+      !-!INFINITE: do
+      !-!   write(*,advance='no')'Enter radius and inclination(in radians):'
+      !-!   read(*,*,iostat=ios) r, i
+      !-!   if(ios.ne.0)exit INFINITE
          call polar_to_cartesian(r,i,x,y)
          write(*,*)'x=',x,' y=',y,'radius=',r,'inclination=',i
-      !!enddo INFINITE
+      !-!enddo INFINITE
      end program demo_polar_to_cartesian

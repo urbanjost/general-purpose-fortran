@@ -1,13 +1,29 @@
 program test_suite_M_units
+use,intrinsic :: iso_fortran_env, only: stdin=>input_unit, stdout=>output_unit!, stderr=>error_unit
 use,intrinsic :: iso_fortran_env, only: real32, real64, real128
-use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
-use M_framework__verify, only : unit_test_level
-use M_framework__msg,    only : str
+use M_framework, only: unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_framework, only: unit_test_level
+use M_framework, only: str
+use M_framework, only: accdig
 use M_framework
-use M_anything,          only : anyscalar_to_real, anyscalar_to_double
-use M_framework,         only : accdig
+use M_anything,  only: anyscalar_to_real, anyscalar_to_double
 use M_units
+implicit none
+logical,parameter :: F=.false., T=.true.
 
+   call unit_test_mode( &
+       keep_going=T,    &
+       flags=[0],       &
+       luns=[stdout],   &
+       command='',      &
+       brief=F,         &
+       match='',        &
+       interactive=F,   &
+       CMDLINE=T,       &
+       debug=F)
+
+   unit_test_level=0
+!  unit_test_level=1
 !! test constants
    call testit_p('pi',      real(PI)      ,  real(3.141592653589793238462643383279500d0)  ,message='')
    call testit_p('e',       real(E)       ,  real(2.718281828459045235360d0)              ,message='')
@@ -44,6 +60,7 @@ use M_units
    call test_is_nan()
    call test_is_even()
 !! teardown
+   call unit_test_stop()
 contains
 !===================================================================================================================================
 subroutine testit_p(label,value1,value2,message)
@@ -169,9 +186,38 @@ end subroutine test_c2f
 subroutine test_cartesian_to_polar()
 
    call unit_test_start('cartesian_to_polar',msg='')
-   !!call unit_test('cartesian_to_polar', 0.eq.0, 'checking', 100)
+   
+   ! basic cardinal directions
+   call checkme(  +1.0,  +0.0,0,1.0,  0.00000000  )
+   call checkme(  +0.0,  +1.0,0,1.0,  1.57079637  )
+   call checkme(  -1.0,  +0.0,0,1.0,  3.14159274  )
+   call checkme(  +0.0,  -1.0,0,1.0,  4.71238899  )
+   ! the 3-4-5 right triangle
+   call checkme(  +4.0,  +3.0,0,5.0,  0.643501103 )
+   call checkme(  +3.0,  +4.0,0,5.0,  0.927295208 )
+   call checkme(  -3.0,  +4.0,0,5.0,  2.21429753  )
+   call checkme(  -4.0,  +3.0,0,5.0,  2.49809170  )
+   call checkme(  -4.0,  -3.0,0,5.0,  3.78509378  )
+   call checkme(  -3.0,  -4.0,0,5.0,  4.06888771  )
+   call checkme(  +3.0,  -4.0,0,5.0,  5.35589027  )
+   call checkme(  +4.0,  -3.0,0,5.0,  5.63968420  )
+   ! intentional overflow
+   call  checkme( huge(0.0),huge(0.0),-1, -3.40282347E+38, 0.785398185 )
    call unit_test_done('cartesian_to_polar',msg='')
 end subroutine test_cartesian_to_polar
+
+subroutine checkme(x,y,ierr_expected,radius_expected,inclination_expected)
+integer,intent(in) :: ierr_expected   
+real,intent(in)    :: radius_expected,inclination_expected   
+real,intent(in)    :: x,y   
+real               :: radius,inc
+integer            :: ierr   
+   call cartesian_to_polar(x,y,radius,inc,ierr)
+   call unit_test('cartesian_to_polar', ierr.eq.ierr_expected, 'ierr=', ierr, 'expected', ierr_expected)
+   call unit_test('cartesian_to_polar', radius.eq.radius_expected, 'radius=', radius, 'expected', radius_expected)
+   call unit_test('cartesian_to_polar', inc.eq.inclination_expected, 'inclination=', inc, 'expected', inclination_expected)
+   !write(*,*)ierr, x,y,radius,inclination,inclination*180/acos(-1.0)
+end subroutine checkme
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_cartesian_to_spherical()
 

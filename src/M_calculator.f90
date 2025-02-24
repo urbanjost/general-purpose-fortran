@@ -111,21 +111,23 @@ use M_list,    only : locate, insert, replace
 implicit none
 private
 
-integer,parameter                         :: dp=kind(0.0d0) ! = SELECTED_REAL_KIND(15,300)
+integer,parameter                        :: dp=kind(0.0d0) ! = SELECTED_REAL_KIND(15,300)
 
-integer,parameter,public                  :: iclen_calc=512        ! max length of expression or variable value as a string
-integer,parameter,public                  :: ixy_calc=55555        ! number of variables in X() and Y() array
-real(kind=dp),save,public                 :: x(ixy_calc)=0.0_dp    ! x array for procedure funcs_
-real(kind=dp),save,public                 :: y(ixy_calc)=0.0_dp    ! y array for procedure funcs_
+integer,parameter,public                 :: iclen_calc=512        ! max length of expression or variable value as a string
+integer,parameter,public                 :: ixy_calc=55555        ! number of variables in X() and Y() array
+real(kind=dp),save,public                :: x(ixy_calc)=0.0_dp    ! x array for procedure funcs_
+real(kind=dp),save,public                :: y(ixy_calc)=0.0_dp    ! y array for procedure funcs_
 
-integer,parameter,public                  :: icname_calc=20        ! max length of a variable name
+integer,parameter,public                 :: icname_calc=20        ! max length of a variable name
 
-character(len=:),allocatable,save         :: keys_q(:)             ! contains the names of string variables
-character(len=:),allocatable,save,public  :: values(:)             ! string variable values
-integer,save,public,allocatable           :: values_len(:)         ! lengths of the string variable values
+character(len=:),allocatable,save        :: keys_q(:)             ! contains the names of string variables
+character(len=:),allocatable,save,public :: values(:)             ! string variable values
+integer,save,public,allocatable          :: values_len(:)         ! lengths of the string variable values
 
-character(len=:),allocatable,save         :: keyr_q(:)             ! contains the names of numeric variables
-real(kind=dp),save,allocatable            :: values_d(:)           ! numeric variable values
+character(len=:),allocatable,save        :: keyr_q(:)             ! contains the names of numeric variables
+real(kind=dp),save,allocatable           :: values_d(:)           ! numeric variable values
+integer,parameter                        :: ixyc_calc=50                   ! number of variables in $X() and $(Y) array
+integer,parameter                        :: icbuf_calc=23*(iclen_calc/2+1) ! buffer for string as it is expanded
 
 public :: calculator
 public :: getvalue
@@ -145,8 +147,6 @@ public :: strgar2      ! read a string into an array USING CALCULATOR
 public :: set_mysub
 public :: set_myfunc
 
-integer,parameter                      :: ixyc_calc=50                   ! number of variables in $X() and $(Y) array
-integer,parameter                      :: icbuf_calc=23*(iclen_calc/2+1) ! buffer for string as it is expanded
 
 
 !  no check on whether line expansion ever causes line length to
@@ -720,7 +720,7 @@ end subroutine parens_
 !!
 !!    recursive subroutine funcs_(wstrng,nchars,ier)
 !!
-!!     character(len=*)                    :: wstrng
+!!     character(len=*) :: wstrng
 !!##DESCRIPTION
 !!##OPTIONS
 !!##RETURNS
@@ -742,95 +742,95 @@ use M_framework__approx,  only : round, dp_accdig
 
 ! ident_4="@(#) M_calculator funcs_(3fp) given string of form name(p1 p2 ...) (p(i) are non-parenthesized expressions) call procedure "name""
 
-character(len=*)                    :: wstrng
-integer                             :: nchars
-integer                             :: ier
+character(len=*)           :: wstrng
+integer                    :: nchars
+integer                    :: ier
 
-integer,parameter                   :: iargs=100
-character(len=10),save              :: days(7)
-character(len=10),save              :: months(12)
-character(len=9) :: day
-character(len=iclen_calc)           :: ctmp
-character(len=iclen_calc)           :: ctmp2
-character(len=iclen_calc)           :: junout
-character(len=iclen_calc)           :: cnum
-character(len=icname_calc)          :: wstrng2
+integer,parameter          :: iargs=100
+character(len=10),save     :: days(7)
+character(len=10),save     :: months(12)
+character(len=9)           :: day
+character(len=iclen_calc)  :: ctmp
+character(len=iclen_calc)  :: ctmp2
+character(len=iclen_calc)  :: junout
+character(len=iclen_calc)  :: cnum
+character(len=icname_calc) :: wstrng2
 
-real(kind=dp)                       :: args(iargs)
+real(kind=dp)              :: args(iargs)
 
-real                                :: acurcy
-real(kind=dp)                       :: arg1
-real(kind=dp)                       :: arg2
-real(kind=dp)                       :: bottom
-real(kind=dp)                       :: false
-real(kind=dp)                       :: fval
-real(kind=dp)                       :: top
-real(kind=dp)                       :: true
-real(kind=dp)                       :: val
+real                       :: acurcy
+real(kind=dp)              :: arg1
+real(kind=dp)              :: arg2
+real(kind=dp)              :: bottom
+real(kind=dp)              :: false
+real(kind=dp)              :: fval
+real(kind=dp)              :: top
+real(kind=dp)              :: true
+real(kind=dp)              :: val
 
-real(kind=realtime)                 :: uepoch
-real,external                       :: c
+real(kind=realtime)        :: uepoch
+real,external              :: c
 
-!!integer,save                        :: ikeepran=22
-integer                             :: i
-integer                             :: i1
-integer                             :: i1010
-integer                             :: i1033
-integer                             :: i1060
-integer                             :: i1066
-integer                             :: i2
-integer                             :: i2020
-integer                             :: i3030
-integer                             :: i410
-integer                             :: i440
-integer                             :: i520
-integer                             :: i852
-integer                             :: iargs_type(iargs)
-integer                             :: ibegin(ixyc_calc),iterm(ixyc_calc)
-integer                             :: icalen
-integer                             :: icount
-integer                             :: idarray(8)
-integer                             :: idig
-integer                             :: idum
-integer                             :: iend
-integer                             :: iend1
-integer                             :: iend2
-integer                             :: ifail
-integer                             :: iflen
-integer                             :: ii
-integer                             :: iie
-integer                             :: iii
-integer                             :: iiie
-integer                             :: ileft
-integer                             :: ilen
-integer                             :: in
-integer                             :: ind
-integer                             :: indexout
-integer                             :: ios
-integer                             :: iright
-integer                             :: istart
-integer                             :: istat
-integer                             :: istore
-integer                             :: istoreat
-integer                             :: isub
-integer                             :: itime(8)
-integer                             :: itype
-integer                             :: iunit
-integer                             :: ival
-integer                             :: ivalue
-integer                             :: jend
-integer                             :: jj
-integer                             :: n
-integer                             :: idat(8)
-integer                             :: ierr
-integer                             :: iweekday
-integer                             :: ii2
-integer                             :: ilen2
-integer                             :: istatus
+!!integer,save              :: ikeepran=22
+integer                    :: i
+integer                    :: i1
+integer                    :: i1010
+integer                    :: i1033
+integer                    :: i1060
+integer                    :: i1066
+integer                    :: i2
+integer                    :: i2020
+integer                    :: i3030
+integer                    :: i410
+integer                    :: i440
+integer                    :: i520
+integer                    :: i852
+integer                    :: iargs_type(iargs)
+integer                    :: ibegin(ixyc_calc),iterm(ixyc_calc)
+integer                    :: icalen
+integer                    :: icount
+integer                    :: idarray(8)
+integer                    :: idig
+integer                    :: idum
+integer                    :: iend
+integer                    :: iend1
+integer                    :: iend2
+integer                    :: ifail
+integer                    :: iflen
+integer                    :: ii
+integer                    :: iie
+integer                    :: iii
+integer                    :: iiie
+integer                    :: ileft
+integer                    :: ilen
+integer                    :: in
+integer                    :: ind
+integer                    :: indexout
+integer                    :: ios
+integer                    :: iright
+integer                    :: istart
+integer                    :: istat
+integer                    :: istore
+integer                    :: istoreat
+integer                    :: isub
+integer                    :: itime(8)
+integer                    :: itype
+integer                    :: iunit
+integer                    :: ival
+integer                    :: ivalue
+integer                    :: jend
+integer                    :: jj
+integer                    :: n
+integer                    :: idat(8)
+integer                    :: ierr
+integer                    :: iweekday
+integer                    :: ii2
+integer                    :: ilen2
+integer                    :: istatus
 
-intrinsic                           :: abs,aint,anint,exp,nint,int,log,log10
-intrinsic                           :: acos,asin,atan,cos,cosh,sin,sinh,tan,tanh
-intrinsic                           :: sqrt,atan2,dim,mod,sign,max,min
+intrinsic                  :: abs,aint,anint,exp,nint,int,log,log10
+intrinsic                  :: acos,asin,atan,cos,cosh,sin,sinh,tan,tanh
+intrinsic                  :: sqrt,atan2,dim,mod,sign,max,min
 !-----------------------------------------------------------------------------------------------------------------------------------
    data months/'January','February','March','April','May','June','July','August','September','October','November','December'/
    data days/'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'/
@@ -2084,21 +2084,21 @@ subroutine args_(line,ilen,array,itype,iarray,ier,mx)
 !@ (#) Commas are only legal delimiters. extra or redundant delimiters are ignored.
 
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=*),intent(in)           :: line      ! input string
-integer,intent(in)                    :: ilen      ! length of input string
-integer,intent(in)                    :: mx        ! up to mx par(i) will be extracted. if more found an error is generated.
-real(kind=dp),intent(out)             :: array(mx)
-integer,intent(out)                   :: itype(mx) ! itype=0 for number, itype=2 for string
-integer,intent(out)                   :: iarray    ! number of parameters found
-integer                               :: ier       ! ier=-1 if error occurs, ier undefined (not changed) if no error.
+character(len=*),intent(in) :: line      ! input string
+integer,intent(in)          :: ilen      ! length of input string
+integer,intent(in)          :: mx        ! up to mx par(i) will be extracted. if more found an error is generated.
+real(kind=dp),intent(out)   :: array(mx)
+integer,intent(out)         :: itype(mx) ! itype=0 for number, itype=2 for string
+integer,intent(out)         :: iarray    ! number of parameters found
+integer                     :: ier       ! ier=-1 if error occurs, ier undefined (not changed) if no error.
 !-----------------------------------------------------------------------------------------------------------------------------------
-integer :: icalc
-integer :: icol
-integer :: iend
-integer :: ilook
-integer :: istart
-character(len=1),parameter :: delimc=','
-character(len=icbuf_calc)  :: wstrng
+integer                     :: icalc
+integer                     :: icol
+integer                     :: iend
+integer                     :: ilook
+integer                     :: istart
+character(len=1),parameter  :: delimc=','
+character(len=icbuf_calc)   :: wstrng
 !-----------------------------------------------------------------------------------------------------------------------------------
    iarray=0
    if(ilen.eq.0)then  ! check if input line (line) was totally blank
@@ -2168,15 +2168,15 @@ character(len=*),intent(inout) :: string
 integer,intent(inout)          :: nchar
 real(kind=dp),intent(out)      :: value
 integer,intent(out)            :: ier
-character(len=icbuf_calc) :: dummy            ! no single term may be over (icbuf_calc) characters
-integer :: ier2
-integer :: iend
-integer :: iendm
-integer :: iendp
-integer :: ista
-integer :: istat
-integer :: nchar2
-real(kind=dp) :: temp
+character(len=icbuf_calc)      :: dummy            ! no single term may be over (icbuf_calc) characters
+integer                        :: ier2
+integer                        :: iend
+integer                        :: iendm
+integer                        :: iendp
+integer                        :: ista
+integer                        :: istat
+integer                        :: nchar2
+real(kind=dp)                  :: temp
 !-----------------------------------------------------------------------------------------------------------------------------------
                                !!!!! what happens if the returned string is longer than the input string?
       value=0.0d0              ! initialize sum value to be returned to 0
@@ -2284,7 +2284,7 @@ subroutine pows_(wstrng,nchar,ier)
 character(len=*),intent(inout) :: wstrng    ! input string returned with power operators evaluated
 integer,intent(inout)          :: nchar     ! input length of wstrng, returned corrected for new wstrng returned.
 integer                        :: ier       ! error status
-character(len=iclen_calc)     :: tempch
+character(len=iclen_calc)      :: tempch
 character(len=icbuf_calc)      :: dummy
 character(len=1)               :: z
 real(kind=dp)                  :: fval1
@@ -2560,15 +2560,15 @@ subroutine a_to_d_(chars,rval8,ierr)
 ! ident_10="@(#) M_calculator a_to_d_(3f) returns a real value rval8 from a numeric character string chars."
 
 ! CAREFUL: LAST is in GLOBAL, but can be read from when passed to this routine as CHARS. DO NOT CHANGE CHARS.
-character(len=*),intent(in) :: chars
+character(len=*),intent(in)  :: chars
 character(len=:),allocatable :: chars_local
-real(kind=dp),intent(out)   :: rval8
-integer,intent(out)         :: ierr
+real(kind=dp),intent(out)    :: rval8
+integer,intent(out)          :: ierr
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=13)           :: frmt
-integer                     :: ier
-integer                     :: indx
-integer                     :: ioerr
+character(len=13)            :: frmt
+integer                      :: ier
+integer                      :: indx
+integer                      :: ioerr
 !-----------------------------------------------------------------------------------------------------------------------------------
    ioerr=0
    chars_local=trim(adjustl(chars))//' ' ! minimum of one character required
@@ -2921,12 +2921,11 @@ subroutine given_name_get_stringvalue_(chars,ierr)
 
 ! ident_12="@(#) M_calculator given_name_get_stringvalue_(3fp) return associated value for variable name"
 
-!-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*),intent(in)  :: chars
 integer,intent(out)          :: ierr
-!-----------------------------------------------------------------------------------------------------------------------------------
-   integer                      :: index
-!-----------------------------------------------------------------------------------------------------------------------------------
+
+integer                      :: index
+
    ierr=0
    index=0
    call locate(keys_q,chars,index,ierr)
@@ -2986,10 +2985,10 @@ real(kind=dp) function getvalue(varnam)
 ! ident_13="@(#) M_calculator getvalue(3f) given numeric variable name return value"
 
 character(len=*),intent(in) :: varnam
-!-----------------------------------------------------------------------------------------------------------------------------------
-   integer          :: index
-   integer          :: ierr
-!-----------------------------------------------------------------------------------------------------------------------------------
+
+integer                     :: index
+integer                     :: ierr
+
    call locate(keyr_q,varnam,index,ierr)
    if(index.le.0)then
       ! need option to turn this on and off
@@ -3501,7 +3500,7 @@ end function rnum0
 !!
 !!   doubleprecision function dnum0(inline,ierr)
 !!
-!!    character(len=*),intent(in) :: inline
+!!    character(len=*),intent(in)  :: inline
 !!    integer,optional,intent(out) :: ierr
 !!
 !!##DESCRIPTION
@@ -3544,13 +3543,13 @@ doubleprecision function dnum0(inline,ierr)
 
 ! ident_18="@(#) M_calculator dnum0(3f) resolve a calculator string into a doubleprecision number"
 
-character(len=*),intent(in) :: inline
+character(len=*),intent(in)  :: inline
 integer,optional,intent(out) :: ierr
-character(len=iclen_calc)           :: cdum20
-doubleprecision             :: dnum1
-integer                     :: iend
-integer                     :: ierr_local
-integer                     :: ilen
+character(len=iclen_calc)    :: cdum20
+doubleprecision              :: dnum1
+integer                      :: iend
+integer                      :: ierr_local
+integer                      :: ilen
    ierr_local=0
    if(inline.eq.' ')then
       dnum1=0.0d0
@@ -3600,8 +3599,8 @@ end function dnum0
 !!     program demo_snum0
 !!     use m_calculator, only: rnum0, snum0
 !!     implicit none
-!!     real :: rdum
-!!     character(len=80)  :: ic,jc,kc
+!!     real              :: rdum
+!!     character(len=80) :: ic,jc,kc
 !!
 !!        rdum=rnum0('A=83/2') ! set a variable in the calculator
 !!        kc=snum0('$MYTITLE="This is my title variable"')
@@ -3747,9 +3746,9 @@ end function snum0
 !!     use M_calculator, only : iclen_calc
 !!     use M_calculator, only : expression
 !!     implicit none
-!!     character(len=iclen_calc) ::  outlin0
-!!     doubleprecision :: outval
-!!     integer :: ierr, ilen
+!!     character(len=iclen_calc) :: outlin0
+!!     doubleprecision           :: outval
+!!     integer                   :: ierr, ilen
 !!        call expression('A=3.4**5    ',outval,outlin0,ierr,ilen)
 !!        write(*,*)'value of expression is ',outval
 !!        write(*,*)'string representation of value is ',trim(outlin0)
@@ -3895,8 +3894,8 @@ end subroutine expression
 !!    use M_kracken, only: sget, kracken, lget
 !!    use M_calculator, only : strgarr
 !!    implicit none
-!!    real vals(41), tol, sumup, sumtarget
-!!    integer :: ifound, ierr, i, ipass, ios
+!!    real              :: vals(41), tol, sumup, sumtarget
+!!    integer           :: ifound, ierr, i, ipass, ios
 !!    character(len=80) :: line=' '
 !!    character(len=10) :: delims=' ;'
 !!    !  define command arguments, default values and crack command line
@@ -3978,8 +3977,8 @@ end subroutine expression
 !! AUTHOR  John S. Urban
 !!##VERSION 1.0, 19971123
 !-----------------------------------------------------------------------------------------------------------------------------------
-SUBROUTINE strgarr(line,ivals,vals,ifound,delims0,ierr)
-USE M_framework__journal, ONLY : journal
+subroutine strgarr(line,ivals,vals,ifound,delims0,ierr)
+use M_framework__journal, only : journal
 
 ! ident_21="@(#) M_calculator strgarr(3f) read numeric expressions into an real array"
 
@@ -3996,81 +3995,81 @@ USE M_framework__journal, ONLY : journal
 !     delimiters. no checking for more than can fit in vals.
 !     quits if encounters any errors in read.
 !-----------------------------------------------------------------------------------------------------------------------------------
-      CHARACTER(LEN=*),INTENT(IN)  :: line
-      INTEGER,INTENT(IN)           :: ivals
-      INTEGER,INTENT(OUT)          :: ifound
-      CHARACTER(LEN=*),INTENT(IN)  :: delims0
-      INTEGER,INTENT(OUT)          :: ierr
+      character(len=*),intent(in)  :: line
+      integer,intent(in)           :: ivals
+      integer,intent(out)          :: ifound
+      character(len=*),intent(in)  :: delims0
+      integer,intent(out)          :: ierr
 !-----------------------------------------------------------------------------------------------------------------------------------
-      REAL                         :: vals(ivals)
-      CHARACTER(len=iclen_calc)    :: outlin
-      INTEGER                      :: ilen,id
-      INTEGER                      :: i10,i20,i40
-      INTEGER                      :: icol,istart,iend
-      DOUBLEPRECISION              :: dval
-      INTEGER                      :: ier
-      INTEGER                      :: ilendm
-      CHARACTER(LEN=256)           :: delims
+      real                         :: vals(ivals)
+      character(len=iclen_calc)    :: outlin
+      integer                      :: ilen,id
+      integer                      :: i10,i20,i40
+      integer                      :: icol,istart,iend
+      doubleprecision              :: dval
+      integer                      :: ier
+      integer                      :: ilendm
+      character(len=256)           :: delims
 !-----------------------------------------------------------------------------------------------------------------------------------
-      id=LEN(delims0)
-      IF(id.EQ.0)THEN
+      id=len(delims0)
+      if(id.eq.0)then
          delims=' '
          id=1
-      ELSE
+      else
          delims=delims0
-      ENDIF
+      endif
 !-----------------------------------------------------------------------------------------------------------------------------------
       ierr=0
       iend=0
       ifound=0
       ilen=0
-      DO i20=LEn(line),1,-1
-         IF(INDEX(delims(:id),line(i20:i20)).EQ.0)THEN      ! see if current character is a delimiter
+      do i20=len(line),1,-1
+         if(index(delims(:id),line(i20:i20)).eq.0)then      ! see if current character is a delimiter
             ilen=i20                                        ! record position of last non-delimiter
-            EXIT                                            ! found non-delimiter
-         ENDIF
-      ENDDO
-      IF(ilen.EQ.0)THEN                                     ! command was totally composed of delimiters
-         CALL journal('sc','*strgarr* blank line passed as a list of numbers')
-         RETURN
-      ENDIF
+            exit                                            ! found non-delimiter
+         endif
+      enddo
+      if(ilen.eq.0)then                                     ! command was totally composed of delimiters
+         call journal('sc','*strgarr* blank line passed as a list of numbers')
+         return
+      endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !     there is at least one non-delimiter in the string
 !     ilen is the column position of the last non-delimiter character
 !     find next non-delimiter
       icol=1                                                ! the pointer into the line being processed
-      DO i10=1,ivals,1                                      ! only find enough values to store into vals(1:ivals)
-         INFINITE: DO                                       ! FIND NEXT SUBSTRING AND STORE IT
-            IF(INDEX(delims(:id),line(icol:icol)).EQ.0)THEN ! character is not a delimiter so starts substring
+      do i10=1,ivals,1                                      ! only find enough values to store into vals(1:ivals)
+         infinite: do                                       ! FIND NEXT SUBSTRING AND STORE IT
+            if(index(delims(:id),line(icol:icol)).eq.0)then ! character is not a delimiter so starts substring
                istart=icol                                  ! set start of substring
                iend=0                                       ! FIND END OF SUBSTRING
-               DO i40=istart,ilen                           ! look at each character starting at left
-                 IF(INDEX(delims(:id),line(i40:i40)).NE.0)THEN   ! determine if character is a delimiter
+               do i40=istart,ilen                           ! look at each character starting at left
+                 if(index(delims(:id),line(i40:i40)).ne.0)then   ! determine if character is a delimiter
                     iend=i40                                ! found a delimiter. record where it was found
-                    EXIT                                    ! found end of substring so leave loop
-                 ENDIF
-               ENDDO
-               IF(iend.EQ.0)iend=ilen+1                     ! no delimiters found, so this substring goes to end of line
-               CALL expression(line(istart:iend-1),dval,outlin,ier,ilendm)    ! parse substring minus delimiter
-               IF(ier.EQ.0)THEN
+                    exit                                    ! found end of substring so leave loop
+                 endif
+               enddo
+               if(iend.eq.0)iend=ilen+1                     ! no delimiters found, so this substring goes to end of line
+               call expression(line(istart:iend-1),dval,outlin,ier,ilendm)    ! parse substring minus delimiter
+               if(ier.eq.0)then
                     vals(i10)=real(dval)
                     ifound=ifound+1
-               ELSE                                         ! could have option to keep going or ignore some columns
+               else                                         ! could have option to keep going or ignore some columns
                     ierr=istart
-                    RETURN
-               ENDIF
+                    return
+               endif
                icol=iend+1
-               EXIT INFINITE                                ! go look for next substring
-            ELSE
+               exit infinite                                ! go look for next substring
+            else
                icol=icol+1                                  ! skip delimiters while looking for start of string
-            ENDIF
-            IF(icol.GT.ilen) THEN                           ! last string
-              RETURN
-            ENDIF
-         ENDDO INFINITE
-      ENDDO
+            endif
+            if(icol.gt.ilen) then                           ! last string
+              return
+            endif
+         enddo infinite
+      enddo
       ierr=iend+1                                           ! error: more than ivals numbers were in the line.
-END SUBROUTINE strgarr
+end subroutine strgarr
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4084,11 +4083,11 @@ END SUBROUTINE strgarr
 !!   subroutine strgar2(line,ivals,vals,ifound,delims,ierr)
 !!
 !!     character(len=*), intent=(in) :: line
-!!     integer, intent=(in) :: ivals
-!!     real, intent=(out) :: vals(ivals)
-!!     integer, intent=(out) :: ifound
+!!     integer, intent=(in)          :: ivals
+!!     real, intent=(out)            :: vals(ivals)
+!!     integer, intent=(out)         :: ifound
 !!     character(len=*), intent=(in) :: delims
-!!     integer, intent=(out) :: ierr
+!!     integer, intent=(out)         :: ierr
 !!
 !!##DESCRIPTION
 !!     STRGAR2() returns an array of real values from a string containing numeric
@@ -4213,29 +4212,29 @@ use M_framework__journal, only : journal
 !  no checking for more than can fit in numbrs.
 !  quits if any errors are encountered in reading the input string.
 !-----------------------------------------------------------------------------------------------------------------------------------
-   character(len=*),intent(in)           :: line            ! line=input string
-   integer,intent(in)                    :: iread           ! iread=maximum number of values to try to read into numbrs
-   real,intent(out)                      :: numbrs(iread)   ! numbrs=real array to be filled with values
-   integer,intent(out)                   :: inums           ! inums=number of values read (before error occurs if one does)
-   character(len=*),intent(in)           :: delims0         ! delimiters at which to break input into expressions
-   integer,intent(out)                   :: ierr            ! ierr==0 if no error, column number error string starts at
+   character(len=*),intent(in) :: line                      ! line=input string
+   integer,intent(in)          :: iread                     ! iread=maximum number of values to try to read into numbrs
+   real,intent(out)            :: numbrs(iread)             ! numbrs=real array to be filled with values
+   integer,intent(out)         :: inums                     ! inums=number of values read (before error occurs if one does)
+   character(len=*),intent(in) :: delims0                   ! delimiters at which to break input into expressions
+   integer,intent(out)         :: ierr                      ! ierr==0 if no error, column number error string starts at
 !-----------------------------------------------------------------------------------------------------------------------------------
-   character(len=iclen_calc) :: outlin
-   character(len=256)        :: delims                      ! malleable copy of delimiters at which to break input into expressions
-   character(len=1)          :: ch
-   integer                   :: iend
-   integer                   :: ilen
-   integer                   :: idels
-   logical                   :: instring                    ! flag that not inside a quoted string
-   doubleprecision           :: dval
-   integer                   :: iprev
-   integer                   :: itwasd                      ! previous character was a delimiter not in a quoted region or not
-   integer                   :: istart
-   integer                   :: istarto
-   integer                   :: ierr_calc
-   integer                   :: ilendm
-   integer                   :: i10
-   integer                   :: i20
+   character(len=iclen_calc)   :: outlin
+   character(len=256)          :: delims                    ! malleable copy of delimiters at which to break input into expressions
+   character(len=1)            :: ch
+   integer                     :: iend
+   integer                     :: ilen
+   integer                     :: idels
+   logical                     :: instring                  ! flag that not inside a quoted string
+   doubleprecision             :: dval
+   integer                     :: iprev
+   integer                     :: itwasd                    ! previous character was a delimiter not in a quoted region or not
+   integer                     :: istart
+   integer                     :: istarto
+   integer                     :: ierr_calc
+   integer                     :: ilendm
+   integer                     :: i10
+   integer                     :: i20
 !-----------------------------------------------------------------------------------------------------------------------------------
    delims=delims0                                           ! need a mutable copy of the delimiter list
    if(delims.eq.'')then                                     ! if delimiter list is null or all spaces make it a space

@@ -40,7 +40,7 @@ end interface set
 
 type :: force_kwargs_hack ! force keywords, using @awvwgk method
 end type force_kwargs_hack
-! so then any argument that comes afer "force_kwargs" is a compile time error
+! so then any argument that comes after "force_kwargs" is a compile time error
 ! if not done with a keyword unless someone "breaks" it by passing something
 ! of this type:
 !    type(force_kwargs_hack), optional, intent(in) :: force_kwargs

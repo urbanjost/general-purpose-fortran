@@ -1,9 +1,12 @@
      program demo_bundle
      use M_strings, only: bundle
      implicit none
-        print "(*('""',a,'""':,',',1x))", bundle("one")
-        print "(*('""',a,'""':,',',1x))", bundle("one","two")
-        print "(*('""',a,'""':,',',1x))", bundle("one","two","three")
-        print "(*('""',a,'""':,',',1x))", bundle("one","two","three",&
-                & "four","five","six","seven")
+     character(len=*),parameter :: fmt= "(*('""',a,'""':,',',1x))"
+     character(len=:),allocatable :: array(:)
+        print fmt, bundle("one")
+        print fmt, bundle("one","two")
+        print fmt, bundle("one","two","three")
+        array=bundle("one","two","three","four","five","six","seven")
+        write(*,'(*(g0))')'size=',size(array),',len=',len(array)
+        write(*,'("[",a,"]")')array
      end program demo_bundle

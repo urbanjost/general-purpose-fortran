@@ -55,7 +55,7 @@
 !!    If default modes need changed it can be done via the unit_test_mode(3f)
 !!    procedure or as command line options.
 !!
-!!    messages by default are writting to stderr, but may be written to any
+!!    messages by default are writing to stderr, but may be written to any
 !!    list of LUNs of preassigned or open files.
 !!
 !!    SET MODES
@@ -262,7 +262,7 @@ private glob_
 
 type :: force_keywd_hack  ! force keywords, using @awvwgk method
 end type force_keywd_hack
-! so then any argument that comes afer "force_keywd" is a compile time error
+! so then any argument that comes after "force_keywd" is a compile time error
 ! if not done with a keyword unless someone "breaks" it by passing something
 ! of this type:
 !    type(force_keywd_hack), optional, intent(in) :: force_keywd
@@ -1469,7 +1469,7 @@ logical,optional, intent(in)           :: keep_going     ! logical variable that
 logical,optional, intent(in)           :: cmdline        ! flag whether to parse command line for arguments or not
 logical,optional, intent(in)           :: interactive
 logical,optional, intent(in)           :: brief          ! flag on whether to display SUCCESS: messages
-logical,optional, intent(in)           :: verbose        ! flag on whether to display all messages including addtional information
+logical,optional, intent(in)           :: verbose        ! flag on whether to display all messages including additional information
 logical,optional, intent(in)           :: silent         ! do not output any messages from unit_test_*(3f) procedures
 character(len=*),optional, intent(in)  :: command        ! name of command to execute. Defaults to the name
 integer,optional, intent(in)           :: flags(:)       ! an  array that can be used to select different options
