@@ -462,7 +462,7 @@ contains
 !~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 subroutine fndfst (kunt, znam, kerr)
 !  Read input file, copying it to the scratch file, until the first non-comment statement is found.
-!  Analyse this statement, and decide of the type and name of the program unit that starts there.
+!  Analyze this statement, and decide of the type and name of the program unit that starts there.
 use splitprms
 use splitcurs
 integer, intent (out) :: kunt           ! type of program unit
@@ -1014,7 +1014,7 @@ integer :: lxpl
 end subroutine reastt
 !~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 subroutine nlzfst (zstt, kunt, znam)
-!  Analyse a statement, and decide the type (and name) of the program unit that starts there.
+!  Analyze a statement, and decide the type (and name) of the program unit that starts there.
 use splitcurs
 character (len=lsttm), intent (in) :: zstt ! the statement
 integer, intent (out) :: kunt              ! type of program unit
@@ -1148,7 +1148,7 @@ integer :: isub
 end subroutine nlzfst
 !~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 subroutine nlziue (zstt, klst)
-!  Analyse a statement, and decide if it is use, include, or if current
+!  Analyze a statement, and decide if it is use, include, or if current
 !  program unit ends there.
 use splitcurs
 use splitdefs
@@ -1304,7 +1304,7 @@ integer :: idep
 end subroutine nlziue
 !~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 subroutine nlzlst (zstt, klst)
-!  Analyse a statement, and decide if the current
+!  Analyze a statement, and decide if the current
 !  program unit ends there.
 use splitcurs
 character (len=lsttm), intent (in) :: zstt ! The statement

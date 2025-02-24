@@ -8,6 +8,7 @@ append("system_chmod.3m_system.html");
 append("system_chown.3m_system.html");
 append("system_clearenv.3m_system.html");
 append("system_closedir.3m_system.html");
+append("system_cmd.3m_system.html");
 append("system_cpu_time.3m_system.html");
 append("system_dir.3m_system.html");
 append("system_errno.3m_system.html");

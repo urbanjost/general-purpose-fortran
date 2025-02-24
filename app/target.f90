@@ -228,6 +228,35 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    target(1f) - [M_drawplus] draw targets on Adobe PDF files
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    target [ --help| --version]
+!!##DESCRIPTION
+!!    Use the M_draw(3fm) and M_drawplus(3fm) modules to create various
+!!    targets. Requires large paper (at least 12x10.5 inches) to be printed
+!!    to scale.
+!!##OPTIONS
+!!    --help     display this help and exit
+!!    --version  output version information and exit
+!!
+!!##EXAMPLE
+!!
+!!   Sample usage:
+!!
+!!    target
+!!    ls *.pdf
+!!    f50_instinct_pistol.pdf
+!!    f50_slow_fire_pistol.pdf
+!!    f50_small_bore_rifle.pdf
+!!    f50_timed_and_rapid_fire_pistol.pdf
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -243,7 +272,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    create printable targets>',&
 '@(#)VERSION:        1.0, 20190108>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2024-12-14 21:42:17 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:26:33 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

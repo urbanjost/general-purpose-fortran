@@ -418,26 +418,6 @@ or just list it as a dependency in your fpm.toml project file.
  + A `ford` configuration file is available to build documentation
  + A `doxygen` configuration file is available to build documentation
 
-## Tests
-```bash
-#!/bin/bash
-(
-exec 2>&1
-#@(#) Run fpm tests
-# M_time tests require a specific timezone
-export TZ='UTC+04:00'
-
-gfortran --version
-ifort --version
-ifx --version
-
-fpm test '*' --compiler gfortran -profile release 2>&1
-fpm test '*' --compiler ifx      -profile release -flag -coarray=single 2>&1
-fpm test '*' --compiler ifort    -profile release -flag -coarray=single -c-compiler cc  2>&1
-fpm test '*' --compiler ifort    -profile release -flag -coarray=single -c-compiler icx 2>&1
-
-)|tee /tmp/x.out
-```
 <!--
 ==================================================================================================
 At least recently, Fortran has centered around solving large

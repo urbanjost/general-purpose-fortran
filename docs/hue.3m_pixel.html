@@ -56,9 +56,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-HUE(3f) - [M_pixel:COLOR] converts color components from one color
-model to another
-(LICENSE:PD)
+HUE(3f) - [M_pixel] converts a color&#146;s components from one color
+model to another. (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
@@ -78,11 +77,11 @@ model to another
 subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
 <P>
 <PRE>
-    character(len=*),intent(in) :: modei
-    character(len=*),intent(in) :: modeo
-    real,intent(in)             :: clr1i,clr2i,clr3i
-    real,intent(out)            :: clr1o,clr2o,clr3o
-    integer,intent(out)         :: status
+     character(len=*),intent(in) :: modei
+     character(len=*),intent(in) :: modeo
+     real,intent(in)             :: clr1i,clr2i,clr3i
+     real,intent(out)            :: clr1o,clr2o,clr3o
+     integer,intent(out)         :: status
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -92,70 +91,49 @@ subroutine hue(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
 
 </A>
 <BLOCKQUOTE>
-Basic color models:
+<P>
+HUE(3f) translates from the first model type to the second.
+<P>
+MODEI specifies the color model that applies to the input color
+components CLR1I, CLR2I, and CLR3I.
+<P>
+MODEO specifies the color model desired for the output color components
+CLR1O, CLR2O, and CLR3O.
+<P>
+At a minimum, this procedure equates the output color values to the
+input color values.
+<P>
+Valid values for MODEI and MODEO as well as the corresponding meanings
+for CLR1*, CLR2*, and CLR3* are:
 <P>
 <PRE>
-    +----------------------------------------------------------+
-    | valid values for modei and modeo as well as the          |
-    | corresponding meanings for clr1*, clr2*, and clr3* are:  |
-    +----------------------------------------------------------+
-    |model| clr1         |         clr2      |         clr3    |
-    |-----+--------------+-------------------+-----------------|
-    |hls  |hue           |lightness          |saturation       |
-    |-----+--------------+-------------------+-----------------|
-    |hsl  |hue           |saturation         |lightness        |
-    |-----+--------------+-------------------+-----------------|
-    |hvs  |hue           |value              |saturation       |
-    |-----+--------------+-------------------+-----------------|
-    |hsv  |hue           |saturation         |value            |
-    |-----+--------------+-------------------+-----------------|
-    |rgb  |red           |green              |blue             |
-    |-----+--------------+-------------------+-----------------|
-    |cmy  |cyan          |magenta            |yellow           |
-    |-----+--------------+-------------------+-----------------|
-    |yiq  |gray scale)   |orange-blue        |purple-green     |
-    |     |              |chrominance        |chrominance      |
-    +----------------------------------------------------------+
+      | mode  | clr1             | clr2         | clr3
+      | ----- | ---------------- |--------------|---------------
+      | &#146;hls&#146; | hue              | lightness    | saturation
+      | &#146;hsl&#146; | hue              | saturation   | lightness
+      | &#146;hvs&#146; | hue              | value        | saturation
+      | &#146;hsv&#146; | hue              | saturation   | value
+      | &#146;rgb&#146; | red              | green        | blue
+      | &#146;cmy&#146; | cyan             | magenta      | yellow
+      | &#146;yiq&#146; | luma(gray-scale) | orange-blue  | purple-green
+      |       |                  | chrominance  | chrominance
+<P>
+          + lightness, value, saturation, red, green, blue, cyan, magenta,
+            and yellow range from 0 to 100,
+          + hue ranges from 0 to 360 degrees,
+          + y ranges from 0 to 100,
+          + i ranges from -60 to 60,
+          + q ranges from -52 to 52
 <P>
 </PRE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-lightness, value, saturation, red, green, blue, cyan, magenta, and
-yellow range from 0 to 100,
-<TABLE width=100% cellpadding=3><!-- tsb: lightness, value, saturation, red, green, blue, cyan, magenta, and
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-hue ranges from 0 to 360 degrees,
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-y ranges from 0 to 100,
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-i ranges from <B>-60</B> to 60,
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-q ranges from <B>-52</B> to 52
-</TD></TR>
-<TR></TR></TABLE><!-- .PP -->
-</TD></TR>
-<TR></TR></TABLE>The STATUS variable can signal the following conditions:
+The STATUS variable can signal the following conditions:
 <P>
 <PRE>
-     -1   modei = modeo, so no substantial conversion was done,
-      1   one of the input color values was outside the allowable range,
-      2   modei was invalid
-      3   modeo was invalid
+     -1     modei = modeo, so no substantial conversion was done,
+      1     one of the input color values was outside the allowable range,
+      2     modei was invalid
+      3     modeo was invalid
+      999   unknown error
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -165,172 +143,96 @@ q ranges from <B>-52</B> to 52
 
 </A>
 <BLOCKQUOTE>
+<P>
 Sample program
 <P>
 <PRE>
-    program demo_hue
-    use M_pixel, only : hue
-    implicit none
-       !                      NAME       RGB(0-255)            HLS(0-100)
-       call check_name(&#146;hls&#146;,&#146;red&#146;,      [ 100, 0,   0   ],[ 0,   50,  100 ])
-       call check_name(&#146;hls&#146;,&#146;orange&#146;,   [ 100, 65,  0   ],[ 39,  50,  100 ])
-       call check_name(&#146;hls&#146;,&#146;yellow&#146;,   [ 100, 100, 0   ],[ 60,  50,  100 ])
-       call check_name(&#146;hls&#146;,&#146;green&#146;,    [ 0,   100, 0   ],[ 120, 50,  100 ])
-       call check_name(&#146;hls&#146;,&#146;cyan&#146;,     [ 0,   100, 100 ],[ 180, 50,  100 ])
-       call check_name(&#146;hls&#146;,&#146;blue&#146;,     [ 0,   0,   100 ],[ 240, 50,  100 ])
-       call check_name(&#146;hls&#146;,&#146;magenta&#146;,  [ 100, 0,   100 ],[ 300, 50,  100 ])
-       call check_name(&#146;hls&#146;,&#146;black&#146;,    [ 0,   0,   0   ],[ 0,   0,   0   ])
-       call check_name(&#146;hls&#146;,&#146;white&#146;,    [ 100, 100, 100 ],[ 0,   100, 0   ])
-       call check_name(&#146;hsv&#146;,&#146;black&#146;,    [ 0,   0,   0   ],[ 0,   0,   0   ])
-       !                      NAME        RGB(0-255)            HSV(0-100)
-       call check_name(&#146;hsv&#146;,&#146;gray50&#146;,   [ 50,  50,  50  ],[ 0,   0,   50  ])
-       call check_name(&#146;hsv&#146;,&#146;silver&#146;,   [ 75,  75,  75  ],[ 0,   0,   75  ])
-       call check_name(&#146;hsv&#146;,&#146;white&#146;,    [ 100, 100, 100 ],[ 0,   0,   100 ])
-       call check_name(&#146;hsv&#146;,&#146;red4&#146;,     [ 55,  0,   0   ],[ 0,   100, 55  ])
-       call check_name(&#146;hsv&#146;,&#146;red&#146;,      [ 100, 0,   0   ],[ 0,   100, 100 ])
-       call check_name(&#146;hsv&#146;,&#146;olive&#146;,    [ 50,  50,  0   ],[ 60,  100, 50  ])
-       call check_name(&#146;hsv&#146;,&#146;yellow&#146;,   [ 100, 100, 0   ],[ 60,  100, 100 ])
-       call check_name(&#146;hsv&#146;,&#146;green&#146;,    [ 0,   100, 0   ],[ 120, 100, 100 ])
-       call check_name(&#146;hsv&#146;,&#146;lime&#146;,     [ 0,   100, 0   ],[ 120, 100, 100 ])
-       call check_name(&#146;hsv&#146;,&#146;teal&#146;,     [ 0,   50,  50  ],[ 180, 100, 50  ])
-       call check_name(&#146;hsv&#146;,&#146;cyan&#146;,     [ 0,   100, 100 ],[ 180, 100, 100 ])
-       call check_name(&#146;hsv&#146;,&#146;navy&#146;,     [ 0,   0,   50  ],[ 240, 100, 50  ])
-       call check_name(&#146;hsv&#146;,&#146;blue&#146;,     [ 0,   0,   100 ],[ 240, 100, 100 ])
-       call check_name(&#146;hsv&#146;,&#146;purple&#146;,   [ 63,  13,  94  ],[ 277, 87,  94  ])
-       call check_name(&#146;hsv&#146;,&#146;magenta4&#146;, [ 55,  0,   55  ],[ 300, 100, 55  ])
-       call check_name(&#146;hsv&#146;,&#146;magenta&#146;,  [ 100, 0,   100 ],[ 300, 100, 100 ])
-       call check_name(&#146;hsv&#146;,&#146;maroon&#146;,   [ 69,  19,  38  ],[ 338, 73,  69  ])
-    contains
-    subroutine check_name(modelout,name,rgb,other)
-    ! given a color convert to MODELOUT and compare to expected values
-    character(len=*),intent(in)   :: name
-    integer,intent(in)            :: rgb(3), other(3)
-    character(len=*),intent(in)   :: modelout
-       real                       :: val1,val2,val3
-       integer                    :: status
-       ! convert RGB values to MODELOUT values
-       call hue(&#146;rgb&#146;,REAL(rgb(1)),REAL(rgb(2)),REAL(rgb(3)), &
-       & modelout,val1,val2,val3,status)
-          write(*,*)&#146;COLOR &#146;//trim(name)
-          write(*,*)&#146;EXPECTED &#146;//modelout//&#146; ====&gt;&#146;,other
-          write(*,*)&#146;RETURNED &#146;//modelout//&#146; ====&gt;&#146;, &
-          & int([val1+0.5,val2+0.5,val3+0.5])
-          write(*,*)&#146;STATUS ==========&gt;&#146;,status
-    end subroutine check_name
-    end program demo_hue
+   program demo_hue
+   use M_pixel, only : hue
+   implicit none
+      !               NAME        RGB(0-255)            HLS(0-100)
+      call chk(&#146;hls&#146;,&#146;red&#146;,     [100, 0,   0  ], [0,   50,  100])
+      call chk(&#146;hls&#146;,&#146;orange&#146;,  [100, 65,  0  ], [39,  50,  100])
+      call chk(&#146;hls&#146;,&#146;yellow&#146;,  [100, 100, 0  ], [60,  50,  100])
+      call chk(&#146;hls&#146;,&#146;green&#146;,   [0,   100, 0  ], [120, 50,  100])
+      call chk(&#146;hls&#146;,&#146;cyan&#146;,    [0,   100, 100], [180, 50,  100])
+      call chk(&#146;hls&#146;,&#146;blue&#146;,    [0,   0,   100], [240, 50,  100])
+      call chk(&#146;hls&#146;,&#146;magenta&#146;, [100, 0,   100], [300, 50,  100])
+      call chk(&#146;hls&#146;,&#146;black&#146;,   [0,   0,   0  ], [0,   0,   0  ])
+      call chk(&#146;hls&#146;,&#146;white&#146;,   [100, 100, 100], [0,   100, 0  ])
+      !               NAME        RGB(0-255)           HSV(0-100)
+      call chk(&#146;hsv&#146;,&#146;red&#146;,     [100, 0,   0  ], [0,   100, 100])
+      call chk(&#146;hsv&#146;,&#146;yellow&#146;,  [100, 100, 0  ], [60,  100, 100])
+      call chk(&#146;hsv&#146;,&#146;green&#146;,   [0,   100, 0  ], [120, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;cyan&#146;,    [0,   100, 100], [180, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;blue&#146;,    [0,   0,   100], [240, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;magenta&#146;, [100, 0,   100], [300, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;black&#146;,   [0,   0,   0  ], [0,   0,   0  ])
+      call chk(&#146;hsv&#146;,&#146;white&#146;,   [100, 100, 100], [0,   0,   100])
+<P>
+      call chk(&#146;hsv&#146;,&#146;gray50&#146;,  [50,  50,  50 ], [0,   0,   50 ])
+      call chk(&#146;hsv&#146;,&#146;silver&#146;,  [75,  75,  75 ], [0,   0,   75 ])
+      call chk(&#146;hsv&#146;,&#146;red4&#146;,    [55,  0,   0  ], [0,   100, 55 ])
+      call chk(&#146;hsv&#146;,&#146;olive&#146;,   [50,  50,  0  ], [60,  100, 50 ])
+      call chk(&#146;hsv&#146;,&#146;lime&#146;,    [0,   100, 0  ], [120, 100, 100])
+      call chk(&#146;hsv&#146;,&#146;teal&#146;,    [0,   50,  50 ], [180, 100, 50 ])
+      call chk(&#146;hsv&#146;,&#146;navy&#146;,    [0,   0,   50 ], [240, 100, 50 ])
+      call chk(&#146;hsv&#146;,&#146;purple&#146;,  [63,  13,  94 ], [277, 87,  94 ])
+      call chk(&#146;hsv&#146;,&#146;magenta4&#146;,[55,  0,   55 ], [300, 100, 55 ])
+      call chk(&#146;hsv&#146;,&#146;maroon&#146;,  [69,  19,  38 ], [338, 73,  69 ])
+   contains
+   subroutine chk(modelout,name,rgb,other)
+   ! given a color convert to MODELOUT and compare to expected values
+   character(len=*),intent(in)   :: name
+   integer,intent(in)            :: rgb(3), other(3)
+   character(len=*),intent(in)   :: modelout
+      real                       :: val1,val2,val3
+      integer                    :: status
+      ! convert RGB values to MODELOUT values
+      call hue(&#146;rgb&#146;,REAL(rgb(1)),REAL(rgb(2)),REAL(rgb(3)),&
+      & modelout,val1,val2,val3,status)
+         ! left-justify name to 10 characters or more
+         write(*,&#146;(a,1x)&#146;,advance=&#146;no&#146;) &
+         & [ character(len=max(10,len_trim(name))) ::&#146; &#146;//trim(name)]
+         write(*,&#146;(a,1x,3(i3,1x))&#146;,advance=&#146;no&#146;) &
+         & modelout//&#146; EXPECTED&#146;,other
+         write(*,&#146;(a,1x,3(i3,1x))&#146;,advance=&#146;no&#146;) &
+         & &#146;GOT&#146;,int([val1+0.5,val2+0.5,val3+0.5])
+         write(*,&#146;(a,i0)&#146;)&#146;STATUS &#146;,status
+   end subroutine chk
+   end program demo_hue
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-    COLOR red
-    EXPECTED hls ====&gt;           0          50         100
-    RETURNED hls ====&gt;           0          50         100
-    STATUS ==========&gt;           0
-    COLOR orange
-    EXPECTED hls ====&gt;          39          50         100
-    RETURNED hls ====&gt;          39          50         100
-    STATUS ==========&gt;           0
-    COLOR yellow
-    EXPECTED hls ====&gt;          60          50         100
-    RETURNED hls ====&gt;          60          50         100
-    STATUS ==========&gt;           0
-    COLOR green
-    EXPECTED hls ====&gt;         120          50         100
-    RETURNED hls ====&gt;         120          50         100
-    STATUS ==========&gt;           0
-    COLOR cyan
-    EXPECTED hls ====&gt;         180          50         100
-    RETURNED hls ====&gt;         180          50         100
-    STATUS ==========&gt;           0
-    COLOR blue
-    EXPECTED hls ====&gt;         240          50         100
-    RETURNED hls ====&gt;         240          50         100
-    STATUS ==========&gt;           0
-    COLOR magenta
-    EXPECTED hls ====&gt;         300          50         100
-    RETURNED hls ====&gt;         300          50         100
-    STATUS ==========&gt;           0
-    COLOR black
-    EXPECTED hls ====&gt;           0           0           0
-    RETURNED hls ====&gt;           0           0           0
-    STATUS ==========&gt;           0
-    COLOR white
-    EXPECTED hls ====&gt;           0         100           0
-    RETURNED hls ====&gt;           0         100           0
-    STATUS ==========&gt;           0
-    COLOR black
-    EXPECTED hsv ====&gt;           0           0           0
-    RETURNED hsv ====&gt;           0           0           0
-    STATUS ==========&gt;           0
-    COLOR gray50
-    EXPECTED hsv ====&gt;           0           0          50
-    RETURNED hsv ====&gt;           0           0          50
-    STATUS ==========&gt;           0
-    COLOR silver
-    EXPECTED hsv ====&gt;           0           0          75
-    RETURNED hsv ====&gt;           0           0          75
-    STATUS ==========&gt;           0
-    COLOR white
-    EXPECTED hsv ====&gt;           0           0         100
-    RETURNED hsv ====&gt;           0           0         100
-    STATUS ==========&gt;           0
-    COLOR red4
-    EXPECTED hsv ====&gt;           0         100          55
-    RETURNED hsv ====&gt;           0         100          55
-    STATUS ==========&gt;           0
-    COLOR red
-    EXPECTED hsv ====&gt;           0         100         100
-    RETURNED hsv ====&gt;           0         100         100
-    STATUS ==========&gt;           0
-    COLOR olive
-    EXPECTED hsv ====&gt;          60         100          50
-    RETURNED hsv ====&gt;          60         100          50
-    STATUS ==========&gt;           0
-    COLOR yellow
-    EXPECTED hsv ====&gt;          60         100         100
-    RETURNED hsv ====&gt;          60         100         100
-    STATUS ==========&gt;           0
-    COLOR green
-    EXPECTED hsv ====&gt;         120         100         100
-    RETURNED hsv ====&gt;         120         100         100
-    STATUS ==========&gt;           0
-    COLOR lime
-    EXPECTED hsv ====&gt;         120         100         100
-    RETURNED hsv ====&gt;         120         100         100
-    STATUS ==========&gt;           0
-    COLOR teal
-    EXPECTED hsv ====&gt;         180         100          50
-    RETURNED hsv ====&gt;         180         100          50
-    STATUS ==========&gt;           0
-    COLOR cyan
-    EXPECTED hsv ====&gt;         180         100         100
-    RETURNED hsv ====&gt;         180         100         100
-    STATUS ==========&gt;           0
-    COLOR navy
-    EXPECTED hsv ====&gt;         240         100          50
-    RETURNED hsv ====&gt;         240         100          50
-    STATUS ==========&gt;           0
-    COLOR blue
-    EXPECTED hsv ====&gt;         240         100         100
-    RETURNED hsv ====&gt;         240         100         100
-    STATUS ==========&gt;           0
-    COLOR purple
-    EXPECTED hsv ====&gt;         277          87          94
-    RETURNED hsv ====&gt;         277          86          94
-    STATUS ==========&gt;           0
-    COLOR magenta4
-    EXPECTED hsv ====&gt;         300         100          55
-    RETURNED hsv ====&gt;         300         100          55
-    STATUS ==========&gt;           0
-    COLOR magenta
-    EXPECTED hsv ====&gt;         300         100         100
-    RETURNED hsv ====&gt;         300         100         100
-    STATUS ==========&gt;           0
-    COLOR maroon
-    EXPECTED hsv ====&gt;         338          73          69
-    RETURNED hsv ====&gt;         337          72          69
-    STATUS ==========&gt;           0
+    red       hls EXPECTED   0  50 100 GOT   0  50 100 STATUS 0
+    orange    hls EXPECTED  39  50 100 GOT  39  50 100 STATUS 0
+    yellow    hls EXPECTED  60  50 100 GOT  60  50 100 STATUS 0
+    green     hls EXPECTED 120  50 100 GOT 120  50 100 STATUS 0
+    cyan      hls EXPECTED 180  50 100 GOT 180  50 100 STATUS 0
+    blue      hls EXPECTED 240  50 100 GOT 240  50 100 STATUS 0
+    magenta   hls EXPECTED 300  50 100 GOT 300  50 100 STATUS 0
+    black     hls EXPECTED   0   0   0 GOT   0   0   0 STATUS 0
+    white     hls EXPECTED   0 100   0 GOT   0 100   0 STATUS 0
+    black     hsv EXPECTED   0   0   0 GOT   0   0   0 STATUS 0
+    gray50    hsv EXPECTED   0   0  50 GOT   0   0  50 STATUS 0
+    silver    hsv EXPECTED   0   0  75 GOT   0   0  75 STATUS 0
+    white     hsv EXPECTED   0   0 100 GOT   0   0 100 STATUS 0
+    red4      hsv EXPECTED   0 100  55 GOT   0 100  55 STATUS 0
+    red       hsv EXPECTED   0 100 100 GOT   0 100 100 STATUS 0
+    olive     hsv EXPECTED  60 100  50 GOT  60 100  50 STATUS 0
+    yellow    hsv EXPECTED  60 100 100 GOT  60 100 100 STATUS 0
+    green     hsv EXPECTED 120 100 100 GOT 120 100 100 STATUS 0
+    lime      hsv EXPECTED 120 100 100 GOT 120 100 100 STATUS 0
+    teal      hsv EXPECTED 180 100  50 GOT 180 100  50 STATUS 0
+    cyan      hsv EXPECTED 180 100 100 GOT 180 100 100 STATUS 0
+    navy      hsv EXPECTED 240 100  50 GOT 240 100  50 STATUS 0
+    blue      hsv EXPECTED 240 100 100 GOT 240 100 100 STATUS 0
+    purple    hsv EXPECTED 277  87  94 GOT 277  86  94 STATUS 0
+    magenta4  hsv EXPECTED 300 100  55 GOT 300 100  55 STATUS 0
+    magenta   hsv EXPECTED 300 100 100 GOT 300 100 100 STATUS 0
+    maroon    hsv EXPECTED 338  73  69 GOT 337  72  69 STATUS 0
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -351,7 +253,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>hue (3)</TD> <TD align=right width=33%><I>December 14, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cb36046b-49b4-4ded-9687-a8546c93b88e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>hue (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 436b98d0-febe-4e77-9269-5ab466d0bffa using man macros.</FONT>
 <br><br><center><img src="images/hue.3m_pixel.gif"></center>
 </div>
 </div>

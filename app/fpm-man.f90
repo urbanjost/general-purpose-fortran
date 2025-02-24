@@ -29,6 +29,7 @@ character(len=256)             :: iomsg
 character(len=:),allocatable   :: line
 integer                        :: iinf
 integer                        :: lun
+integer                        :: ierr
 integer                        :: direction
 integer                        :: irestore
 integer                        :: search_end
@@ -331,7 +332,7 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                              ! vim -R
                              editor=get_env('FCEDIT', get_env('FCEDIT', get_env('VISUAL','vi')))
                              iostat=filewrite('_scratch_',clone_no_color)
-                             call execute_command_line(editor//' '//paws(2:)//' _scratch_')
+                             ierr=run(editor//' '//paws(2:)//' _scratch_')
                              lun=-1
                              open(newunit=lun,file='_scratch_',iostat=iostat,iomsg=iomsg)
                              if(iostat.ne.0)write(*,*)trim(iomsg)
@@ -344,7 +345,7 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                              if(paws.eq.'x')then
                                 cmdmode=.not.cmdmode
                              elseif(paws(2:).ne.'')then
-                                call execute_command_line(paws(2:))
+                                ierr=run(paws(2:))
                              endif
                              iinf=0
                              remember='f'
@@ -467,7 +468,7 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                      remember='f'
                   case default
                      if(cmdmode)then
-                        call execute_command_line(paws)
+                        ierr=run(paws)
                      else
                         call cribsheet()
                         i=max(0,i-2*lines+2) ! back
@@ -777,8 +778,34 @@ integer                      :: i
    enddo
 end function than
 
-subroutine setup()
+elemental impure function run(command)
+! ident_1="@(#) fman run(3f) funcion to call execute_command_line()"
+use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdout=>OUTPUT_UNIT
+implicit none
+character(len=*),intent(in) :: command
+logical                    :: run
+logical                    :: wait
+integer                    :: exitstat
+integer                    :: cmdstat
+character(len=256)         :: cmdmsg
+   wait=.false.
+   exitstat=0
+   cmdstat=0
+   call execute_command_line(command=command,wait=wait, exitstat=exitstat,cmdstat=cmdstat,cmdmsg=cmdmsg)
+   if(cmdstat.ne.0)then
+      flush(stdout)
+      write(stderr,'(a)')trim(cmdmsg)
+      flush(stderr)
+   endif
+   if(exitstat.ne.0)then
+      flush(stdout)
+      write(stderr,'(*(g0))')'exitstat=',exitstat,':',trim(command)
+      flush(stderr)
+   endif
+   run=merge(.true.,.false.,exitstat==0)
+end function run
 
+subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
 '    fman(1f) - [DEVELOPER] output descriptions of Fortran intrinsics',&

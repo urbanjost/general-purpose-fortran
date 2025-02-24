@@ -17,7 +17,7 @@ integer                      :: i
 logical                      :: dryrun
    ! set help and version text
    call setup()
-   ! process command argments
+   ! process command arguments
    call set_args('--target:T "*" --repeat:R 1 --flag:F:: " " --dryrun:D F',help_text,version_text)
    ! process command arguments
    if(size(unnamed).eq.0)then
@@ -99,7 +99,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 'help_text=[ CHARACTER(LEN=128) :: &',&
 'NAME                               ',&
 '  fpm-time(1) - call fpm(1) with gprof(1) to generata a flat timing profile',&
-'SYNOPIS                                                                    ',&
+'SYNOPSIS                                                                   ',&
 '  fpm-time [subcommand] [--target] targets                                 ',&
 'DESCRIPTION                                                                ',&
 '  Run the fpm(1) command with the gfortran(1) compiler and compiler flags  ',&

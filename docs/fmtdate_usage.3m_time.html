@@ -66,7 +66,7 @@ by fmtdate(3f) and now(3f)
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Options</A><BR>
-<A HREF=#4>Examples</A><BR>
+<A HREF=#4>Example</A><BR>
 <A HREF=#5>Author</A><BR>
 <A HREF=#6>License</A><BR>
 </BLOCKQUOTE>
@@ -114,7 +114,7 @@ for this optional parameter is three (3).
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
 
-     <H3>EXAMPLES</H3>
+     <H3>EXAMPLE</H3>
 
 </A>
 <BLOCKQUOTE>
@@ -150,6 +150,10 @@ results (actually call the routine to ensure this is up to date):
     Conversions:
         %E -- Unix Epoch time                           1469804048.5220029
         %e -- integer value of Unix Epoch time          1469804049
+        %F -- Modified Julian  date                     57599.121
+        %f -- integer value of Modified Julian Date     57599
+        %G -- Baseday and Seconds                       (57599,40223.12139393)
+        %g -- Baseday seconds                           40223.12139393
         %J -- Julian  date                              2457599.121
         %j -- integer value of Julian Date(Julian Day)  2457599
         %O -- Ordinal day (day of year)                 211
@@ -157,7 +161,7 @@ results (actually call the routine to ensure this is up to date):
         %U -- day of week, 1..7 Sunday=1                6
         %u -- day of week, 1..7 Monday=1                5
         %i -- ISO week of year 1..53                    30
-        %I -- iso-8601 week-numbering date(yyyy-Www-d)  2016-W30-5
+        %I -- iso-8601 week with weekday: (yyyy-Www-d)  2016-W30-5
      Names:
         %l -- abbreviated month name                    Jul
         %L -- full month name                           July
@@ -165,6 +169,7 @@ results (actually call the routine to ensure this is up to date):
         %W -- weekday name                              Friday
         %p -- phase of moon                             New
         %P -- percent of way from new to full moon      -1%
+        %X -- day of month in English                   twenty-first
      Literals:
         %% -- a literal %                               %
         %t -- tab character
@@ -175,7 +180,7 @@ results (actually call the routine to ensure this is up to date):
         %Q -- double quote
      Duration:
         %a -- Time since now as d-h:m:s               1-12:34:30
-        %A -- Time since now as seconds               12810.4500
+        %A -- TIme since now as seconds               12810.4500
      Program timing:
         %c -- CPU_TIME(3f) output                     .21875000000000000
         %C -- number of times this routine is used    1
@@ -193,26 +198,26 @@ If the format is composed entirely of one of the following
 keywords the following substitutions occur:
 <P>
 <PRE>
-     "iso-8601",
-     "iso"           ==&gt; %Y-%M-%DT%h:%m:%s%z
-     "iso-8601W",
-     "isoweek"       ==&gt; %I 2016-W30-5
-     "sql"           ==&gt; "%Y-%M-%D %h:%m:%s.%x"
-     "sqlday"        ==&gt; "%Y-%M-%D"
-     "dash"          ==&gt; %Y-%M-%D
-     "sqltime"       ==&gt; "%h:%m:%s.%x"
-     "rfc-2822"      ==&gt; %w, %D %l %Y %h:%m:%s %T
-     "rfc-3339"      ==&gt; %Y-%M-%DT%h:%m:%s%z
-     "date"          ==&gt; %w %l %D %h:%m:%s UTC%z %Y
-     "short"         ==&gt; %w, %l %d, %Y %H:%m:%s %N UTC%z
-     "long"," "      ==&gt; %W, %L %d, %Y %H:%m:%s %N UTC%z
-     "suffix"        ==&gt; %Y%D%M%h%m%s
-     "formal"        ==&gt; The %d of %L %Y
-     "lord"          ==&gt; the %d day of %L in the year of our Lord %Y
-     "easter"        ==&gt; FOR THE YEAR OF THE CURRENT DATE:
-                      Easter day: the %d day of %L in the year of our Lord %Y
-     "all"           ==&gt; A SAMPLE OF DATE FORMATS
-     "usage|help|?"  ==&gt; %?
+    iso-8601,
+    iso          ==&gt; %Y-%M-%DT%h:%m:%s%z
+    iso-8601W,
+    isoweek      ==&gt; %I 2016-W30-5
+    sql          ==&gt; %Y-%M-%D %h:%m:%s.%x
+    sqlday       ==&gt; %Y-%M-%D
+    dash         ==&gt; %Y-%M-%D
+    sqltime      ==&gt; %h:%m:%s.%x
+    rfc-2822     ==&gt; %w, %D %l %Y %h:%m:%s %T
+    rfc-3339     ==&gt; %Y-%M-%DT%h:%m:%s%z
+    date         ==&gt; %w %l %D %h:%m:%s UTC%z %Y
+    short        ==&gt; %w, %l %d, %Y %H:%m:%s %N UTC%z
+    long," "     ==&gt; %W, %L %d, %Y %H:%m:%s %N UTC%z
+    suffix       ==&gt; %Y%D%M%h%m%s
+    formal       ==&gt; The %d of %L %Y
+    lord         ==&gt; the %d day of %L in the year of our Lord %Y
+    easter       ==&gt; FOR THE YEAR OF THE CURRENT DATE:
+                     Easter day: the %d day of %L in the year of our Lord %Y
+    all          ==&gt; A SAMPLE OF DATE FORMATS
+    usage|help|? ==&gt; %?
 <P>
 </PRE>
 Examples of single keywords
@@ -263,16 +268,17 @@ Examples of single keywords
 <P>
    string values:
 <P>
-      MONTH          %L  July
-      Month|Mth      %l  Jul
-      WEEKDAY        %W  Thursday
-      Weekday|wkday  %w  Thu
-      DAY            %d  7th
-      TIMEZONE       %z  -04:00
-      Timezone       %Z  -240m
-      GOOD           %N  AM
-      HOUR           %H  10
-      AGE            %a  1200-10:30:40
+      longmonth|MONTH             %L  July
+      shortmonth|Month|Mth        %l  Jul
+      longweekday|WEEKDAY         %W  Thursday
+      shortweekday|Weekday|wkday  %w  Thu
+      shortday|DAY                %d  7th
+      longday                     %X  seventh
+      TIMEZONE                    %z  -04:00
+      Timezone                    %Z  -240m
+      GOOD                        %N  AM
+      goodhour|HOUR               %H  10
+      AGE                         %a  1200-10:30:40
 <P>
    If none of these keywords are found then every letter that
    is a macro is assumed to have an implied percent in front
@@ -304,7 +310,7 @@ John S. Urban, 2015-10-24
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>fmtdate_usage (3)</TD> <TD align=right width=33%><I>December 14, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f03a30ec-aa58-486c-85cc-58fa39773969 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>fmtdate_usage (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 2e8e2280-54e5-4193-8d6b-8d79ca2f2223 using man macros.</FONT>
 <br><br><center><img src="images/fmtdate_usage.3m_time.gif"></center>
 </div>
 </div>

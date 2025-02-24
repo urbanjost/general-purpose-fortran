@@ -82,7 +82,7 @@ procedure (hashkey), pointer :: hash_ptr => null ()
       filepoint=1
       hash=0_int128
       INFINITE: do                                                 ! read and sum file string by string
-         ! quick buffering read because reading a single character sixty times slower on CygWIn with gfortran (no system buffering?)
+         ! quick buffering read because reading a single character sixty times slower on CygWin with gfortran (no system buffering?)
          read(iunit,iostat=ios,pos=filepoint) buff(1:sz)
          if(is_iostat_end(ios))then                                ! this is the last buffer
             if(sz.ne.1)then                                        ! try again with a smaller buffer
@@ -218,7 +218,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)                change and redistribute it.  There is NO WARRANTY;>',&
 '@(#)                without even the implied warranty of MERCHANTABILITY or>',&
 '@(#)                FITNESS FOR A PARTICULAR PURPOSE.>',&
-'@(#)COMPILED:       2024-12-14 15:02:32 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 10:03:25 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

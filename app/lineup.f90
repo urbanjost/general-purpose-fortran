@@ -1,21 +1,21 @@
 program testit
-   !@(#) line up :: string, mostly for Fortran declarations
-   use M_io,      only : fileread
-   use M_strings, only : stretch
-   use M_CLI2,    only : set_args, filenames=>unnamed
-   implicit none
-   character(len=:),allocatable :: pageout(:) ! page to hold file in memory
-   character(len=:),allocatable :: left,right
-   integer :: i, j, k, ii, imax
-   call set_args('', help_text=[ CHARACTER(LEN=128) :: &
-   'NAME',&
-   '    lineup(1f) - [APPS] align :: strings in Fortran declarations',&
-   '    (LICENSE:PD)                                               ',&
-   '                                                               ',&
-   'SYNOPSIS                                                       ',&
-   '    lineup [filename(s) ][ --help| --version]                   ',&
-   '                                                               ',&
-   'DESCRIPTION                                                    ',&
+!@(#) line up :: string, mostly for Fortran declarations
+use M_io,      only : fileread
+use M_strings, only : stretch
+use M_CLI2,    only : set_args, filenames=>unnamed
+implicit none
+character(len=:),allocatable :: pageout(:) ! page to hold file in memory
+character(len=:),allocatable :: left,right
+integer :: i, j, k, ii, imax
+call set_args('', help_text=[ CHARACTER(LEN=128) :: &
+   'NAME                                                                         ',&
+   '    lineup(1f) - [APPS] align :: strings in Fortran declarations             ',&
+   '    (LICENSE:PD)                                                             ',&
+   '                                                                             ',&
+   'SYNOPSIS                                                                     ',&
+   '    lineup [filename(s) ][ --help| --version]                                ',&
+   '                                                                             ',&
+   'DESCRIPTION                                                                  ',&
    '    A simple filter that finds and aligns the string "::" in a block of text.',&
    '    A stylistic preference for Fortran declaration statements                ',&
    '                                                                             ',&
@@ -28,7 +28,7 @@ program testit
    'EXAMPLES                                                                     ',&
    '    Sample input:                                                            ',&
    '                                                                             ',&
-   '       lineup <<\EOF                                                          ',&
+   '       lineup <<\EOF                                                         ',&
    '       logical :: glob                                                       ',&
    '       character(len=*) :: tame ! A string without wildcards                 ',&
    '       character(len=*) :: wild ! A corresponding wildcards string           ',&
@@ -45,33 +45,33 @@ program testit
    '                                                                             ',&
    '       logical                      :: glob                                  ',&
    '       character(len=*)             :: tame ! A string without wildcards     ',&
-   '       character(len=*)             :: wild ! A corresponding wildcards string',&
-   '       character(len=len(tame)+1)   :: tametext                               ',&
-   '       character(len=len(wild)+1)   :: wildtext                               ',&
-   '       character(len=1),parameter   :: NULL=char(0)                           ',&
-   '       integer                      :: wlen                                   ',&
-   '       integer                      :: ti, wi                                 ',&
-   '       integer                      :: i                                      ',&
-   '       character(len=:),allocatable :: tbookmark, wbookmark                   ',&
-   '                                                                              ',&
-   'SEE ALSO                                                                      ',&
-   '    column(1)                                                                 ',&
-   'AUTHOR                                                                        ',&
-   '   John S. Urban                                                              ',&
-   'LICENSE                                                                       ',&
-   '   Public Domain                                                              ',&
+   '       character(len=*)             :: wild ! A corresponding wildcards string  ',&
+   '       character(len=len(tame)+1)   :: tametext                                 ',&
+   '       character(len=len(wild)+1)   :: wildtext                                 ',&
+   '       character(len=1),parameter   :: NULL=char(0)                             ',&
+   '       integer                      :: wlen                                     ',&
+   '       integer                      :: ti, wi                                   ',&
+   '       integer                      :: i                                        ',&
+   '       character(len=:),allocatable :: tbookmark, wbookmark                     ',&
+   '                                                                                ',&
+   'SEE ALSO                                                                        ',&
+   '    column(1)                                                                   ',&
+   'AUTHOR                                                                          ',&
+   '   John S. Urban                                                                ',&
+   'LICENSE                                                                         ',&
+   '   Public Domain                                                                ',&
    ''], &
    version_text=[ CHARACTER(LEN=128) :: &
-   'PRODUCT:        GPF (General Purpose Fortran) utilities and examples                             ',&
-   'PROGRAM:        lineup(1)                                                                        ',&
-   'DESCRIPTION:    Align "::" strings in Fortran declararations into a column                       ',&
-   'VERSION:        1.0, 2024-08-18                                                                  ',&
-   'AUTHOR:         John S. Urban                                                                    ',&
-   'REPORTING BUGS: http://www.urbanjost.altervista.org/                                             ',&
-   'HOME PAGE:      http://www.urbanjost.altervista.org/index.html                                   ',&
-   'LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.',&
-   '                There is NO WARRANTY, to the extent permitted by law.                            ',&
-   '                                                                                                 ',&
+   'PRODUCT:        GPF (General Purpose Fortran) utilities and examples            ',&
+   'PROGRAM:        lineup(1)                                                       ',&
+   'DESCRIPTION:    Align "::" strings in Fortran declararations into a column      ',&
+   'VERSION:        1.0, 2024-08-18                                                 ',&
+   'AUTHOR:         John S. Urban                                                   ',&
+   'REPORTING BUGS: http://www.urbanjost.altervista.org/                            ',&
+   'HOME PAGE:      http://www.urbanjost.altervista.org/index.html                  ',&
+   'LICENSE:        Public Domain. This is free software: you are free to change    ',&
+   'LICENSE:        and redistribute it.                                            ',&
+   '                There is NO WARRANTY, to the extent permitted by law.           ',&
    ''])
 
    if(size(filenames).eq.0)filenames=['-']
@@ -89,7 +89,7 @@ program testit
          j= index(pageout(i),'::')
          if( j.ge.2)then
             left=trim(pageout(i)(:j-1))
-            write(*,'(*(g0))')stretch(left,imax-1,' '),'::',trim(pageout(i)(j+2:))
+            write(*,'(*(g0))')stretch(left,imax-1,' '),':: ',adjustl(trim(pageout(i)(j+2:)))
          else
             write(*,'(*(g0))')trim(pageout(i))
          endif

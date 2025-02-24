@@ -58,13 +58,14 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-ASSOCIATE(7f) - [EXECUTION CONTROL] aliases complex variable names and
-creates parameters from expressions
+ASSOCIATE(7f) - [EXECUTION CONTROL] aliases selected variable
+identifiers as well as creates constants within the block from runtime
+expressions at entry into the block (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=8>
+<A name=10>
 
      <H3>SYNTAX</H3>
 
@@ -73,88 +74,179 @@ creates parameters from expressions
 <P>
 Syntax:
 <P>
-[ construct-name : ] ASSOCIATE ( associate-name =&gt; selector &#46;&#46;&#46;) : : a
-sequence of zero or more statements or constructs. : END ASSOCIATE [
-construct-name ]
+<PRE>
+      [ construct-name : ] ASSOCIATE ( associate-name =&gt; selector &#46;&#46;&#46;)
+        :
+        : the associate-block; a sequence of zero or more statements or constructs
+        :
+      END ASSOCIATE [ construct-name ]
 <P>
-ASSOCIATE-NAME
-<P>
-An identifier that becomes associated with the selector in the ASSOCIATE
-block. The "associate-name" must be unique within the construct.
-</BLOCKQUOTE>
-<A name=2>
-
-     <H3>SELECTOR</H3>
-
-</A>
-<BLOCKQUOTE>
-<P>
-Is an expression or variable. It becomes the associated entity.
-<P>
-CONSTRUCT-NAME
-<P>
-If a construct-name is specified the sme name must appear at both the
-beginning of an ASSOCIATE and at its associated END ASSOCIATE statement.
-<P>
-The same construct-name must not be used for different named constructs
-in the same scoping unit.
-<P>
-It is permissible to branch to an end-associate-stmt only from within
-its ASSOCIATE construct.
+</PRE>
+For example:
 <P>
 <PRE>
-            exit ASSOCIATE
+       ! pi is an associate-name, acos(-1.0) is its selector
+       associate (pi =&gt; acos(-1.0) )
+          print *, pi
+       end associate
+<P>
+</PRE>
+ASSOCIATE-NAME
+<P>
+<PRE>
+     An identifier that becomes associated with the selector within the
+     ASSOCIATE block. The "associate-name" must be unique within the
+     construct (but the name can be redefined in other nested subblocks
+     such as BLOCK constructs and additional ASSOCIATE blocks).
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=3>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SELECTOR</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Is an expression or variable that will be referred to by the
+associate-name.
+</BLOCKQUOTE>
+<P>
+CONSTRUCT-NAME
+<P>
+<PRE>
+     An optional name for the block. It is generally used so the block
+     can be exited by name or to distinguish which end statement
+     is connected with which ASSOCIATE statement when blocks are heavily
+     nested.
+<P>
+     If a construct-name is specified the same name must appear at both
+     the beginning of the block in the ASSOCIATE statement and at the
+     end in the END ASSOCIATE statement.
+<P>
+     Construct names must be unique in the scoping unit. Once used that
+     same construct-name must not be used for any other named constructs
+     in the same scoping unit.
+<P>
+     It is permissible to branch to an end-associate-stmt only from
+     within its ASSOCIATE construct.
+<P>
+            MYNAME: associate
+             :
+        if(something_is_true) exit MYNAME
+         :
+            end associate MYNAME
+<P>
+</PRE>
+sample program:
+<P>
+<PRE>
+       program show_exiting
+       implicit none
+       integer :: values(8)
+<P>
+       call date_and_time( values=values )
+<P>
+       CALENDAR: associate ( cal=values([1,2,3,5,6,7,4]), &
+          year                        =&gt;  VALUES(1), &
+          month                       =&gt;  VALUES(2), &
+          day                         =&gt;  VALUES(3), &
+          delta_from_UTC_in_minutes   =&gt;  VALUES(4), &
+          hour_of_day                 =&gt;  VALUES(5), &
+          minutes_of_the_hour         =&gt;  VALUES(6), &
+          seconds_of_the_minute       =&gt;  VALUES(7), &
+          milliseconds_of_the_second  =&gt;  VALUES(8) )
+          if(hour_of_day.lt.6)  exit CALENDAR
+          if(hour_of_day.ge.18) exit CALENDAR
+          write(*,&#146;(i4.4,"-",i2.2,"-",i2.2,"T", &
+          & i2.2,":",i2.2,":",i2.2,sp,i0.4)&#146;)cal
+       end associate CALENDAR
+<P>
+       end program show_exiting
+<P>
+</PRE>
+<A name=2>
 
      <H3>DESCRIPTION</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
-An ASSOCIATE statement creates either an
-<TABLE cellpadding=3><!-- tsb: An ASSOCIATE statement creates either an
+An ASSOCIATE statement can rename syntactically complex data selectors
+with simple or more descriptive aliases and also allows for simple names
+to be used for the value of expressions at the top of the block (this
+value becomes a constant in the code block). ASSOCIATE is thus used to
+make complicated expressions more readable and maintainable by
+developers.
+<P>
+The ASSOCIATE construct creates a temporary association between a
+identifier and a variable or the value of an expression. The association
+lasts for the duration of the block.
+<P>
+Each ASSOCIATE statement must be followed by a matching END ASSOCIATE
+<P>
+The variable will have most, but not all of the attributes of the
+variable.
+<P>
+More specifically an ASSOCIATE statement either
+<TABLE cellpadding=3><!-- tsb: More specifically an ASSOCIATE statement either
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=4%>
 1.
 </TD><TD>
-abbreviation for the value of an expression that becomes a constant
-in the ASSOCIATE block.
+creates a name for a constant in the block using the value of an
+expression defined in the ASSOCIATE statement.
 <P>
 or
 </TD></TR>
 <TR valign=top><TD width=4%>
 2.
 </TD><TD>
-an alias for a long variable name. If the LHS is a variable it can
-actually have the value change the associated name outside of the
-block as well.
+creates an alias for a long variable name. When the RHS is a
+variable changing the alias value changes the associated name
+outside of the block as well.
+<P>
+If the selector of an ASSOCIATE is a variable, the associate-name
+can be changed in an ordinary assignment, which also changes the
+variable.
 </TD></TR>
 <TR></TR></TABLE>An alias for a variable is useful when you want to simplify multiple
-accesses to a variable that has a lengthy description; for example, if
-the variable contains multiple subscripts and component names.
+accesses to a variable that has a lengthy description. An example would
+be if the initial variable contains multiple subscripts and component
+names.
 <P>
-A constant is similiar to a PARAMETER statement where the value can be
-changed at runtime before entering the ASSOCIATE block.
+On the other hand an expression (instead of a variable) on the RHS
+becomes a named constant in the block.
 <P>
-It is NOT equivalent to a function macro.
-<P>
-The ASSOCIATE construct associates named entities with expressions or
-variables during the execution of its block. These "named construct
-entities" are "associating entities". The names are "associate names".
-<TABLE cellpadding=3><!-- tsb: The ASSOCIATE construct associates named entities with expressions or
+The ASSOCIATE statement is NOT equivalent to a function statement or a
+macro. That would generally be implemented via a contained procedure.
+<TABLE cellpadding=3><!-- tsb: The ASSOCIATE statement is NOT equivalent to a function statement or a
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-If selector is not a variable or is a variable that has a vector
-subscript, associate-name shall not appear in a variable definition
-context.
+If the selector is an expression or a variable that has a vector
+subscript, the associate-name shall not appear in a variable definition
+context but will behave as a constant, much like a parameter of a
+procedure with INTENT(IN). That is, the associate-name cannot be changed
+in an ordinary assignment.
 </TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+    Note: A vector subscript is an integer array expression of rank one,
+          designating a sequence of subscripts that correspond to the
+          values of the elements of the expression.
+<P>
+          The sequence does not have to be in order, and may contain
+          duplicate values:
+<P>
+             INTEGER A(10), B(3)
+             ! B(1) = A(1); B(2) = A(2); B(3) = A(2) also
+             B = A( [1,2,2] )
+<P>
+</PRE>
+<TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -164,21 +256,16 @@ the same associate-stmt.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-variable shall not be a coindexed object.
+The variable name on the RHS shall not be a coindexed object.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-expr shall not be a variable.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-If present, an associate-construct-name must appear on both the
-ASSOCIATE statement and the ENDASSOCIATE statement.
+expr shall not be a variable. Note putting a variable in parentheses
+makes it an expression.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=3>
 
      <H3>EXECUTION OF THE ASSOCIATE CONSTRUCT</H3>
 
@@ -186,12 +273,10 @@ ASSOCIATE statement and the ENDASSOCIATE statement.
 <BLOCKQUOTE>
 <P>
 Execution of an ASSOCIATE construct causes evaluation of every
-expression within every selector that is a variable designator and
-evaluation of every other selector , followed by execution of its block.
+expression used as a selector, followed by execution of its block.
 <P>
 During execution of the block within the construct, each associate-name
-identifies an entity, which is associated with the corresponding
-selector.
+identifies an entity associated with the corresponding selector.
 <P>
 The associating entity assumes the declared type and type parameters of
 the selector.
@@ -199,7 +284,7 @@ the selector.
 If and only if the selector is polymorphic, the associating entity is
 polymorphic.
 </BLOCKQUOTE>
-<A name=5>
+<A name=4>
 
      <H3>ATTRIBUTES OF ASSOCIATE NAMES</H3>
 
@@ -214,16 +299,66 @@ function LBOUND(3f) applied to the corresponding dimension of selector.
 The upper bound of each dimension is one less than the sum of the lower
 bound and the extent.
 <P>
+Sample showing affects on custom bounds:
+<P>
+<PRE>
+       program show_bounds
+       implicit none
+       character(len=*),parameter :: & ! a format
+       & bounds="(&#146;bounds of &#146;,a,&#146;=&gt;(&#146;,i0,&#146;:&#146;,i0,&#146;,&#146;,i0,&#146;:&#146;,i0,&#146;)&#146;)"
+       integer :: arr(-5:5,-5:5) ! custom non-normal bounds
+       integer :: b(4)
+         ! first the different between queries of arr versus arr(:,:)
+          b([1,3,2,4])=[lbound(arr),ubound(arr)]
+          print bounds,&#146;arr&#146;, b
+          b([1,3,2,4])=[lbound(arr(:,:)),ubound(arr(:,:))]
+          print bounds,&#146;arr(:,:)&#146;,b
+         !
+         ! and the bounds assigned to the identifiers are what UBOUND(3f)
+         ! and LBOUND(3f) return given the selector as an argument so
+          associate ( &
+             alias=&gt;   arr,       & ! keeps the custom bounds
+             normal=&gt;  arr(:,:)   & ! gets normal bounds
+             )
+             b([1,3,2,4])=[lbound(alias),ubound(alias)]
+             print bounds,&#146;alias&#146;, b
+             b([1,3,2,4])=[lbound(normal),ubound(normal)]
+             print bounds,&#146;normal&#146;,b
+          end associate
+       end program show_bounds
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+          bounds of arr=&gt;(-5:5,-5:5)
+          bounds of arr(:,:)=&gt;(1:11,1:11)
+          bounds of alias=&gt;(-5:5,-5:5)
+          bounds of normal=&gt;(1:11,1:11)
+<P>
+</PRE>
 The cobounds of each codimension of the associating entity are the same
-as those of the selector. The associating entity has the ASYNCHRONOUS or
-VOLATILE attribute if and only if the selector is a variable and has the
-attribute. The associating entity has the TARGET attribute if and only
-if the selector is a variable and has either the TARGET or POINTER
-attribute.
+as those of the selector.
+<P>
+The associating entity has the ASYNCHRONOUS or VOLATILE attribute if and
+only if the selector is a variable and has the attribute.
+<P>
+The associating entity has the TARGET attribute if and only if the
+selector is a variable and has either the TARGET or POINTER attribute.
+<P>
+The selector must be allocated if allocatable. The associate-name is not
+ALLOCATABLE even if the selector is.
+<P>
+If a selector has the POINTER attribute, it shall be associated. The
+associate name is associated with the target of the pointer and does not
+have the POINTER attribute.
 <P>
 If the associating entity is polymorphic, it assumes the dynamic type
-and type parameter values of the selector. If the selector has the
-OPTIONAL attribute, it shall be present.
+and type parameter values of the selector.
+<P>
+If the selector has the OPTIONAL attribute, it shall be present (It
+cannot be absent). The associating entity does not have the OPTIONAL
+attribute.
 <P>
 The associating entity is contiguous if and only if the selector is
 contiguous.
@@ -231,57 +366,75 @@ contiguous.
 If the selector is not permitted to appear in a variable definition
 context, the associate name shall not appear in a variable definition
 context.
+<P>
+The selector has the TARGET attribute if and only if the selector is a
+variable and has either the TARGET or POINTER attribute.
+<P>
+expr shall not be a designator of a procedure pointer or a function
+reference that returns a procedure pointer.
+<P>
+Within an ASSOCIATE construct, each associating entity has the same
+corank as its associated selector. If the selector is a coarray, the
+cobounds of each codimension of the associating entity are the same as
+those of the selector.
+<P>
+The associating entity itself is a variable, but if the selector is not
+a deﬁnable variable, the associating entity is not definable and shall
+not be defined or become undefined.
+<P>
+If a selector is not permitted to appear in a variable definition
+context, neither the associate name nor any subobject thereof shall
+appear in a variable definition context or pointer association context.
 </BLOCKQUOTE>
-<A name=6>
+<A name=5>
 
-     <H3>EXAMPLES</H3>
+     <H3>NESTING</H3>
 
 </A>
 <BLOCKQUOTE>
 <P>
-The following shows an expression as a selector:
+No other block may be created in an ASSOCIATE block that is not
+terminated in the block; and the ASSOCIATE block must be terminated in
+the block it was created in. For example, if an ASSOCIATE block is begun
+in a DO loop it must be terminated before the end of the loop.
+Conversely if a DO loop is created in an ASSOCIATE block it must be
+terminated before the end of the ASSOCIATE block.
 <P>
-<PRE>
-       ASSOCIATE (O =&gt; (A-F)**2 + (B+G)**2)
-         PRINT *, SQRT (O)
-</PRE>
+An associate-name can appear in an ASSOCIATE statement even if it
+previously appeared in an ASSOCIATE statement that has not been
+terminated.
 </BLOCKQUOTE>
-<A name=>
+<A name=6>
 
-    <H4>&nbsp; &nbsp; END ASSOCIATE</H4>
+     <H3>SAMPLES</H3>
+
 </A>
 <BLOCKQUOTE>
 <P>
 The following shows association with an array section:
 <P>
 <PRE>
-       ASSOCIATE (ARRAY =&gt; AB % D (I, :) % X)
-         ARRAY (3) = ARRAY (1) + ARRAY (2)
-</PRE>
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; END ASSOCIATE</H4>
-</A>
-<BLOCKQUOTE>
-<P>
-Without the ASSOCIATE construct, this is what you would need to write:
-<P>
-<PRE>
-       AB % D (I, 3) % X = AB % D (I, 1) % X + AB % D (I, 2) % X
+       associate (array =&gt; ab % d(i, :) % x)
+         array(3) = array(1) + array(2)
+       end associate
 <P>
 </PRE>
-The following example illustrates an association with an expression.
+instead of the equivalent statement
 <P>
 <PRE>
-           associate ( z =&gt; exp(-(x**2+y**2)) * cos(theta) )
-           ! creates the constant "z"
+       ab % d(i,3) % x = ab % d(i,1) % x + ab % d(i,2) % x
+<P>
+</PRE>
+This example illustrates an association with an expression.
+<P>
+<PRE>
+         associate ( z =&gt; exp(-(x**2+y**2)) * cos(theta) )
+             ! creates the constant "z"
              print *, a+z, a-z
-           end associate
+         end associate
 <P>
 </PRE>
-The following example illustrates an association with a derived-type
-variable.
+an association with a derived-type variable:
 <P>
 <PRE>
            associate ( xc =&gt; ax%b(i,j)%c )
@@ -289,90 +442,220 @@ variable.
            end associate
 <P>
 </PRE>
-The following example illustrates association with an array section.
+association with an array section:
 <P>
 <PRE>
-           associate ( array =&gt; ax%b(i,:)%c )
-             array(n)%ev = array(n-1)%ev
+           associate ( quadrantIII =&gt;  array(1:5,6:10) )
+             quadrantIII = 0
            end associate
 <P>
 </PRE>
-The following example illustrates multiple associations.
+The next example illustrates multiple associations.
 <P>
 <PRE>
-           associate ( w =&gt; result(i,j)%w, zx=&gt;ax%b(i,j)%d, zy=&gt;ay%b(i,j)%d )
+           associate ( w =&gt; result(i,j)%w, zx =&gt; ax%b(i,j)%d, zy =&gt; ay%b(i,j)%d )
              w = zx*x + zy*y
            end associate
 <P>
 </PRE>
-The following example uses the ASSOCIATE construct as a shorthand for a
-complex expression and renames an existing variable, MYREAL. After the
-end of the ASSOCIATE construct, any change within the construct to the
-value of the associating entity that associates with MYREAL is
-reflected.
+An ASSOCIATE block may not span other block boundaries
 <P>
 <PRE>
-          program demo_associate
-          real :: myreal, x, y, theta, a
-          x = 0.42
-          y = 0.35
-          myreal = 9.1
-          theta = 1.5
-          a = 0.4
-          associate ( z =&gt; exp(-(x**2+y**2)) * cos(theta), v =&gt; myreal)
-             print *, a+z, a-z, v
-             v = v * 4.6
-          end associate
-          print *, myreal
-          end program demo_associate
+    do i=1,3
+       associate (x =&gt; real(i)) !since this was started inside the DO loop
+          print*,i,sqrt(x)
+       end associate ! the end must appear before the end of the DO loop
+    enddo
 <P>
 </PRE>
-See if you know what the following produces &#46;&#46;&#46;
-<P>
-<PRE>
-          program dustycorner
-          implicit none
-          real :: a = 42
-          associate (a =&gt; a, b =&gt; 2 * a)
-             print *, a, b
-             a = 0
-             print *, a, b
-          end associate
-          print *, a
-<P>
-          a=42
-          associate (aa =&gt; a, b =&gt; 2 * a)
-             print *, a, aa, b
-             aa = 0
-             print *, a, aa, b
-             a=-1
-             print *, a, aa, b
-          end associate
-          print *, a
-          end program dustycorner
-<P>
-</PRE>
-Did you expect the following?
-<P>
-<PRE>
-          42.0000000       84.0000000
-          0.00000000       84.0000000
-          0.00000000
-          42.0000000       42.0000000       84.0000000
-          0.00000000       0.00000000       84.0000000
-</PRE>
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb:           42.0000000       84.0000000
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B></B><B>-1.00000000</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-<B>-1.00000000</B>       84.0000000
-<B>-1.00000000</B>
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 </BLOCKQUOTE>
 <A name=7>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+       program demo_associate
+       implicit none
+       character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
+       character :: array(-5:5,-5:5)      ! custom non-normal bounds
+       ! note the different between queries of ARRAY versus ARRAY(:,:)
+          write(*,g)&#146;array:     &#146;,  &#146;lbound=&#146;,lbound(array), &
+                                    &#146;ubound=&#146;,ubound(array)
+          write(*,g)&#146;array(:,:): &#146;, &#146;lbound=&#146;,lbound(array(:,:)), &
+                                    &#146;ubound=&#146;,ubound(array(:,:))
+       ! the bounds assigned to the identifiers are what UBOUND(3f)
+       ! and LBOUND(3f) return given the selector as an argument
+          associate ( &
+             alias=&gt;   array,              & ! keeps the custom bounds
+             normal=&gt;  array(:,:),         & ! gets normal bounds
+             quadI=&gt;   array(+1:+5,-5:-1), & ! quad* will have normal bounds
+             quadII=&gt;  array(-5:-1,-5:-1), & !
+             quadIII=&gt; array(-5:-1,+1:+5), & !
+             quadIV=&gt;  array(+1:+5,+1:+5), & !
+             xaxis=&gt;array(:,0), &
+             yaxis=&gt;array(0,:) &
+             )
+             array=&#146;.&#146; ! selector name is still valid in the block
+             xaxis=&#146;-&#146;
+             yaxis=&#146;|&#146;
+             alias(0,0)=&#146;+&#146; ! uses non-normal bounds, equivalent to array(0,0)=&#146;+&#146;
+             write(*,&#146;(11(g0,1x))&#146;) alias
+             ! the quads have normalized dimension bounds (1:5,1:5):
+             quadI    =  &#146;1&#146;;  quadI(1,1)    =  &#146;a&#146;;  quadI(5,5)    =  &#146;A&#146;
+             quadII   =  &#146;2&#146;;  quadII(1,1)   =  &#146;b&#146;;  quadII(5,5)   =  &#146;B&#146;
+             quadIII  =  &#146;3&#146;;  quadIII(1,1)  =  &#146;c&#146;;  quadIII(5,5)  =  &#146;C&#146;
+             quadIV   =  &#146;4&#146;;  quadIV(1,1)   =  &#146;d&#146;;  quadIV(5,5)   =  &#146;D&#146;
+             write(*,&#146;(11(g0,1x))&#146;) alias
+<P>
+             write(*,g)&#146;array:   lbound=&#146;,lbound(array),  &#146;ubound=&#146;,ubound(array)
+             write(*,g)&#146;alias:   lbound=&#146;,lbound(alias),  &#146;ubound=&#146;,ubound(alias)
+             write(*,g)&#146;normal:  lbound=&#146;,lbound(normal), &#146;ubound=&#146;,ubound(normal)
+             write(*,g)&#146;quadI:   lbound=&#146;,lbound(quadI),  &#146;ubound=&#146;,ubound(quadI)
+             write(*,g)&#146;quadII:  lbound=&#146;,lbound(quadII), &#146;ubound=&#146;,ubound(quadII)
+             write(*,g)&#146;quadIV:  lbound=&#146;,lbound(quadIV), &#146;ubound=&#146;,ubound(quadIV)
+          end associate
+       end program demo_associate
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+          array:      lbound= -5 -5 ubound= 5 5
+          array(:,:):  lbound= 1 1 ubound= 11 11
+          . . . . . | . . . . .
+          . . . . . | . . . . .
+          . . . . . | . . . . .
+          . . . . . | . . . . .
+          . . . . . | . . . . .
+          - - - - - + - - - - -
+          . . . . . | . . . . .
+          . . . . . | . . . . .
+          . . . . . | . . . . .
+          . . . . . | . . . . .
+          . . . . . | . . . . .
+          b 2 2 2 2 | a 1 1 1 1
+          2 2 2 2 2 | 1 1 1 1 1
+          2 2 2 2 2 | 1 1 1 1 1
+          2 2 2 2 2 | 1 1 1 1 1
+          2 2 2 2 B | 1 1 1 1 A
+          - - - - - + - - - - -
+          c 3 3 3 3 | d 4 4 4 4
+          3 3 3 3 3 | 4 4 4 4 4
+          3 3 3 3 3 | 4 4 4 4 4
+          3 3 3 3 3 | 4 4 4 4 4
+          3 3 3 3 C | 4 4 4 4 D
+          array:   lbound= -5 -5 ubound= 5 5
+          alias:   lbound= -5 -5 ubound= 5 5
+          normal:  lbound= 1 1 ubound= 11 11
+          quadI:   lbound= 1 1 ubound= 5 5
+          quadII:  lbound= 1 1 ubound= 5 5
+          quadIII: lbound= 1 1 ubound= 5 5
+          quadIV:  lbound= 1 1 ubound= 5 5
+<P>
+</PRE>
+Dusty Corners
+<P>
+If the expressions have side-effects are they executed only when the
+block is entered?
+<P>
+Selected variable names are still accessible in the ASSOCIATE block.
+This is confusing and should be avoided, particular if the selectors are
+allocatable or pointers. This is similiar to variables passed as
+arguments to contained procedures but referenced via the argument name
+and the name in the surrounding scope. The behavior is ill-defined. Does
+a change to the argument take affect immediately or upon return from the
+procedure? If the argument is not declared allocatable or is a pointer
+does the argument name value get changed by deallocation or
+disassociation or changes to the original names?
+<P>
+are you allowed to allocate v to a different size before the ASSOCIATE
+is terminated? If so, what happens to c ?
+<P>
+Does that mean it is invalid to resize v within the ASSOCIATE block? Or
+is it only invalid to resize v and then refer to c? Or only invalid to
+resize v and refer to c when c is associated with elements of v that no
+longer exist?
+<P>
+<PRE>
+       implicit none
+       integer, allocatable, target :: v(:)
+       integer, pointer :: p(:)
+          v = [4,7,9]
+          p =&gt; v
+          print*,p
+          deallocate(v)
+          print*,p ! invalid, because target has been deallocated
+       end program main
+<P>
+</PRE>
+are you allowed to allocate v to a different size before the ASSOCIATE
+is terminated? If so, what happens to c? &#145;&#145;&#145;fortran program
+demonstrate_associate implicit none integer, allocatable :: v(:) v =
+[3,4]
+<P>
+<PRE>
+         associate (c =&gt; v) ; call disp("1",v,c)
+         c = c*10           ; call disp("2",v,c)
+         v = [2,4,6]        ; call disp("3",v,c)
+         c = c*10           ; call disp("4",v,c)
+         v = [2]            ; call disp("5",v,c)
+         end associate
+<P>
+         contains
+<P>
+         subroutine disp(label,v,c)
+         character (len=*), intent(in) :: label
+         integer, intent(in) :: v(:),c(:)
+            write (*,"(a,&#146; v = &#146;,*(1x,i0))",advance="no") label,v
+            write (*,"(3x,&#146;c = &#146;,*(1x,i0))") c
+         end subroutine disp
+<P>
+         end program demonstrate_associate
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>COMPARISONS TO OTHER CONSTRUCTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+When is it not true that
+<P>
+<PRE>
+       associate (a=&gt;AA)
+       end associate
+<P>
+</PRE>
+is equivalent to
+<P>
+<PRE>
+       call assoc(AA)
+       contains
+       subroutine assoc(a)
+       type(type(a)),intent(in) :: a(..) ! if a in an expression
+       type(type(a))            :: a(..) ! if a in a variable
+       end subroutine assoc
+<P>
+       ! somewhat like the parameters being class(*) but without all the SELECT statements
+       ! like type(type(a)) worked.
+<P>
+       ! so "a" in the subroutine does not have the allocatable, optional, or pointer
+       ! attributes even if AA did, and it is up to the programmer to make sure AA is allocated
+       ! or assigned a target or present if optional when making the call if it has those
+       ! attributes.
+<P>
+       ! but it can have the target attribute.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=9>
 
      <H3>SEE ALSO</H3>
 
@@ -436,7 +719,7 @@ case)
 <TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>associate (7)</TD> <TD align=right width=33%><I>December 14, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 58d0721c-e6cc-47c2-bab3-f92e332183e4 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>associate (7)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e43be77d-4f4c-4c8d-acf3-170b027e9cc4 using man macros.</FONT>
 <br><br><center><img src="images/associate.7fortran.gif"></center>
 </div>
 </div>

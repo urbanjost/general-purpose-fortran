@@ -45,7 +45,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <a href="http://www.urbanjost.altervista.org/LIBRARY/libGPF/GPF.html">[GPF Home Page]</a>
 <div id="Container">
 <div id="Content">
-<h1>KRACKEN(3F): The Fortran Command Line Argument Cracker<br><em>(Extended Version)</em></h1>
+<h1>KRACKEN(3F): [ARGUMENTS:M_kracken::INTRO]The Fortran Command Line Argument Cracker<br><em>(Extended Version)</em></h1>
 
 <p class="synopsis">
     This version is dependent upon Fortran 2008 features and other GPF (General Purpose Fortran) modules.
@@ -204,12 +204,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </p>
 
 <pre>
-   logical,public            :: stop_command=.false. ! indication to return stop_command as false in interactive mode
-   integer, parameter,public :: IPvalue=4096*16      ! length of keyword value
-   integer, parameter,public :: IPverb=20            ! length of verb
-   character(len=1),save,public         :: kracken_comment='#'
-   character(len=:),allocatable,public  :: leftover                 ! remaining command(s) on line
-   integer,public,save                  :: current_command_length=0 ! length of options for current command
+   logical,public                      :: stop_command=.false.     ! indication to return stop_command as false in interactive mode
+   integer, parameter,public           :: IPvalue=4096*16          ! length of keyword value
+   integer, parameter,public           :: IPverb=20                ! length of verb
+   character(len=1),save,public        :: kracken_comment='#'
+   character(len=:),allocatable,public :: leftover                 ! remaining command(s) on line
+   integer,public,save                 :: current_command_length=0 ! length of options for current command
 </pre>
 
 <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
@@ -447,8 +447,8 @@ where
      implicit none
      character(len=:),allocatable :: files(:)
      character(len=:),allocatable :: title
-     real :: x,y
-     integer :: i
+     real                         :: x,y
+     integer                      :: i
      ! define and crack command line arguments
      call kracken('cmd',' --title this is my title -x 123 -y 456 --help .false.')
 
@@ -496,8 +496,8 @@ where
      USE M_KRACKEN, ONLY : UNNAMED
      implicit none
      character(len=:),allocatable :: title
-     real :: x,y
-     integer :: i
+     real                         :: x,y
+     integer                      :: i
      ! define and crack command line arguments
      !
      !

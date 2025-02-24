@@ -114,6 +114,110 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    manup(1f) - [DEVELOPER] Simple markup of text to a man(1) page
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    manup FILE -cmd title -section N --product "product name" -help .F. --version .F.
+!!
+!!##DESCRIPTION
+!!   This program is being extended. It currently essentially
+!!      o converts uppercase lines title sections
+!!      o leaves lines indented more than four characters as-is
+!!      o takes other text and builds it into paragraphs delimited by
+!!        blank lines in the input file.
+!!##OPTIONS
+!!      FILE
+!!         The input filename
+!!
+!!      -section N  N is the man(1) section number. Typically the following
+!!                  categories are used:
+!!
+!!                  User Commands(1)      Executable programs or shell commands
+!!                  System Calls(2)       System calls (functions provided by the kernel)
+!!                  Library Calls(3)      Library calls (functions within program libraries)
+!!                  Special Files(4)      Special files (usually found in /dev)
+!!                  File Formats(5)       File formats and conventions (eg. /etc/passwd)
+!!                  Games(6)  Games
+!!                  Miscellaneous(7)      Miscellaneous (including macro packages and conventions), e.g. man(7), groff(7)
+!!                  System Admin.(8)      System administration commands (usually only for root)
+!!                  Kernel Extensions(9)  Kernel routines [Non standard]
+!!
+!!                  See the man(1) page for man(1) for further details.
+!!
+!!      -title      title for manpage header
+!!      -product    description for manpage header
+!!      -asis       no formatting except for header lines.
+!!
+!!      -help       display help and exit
+!!      -version    display version information and exit
+!!##EXAMPLE
+!!
+!!  Given an input file such as
+!!
+!!    >NAME
+!!    >   yes(1f) - [FUNIX] output a string repeatedly until killed
+!!    >             or limit is reached
+!!    >
+!!    >SYNOPSIS
+!!    >   yes [STRING] -help -version [-repeat N]
+!!    >
+!!    >DESCRIPTION
+!!    >   yes(1) prints the command line arguments, separated by spaces
+!!    >   and followed by a newline until the repeat count is reached or
+!!    >   endlessly until it is killed. If no arguments are given, it prints
+!!    >   ''y'' followed by a newline endlessly until killed. Upon a write
+!!    >   error, yes(1) exits with status "1".
+!!    >
+!!    >   -repeat N  specify number of times to display string
+!!    >   --help     display this help and exit
+!!    >   --version  output version information and exit
+!!    >
+!!    >   To output an argument that begins with -, precede it with --, e.g.,
+!!    >
+!!    >   yes -- --help.
+!!    >
+!!    >EXAMPLES
+!!    >  Sample commands
+!!    >
+!!    >   # repeat a command 20 times, pausing and clearing:
+!!    >   yes  date --repeat 20  |xargs -iXX  sh -c ''XX;sleep 2;clear''
+!!    >
+!!    >REPORTING BUGS
+!!    >   Report yes bugs to <http://www.urbanjost.altervista.org/index.html>
+!!    >
+!!    >SEE ALSO
+!!    >   yes(1), repeat(1), xargs(1)
+!!
+!!  run it through manup(1):
+!!
+!!     A short example of usage
+!!
+!!      # use help txt as input to t2m to make man(1) page
+!!      # generate new man(1) page
+!!      manup yes.1.txt >yes.1
+!!
+!!      # install man page in a common location (location varies)
+!!         # man pages are commonly kept as compressed files
+!!         gzip yes.1
+!!         # place file in a directory read by man(1) command.
+!!         # can be changed with environment variable MANPATH
+!!         # or by adding a directory to the default manpath.
+!!         # varies from system to system
+!!         mv -i yes.1.gz /usr/share/man/man1/
+!!         # make sure file is readable by all users
+!!         chmod a=r,u+w /usr/share/man/man1/yes.1.gz
+!!
+!!      # test man page
+!!      man 1 yes|more
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -131,13 +235,13 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2024-12-14 21:40:23 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:25:08 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
 endif
 end subroutine help_version
-! See alernatives:
+! See alternatives:
 ! man page format with special *roff macros
 ! nroff/groff
 ! TexInfo files
@@ -155,13 +259,13 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
 subroutine manup(table,title,section,product)
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 ! o Line all in uppercase starting in column one becomes a section header (.SH and .SY/.YS)
 ! o Line starting with . is assumed to be a raw *roff directive and is passed on as-is
 !
 ! First line not starting in column 1 and less than column 5 establishes default paragraph indent
 ! if indented .ge. 5 left as-is unless in a list
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !SECTION
 !    This is regular text in a regular paragraph that will be auto-wrapped
 !    until some other level of indent is seen; unless the initial indent is
@@ -174,11 +278,11 @@ subroutine manup(table,title,section,product)
 !
 !    tag lists [ first word followed by at least two spaces and definition ]
 !    tag lists [ line ending in :: ]
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 ! Special section names ...
 !    o NAME    : all appended to one line, anything before ' - ' is emphasized.
 !    o SYNOPIS : everything here is left as-is
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 use M_strings, only : substitute, indent, s2v, v2s, upper, switch
 use M_time,    only : now
 implicit none
@@ -193,11 +297,11 @@ integer                     :: isection
    integer                  :: leading_spaces
    integer                  :: i
    integer                  :: ileft
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 character(len=:),allocatable :: global_section
 character(len=:),allocatable :: NAME
 character(len=:),allocatable :: SYNOPSIS
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !       The table below shows the section numbers of the manual followed by the types of pages they contain.
 !
 character(len=*),parameter  :: sections(10)= [&
@@ -211,15 +315,15 @@ character(len=*),parameter  :: sections(10)= [&
 &'System Admin.       ',& !       8   System administration commands (usually only for root)
 &'Kernel Extensions   ',& !       9   Kernel routines [Non standard]
 &'                    ']
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
    if(section.le.1.or.section.gt.9)then
       isection=10
    else
       isection=section
    endif
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
    call TH(title,section,product)                                ! write title header
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
    global_section=''
    NAME=''
    SYNOPSIS=''
@@ -227,12 +331,12 @@ character(len=*),parameter  :: sections(10)= [&
    INFINITE: do i=1,size(table)
       line=table(i)
       leading_spaces=indent(line)                                ! find amount of leading white space
-      !-----------------------------------------------------------------------------------------------------------------------------
+      !----------------------------------------------------------------------------------------------------------------------------!
       if(line(1:1).eq.'.')then
          write(*,'(a)',iostat=ios)trim(line)                     ! assume embedded *roff commands. Write as-is
          cycle INFINITE
       endif
-      !-----------------------------------------------------------------------------------------------------------------------------
+      !----------------------------------------------------------------------------------------------------------------------------!
       if(leading_spaces.eq.0.and.len_trim(line).ne.0.and.upper(line).eq.line)then ! all upper-case non-blank starting in column 1
 
          if(global_section.eq.'NAME')then
@@ -254,11 +358,11 @@ character(len=*),parameter  :: sections(10)= [&
          NAME=NAME//' '//trim(line)
          cycle INFINITE
       endif
-      !-----------------------------------------------------------------------------------------------------------------------------
+      !----------------------------------------------------------------------------------------------------------------------------!
       WHITESPACE: select case(leading_spaces)
       case(0)                                                    ! there is a character in column 1
          call putline(line)
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
       case(1:(len(line)-1))                                      ! assume text in a paragraph
          if(ileft==0)ileft=leading_spaces
          if(line(leading_spaces+1:leading_spaces+1)=='-')then
@@ -269,18 +373,18 @@ character(len=*),parameter  :: sections(10)= [&
          else
             call putline(line)
          endif
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
       case (len(line))                                           ! blank line
          write(*,'(a)')
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
       case default
          write(*,*)'OTHER LINE',leading_spaces,trim(line)
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
       end select WHITESPACE
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
    enddo INFINITE
 contains
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 subroutine printname(nameline)  ! assuming all of NAME section has been appended into line process NAME section uniquely
 character(len=*),intent(in) :: nameline
 character(len=:),allocatable :: linebuff
@@ -288,7 +392,7 @@ character(len=:),allocatable :: linebuff
    call substitute(linebuff,' - ',' \fP- ')
    write(*,'(a)',iostat=ios)trim(linebuff)
 end subroutine printname
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 subroutine printsynopsis(inline)  ! assuming all of SYNOPSIS section has been appended into line process SYNOPSIS section uniquely
 ! The following conventions apply to the SYNOPSIS section and can be used as a guide in other sections.
 !
@@ -315,12 +419,12 @@ character(len=:),allocatable :: linebuff
    write(*,'(a)',iostat=ios)'.fam T'
    write(*,'(a)',iostat=ios)'.fi'
 end subroutine printsynopsis
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 subroutine putline(lineout)
 character(len=*),intent(in)  :: lineout
    write(*,'(a)',iostat=ios)trim(lineout)
 end subroutine putline
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 subroutine SH(line)
 use M_strings, only : switch
 character(len=*) :: line
@@ -334,8 +438,8 @@ character(len=*) :: line
 !     following text is reset to the default values.
 ! .SY command
 !     Begin synopsis.  Takes a single argument, the name of a command.  Text following, until closed by .YS, is set with
-!     a hanging indentation with the width of command plus a space.  This produces the traditional look of a  Unix  com-
-!     mand synopsis.
+!     a hanging indentation with the width of command plus a space.  This produces the traditional look of a  Unix
+!     command synopsis.
 ! .YS    This macro restores normal indentation at the end of a command synopsis.
 !
 ! Something like the following is expected ...
@@ -355,28 +459,28 @@ character(len=*) :: line
    endif
 
 end subroutine SH
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 subroutine TH(title,section,product)
 !use M_time,    only : now
 implicit none
 character(len=*),intent(in) :: title
 integer,intent(in)          :: section
 character(len=*),intent(in) :: product
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 ! place a comment at the top of the file
    write(*,'(*(a))')'.\"manpage'
    write(*,'(a)')'." -----------------------------------------------------------------'
    write(*,'(a)')'.\" t'
    write(*,'(a)')'.\" ** The above line should force tbl to be a preprocessor **'
    write(*,'(a)')'." -----------------------------------------------------------------'
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
    write(*,'(*(a))')'.\"DO NOT MODIFY THIS FILE!  It was generated by manup 1.0 at '//now('%w, %l %D, %Y %h:%m:%s')
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !  .TH title section [extra1] [extra2] [extra3]
 !     Set  the  title  of  the man page to title and the section to section, which must take on a value between 1 and 8.
 !     The value section may also have a string appended, e.g. `.pm', to indicate a specific subsection of the man pages.
-!     Both  title and section are positioned at the left and right in the header line (with section in parentheses imme-
-!     diately appended to title.  extra1 is positioned in the middle of the footer line.  extra2 is  positioned  at  the
+!     Both  title and section are positioned at the left and right in the header line (with section in parentheses immediately
+!     appended to title.  extra1 is positioned in the middle of the footer line.  extra2 is  positioned  at  the
 !     left  in  the  footer line (or at the left on even pages and at the right on odd pages if double-sided printing is
 !     active).  extra3 is centered in the header line.
 !
@@ -397,7 +501,7 @@ character(len=*),intent(in) :: product
    write(*,'(a)')'." -----------------------------------------------------------------'
 
 end subroutine TH
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 end subroutine manup
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -409,7 +513,7 @@ end module M_manup
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !----------------------------------------------------------------------------------------------------------------------------------!
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 program test_manup
 use M_kracken,  only : kracken, sget, sgets, iget, IPvalue, lget
 use M_manup,    only : manup
@@ -425,7 +529,7 @@ implicit none
    integer                            :: inunit
    integer                            :: ios
    integer                            :: ilen
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !  parse command line arguments
    call kracken('manup',' -cmd -section 1 -product "GPF utilities" -asis .F. -help .F. -version .F.' )
    call help_usage(lget('manup_help'))       ! process -help switch
@@ -464,10 +568,10 @@ implicit none
    enddo FILES
 
 end program test_manup
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !
 !GNU coreutils 8.24                                         August 2015                                                    YES(1)
 !
@@ -511,15 +615,15 @@ end program test_manup
 !This is free software: you are free to change and redistribute it.
 !.br
 !There is NO WARRANTY, to the extent permitted by law.
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !       A manual page consists of several sections.
 !
 !       Conventional  section  names  include  NAME,  SYNOPSIS,  CONFIGURATION,  DESCRIPTION, OPTIONS, EXIT STATUS, RETURN VALUE,
 !       ERRORS, ENVIRONMENT, FILES, VERSIONS, CONFORMING TO, NOTES, BUGS, EXAMPLE, AUTHORS, and SEE ALSO.
 !
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !
 !OPTIONS
 !       The man macros understand the following command line options (which define various registers).
@@ -543,8 +647,8 @@ end program test_manup
 !
 !       .EX
 !       .EE    Example/End Example.  After .EX, filling is disabled and the font is set to constant-width.  This  is  useful  for
-!              formatting  code, command, and configuration-file examples.  The EE macro restores filling and restores the previ-
-!              ous font.
+!              formatting  code, command, and configuration-file examples.  The EE macro restores filling and restores the
+!              previous font.
 !
 !       .IP [designator] [nnn]
 !              Set  up  an indented paragraph, using designator as a tag to mark its beginning.  The indentation is set to nnn if
@@ -607,8 +711,8 @@ end program test_manup
 !              The TP macro is the macro used for the explanations you are just reading.
 !
 !       .TQ    The TQ macro sets up header continuation for a TP macro.  With it, you can stack up any number of labels (such  as
-!              in a glossary, or list of commands) before beginning the indented paragraph.  For an example, look up the documen-
-!              tation of the LP, PP, and P macros.
+!              in a glossary, or list of commands) before beginning the indented paragraph.  For an example, look up the
+!              documentation of the LP, PP, and P macros.
 !
 !              This macro is not defined on legacy Unix systems running classic troff.  To be certain your page will be  portable
 !              to those systems, copy its definition from the an-ext.tmac file of a groff installation.
@@ -664,8 +768,8 @@ end program test_manup
 !              smaller than the default font.
 !
 !MACROS TO DESCRIBE HYPERLINKS AND EMAIL ADDRESSES
-!       The following macros are not defined on legacy Unix systems running classic troff.  To be certain your page will be  por-
-!       table to those systems, copy their definitions from the an-ext.tmac file of a groff installation.
+!       The following macros are not defined on legacy Unix systems running classic troff.  To be certain your page will be
+!       portable to those systems, copy their definitions from the an-ext.tmac file of a groff installation.
 !
 !       Using  these  macros helps ensure that you get hyperlinks when your manual page is rendered in a browser or other program
 !       that is Web-enabled.
@@ -698,17 +802,17 @@ end program test_manup
 !                     .UE ,
 !                     given as an example
 !
-!              usually displays like this: "this is a link to some random site <http://randomsite.org/fubar>, given as  an  exam-
-!              ple".
+!              usually displays like this: "this is a link to some random site <http://randomsite.org/fubar>, given as  an
+!              example".
 !
 !              The use of \: to insert hyphenless breakpoints is a groff extension and can be omitted.
 !
 !MACROS TO DESCRIBE COMMAND SYNOPSES
-!       The  following macros are not defined on legacy Unix systems running classic troff.  To be certain your page will be por-
-!       table to those systems, copy their definitions from the an-ext.tmac file of a groff installation.
+!       The  following macros are not defined on legacy Unix systems running classic troff.  To be certain your page will be
+!       portable to those systems, copy their definitions from the an-ext.tmac file of a groff installation.
 !
-!       These macros are a convenience for authors.  They also assist automated translation tools and help browsers in  recogniz-
-!       ing command synopses and treating them differently from running text.
+!       These macros are a convenience for authors.  They also assist automated translation tools and help browsers in
+!       recognizing command synopses and treating them differently from running text.
 !
 !       .OP key value
 !              Describe  an  optional  command  argument.  The arguments of this macro are set surrounded by option braces in the
@@ -753,8 +857,8 @@ end program test_manup
 !       that  may  break in an HTML environment; also, many of these viewers don't interpret the full troff vocabulary, a problem
 !       that can lead to portions of your text being silently dropped.
 !
-!       For portability to modern viewers, it is best to write your page entirely in the requests described on this  page.   Fur-
-!       ther, it is best to completely avoid those we have described as `presentation-level' (.HP, .PD, and .DT).
+!       For portability to modern viewers, it is best to write your page entirely in the requests described on this  page.
+!       Further, it is best to completely avoid those we have described as `presentation-level' (.HP, .PD, and .DT).
 !
 !       The  macros  we have described as extensions (.EX/.EE, .SY/.OP/.YS, .UR/.UE, and .MT/.ME) should be used with caution, as
 !       they may not yet be built in to some viewer that is important to your audience.  If in  doubt,  copy  the  implementation
@@ -766,8 +870,8 @@ end program test_manup
 !COPYING
 !       Copyright (C) 1999-2014 Free Software Foundation, Inc.
 !
-!       Permission is granted to make and distribute verbatim copies of this manual provided the copyright notice and this per-
-!       mission notice are preserved on all copies.
+!       Permission is granted to make and distribute verbatim copies of this manual provided the copyright notice and this
+!       permission notice are preserved on all copies.
 !
 !       Permission is granted to copy and distribute modified versions of this manual under the conditions for verbatim copying,
 !       provided that the entire resulting derived work is distributed under the terms of a permission notice identical to this
@@ -778,11 +882,11 @@ end program test_manup
 !
 !       It was corrected and updated by Werner Lemberg <wl@gnu.org>.
 !
-!       The extension macros were documented (and partly designed) by Eric S. Raymond <esr@thyrsus.com>; he also wrote the porta-
-!       bility advice.
+!       The extension macros were documented (and partly designed) by Eric S. Raymond <esr@thyrsus.com>; he also wrote the
+!       portability advice.
 !
 !Groff Version 1.22.3                                     4 November 2014                                            GROFF_MAN(7)
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 !GROFF_MDOC(7)                                 BSD Miscellaneous Information Manual                                 GROFF_MDOC(7)
 !
 !NAME
@@ -792,20 +896,20 @@ end program test_manup
 !     groff -mdoc file ...
 !
 !DESCRIPTION
-!     A complete reference for writing UNIX manual pages with the -mdoc macro package; a content-based and domain-based format-
-!     ting package for GNU troff(1).  Its predecessor, the -man(7) package, addressed page layout leaving the manipulation of
+!     A complete reference for writing UNIX manual pages with the -mdoc macro package; a content-based and domain-based
+!     formatting package for GNU troff(1).  Its predecessor, the -man(7) package, addressed page layout leaving the manipulation of
 !     fonts and other typesetting details to the individual author.  In -mdoc, page layout macros make up the page structure
-!     domain which consists of macros for titles, section headers, displays and lists - essentially items which affect the physi-
-!     cal position of text on a formatted page.  In addition to the page structure domain, there are two more domains, the manual
+!     domain which consists of macros for titles, section headers, displays and lists - essentially items which affect the physical
+!     position of text on a formatted page.  In addition to the page structure domain, there are two more domains, the manual
 !     domain and the general text domain.  The general text domain is defined as macros which perform tasks such as quoting or
 !     emphasizing pieces of text.  The manual domain is defined as macros that are a subset of the day to day informal language
 !     used to describe commands, routines and related UNIX files.  Macros in the manual domain handle command names, command line
 !     arguments and options, function names, function parameters, pathnames, variables, cross references to other manual pages,
-!     and so on.  These domain items have value for both the author and the future user of the manual page.  Hopefully, the con-
-!     sistency gained across the manual set will provide easier translation to future documentation tools.
+!     and so on.  These domain items have value for both the author and the future user of the manual page.  Hopefully, the
+!     consistency gained across the manual set will provide easier translation to future documentation tools.
 !
-!     Throughout the UNIX manual pages, a manual entry is simply referred to as a man page, regardless of actual length and with-
-!     out sexist intention.
+!     Throughout the UNIX manual pages, a manual entry is simply referred to as a man page, regardless of actual length and
+!     without sexist intention.
 !
 !GETTING STARTED
 !     The material presented in the remainder of this document is outlined as follows:
@@ -903,8 +1007,9 @@ end program test_manup
 !     of the way.  And, too, be forewarned, this package is not fast.
 !
 !   Macro Usage
-!     As in GNU troff(1), a macro is called by placing a `.' (dot character) at the beginning of a line followed by the two-char-
-!     acter (or three-character) name for the macro.  There can be space or tab characters between the dot and the macro name.
+!     As in GNU troff(1), a macro is called by placing a `.' (dot character) at the beginning of a line followed by the
+!     two-character
+!     (or three-character) name for the macro.  There can be space or tab characters between the dot and the macro name.
 !     Arguments may follow the macro separated by spaces (but no tabs).  It is the dot character at the beginning of the line
 !     which causes GNU troff(1) to interpret the next two (or more) characters as a macro name.  A single starting dot followed
 !     by nothing is ignored.  To place a `.' (dot character) at the beginning of an input line in some context other than a macro
@@ -927,20 +1032,20 @@ end program test_manup
 !
 !           [Fl s Ar bytes]  is produced by `.Op \&Fl s \&Ar bytes'
 !
-!     Here the strings `Fl' and `Ar' are not interpreted as macros.  Macros whose argument lists are parsed for callable argu-
-!     ments are referred to as parsed and macros which may be called from an argument list are referred to as callable throughout
+!     Here the strings `Fl' and `Ar' are not interpreted as macros.  Macros whose argument lists are parsed for callable arguments
+!     are referred to as parsed and macros which may be called from an argument list are referred to as callable throughout
 !     this document.  This is a technical faux pas as almost all of the macros in -mdoc are parsed, but as it was cumbersome to
 !     constantly refer to macros as being callable and being able to call other macros, the term parsed has been used.
 !
-!     In the following, we call an -mdoc macro which starts a line (with a leading dot) a command if this distinction is neces-
-!     sary.
+!     In the following, we call an -mdoc macro which starts a line (with a leading dot) a command if this distinction is
+!     necessary.
 !
 !   Passing Space Characters in an Argument
 !     Sometimes it is desirable to give as an argument a string containing one or more blank space characters, say, to specify
 !     arguments to commands which expect particular arrangement of items in the argument list.  Additionally, it makes -mdoc
 !     working faster.  For example, the function command `.Fn' expects the first argument to be the name of a function and any
-!     remaining arguments to be function parameters.  As ANSI C stipulates the declaration of function parameters in the paren-
-!     thesized parameter list, each parameter is guaranteed to be at minimum a two word string.  For example, int foo.
+!     remaining arguments to be function parameters.  As ANSI C stipulates the declaration of function parameters in the
+!     parenthesized parameter list, each parameter is guaranteed to be at minimum a two word string.  For example, int foo.
 !
 !     There are two possible ways to pass an argument which contains an embedded space.  One way of passing a string containing
 !     blank spaces is to use the hard or unpaddable space character `\ ', that is, a blank space preceded by the escape character
@@ -974,14 +1079,14 @@ end program test_manup
 !     A warning is emitted when an empty input line is found outside of displays (see below).  Use `.sp' instead.  (Well, it is
 !     even better to use -mdoc macros to avoid the usage of low-level commands.)
 !
-!     Leading spaces will cause a break and are output directly.  Avoid this behaviour if possible.  Similarly, do not use more
+!     Leading spaces will cause a break and are output directly.  Avoid this behavior if possible.  Similarly, do not use more
 !     than one space character between words in an ordinary text line; contrary to other text formatters, they are not replaced
 !     with a single space.
 !
 !     You can't pass `"' directly as an argument.  Use `\*[q]' (or `\*q') instead.
 !
 !     By default, troff(1) inserts two space characters after a punctuation mark closing a sentence; characters like `)' or `''
-!     are treated transparently, not influencing the sentence-ending behaviour.  To change this, insert `\&' before or after the
+!     are treated transparently, not influencing the sentence-ending behavior.  To change this, insert `\&' before or after the
 !     dot:
 !
 !           The
@@ -1082,8 +1187,8 @@ end program test_manup
 !     quotes; `foo <bar>' has been produced by `.Ic "foo <bar>"'.
 !
 !     Most macros have a default width value which can be used to specify a label width (-width) or offset (-offset) for the
-!     `.Bl' and `.Bd' macros.  It is recommended not to use this rather obscure feature to avoid dependencies on local modifica-
-!     tions of the -mdoc package.
+!     `.Bl' and `.Bd' macros.  It is recommended not to use this rather obscure feature to avoid dependencies on local
+!     modifications of the -mdoc package.
 !
 !TITLE MACROS
 !     The title macros are part of the page structure domain but are presented first and separately for someone who wishes to
@@ -1158,8 +1263,8 @@ end program test_manup
 !             file, mdoc.local.  In general, the name of the operating system should be the common acronym, e.g. BSD or ATT.  The
 !             release should be the standard release nomenclature for the system specified.  In the following table, the possible
 !             second arguments for some predefined operating systems are listed.  Similar to `.Dt', local additions might be
-!             defined in mdoc.local; look for strings named `operating-system-XXX-YYY', where `XXX' is the acronym for the oper-
-!             ating system and `YYY' the release ID.
+!             defined in mdoc.local; look for strings named `operating-system-XXX-YYY', where `XXX' is the acronym for the
+!             operating system and `YYY' the release ID.
 !
 !                   ATT        7th, 7, III, 3, V, V.2, V.3, V.4
 !
@@ -1204,8 +1309,8 @@ end program test_manup
 !             This macro is neither callable nor parsed.
 !
 !     .Dd [<month> <day>, <year>]
-!             If `Dd' has no arguments, `Epoch' is used for the date string.  If it has exactly three arguments, they are con-
-!             catenated, separated with unbreakable space:
+!             If `Dd' has no arguments, `Epoch' is used for the date string.  If it has exactly three arguments, they are
+!             concatenated, separated with unbreakable space:
 !
 !                   .Dd January 25, 2001
 !
@@ -1276,8 +1381,8 @@ end program test_manup
 !   General Syntax
 !     The manual domain and general text domain macros share a similar syntax with a few minor deviations; most notably, `.Ar',
 !     `.Fl', `.Nm', and `.Pa' differ only when called without arguments; and `.Fn' and `.Xr' impose an order on their argument
-!     lists.  All content macros are capable of recognizing and properly handling punctuation, provided each punctuation charac-
-!     ter is separated by a leading space.  If a command is given:
+!     lists.  All content macros are capable of recognizing and properly handling punctuation, provided each punctuation
+!     character is separated by a leading space.  If a command is given:
 !
 !           .Ar sptr, ptr),
 !
@@ -1285,8 +1390,8 @@ end program test_manup
 !
 !           sptr, ptr),
 !
-!     The punctuation is not recognized and all is output in the font used by `.Ar'.  If the punctuation is separated by a lead-
-!     ing white space:
+!     The punctuation is not recognized and all is output in the font used by `.Ar'.  If the punctuation is separated by a
+!     leading white space:
 !
 !           .Ar sptr , ptr ) ,
 !
@@ -1302,13 +1407,13 @@ end program test_manup
 !               .         ,         :         ;         (
 !               )         [         ]         ?         !
 !
-!     Troff is limited as a macro language, and has difficulty when presented with a string containing a member of the mathemati-
-!     cal, logical or quotation set:
+!     Troff is limited as a macro language, and has difficulty when presented with a string containing a member of the
+!     mathematical, logical or quotation set:
 !
 !                 {+,-,/,*,%,<,>,<=,>=,=,==,&,`,',"}
 !
-!     The problem is that troff may assume it is supposed to actually perform the operation or evaluation suggested by the char-
-!     acters.  To prevent the accidental evaluation of these characters, escape them with `\&'.  Typical syntax is shown in the
+!     The problem is that troff may assume it is supposed to actually perform the operation or evaluation suggested by the
+!     characters.  To prevent the accidental evaluation of these characters, escape them with `\&'.  Typical syntax is shown in the
 !     first content macro displayed below, `.Ad'.
 !
 !MANUAL DOMAIN
@@ -1380,8 +1485,8 @@ end program test_manup
 !   Command Modifiers
 !     The command modifier is identical to the `.Fl' (flag) command with the exception that the `.Cm' macro does not assert a
 !     dash in front of every argument.  Traditionally flags are marked by the preceding dash, however, some commands or subsets
-!     of commands do not use them.  Command modifiers may also be specified in conjunction with interactive commands such as edi-
-!     tor commands.  See Flags.
+!     of commands do not use them.  Command modifiers may also be specified in conjunction with interactive commands such as
+!     editor commands.  See Flags.
 !
 !     The default width is 10n.
 !
@@ -1446,11 +1551,11 @@ end program test_manup
 !                    .Fd "#include <sys/types.h>"  #include <sys/types.h>
 !
 !     In the SYNOPSIS section a `.Fd' command causes a line break if a function has already been presented and a break has not
-!     occurred.  This leaves a nice vertical space in between the previous function call and the declaration for the next func-
-!     tion.
+!     occurred.  This leaves a nice vertical space in between the previous function call and the declaration for the next
+!     function.
 !
-!     The `.In' macro, while in the SYNOPSIS section, represents the #include statement, and is the short form of the above exam-
-!     ple.  It specifies the C header file as being included in a C program.  It also causes a line break.
+!     The `.In' macro, while in the SYNOPSIS section, represents the #include statement, and is the short form of the above
+!     example.  It specifies the C header file as being included in a C program.  It also causes a line break.
 !
 !     While not in the SYNOPSIS section, it represents the header file enclosed in angle brackets.
 !
@@ -1502,8 +1607,8 @@ end program test_manup
 !           int res_mkquery(int op, char *dname, int class, int type, char *data, int datalen, struct rrec *newrr, char *buf,
 !           int buflen)
 !
-!     In the SYNOPSIS section, the function will always begin at the beginning of line.  If there is more than one function pre-
-!     sented in the SYNOPSIS section and a function type has not been given, a line break will occur, leaving a nice vertical
+!     In the SYNOPSIS section, the function will always begin at the beginning of line.  If there is more than one function
+!     presented in the SYNOPSIS section and a function type has not been given, a line break will occur, leaving a nice vertical
 !     space between the current function name and the one prior.
 !
 !     The default width values of `.Fn' and `.Fo' are 12n and 16n, respectively.
@@ -1672,8 +1777,8 @@ end program test_manup
 !     The default width is 10n.
 !
 !   Options
-!     The `.Op' macro places option brackets around any remaining arguments on the command line, and places any trailing punctua-
-!     tion outside the brackets.  The macros `.Oo' and `.Oc' (which produce an opening and a closing option bracket respectively)
+!     The `.Op' macro places option brackets around any remaining arguments on the command line, and places any trailing punctuation
+!     outside the brackets.  The macros `.Oo' and `.Oc' (which produce an opening and a closing option bracket respectively)
 !     may be used across one or more lines or to specify the exact position of the closing parenthesis.
 !
 !           Usage: .Op [<option>] ...
@@ -1779,8 +1884,8 @@ end program test_manup
 !     Both macros are neither callable nor parsed.
 !
 !   Enclosure and Quoting Macros
-!     The concept of enclosure is similar to quoting.  The object being to enclose one or more strings between a pair of charac-
-!     ters like quotes or parentheses.  The terms quoting and enclosure are used interchangeably throughout this document.  Most
+!     The concept of enclosure is similar to quoting.  The object being to enclose one or more strings between a pair of characters
+!     like quotes or parentheses.  The terms quoting and enclosure are used interchangeably throughout this document.  Most
 !     of the one-line enclosure macros end in small letter `q' to give a hint of quoting, but there are a few irregularities.
 !     For each enclosure macro there is also a pair of open and close macros which end in small letters `o' and `c' respectively.
 !
@@ -1841,8 +1946,8 @@ end program test_manup
 !           .Sq string               `string'
 !           .Em or Ap ing            or'ing
 !
-!     For a good example of nested enclosure macros, see the `.Op' option macro.  It was created from the same underlying enclo-
-!     sure macros as those presented in the list above.  The `.Xo' and `.Xc' extended argument list macros are discussed below.
+!     For a good example of nested enclosure macros, see the `.Op' option macro.  It was created from the same underlying enclosure
+!     macros as those presented in the list above.  The `.Xo' and `.Xc' extended argument list macros are discussed below.
 !
 !   No-Op or Normal Text Macro
 !     The `.No' macro can be used in a macro command line for parameters which should not be formatted.  Be careful to add `\&'
@@ -1937,8 +2042,8 @@ end program test_manup
 !           Nowhere, April 1991.
 !
 !   Trade Names (or Acronyms and Type Names)
-!     The trade name macro prints its arguments in a smaller font.  Its intended use is to imitate a small caps fonts for upper-
-!     case acronyms.
+!     The trade name macro prints its arguments in a smaller font.  Its intended use is to imitate a small caps fonts for uppercase
+!     acronyms.
 !
 !           Usage: .Tn <symbol> ...
 !
@@ -2054,8 +2159,8 @@ end program test_manup
 !                        here.  The `.Er' macro is used to specify an error (errno).
 !
 !     .Sh SEE ALSO       References to other material on the man page topic and cross references to other relevant man pages
-!                        should be placed in the SEE ALSO section.  Cross references are specified using the `.Xr' macro.  Cur-
-!                        rently refer(1) style references are not accommodated.
+!                        should be placed in the SEE ALSO section.  Cross references are specified using the `.Xr' macro.
+!                        Currently refer(1) style references are not accommodated.
 !
 !                        It is recommended that the cross references are sorted on the section number, then alphabetically on the
 !                        names within a section, and placed in that order and comma separated.  Example:
@@ -2066,8 +2171,8 @@ end program test_manup
 !                        (``POSIX.2'') or ANSI X3.159-1989 (``ANSI C89'') this should be noted here.  If the command does not
 !                        adhere to any standard, its history should be noted in the HISTORY section.
 !
-!     .Sh HISTORY        Any command which does not adhere to any specific standards should be outlined historically in this sec-
-!                        tion.
+!     .Sh HISTORY        Any command which does not adhere to any specific standards should be outlined historically in this
+!                        section.
 !
 !     .Sh AUTHORS        Credits should be placed here.  Use the `.An' macro for names and the `.Aq' macro for e-mail addresses
 !                        within optional contact information.  Explicitly indicate whether the person authored the initial manual
@@ -2160,8 +2265,8 @@ end program test_manup
 !     .Ed  End display (takes no arguments).
 !
 !   Lists and Columns
-!     There are several types of lists which may be initiated with the `.Bl' begin-list macro.  Items within the list are speci-
-!     fied with the `.It' item macro, and each list must end with the `.El' macro.  Lists may be nested within themselves and
+!     There are several types of lists which may be initiated with the `.Bl' begin-list macro.  Items within the list are specified
+!     with the `.It' item macro, and each list must end with the `.El' macro.  Lists may be nested within themselves and
 !     within displays.  The use of columns inside of lists or lists inside of columns is unproven.
 !
 !     In addition, several list attributes may be specified such as the width of a tag, the list offset, and compactness (blank
@@ -2428,8 +2533,8 @@ end program test_manup
 !                                       list.
 !
 !                       (Note that the current state of -mdoc is saved before <string> is interpreted; afterwards, all variables
-!                       are restored again.  However, boxes (used for enclosures) can't be saved in GNU troff(1); as a conse-
-!                       quence, arguments must always be balanced to avoid nasty errors.  For example, do not write `.Ao Ar
+!                       are restored again.  However, boxes (used for enclosures) can't be saved in GNU troff(1); as a consequence,
+!                       arguments must always be balanced to avoid nasty errors.  For example, do not write `.Ao Ar
 !                       string' but `.Ao Ar string Xc' instead if you really need only an opening angle bracket.)
 !
 !                       Otherwise, if <string> is a valid numeric expression (with a scale indicator other than `u'), use that
@@ -2449,16 +2554,16 @@ end program test_manup
 !                       `u'), use that value for indentation.  The most useful scale indicators are `m' and `n', specifying the
 !                       so-called Em and En square.  This is approximately the width of the letters `m' and `n' respectively of
 !                       the current font (for nroff output, both scale indicators give the same values).  If <string> isn't a
-!                       numeric expression, it is tested whether it is an -mdoc macro name, and the default offset value associ-
-!                       ated with this macro is used.  Finally, if all tests fail, the width of <string> (typeset with a fixed-
-!                       width font) is taken as the offset.
+!                       numeric expression, it is tested whether it is an -mdoc macro name, and the default offset value associated
+!                       with this macro is used.  Finally, if all tests fail, the width of <string> (typeset with a fixed-width
+!                       font) is taken as the offset.
 !
 !     -compact          Suppress insertion of vertical space before the list and between list items.
 !
 !MISCELLANEOUS MACROS
 !     Here a list of the remaining macros which do not fit well into one of the above sections.  We couldn't find real examples
-!     for the following macros: `.Me' and `.Ot'.  They are documented here for completeness - if you know how to use them prop-
-!     erly please send a mail to bug-groff@gnu.org (including an example).
+!     for the following macros: `.Me' and `.Ot'.  They are documented here for completeness - if you know how to use them properly
+!     please send a mail to bug-groff@gnu.org (including an example).
 !
 !     .Bt  prints
 !
@@ -2470,11 +2575,11 @@ end program test_manup
 !
 !                Usage: .Fr <function return value> ...
 !
-!          Don't use this macro.  It allows a break right before the return value (usually a single digit) which is bad typo-
-!          graphical behaviour.  Use `\~' to tie the return value to the previous word.
+!          Don't use this macro.  It allows a break right before the return value (usually a single digit) which is bad
+!          typographical behavior.  Use `\~' to tie the return value to the previous word.
 !
-!     .Hf  Use this macro to include a (header) file literally.  It first prints `File:' followed by the file name, then the con-
-!          tents of <file>.
+!     .Hf  Use this macro to include a (header) file literally.  It first prints `File:' followed by the file name, then the
+!          contents of <file>.
 !
 !                Usage: .Hf <file>
 !
@@ -2545,7 +2650,7 @@ end program test_manup
 !
 !FORMATTING WITH GROFF, TROFF, AND NROFF
 !     By default, the package inhibits page breaks, headers, and footers if displayed with a TTY device like `latin1' or
-!     `unicode', to make the manual more efficient for viewing on-line.  This behaviour can be changed (e.g. to create a hardcopy
+!     `unicode', to make the manual more efficient for viewing on-line.  This behavior can be changed (e.g. to create a hardcopy
 !     of the TTY output) by setting the register `cR' to zero while calling groff(1), resulting in multiple pages instead of a
 !     single, very long page:
 !
@@ -2591,7 +2696,7 @@ end program test_manup
 !     The list and display macros do not do any keeps and certainly should be able to.
 !
 !BSD                                                     November 2, 2010                                                     BSD
-!-----------------------------------------------------------------------------------------------------------------------------------
+!----------------------------------------------------------------------------------------------------------------------------------!
 ! NAME
 !
 ! ronn-format - manual authoring format based on Markdown
@@ -2676,7 +2781,7 @@ end program test_manup
 !
 ! Dash underline syntax:
 ! HEADING TEXT
-! ------------
+! -----------!
 !
 ! Section headings should be all uppercase and may not contain inline markup.
 !

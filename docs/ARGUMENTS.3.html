@@ -63,26 +63,22 @@ ARGUMENTS(3f) - [ARGUMENTS::INTRO] collection of command line argument parsers
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
-<A HREF=#3>M_kracken</A><BR>
 </BLOCKQUOTE>
-<A name=4>
+<A name=3>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-Special-Purpose Public Routines:
+Command Line Argument Parsers:
 <P>
 <PRE>
+   use M_CLI2
+   use M_CLI
+   use M_args
    use M_kracken
-   use M_kracken,  only : kracken
-   use M_kracken,  only : rget,dget,iget,lget,sget,retrev
-   use M_krackens, only : rgets,dgets,igets,lgets,sgets
-   use M_kracken,  only : print_kracken_dictionary
-   use M_kracken,  only : cmd_args_to_dictionary, unnamed
    use M_getopt
    use M_getopt_long
-   use M_args
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -97,6 +93,27 @@ The following command line argument parser modules are available:
 <TABLE cellpadding=3><!-- tsb: The following command line argument parser modules are available:
  -->
 <TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M_CLI2 parse command using a Unix-like syntax more closely conforming to recent Unix/Linux GNU conventions.
+Also allows for response files.
+(LICENSE:MIT)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M_CLI parse command using a Unix-like syntax more closely conforming to recent Unix/Linux GNU conventions.
+Integrates with NAMELIST groups greatly simplifying obtaining argument values as various intrinsic types.
+(LICENSE:MIT)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+M_args parse commands using NAMELIST format or Unix-like syntax and produce a NAMELIST string
+to allow argument parsing without having to convert strings to various variable types
+(LICENSE:PD)
+</TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
@@ -115,127 +132,9 @@ o
 M_getopt_long parse command line options like Sun getopt_long, including the Sun CLIP specification
 (LICENSE:PD)
 </TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-M_args parse commands using NAMELIST format or Unix-like syntax and produce a NAMELIST string
-to allow argument parsing without having to convert strings to various variable types
-(LICENSE:PD)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=3>
-
-     <H3>M_KRACKEN</H3>
-
-</A>
-<BLOCKQUOTE>
-<P>
-M_kracken(3f) is a module to parse command line options of Fortran programs using Unix-like syntax.
-The main differences in syntax are that negative values and multi-word values rarely need quotes
-around them, and that the "unnamed" parameter is first on the command line. It contains:
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; BASE ROUTINES</H4>
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>kracken</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- crack command line options on Fortran programs, using "<B>-KEYWORD</B> VALUE" syntax
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>retrev</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- get keyword value as a string from a command&#146;s argument list
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; CONVENIENCE ROUTINES FOR FETCHING VALUES</H4>
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>dget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch doubleprecision value from command argument
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>iget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch integer value from command argument
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>lget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch logical value from command arguments
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>rget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch real value from command argument
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>sget</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch string value and length from command arguments
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>dgets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch doubleprecision array from command arguments
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>igets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch integer array from command arguments
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>lgets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch logical array from command argument
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>rgets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch real array from command arguments
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>sgets</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- given keyword fetch string value parsed on whitespace into an array
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; AUXILIARY COMMAND FOR SETTING PROMPTS</H4>
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>setprompts</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- set explicit prompts for keywords in interactive mode
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; AUXILIARY COMMANDS FOR USE IN BUILDING CLI</H4>
-</A>
-<BLOCKQUOTE>
-(CLI) Command Line Interface routines can be used to read shell-like input and
-configuration files
-<TABLE cellpadding=3><!-- tsb: (CLI) Command Line Interface routines can be used to read shell-like input and
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>dissect</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- convenient call to parse() - define defaults, then process
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>parse</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- parse user command and store tokens into Language Dictionary
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>show</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- dump dictionary entries
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>store</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
-- replace dictionary name&#146;s value (if allow=add add name if necessary)
-</TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ARGUMENTS (3)</TD> <TD align=right width=33%><I>December 14, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f3cb9008-f994-4232-b9cf-d03326a757f3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>ARGUMENTS (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 6d9aff8b-afaa-4c2b-a7be-b90eea057c57 using man macros.</FONT>
 <br><br><center><img src="images/ARGUMENTS.3.gif"></center>
 </div>
 </div>

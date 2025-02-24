@@ -1,106 +1,9 @@
-subroutine help_usage(l_help)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
-logical,intent(in)             :: l_help
-character(len=:),allocatable :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_help)then
-help_text=[ CHARACTER(LEN=128) :: &
-'NAME                                                                            ',&
-'       compute(1f) - [MATH] evaluate a calculator expression                    ',&
-'       (LICENSE:PD)                                                             ',&
-'SYNOPSIS                                                                        ',&
-'       compute [STRING] [ -verbose]| [ -help| -version]                         ',&
-'DESCRIPTION                                                                     ',&
-'       Given any expression call the CALCULATOR(3f) calculator function and     ',&
-'       evaluate it. If no expression is present on the command line, read       ',&
-'       expressions from stdin until a line composed of a period(".") or         ',&
-'       end of data is encountered.                                              ',&
-'                                                                                ',&
-'       Expressions are similar to Fortran77 syntax except powers are            ',&
-'       processed from left to right, and string variable names start            ',&
-'       with a dollar-sign, and all numeric values are assumed to be             ',&
-'       DOUBLEPRECISION.                                                         ',&
-'OPTIONS                                                                         ',&
-'       STRING            calculator expression to evaluate                      ',&
-'       --verbose         echo the input as well as the computed values          ',&
-'       --help            display this help and exit                             ',&
-'       --version         output version information and exit                    ',&
-'       --trail FILENAME  record actions on a trail file.                        ',&
-'EXAMPLES                                                                        ',&
-'       Sample commands:                                                         ',&
-'                                                                                ',&
-'        $ compute ''(sin(30.33333)*2)**2+40.0/2.3-1.23e3''                      ',&
-'        $ compute funcs|more                                                    ',&
-'                                                                                ',&
-'        $ compute --trail record.txt                                            ',&
-'        a=10                                                                    ',&
-'        # The redo(3f) command is used for command recall and history           ',&
-'        # by entering an exclamation on a line by itself or by following        ',&
-'        # the exclamation by a space and an optional initial command for        ',&
-'        # redo(3f). Enter "?" at the redo(3f) prompt for help using the         ',&
-'        # command line history editor.                                          ',&
-'                                                                                ',&
-'        # enter a long calculation                                              ',&
-'        b=sin(a)**2+3.4e2+100-11*2/55.6                                         ',&
-'        # use redo(3f) to change "sin" to "cos". Enter return to execute        ',&
-'        # the changed line                                                      ',&
-'        ! c/sin/cos                                                             ',&
-'                                                                                ',&
-'        # system commands can be called if prefixed by exclamation              ',&
-'        !ls                                                                     ',&
-'                                                                                ',&
-'        # exit using a period on a line by itself                               ',&
-'        .                                                                       ',&
-'                                                                                ',&
-'        # a simple non-nesting alternate input file can be read                 ',&
-'        <myfile                                                                 ',&
-'                                                                                ',&
-'        funcs # list available functions                                        ',&
-'        dump  # list current variables                                          ',&
-'                                                                                ',&
-'SEE  ALSO                                                                       ',&
-'       See the man(1) page for M_calculator(3fm) for a more detailed            ',&
-'       description of the CALCULATOR(3f) routine.                               ',&
-'AUTHOR                                                                          ',&
-'   John S. Urban                                                                ',&
-'LICENSE                                                                         ',&
-'   Public License                                                               ',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
-   stop ! if --help was specified, stop
-endif
-end subroutine help_usage
-subroutine help_version(l_version)
-implicit none
-character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
-logical,intent(in)             :: l_version
-character(len=:),allocatable   :: help_text(:)
-integer                        :: i
-logical                        :: stopit=.false.
-stopit=.false.
-if(l_version)then
-help_text=[ CHARACTER(LEN=128) :: &
-'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
-'@(#)PROGRAM:        compute(1f)>',&
-'@(#)DESCRIPTION:    line mode calculator program (that calls CALCULATOR(3f))>',&
-'@(#)VERSION:        23.1 20160618>',&
-'@(#)AUTHOR:         John S. Urban>',&
-'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2024-12-14 21:36:44 UTC-300>',&
-'']
-   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
-   stop ! if --version was specified, stop
-endif
-end subroutine help_version
 program compute
 use M_kracken,    only : kracken, sget, lget
 use M_calculator, only : calculator,iclen_calc
 use M_history,    only : redo
 use M_io,         only : read_line
-use M_journal,    only : journal
+use M_framework,  only : journal
 !use M_noown, only     : juown1, c
 !!implicit real(kind=selected_real_kind(15,300)) (a-h, o-z)
 implicit none
@@ -185,4 +88,162 @@ contains
        case default; call journal('sc','*compute* unexpected ierr value ',ierr)     ! this should not occur
       end select
    end subroutine processit
+subroutine help_usage(l_help)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_usage(3f): prints help information"
+logical,intent(in)             :: l_help
+character(len=:),allocatable :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_help)then
+help_text=[ CHARACTER(LEN=128) :: &
+'NAME                                                                            ',&
+'   compute(1f) - [MATH] evaluate a calculator expression                        ',&
+'   (LICENSE:PD)                                                                 ',&
+'SYNOPSIS                                                                        ',&
+'   compute [[STRING] [--trail FILENAME] [ --verbose]]|[ --help|--version]       ',&
+'DESCRIPTION                                                                     ',&
+'   Given any expression call the CALCULATOR(3f) calculator function and         ',&
+'   evaluate it. If no expression is present on the command line, read           ',&
+'   expressions from stdin until a line composed of a period(".") or end         ',&
+'   of data is encountered.                                                      ',&
+'                                                                                ',&
+'   Expressions are similar to Fortran77 syntax except powers are processed      ',&
+'   from left to right, and string variable names start with a dollar-sign,      ',&
+'   and all numeric values are assumed to be DOUBLEPRECISION.                    ',&
+'OPTIONS                                                                         ',&
+'   STRING            calculator expression to evaluate                          ',&
+'   --trail FILENAME  record actions on a trail file.                            ',&
+'   --verbose         echo the input as well as the computed values              ',&
+'   --help            display this help and exit                                 ',&
+'   --version         output version information and exit                        ',&
+'EXAMPLES                                                                        ',&
+'  Sample commands:                                                              ',&
+'                                                                                ',&
+'    $ compute ''(sin(30.33333)*2)**2+40.0/2.3-1.23e3''                          ',&
+'    $ compute funcs|more                                                        ',&
+'                                                                                ',&
+'    $ compute --trail record.txt                                                ',&
+'    a=10                                                                        ',&
+'    # The redo(3f) command is used for command recall and history               ',&
+'    # by entering an exclamation on a line by itself or by following            ',&
+'    # the exclamation by a space and an optional initial command for            ',&
+'    # redo(3f). Enter "?" at the redo(3f) prompt for help using the             ',&
+'    # command line history editor.                                              ',&
+'                                                                                ',&
+'    # enter a long calculation                                                  ',&
+'    b=sin(a)**2+3.4e2+100-11*2/55.6                                             ',&
+'    # use redo(3f) to change "sin" to "cos". Enter return to execute            ',&
+'    # the changed line                                                          ',&
+'    ! c/sin/cos                                                                 ',&
+'                                                                                ',&
+'    # system commands can be called if prefixed by exclamation                  ',&
+'    !ls                                                                         ',&
+'                                                                                ',&
+'    # exit using a period on a line by itself                                   ',&
+'    .                                                                           ',&
+'                                                                                ',&
+'    # a simple non-nesting alternate input file can be read                     ',&
+'    <myfile                                                                     ',&
+'                                                                                ',&
+'    funcs # list available functions                                            ',&
+'    dump  # list current variables                                              ',&
+'                                                                                ',&
+'SEE  ALSO                                                                       ',&
+'   See the man(1) page for M_calculator(3fm) for a more detailed                ',&
+'   description of the CALCULATOR(3f) routine.                                   ',&
+'AUTHOR                                                                          ',&
+'   John S. Urban                                                                ',&
+'LICENSE                                                                         ',&
+'   Public License                                                               ',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)),i=1,size(help_text))
+   stop ! if --help was specified, stop
+endif
+end subroutine help_usage
+!>
+!!##NAME
+!!    compute(1f) - [MATH] evaluate a calculator expression
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    compute [[STRING] [--trail FILENAME] [ --verbose]]|[ --help|--version]
+!!##DESCRIPTION
+!!    Given any expression call the CALCULATOR(3f) calculator function and
+!!    evaluate it. If no expression is present on the command line, read
+!!    expressions from stdin until a line composed of a period(".") or end
+!!    of data is encountered.
+!!
+!!    Expressions are similar to Fortran77 syntax except powers are processed
+!!    from left to right, and string variable names start with a dollar-sign,
+!!    and all numeric values are assumed to be DOUBLEPRECISION.
+!!##OPTIONS
+!!    STRING            calculator expression to evaluate
+!!    --trail FILENAME  record actions on a trail file.
+!!    --verbose         echo the input as well as the computed values
+!!    --help            display this help and exit
+!!    --version         output version information and exit
+!!##EXAMPLES
+!!
+!!   Sample commands:
+!!
+!!     $ compute '(sin(30.33333)*2)**2+40.0/2.3-1.23e3'
+!!     $ compute funcs|more
+!!
+!!     $ compute --trail record.txt
+!!     a=10
+!!     # The redo(3f) command is used for command recall and history
+!!     # by entering an exclamation on a line by itself or by following
+!!     # the exclamation by a space and an optional initial command for
+!!     # redo(3f). Enter "?" at the redo(3f) prompt for help using the
+!!     # command line history editor.
+!!
+!!     # enter a long calculation
+!!     b=sin(a)**2+3.4e2+100-11*2/55.6
+!!     # use redo(3f) to change "sin" to "cos". Enter return to execute
+!!     # the changed line
+!!     ! c/sin/cos
+!!
+!!     # system commands can be called if prefixed by exclamation
+!!     !ls
+!!
+!!     # exit using a period on a line by itself
+!!     .
+!!
+!!     # a simple non-nesting alternate input file can be read
+!!     <myfile
+!!
+!!     funcs # list available functions
+!!     dump  # list current variables
+!!
+!!##SEE  ALSO
+!!    See the man(1) page for M_calculator(3fm) for a more detailed
+!!    description of the CALCULATOR(3f) routine.
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public License
+subroutine help_version(l_version)
+implicit none
+character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
+logical,intent(in)             :: l_version
+character(len=:),allocatable   :: help_text(:)
+integer                        :: i
+logical                        :: stopit=.false.
+stopit=.false.
+if(l_version)then
+help_text=[ CHARACTER(LEN=128) :: &
+'@(#)PRODUCT:        GPF (General Purpose Fortran) utilities and examples>',&
+'@(#)PROGRAM:        compute(1f)>',&
+'@(#)DESCRIPTION:    line mode calculator program (that calls CALCULATOR(3f))>',&
+'@(#)VERSION:        23.1 20160618>',&
+'@(#)AUTHOR:         John S. Urban>',&
+'@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
+'@(#)COMPILED:       2025-02-23 19:22:53 UTC-300>',&
+'']
+   WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
+   stop ! if --version was specified, stop
+endif
+end subroutine help_version
 end program compute

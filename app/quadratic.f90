@@ -63,6 +63,59 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!        quadratic(1f) - [MATH] Calculate and print the roots of a quadratic formula even if they are complex
+!!        (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!        quadratic A B C [ --verbose]|[ --help| --version]
+!!
+!!##DESCRIPTION
+!!    Given the equation
+!!
+!!       A*x**2 + B*x + C = 0
+!!
+!!    Use the quadratic formula to determine the root values of the equation.
+!!
+!!##OPTIONS
+!!        A,B,C       coefficients
+!!        --verbose   echo input values
+!!        --help      display help text and exit
+!!        --version   display version information and exit
+!!
+!!##EXAMPLE
+!!
+!!   This program uses NAMELIST to crack the command line arguments,
+!!   and complex numbers.
+!!
+!!   Sample usage:
+!!
+!!    quadratic A=1.0  B=5.0  C=2.0
+!!     for 1*x**2 + 5*x + 2 = 0
+!!     the roots (ie. "x intercepts") are real so the parabola crosses the x-axis at two points:
+!!     z1 =-0.438447237
+!!     z2 =-4.561553
+!!     discriminant =17
+!!
+!!    quadratic A=1.0  B=2.0  C=5.0 # There are no real roots (Discriminant = -16)!
+!!     for 1*x**2 + 2*x + 5 = 0
+!!     the roots(ie. "x intercepts")  are complex:
+!!     z1 = ( -1.00000000    ,  2.00000000    )
+!!     z2 = ( -1.00000000    , -2.00000000    )
+!!     discriminant =-16
+!!
+!!    quadratic A=9 B=12 C=4
+!!     for 9*x**2 + 12*x + 4 = 0
+!!     the roots (ie. "x intercepts") are repeated (real and equal) so the parabola just touches the x-axis at:
+!!     z1 = z2 =-0.666666687
+!!     discriminant =0
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -78,7 +131,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    Calculate and print the roots of a quadratic formula even if they are complex>',&
 '@(#)VERSION:        2.0, 20180825>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2024-12-14 21:41:55 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:26:16 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

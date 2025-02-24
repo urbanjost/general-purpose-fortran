@@ -62,6 +62,57 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    explain(1) - [HELP] reads and navigates a VMS-style help file.
+!!    (LICENSE:GNU LGPL)
+!!##SYNOPSIS
+!!
+!!   explain [HELP_FILENAME]
+!!##DESCRIPTION
+!!    explain(1) reads and navigates a VMS-style help file.
+!!    This shows a simple help file:
+!!
+!!     >1 Help_File_Format
+!!     >
+!!     >This is a brief suggestion of how a help file is laid out. A line
+!!     >that begins with a number marks the beginning of a topic. The text
+!!     >on that line is the label for the topic.
+!!     >
+!!     >2 What_the_User_Sees
+!!     >
+!!     >On issuing the help command, the user sees the main topic printed out.
+!!     >Following this, a list of the immediate subtopics is presented.
+!!     >The user can proceed to a subtopic by typing its label.
+!!     >
+!!     >3 Sub_Sub_Topics
+!!     >
+!!     >The arrangement of topics is a little like the grouping of parentheses.
+!!     >
+!!     >2 Suggestions
+!!     >
+!!     >You might want to keep each subtopic short, certainly no more than
+!!     >a page in length.
+!!
+!!##OPTIONS
+!!     HELP_FILENAME  Name of help file. That is, a text file marked up
+!!                    using the VMS help file format. In this format,
+!!                    a number in column 1 is a label, and indicates the
+!!                    beginning of a help topic. Label 1 is reserved for
+!!                    the main help topic; subtopics of the main topic have
+!!                    a label of 2, and so on.
+!!##LICENSING
+!!   This code is distributed under the GNU LGPL license.
+!!##AUTHOR
+!!  Lifecycle Information:
+!!
+!!   Author:   John Burkardt, 2001-03-06, version 1.06
+!!   Modified: John S. Urban, 2019-01-25, version 1.07
+!!             Integrated into the GPF(General Purpose Fortran) format. The
+!!             basic login remains the same, sans some utility routines
+!!             that duplicated GPF routines; added the command --help
+!!             and --version switches; allowed abbreviated case-insensitive
+!!             topics.
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -79,7 +130,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John Burkardt>',&
 '@(#)VERSION:        1.07, 20190125>',&
 '@(#)MODIFIED:       John S. Urban>',&
-'@(#)COMPILED:       2024-12-14 21:40:11 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:24:59 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

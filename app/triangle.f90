@@ -54,6 +54,47 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    triangle(1f) - resolution of a triangle
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    triangle -a NN -b NN -c NN -ta NN -tb NN -tc NN -radians -degrees
+!!##DESCRIPTION
+!!    Given three side or angle elements of a triangle out of six,
+!!    this program will determine the missing elements and calculate the
+!!    surface. The not-given elements must be put to zero.
+!!##AUTHOR
+!!    Based on an example F90 version by J-P Moreau (www.jpmoreau.fr).
+!!
+!!    Ref.: "Mathématiques en Turbo-Pascal By M. Ducamp
+!!    and A. Reverchon (vol 2), Eyrolles, Paris, 1988"
+!!    [BIBLI 05].
+!!##OPTIONS
+!!    a   length of side A
+!!    b   length of side B
+!!    c   length of side C
+!!    ta  angle opposite to side A
+!!    tb  angle opposite to side B
+!!    tc  angle opposite to side C
+!!##EXAMPLE
+!!
+!!    sample run
+!!
+!!      $triangle -a 18 -tb 110 -tc 52.2
+!!
+!!      Angle unit: PI = 180
+!!
+!!      A  =    18.0000000000000
+!!      B  =    55.3311291183785
+!!      C  =    46.5260338924988
+!!
+!!      TA =    17.8000000000000
+!!      TB =   110.0000000000000
+!!      TC =    52.2000000000000
+!!
+!!      Surface:    393.481559106180
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -69,7 +110,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    resolution of a triangle>',&
 '@(#)VERSION:        1.0, 20190315>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2024-12-14 21:41:45 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:26:09 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

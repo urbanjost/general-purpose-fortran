@@ -93,26 +93,27 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </p>
 
 <ul>
-   <li> Julian Dates               </li>
-   <li> Unix Epoch Dates           </li>
-   <li> High-level date formatting </li>
-   <li> Ordinal days of the year   </li>
-   <li> days of the week           </li>
-   <li> ISO-8601 week numbers      </li>
-   <li> month and weekday names    </li>
+   <li> Julian and Modified Julian Dates </li>
+   <li> (Modified) Days and Seconds      </li>
+   <li> Unix Epoch Dates                 </li>
+   <li> High-level date formatting       </li>
+   <li> Ordinal days of the year         </li>
+   <li> days of the week                 </li>
+   <li> ISO-8601 week numbers            </li>
+   <li> month and weekday names          </li>
 </ul>
 
 <p>
-   Julian and Unix Epoch Dates are particularly useful for manipulating dates
-   in simple numeric expressions.
+   Julian and Unix Epoch Dates are particularly useful
+   for manipulating dates in simple numeric expressions.
 </p>
 
 <p>
-   The extensive formatting options include showing SYSTEM_CLOCK(3f) and
-   CPU_USAGE(3f) information along with Gregorian date information, allowing
-   for the easy incorporation of timing information into program messages. In
-   addition to conventional Civilian Calendar dates, the module
-   supports the ISO-8601 standard methods of displaying dates.
+   The extensive formatting options include showing SYSTEM_CLOCK(3f)
+   and CPU_USAGE(3f) information along with Gregorian date information,
+   allowing for the easy incorporation of timing information into program
+   messages. In addition to conventional Civilian Calendar dates, the
+   module supports the ISO-8601 standard methods of displaying dates.
 </p>
 
 <p>
@@ -146,7 +147,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </tr>
 
 <tr><th colspan="3">JULIAN                    </th></tr>
-
 <tr>
    <td><a href="julian_to_date.3m_time.html"> julian_to_date(julian,DAT,IERR)      </a>
    </br>or</br>
@@ -164,6 +164,43 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    <td>%julian() </td>
    <td> Converts date array to Julian Date </td>
 </tr>
+
+<tr><th colspan="3">MODIFIED JULIAN                    </th></tr>
+<tr>
+   <td><a href="modified_julian_to_date.3m_time.html"> modified_julian_to_date(modified_julian,DAT,IERR)      </a>
+   </br>or</br>
+   <a href="m2d.3m_time.html"> m2d(modified_julian)&nbsp;result(DAT)    </a>
+   </td>
+   <td>&nbsp;   </td>
+   <td> Convert Modified Julian Date to date array</td>
+</tr>
+<tr>
+   <td><a href="date_to_modified_julian.3m_time.html"> date_to_modified_julian(dat,MODIFIED_JULIAN,IERR)      </a>
+   </br>or</br>
+   <a href="d2m.3m_time.html"> d2m(dat)&nbsp;result(MODIFIED_JULIAN)    </a>
+   </td>
+   <td>%modified_julian() </td>
+   <td> Converts date array to Modified Julian Date </td>
+</tr>
+
+<tr><th colspan="3">BASEDAY AND SECONDS                    </th></tr>
+<tr>
+   <td><a href="bas_to_date.3m_time.html"> bas_to_date(bas,DAT,IERR)      </a>
+   </br>or</br>
+   <a href="b2d.3m_time.html"> b2d(bas)&nbsp;result(DAT)    </a>
+   </td>
+   <td>&nbsp;   </td>
+   <td> Convert Baseday And Seconds (BAS) to date array</td>
+</tr>
+<tr>
+   <td><a href="date_to_bas.3m_time.html"> date_to_bas(dat,BAS,IERR)      </a>
+   </br>or</br>
+   <a href="d2m.3m_time.html"> d2m(dat)&nbsp;result(BAS)    </a>
+   </td>
+   <td>%nbsp; </td>
+   <td> Converts date array to Baseday And Seconds date</td>
+</tr>
+
 <tr><th colspan="3">WEEK OF YEAR              </th></tr>
 <tr>
    <td><a href="d2w.3m_time.html"> d2w(dat,ISO_YEAR,ISO_WEEK,ISO_WEEKDAY,ISO_NAME) </a></td>
@@ -181,7 +218,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 <tr><th colspan="3">ORDINAL DAY               </th></tr>
 <tr><td><a href="d2o.3m_time.html"> d2o(dat) result(ORDINAL)                  </a></td><td>%ordinal() </td><td> given date array return ordinal day of year, Jan 1st=1</td></tr>
-
 
 <tr>
    <td><a href="ordinal_to_date.3m_time.html"> ordinal_to_date(ordinal,year,DAT)  </a>
@@ -212,7 +248,6 @@ first day of given month name in specified year</td></tr>
 <tr><th colspan="3">LOCALE                    </th></tr>
 <tr><td><a href="locale.3m_time.html"> locale(name,month_names,weekday_names,month_names_abbr,weekday_names_abbr,IERR)  </a></td><td>&nbsp; </td><td> basic ASCII locale definition</td></tr>
 
-
 <tr><th colspan="3">ASTROLOGICAL                        </th></tr>
 <tr><td><a href="easter.3m_time.html"> easter(year,dat) </a></td><td>&nbsp; </td><td> calculate month and day Easter falls on for given year </td></tr>
 <!--
@@ -224,7 +259,8 @@ first day of given month name in specified year</td></tr>
 
 <tr><th colspan="3">DURATION                  </th></tr>
 <tr><td><a href="sec2days.3m_time.html">  sec2days(seconds)  result(DHMS)     </a></td><td>&nbsp;       </td><td> converts seconds to string D-HH:MM:SS</td></tr>
-<tr><td><a href="days2sec.3m_time.html"> days2sec(string)   result(SECONDS)   </a></td><td>&nbsp;       </td><td> converts string D-HH:MM:SS to seconds</td></tr>
+<tr><td><a href="days2sec.3m_time.html"> days2sec(string)   result(SECONDS)   </a></td><td>&nbsp;       </td><td> converts string
+D-HH:MM:SS or NNdNNhNNmNNs to seconds</td></tr>
 
 <tr><th colspan="3">READING DATES             </th></tr>
 <tr><td><a href="guessdate.3m_time.html">    guessdate(anot,DAT)                </a></td><td>&nbsp;       </td><td> Converts a date string to a date array, in various formats</td></tr>
@@ -238,18 +274,19 @@ first day of given month name in specified year</td></tr>
 <dd>
 
 <p>
-   You can easily use Julian Dates and Unix Epoch Times to add
-   and subtract times from dates or to calculate the interval
-   between dates. But JEDs and UETs and even the Gregorian Calendar
-   arrays in the DAT arrays are not the way we typically describe a
-   date on the Civilian Calendar. So the fmtdate(3f) routine lets us
-   print a DAT array in a variety of familiar styles.
+   You can easily use Julian Dates and Unix Epoch Times to add and
+   subtract times from dates or to calculate the interval between
+   dates. But JEDs and UETs and even the Gregorian Calendar arrays in
+   the DAT arrays are not the way we typically describe a date on the
+   Civilian Calendar. So the fmtdate(3f) routine lets us print a DAT
+   array in a variety of familiar styles.
 </p>
 
 <p>
-   The fmtdate(3f) and now(3f) procedures let you display a Gregorian date using
-   either keywords for standard formats or using macros in a user-specified
-   formatting string. A formatting string may contain the following macros:
+   The fmtdate(3f) and now(3f) procedures let you display a Gregorian
+   date using either keywords for standard formats or using macros in
+   a user-specified formatting string. A formatting string may contain
+   the following macros:
 </p>
 <pre>
 
@@ -272,6 +309,10 @@ Description                                        Example
  Conversions:
       %E -- Unix Epoch time                           1469669062.5129952
       %e -- integer value of Unix Epoch time          1469669063
+      %F -- Modified Julian Date                      60400.559
+      %f -- integer value of Modified Julian Date     60400
+      %G -- Baseday and Seconds                       (60400,4000.55944412)
+      %g -- Baseday seconds                           4000.55944412
       %J -- Julian date                               2457597.559
       %j -- integer value of Julian Date(Julian Day)  2457597
       %O -- Ordinal day (day of year)                 209
@@ -279,7 +320,7 @@ Description                                        Example
       %U -- day of week, 1..7 Sunday=1                4
       %u -- day of week, 1..7 Monday=1                3
       %i -- ISO week of year 1..53                    30
-      %I -- iso-8601 week-numbering date(yyyy-Www-d)  2016-W30-3
+      %I -- iso-8601 week with weekday: (yyyy-Www-d)  2016-W30-3
   Names:
       %l -- abbreviated month name                    Jul
       %L -- full month name                           July
@@ -287,6 +328,7 @@ Description                                        Example
       %W -- weekday name                              Wednesday
       %p -- phase of moon                             New
       %P -- percent of way from new to full moon      -1%
+      %X -- day of month in English                   twenty-first
   Literals:
       %% -- a literal %                               %
       %t -- tab character
@@ -358,43 +400,45 @@ otherwise the following words are replaced with the most common
 macros. For duplicate names the lowercase one is a numeric value string
 and all uppercase is an alphanumeric string:
 
-  String         Macro  Example
-  year           %Y     2016
+  String                      Macro  Example
+  year                        %Y     2016
 
-  month          %M     07
-  MONTH          %L     July
-  Month|Mth      %l     Jul
+  month                       %M     07
+  longmonth|MONTH             %L     July
+  shortmonth|Month|Mth        %l     Jul
 
-  day            %D     27
-  DAY            %d     27th
+  day                         %D     27
+  shortday|DAY                %d     27th
+  longday                     %X     twentyseventh
 
-  hour           %h     21
+  hour                        %h     21
 
-  HOUR           %H     11
-  GOOD           %N     AM
+  goodhour|HOUR               %H     11
+  GOOD                        %N     AM
 
-  minute         %m     24
+  minute                      %m     24
 
-  second         %s     22
+  second                      %s     22
 
-  weekday        %u     3
-  WEEKDAY        %W     Thursday
-  Weekday|wkday  %w     Thu
+  weekday                     %u     3
+  longweekday|WEEKDAY         %W     Thursday
+  shortweekday|Weekday|wkday  %w     Thu
 
-  timezone       %T     -0400   (+-HHMM)
-  TIMEZONE       %z     -04:00  (+-HH:MM)
-  Timezone       %Z     -240m   (+-MMMMm)
+  timezone                    %T     -0400   (+-HHMM)
+  TIMEZONE                    %z     -04:00  (+-HH:MM)
+  Timezone                    %Z     -240m   (+-MMMMm)
 
-  epoch          %e     1469669063
+  epoch                       %e     1469669063
 
-  julian         %j     2457597
+  julian                      %j     2457597
+  MJD                         %f     57597
 
-  ordinal        %O     209
+  ordinal                     %O     209
 
-  age            %A     100-20:30:40
-  AGE            %a     20900.3030
+  age                         %A     100-20:30:40
+  AGE                         %a     20900.3030
 
-  usage|help|?   %?     call fmtdate_usage()
+  usage|help|?                %?     call fmtdate_usage()
 
 If none of these keywords are found then every letter that
 is a macro is assumed to have an implied percent in front
@@ -536,6 +580,62 @@ of it. For example:
 </p>
 
 <p>
+   <b>Modified Julian Date (MJD)</b> measures days (and fractional days)
+   since the start of 17 Nov 1858 CE in Universal Time (UTC). Julian Date
+   (JD) measures days (and fractional days) since noon on 1 January, 4713
+   BCE in Universal Time (UTC). As an expression
+</p>
+
+<pre>
+     Modified Julian Date (MJD) = Julian Date (JD) - 2400000.5
+</pre>
+
+<p>
+   <b> Baseday And Seconds</b> is a date composed of two values. The
+   first is an integer representing a Modified Julian Day. The second
+   is a double-precision value representing an offset from the start of
+   this base day <b>in seconds </b>.
+</p>
+
+<pre>
+type BAStime
+   integer           :: base_day ! whole days since the MJD Epoch date
+   real(kind=real64) :: secs     ! offset in seconds from start of BASE_DAY
+end type BAStime
+</pre>
+
+<p>
+   This facilitates storing a date at a higher precision that the other
+   formats used by the library (although sometimes that lower precision
+   is limited primarily by the definition -- for example the milliseconds
+   in a DAT could be smaller units).
+</p>
+
+<p>
+   This format uses seconds for the units of the fractional day
+   component instead of fractions of a day as is used by JD and MJD, as
+   seconds are often the unit of measure in many computations.
+</p>
+
+<p>
+   BAS days start at midnight (00:00:00) so truncating the fractional
+   component always gives the same Civil Calendar day whatever the time
+   of day (unlike JD).
+</p>
+
+<p>
+   The seconds offset may take any double-precision value, so that any
+   date/time may be expressed in terms of an offset from the same BAS
+   day. Given that, floating point precision is finite so it is intended
+   that the offset value be relatively small or the spacing between
+   representable numbers becomes so large that precise small intervals
+   cannot be represented.
+
+   The seconds field thus may exceed a single day but should generally
+   have a small exponent to retain precision, and may also be negative.
+</p>
+
+<p>
    <b>Coordinated Universal Time</b>  (French:  Temps universel coordonn'e),
    abbreviated as <b>UTC</b>, is the primary time standard by which the world
    regulates clocks and time. It is within about 1 second of mean solar time
@@ -605,7 +705,7 @@ of it. For example:
    <li> <a href="now.1.html">      now(1)      </a> prints a date in many formats                         </li>
    <li> <a href="ttee.1.html">     ttee(1)     </a> a filter which timestamps stdout from another command </li>
    <li> <a href="month.1.html">    month(1)    </a> which lets you print simple calendars                 </li>
-   <li> <a href="days2sec.1.html"> days2sec(1) </a> converts dd-hh:mm:ss to seconds                       </li>
+   <li> <a href="days2sec.1.html"> days2sec(1) </a> converts dd-hh:mm:ss or NNdNNhNNmNNs to seconds       </li>
    <li> <a href="sec2days.1.html"> sec2days(1) </a> converts seconds to dd-hh:mm:ss                       </li>
    <li> <a href="paws.1.html">     paws(1)     </a> pause until specified time or for specified interval  </li>
 </ul>

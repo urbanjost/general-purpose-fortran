@@ -10,7 +10,7 @@
 !     so colors need remapped each time a new driver is called
 !===============================================================================
 !     BUG:
-!     at least one verison of X11 driver runs out of color entries
+!     at least one version of X11 driver runs out of color entries
 !===============================================================================
 !     DRIVER DIFFERENCES
 !     if you do not have enough colors in table to display all of a page,
@@ -308,7 +308,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0 20181013>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2024-12-14 21:56:10 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:29:23 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

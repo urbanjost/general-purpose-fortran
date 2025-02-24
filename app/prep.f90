@@ -3062,7 +3062,7 @@ logical                      :: isscratch
       endif
 
       if(G_inparcel)then                                   ! do not expand lines stored in a parcel
-      elseif(size(macro%key) /= 0)then                     ! expand variables if any variable is defined, else skip for efficieny
+      elseif(size(macro%key) /= 0)then                     ! expand variables if any variable is defined, else skip for efficiency
          call expand_variables(G_source)                   ! expand ${NAME} strings
       endif
 

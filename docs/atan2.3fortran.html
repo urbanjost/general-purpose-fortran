@@ -64,7 +64,7 @@ function
 </BLOCKQUOTE>
 <BLOCKQUOTE>
 </BLOCKQUOTE>
-<A name=10>
+<A name=7>
 
      <H3>SYNOPSIS</H3>
 
@@ -76,7 +76,7 @@ result = atan2(y, x)
 <PRE>
          elemental real(kind=KIND) function atan2(y, x)
 <P>
-          real,kind=KIND) :: atan2
+          real,kind=KIND)            :: atan2
           real,kind=KIND),intent(in) :: y, x
 <P>
 </PRE>
@@ -114,8 +114,14 @@ angle).
 <P>
 If Y has the value zero, X shall not have the value zero.
 <P>
-The resulting phase lies in the range <B>-PI</B> &lt;= ATAN2 (Y,X) &lt;= PI and is
-equal to a processor-dependent approximation to a value of arctan(Y/X).
+The resulting phase lies in the range
+<P>
+<PRE>
+      -PI &lt;= ATAN2 (Y,X) &lt;= PI
+<P>
+</PRE>
+and is equal to a processor-dependent approximation to a value of
+arctan(Y/X).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -174,11 +180,11 @@ Range of returned values by quadrant:
     &gt;                     |
     &gt;                   -PI/2
     &gt;
-         NOTES:
+       NOTES:
 <P>
-         If the processor distinguishes -0 and +0 then the sign of the
-         returned value is that of Y when Y is zero, else when Y is zero
-         the returned value is always positive.
+       If the processor distinguishes -0 and +0 then the sign of the
+       returned value is that of Y when Y is zero, else when Y is zero
+       the returned value is always positive.
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -193,7 +199,7 @@ Sample program:
 <P>
 <PRE>
     program demo_atan2
-    real :: z
+    real    :: z
     complex :: c
      !
      ! basic usage
@@ -201,10 +207,10 @@ Sample program:
       z=atan2(1.5574077, 1.0)
       write(*,*) &#146;radians=&#146;,z,&#146;degrees=&#146;,r2d(z)
      !
-     ! elemental arrays
+     ! elemental : arrays
       write(*,*)&#146;elemental&#146;,atan2( [10.0, 20.0], [30.0,40.0] )
      !
-     ! elemental arrays and scalars
+     ! elemental : arrays and scalars
       write(*,*)&#146;elemental&#146;,atan2( [10.0, 20.0], 50.0 )
      !
      ! break complex values into real and imaginary components
@@ -219,23 +225,16 @@ Sample program:
       integer             :: i
      !
       vals=[ &
-        ( 1.0, 0.0 ), & ! 0
-        ( 1.0, 1.0 ), & ! 45
-        ( 0.0, 1.0 ), & ! 90
-        (-1.0, 1.0 ), & ! 135
-        (-1.0, 0.0 ), & ! 180
-        (-1.0,-1.0 ), & ! 225
-        ( 0.0,-1.0 )]   ! 270
+        !     0            45            90           135
+        ( 1.0, 0.0 ), ( 1.0, 1.0 ), ( 0.0, 1.0 ), (-1.0, 1.0 ), &
+        !    180           225          270
+        (-1.0, 0.0 ), (-1.0,-1.0 ), ( 0.0,-1.0 ) ]  
       do i=1,size(vals)
-         call cartesian_to_polar(vals(i)%re, vals(i)%im, radius,ang)
+         call cartesian_to_polar(vals(i), radius,ang)
          write(*,101)vals(i),ang,r2d(ang),radius
       enddo
-      101 format(             &
-      & &#146;X= &#146;,f5.2,           &
-      & &#146; Y= &#146;,f5.2,          &
-      & &#146; ANGLE= &#146;,g0,        &
-      & T38,&#146;DEGREES= &#146;,g0.4, &
-      & T54,&#146;DISTANCE=&#146;,g0)
+      101 format( &#146;X= &#146;,f5.2,&#146; Y= &#146;,f5.2,&#146; ANGLE= &#146;,g0, &
+      & T38,&#146;DEGREES= &#146;,g0.4, T54,&#146;DISTANCE=&#146;,g0)
      endblock COMPLEX_VALS
     !
     contains
@@ -247,80 +246,52 @@ Sample program:
        r2d=radians / DEGREE ! do the conversion
     end function r2d
     !
-    subroutine cartesian_to_polar(x,y,radius,inclination)
+    subroutine cartesian_to_polar(xy,radius,inclination)
     ! return angle in radians in range 0 to 2*PI
     implicit none
-    real,intent(in)  :: x,y
+    complex,intent(in)  :: xy
     real,intent(out) :: radius,inclination
-       radius=sqrt(x**2+y**2)
-       if(radius.eq.0)then
-          inclination=0.0
-       else
-          inclination=atan2(y,x)
-          if(inclination &lt; 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)
-       endif
+       radius=abs( xy )
+       ! arbitrarily set angle to zero when radius is zero
+       inclination=merge(0.0,atan2(x=xy%re, y=xy%im),radius==0.0)
+       ! bring into range 0 &lt;= inclination &lt; 2*PI
+       if(inclination &lt; 0.0)inclination=inclination+2*atan2(0.0d0,-1.0d0)
     end subroutine cartesian_to_polar
     !
     end program demo_atan2
 <P>
-</PRE>
-Results:
+    Results:
 <P>
-<PRE>
-     &gt;  radians=   1.000000     degrees=   57.29578
-     &gt;  elemental  0.3217506      0.4636476
-     &gt;  elemental  0.1973956      0.3805064
-     &gt;  complex (0.0000000E+00,1.000000)   1.570796
-     &gt; X=  1.00 Y=  0.00 ANGLE= .000000     DEGREES= .000   DISTANCE=1.000000
-     &gt; X=  1.00 Y=  1.00 ANGLE= .7853982    DEGREES= 45.00  DISTANCE=1.414214
-     &gt; X=  0.00 Y=  1.00 ANGLE= 1.570796    DEGREES= 90.00  DISTANCE=1.000000
-     &gt; X= -1.00 Y=  1.00 ANGLE= 2.356194    DEGREES= 135.0  DISTANCE=1.414214
-     &gt; X= -1.00 Y=  0.00 ANGLE= 3.141593    DEGREES= 180.0  DISTANCE=1.000000
-     &gt; X= -1.00 Y= -1.00 ANGLE= 3.926991    DEGREES= 225.0  DISTANCE=1.414214
-     &gt; X=  0.00 Y= -1.00 ANGLE= 4.712389    DEGREES= 270.0  DISTANCE=1.000000
+     &gt;  radians=   1.00000000     degrees=   57.2957802   
+     &gt;  elemental  0.321750551      0.463647604   
+     &gt;  elemental  0.197395563      0.380506366   
+     &gt;  complex             (0.00000000,1.00000000)   1.57079637   
+     &gt; X=  1.00 Y=  0.00 ANGLE= 0.00000000  DEGREES= 0.000  DISTANCE=1.00000000
+     &gt; X=  1.00 Y=  1.00 ANGLE= 0.785398185 DEGREES= 45.00  DISTANCE=1.41421354
+     &gt; X=  0.00 Y=  1.00 ANGLE= 1.57079637  DEGREES= 90.00  DISTANCE=1.00000000
+     &gt; X= -1.00 Y=  1.00 ANGLE= 2.35619450  DEGREES= 135.0  DISTANCE=1.41421354
+     &gt; X= -1.00 Y=  0.00 ANGLE= 3.14159274  DEGREES= 180.0  DISTANCE=1.00000000
+     &gt; X= -1.00 Y= -1.00 ANGLE= 3.92699075  DEGREES= 225.0  DISTANCE=1.41421354
+     &gt; X=  0.00 Y= -1.00 ANGLE= 4.71238899  DEGREES= 270.0  DISTANCE=1.00000000
 <P>
+    # STANDARD
+<P>
+    FORTRAN 77
+<P>
+    # SEE ALSO
+<P>
+    - [**atan**(3)](#atan)
+    - [**tan**(3)](#tan)
+    - [**tan2**(3)](#tan2)
+<P>
+    # RESOURCES
+<P>
+    - [arctan:wikipedia](https://en.wikipedia.org/wiki/Inverse_trigonometric_functions)
+     _Fortran intrinsic descriptions (license: MIT) \@urbanjost_
 </PRE>
 </BLOCKQUOTE>
-<A name=7>
-
-     <H3>STANDARD</H3>
-
-</A>
-<BLOCKQUOTE>
-<P>
-FORTRAN 77
-</BLOCKQUOTE>
-<A name=8>
-
-     <H3>SEE ALSO</H3>
-
-</A>
-<BLOCKQUOTE>
-<P>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-ATAN(3)
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=9>
-
-     <H3>RESOURCES</H3>
-
-</A>
-<BLOCKQUOTE>
-<P>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-arctan:wikipedia Fortran intrinsic descriptions (license: MIT)
-@urbanjost
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan2 (3)</TD> <TD align=right width=33%><I>December 14, 2024</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f3bb5289-f22d-4fe7-9d24-d74d79e06b9f using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan2 (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ed3218f1-a4f5-4d59-814b-9b1b2bbb4c9e using man macros.</FONT>
 <br><br><center><img src="images/atan2.3fortran.gif"></center>
 </div>
 </div>

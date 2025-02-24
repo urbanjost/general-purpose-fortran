@@ -57,6 +57,53 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    degrees(1f) - [CONVERT] Convert between Fahrenheit and Celsius temperature values
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    degrees [value_unit ...] [ -C values] [ -F values] [ --help] [ --version]
+!!
+!!##DESCRIPTION
+!!
+!!    value_unit  numeric values followed by either a C or F to specify a unit.
+!!    -C values   Display the given Celsius values as both Celsius and
+!!                Fahrenheit values
+!!    -F values   Display the given Fahrenheit values as both Celsius and
+!!                Fahrenheit values. If no values are given a small table of
+!!                common temperatures is displayed.
+!!    --help      display this help and exit
+!!    --version   output version information and exit
+!!
+!!    At the physically impossible-to-reach temperature of zero Kelvin,
+!!    or minus 459.67 degrees Fahrenheit (minus 273.15 degrees Celsius),
+!!    atoms would stop moving. As such, nothing can be colder than absolute
+!!    zero on the Kelvin scale.
+!!
+!!##EXAMPLE
+!!
+!!
+!!  Sample program runs:
+!!
+!!    %degrees -C -40 0 37 100
+!!     Celsius      Fahrenheit
+!!      -40.00C      -40.00F
+!!        0.00C       32.00F
+!!       37.00C       98.60F
+!!      100.00C      212.00F
+!!
+!!    %degrees -F -459.67 32 98.60 212
+!!     Fahrenheit   Celsius
+!!     -459.67F     -273.15C
+!!       32.00F        0.00C
+!!       98.60F       37.00C
+!!      212.00F      100.00C
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -75,7 +122,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2024-12-14 21:41:03 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:25:38 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

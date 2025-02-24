@@ -1,23 +1,26 @@
-! NAME
-!    cylinder(1f) - [GEOMETRY] calculate the surface area of a cylinder
-!    (LICENSE:PD)
-! 
-! SYNOPSIS
-!    cylinder
-! 
-! DESCRIPTION
-! 
-!    Simple Fortran example program prompts for height and radius and
-!    calculates the surface area of a cylinder in a loop till a ctrl-C
-!    terminates the program.
-! 
-! EXAMPLES
-!    Sample usage
-! 
-!      cylinder
-! 
-! LICENSE
-!    Public Domain
+!>
+!!##NAME
+!!    cylinder(1f) - [GEOMETRY] calculate the surface area of a cylinder
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    cylinder
+!!
+!!##DESCRIPTION
+!!
+!!    Simple Fortran example program prompts for height and radius and
+!!    calculates the surface area of a cylinder in a loop till a ctrl-C
+!!    terminates the program.
+!!
+!!##EXAMPLES
+!!
+!!    Sample usage
+!!
+!!      cylinder
+!!
+!!##LICENSE
+!!    Public Domain
 program cylinder
 
 ! Calculate the surface area of a cylinder.

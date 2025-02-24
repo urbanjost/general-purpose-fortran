@@ -1,0 +1,245 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>User Commands  &nbsp;-&nbsp;</I><NOBR>settheory (1)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+settheory(1f) - [M_sets:SETTHEORY] combine two sets of values
+and display union, intersection, values found in both sets,
+values found only in one set, &#46;&#46;&#46;
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Results</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+settheory <B>-a</B> SET_ONE <B>-b</B> SET_TWO [-<B>-type</B> DATATYPE]
+[-<B>-setorder</B> ORDERTYPE] [-<B>-verbose</B>]
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+settheory(1f) finds the union, intersection, and set differences of
+two small sets of numbers or strings and displays them
+<P>
+If both sets are empty a simple example is run.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B></B><B>--seta</B>,<B>-a</B> SET_ONE </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+vector of numbers or strings comprising
+set A. May be delimited by commas, spaces,
+or colons. If spaces are used the set needs
+quoted.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--setb</B>,<B>-b</B> SET_TWO </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+vector of numbers or strings comprising
+set B. May be delimited by commas, spaces,
+or colons. If spaces are used the set needs
+quoted.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--type</B>,<B>-t</B> DATATYPE </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+May be "integer", "character", "real" or
+"double". Defaults to "character".
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--setorder</B>,<B>-o</B> ORDERTYPE </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+"sorted" or "stable". If "stable" the values
+remain in the order input.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--verbose</B>,<B>-V</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+add additional descriptive text
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--usage</B>,<B>-u</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+show table of options and their current values
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--version</B>,<B>-v</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Print version information on standard output
+then exit successfully.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B></B><B>--help</B>,<B>-h</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Print usage information on standard output
+then exit successfully.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RESULTS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Outputs the results from the following calls to the M_set(3f) module
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Outputs the results from the following calls to the M_set(3f) module
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+unique(A,setOrder);unique(B,setOrder) - Unique values in each array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+union(A,B,setOrder) - Set union of two arrays
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+intersect(A,B,setOrder) - Set intersection of two arrays
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+setdiff(A,B,setOrder) - Set difference of two arrays
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ismember(A,B) - Array elements of set B that are members
+of set A array
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+setxor(A,B,setOrder) - Set exclusive OR of two arrays
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample commands
+<P>
+<PRE>
+    settheory -a one,two,three -b four,two,five,three
+    A            :  one   two   three
+    B            :  four  two   five  three
+    UNIQUE A     :  one   three two
+    UNIQUE B     :  five  four  three two
+    UNION        :  five  four  one   three two
+    INTERSECT    :  three two
+    SETDIFF      :  one
+    ISMEMBER     :  0 1 1
+    SETXOR       :  five  four  one
+<P>
+    settheory -a 7,23,14,15,9,12,8,24,35 -b 2,5,7,8,14,16,25,35,27 \
+              --type integer
+    A            :  7 23 14 15 9 12 8 24 35
+    B            :  2 5 7 8 14 16 25 35 27
+    UNIQUE A     :  7 8 9 12 14 15 23 24 35
+    UNIQUE B     :  2 5 7 8 14 16 25 27 35
+    UNION        :  2 5 7 8 9 12 14 15 16 23 24 25 27 35
+    INTERSECT    :  7 8 14 35
+    SETDIFF      :  9 12 15 23 24
+    ISMEMBER     :  1 0 1 0 0 0 1 0 1
+    SETXOR       :  2 5 9 12 15 16 23 24 25 27
+    # or
+    settheory --type integer \
+    -a &#146;7 23 14 15 9 12 8 24 35&#146; \
+    -b &#146;2 5 7 8 14 16 25 35 27&#146;
+    # or
+    settheory --type integer \
+    -a 7:23:14:15:9:12:8:24:35 \
+    -b 2:5:7:8:14:16:25:35:27
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+diff(1),uniq(1),sort(1),comm(1),join(1)
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>settheory (1)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from bf99fd8b-36f1-4187-b73d-bd4434230da8 using man macros.</FONT>
+<br><br><center><img src="images/settheory.1.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

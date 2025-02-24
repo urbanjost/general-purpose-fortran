@@ -46,6 +46,35 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!        dtu(1f) - [FILE FILTER] convert files between Unix and DOS line terminator conventions
+!!        (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!        dtu [[ -make dos|unix] [ -z] [ -n] -i input -o output ]|--help|--version
+!!
+!!##DESCRIPTION
+!!        Convert DOS end-of-line (CR-LF or <carriage-return><line-feed>)
+!!        to a Unix end-of-line (LF or <line-feed>, often called "newline");
+!!        or vice-versa.
+!!
+!!##OPTIONS
+!!        -make unix      (default) convert DOS file to Unix ( CR-LF to newline )
+!!        -make dos       convert Unix file to DOS ( newline to CR-LF )
+!!        -z              guarantee last character of DOS file is ^Z,
+!!                        guarantee last character of Unix file is not ^Z
+!!                        otherwise, ^Z in input is copied or not as-is
+!!        -n              noisy mode reports character and line counts on stderr
+!!        -i input_file   required
+!!        -o output_file  required
+!!        --help          display this help and exit
+!!        --version       output version information and exit
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -65,7 +94,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain>',&
-'@(#)COMPILED:       2024-12-14 21:40:41 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:25:23 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

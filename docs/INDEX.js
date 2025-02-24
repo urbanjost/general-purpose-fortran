@@ -20,6 +20,7 @@ append("./BOOK_M_messages.html");
 append("./BOOK_M_pixel.html");
 append("./BOOK_M_process.html");
 append("./BOOK_M_regex.html");
+append("./BOOK_M_sets.html");
 append("./BOOK_M_sort.html");
 append("./BOOK_M_sqlite.html");
 append("./BOOK_M_steam67.html");

@@ -114,6 +114,46 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    splitname(1f) - [FUNIX] strip pathname into components {dir,name,basename,extension}
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    splitname [NAME1 NAME2 ... |[ -d -b -l -e]|-help|-version]
+!!
+!!##DESCRIPTION
+!!    Output each pathname broken into components directory, leaf name, basename, extension
+!!
+!!    Output is always in the form and order
+!!
+!!       "dir" "name" "basename" "ext"
+!!
+!!##OPTIONS
+!!    NAMES      pathnames to split
+!!    -d         print director name
+!!    -l         print leaf name
+!!    -b         print base name sans any suffix
+!!    -e         print suffix extension
+!!    --stdin    flag to read pathnames from stdin instead of command line
+!!    --help     display this help and exit
+!!    --version  output version information and exit
+!!
+!!##EXAMPLES
+!!
+!!    Sample program executions:
+!!
+!!      splitname /usr/bin/          -> "/usr/bin" "" "" ""
+!!      splitname /usr/bin           -> "/usr" "bin" "" ""
+!!      splitname stdio.h            -> "" "studio.h" "studio" ".h"
+!!
+!!##SEE ALSO
+!!    dirname(1), basename(1), readlink(1), realpath(1)
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -131,7 +171,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DATE:           2017-04-18>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2024-12-14 21:36:37 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:22:50 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

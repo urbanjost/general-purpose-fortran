@@ -108,6 +108,45 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
+!>
+!!##NAME
+!!    month(1f) - [TIME] display a calendar
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    month [[ -year] NNNN] [ -month NN|month_name]
+!!
+!!##DESCRIPTION
+!!    month(1) displays a simple calendar. If no arguments are specified,
+!!    the current year is displayed.
+!!
+!!##OPTIONS
+!!    -month NN   Display single month output. The month is numeric (1-12)
+!!                or a month name or blank. If blank the current month is assumed.
+!!
+!!    -year NNNN  Select the year to display. A year starts on Jan 1st.
+!!
+!!    -help       Display help text and exit.
+!!    -version    Display version information and exit.
+!!
+!!##EXAMPLES
+!!
+!!       month -month 12
+!!
+!!        >    December 2015
+!!        >Mo Tu We Th Fr Sa Su
+!!        >    1  2  3  4  5  6
+!!        > 7  8  9 10 11 12 13
+!!        >14 15 16 17 18 19 20
+!!        >21 22 23 24 25 26 27
+!!        >28 29 30 31
+!!
+!!       month -month April # month names may be given instead of numbers
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -127,7 +166,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2024-12-14 21:39:11 UTC-300>',&
+'@(#)COMPILED:       2025-02-23 19:24:23 UTC-300>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

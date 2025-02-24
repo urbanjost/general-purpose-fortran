@@ -3,9 +3,9 @@ use M_CLI2,                       only : set_args, lget, sgets, iget, unnamed
 use M_uuid,                       only : generate_uuid
 use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
-integer :: version
-integer :: repeat
-integer :: i,j
+integer                       :: version
+integer                       :: repeat
+integer                       :: i,j
 character(len=10),allocatable :: methods(:)
 character(len=:),allocatable  :: prefix
 character(len=:),allocatable  :: help_text(:)
@@ -58,23 +58,22 @@ help_text=[ CHARACTER(LEN=128) :: &
 '    unique [[ --method] NAME][ -urn][ -repeat N]]|[ --help|--version]  ',&
 '                                                                       ',&
 'DESCRIPTION                                                            ',&
-'   unique(3f) generates UUID strings according to the RFC 4122         ',&
-'   standard.                                                           ',&
-'                                                                       ',&
-'   A universally unique identifier (UUID) is a 128-bit number used to  ',&
-'   identify information in computer systems. When generated according  ',&
-'   to standard methods UUIDs are for practical purposes unique.        ',&
-'                                                                       ',&
-'   Standard methods 0,1, and 4 are supported as described in RFC 4122. ',&
-'                                                                       ',&
-'   UUID strings are particularly useful as keys for relational database',&
-'   entries, and for building unique temporary file names (especially in',&
-'   cross-mounted filesystems that more than one OS is utilizing).      ',&
-'                                                                       ',&
-'OPTIONS                                                                ',&
-'    --method NAME  Select the UUID version type. Supported methods are ',&
-'                   nil|0, random|4, time|1.                            ',&
-'                                                                       ',&
+'   unique(3f) generates UUID strings according to the RFC 4122 standard.',&
+'                                                                        ',&
+'   A universally unique identifier (UUID) is a 128-bit number used to   ',&
+'   identify information in computer systems. When generated according   ',&
+'   to standard methods UUIDs are for practical purposes unique.         ',&
+'                                                                        ',&
+'   Standard methods 0, 1 and 4 are supported as described in RFC 4122.  ',&
+'                                                                        ',&
+'   UUID strings are particularly useful as keys for relational database ',&
+'   entries, and for building unique temporary file names (especially in ',&
+'   cross-mounted filesystems that more than one OS is utilizing).       ',&
+'                                                                        ',&
+'OPTIONS                                                                 ',&
+'    --method NAME  Select the UUID version type. Supported methods are  ',&
+'                   nil|0, random|4, time|1.                             ',&
+'                                                                        ',&
 '                   0. Nil UUID (ie. ''''00000000-0000-0000-0000-000000000000'''')',&
 '                   1. time-based UUID                                            ',&
 '                   2. Not implemented                                            ',&
