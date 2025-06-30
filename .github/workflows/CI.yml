@@ -1,5 +1,4 @@
-# from https://github.com/gha3mi/setup-fortran-conda
-name: multi-platform fpm test using conda setup
+name: Setup Fortran Conda CI/CD
 
 on:
   push:
@@ -7,138 +6,161 @@ on:
   pull_request:
     branches: [main, master]
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
-  test:
+  test_fpm:
+    name: ${{ matrix.os }}_${{ matrix.compiler }}_fpm
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        compiler: [gfortran, ifx, lfortran, flang-new]
+        compiler: [gfortran, ifx, lfortran, flang-new, nvfortran]
         include:
-        - os: ubuntu-latest
-          extra-packages: ""
-        - os: windows-latest
-          extra-packages: ""
-        - os: macos-latest
-          extra-packages: ""
+          - os: ubuntu-latest
+            extra-packages: ""
+          - os: windows-latest
+            extra-packages: ""
+          - os: macos-latest
+            extra-packages: ""
         exclude:
           - os: macos-latest
             compiler: flang-new
           - os: macos-latest
             compiler: ifx
+          - os: macos-latest
+            compiler: nvfortran
           - os: windows-latest
-            compiler: lfortran
-          - os: windows-latest
-            compiler: flang-new
-    env:
-      TZ: UTC+04:00
+            compiler: nvfortran
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Conda
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-update-conda: true
-          activate-environment: fortran
-          channels: conda-forge, defaults
-
       - name: Setup Fortran
-        uses: gha3mi/setup-fortran-conda@dev
+        uses: gha3mi/setup-fortran-conda@latest
         with:
           compiler: ${{ matrix.compiler }}
           platform: ${{ matrix.os }}
           extra-packages: ${{ matrix.extra-packages }}
 
-# ENVIRONMENT VARIABLES FOR COMPILERS
-#  FPM_FC            sets the path to the Fortran compiler used for the build, ==> --compiler
-#  FPM_FFLAGS        sets the arguments for the Fortran compiler               ==> --flag
-#  FPM_CC            sets the path to the C compiler used for the build        ==> --c-compiler
-#  FPM_CFLAGS        sets the arguments for the C compiler                     ==> --c-flag
-#  FPM_CXX           sets the path to the C++ compiler used for the build,     ==> --cxx-compiler
-#  FPM_CXXFLAGS      sets the arguments for the C++ compiler                   ==> --cxx-flag
-#  FPM_AR            sets the path to the archiver used for the build,         ==> --archiver
-#  FPM_LDFLAGS       sets additional link arguments for creating executables   ==> --link-flag
-#
-      - name: Set environment for lfortran
-        if: matrix.compiler == 'lfortran'
-        run: |
-          echo "FPM_FFLAGS='--no-style-warnings' --cpp" >> $GITHUB_ENV
-
-      - name: Set environment for gfortran and windows
-        if: matrix.compiler == 'gfortran' && matrix.os == 'windows-latest'
-        run: |
-          echo "end" >_empty.f90
-          gfortran -cpp -dM -E _empty.f90
-          gfortran --version
-          echo "FPM_FFLAGS=-D_WIN32" >> $env:GITHUB_ENV
-
-      - name: Set environment for gfortran and not windows
-        if: matrix.compiler == 'gfortran' && matrix.os != 'windows-latest'
-        run: |
-          echo "end" >_empty.f90
-          gfortran -cpp -dM -E _empty.f90
-          gfortran --version
-
-      - name: Set environment for flang-new
-        if: matrix.compiler == 'flang-new'
-        run: |
-          echo "end" >_empty.f90
-          flang-new -cpp -dM -E _empty.f90
-          flang-new --version
-          echo "FPM_FFLAGS='-cpp'" >> $GITHUB_ENV
-
-      - name: Set environment for ifx and windows
-        if: matrix.compiler == 'ifx' &&  matrix.os == 'windows-latest'
-        run: |
-          echo "end" >_empty.f90
-          ifx -E -fpp empty.f90 -dryrun 2>&1 | perl -lne 'print for /-D(\S+)/'
-          #ifx /logo
-          #ifx /help
-          echo "FPM_FFLAGS=/fpp" >> $env:GITHUB_ENV
-
-      - name: Set environment for ifx and not windows
-        if: matrix.compiler == 'ifx' &&  matrix.os != 'windows-latest'
-        run: |
-          echo "end" >_empty.f90
-          ifx -E -fpp empty.f90 -dryrun 2>&1 | perl -lne 'print for /-D(\S+)/'
-          ifx --version
-
-# OS
-      - name: Set environment for ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          ulimit -c unlimited -d unlimited -f unlimited -m unlimited -s unlimited -t unlimited -v unlimited -x unlimited
-
-# RUN TESTS
-
       - name: fpm test (debug)
-        if: matrix.os != 'windows-latest'
-        run: |
-          fpm test --compiler ${{ matrix.compiler }} --profile debug --verbose
+        run: fpm test --compiler ${{ matrix.compiler }} --profile debug --verbose
 
       - name: fpm test (release)
-        if: matrix.os != 'windows-latest'
-        run: |
-          fpm test --compiler ${{ matrix.compiler }} --profile release -- --brief
+        run: fpm test --compiler ${{ matrix.compiler }} --profile release --verbose
 
-      - name: fpm test (debug)
-        if: matrix.os == 'windows-latest' && matrix.compiler != 'gfortran'
-        run: |
-          fpm test --compiler ${{ matrix.compiler }} --profile debug --verbose
+  test_cmake:
+    name: ${{ matrix.os }}_${{ matrix.compiler }}_cmake
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        compiler: [gfortran, ifx, lfortran, flang-new, nvfortran]
+        include:
+          - os: ubuntu-latest
+            extra-packages: "cmake, ninja"
+          - os: windows-latest
+            extra-packages: "cmake, ninja"
+          - os: macos-latest
+            extra-packages: "cmake, ninja"
+        exclude:
+          - os: macos-latest
+            compiler: flang-new
+          - os: macos-latest
+            compiler: ifx
+          - os: macos-latest
+            compiler: nvfortran
+          - os: windows-latest
+            compiler: nvfortran
 
-      - name: fpm test (release)
-        if: matrix.os == 'windows-latest' && matrix.compiler != 'gfortran'
-        run: |
-          fpm test --compiler ${{ matrix.compiler }} --profile release -- --brief
+    steps:
+      - name: Setup Fortran
+        uses: gha3mi/setup-fortran-conda@latest
+        with:
+          compiler: ${{ matrix.compiler }}
+          platform: ${{ matrix.os }}
+          extra-packages: ${{ matrix.extra-packages }}
 
-      - name: fpm test (debug)
-        if: matrix.os == 'windows-latest' && matrix.compiler == 'gfortran'
+      - name: cmake test (debug)
         run: |
-          fpm test --compiler ${{ matrix.compiler }} --verbose --fflags="-D_WIN32 -Wall -Wextra -fmax-errors=1 -g -fcheck=bounds -fcheck=array-temps -fbacktrace -fcoarray=single -fimplicit-none -Werror=implicit-interface" 
+          cmake -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug -DCMAKE_Fortran_COMPILER=${{ matrix.compiler }} -G Ninja
+          cmake --build build/debug
+          ctest --test-dir build/debug --output-on-failure
 
-      - name: fpm test (release)
-        if: matrix.os == 'windows-latest' && matrix.compiler == 'gfortran'
+      - name: cmake test (release)
         run: |
-          fpm test --compiler ${{ matrix.compiler }} --verbose --fflags="-D_WIN32 -O3 -funroll-loops -Wimplicit-interface -fmax-errors=1 -fcoarray=single -fimplicit-none -Werror=implicit-interface -ffree-form" -- --brief
+          cmake -S . -B build/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_Fortran_COMPILER=${{ matrix.compiler }} -G Ninja
+          cmake --build build/release
+          ctest --test-dir build/release --output-on-failure
+
+  doc_ford:
+    name: Generate FORD Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup and Generate FORD Documentation
+        uses: gha3mi/setup-fortran-conda@latest
+        with:
+          compiler: gfortran
+          platform: ubuntu-latest
+          generate-doc-ford: true
+          ford-working-directory: .
+          ford-config: README.md
+          ford-output-directory: doc/ford
+          ford-branch: gh-pages-ford
+          ford-target-folder: doc/ford
+
+  doc_doxygen:
+    name: Generate Doxygen Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup and Generate Doxygen Documentation
+        uses: gha3mi/setup-fortran-conda@latest
+        with:
+          compiler: gfortran
+          platform: ubuntu-latest
+          generate-doc-doxygen: true
+          doxygen-working-directory: .
+          doxygen-config: Doxyfile
+          doxygen-output-directory: doc/doxygen
+          doxygen-branch: gh-pages-doxygen
+          doxygen-target-folder: doc/doxygen
+
+  status_fpm:
+    name: Generate STATUS.md
+    if: always()
+    needs: test_fpm
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate summary
+        uses: gha3mi/setup-fortran-conda@latest
+        with:
+          generate-status-fpm: true
+
+  status_cmake:
+    name: Generate STATUS.md
+    if: always()
+    needs: test_cmake
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate summary
+        uses: gha3mi/setup-fortran-conda@latest
+        with:
+          generate-status-cmake: true
+
+  update_readme_table:
+    name: Update README.md status table
+    if: |
+      always() &&
+      github.ref != 'refs/heads/update-readme-table'
+    needs: [status_fpm, status_cmake]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update README status
+        uses: gha3mi/setup-fortran-conda@latest
+        with:
+          update-readme-table: true
+          update-readme-token: ${{ secrets.GH_PAT }}   # Update with your GitHub personal access token
+          update-readme-user-name: "John S. Urban" # Update with your name
+          update-readme-user-email: "urbanjost@proton.me"  # Update with your email
