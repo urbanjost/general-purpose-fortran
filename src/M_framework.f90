@@ -155,12 +155,12 @@ implicit none(type,external)
 !! procedure or closely related procedures in the fpm test/ directory.
 !!
 !!  + make a subroutine for each component to be tested
-!!  + in each test procedure start it with a call to UNIT\_CHECK\_START(3f)
-!!  + end each test procedure it with a call to UNIT\_CHECK\_END(3f)
-!!  + make multiple calls to UNIT\_CHECK(3f) in-between to generate
+!!  + in each test procedure start it with a call to UNIT\_TEST\_START(3f)
+!!  + end each test procedure it with a call to UNIT\_TEST\_END(3f)
+!!  + make multiple calls to UNIT\_TEST(3f) in-between to generate
 !!    test results
 !!  + call each of those test routines from the main program
-!!  + end the main program with a call to UNIT\_CHECK\_STOP(3f)
+!!  + end the main program with a call to UNIT\_TEST\_STOP(3f)
 !!
 !! Optionally, before starting set preferred non-default modes.
 !!
@@ -176,7 +176,7 @@ implicit none(type,external)
 !!      fpm test_suite sqrt cos sin > test/test_suite.f90
 !!
 !! to create the skeleton program and then adding a few actual
-!! calls to unit\_test\_check(3f) results in
+!! calls to unit\_test\_test(3f) results in
 !!
 !!   Sample program:
 !!
@@ -200,18 +200,18 @@ implicit none(type,external)
 !!       !  the executable running tests, but they can be
 !!       !  altered. For example:
 !!       CHECK_PREFIX=prefix(                  &
-!!        check_MSG    =  'check_msg:   ', &
-!!        check        =  'check:       ', &
-!!        check_START  =  'check_start: ', &
-!!        check_STOP   =  'check_stop:  ', &
-!!        check_END    =  'check_end:   '  &
+!!        test_MSG    =  'test_msg:   ', &
+!!        test        =  'test:      ',  &
+!!        test_START  =  'test_start: ', &
+!!        test_STOP   =  'test_stop:  ', &
+!!        test_END    =  'test_end:   '  &
 !!       )
 !!       !---------------------------------------------------
 !!       !OPTIONAL:
 !!       ! the options available at run-time on the command
 !!       ! line can have their defaults selected. See the
 !!       ! man-page for the procedure for details.
-!!       call unit_check_mode(
+!!       call unit_test_mode(
 !!         ( keep_going=.true. ,
 !!         flags=[character(len=0) ::],
 !!         luns=[stdout],
@@ -260,12 +260,12 @@ implicit none(type,external)
 !! the procedure gets an "UNTESTED" entry to remind you to make
 !! some tests ..).
 !!
-!!    > check:       sqrt   SUCCESS : check table of values
-!!    > check:       sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
-!!    > check_end:   sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
-!!    > check_end:   cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
-!!    > check_end:   sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
-!!    > check_stop:  TALLY  PASSED  : GOOD:        2 BAD:        0 DURATION:00000000000000
+!!    > test:       sqrt   SUCCESS : check table of values
+!!    > test:       sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
+!!    > test_end:   sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
+!!    > test_end:   cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+!!    > test_end:   sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+!!    > test_stop:  TALLY  PASSED  : GOOD:        2 BAD:        0 DURATION:00000000000000
 !!    > STOP 0
 !!
 !! this is a model that works particularly well for basic numeric procedures.
@@ -314,7 +314,7 @@ implicit none(type,external)
 !! The example programs also contain a placeholder call to unit\_test\_mode(3f).
 !!
 !!    PROCEDURAL AND COMMAND LINE MODE OPTIONS
-!! The dummy skeleton routines all start with a call to 1\_check\_mode(3f).
+!! The dummy skeleton routines all start with a call to 1\_test\_mode(3f).
 !! Its documentation describes a few default modes you can change with the
 !! routine. Essentially the same options are available on the command line
 !! of the test program(s) as well.
@@ -436,18 +436,18 @@ implicit none(type,external)
 !! if you have sqlite3(1) installed.
 !!
 !!    .mode csv
-!!    .import bookkeeper.csv unit_check
-!!    .schema unit_check
+!!    .import bookkeeper.csv unit_test
+!!    .schema unit_test
 !!    ---
 !!    --- show all data to show it worked
-!!    SELECT * FROM unit_check;
+!!    SELECT * FROM unit_test;
 !!    ---
 !!    --- example lists unique names
-!!    SELECT name FROM unit_check GROUP BY name ORDER BY name ;
+!!    SELECT name FROM unit_test GROUP BY name ORDER BY name ;
 !!    ---
 !!    --- tally up passed, failed, skipped in a text table
 !!    .header on
-!!    .mode column unit_check
+!!    .mode column unit_test
 !!    .width 64 9 9 9
 !!    SELECT name,
 !!    --- depending on SQL version a simpler IIF/IF, IFNULL, or TOTAL might be better but this works well
@@ -456,7 +456,7 @@ implicit none(type,external)
 !!    CASE  sum( passed == 'passed'  ) WHEN NULL THEN 0 ELSE sum ( passed == 'passed')  END  AS 'ok',
 !!    CASE  sum( passed == 'failed'  ) WHEN NULL THEN 0 ELSE sum ( passed == 'failed')  END  AS 'not ok',
 !!    CASE  sum( passed == 'skipped' ) WHEN NULL THEN 0 ELSE sum ( passed == 'skipped') END  AS 'skip'
-!!    FROM unit_check
+!!    FROM unit_test
 !!    --- WHERE condition
 !!    GROUP BY name
 !!    ORDER BY name ;
@@ -465,8 +465,8 @@ implicit none(type,external)
 !!    --- including the first row, in the CSV file as the actual data to import.
 !!    --- Therefore, you should delete the first row of the CSV file with the
 !!    --- header labels if adding to an existing table instead of creating
-!!    DROP TABLE IF EXISTS unit_check;
-!!    --- CREATE TABLE unit_check(
+!!    DROP TABLE IF EXISTS unit_test;
+!!    --- CREATE TABLE unit_test(
 !!    ---   name   TEXT NOT NULL,
 !!    ---   date   DATE NOT NULL,
 !!    ---   passed TEXT NOT NULL,

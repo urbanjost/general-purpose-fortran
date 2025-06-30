@@ -73,9 +73,10 @@ disp_set(3f) - [M_display] set default options for disp(3f)
 </A>
 <BLOCKQUOTE>
 <P>
-The subroutine DISP_SET may be used to change default values of all the arguments of DISP except
-TITLE, X, FMT and LBOUND. In addition the default separator between items that are displayed
-side-by-side (using ADVANCE=&#146;no&#146;) may be changed with the MATSEP argument.
+The subroutine DISP_SET may be used to change default values of all
+the arguments of DISP except TITLE, X, FMT and LBOUND. In addition the
+default separator between items that are displayed side-by-side (using
+ADVANCE=&#146;no&#146;) may be changed with the MATSEP argument.
 </BLOCKQUOTE>
 <A name=2>
 
@@ -84,72 +85,29 @@ side-by-side (using ADVANCE=&#146;no&#146;) may be changed with the MATSEP argum
 </A>
 <BLOCKQUOTE>
 <P>
-M_display contains the following definition of the data type DISP_SETTINGS.
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; TYPE DISP_SETTINGS</H4>
-</A>
-<BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>character(3)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: advance   = &#146;YES&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>character(9)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: matsep    = &#146;   &#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>character(3)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: orient    = &#146;COL&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>character(9)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: sep       = &#146;  &#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>character(19) :: style</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-= &#146;LEFT&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>character(4)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: trim      = &#146;AUTO&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>character(9)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: zeroas    = &#146;&#146;
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: digmax    = 6
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: matseplen = 3
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: seplen    = 2
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: unit      = <B>-3</B>
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-:: zaslen    = 0
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; END TYPE DISP_SETTINGS</H4>
-</A>
-<BLOCKQUOTE>
+M_display contains the following definition of the data type
+DISP_SETTINGS.
 <P>
-Structures of type DISP_SETTINGS may be used to save and later restore format control settings of
-DISP. As shown, new variables of this type will automatically have default values for all
-components.
+<PRE>
+      type disp_settings
+        character(3)  :: advance   = &#146;YES&#146;
+        character(9)  :: matsep    = &#146;   &#146;
+        character(3)  :: orient    = &#146;COL&#146;
+        character(9)  :: sep       = &#146;  &#146;
+        character(19) :: style     = &#146;LEFT&#146;
+        character(4)  :: trim      = &#146;AUTO&#146;
+        character(9)  :: zeroas    = &#146;&#146;
+        integer       :: digmax    = 6
+        integer       :: matseplen = 3
+        integer       :: seplen    = 2
+        integer       :: unit      = -3
+        integer       :: zaslen    = 0
+      end type disp_settings
+<P>
+</PRE>
+Structures of type DISP_SETTINGS may be used to save and later restore
+format control settings of DISP. As shown, new variables of this type
+will automatically have default values for all components.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -161,36 +119,38 @@ components.
 There are two ways to call DISP_SET:
 <P>
 <PRE>
-      CALL DISP_SET(SETTINGS)
-      CALL DISP_SET(ADVANCE, DIGMAX, MATSEP, ORIENT, SEP, STYLE, UNIT, ZEROAS)
+      call disp_set(settings)
+      call disp_set(advance, digmax, matsep, orient, sep, style, unit, zeroas)
 <P>
 </PRE>
-Both calls change the default format control used in subsequent calls to DISP. In the first call,
-SETTINGS is of type DISP_SETTINGS and the default values for all arguments is changed. In the
-second call all the arguments are optional. If an argument is absent the corresponding default
-setting is not changed. An example call is
+Both calls change the default format control used in subsequent calls
+to DISP. In the first call, SETTINGS is of type DISP_SETTINGS and the
+default values for all arguments is changed. In the second call all
+the arguments are optional. If an argument is absent the corresponding
+default setting is not changed. An example call is
 <P>
 <PRE>
-      CALL DISP_SET(STYLE = &#146;PAD&#146;, SEP = &#146; &#146;).
+      call disp_set(style = &#146;pad&#146;, sep = &#146; &#146;).
 <P>
 </PRE>
-The effect is that titles will be written padded above matrices, and matrix column will be
-separated by one blank. The type and purpose of all the arguments except MATSEP has been
-described in section 3.2.
-<TABLE cellpadding=3><!-- tsb: The effect is that titles will be written padded above matrices, and matrix column will be
+The effect is that titles will be written padded above matrices, and
+matrix column will be separated by one blank. The type and purpose of
+all the arguments except MATSEP has been described in section 3.2.
+<TABLE cellpadding=3><!-- tsb: The effect is that titles will be written padded above matrices, and
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
 <B>MATSEP = ms</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-Specifies a character string of length &lt;= 9 that is written out between items
-(matrices) when they are displayed side-by-side. An example is:
+Specifies a character string of length &lt;= 9 that is written
+out between items (matrices) when they are displayed
+side-by-side. An example is:
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
 <PRE>
-                  CALL DISP(X, ADVANCE=&#146;NO&#146;)
-                  CALL DISP(Y, ADVANCE=&#146;NO&#146;)
-                  CALL DISP_SET(MATSEP=&#146; | &#146;)
-                  CALL DISP(Z, ADVANCE=&#146;YES&#146;)
+                  call disp(x, advance=&#146;no&#146;)
+                  call disp(y, advance=&#146;no&#146;)
+                  call disp_set(matsep=&#146; | &#146;)
+                  call disp(z, advance=&#146;yes&#146;)
 <P>
 </PRE>
 The output from these calls might be:
@@ -201,8 +161,9 @@ The output from these calls might be:
                   -2.0 |  4.0 | 4
 <P>
 </PRE>
-Note that MATSEP affects the separation of all items that have been placed in the
-output queue of the unit being displayed on.
+Note that MATSEP affects the separation of all items that
+have been placed in the output queue of the unit being
+displayed on.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -210,12 +171,14 @@ output queue of the unit being displayed on.
 
 </A>
 <BLOCKQUOTE>
-Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
+Based on dispmodule(3f),
+"A Fortran 95 module for pretty-printing matrices".
+Version number 1.02 6-Sept-2008,
+Kristjan Jonasson, Dept. of Computer Science,
+University of Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>disp_set (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ce4d2527-d4f2-4d7c-be67-782bbfcc4c47 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>disp_set (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e670a9c8-e3d9-464a-a309-68d8186fcb44 using man macros.</FONT>
 <br><br><center><img src="images/disp_set.3m_display.gif"></center>
 </div>
 </div>

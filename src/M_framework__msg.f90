@@ -576,7 +576,7 @@ end subroutine trimzeros_
 !!                     & genericf,genericg,generich,generici,genericj
 !!##DESCRIPTION
 !!    STDERR(3f) writes a message to standard error using a standard
-!!    f2003 method.  Up to twenty generic options are available.
+!!    f2003 method. Up to twenty generic options are available.
 !!##OPTIONS
 !!    msg           - description to print
 !!    generic[0-j]  - optional value to print the value of after the

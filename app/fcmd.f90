@@ -1,34 +1,34 @@
 program fcmd
 use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT
-use M_CLI2, only : set_args, sgets, sget, lget, leafs=>unnamed, specified
+use M_CLI2,    only : set_args, sgets, sget, lget, leafs=>unnamed, specified
 use M_strings, only : split, lower
-use M_system, only  : system_access, R_OK, W_OK, X_OK, F_OK, system_getenv, system_dir, system_isdir
+use M_system,  only : system_access, R_OK, W_OK, X_OK, F_OK, system_getenv, system_dir, system_isdir
 use M_io,      only : joinpath, basename, rd
 implicit none
-character(len=:),allocatable    :: searchpath
-character(len=:),allocatable    :: directories(:)
-character(len=:),allocatable    :: pathnames(:)
-character(len=:),allocatable    :: pathname
-character(len=:),allocatable    :: cmd
-character(len=:),allocatable    :: cmds(:)
-character(len=:),allocatable    :: name
-integer                         :: path_line_length
-integer                         :: i, j, k, m, n
-integer                         :: icount
-logical                         :: all
-logical                         :: verbose
-logical                         :: wild
-logical                         :: interactive
-logical                         :: tstfor
-logical                         :: ignorecase
-character(len=:),allocatable    :: help(:),version(:)
-character(len=:),allocatable    :: command
-integer                         :: exitstat
-integer                         :: cmdstat
-character(len=256)              :: cmdmsg
+character(len=:),allocatable :: searchpath
+character(len=:),allocatable :: directories(:)
+character(len=:),allocatable :: pathnames(:)
+character(len=:),allocatable :: pathname
+character(len=:),allocatable :: cmd
+character(len=:),allocatable :: cmds(:)
+character(len=:),allocatable :: name
+integer                      :: path_line_length
+integer                      :: i, j, k, m, n
+integer                      :: icount
+logical                      :: all
+logical                      :: verbose
+logical                      :: wild
+logical                      :: interactive
+logical                      :: tstfor
+logical                      :: ignorecase
+character(len=:),allocatable :: help(:),version(:)
+character(len=:),allocatable :: command
+integer                      :: exitstat
+integer                      :: cmdstat
+character(len=256)           :: cmdmsg
    ! process command-line options
    call setup()
-   call set_args('fcmd --vi F --first:f F --cmd:c " " --ignorecase:i F --wild:w F --ok F --test:t F --ls:l',help,version)
+   call set_args('fcmd --vi F --first:f F --cmd:c " " --ignorecase:i F --wild:w F --ok F --test:t F --long:l',help,version)
    all=.not.lget('first')
    wild=lget('wild')
    interactive=lget('ok')
@@ -42,11 +42,12 @@ character(len=256)              :: cmdmsg
       cmd=cmd//':'//sget('cmd')
       if(sget('cmd')==':') cmd=system_getenv('FCEDIT',system_getenv('EDITOR',system_getenv('VISUAL','vi')))
    endif
-   if(lget('ls')) cmd=cmd//':ls -l'
+   if(lget('long')) cmd=cmd//':ls -l'
 
    call get_environment_variable(name="PATH", length=path_line_length)  ! get length of $PATH
    allocate(character(len=path_line_length) :: searchpath)              ! make a string variable long enough to hold $PATH
    call get_environment_variable(name="PATH", value=searchpath)         ! get value of environment variable $PATH
+
    if(index(searchpath,';').eq.0)then
       call split(searchpath,directories,':')                               ! create array of directory names in $PATH
    else
@@ -60,20 +61,25 @@ character(len=256)              :: cmdmsg
    endif
    call split(cmd,cmds,';:')
    if(size(cmds).eq.0)cmds=['']
+
    if(verbose)then
       write(stderr,'("cmds>>",g0)')cmds
       write(stderr,'("leafs>>",g0)')leafs
       write(stderr,'("all>>",g0)')all
    endif
+
    icount=0
    NAMESLOOP: do j=1,size(leafs)                                        ! try name appended to each directory name
-   DOS: do n=1,2
+   DOS: do n=1,2                                                        ! make a second pass adding .exe to end for DOS
          if(wild)then
             name='*'//trim(leafs(j))//'*'
          else
             name=trim(leafs(j))
          endif
-         if(n==2)name=name//'.exe'
+         if(n==2)then
+            if(index(name,'.exe',back=.true.).eq.1)cycle
+            name=name//'.exe'
+         endif
          DIRLOOP: do i=1,size(directories)
             if(.not.system_isdir(trim(directories(i))))cycle
             pathnames=system_dir(trim(directories(i)),name,ignorecase=ignorecase)
@@ -127,7 +133,7 @@ help=[ CHARACTER(LEN=128) :: &
 '                                                                  ',&
 'SYNOPSIS                                                          ',&
 '    fcmd [commands(s) [--wild] [ --first][--ignorecase][--test]   ',&
-'    [ --cmd COMMAND;COMMAND,COMMAND;... ]|[--ls]|[--vi]           ',&
+'    [ --cmd COMMAND;COMMAND,COMMAND;... ]|[--long]|[--vi]         ',&
 '    [ --help|--version]                                           ',&
 '                                                                  ',&
 'DESCRIPTION                                                       ',&
@@ -159,7 +165,7 @@ help=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '                Abbreviations for common --cmd options:                         ',&
 '                                                                                ',&
-'                --ls,l   abbreviation for "--cmd ''ls -l''"                     ',&
+'                --long,l   abbreviation for "--cmd ''ls -l''"                   ',&
 '                --vi       abbreviation for "--cmd ''vim''"                     ',&
 '                                                                                ',&
 '    --ok        Prompt for a y/n answer before executing the list of            ',&

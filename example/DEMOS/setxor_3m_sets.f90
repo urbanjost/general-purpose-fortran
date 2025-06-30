@@ -8,7 +8,7 @@
         A = [5,1,3,3,3]
         B = [4,1,2]
         write(*,g) 'A=', A
-        write(*,g) 'A=', B
+        write(*,g) 'B=', B
         write(*,g) setxor(A,B)
         write(*,g) setxor(A,B,'stable')
 

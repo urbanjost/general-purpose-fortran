@@ -77,7 +77,7 @@
 !!     Originally the CALCOMP library was a simple graphics library that
 !!     created files composed of instructions that drove a very popular
 !!     family of pen plotters made by CALCOMP. The library was supplied
-!!     by the manufacturer.  This made it easier for CALCOMP customers
+!!     by the manufacturer. This made it easier for CALCOMP customers
 !!     to create plots on these old vector-based monochrome (then color)
 !!     pen plotters using Fortran 66 or 77 (which was the most popular
 !!     programming language for graphics). For the most part, codes
@@ -4289,7 +4289,7 @@ end subroutine scalg
 !!
 !!                    When the next call to SMOOT with IPEN = -2 or -3 is
 !!                    received, the pen is repositioned to the point where
-!!                    it left the smooth curve.  The smooth curve is then
+!!                    it left the smooth curve. The smooth curve is then
 !!                    continued as though the calls with IPEN = 2 or 3 had
 !!                    not occurred.
 !!

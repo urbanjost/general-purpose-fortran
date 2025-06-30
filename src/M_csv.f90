@@ -482,8 +482,8 @@ end subroutine csv_write_table
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_csv()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_verify, only : unit_test_level
 !! setup
    call test_csv()
    call test_csv_write_row()
@@ -494,30 +494,30 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_csv()
 
-   call unit_check_start('csv',msg='')
-   !!call unit_check('csv', 0.eq.0, 'checking',100)
-   call unit_check_done('csv',msg='')
+   call unit_test_start('csv',msg='')
+   !!call unit_test('csv', 0.eq.0, 'checking',100)
+   call unit_test_done('csv',msg='')
 end subroutine test_csv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_csv_write_scalar()
 
-   call unit_check_start('csv_write_scalar',msg='')
-   !!call unit_check('csv_write_scalar', 0.eq.0, 'checking',100)
-   call unit_check_done('csv_write_scalar',msg='')
+   call unit_test_start('csv_write_scalar',msg='')
+   !!call unit_test('csv_write_scalar', 0.eq.0, 'checking',100)
+   call unit_test_done('csv_write_scalar',msg='')
 end subroutine test_csv_write_scalar
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_csv_write_row()
 
-   call unit_check_start('csv_write_row',msg='')
-   !!call unit_check('csv_write_row', 0.eq.0, 'checking',100)
-   call unit_check_done('csv_write_row',msg='')
+   call unit_test_start('csv_write_row',msg='')
+   !!call unit_test('csv_write_row', 0.eq.0, 'checking',100)
+   call unit_test_done('csv_write_row',msg='')
 end subroutine test_csv_write_row
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_csv_write_table()
 
-   call unit_check_start('csv_write_table',msg='')
-   !!call unit_check('csv_write_table', 0.eq.0, 'checking',100)
-   call unit_check_done('csv_write_table',msg='')
+   call unit_test_start('csv_write_table',msg='')
+   !!call unit_test('csv_write_table', 0.eq.0, 'checking',100)
+   call unit_test_done('csv_write_table',msg='')
 end subroutine test_csv_write_table
 !===================================================================================================================================
 end subroutine test_suite_M_csv

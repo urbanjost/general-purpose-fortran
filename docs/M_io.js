@@ -25,7 +25,6 @@ append("putchar.3m_io.html");
 append("rd.3m_io.html");
 append("read_line.3m_io.html");
 append("read_table.3m_io.html");
-append("readenv.3m_io.html");
 append("scratch.3m_io.html");
 append("separator.3m_io.html");
 append("splitpath.3m_io.html");

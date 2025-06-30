@@ -124,10 +124,16 @@ UNPACK(3) scatters the elements of VECTOR into a copy of an array FIELD
 of any rank using .true. values from MASK in array element order to
 specify placement of the VECTOR values.
 <P>
-So a copy of FIELD is generated with select elements replaced with
-values from VECTOR. This allows for complex replacement patterns that
-would be difficult when using array syntax or multiple assignment
-statements, particularly when the replacements are conditional.
+The result is a copy of FIELD generated with select elements replaced
+with values from VECTOR.
+<P>
+That is, FIELD and MASK are of the same shape. A copy of FIELD is made
+except that where any element of MASK is .true. the corresponding
+element in FIELD is replaced with the next value in VECTOR.
+<P>
+This allows for complex replacement patterns that would be difficult
+when using array syntax or multiple assignment statements, particularly
+when the replacements are conditional.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -152,7 +158,7 @@ be replaced with values from VECTOR.
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-FIELD : The input array to be altered.
+FIELD : The input array to be altered, or a scalar.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -163,9 +169,9 @@ FIELD : The input array to be altered.
 <BLOCKQUOTE>
 <P>
 The element of the result that corresponds to the ith true element of
-MASK, in array element order, has the value VECTOR(I) for i = 1, 2, . .
-[char46], t, where t is the number of true values in MASK. Each other element
-has a value equal to FIELD if FIELD is scalar or to the corresponding
+MASK, in array element order, has the value VECTOR(I) for i = 1, 2, ..,
+N, where N is the number of true values in MASK. Each other element has
+a value equal to FIELD if FIELD is scalar or to the corresponding
 element of FIELD if it is an array.
 <P>
 The resulting array corresponds to FIELD with .true. elements of MASK
@@ -178,82 +184,52 @@ replaced by values from VECTOR in array element order.
 </A>
 <BLOCKQUOTE>
 <P>
-Particular values may be "scattered" to particular positions in an array
-by using
-<BLOCKQUOTE>
-<P>
-1 0 0
-</BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: 1 0 0
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>If M is the array</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-0 1 0
-0 0 1
-<P>
-V is the array [1, 2, 3],
-[char46] T .
-<TABLE width=100% cellpadding=3><!-- tsb: V is the array [1, 2, 3],
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD colspan=2>
-<B>and Q is the logical mask</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-T . .
-[char46] . T
-where "T" represents true and "." represents false, then the result of
-</TD></TR>
-<TR><TD colspan=2>
-UNPACK (V, MASK = Q, FIELD = M) has the value
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
-<P>
-1 2 0
-1 1 0
-0 0 3
-</TD></TR>
-<TR><TD colspan=2>
-and the result of UNPACK (V, MASK = Q, FIELD = 0) has the value
-</TD></TR>
-<TR><TD width=6%>&nbsp;</TD><TD>
-<P>
-0 2 0
-1 0 0
-0 0 3
-</TD></TR>
-<TR></TR></TABLE><!-- .PP -->
-</TD></TR>
-<TR></TR></TABLE>Sample program:
+Sample program:
 <P>
 <PRE>
     program demo_unpack
     implicit none
     logical,parameter :: T=.true., F=.false.
+    integer,parameter :: rows=3, cols=3
+    integer           :: i
+    logical           :: mask(rows,cols) = reshape([ &
+       T, F, F, &
+       F, T, F, &
+       F, F, T  &
+    ],[3,3])
+    integer :: field(rows,cols) = reshape([ &
+       1, 2, 3, &
+       4, 5, 6, &
+       7, 8, 9  &
+    ],[3,3])
+    integer :: result(rows,cols)
 <P>
-    integer :: vector(2)  = [1,1]
+      ! mask and field must conform or field must be a scalar
+       write(*,*) &#146;if the logical mask is&#146;
+       do i=1,size(mask,dim=1)
+          write(*,*)mask(i,:)
+       enddo
+       write(*,*) &#146;and field is a scalar (in this case, 0)&#146;
+       write(*,*) &#146;the result is the shape of the mask&#146;
+       write(*,*) &#146;with all values set to the scalar value&#146;
+       write(*,*) &#146;except the true elements of the mask are&#146;
+       write(*,*) &#146;filled in row-column order with values&#146;
+       write(*,*) &#146;from the vector of values [11,22,33]&#146;
+       result = unpack( [11,22,33], mask, field=0 )
+       call print_matrix_int(&#146;result=&#146;, result)
 <P>
-    ! mask and field must conform
-    integer,parameter :: r=2, c=2
-    logical :: mask(r,c)  = reshape([ T,F,F,T ],[2,2])
-    integer :: field(r,c) = 0, unity(2,2)
-<P>
-       ! basic usage
-       unity = unpack( vector, mask, field )
-       call print_matrix_int(&#146;unity=&#146;, unity)
-<P>
-       ! if FIELD is a scalar it is used to fill all the elements
-       ! not assigned to by the vector and mask.
-       call print_matrix_int(&#146;scalar field&#146;,         &
-       & unpack(                                     &
-       & vector=[ 1, 2, 3, 4 ],                      &
-       & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &
-       & field=0) )
+       write(*,*) &#146;if field is an array it must conform&#146;
+       write(*,*) &#146;to the shape of the mask&#146;
+       call print_matrix_int(&#146;field=&#146;,field)
+       write(*,*) &#146;and the combination results in&#146;
+       result = unpack( [11,22,33], mask, field )
+       call print_matrix_int(&#146;result=&#146;, result)
 <P>
     contains
 <P>
     subroutine print_matrix_int(title,arr)
-    ! convenience routine:
-    ! just prints small integer arrays in row-column format
+    ! @(#) convenience routine:
+    !      prints small integer arrays in row-column format
     implicit none
     character(len=*),intent(in)  :: title
     integer,intent(in)           :: arr(:,:)
@@ -280,13 +256,31 @@ and the result of UNPACK (V, MASK = Q, FIELD = 0) has the value
 Results:
 <P>
 <PRE>
-       &gt; unity=
-       &gt;  [ 1, 0 ]
-       &gt;  [ 0, 1 ]
-       &gt; scalar field
-       &gt;  [  1,  0,  3 ]
-       &gt;  [  0,  0,  0 ]
-       &gt;  [  2,  0,  4 ]
+     &gt;  if the logical mask is
+     &gt;  T F F
+     &gt;  F T F
+     &gt;  F F T
+     &gt;  and field is a scalar (in this case, 0)
+     &gt;  the result is the shape of the mask
+     &gt;  with all values set to the scalar value
+     &gt;  except the true elements of the mask are
+     &gt;  filled in row-column order with values
+     &gt;  from the vector of values [11,22,33]
+     &gt;  result=
+     &gt;   [  11,   0,   0 ]
+     &gt;   [   0,  22,   0 ]
+     &gt;   [   0,   0,  33 ]
+     &gt;  if field is an array it must conform
+     &gt;  to the shape of the mask
+     &gt;  field=
+     &gt;   [  1,  4,  7 ]
+     &gt;   [  2,  5,  8 ]
+     &gt;   [  3,  6,  9 ]
+     &gt;  and the combination results in
+     &gt;  result=
+     &gt;   [  11,   4,   7 ]
+     &gt;   [   2,  22,   8 ]
+     &gt;   [   3,   6,  33 ]
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -311,7 +305,7 @@ MERGE(3), PACK(3), SPREAD(3)
 Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unpack (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8de003a4-8464-4c6e-8d92-35b67e5fb996 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>unpack (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from dac06aec-253c-428b-9b46-817833e9eca6 using man macros.</FONT>
 <br><br><center><img src="images/unpack.3fortran.gif"></center>
 </div>
 </div>

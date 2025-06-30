@@ -73,12 +73,13 @@
            & readwrite=readwrite,sign=sign,round=round,blank=blank,           &
            & decimal=decimal,delim=delim,encoding=encoding,pad=pad,           &
            & named=named,opened=opened,exist=exist,number=number,             &
-      !bug & pending=pending,                                                 &
+           !bug & pending=pending,                                            &
            & asynchronous=asynchronous,                                       &
            & iostat=iostat,err=999,iomsg=message)
          elseif(filename_  /= '')then
            write(*,*)'*print_inquire* checking file:'//filename_
-           inquire(file=filename_ ,recl=recl,nextrec=nextrec,pos=pos,         &
+           inquire(file=filename_,                                            &
+           & recl=recl,nextrec=nextrec,pos=pos,                               &
            & size=size,position=position,name=name,                           &
            & form=form,formatted=formatted,unformatted=unformatted,           &
            & access=access,sequential=sequential,direct=direct,stream=stream, &
@@ -88,13 +89,14 @@
            & number=number,pending=pending,asynchronous=asynchronous,         &
            & iostat=iostat,err=999,iomsg=message)
          else
-            write(*,*)'*print_inquire* must specify either filename or unit number'
+            write(*,*) &
+            & '*print_inquire* must specify either filename or unit number'
          endif
          write(*,nml=inquire,delim='none')
          return
       999   continue
          write(*,*)'*print_inquire* bad inquire'
-      !  If an error condition occurs during execution of an INQUIRE  statement,
+      !  If an error condition occurs during execution of an INQUIRE statement,
       !  all of the inquiry identifiers except iostat become undefined.
          write(*,*) '*print_inquire* inquire call failed,iostat=',iostat, &
          & 'message=',message

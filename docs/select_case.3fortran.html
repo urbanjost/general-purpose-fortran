@@ -1,0 +1,284 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>select_case (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+select_case(7f) - [EXECUTION CONTROL] select a block based on the value
+of an expression (a case)
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The CASE construct selects for execution at most one of its constituent
+blocks. The selection is based on the value of an expression.
+<P>
+<PRE>
+      [ case-construct-name : ] SELECT CASE (case-expr)
+      CASE (value) [case-construct-name]
+         [selected code]
+      CASE ([lower_value]:[upper_value]) [case-construct-name]
+         [selected code]
+      CASE (range_or_value,range_or_value,&#46;&#46;&#46;) [case-construct-name]
+         [selected code]
+      CASE default
+      END SELECT [ case-construct-name ]
+<P>
+</PRE>
+The expression may be integer,character,or logical. In particular it
+cannot be real.
+<P>
+For a given case-construct, there shall be no possible value of the
+case-expr that matches more than one case-value-range.
+<P>
+If the select-case-stmt of a case-construct specifies a
+case-construct-name, the corresponding end-select-stmt shall specify the
+same case-construct-name.
+<P>
+If the select-case-stmt of a case-construct does not specify a
+case-construct-name, the corresponding end-select-stmt shall not specify
+a case-construct-name.
+<P>
+If a case-stmt specifies a case-construct-name, the corresponding
+select-case-stmt shall specify the same case-construct-name.
+<P>
+No more than one of the selectors of one of the CASE statements shall be
+DEFAULT.
+<TABLE cellpadding=3><!-- tsb: No more than one of the selectors of one of the CASE statements shall be
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+For a given case-construct, each case-value shall be of the same
+type as case-expr
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+For character type, the kind type parameters shall be the same
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+character length differences are allowed.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A case-value-range using a colon shall not be used if case-expr is
+of type logical.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The execution of the SELECT CASE statement causes the case expression to
+be evaluated. The resulting value is called the case index. For a case
+value range list, a match occurs if the case index matches any of the
+case value ranges in the list. For a case index with a value of c, a
+match is determined as follows.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: The execution of the SELECT CASE statement causes the case expression to
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=4%>
+1.
+</TD><TD>
+If the case value range contains a single value v without a
+colon, a match occurs for type logical if the expression
+c .EQV. v is true, and a match occurs for type integer or
+character if the expression c == v is true.
+</TD></TR>
+<TR valign=top><TD width=4%>
+2.
+</TD><TD>
+If the case value range is of the form low : high, a match
+occurs if the expression low &lt;= c .AND. c &lt;= high is true.
+</TD></TR>
+<TR valign=top><TD width=4%>
+3.
+</TD><TD>
+If the case value range is of the form low :, a match occurs
+if the expression low &lt;= c is true.
+</TD></TR>
+<TR valign=top><TD width=4%>
+4.
+</TD><TD>
+If the case value range is of the form : high, a match occurs
+if the expression c &lt;= high is true.
+</TD></TR>
+<TR valign=top><TD width=4%>
+5.
+</TD><TD>
+If no other selector matches and a DEFAULT selector appears,
+it matches the case index.
+</TD></TR>
+<TR valign=top><TD width=4%>
+6.
+</TD><TD>
+If no other selector matches and the DEFAULT selector does
+not appear, there is no match.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+The block following the CASE statement containing the matching selector,
+if any, is executed. This completes execution of the construct.
+<P>
+It is permissible to branch to an end-select-stmt only from within its
+CASE construct.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+An integer signum function:
+<P>
+<PRE>
+    integer function signum (n)
+       select case (n)
+       case (:-1)
+          signum = -1  ! if &lt;= -1 set to negative 1
+       case (0)
+          signum = 0
+       case (1:)
+          signum = 1   ! anything &gt;= 1 set to positive 1
+       end select
+    end function signum
+<P>
+</PRE>
+A code fragment to check for balanced parentheses:
+<P>
+<PRE>
+           character (80) :: line
+              &#46;&#46;&#46;
+           level = 0
+           scan_line: do i = 1, 80
+              check_parens: select case (line (i:i))
+              case (&#146;(&#146;)
+                 level = level + 1
+              case (&#146;)&#146;)
+                 level = level - 1
+                 if (level &lt; 0) then
+                    print *, &#146;unexpected right parenthesis&#146;
+                    exit scan_line
+                 end if
+              case default
+                 ! ignore all other characters
+               end select check_parens
+            end do scan_line
+            if (level &gt; 0) then
+               print *, &#146;missing right parenthesis&#146;
+            end if
+<P>
+</PRE>
+the following three fragments are equivalent:
+<P>
+<PRE>
+            if (silly == 1) then
+               call this
+            else
+               call that
+            end if
+<P>
+            select case (silly == 1)
+            case (.true.)
+               call this
+            case (.false.)
+               call that
+            end select
+<P>
+            select case (silly)
+            case default
+               call that
+            case (1)
+               call this
+            end select
+<P>
+</PRE>
+A code fragment showing several selections of one block:
+<P>
+<PRE>
+       select case (n)
+          case (1, 3:5, 8)        ! selects 1, 3, 4, 5, 8
+             call sub()
+          case default
+             call other()
+       end select
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>select_case (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 748a46fe-98f3-4359-8db2-018c579caced using man macros.</FONT>
+<br><br><center><img src="images/select_case.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

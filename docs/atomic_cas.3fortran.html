@@ -58,7 +58,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-ATOMIC_CAS(3) - [ATOMIC] Atomic compare and swap
+ATOMIC_CAS(3) - [ATOMIC] Atomically compare and swap a set of values
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -92,15 +92,22 @@ call atomic_cas (atom, old, compare, new [,stat] )
 </A>
 <BLOCKQUOTE>
 <P>
-ATOMIC_CAS(3) compares the variable ATOM with the value of COMPARE; if
-the value is the same, ATOM is set to the value of NEW. Additionally,
-OLD is set to the value of ATOM that was used for the comparison. When
-STAT is present and the invocation was successful, it is assigned the
-value 0. If it is present and the invocation has failed, it is assigned
-a positive value; in particular, for a coindexed ATOM, if the remote
-image has stopped, it is assigned the value of iso_fortran_env&#146;s
-stat_stopped_image and if the remote image has failed, the value
-stat_failed_image.
+ATOMIC_CAS(ATOM, OLD, COMPARE, NEW, STAT) atomically compares the value
+of ATOM with COMPARE. If they are equal, ATOM is set to NEW, and OLD
+receives the previous value of ATOM. If not equal, ATOM is unchanged,
+and OLD still receives the current value of ATOM.
+<P>
+ATOMIC_CAS is useful for implementing locks or conditional updates.
+<P>
+Only one image’s NEW value is set if multiple images attempt the
+operation simultaneously.
+<P>
+When STAT is present and the invocation was successful, it is assigned
+the value 0. If it is present and the invocation has failed, it is
+assigned a positive value; in particular, for a coindexed ATOM, if the
+remote image has stopped, it is assigned the value of ISO_FORTRAN_ENV&#146;s
+STAT_STOPPED_IMAGE and if the remote image has failed, the value
+STAT_FAILED_IMAGE.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -109,37 +116,47 @@ stat_failed_image.
 </A>
 <BLOCKQUOTE>
 <P>
-<TABLE cellpadding=3>
+STAT (optional): A scalar default-kind integer. Set to 0 on success,
+or a positive value on failure.
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: STAT (optional): A scalar default-kind integer. Set to 0 on success,
+ -->
+<TR></TR><TR></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 ATOM : Scalar coarray or coindexed variable of either integer type
-with atomic_int_kind kind or logical type with atomic_logical_kind
-kind.
+with ATOMIC_INT_KIND kind or logical type with kind
+ATOMIC_LOGICAL_KIND.
+<TABLE width=100% cellpadding=3><!-- tsb: ATOM : Scalar coarray or coindexed variable of either integer type
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+OLD : Scalar of the same type and kind as ATOM. It receives the
+value of ATOM before the operation.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-OLD : Scalar of the same type and kind as ATOM.
-</TD></TR>
-<TR valign=top><TD width=3%>
-o
-</TD><TD>
-COMPARE : Scalar variable of the same type and kind as ATOM.
+COMPARE : Scalar variable of the same type and kind as ATOM. Used
+for comparison.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 NEW : Scalar variable of the same type as ATOM. If kind is
-different, the value is converted to the kind of ATOM.
+different, the value is converted to the kind of ATOM. It is given
+the new value from ATOM if the comparison succeeds.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
 STAT : (optional) Scalar default-kind integer variable.
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<A name=5>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><A name=5>
 
      <H3>EXAMPLES</H3>
 
@@ -149,12 +166,38 @@ STAT : (optional) Scalar default-kind integer variable.
 Sample program:
 <P>
 <PRE>
-    program demo_atomic_cas
+    program demo_atomic_cas_example
     use iso_fortran_env
     implicit none
-    logical(atomic_logical_kind) :: atom[*], prev
-       call atomic_cas(atom[1], prev, .false., .true.)
-    end program demo_atomic_cas
+    integer(atomic_int_kind) :: lock[*]
+    integer(atomic_int_kind) :: old
+    integer :: stat, me
+<P>
+      if (this_image() == 1) lock = 0
+      sync all
+<P>
+      me = this_image()
+      call atomic_cas(lock[1], old, 0, me, stat)
+<P>
+      if (stat /= 0) then
+        print *, "Image", me, ": Failed with STAT =", stat
+      else
+        print *, "Image", me, ": Old =", old, ", New =", lock[1]
+      end if
+      sync all
+<P>
+      if (this_image() == 1) print *, "Final lock:", lock
+    end program demo_atomic_cas_example
+<P>
+</PRE>
+Expected Output (4 images, order varies)
+<P>
+<PRE>
+        &gt; Image 1: Old = 0, New = 1
+        &gt; Image 2: Old = 1, New = 1
+        &gt; Image 3: Old = 1, New = 1
+        &gt; Image 4: Old = 1, New = 1
+        &gt; Final lock: 1
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -165,7 +208,7 @@ Sample program:
 </A>
 <BLOCKQUOTE>
 <P>
-TS 18508
+Fortran 2008 and later, per TS 18508
 </BLOCKQUOTE>
 <A name=7>
 
@@ -176,10 +219,13 @@ TS 18508
 <P>
 ATOMIC_DEFINE(3), ATOMIC_REF(3), ISO_FORTRAN_ENV(3)
 <P>
+See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND,
+STAT_STOPPED_IMAGE, and STAT_FAILED_IMAGE.
+<P>
 Fortran intrinsic descriptions
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atomic_cas (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b5d1dbb8-ffb6-43ed-b2d3-d8f3917b1bba using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atomic_cas (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 97e254e7-5d2e-45bd-b49d-91877aa3593a using man macros.</FONT>
 <br><br><center><img src="images/atomic_cas.3fortran.gif"></center>
 </div>
 </div>

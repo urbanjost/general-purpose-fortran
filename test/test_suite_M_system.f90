@@ -1,17 +1,17 @@
 program runtest
-use M_framework__verify, only : unit_check_stop
+use M_framework__verify, only : unit_test_stop
 implicit none
 interface; subroutine test_suite_M_system_tests(); end ; end interface
    call test_suite_M_system_tests()
-   call unit_check_stop()
+   call unit_test_stop()
 end program runtest
 
 subroutine test_suite_M_system_tests()
 use,intrinsic :: iso_c_binding,   only : c_int32_t, c_int, c_ptr, c_size_t, c_short, c_float, c_char, c_null_char
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 use M_framework__msg,     only : str
-use M_framework__verify,   only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
-use M_framework__verify,   only : unit_check_msg
+use M_framework__verify,   only : unit_test, unit_test_start, unit_test_good, unit_test_bad, unit_test_done
+use M_framework__verify,   only : unit_test_msg
 use M_system
 use M_process, only : process_readall
 use M_time,    only : fmtdate, u2d
@@ -22,11 +22,11 @@ integer :: ierr
    ierr=system_rmdir('_test2')
    ierr=system_rmdir('_test3')
 
-call unit_check_msg('M_system','try to test OS interface routines, given difficulty of trying to test')
-call unit_check_msg('M_system','functions not intrinsically part of Fortran and system-dependent.')
-call unit_check_msg('M_system','Many assumptions are made, including assuming a GNU Linux/Unix system.')
-call unit_check_msg('M_system','Examine the tests on other platforms, as it may well be the assumptions made')
-call unit_check_msg('M_system','about the system and not the routines that are generating an error.')
+call unit_test_msg('M_system','try to test OS interface routines, given difficulty of trying to test')
+call unit_test_msg('M_system','functions not intrinsically part of Fortran and system-dependent.')
+call unit_test_msg('M_system','Many assumptions are made, including assuming a GNU Linux/Unix system.')
+call unit_test_msg('M_system','Examine the tests on other platforms, as it may well be the assumptions made')
+call unit_test_msg('M_system','about the system and not the routines that are generating an error.')
 call test_set_environment_variable()
 call test_system_rename()
 call test_system_getlogin()
@@ -96,11 +96,11 @@ call test_system_getcwd()
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 !-!subroutine test_system_stat_print()
-!-!   call unit_check_start('system_stat_print',msg='')
+!-!   call unit_test_start('system_stat_print',msg='')
 !-!   call system_stat_print('/tmp')
 !-!   call system_stat_print('/etc/hosts')
-!-!   !!call unit_check('system_stat_print', 0.eq.0, 'checking',100)
-!-!   call unit_check_done('system_stat_print',msg='')
+!-!   !!call unit_test('system_stat_print', 0.eq.0, 'checking',100)
+!-!   call unit_test_done('system_stat_print',msg='')
 !-!end subroutine test_system_stat_print
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_srand()
@@ -112,9 +112,9 @@ integer :: i,j
       enddo
       write(*,*)
    enddo
-   call unit_check_start('system_srand',msg='')
-   !!call unit_check('system_srand', 0.eq.0, 'checking',100)
-   call unit_check_done('system_srand',msg='')
+   call unit_test_start('system_srand',msg='')
+   !!call unit_test('system_srand', 0.eq.0, 'checking',100)
+   call unit_test_done('system_srand',msg='')
 end subroutine test_system_srand
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_kill()
@@ -138,9 +138,9 @@ character(len=80) :: argument
          endif
       endif
    enddo
-   call unit_check_start('system_kill',msg='')
-   !!call unit_check('system_kill', 0.eq.0, 'checking',100)
-   call unit_check_done('system_kill',msg='')
+   call unit_test_start('system_kill',msg='')
+   !!call unit_test('system_kill', 0.eq.0, 'checking',100)
+   call unit_test_done('system_kill',msg='')
 end subroutine test_system_kill
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_errno()
@@ -150,9 +150,9 @@ integer :: stat
       write(*,*)'err=',system_errno()
       call system_perror('*test_system_errno*')
    endif
-   call unit_check_start('system_errno',msg='')
-   !!call unit_check('system_errno', 0.eq.0, 'checking',100)
-   call unit_check_done('system_errno',msg='')
+   call unit_test_start('system_errno',msg='')
+   !!call unit_test('system_errno', 0.eq.0, 'checking',100)
+   call unit_test_done('system_errno',msg='')
 end subroutine test_system_errno
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_geteuid()
@@ -160,17 +160,17 @@ subroutine test_system_geteuid()
 character(len=:),allocatable :: string
 integer                      :: uid_command
 integer                      :: uid
-   call unit_check_start('system_geteuid',msg='check using command "id -u"')
+   call unit_test_start('system_geteuid',msg='check using command "id -u"')
    string=process_readall('id -u',ierr=ierr)
-   !!call unit_check('system_geteuid', ierr.eq.0, 'using command "id -u" ierr=',ierr,'effective UID=',string)
-   call unit_check('system_geteuid', string.ne.' ', 'using command "id -u" ierr=',ierr,'effective UID=',string)
+   !!call unit_test('system_geteuid', ierr.eq.0, 'using command "id -u" ierr=',ierr,'effective UID=',string)
+   call unit_test('system_geteuid', string.ne.' ', 'using command "id -u" ierr=',ierr,'effective UID=',string)
    uid=system_geteuid();
    if(string.ne.'')then
       read(string,*)uid_command
-      call unit_check('system_geteuid', uid.eq.uid_command, 'uid=',uid)
-      call unit_check_done('system_geteuid',msg='')
+      call unit_test('system_geteuid', uid.eq.uid_command, 'uid=',uid)
+      call unit_test_done('system_geteuid',msg='')
    else
-      call unit_check_bad('system_geteuid', msg=str(' assuming bad because system command did not work. uid=',uid))
+      call unit_test_bad('system_geteuid', msg=str(' assuming bad because system command did not work. uid=',uid))
    endif
 end subroutine test_system_geteuid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -180,18 +180,18 @@ character(len=:),allocatable :: string
 integer                      :: uid_command
 integer                      :: uid
 integer                      :: ios
-   call unit_check_start('system_getuid',msg='check using command "id -u -r"')
+   call unit_test_start('system_getuid',msg='check using command "id -u -r"')
    string=process_readall('id -u -r',ierr=ierr)
-   !!call unit_check('system_getuid', ierr.eq.0, 'using command "id -u -r" ierr=',ierr,'UID=',string)
-   call unit_check('system_getuid', string.ne.' ', 'using command "id -u -r" ierr=',ierr,'UID=',string)
+   !!call unit_test('system_getuid', ierr.eq.0, 'using command "id -u -r" ierr=',ierr,'UID=',string)
+   call unit_test('system_getuid', string.ne.' ', 'using command "id -u -r" ierr=',ierr,'UID=',string)
    uid=system_getuid();
    if(string.ne.' ')then
       read(string,*,iostat=ios)uid_command
-      call unit_check('system_getuid', ios.eq.0, 'read uid=',uid_command)
-      call unit_check('system_getuid', uid.eq.uid_command, 'uid=',uid)
-      call unit_check_done('system_getuid',msg='')
+      call unit_test('system_getuid', ios.eq.0, 'read uid=',uid_command)
+      call unit_test('system_getuid', uid.eq.uid_command, 'uid=',uid)
+      call unit_test_done('system_getuid',msg='')
    else
-      call unit_check_bad('system_getuid', msg=str(' assuming bad because system command did not work. uid=',uid))
+      call unit_test_bad('system_getuid', msg=str(' assuming bad because system command did not work. uid=',uid))
    endif
 end subroutine test_system_getuid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -201,16 +201,16 @@ character(len=:),allocatable :: string
 integer                      :: gid_command
 integer                      :: gid
 character(len=*),parameter   :: cmd='id -g'
-   call unit_check_start('system_getegid','check using command',cmd)
+   call unit_test_start('system_getegid','check using command',cmd)
    string=process_readall(cmd,ierr=ierr)
-   !!call unit_check('system_getegid', string.ne.' ', 'using command "',cmd,'" ierr=',ierr,'GID=',string)
+   !!call unit_test('system_getegid', string.ne.' ', 'using command "',cmd,'" ierr=',ierr,'GID=',string)
    gid=system_getegid();
    if(string.ne.' ')then
       read(string,*)gid_command
-      call unit_check('system_getegid', gid.eq.gid_command, 'gid=',gid)
-      call unit_check_done('system_getegid',msg='')
+      call unit_test('system_getegid', gid.eq.gid_command, 'gid=',gid)
+      call unit_test_done('system_getegid',msg='')
    else
-      call unit_check_bad('system_getegid', msg=str(' assuming bad because system command did not work. gid=',gid))
+      call unit_test_bad('system_getegid', msg=str(' assuming bad because system command did not work. gid=',gid))
    endif
 end subroutine test_system_getegid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -220,17 +220,17 @@ character(len=:),allocatable :: string
 integer                      :: gid_command
 integer                      :: gid
 character(len=*),parameter   :: cmd='id -g -r'
-   call unit_check_start('system_getgid','check using command',cmd)
+   call unit_test_start('system_getgid','check using command',cmd)
    string=process_readall(cmd,ierr=ierr)
-   !!call unit_check('system_getgid', ierr.eq.0, 'using command "',cmd,'" ierr=',ierr,'GID=',string)
-   call unit_check('system_getgid', string.ne.' ', 'using command "',cmd,'" ierr=',ierr,'GID=',string)
+   !!call unit_test('system_getgid', ierr.eq.0, 'using command "',cmd,'" ierr=',ierr,'GID=',string)
+   call unit_test('system_getgid', string.ne.' ', 'using command "',cmd,'" ierr=',ierr,'GID=',string)
    gid=system_getgid();
    if(string.ne.' ')then
       read(string,*)gid_command
-      call unit_check('system_getgid', gid.eq.gid_command, 'gid=',gid)
-      call unit_check_done('system_getgid',msg='')
+      call unit_test('system_getgid', gid.eq.gid_command, 'gid=',gid)
+      call unit_test_done('system_getgid',msg='')
    else
-      call unit_check_bad('system_getgid', msg=str(' assuming bad because system command did not work. gid=',gid))
+      call unit_test_bad('system_getgid', msg=str(' assuming bad because system command did not work. gid=',gid))
    endif
 end subroutine test_system_getgid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -240,41 +240,41 @@ subroutine test_system_getsid()
 !!integer                      :: sid_command
 integer                      :: sid
 character(len=*),parameter   :: cmd='UNKNOWN'
-   call unit_check_start('system_getsid','check using command',cmd)
+   call unit_test_start('system_getsid','check using command',cmd)
 !!   string=process_readall(cmd,ierr=ierr)
-!!   call unit_check('system_getsid', ierr.eq.0, 'using command "',cmd,'" ierr=',ierr,'sid=',string)
+!!   call unit_test('system_getsid', ierr.eq.0, 'using command "',cmd,'" ierr=',ierr,'sid=',string)
    sid=system_getsid(0_c_int);
 !!   if(string.ne.' ')then
 !!      read(string,*)sid_command
-!!      call unit_check('system_getsid', sid.eq.sid_command, 'sid=',sid)
-      call unit_check_done('system_getsid',msg='')
+!!      call unit_test('system_getsid', sid.eq.sid_command, 'sid=',sid)
+      call unit_test_done('system_getsid',msg='')
 !!   else
-!!      call unit_check_bad('system_getsid', msg=str(' assuming bad because system command did not work. sid=',sid))
+!!      call unit_test_bad('system_getsid', msg=str(' assuming bad because system command did not work. sid=',sid))
 !!   endif
 end subroutine test_system_getsid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_setsid()
 integer                      :: pid
-   call unit_check_start('system_setsid')
+   call unit_test_start('system_setsid')
    pid=system_setsid();
-   !!call unit_check('system_setsid', pid.ge.0, 'just checking PID>0 pid=',pid)
-   call unit_check_done('system_setsid',msg='')
+   !!call unit_test('system_setsid', pid.ge.0, 'just checking PID>0 pid=',pid)
+   call unit_test_done('system_setsid',msg='')
 end subroutine test_system_setsid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getpid()
 integer                      :: pid
-   call unit_check_start('system_getpid','PID (process ID) of current process')
+   call unit_test_start('system_getpid','PID (process ID) of current process')
    pid=system_getpid();
-   call unit_check('system_getpid', pid.ge.0, 'just checking PID>0 pid=',pid)
-   call unit_check_done('system_getpid',msg='')
+   call unit_test('system_getpid', pid.ge.0, 'just checking PID>0 pid=',pid)
+   call unit_test_done('system_getpid',msg='')
 end subroutine test_system_getpid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getppid()
 integer                      :: ppid
-call unit_check_start('system_getppid','only make sure call does not work and returns value >0')
+call unit_test_start('system_getppid','only make sure call does not work and returns value >0')
    ppid=system_getppid();
-   call unit_check('system_getppid', ppid.ge.0, 'ppid=',ppid)
-   call unit_check_done('system_getppid',msg='')
+   call unit_test('system_getppid', ppid.ge.0, 'ppid=',ppid)
+   call unit_test_done('system_getppid',msg='')
 end subroutine test_system_getppid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_rand()
@@ -286,9 +286,9 @@ integer :: i
    enddo
    write(*,*)
 
-   call unit_check_start('system_rand',msg='')
-   !!call unit_check('system_rand', 0.eq.0, 'checking',100)
-   call unit_check_done('system_rand',msg='')
+   call unit_test_start('system_rand',msg='')
+   !!call unit_test('system_rand', 0.eq.0, 'checking',100)
+   call unit_test_done('system_rand',msg='')
 end subroutine test_system_rand
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_initenv()
@@ -297,7 +297,7 @@ integer                      :: i
 integer                      :: ierr
 character(len=:),allocatable :: home
 character(len=4096)          :: envname
-   call unit_check_start('system_initenv',msg='assuming system always has environment variable HOME set')
+   call unit_test_start('system_initenv',msg='assuming system always has environment variable HOME set')
    i=0
    home=''
    ! read environment table and look for HOME= at beginning of line
@@ -315,8 +315,8 @@ character(len=4096)          :: envname
    enddo
    call get_environment_variable("HOME",value=envname, status=ierr)
    envname='HOME='//trim(envname)
-   call unit_check('system_initenv',home.eq.envname, 'HOME',home,envname)
-   call unit_check_done('system_initenv',msg='')
+   call unit_test('system_initenv',home.eq.envname, 'HOME',home,envname)
+   call unit_test_done('system_initenv',msg='')
 end subroutine test_system_initenv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_realpath()
@@ -345,40 +345,40 @@ integer                      :: filename_length
       patho=system_realpath('.')
       write(*,*)'.=>',trim(patho)
    endif
-   call unit_check_start('system_realpath',msg='')
-   !!call unit_check('system_realpath', 0.eq.0, 'checking',100)
-   call unit_check_done('system_realpath',msg='')
+   call unit_test_start('system_realpath',msg='')
+   !!call unit_test('system_realpath', 0.eq.0, 'checking',100)
+   call unit_test_done('system_realpath',msg='')
 end subroutine test_system_realpath
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fileglob()
-   call unit_check_start('fileglob',msg='')
-   !!call unit_check('fileglob', 0.eq.0, 'checking',100)
-   call unit_check_done('fileglob',msg='')
+   call unit_test_start('fileglob',msg='')
+   !!call unit_test('fileglob', 0.eq.0, 'checking',100)
+   call unit_test_done('fileglob',msg='')
 end subroutine test_fileglob
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_set_environment_variable()
 
 integer :: ierr
 character(len=4096) :: value
-   call unit_check_start('set_environment_variable',msg='')
+   call unit_test_start('set_environment_variable',msg='')
 !! CHECK NOT_THERE_S_E_V IS NOT THERE FOR TEST
    call get_environment_variable("NOT_THERE_S_E_V", status=ierr)
-   call unit_check('set_environment_variable',ierr.eq.1,'make sure variable does not exist,status=',ierr)
+   call unit_test('set_environment_variable',ierr.eq.1,'make sure variable does not exist,status=',ierr)
 !! SET THE VARIABLE NOT_THERE_S_E_V
    call set_environment_variable('NOT_THERE_S_E_V','this is the value',ierr)
 !! CHECK VARIABLE IS NOW SET
-   call unit_check('set_environment_variable',ierr.eq.0,'setting, status should be zero when setting=',ierr)
+   call unit_test('set_environment_variable',ierr.eq.0,'setting, status should be zero when setting=',ierr)
    call get_environment_variable("NOT_THERE_S_E_V", value=value,status=ierr)
-   call unit_check('set_environment_variable',ierr.eq.0,'status should be zero when getting=',ierr)
-   call unit_check('set_environment_variable',value.eq.'this is the value','value is set to:',value)
+   call unit_test('set_environment_variable',ierr.eq.0,'status should be zero when getting=',ierr)
+   call unit_test('set_environment_variable',value.eq.'this is the value','value is set to:',value)
 !! REPLACE VALUE
    call set_environment_variable('NOT_THERE_S_E_V','this is the new value',ierr)
-   call unit_check('set_environment_variable',ierr.eq.0,'setting, status should be zero when setting=',ierr)
+   call unit_test('set_environment_variable',ierr.eq.0,'setting, status should be zero when setting=',ierr)
    call get_environment_variable("NOT_THERE_S_E_V", value=value,status=ierr)
-   call unit_check('set_environment_variable',ierr.eq.0,'status should be zero when getting=',ierr)
-   call unit_check('set_environment_variable',value.eq.'this is the new value','value is set to:',value)
+   call unit_test('set_environment_variable',ierr.eq.0,'status should be zero when getting=',ierr)
+   call unit_test('set_environment_variable',value.eq.'this is the new value','value is set to:',value)
 
-   call unit_check_done('set_environment_variable',msg='')
+   call unit_test_done('set_environment_variable',msg='')
 end subroutine test_set_environment_variable
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_access()
@@ -396,31 +396,31 @@ character(len=80),parameter :: names(*)=[ &
       write(*,*)' is ',trim(names(i)),' writeable?    ', system_access(names(i),W_OK)
       write(*,*)' is ',trim(names(i)),' executable?   ', system_access(names(i),X_OK)
    enddo
-   call unit_check_start('system_access',msg='')
-   !!call unit_check('system_access', 0.eq.0, 'checking',100)
-   call unit_check_done('system_access',msg='')
+   call unit_test_start('system_access',msg='')
+   !!call unit_test('system_access', 0.eq.0, 'checking',100)
+   call unit_test_done('system_access',msg='')
 end subroutine test_system_access
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_chdir()
 character(len=:),allocatable :: dirname
 character(len=:),allocatable :: hold
 integer             :: ierr
-   call unit_check_start('system_chdir',msg='test system_chdir(3f) assuming Unix-like file system and system_getwd(3f) works')
+   call unit_test_start('system_chdir',msg='test system_chdir(3f) assuming Unix-like file system and system_getwd(3f) works')
    call system_getcwd(hold,ierr)
 
    call system_chdir('/tmp',ierr)
    call system_getcwd(dirname,ierr)
-   call unit_check('system_chdir', dirname.eq.'/tmp', 'checking /tmp to',dirname)
+   call unit_test('system_chdir', dirname.eq.'/tmp', 'checking /tmp to',dirname)
 
    call system_chdir('/',ierr)
    call system_getcwd(dirname,ierr)
-   call unit_check('system_chdir', dirname.eq.'/', 'checking / to',dirname)
+   call unit_test('system_chdir', dirname.eq.'/', 'checking / to',dirname)
 
    call system_chdir(hold,ierr)
    call system_getcwd(dirname,ierr)
-   call unit_check('system_chdir', dirname.eq.hold, 'checking ',hold,' to',dirname)
+   call unit_test('system_chdir', dirname.eq.hold, 'checking ',hold,' to',dirname)
 
-   call unit_check_done('system_chdir',msg='')
+   call unit_test_done('system_chdir',msg='')
 end subroutine test_system_chdir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_chmod()
@@ -490,9 +490,9 @@ character(len=4096) :: message
 !    of the file is changed to a value which would deny access to
 !    that process.
 
-   call unit_check_start('system_chmod',msg='')
-   !!call unit_check('system_chmod', 0.eq.0, 'checking',100)
-   call unit_check_done('system_chmod',msg='')
+   call unit_test_start('system_chmod',msg='')
+   !!call unit_test('system_chmod', 0.eq.0, 'checking',100)
+   call unit_test_done('system_chmod',msg='')
 end subroutine test_system_chmod
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_chown()
@@ -508,9 +508,9 @@ character(len=80),parameter :: names(*)=[character(len=80) :: 'myfile1','/usr/lo
          call system_perror('*test_system_chown* '//trim(names(i)))
       endif
    enddo
-   call unit_check_start('system_chown',msg='')
-   !!call unit_check('system_chown', 0.eq.0, 'checking',100)
-   call unit_check_done('system_chown',msg='')
+   call unit_test_start('system_chown',msg='')
+   !!call unit_test('system_chown', 0.eq.0, 'checking',100)
+   call unit_test_done('system_chown',msg='')
 end subroutine test_system_chown
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_clearenv()
@@ -520,9 +520,9 @@ subroutine test_system_clearenv()
 ! environment after clearing (not necessarily blank!!)
    call system_clearenv()
    call execute_command_line('env')
-   call unit_check_start('system_clearenv',msg='')
-   !!call unit_check('system_clearenv', 0.eq.0, 'checking',100)
-   call unit_check_done('system_clearenv',msg='')
+   call unit_test_start('system_clearenv',msg='')
+   !!call unit_test('system_clearenv', 0.eq.0, 'checking',100)
+   call unit_test_done('system_clearenv',msg='')
 end subroutine test_system_clearenv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_closedir()
@@ -530,17 +530,17 @@ subroutine test_system_closedir()
 type(c_ptr)                  :: dir
 character(len=:),allocatable :: filename
 integer                      :: ierr
-call unit_check_start('system_closedir',msg='test if can read from current directory, assumed non-empty and close and retry')
+call unit_test_start('system_closedir',msg='test if can read from current directory, assumed non-empty and close and retry')
    call system_opendir('.',dir,ierr)      !--- open directory stream to read from
    call system_readdir(dir,filename,ierr) !--- read directory stream
-   call unit_check('system_closedir', filename.ne.'', 'found a file named',filename)
+   call unit_test('system_closedir', filename.ne.'', 'found a file named',filename)
    call system_closedir(dir,ierr)         !--- close directory stream
-   call unit_check('system_closedir', ierr.eq.0, 'closing gave ierr=',ierr)
+   call unit_test('system_closedir', ierr.eq.0, 'closing gave ierr=',ierr)
    !!!!!!! TRYING BAD OPERATION HANGS SYSTEMS. CANNOT FIND GENERIC TEST TO SEE IF OPEN
    !!call system_readdir(dir,filename,ierr)
-   !!call unit_check('system_closedir', ierr.ne.0, 'try reading now should give error ierr=',ierr)
+   !!call unit_test('system_closedir', ierr.ne.0, 'try reading now should give error ierr=',ierr)
    !!!!!!!
-   call unit_check_done('system_closedir',msg='')
+   call unit_test_done('system_closedir',msg='')
 end subroutine test_system_closedir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_cpu_time()
@@ -562,33 +562,33 @@ real    :: value
    write(*,*)'SYSTEM ....',system_finish-system_start
    write(*,*)'TOTAL .....',total_finish-total_start
 
-   call unit_check_start('system_cpu_time',msg='')
-   !!call unit_check('system_cpu_time', 0.eq.0, 'checking',100)
-   call unit_check_done('system_cpu_time',msg='')
+   call unit_test_start('system_cpu_time',msg='')
+   !!call unit_test('system_cpu_time', 0.eq.0, 'checking',100)
+   call unit_test_done('system_cpu_time',msg='')
 end subroutine test_system_cpu_time
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getcwd()
 character(len=:),allocatable :: dirname
 character(len=:),allocatable :: hold
 integer                      :: ierr
-   call unit_check_start('system_getcwd',msg='test system_getcwd(3f) assuming Unix-like file system')
+   call unit_test_start('system_getcwd',msg='test system_getcwd(3f) assuming Unix-like file system')
    ! cache current directory so can return
    call system_getcwd(hold,ierr)
-   call unit_check('system_getcwd', ierr.eq.0 , 'checking ierr on getting current directory=',ierr)
+   call unit_test('system_getcwd', ierr.eq.0 , 'checking ierr on getting current directory=',ierr)
 
    call system_chdir('/tmp',ierr)
    call system_getcwd(dirname,ierr)
-   call unit_check('system_getcwd', dirname.eq.'/tmp', 'checking /tmp to',dirname)
+   call unit_test('system_getcwd', dirname.eq.'/tmp', 'checking /tmp to',dirname)
 
    call system_chdir('/',ierr)
    call system_getcwd(dirname,ierr)
-   call unit_check('system_getcwd', dirname.eq.'/', 'checking / to',dirname)
+   call unit_test('system_getcwd', dirname.eq.'/', 'checking / to',dirname)
    ! back to original
    call system_chdir(hold,ierr)
    call system_getcwd(dirname,ierr)
-   call unit_check('system_getcwd', dirname.eq.hold, 'checking ',hold,' to',dirname)
+   call unit_test('system_getcwd', dirname.eq.hold, 'checking ',hold,' to',dirname)
 
-   call unit_check_done('system_getcwd',msg='')
+   call unit_test_done('system_getcwd',msg='')
 end subroutine test_system_getcwd
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getenv()
@@ -597,13 +597,13 @@ character(len=256)           :: envname
 character(len=*),parameter   :: names(*)=[character(len=10)::'USER','HOME','LOGNAME','USERNAME']
 integer                      :: i
 integer                      :: ierr
-   call unit_check_start('system_getenv',msg='')
+   call unit_test_start('system_getenv',msg='')
    do i=1,size(names)
       var=system_getenv(names(i))
       call get_environment_variable(names(i),value=envname, status=ierr)
-      call unit_check('system_getenv', envname.eq.var, names(i),var,envname)
+      call unit_test('system_getenv', envname.eq.var, names(i),var,envname)
    enddo
-   call unit_check_done('system_getenv',msg='')
+   call unit_test_done('system_getenv',msg='')
 end subroutine test_system_getenv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getgrgid()
@@ -612,9 +612,9 @@ character(len=:),allocatable :: name
    gid=system_getgid()
    name=system_getgrgid( gid )
    write(*,'("group[",a,"] for ",i0)')name,system_getgid()
-   call unit_check_start('system_getgrgid',msg='')
-   !!call unit_check('system_getgrgid', 0.eq.0, 'checking',100)
-   call unit_check_done('system_getgrgid',msg='')
+   call unit_test_start('system_getgrgid',msg='')
+   !!call unit_test('system_getgrgid', 0.eq.0, 'checking',100)
+   call unit_test_done('system_getgrgid',msg='')
 end subroutine test_system_getgrgid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_gethostname()
@@ -628,16 +628,16 @@ integer                      :: ierr
       write(*,'(a)')'ERROR: could not get hostname'
    endif
 
-   call unit_check_start('system_gethostname',msg='')
-   !!call unit_check('system_gethostname', 0.eq.0, 'checking',100)
-   call unit_check_done('system_gethostname',msg='')
+   call unit_test_start('system_gethostname',msg='')
+   !!call unit_test('system_gethostname', 0.eq.0, 'checking',100)
+   call unit_test_done('system_gethostname',msg='')
 end subroutine test_system_gethostname
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getlogin()
 character(len=80) :: envname
 character(len=:),allocatable :: name
 integer                      :: ierr
-   call unit_check_start('system_getlogin',msg=' test system_getlogin(3f) against environment variable')
+   call unit_test_start('system_getlogin',msg=' test system_getlogin(3f) against environment variable')
    call get_environment_variable("USER",value=envname, status=ierr)
    if(envname.eq.'')then
       call get_environment_variable("LOGNAME",value=envname, status=ierr)
@@ -646,12 +646,12 @@ integer                      :: ierr
       call get_environment_variable("USERNAME",value=envname, status=ierr)
    endif
    if(envname.eq.'')then
-      call unit_check_msg('system_getlogin',' did not find username in environment, test invalid')
+      call unit_test_msg('system_getlogin',' did not find username in environment, test invalid')
    else
       name=system_getlogin()
-      call unit_check('system_getlogin', name.eq.envname, 'checking',envname,'versus',name)
+      call unit_test('system_getlogin', name.eq.envname, 'checking',envname,'versus',name)
    endif
-   call unit_check_done('system_getlogin',msg='')
+   call unit_test_done('system_getlogin',msg='')
 end subroutine test_system_getlogin
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getpwuid()
@@ -660,18 +660,18 @@ integer(kind=int64)          :: uid
    uid=system_getuid()
    name=system_getpwuid(uid)
    write(*,'("login[",a,"] has UID ",i0)')name,uid
-   call unit_check_start('system_getpwuid',msg='')
-   !!call unit_check('system_getpwuid', 0.eq.0, 'checking',100)
-   call unit_check_done('system_getpwuid',msg='')
+   call unit_test_start('system_getpwuid',msg='')
+   !!call unit_test('system_getpwuid', 0.eq.0, 'checking',100)
+   call unit_test_done('system_getpwuid',msg='')
 end subroutine test_system_getpwuid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getumask()
 integer :: i
    write(*,101)(system_getumask(),i=1,4)
 101 format(1x,i0,1x,"O'",o4.4,"'",1x,'Z"',z0,"'",1x,"B'",b12.12,"'")
-   call unit_check_start('system_getumask',msg='')
-   !!call unit_check('system_getumask', 0.eq.0, 'checking',100)
-   call unit_check_done('system_getumask',msg='')
+   call unit_test_start('system_getumask',msg='')
+   !!call unit_test('system_getumask', 0.eq.0, 'checking',100)
+   call unit_test_done('system_getumask',msg='')
 end subroutine test_system_getumask
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_isblk()
@@ -686,9 +686,9 @@ character(len=80),parameter :: names(*)=[ &
    do i=1,size(names)
       write(*,*)' is ',trim(names(i)),' a block device? ', system_isblk(names(i))
    enddo
-   call unit_check_start('system_isblk',msg='')
-   !!call unit_check('system_isblk', 0.eq.0, 'checking',100)
-   call unit_check_done('system_isblk',msg='')
+   call unit_test_start('system_isblk',msg='')
+   !!call unit_test('system_isblk', 0.eq.0, 'checking',100)
+   call unit_test_done('system_isblk',msg='')
 end subroutine test_system_isblk
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_ischr()
@@ -703,9 +703,9 @@ character(len=80),parameter :: names(*)=[ &
    do i=1,size(names)
       write(*,*)' is ',trim(names(i)),' a character device? ', system_ischr(names(i))
    enddo
-   call unit_check_start('system_ischr',msg='')
-   !!call unit_check('system_ischr', 0.eq.0, 'checking',100)
-   call unit_check_done('system_ischr',msg='')
+   call unit_test_start('system_ischr',msg='')
+   !!call unit_test('system_ischr', 0.eq.0, 'checking',100)
+   call unit_test_done('system_ischr',msg='')
 end subroutine test_system_ischr
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_isdir()
@@ -718,12 +718,12 @@ character(len=80),parameter :: names(*)=[ &
       'PROBABLY_NOT    ']
 logical,parameter           :: expected(*)=[.true., .false., .true., .true., .false.]
 logical                     :: answer
-   call unit_check_start('system_isdir',msg='')
+   call unit_test_start('system_isdir',msg='')
    do i=1,size(names)
       answer=system_isdir(names(i))
-      call unit_check('system_isdir', answer.eqv.expected(i), names(i))
+      call unit_test('system_isdir', answer.eqv.expected(i), names(i))
    enddo
-   call unit_check_done('system_isdir',msg='')
+   call unit_test_done('system_isdir',msg='')
 end subroutine test_system_isdir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_isfifo()
@@ -738,9 +738,9 @@ character(len=80),parameter :: names(*)=[ &
    do i=1,size(names)
       write(*,*)' is ',trim(names(i)),' a fifo(named pipe)? ', system_isfifo(names(i))
    enddo
-   call unit_check_start('system_isfifo',msg='')
-   !!call unit_check('system_isfifo', 0.eq.0, 'checking',100)
-   call unit_check_done('system_isfifo',msg='')
+   call unit_test_start('system_isfifo',msg='')
+   !!call unit_test('system_isfifo', 0.eq.0, 'checking',100)
+   call unit_test_done('system_isfifo',msg='')
 end subroutine test_system_isfifo
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_islnk()
@@ -755,9 +755,9 @@ character(len=80),parameter :: names(*)=[ &
    do i=1,size(names)
       write(*,*)' is ',trim(names(i)),' a link? ', system_islnk(names(i))
    enddo
-   call unit_check_start('system_islnk',msg='')
-   !!call unit_check('system_islnk', 0.eq.0, 'checking',100)
-   call unit_check_done('system_islnk',msg='')
+   call unit_test_start('system_islnk',msg='')
+   !!call unit_test('system_islnk', 0.eq.0, 'checking',100)
+   call unit_test_done('system_islnk',msg='')
 end subroutine test_system_islnk
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_isreg()
@@ -769,9 +769,9 @@ character(len=80),parameter :: names(*)=[ &
    do i=1,size(names)
       write(*,*)' is ',trim(names(i)),' a regular file? ', system_isreg(names(i))
    enddo
-   call unit_check_start('system_isreg',msg='')
-   !!call unit_check('system_isreg', 0.eq.0, 'checking',100)
-   call unit_check_done('system_isreg',msg='')
+   call unit_test_start('system_isreg',msg='')
+   !!call unit_test('system_isreg', 0.eq.0, 'checking',100)
+   call unit_test_done('system_isreg',msg='')
 end subroutine test_system_isreg
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_issock()
@@ -787,9 +787,9 @@ character(len=80),parameter :: names(*)=[ &
    do i=1,size(names)
       write(*,*)' is ',trim(names(i)),' a socket? ', system_issock(names(i))
    enddo
-   call unit_check_start('system_issock',msg='')
-   !!call unit_check('system_issock', 0.eq.0, 'checking',100)
-   call unit_check_done('system_issock',msg='')
+   call unit_test_start('system_issock',msg='')
+   !!call unit_test('system_issock', 0.eq.0, 'checking',100)
+   call unit_test_done('system_issock',msg='')
 end subroutine test_system_issock
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_link()
@@ -799,26 +799,26 @@ integer :: ierr
    if(ierr.ne.0)then
       call system_perror('*test_system_link*')
    endif
-   call unit_check_start('system_link',msg='')
-   !!call unit_check('system_link', 0.eq.0, 'checking',100)
-   call unit_check_done('system_link',msg='')
+   call unit_test_start('system_link',msg='')
+   !!call unit_test('system_link', 0.eq.0, 'checking',100)
+   call unit_test_done('system_link',msg='')
 end subroutine test_system_link
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_mkdir()
 
 integer :: ierr
 logical :: query
-   call unit_check_start('system_mkdir',msg='make and remove _scratch/')
+   call unit_test_start('system_mkdir',msg='make and remove _scratch/')
    ierr=system_mkdir('_scratch',IANY([R_USR,W_USR,X_USR]))
-   call unit_check('system_mkdir', ierr.eq.0, 'make _scratch/, ierr=',ierr)
+   call unit_test('system_mkdir', ierr.eq.0, 'make _scratch/, ierr=',ierr)
    query=system_isdir('_scratch')
-   call unit_check_msg('system_mkdir',query,'looks like the directory was made')
+   call unit_test_msg('system_mkdir',query,'looks like the directory was made')
    call system_chdir('_scratch',ierr)
    call system_chdir('..',ierr)
-   call unit_check_msg('system_mkdir',ierr.eq.0,'looks like it can be entered')
+   call unit_test_msg('system_mkdir',ierr.eq.0,'looks like it can be entered')
    ierr=system_rmdir('_scratch')
-   call unit_check('system_mkdir', ierr.eq.0, 'remove _scratch/, ierr=',ierr)
-   call unit_check_done('system_mkdir',msg='')
+   call unit_test('system_mkdir', ierr.eq.0, 'remove _scratch/, ierr=',ierr)
+   call unit_test_done('system_mkdir',msg='')
 end subroutine test_system_mkdir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_mkfifo()
@@ -828,9 +828,9 @@ integer :: status
    if(status.ne.0)then
       call system_perror('*mkfifo* error:')
    endif
-   call unit_check_start('system_mkfifo',msg='')
-   !!call unit_check('system_mkfifo', 0.eq.0, 'checking',100)
-   call unit_check_done('system_mkfifo',msg='')
+   call unit_test_start('system_mkfifo',msg='')
+   !!call unit_test('system_mkfifo', 0.eq.0, 'checking',100)
+   call unit_test_done('system_mkfifo',msg='')
 end subroutine test_system_mkfifo
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_opendir()
@@ -838,9 +838,9 @@ type(c_ptr)                  :: dir
 character(len=:),allocatable :: filename
 integer                      :: i
 integer                      :: ierr
-   call unit_check_start('system_opendir',msg='')
+   call unit_test_start('system_opendir',msg='')
    call system_opendir('.',dir,ierr)                                              !--- open directory stream to read from
-   call unit_check('system_opendir', ierr.eq.0, 'checking ierr=',ierr)
+   call unit_test('system_opendir', ierr.eq.0, 'checking ierr=',ierr)
    i=0
    do                                                                             !--- read directory stream
       call system_readdir(dir,filename,ierr)
@@ -848,7 +848,7 @@ integer                      :: ierr
       i=i+1
    enddo
    call system_closedir(dir,ierr)                                                 !--- close directory stream
-   call unit_check_done('system_opendir',msg='')
+   call unit_test_done('system_opendir',msg='')
 end subroutine test_system_opendir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_perm()
@@ -866,9 +866,9 @@ character(len=:),allocatable :: perms
       write(*,'("for ",a," permits[",a,"]",1x,i0,1x,o0)') &
          trim(string),perms,values(3),values(3)
    endif
-   call unit_check_start('system_perm',msg='')
-   !!call unit_check('system_perm', 0.eq.0, 'checking',100)
-   call unit_check_done('system_perm',msg='')
+   call unit_test_start('system_perm',msg='')
+   !!call unit_test('system_perm', 0.eq.0, 'checking',100)
+   call unit_test_done('system_perm',msg='')
 end subroutine test_system_perm
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_perror()
@@ -880,39 +880,39 @@ character(len=:),allocatable :: DIRNAME
       call system_perror('*test_system_perror*:'//DIRNAME)
    endif
    write(*,'(a)')"That's all Folks!"
-   call unit_check_start('system_perror',msg='')
-   !!call unit_check('system_perror', 0.eq.0, 'checking',100)
-   call unit_check_done('system_perror',msg='')
+   call unit_test_start('system_perror',msg='')
+   !!call unit_test('system_perror', 0.eq.0, 'checking',100)
+   call unit_test_done('system_perror',msg='')
 end subroutine test_system_perror
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_putenv()
 
 character(len=4096) :: value
 integer             :: ierr
-   call unit_check_start('system_putenv',msg='')
+   call unit_test_start('system_putenv',msg='')
 !! CHECK NOT_THERE_S_P IS NOT THERE FOR TEST
    call get_environment_variable("NOT_THERE_S_P", status=ierr)
-   call unit_check('system_putenv',ierr.eq.1,'make sure variable does not exist,status=',ierr)
+   call unit_test('system_putenv',ierr.eq.1,'make sure variable does not exist,status=',ierr)
 !! SET THE VARIABLE NOT_THERE_S_P
    call system_putenv('NOT_THERE_S_P=this is the value',ierr)
 !! CHECK VARIABLE IS NOW SET
-   call unit_check('system_putenv',ierr.eq.0,'setting, status should be zero when setting=',ierr)
+   call unit_test('system_putenv',ierr.eq.0,'setting, status should be zero when setting=',ierr)
    call get_environment_variable("NOT_THERE_S_P", value=value,status=ierr)
-   call unit_check('system_putenv',ierr.eq.0,'status should be zero when getting=',ierr)
-   call unit_check('system_putenv',value.eq.'this is the value','value is set to:',value)
+   call unit_test('system_putenv',ierr.eq.0,'status should be zero when getting=',ierr)
+   call unit_test('system_putenv',value.eq.'this is the value','value is set to:',value)
 !! REPLACE VALUE
    call system_putenv('NOT_THERE_S_P=this is the new value',ierr)
-   call unit_check('system_putenv',ierr.eq.0,'setting, status should be zero when setting=',ierr)
+   call unit_test('system_putenv',ierr.eq.0,'setting, status should be zero when setting=',ierr)
    call get_environment_variable("NOT_THERE_S_P", value=value,status=ierr)
-   call unit_check('system_putenv',ierr.eq.0,'status should be zero when getting=',ierr)
-   call unit_check('system_putenv',value.eq.'this is the new value','value is set to:',value)
+   call unit_test('system_putenv',ierr.eq.0,'status should be zero when getting=',ierr)
+   call unit_test('system_putenv',value.eq.'this is the new value','value is set to:',value)
 !! DELETE VALUE
    call system_putenv('NOT_THERE_S_P',ierr)
    call get_environment_variable("NOT_THERE_S_P", status=ierr)
-   call unit_check('system_putenv',ierr.eq.1,'should be gone, varies with different putenv(3c)',ierr)
-   call unit_check_msg('system_putenv','system_unsetenv(3f) is a better way to remove variables')
+   call unit_test('system_putenv',ierr.eq.1,'should be gone, varies with different putenv(3c)',ierr)
+   call unit_test_msg('system_putenv','system_unsetenv(3f) is a better way to remove variables')
 !!
-   call unit_check_done('system_putenv',msg='')
+   call unit_test_done('system_putenv',msg='')
 end subroutine test_system_putenv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_readdir()
@@ -924,7 +924,7 @@ character(len=256)           :: message
 integer                      :: ios
 integer                      :: lun
 logical                      :: found1,found2
-   call unit_check_start('system_readdir',msg='make some scratch files and look for their name in current directory')
+   call unit_test_start('system_readdir',msg='make some scratch files and look for their name in current directory')
    found1=.false.
    found2=.false.
 !--- create two scratch files of known names
@@ -933,7 +933,7 @@ logical                      :: found1,found2
    if(ios.eq.0)then
       write(lun,*)'SCRATCH FILE 1'
    else
-      call unit_check_msg('system_readdir','error:',message)
+      call unit_test_msg('system_readdir','error:',message)
    endif
    close(unit=lun,iostat=ios,iomsg=message)
 
@@ -941,28 +941,28 @@ logical                      :: found1,found2
    if(ios.eq.0)then
       write(lun,*)'SCRATCH FILE 2'
    else
-      call unit_check_msg('system_readdir','error:',message)
+      call unit_test_msg('system_readdir','error:',message)
    endif
    close(unit=lun,iostat=ios,iomsg=message)
 
 !--- open directory stream to read from
    call system_opendir('.',dir,ierr)
-   call unit_check('system_opendir', ierr.eq.0, 'system_opendir ierr=',ierr)
+   call unit_test('system_opendir', ierr.eq.0, 'system_opendir ierr=',ierr)
 !--- read directory stream and look for scratch file names
       do
          call system_readdir(dir,filename,ierr)
          if(filename.eq.' ') exit
-         call unit_check('system_readdir', ierr.eq.0, 'system_readdir ierr=',ierr,'filename=',filename)
+         call unit_test('system_readdir', ierr.eq.0, 'system_readdir ierr=',ierr,'filename=',filename)
          if(ierr.ne.0) exit
          if(filename.eq.'__scratch_1__')found1=.true.
          if(filename.eq.'__scratch_2__')found2=.true.
       enddo
 !--- close directory stream
    call system_closedir(dir,ierr)
-   call unit_check('system_readdir', ierr.eq.0, 'system_closedir ierr=',ierr)
+   call unit_test('system_readdir', ierr.eq.0, 'system_closedir ierr=',ierr)
 
-   call unit_check('system_readdir', found1, '__scratch__1',found1)
-   call unit_check('system_readdir', found2, '__scratch__2',found2)
+   call unit_test('system_readdir', found1, '__scratch__1',found1)
+   call unit_test('system_readdir', found2, '__scratch__2',found2)
 
 !--- remove scratch files
    open(newunit=lun,file='__scratch_1__',iostat=ios,iomsg=message)
@@ -970,7 +970,7 @@ logical                      :: found1,found2
    open(newunit=lun,file='__scratch_2__',iostat=ios,iomsg=message)
    close(unit=lun,iostat=ios,iomsg=message,status='delete')
 
-   call unit_check_done('system_readdir',msg='')
+   call unit_test_done('system_readdir',msg='')
 end subroutine test_system_readdir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_readenv()
@@ -979,7 +979,7 @@ integer                      :: i
 integer                      :: ierr
 character(len=:),allocatable :: home
 character(len=4096)          :: envname
-   call unit_check_start('system_readenv',msg='assuming system always has environment variable HOME set')
+   call unit_test_start('system_readenv',msg='assuming system always has environment variable HOME set')
    i=0
    home=''
    ! read environment table and look for HOME= at beginning of line
@@ -997,8 +997,8 @@ character(len=4096)          :: envname
    enddo
    call get_environment_variable("HOME",value=envname, status=ierr)
    envname='HOME='//trim(envname)
-   call unit_check('system_readenv',home.eq.envname, 'HOME',home,envname)
-   call unit_check_done('system_readenv',msg='')
+   call unit_test('system_readenv',home.eq.envname, 'HOME',home,envname)
+   call unit_test_done('system_readenv',msg='')
 end subroutine test_system_readenv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_remove()
@@ -1006,21 +1006,21 @@ character(len=*),parameter :: FILE='__MyJunkFile.txt'
 integer                    :: ierr
 integer                    :: ios
 character(len=256)         :: message
-   call unit_check_start('system_remove',msg='')
+   call unit_test_start('system_remove',msg='')
    ierr=system_remove(FILE) ! note intentionally causes error if file exists
    open(unit=10,file=FILE,iostat=ios,status='NEW')
    if(ios.eq.0)then
       write(10,'(a)',iostat=ios)'This is a file to be deleted by the test of system_remove(3f)'
       close(unit=10,iostat=ios)
-      call unit_check('system_remove',system_isreg(FILE),msg='checking if test file exists before remove')
+      call unit_test('system_remove',system_isreg(FILE),msg='checking if test file exists before remove')
    else
-      call unit_check('system_remove', ios.eq.0, 'bad I/O IOSTAT=',ios,message)
+      call unit_test('system_remove', ios.eq.0, 'bad I/O IOSTAT=',ios,message)
    endif
    ierr=system_remove(FILE)
-   call unit_check('system_remove', ierr.eq.0, 'checking return code',ierr)
-   call unit_check('system_remove',.not.system_isreg(FILE),msg='checking if test file exists after remove')
-   call unit_check('system_remove',.not.system_access(FILE,F_OK),msg='checking if test file exists after remove')
-   call unit_check_done('system_remove',msg='')
+   call unit_test('system_remove', ierr.eq.0, 'checking return code',ierr)
+   call unit_test('system_remove',.not.system_isreg(FILE),msg='checking if test file exists after remove')
+   call unit_test('system_remove',.not.system_access(FILE,F_OK),msg='checking if test file exists after remove')
+   call unit_test_done('system_remove',msg='')
 end subroutine test_system_remove
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_rename()
@@ -1029,7 +1029,7 @@ character(len=256) :: string
 character(len=256) :: message
 integer            :: ios
 integer            :: ierr
-   call unit_check_start('system_rename',msg='check system_rename(3f) renaming "_scratch_file_" to "_renamed_scratch_file_"')
+   call unit_test_start('system_rename',msg='check system_rename(3f) renaming "_scratch_file_" to "_renamed_scratch_file_"')
    message=''
 ! try to remove junk files just in case
    ierr=system_remove('_scratch_file_')
@@ -1037,24 +1037,24 @@ integer            :: ierr
 ! create scratch file to rename
    close(unit=10,iostat=ios,status='delete')
    open(unit=10,file='_scratch_file_',status='new',iostat=ios)
-   call unit_check('system_rename', ios.eq.0, 'message from OPEN(3f) is:',message,' ios is',ios)
+   call unit_test('system_rename', ios.eq.0, 'message from OPEN(3f) is:',message,' ios is',ios)
    write(10,'(a)',iostat=ios,iomsg=message) 'IF YOU SEE THIS RENAME WORKED'
    close(unit=10)
 ! rename scratch file
    ierr=system_rename('_scratch_file_','_renamed_scratch_file_')
-   call unit_check('system_rename', ierr.eq.0, 'ierr',ierr)
+   call unit_test('system_rename', ierr.eq.0, 'ierr',ierr)
 ! read renamed file
    open(unit=11,file='_renamed_scratch_file_',status='old')
    read(11,'(a)',iostat=ios)string
-   call unit_check('system_rename', ios.eq.0, 'ios',ierr)
-   call unit_check('system_rename', string.eq.'IF YOU SEE THIS RENAME WORKED', string)
+   call unit_test('system_rename', ios.eq.0, 'ios',ierr)
+   call unit_test('system_rename', string.eq.'IF YOU SEE THIS RENAME WORKED', string)
    close(unit=11)
 ! clean up
    ierr=system_remove('_scratch_file_')
-   call unit_check('system_rename', ierr.ne.0, 'cleanup',ierr)
+   call unit_test('system_rename', ierr.ne.0, 'cleanup',ierr)
    ierr=system_remove('_renamed_scratch_file_')
-   call unit_check('system_rename', ierr.eq.0, 'cleanup',ierr)
-   call unit_check_done('system_rename',msg='')
+   call unit_test('system_rename', ierr.eq.0, 'cleanup',ierr)
+   call unit_test_done('system_rename',msg='')
 end subroutine test_system_rename
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_rewinddir()
@@ -1064,7 +1064,7 @@ integer                      :: sum(2)
 integer                      :: i
 integer                      :: j
 integer                      :: ierr
-   call unit_check_start('system_rewinddir',msg='')
+   call unit_test_start('system_rewinddir',msg='')
    call system_opendir('.',dir,ierr)                   ! open directory stream to read from
    do i=1,2                                            ! read directory stream twice
       j=0
@@ -1077,8 +1077,8 @@ integer                      :: ierr
       call system_rewinddir(dir)                       ! rewind directory stream
    enddo
    call system_closedir(dir,ierr)                      ! close directory stream
-   call unit_check('system_rewinddir', sum(1).eq.sum(2), 'number of files','PASS 1:',sum(1),'PASS 2:',sum(2))
-   call unit_check_done('system_rewinddir',msg='')
+   call unit_test('system_rewinddir', sum(1).eq.sum(2), 'number of files','PASS 1:',sum(1),'PASS 2:',sum(2))
+   call unit_test_done('system_rewinddir',msg='')
 end subroutine test_system_rewinddir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_rmdir()
@@ -1086,27 +1086,27 @@ subroutine test_system_rmdir()
    integer :: ierr
    character(len=*),parameter :: dirname='_scratch_rmdir'
 !! setup
-   call unit_check_start('system_rmdir',msg='')
+   call unit_test_start('system_rmdir',msg='')
    if(system_isdir(dirname))then ! TRY TO CREATE
-      call unit_check_msg('system_rmdir',dirname,'directory existed')
+      call unit_test_msg('system_rmdir',dirname,'directory existed')
    endif
    ierr=system_mkdir(dirname,RWX_U)
-   call unit_check('system_rmdir',ierr.eq.0,'try to create',dirname)
-   call unit_check('system_rmdir',system_isdir(dirname),'check if',dirname,'exists and is a directory')
+   call unit_test('system_rmdir',ierr.eq.0,'try to create',dirname)
+   call unit_test('system_rmdir',system_isdir(dirname),'check if',dirname,'exists and is a directory')
 !! test
    ierr=system_rmdir(dirname) ! TRY TO REMOVE
-   call unit_check('system_rmdir',ierr.eq.0,'check ierr',ierr)
-   call unit_check('system_rmdir',.not.system_isdir(dirname),'check if',dirname,'is still a directory')
+   call unit_test('system_rmdir',ierr.eq.0,'check ierr',ierr)
+   call unit_test('system_rmdir',.not.system_isdir(dirname),'check if',dirname,'is still a directory')
 
    if(system_isdir(dirname))then
-      call unit_check_bad('system_rmdir',msg=str('testing went bad,',dirname,'is still a directory'))
+      call unit_test_bad('system_rmdir',msg=str('testing went bad,',dirname,'is still a directory'))
    else
       ierr=system_rmdir(dirname) ! TRY TO REMOVE scratch directory when it should be gone
-      call unit_check('system_rmdir',ierr.ne.0,'check ierr',ierr)
+      call unit_test('system_rmdir',ierr.ne.0,'check ierr',ierr)
       call system_perror('*test of system_rmdir*')
    endif
 
-   call unit_check_done('system_rmdir',msg='')
+   call unit_test_done('system_rmdir',msg='')
 end subroutine test_system_rmdir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_setumask()
@@ -1120,9 +1120,9 @@ integer :: i
    old_umask=system_setumask(newmask)
    write(*,*)'NEW'
    write(*,101)(system_getumask(),i=1,4)
-   call unit_check_start('system_setumask',msg='')
-   !!call unit_check('system_setumask', 0.eq.0, 'checking',100)
-   call unit_check_done('system_setumask',msg='')
+   call unit_test_start('system_setumask',msg='')
+   !!call unit_test('system_setumask', 0.eq.0, 'checking',100)
+   call unit_test_done('system_setumask',msg='')
 end subroutine test_system_setumask
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_stat()
@@ -1175,9 +1175,9 @@ equivalence                                    &
       write (*, FMT="('No. of blocks allocated:',     T30, I0)") buff(13)
    endif
 
-   call unit_check_start('system_stat',msg='')
-   !!call unit_check('system_stat', 0.eq.0, 'checking',100)
-   call unit_check_done('system_stat',msg='')
+   call unit_test_start('system_stat',msg='')
+   !!call unit_test('system_stat', 0.eq.0, 'checking',100)
+   call unit_test_done('system_stat',msg='')
 end subroutine test_system_stat
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_uname()
@@ -1193,9 +1193,9 @@ character(len=is)          :: string=' '
       write(*,*)'=====> TESTING system_uname('//letters(i:i)//')--->'//trim(string)
    enddo
    write(*,'(80("="))')
-   call unit_check_start('system_uname',msg='')
-   !!call unit_check('system_uname', 0.eq.0, 'checking',100)
-   call unit_check_done('system_uname',msg='')
+   call unit_test_start('system_uname',msg='')
+   !!call unit_test('system_uname', 0.eq.0, 'checking',100)
+   call unit_test_done('system_uname',msg='')
 end subroutine test_system_uname
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_unlink()
@@ -1205,9 +1205,9 @@ integer :: ierr
    if(ierr.ne.0)then
       call system_perror('*test_system_unlink*')
    endif
-   call unit_check_start('system_unlink',msg='')
-   !!call unit_check('system_unlink', 0.eq.0, 'checking',100)
-   call unit_check_done('system_unlink',msg='')
+   call unit_test_start('system_unlink',msg='')
+   !!call unit_test('system_unlink', 0.eq.0, 'checking',100)
+   call unit_test_done('system_unlink',msg='')
 end subroutine test_system_unlink
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_unsetenv()
@@ -1217,52 +1217,52 @@ character(len=4096) :: value
 
    call system_unsetenv('GRU')
 
-   call unit_check_start('system_unsetenv',msg='')
+   call unit_test_start('system_unsetenv',msg='')
 
 !! SET THE VARIABLE NOT_THERE_S_U
    call set_environment_variable('NOT_THERE_S_U','this is the value',ierr)
 !! CHECK VARIABLE IS NOW SET
    call get_environment_variable("NOT_THERE_S_U", value=value,status=ierr)
-   call unit_check('system_unsetenv',ierr.eq.0,'status should be zero when getting=',ierr)
-   call unit_check('system_unsetenv',value.eq.'this is the value','value is set to:',value)
+   call unit_test('system_unsetenv',ierr.eq.0,'status should be zero when getting=',ierr)
+   call unit_test('system_unsetenv',value.eq.'this is the value','value is set to:',value)
    !! REMOVE
    call system_unsetenv('NOT_THERE_S_U',ierr)
-   call unit_check('system_unsetenv',ierr.eq.0,'should be zero ierr=',ierr)
+   call unit_test('system_unsetenv',ierr.eq.0,'should be zero ierr=',ierr)
    !! CHECK IF GONE
    call get_environment_variable("NOT_THERE_S_U", value=value,status=ierr)
-   call unit_check('system_unsetenv',ierr.eq.1,'should be zero ierr=',ierr)
-   call unit_check('system_unsetenv',value.eq.' ','value should be blank=',value)
+   call unit_test('system_unsetenv',ierr.eq.1,'should be zero ierr=',ierr)
+   call unit_test('system_unsetenv',value.eq.' ','value should be blank=',value)
 
-   call unit_check_done('system_unsetenv',msg='')
+   call unit_test_done('system_unsetenv',msg='')
 
 end subroutine test_system_unsetenv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_memcpy()
-   call unit_check_start('system_memcpy',msg='')
-   !!call unit_check('system_memcpy', 0.eq.0, 'checking',100)
-   call unit_check_done('system_memcpy',msg='')
+   call unit_test_start('system_memcpy',msg='')
+   !!call unit_test('system_memcpy', 0.eq.0, 'checking',100)
+   call unit_test_done('system_memcpy',msg='')
 end subroutine test_system_memcpy
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_utime()
 character(len=4096) :: pathname
 integer             :: times(2)
 integer             :: i
-   call unit_check_start('system_utime',msg='')
+   call unit_test_start('system_utime',msg='')
    do i=1,command_argument_count()
       call get_command_argument(i, pathname)
       if(.not.system_utime(pathname,times))then
          call system_perror('*test_system_utime*')
       endif
    enddo
-   !!call unit_check('system_utime', 0.eq.0, 'checking',100)
-   call unit_check_done('system_utime',msg='')
+   !!call unit_test('system_utime', 0.eq.0, 'checking',100)
+   call unit_test_done('system_utime',msg='')
 end subroutine test_system_utime
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_dir()
 
-   call unit_check_start('system_dir',msg='')
-   !!call unit_check('system_dir', 0.eq.0, 'checking',100)
-   call unit_check_done('system_dir',msg='')
+   call unit_test_start('system_dir',msg='')
+   !!call unit_test('system_dir', 0.eq.0, 'checking',100)
+   call unit_test_done('system_dir',msg='')
 end subroutine test_system_dir
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 end subroutine test_suite_M_system_tests

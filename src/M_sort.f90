@@ -9,6 +9,10 @@
 
 
 
+!-----------------------------------------------------------------------------------------------------------------------------------
+
+
+!-----------------------------------------------------------------------------------------------------------------------------------
 
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -57,7 +61,6 @@ end interface
 interface sort_heap
    module procedure sort_heap_integer_int8, sort_heap_integer_int16, sort_heap_integer_int32, sort_heap_integer_int64
    module procedure sort_heap_real_real32, sort_heap_real_real64
-   module procedure sort_heap_real_real128
    module procedure sort_heap_character_ascii
 end interface
 !===================================================================================================================================
@@ -68,7 +71,6 @@ interface sort_quick_compact
    module procedure sort_quick_compact_integer_int8,   sort_quick_compact_integer_int16,  &
           &         sort_quick_compact_integer_int32,  sort_quick_compact_integer_int64
    module procedure sort_quick_compact_real_real32,    sort_quick_compact_real_real64
-   module procedure sort_quick_compact_real_real128
    module procedure sort_quick_compact_complex_real32, sort_quick_compact_complex_real64
    module procedure sort_quick_compact_character_ascii
 end interface
@@ -81,7 +83,6 @@ module procedure  unique_integer_int8,            unique_integer_int16,   unique
 module procedure  unique_real_real32,             unique_real_real64
 module procedure  unique_complex_real32,          unique_complex_real64
 module procedure  unique_strings_allocatable_len  !x!,unique_strings
-module procedure  unique_real_real128,            unique_complex_real128
 end interface
 !===================================================================================================================================
 
@@ -407,7 +408,7 @@ subroutine sort_shell_strings(lines,order,startcol,endcol)
 character(len=*),  intent(inout)       :: lines(:)            ! input/output array
 character(len=*),  intent(in)          :: order               ! sort order 'ascending'|'descending'
 integer,           optional,intent(in) :: startcol,  endcol   ! beginning and ending column to sort by
-   integer                             :: imax, is, ie
+integer                                :: imax, is, ie
 
    imax=len(lines(1))                                         ! maximum length of the character variables being sorted
    if(imax.eq.0)return
@@ -441,18 +442,23 @@ subroutine sort_shell_strings_lh(lines,startcol,endcol)
 !  should carefully check for bad input values,
 !  return flag indicating whether any strings were equal,
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=*) :: lines(:)
-integer,intent(in),optional     :: startcol, endcol
-integer                         :: startcol_local, endcol_local
-   character(len=:),allocatable :: ihold
-   integer           :: n
-   integer           :: igap
-   integer           :: i,j,k
-   integer           :: jg
+character(len=*)             :: lines(:)
+integer,intent(in),optional  :: startcol, endcol
+integer                      :: startcol_local, endcol_local
+character(len=:),allocatable :: ihold
+integer                      :: n
+integer                      :: igap
+integer                      :: i,j,k
+integer                      :: jg
 !-----------------------------------------------------------------------------------------------------------------------------------
    n=size(lines)
-   startcol_local=merge(startcol,1,present(startcol))
-   endcol_local=merge(endcol,size(lines),present(endcol))
+
+   !startcol_local=merge(startcol,1,present(startcol))
+   if(present(startcol))then; startcol_local=startcol; else; startcol_local=1; endif
+
+   !endcol_local=merge(endcol,size(lines),present(endcol))
+   if(present(endcol))then; endcol_local=endcol; else; endcol_local=size(lines); endif
+
    if(n.gt.0)then
       allocate(character(len=len(lines(1))) :: ihold)
    else
@@ -491,18 +497,23 @@ subroutine sort_shell_strings_hl(lines,startcol,endcol)
 !  should carefully check for bad input values,
 !  return flag indicating whether any strings were equal,
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=*) :: lines(:)
-integer,intent(in),optional     :: startcol, endcol
-integer                         :: startcol_local, endcol_local
-   character(len=:),allocatable :: ihold
-   integer           :: n
-   integer           :: igap
-   integer           :: i,j,k
-   integer           :: jg
+character(len=*)             :: lines(:)
+integer,intent(in),optional  :: startcol, endcol
+integer                      :: startcol_local, endcol_local
+character(len=:),allocatable :: ihold
+integer                      :: n
+integer                      :: igap
+integer                      :: i,j,k
+integer                      :: jg
 !-----------------------------------------------------------------------------------------------------------------------------------
    n=size(lines)
-   startcol_local=merge(startcol,1,present(startcol))
-   endcol_local=merge(endcol,size(lines),present(endcol))
+
+   !startcol_local=merge(startcol,1,present(startcol))
+   if(present(startcol))then; startcol_local=startcol; else; startcol_local=1; endif
+
+   !endcol_local=merge(endcol,size(lines),present(endcol))
+   if(present(endcol))then; endcol_local=endcol; else; endcol_local=size(lines); endif
+
    if(n.gt.0)then
       allocate(character(len=len(lines(1))) :: ihold)
    else
@@ -556,9 +567,9 @@ subroutine sort_shell_integers_hl(iarray)
 
 ! ident_10="@(#) M_sort sort_shell_integers_hl(3fp) sort integer array using Shell sort (high to low)"
 
-integer,intent(inout)      :: iarray(:)  ! input/output array
-integer                    :: n          ! number of elements in input array (iarray)
-integer                    :: igap, i, j, k, jg
+integer,intent(inout) :: iarray(:)  ! input/output array
+integer               :: n          ! number of elements in input array (iarray)
+integer               :: igap, i, j, k, jg
    n=size(iarray)
    igap=n
    INFINITE: do
@@ -587,8 +598,8 @@ subroutine sort_shell_integers_lh(iarray) ! sort an integer array in ascending o
 ! ident_11="@(#) M_sort sort_shell_integers_lh(3fp) sort integer array using Shell sort low to high"
 
 integer,intent(inout) :: iarray(:)      ! iarray input/output array
-   integer            :: n
-   integer            :: igap, i, j, k, jg
+integer               :: n
+integer               :: igap, i, j, k, jg
 
    n=size(iarray)
    igap=n
@@ -637,8 +648,8 @@ subroutine sort_shell_reals_hl(array)
 
 !  Copyright(C) 1989 John S. Urban
 real,intent(inout) :: array(:) ! input array
-   integer         :: n        ! number of elements in input array (array)
-   integer         :: i, j, k, igap, jg
+integer            :: n        ! number of elements in input array (array)
+integer            :: i, j, k, igap, jg
    n=size(array)
    igap=n
    INFINITE: do
@@ -667,8 +678,8 @@ subroutine sort_shell_reals_lh(array)
 
 !  Copyright(C) 1989 John S. Urban
 real,intent(inout) :: array(:)            ! input array
-integer         :: n                   ! number of elements in input array (array)
-integer         :: i, j, k, igap, jg
+integer            :: n                   ! number of elements in input array (array)
+integer            :: i, j, k, igap, jg
    n=size(array)
    igap=n
    INFINITE: do
@@ -699,8 +710,8 @@ subroutine sort_shell_doubles(array,order)
 
 ! ident_15="@(#) M_sort sort_shell_doubles(3fp) sort double array using Shell sort and specified order"
 
-doubleprecision,intent(inout)          :: array(:)   ! input/output array
-character(len=*),intent(in) :: order      ! sort order 'ascending'|'descending'
+doubleprecision,intent(inout) :: array(:)   ! input/output array
+character(len=*),intent(in)   :: order      ! sort order 'ascending'|'descending'
 
    if(order(1:1).eq.'a' .or. order(1:1).eq.'A') then
       call sort_shell_doubles_lh(array)
@@ -716,8 +727,8 @@ subroutine sort_shell_doubles_hl(array)
 
 !  Copyright(C) 1989 John S. Urban
 doubleprecision,intent(inout) :: array(:) ! input array
-integer         :: n        ! number of elements in input array (array)
-integer         :: i, j, k, igap, jg
+integer                       :: n        ! number of elements in input array (array)
+integer                       :: i, j, k, igap, jg
    n=size(array)
    igap=n
    INFINITE: do
@@ -746,8 +757,8 @@ subroutine sort_shell_doubles_lh(array)
 
 !  Copyright(C) 1989 John S. Urban
 doubleprecision,intent(inout) :: array(:)            ! input array
-   integer         :: n                   ! number of elements in input array (array)
-   integer         :: i, j, k, igap, jg
+integer                       :: n                   ! number of elements in input array (array)
+integer                       :: i, j, k, igap, jg
    n=size(array)
    igap=n
    INFINITE: do
@@ -795,10 +806,10 @@ subroutine sort_shell_complex_hl(array,type)
 ! ident_19="@(#) M_sort sort_shell_reals_hl(3fp) sort complex array using Shell sort (high to low)"
 
 !     Copyright(C) 1989 John S. Urban   all rights reserved
-   complex,intent(inout)       :: array(:)            ! input array
-   character(len=*),intent(in) :: type
-   integer                     :: n                   ! number of elements in input array (array)
-   integer                     :: igap, k, i, j, jg
+complex,intent(inout)       :: array(:)            ! input array
+character(len=*),intent(in) :: type
+integer                     :: n                   ! number of elements in input array (array)
+integer                     :: igap, k, i, j, jg
    n=size(array)
    igap=n
    if(len(type).le.0)return
@@ -836,10 +847,10 @@ subroutine sort_shell_complex_lh(array,type)
 !  Copyright(C) 1989 John S. Urban   all rights reserved
 !  array    input array
 !  n        number of elements in input array (array)
-   complex,intent(inout)         :: array(:)
-   character(len=*),  intent(in) :: type       ! sort by real part, imaginary part, or sqrt(R**2+I**2) ('R','I','S')
-   integer                       :: n
-   integer                       :: igap, k, i, j, jg
+complex,intent(inout)         :: array(:)
+character(len=*),  intent(in) :: type       ! sort by real part, imaginary part, or sqrt(R**2+I**2) ('R','I','S')
+integer                       :: n
+integer                       :: igap, k, i, j, jg
    n=size(array)
    igap=n
    INFINITE: do
@@ -877,9 +888,9 @@ subroutine sort_shell_complex_double(array,order,type)  ! select ascending or de
 
 ! ident_21="@(#) M_sort sort_shell_complex_double(3fp) sort double complex array using Shell sort"
 
-complex(kind=cd),intent(inout)         :: array(:)   ! array  input/output array
-character(len=*),  intent(in) :: order      ! sort order 'ascending'|'descending'
-character(len=*),  intent(in) :: type       ! sort by real part, imaginary part, or sqrt(R**2+I**2) ('R','I','S')
+complex(kind=cd),intent(inout) :: array(:)   ! array  input/output array
+character(len=*),  intent(in)  :: order      ! sort order 'ascending'|'descending'
+character(len=*),  intent(in)  :: type       ! sort by real part, imaginary part, or sqrt(R**2+I**2) ('R','I','S')
 
 if(order(1:1).eq.'a' .or. order(1:1).eq.'A') then
    call sort_shell_complex_double_lh(array,type)
@@ -894,10 +905,10 @@ subroutine sort_shell_complex_double_hl(array,type)
 ! ident_22="@(#) M_sort sort_shell_reals_hl(3fp) sort double complex array using Shell sort (high to low)"
 
 !     Copyright(C) 1989 John S. Urban   all rights reserved
-   complex(kind=cd),intent(inout)       :: array(:)            ! input array
-   character(len=*),intent(in) :: type
-   integer                     :: n                   ! number of elements in input array (array)
-   integer                     :: igap, k, i, j, jg
+complex(kind=cd),intent(inout) :: array(:)            ! input array
+character(len=*),intent(in)    :: type
+integer                        :: n                   ! number of elements in input array (array)
+integer                        :: igap, k, i, j, jg
    n=size(array)
    igap=n
    if(len(type).le.0)return
@@ -935,10 +946,10 @@ subroutine sort_shell_complex_double_lh(array,type)
 !  Copyright(C) 1989 John S. Urban   all rights reserved
 !  array    input array
 !  n        number of elements in input array (array)
-   complex(kind=cd),intent(inout)         :: array(:)
-   character(len=*),  intent(in) :: type       ! sort by real part, imaginary part, or sqrt(R**2+I**2) ('R','I','S')
-   integer                       :: n
-   integer                       :: igap, k, i, j, jg
+complex(kind=cd),intent(inout) :: array(:)
+character(len=*),  intent(in)  :: type       ! sort by real part, imaginary part, or sqrt(R**2+I**2) ('R','I','S')
+integer                        :: n
+integer                        :: igap, k, i, j, jg
    n=size(array)
    igap=n
    INFINITE: do
@@ -988,7 +999,7 @@ end subroutine sort_shell_complex_double
 !!          character,intent(in)       :: data(:)
 !!          complex,intent(in)         :: data(:)
 !!
-!!       integer,intent(out)           :: indx(size(data))
+!!          integer,intent(out)        :: indx(size(data))
 !!
 !!##DESCRIPTION
 !!    A rank hybrid quicksort. The data is not moved. An integer array is
@@ -1045,10 +1056,10 @@ end subroutine sort_shell_complex_double
 !!    program demo_sort_quick_rx
 !!    use M_sort, only : sort_quick_rx
 !!    implicit none
-!!    integer,parameter            :: isz=10000
-!!    real                         :: rr(isz)
-!!    integer                      :: ii(isz)
-!!    integer                      :: i
+!!    integer,parameter :: isz=10000
+!!    real              :: rr(isz)
+!!    integer           :: ii(isz)
+!!    integer           :: i
 !!    write(*,*)'initializing array with ',isz,' random numbers'
 !!    CALL RANDOM_NUMBER(RR)
 !!    rr=rr*450000.0
@@ -1095,9 +1106,9 @@ integer(kind=int8),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
 integer(kind=int8)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1269,9 +1280,9 @@ integer(kind=int16),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
 integer(kind=int16)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1443,9 +1454,9 @@ integer(kind=int32),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
 integer(kind=int32)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1617,9 +1628,9 @@ integer(kind=int64),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
 integer(kind=int64)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1791,9 +1802,9 @@ real(kind=real32),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
 real(kind=real32)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -1965,9 +1976,9 @@ real(kind=real64),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                :: indx(:)
 real(kind=real64)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -2139,9 +2150,9 @@ character(kind=ascii,len=*),intent(in)   :: data(:)
 integer(kind=int32),intent(out)                  :: indx(:)
 character(kind=ascii,len=len(data))  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -2315,9 +2326,9 @@ integer(kind=int8),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
 integer(kind=int8)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -2489,9 +2500,9 @@ integer(kind=int16),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
 integer(kind=int16)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -2663,9 +2674,9 @@ integer(kind=int32),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
 integer(kind=int32)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -2837,9 +2848,9 @@ integer(kind=int64),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
 integer(kind=int64)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -3011,9 +3022,9 @@ real(kind=real32),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
 real(kind=real32)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -3185,9 +3196,9 @@ real(kind=real64),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                :: indx(:)
 real(kind=real64)  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -3359,9 +3370,9 @@ character(kind=ascii,len=*),intent(in)   :: data(:)
 integer(kind=int64),intent(out)                  :: indx(:)
 character(kind=ascii,len=len(data))  :: datap
 
-integer(kind=int64)    :: n
-integer(kind=int64)    :: lstk(31),rstk(31),istk
-integer(kind=int64)    :: l,r,i,j,p,indexp,indext
+integer(kind=int64) :: n
+integer(kind=int64) :: lstk(31),rstk(31),istk
+integer(kind=int64) :: l,r,i,j,p,indexp,indext
 
 !  QuickSort Cutoff
 !
@@ -3945,10 +3956,10 @@ end subroutine sort_quick_rx_complex_int64
 !!      program demo_sort_quick_compact
 !!      use M_sort, only : sort_quick_compact
 !!      implicit none
-!!      integer,parameter            :: isz=10000
-!!      real                         :: rrin(isz)
-!!      real                         :: rrout(isz)
-!!      integer                      :: i
+!!      integer,parameter :: isz=10000
+!!      real              :: rrin(isz)
+!!      real              :: rrout(isz)
+!!      integer           :: i
 !!      write(*,*)'initializing array with ',isz,' random numbers'
 !!      CALL RANDOM_NUMBER(rrin)
 !!      rrin=rrin*450000.0
@@ -4114,28 +4125,6 @@ real(kind=real64)                   :: sorted(1:size(data))
    endif
 !     All done
 end function sort_quick_compact_real_real64
-recursive function sort_quick_compact_real_real128(data) result(sorted)
-
-! ident_46="@(#) M_sort sort_quick_compact_real_real128(3f) recursive quicksort of a real(kind=real128) array"
-!
-! Compact implementation of the QuickSort algorithm
-!
-! This is derived from an example in "Modern Fortran in Practice" by Arjen Markus
-!
-! This work is licensed under the Creative Commons Attribution 3.0 Unported License.
-! To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/
-real(kind=real128),intent(in)        :: data(:)
-real(kind=real128)                   :: sorted(1:size(data))
-
-   if (size(data) > 1) then
-      sorted = [sort_quick_compact_real_real128(pack(data(2:), data(2:) > data(1))), &
-                data(1), &
-                sort_quick_compact_real_real128(pack(data(2:), data(2:) <= data(1)))]
-   else
-      sorted = data
-   endif
-!     All done
-end function sort_quick_compact_real_real128
 
 recursive function sort_quick_compact_complex_real32(data) result(sorted)
 
@@ -4181,28 +4170,6 @@ complex(kind=real64)                   :: sorted(1:size(data))
    endif
 !     All done
 end function sort_quick_compact_complex_real64
-recursive function sort_quick_compact_complex_real128(data) result(sorted)
-
-! ident_49="@(#) M_sort sort_quick_compact_complex_real128(3f) recursive quicksort of a complex(kind=real128) array"
-!
-! Compact implementation of the QuickSort algorithm
-!
-! This is derived from an example in "Modern Fortran in Practice" by Arjen Markus
-!
-! This work is licensed under the Creative Commons Attribution 3.0 Unported License.
-! To view a copy of this license, visit http://creativecommons.org/licenses/by/3.0/
-complex(kind=real128),intent(in)        :: data(:)
-complex(kind=real128)                   :: sorted(1:size(data))
-
-   if (size(data) > 1) then
-      sorted = [sort_quick_compact_complex_real128(pack(data(2:), abs(data(2:)) > abs(data(1)))), &
-                data(1), &
-                sort_quick_compact_complex_real128(pack(data(2:), abs(data(2:)) <= abs(data(1))))]
-   else
-      sorted = data
-   endif
-!     All done
-end function sort_quick_compact_complex_real128
 
 recursive function sort_quick_compact_character_ascii(data) result(sorted)
 
@@ -4316,8 +4283,8 @@ end function sort_quick_compact_character_ascii
 subroutine unique_integer_int8(array,ivals)
 integer(kind=int8),intent(inout)  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4340,8 +4307,8 @@ end subroutine unique_integer_int8
 subroutine unique_integer_int16(array,ivals)
 integer(kind=int16),intent(inout)  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4364,8 +4331,8 @@ end subroutine unique_integer_int16
 subroutine unique_integer_int32(array,ivals)
 integer(kind=int32),intent(inout)  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4388,8 +4355,8 @@ end subroutine unique_integer_int32
 subroutine unique_integer_int64(array,ivals)
 integer(kind=int64),intent(inout)  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4413,8 +4380,8 @@ end subroutine unique_integer_int64
 subroutine unique_real_real32(array,ivals)
 real(kind=real32),intent(inout)  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4437,8 +4404,8 @@ end subroutine unique_real_real32
 subroutine unique_real_real64(array,ivals)
 real(kind=real64),intent(inout)  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4454,30 +4421,6 @@ integer                              :: i,isize
 ! unique >>>>>>>>>>>
 end subroutine unique_real_real64
 ! unique_template >>>>>>>>>>>
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-!<<<<<<<<<<< unique_template
-subroutine unique_real_real128(array,ivals)
-real(kind=real128),intent(inout)  :: array(:)
-!<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
-   isize=size(array)
-   if(isize.ge.2)then
-      ivals=1
-      do i=2,isize
-         if(array(i).ne.array(i-1))then
-            ivals=ivals+1
-            array(ivals)=array(i)
-         endif
-      enddo
-   else
-      ivals=isize
-   endif
-! unique >>>>>>>>>>>
-end subroutine unique_real_real128
-! unique_template >>>>>>>>>>>
 
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -4486,8 +4429,8 @@ end subroutine unique_real_real128
 subroutine unique_complex_real32(array,ivals)
 complex(kind=real32),intent(inout)  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4510,8 +4453,8 @@ end subroutine unique_complex_real32
 subroutine unique_complex_real64(array,ivals)
 complex(kind=real64),intent(inout)  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4530,35 +4473,11 @@ end subroutine unique_complex_real64
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-!<<<<<<<<<<< unique_template
-subroutine unique_complex_real128(array,ivals)
-complex(kind=real128),intent(inout)  :: array(:)
-!<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
-   isize=size(array)
-   if(isize.ge.2)then
-      ivals=1
-      do i=2,isize
-         if(array(i).ne.array(i-1))then
-            ivals=ivals+1
-            array(ivals)=array(i)
-         endif
-      enddo
-   else
-      ivals=isize
-   endif
-! unique >>>>>>>>>>>
-end subroutine unique_complex_real128
-! unique_template >>>>>>>>>>>
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
 subroutine unique_strings_allocatable_len(array,ivals)
 character(len=:),intent(inout),allocatable  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4579,8 +4498,8 @@ end subroutine unique_strings_allocatable_len
 subroutine unique_strings(array,ivals)
 character(len=*),intent(inout),allocatable  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -4601,8 +4520,8 @@ end subroutine unique_strings
 subroutine unique_allocatable_strings(array,ivals)
 character(len=:),intent(inout),allocatable  :: array(:)
 !<<<<<<<<<<< unique
-integer,intent(out)                  :: ivals
-integer                              :: i,isize
+integer,intent(out) :: ivals
+integer             :: i,isize
    isize=size(array)
    if(isize.ge.2)then
       ivals=1
@@ -5457,7 +5376,6 @@ character(len=1),allocatable :: chars(:)
     type is (integer(kind=int64));  chars=transfer(anything,chars)
     type is (real(kind=real32));    chars=transfer(anything,chars)
     type is (real(kind=real64));    chars=transfer(anything,chars)
-    type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
       chars=transfer(anything,chars) ! should work for everything, does not with some compilers
@@ -5486,7 +5404,6 @@ character(len=1),allocatable :: chars(:)
     type is (integer(kind=int64));  chars=transfer(anything,chars)
     type is (real(kind=real32));    chars=transfer(anything,chars)
     type is (real(kind=real64));    chars=transfer(anything,chars)
-    type is (real(kind=real128));   chars=transfer(anything,chars)
     type is (logical);              chars=transfer(anything,chars)
     class default
       chars=transfer(anything,chars) ! should work for everything, does not with some compilers
@@ -5564,8 +5481,8 @@ end function  anything_to_bytes_scalar
 !!##LICENSE
 !!    Public Domain
 subroutine bytes_to_anything(chars,anything)
-   character(len=1),allocatable :: chars(:)
-   class(*) :: anything
+character(len=1),allocatable :: chars(:)
+class(*)                     :: anything
    select type(anything)
     type is (character(len=*));     anything=transfer(chars,anything)
     type is (complex);              anything=transfer(chars,anything)
@@ -5576,7 +5493,6 @@ subroutine bytes_to_anything(chars,anything)
     type is (integer(kind=int64));  anything=transfer(chars,anything)
     type is (real(kind=real32));    anything=transfer(chars,anything)
     type is (real(kind=real64));    anything=transfer(chars,anything)
-    type is (real(kind=real128));   anything=transfer(chars,anything)
     type is (logical);              anything=transfer(chars,anything)
     class default
       stop 'crud. bytes_to_anything(1) does not know about this type'
@@ -5674,11 +5590,6 @@ real(kind=real64),intent(in) :: input(:)
 integer :: counts(size(input)), i
    counts=[(count(input(i) > input)+count(input(i) == input(:i)), i=1,size(input) )]
 end function sort_real64
-function sort_real128(input) result(counts)
-real(kind=real128),intent(in) :: input(:)
-integer :: counts(size(input)), i
-   counts=[(count(input(i) > input)+count(input(i) == input(:i)), i=1,size(input) )]
-end function sort_real128
 function sort_character(input) result(counts)
 character(len=*),intent(in) :: input(:)
 integer :: counts(size(input)), i
@@ -6158,63 +6069,6 @@ integer :: i, j, k, l, it
 !<<<<<<<<< sort_heap_template
 end subroutine sort_heap_real_real64
 
-subroutine sort_heap_real_real128(dat,indx)
-implicit none
-real(kind=real128),intent(in)  :: dat(:)
-real(kind=real128)             :: a_temp
-!>>>>>>>>> sort_heap_template
-integer :: indx(*)
-integer :: n
-integer :: i, j, k, l, it
-!
-! Construct an index table that can be used to rearrange array DAT in ascending order using the heapsort algorithm.
-!
-   n=size(dat)
-   if (n .eq. 0) stop ' Nonpositive dimension in sort_heap'
-   do i = 1, n
-      indx(i) = i
-   enddo
-   if (n .eq. 1) return
-   l = n/2 + 1
-   k = n
-
-   INFINITE: do
-      if (l .gt. 1) then
-         l  = l - 1
-         it = indx(l)
-         a_temp = dat(it)
-      else
-         it = indx(k)
-         a_temp = dat(it)
-         indx(k) = indx(1)
-         k = k - 1
-         if (k .eq. 1) then
-            indx(1) = it
-            return
-         endif
-      endif
-      i = l
-      j = l + l
-      INNER: do
-         if (j .le. k) then
-            if (j .lt. k) then
-               if (dat(indx(j)) .lt. dat(indx(j+1))) j = j + 1
-            endif
-            if (a_temp .lt. dat(indx(j) )) then
-               indx(i) = indx(j)
-               i = j
-               j = j + j
-            else
-               j = k + 1
-            endif
-         else
-            exit INNER
-         endif
-      enddo INNER
-      indx(i) = it
-   enddo INFINITE
-!<<<<<<<<< sort_heap_template
-end subroutine sort_heap_real_real128
 subroutine sort_heap_character_ascii(dat,indx)
 implicit none
 character(kind=ascii,len=*),intent(in)  :: dat(:)

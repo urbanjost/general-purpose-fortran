@@ -1,0 +1,135 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>banslv (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>banslv (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>companion routine to</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+banfac . it returns the solution  x  of the
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>linear system</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a*x = b  in place of  b , given the lu-factorization
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>for</B> </TD><TD valign=bottom>
+a  in the workarray  w .
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+w, nroww,nrow,nbandl,nbandu&#46;&#46;&#46;..describe the lu-factorization of a
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>banded matrix</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  of order  nrow  as constructed in  banfac .
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>for details, see</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+banfac .
+b&#46;&#46;&#46;..right side of the system to be solved .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>b&#46;&#46;&#46;..contains the solution</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+x , of order  nrow .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>(with</B> </TD><TD valign=bottom>
+a = l*u, as stored in  w,) the unit lower triangular system
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>l(u*x) = b</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is solved for  y = u*x, and  y  stored in  b . then the
+<TABLE width=100% cellpadding=3><!-- tsb: is solved for  y = u*x, and  y  stored in  b . then the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>upper triangular system</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+u*x = y  is solved for  x  . the calcul-
+ations are so arranged that the innermost loops stay within columns.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>banslv (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 9a0ea81f-4dc5-4ed8-9445-b1a4ad0d854d using man macros.</FONT>
+<br><br><center><img src="images/banslv.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

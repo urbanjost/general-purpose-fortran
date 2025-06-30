@@ -9,10 +9,14 @@
 
 
 
+!-----------------------------------------------------------------------------------------------------------------------------------
+
+
+!-----------------------------------------------------------------------------------------------------------------------------------
 !===================================================================================================================================
 MODULE M_io
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
-use,intrinsic     :: iso_c_binding,   only : c_int, c_char
+use,intrinsic  :: iso_c_binding,   only : c_int, c_char
 use M_strings, only : merge_str, lower, notabs, s2v, isnumber, decodebase, s2vs, split, substitute, noesc, crop
 use M_uuid,    only : generate_uuid
 use M_journal, only : journal
@@ -114,6 +118,7 @@ interface
       import c_int
    end function system_getchar
 end interface
+!-----------------------------------
 CONTAINS
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -409,8 +414,16 @@ character(len=20)             :: sign           ; namelist/inquire/sign
 integer                       :: size           ; namelist/inquire/size
 character(len=20)             :: stream         ; namelist/inquire/stream
 !==============================================================================================
-   namein=merge_str(namein_in,'',present(namein_in))
-   lun=merge(lun_in,-1,present(lun_in))
+   if(present(namein_in))then
+      namein=namein_in
+   else
+      namein=''
+   endif
+   if(present(lun_in))then
+      lun=lun_in
+   else
+      lun=-1
+   endif
    ! exist, opened, and named always become defined unless an error condition occurs.
    !!write(*,*)'LUN=',lun,' FILENAME=',namein
    !-----------------------------------------------------------------------------------------------------------------------------------
@@ -448,7 +461,7 @@ character(len=20)             :: stream         ; namelist/inquire/stream
        call journal('sc','*print_inquire* must specify either filename or unit number')
     endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   write(*,nml=inquire,delim='none')
+   write(*,nml=inquire,delim='quote') ! APOSTROPHE, QUOTE, or NONE
    return
 !-----------------------------------------------------------------------------------------------------------------------------------
 999   continue
@@ -1832,7 +1845,11 @@ character(len=:),allocatable          :: local_mode
 character(len=256)                    :: message
 character(len=:),allocatable          :: action, position, access, form, status, file
 logical                               :: verbose
-   local_mode=lower(merge_str(mode,'',present(mode)))
+   if(present(mode))then
+      local_mode=mode
+   else
+      local_mode=''
+   endif
    file=trim(adjustl(filename))//'   '
    ifound=index(file,'>>')
    if(ifound /= 0)then
@@ -2679,7 +2696,11 @@ integer                                  :: lun_local
 
    line_local=''
    ier=0
-   lun_local=merge(lun,stdin,present(lun))
+   if(present(lun))then
+      lun_local=lun
+   else
+      lun_local=stdin
+   endif
    INFINITE: do                                                           ! read characters from line and append to result
       read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for
                                                                           ! files other than stdin so system line limit
@@ -4092,7 +4113,7 @@ end function getchar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-end module m_io
+end module M_io
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

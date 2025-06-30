@@ -9,7 +9,7 @@
          write(*,*)squareall(2_int64)
          write(*,*)squareall(2.0_real32)
          write(*,*)squareall(2.0_real64)
-         write(*,*)squareall(2.0_real128)
+         !write(*,*)squareall(2.0_real128)
       contains
 
       function squareall(invalue) result (dvalue)

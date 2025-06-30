@@ -17,7 +17,7 @@
 !!##DESCRIPTION
 !! The M_matrix module contains the Linear Algebra Fortran Facility (LALA)
 !! which allows for interacting with a Fortran program using Matlab
-!! or Octave-like commands.  LALA is also usable as a simple one-line
+!! or Octave-like commands. LALA is also usable as a simple one-line
 !! language. It is a WIP (Work In Progress) but is already useful.
 !!
 !!   * You can pass intrinsic-type data easily between your Fortran
@@ -87,24 +87,28 @@
 !!
 !!     end program demo_M_matrix
 module M_matrix
+! https://orcid.org/0009-0000-9717-3407
 
 use,intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, stdout=>OUTPUT_UNIT
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 
-use M_strings,    only : value_to_string, lower, v2s, s2v
+use M_strings,    only : value_to_string, lower, v2s, s2v, fmt
 use M_framework,  only : journal
 use M_help,       only : help_command
 use M_history,    only : redo
 use M_list,       only : insert, locate, replace, remove
-use M_io,         only : lookfor
+use M_io,         only : lookfor, which
 use M_intrinsics, only : help_intrinsics
+use M_time,       only : d2u, d2j, d2m, d2b, BAStime, d2o, dow
+use M_sets,       only : intersect, ismember, issorted, isequal, setdiff, setxor, union, unique
+use M_orderpack,  only : median,medianloc,medianval,occurrences,perturb,rank,sort,orderloc,orderval,rank_unique,rank_decreasing
 
-use M_LA, only : mat_flop,   mat_inverse_hilbert,  mat_iwamax,  mat_magic,   mat_pythag,  mat_rat,    mat_round,  mat_rref
-use M_LA, only : mat_rrot,   mat_rrotg,            mat_rset,    mat_rswap,   mat_urand,   mat_wasum,  mat_wcopy
-use M_LA, only : mat_wdotci,           mat_wdotcr,  mat_wdotui,  mat_wdotur, mat_wmul,   mat_wnrm2
-use M_LA, only : mat_wpofa,  mat_wrscal,           mat_wscal,   mat_wset,    mat_wsign,   mat_wsqrt,  mat_wswap
+use M_LA, only : mat_flop, mat_inverse_hilbert, mat_iwamax, mat_magic, mat_pythag, mat_rat, mat_round, mat_rref
+use M_LA, only : mat_rrot, mat_rrotg, mat_rset, mat_rswap, mat_urand, mat_wasum, mat_wcopy
+use M_LA, only : mat_wdotci, mat_wdotcr, mat_wdotui, mat_wdotur, mat_wmul, mat_wnrm2, mat_wpow
+use M_LA, only : mat_wpofa, mat_wrscal, mat_wscal, mat_wset, mat_wsign, mat_wsqrt, mat_wswap
 
-!use M_LA, only : mat_wdiv,   mat_wlog, mat_watan
+!use M_LA, only : mat_wdiv, mat_wlog, mat_watan
 
 !matx_waxpy,ml_comqr3,ml_corth,ml_htribk,ml_htridi,ml_imtql2,ml_wgeco,ml_wgedi,ml_wgefa,ml_wgesl,ml_wqrdc,ml_wqrsl,ml_wsvdc_
 !>
@@ -189,6 +193,8 @@ use M_LA, only : mat_wpofa,  mat_wrscal,           mat_wscal,   mat_wset,    mat
 !!
 !!    ---------------------> FACTOR >---------------------->
 !!            |                                   |
+!!            |             |-< ^ <-|             |
+!!            |             |       |             |
 !!            |             |-< * <-|             |
 !!            |  |-------|  |       |  |-------|  |
 !!            |--|       |--|-< / <-|--|       |--|
@@ -221,7 +227,9 @@ use M_LA, only : mat_wpofa,  mat_wrscal,           mat_wscal,   mat_wset,    mat
 !!         |                                         |           |
 !!         |------------> > >-----> EXPR >-----> < >-|           |
 !!         |                                         |           |
-!!         |-----> FACTOR >---> ** >---> FACTOR >----|           |
+!!         |                  | ^  |                 |           |
+!!         |-----> FACTOR >--->    >---> FACTOR >----|           |
+!!         |                  | ** |                 |           |
 !!         |                                                     |
 !!         |------------> ' >-----> TEXT >-----> ' >-------------|
 !!
@@ -304,7 +312,7 @@ use M_LA, only : mat_wpofa,  mat_wrscal,           mat_wscal,   mat_wset,    mat
 !!
 !!    The source was taken off a VAX 11/780. It ran without modification
 !!    (except the file handler and some minor error handling) on an Amiga
-!!    1000 using ABSoft Fortran v2.2.  It will run in 512K environment.
+!!    1000 using ABSoft Fortran v2.2. It will run in 512K environment.
 !!    I have seen it on IBM mainframes and IBM PCs.
 !!
 !!    Subsequent changes per John S. Urban: see change log and git(1) history
@@ -338,6 +346,7 @@ integer,parameter        :: GG_EOL=99999           ! make > 2256
 !==================================================================================================================================!
 character(len=GG_LINELEN),allocatable,save :: G_PSEUDO_FILE(:) ! allow for input to be passed from program instead of from file
 logical                  :: G_PROMPT              ! companion for G_PSEUDO_FILE
+logical,save             :: G_SYSTEM=.false.
 logical,save             :: G_ECHO=.false.        ! echo input lines
 
 integer                  :: G_LIN(GG_LINELEN)
@@ -345,19 +354,18 @@ integer                  :: G_LIN(GG_LINELEN)
 integer                  :: G_LHS ! number of arguments on LHS
 integer                  :: G_RHS ! number of arguments on RHS
 integer                  :: G_FIN
-integer                  :: G_FUN
-integer                  :: G_FMT
+integer                  :: G_FUN ! which function to call to process specified command
+integer                  :: G_FMT ! which case in function to process a special command
 
-integer                  :: G_RIO
+integer                  :: G_LUN_READING_FROM
 integer                  :: G_INPUT_LUN
 
 integer                  :: G_PTZ
 integer                  :: G_SYM
+integer                  :: G_SYM_LEFT
 integer                  :: G_SYN(GG_MAX_NAME_LENGTH)
 !==================================================================================================================================!
 integer                  :: G_CURRENT_RANDOM_SEED
-integer                  :: G_CURRENT_RANDOM_TYPE     ! [0] uniform distribution
-                                                      ! [*] normal distribution
 integer                  :: G_FLOP_COUNTER(2)
 integer                  :: G_DEBUG_LEVEL             ! select which debug messages to display. zero (0) is off
 logical                  :: G_FILE_OPEN_ERROR         ! flag whether file open error occurred or not
@@ -455,7 +463,7 @@ integer                     :: G_TOP_OF_SAVED, G_ARGUMENT_POINTER
 !   bottom portion for saved variables. The figure shows the situation
 !   after the line
 !
-!      A = [11,12; 21,22],  x = [3.14, sqrt(-1)]'
+!      A = [11,12; 21,22],  x = [3.14, la%sqrt(-1)]'
 !
 !   has been processed. The four permanent names, "eps", "flop", "rand"
 !   and "eye", occupy the last four positions of the variable stacks.
@@ -578,7 +586,7 @@ integer,parameter :: blank=32 ! blank
 !integer,parameter :: doublequote=34 ! "
 !integer,parameter ::  =35 ! #
 !integer,parameter ::  =36 ! $
-!integer,parameter ::  =37 ! %
+integer,parameter ::  percent=37 ! %
 !integer,parameter ::  =38 ! &
 integer,parameter ::  quote=39  ! '
 integer,parameter ::  lparen=40 ! (
@@ -635,7 +643,7 @@ integer,parameter ::  z_up=90   ! Z
 integer,parameter ::  lbracket=91 ! [
 integer,parameter ::  bslash=92 ! backslash
 integer,parameter ::  rbracket=93 ! ]
-!integer,parameter ::  =94 ! ^
+integer,parameter ::  caret =94 ! ^
 integer,parameter ::  score=95  ! _
 !integer,parameter ::  =96 ! `
 integer,parameter ::  a_low=97  ! a
@@ -689,8 +697,6 @@ public usersub_interface
 
 procedure(usersub_interface),pointer :: usersub => usersub_placeholder
 !==================================================================================================================================!
-!==================================================================================================================================!
-
 contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -757,11 +763,10 @@ end subroutine usersub_placeholder
 !!    which may be programmed, either through a macro language or through
 !!    execution of script files.
 !!
-!!    LALA(3f) Functions supported include (but are not by any means limited
+!!    LALA(3f) functions supported include (but are not by any means limited
 !!    to) sin, cos, tan, arcfunctions, upper triangular, lower triangular,
 !!    determinants, matrix multiplication, identity, Hilbert matrices,
-!!    eigenvalues and eigenvectors, matrix roots and products, inversion
-!!    and so on and so forth.
+!!    eigenvalues and eigenvectors, matrix roots and products, and inversion.
 !!
 !!    LALA() can be used
 !!       + as a stand-alone utility for working with lala() files and
@@ -793,7 +798,7 @@ end subroutine usersub_placeholder
 !!    If no parameters are supplied interactive mode is entered.
 !!
 !!    If a CMD is passed and no previous initialization call was made the
-!!    scratch space will be allocated to 200000.
+!!    scratch space will be allocated to 400000 64-bit complex values.
 !!
 !!##EXAMPLES
 !!
@@ -830,17 +835,17 @@ end subroutine usersub_placeholder
 !!       call lala(20000)                  ! initialize silently
 !!       call lala( 'a=[1 2 3 4; 5 6 7 8]')
 !!       call lala( [character(len=80) :: &
-!!        & 'semi;lines(999999)                                    ',&
-!!        & '// create a magic square and add 100 to all the values',&
-!!        & 'A=magic(4),<X,Y>=shape(A)                             ',&
-!!        & 'B=A+ones(X,Y)*100                                     ',&
-!!        & '// save all current values to a file                  ',&
-!!        & "save('sample.laf')                                    ",&
-!!        & '// clear all user values                              ',&
-!!        & 'clear                                                 ',&
-!!        & '// show variable names, load values from file         ',&
-!!        & '// and show again to show the variables are restored  ',&
-!!        & "who;load('sample.laf');who                            "])
+!!        & 'semi;lines(999999)                                     ',&
+!!        & '// create a magic square and add 100 to all the values ',&
+!!        & 'A=magic(4),<X,Y>=shape(A)                              ',&
+!!        & 'B=A+ones(X,Y)*100                                      ',&
+!!        & '// save all current values to a file                   ',&
+!!        & "save('sample.laf')                                     ",&
+!!        & '// clear all user values                               ',&
+!!        & 'clear                                                  ',&
+!!        & '// show variable names, load values from file          ',&
+!!        & '// and show again to show the variables are restored   ',&
+!!        & "who;load('sample.laf');who                             "])
 !!    end program bigmat
 !!
 !!   Example 3: Sample program with custom user function
@@ -904,14 +909,14 @@ end subroutine usersub_placeholder
 !!
 !!      >:avg:
 !!
-!!      >for i = 2:2:n, for j = 2:2:n, t = (a(i-1,j-1)+a(i-1,j)+a(i,j-1)+a(i,j))/4; ...
+!!      >for i = 2:n:2, for j = 2:n:2, t = (a(i-1,j-1)+a(i-1,j)+a(i,j-1)+a(i,j))/4; ...
 !!      >a(i-1,j-1) = t; a(i,j-1) = t; a(i-1,j) = t; a(i,j) = t;
 !!
 !!      >:cdiv:
 !!
 !!      >// ======================================================
 !!      >// cdiv
-!!      >a=sqrt(random(8))
+!!      >a=la%sqrt(random(8))
 !!      >ar = real(a); ai = imag(a); br = real(b); bi = imag(b);
 !!      >p = bi/br;
 !!      >t = (ai - p*ar)/(br + p*bi);
@@ -932,7 +937,7 @@ end subroutine usersub_placeholder
 !!      >[cr ci; cr2 ci2; cr3 ci3]
 !!      >// ======================================================
 !!
-!!      >:exp:
+!!      >:la%exp:
 !!
 !!      >t = 0*x + eye; s = 0*eye(x); n = 1;
 !!      >while abs(s+t-s) > 0, s = s+t, t = x*t/n, n = n + 1
@@ -940,19 +945,19 @@ end subroutine usersub_placeholder
 !!      >:four:
 !!      > n
 !!      > pi = 4*atan(1);
-!!      > i = sqrt(-1);
-!!      > w = exp(2*pi*i/n);
+!!      > i = la%sqrt(-1);
+!!      > w = la%exp(2*pi*i/n);
 !!      > F = [];
 !!      > for k = 1:n, for j = 1:n, F(k,j) = w**((j-1)*(k-1));
-!!      > F = F/sqrt(n);
+!!      > F = F/la%sqrt(n);
 !!      > alpha = r*pi;
-!!      > rho = exp(i*alpha);
-!!      > S = log(rho*F)/i - alpha*eye;
+!!      > rho = la%exp(i*alpha);
+!!      > S = la%log(rho*F)/i - alpha*eye;
 !!      > serr = norm(imag(S),1);
 !!      > S = real(S);
 !!      > serr = serr + norm(S-S',1)
 !!      > S = (S + S')/2;
-!!      > ferr = norm(F-exp(i*S),1)
+!!      > ferr = norm(F-la%exp(i*S),1)
 !!
 !!      > :gs:
 !!      > for k = 1:n, for j = 1:k-1, d = x(k,:)*x(j,:)'; x(k,:) = x(k,:) - d*x(j,:); ...
@@ -979,9 +984,9 @@ end subroutine usersub_placeholder
 !!      > :jacstep:
 !!
 !!      > d = (a(q,q)-a(p,p))*0.5/a(p,q);
-!!      > t = 1/(abs(d)+sqrt(d*d+1));
+!!      > t = 1/(abs(d)+la%sqrt(d*d+1));
 !!      > if d < 0, t = -t; end;
-!!      > c = 1/sqrt(1+t*t);  s = t*c;
+!!      > c = 1/la%sqrt(1+t*t);  s = t*c;
 !!      > R = eye(n); r(p,p)=c; r(q,q)=c; r(p,q)=s; r(q,p)=-s;
 !!      > X = X*R;
 !!      > A = R'*A*R;
@@ -998,7 +1003,7 @@ end subroutine usersub_placeholder
 !!      > :lanczos:
 !!
 !!      > [n,n] = shape(A);
-!!      > q1 = rand(n,1);
+!!      > q1 = randu(n,1);
 !!      > ort
 !!      > alpha = []; beta = [];
 !!      > q = q1/norm(q1); r = A*q(:,1);
@@ -1067,8 +1072,8 @@ end subroutine usersub_placeholder
 !!      > for i=1:n, for j=2:m, k=c(i,j); if k>0, a(i,k)=1;
 !!      > check = norm(A-A',1), if check > 0, quit
 !!      > [X,D] = eig(A+eye);
-!!      > D = diag(D);  D = D(n:-1:1)
-!!      > X = X(:,n:-1:1);
+!!      > D = diag(D);  D = D(n:1:-1)
+!!      > X = X(:,n:1:-1);
 !!      > [x(:,1)/sum(x(:,1)) x(:,2) x(:,3) x(:,19)]
 !!
 !!      > :pascal:
@@ -1105,7 +1110,7 @@ end subroutine usersub_placeholder
 !!
 !!      > y = [ 75.995   91.972  105.711  123.203   ...
 !!      >      131.669  150.697  179.323  203.212]'
-!!      > t = [ 1900:10:1970 ]'
+!!      > t = [ 1900:1970:10 ]'
 !!      > t = (t - 1940*ones(t))/40;   [t y]
 !!      > n = 8;  A(:,1) = ones(t);  for j = 2:n, A(:,j) = t .* A(:,j-1);
 !!      > A
@@ -1118,7 +1123,7 @@ end subroutine usersub_placeholder
 !!      > sl = s(l)/scale; el = e(l)/scale;
 !!      > b = ((smm1 + sm)*(smm1 - sm) + emm1**2)/2;
 !!      > c = (sm*emm1)**2;
-!!      > shift = sqrt(b**2+c); if b < 0, shift = -shift;
+!!      > shift = la%sqrt(b**2+c); if b < 0, shift = -shift;
 !!      > shift = c/(b + shift)
 !!      > f = (sl + sm)*(sl-sm) - shift
 !!      > g = sl*el
@@ -1163,7 +1168,7 @@ end subroutine usersub_placeholder
 !!      >       x(i) = 1-rho*sin(t);  y(i) = 1-rho*cos(t);
 !!      > //convert to polar coordinates
 !!      >    for i = 1:m-1, th(i) = atan(y(i)/x(i));  ...
-!!      >       r(i) = sqrt(x(i)**2+y(i)**2);
+!!      >       r(i) = la%sqrt(x(i)**2+y(i)**2);
 !!      >    th(m) = pi/2;  r(m) = 1;
 !!      > //generate matrix
 !!      >    //Dirichlet conditions
@@ -1178,7 +1183,7 @@ end subroutine usersub_placeholder
 !!      > //solve for coefficients
 !!      >    c = A\b
 !!      > //compute effective conductivity
-!!      >    c(2:2:n) = -c(2:2:n)
+!!      >    c(2:n:2) = -c(2:n:2)
 !!      >    sigma = sum(c)
 !!      > //output total operation count
 !!      >    ops = flop(2)
@@ -1190,7 +1195,7 @@ end subroutine usersub_placeholder
 !!      > wv = ncen/sum(ncen);           // ncen contains population sizes
 !!      > pbar = wv*p;                   // weighted average of p
 !!      > p = p - ones(g,1)*pbar;        // deviations from mean
-!!      > p = sqrt(diag(wv)) * p;        // weight rows of p by sqrt of pop size
+!!      > p = la%sqrt(diag(wv)) * p;        // weight rows of p by sqrt of pop size
 !!      > h = diag(pbar); h = h*(eye-h); // diagonal contains binomial variance: p*(1-p)
 !!      > r = p*inv(h)*p'/k;             // normalized covariance matrix
 !!      > eig(r)'
@@ -1241,7 +1246,7 @@ end subroutine usersub_placeholder
 !!      > :strut.laf:
 !!
 !!      > // Structure problem, Forsythe, Malcolm and Moler, p. 62
-!!      > s =  sqrt(2)/2;
+!!      > s =  la%sqrt(2)/2;
 !!      > A = [
 !!      > -s  .  .  1  s   .  .  .  .  .  .  .  .  .  .  .  .
 !!      > -s  . -1  . -s   .  .  .  .  .  .  .  .  .  .  .  .
@@ -1298,7 +1303,7 @@ end subroutine usersub_placeholder
 !!      > X = data;
 !!      > [n,p] = shape(X)
 !!      > mu = ones(1,n)*X/n
-!!      > X = X - ones(n,1)*mu;  X = X/diag(sqrt(diag(X'*X)))
+!!      > X = X - ones(n,1)*mu;  X = X/diag(la%sqrt(diag(X'*X)))
 !!      > corr = X'*X
 !!      > y = data(:,p); X = [ones(y) data(:,1:p-1)];
 !!      > long e
@@ -1370,6 +1375,7 @@ integer,parameter           :: EPS(GG_MAX_NAME_LENGTH)=   [iachar(['e','p','s','
 integer,parameter           :: FLOPS(GG_MAX_NAME_LENGTH)= [iachar(['f','l','o','p','s']),GG_PAD(6:)]
 integer,parameter           :: EYE(GG_MAX_NAME_LENGTH)=   [iachar(['e','y','e',' ',' ']),GG_PAD(6:)]
 integer,parameter           :: RAND(GG_MAX_NAME_LENGTH)=  [iachar(['r','a','n','d',' ']),GG_PAD(6:)]
+integer                     :: i
 
    if(present(echo)) G_ECHO=echo
 
@@ -1379,23 +1385,22 @@ integer,parameter           :: RAND(GG_MAX_NAME_LENGTH)=  [iachar(['r','a','n','
    if(allocated(G_PSEUDO_FILE))deallocate(G_PSEUDO_FILE)
    allocate(G_PSEUDO_FILE(0))
 
-   G_LIN=blank
+   G_LIN=blank ! should set everyone
    G_VAR_IDS=blank
 
    GM_BIGMEM=INIT
-   if(GM_BIGMEM.lt.0)GM_BIGMEM=200000
+   if(GM_BIGMEM.lt.0)GM_BIGMEM=400000
    if(allocated(GM_REALS) )deallocate(GM_REALS)
    if(allocated(GM_IMAGS) )deallocate(GM_IMAGS)
    allocate(GM_REALS(GM_BIGMEM),GM_IMAGS(GM_BIGMEM))                      ! set to size of GM_BIGMEM
 
    G_INPUT_LUN = STDIN                                                    ! unit number for terminal input
    call mat_files(G_INPUT_LUN,G_BUF)
-   G_RIO = G_INPUT_LUN                                                    ! current file to read commands from
+   G_LUN_READING_FROM = G_INPUT_LUN                                       ! current file to read commands from
    call mat_files(STDOUT,G_BUF)
 
-   call mat_help_text()                                                   ! initialize help text
+   if(.not.allocated(G_HELP_TEXT)) call mat_help_text()                   ! initialize help text
    G_CURRENT_RANDOM_SEED = 0                                              ! random number seed
-   G_CURRENT_RANDOM_TYPE = 0                                              ! set the type of random numbers to compute
    G_LINECOUNT(2) = 23                                                    ! initial line limit for paging output
 
    G_TOP_OF_SAVED = GG_MAX_NUMBER_OF_NAMES-3  ! move up to allow room for the built-in values eps, flops, eye, rand
@@ -1478,10 +1483,10 @@ logical,intent(in),optional          :: echo
    if(present(echo)) G_ECHO=echo
 
    if(GM_BIGMEM.LT.0)then
-      call lala_init(200000)
+      call lala_init(400000)
    else
       G_INPUT_LUN = STDIN                                                    ! unit number for terminal input
-      G_RIO = G_INPUT_LUN                                                    ! current file to read commands from
+      G_LUN_READING_FROM = G_INPUT_LUN                                       ! current file to read commands from
       G_PROMPT=.true.
    endif
 
@@ -1494,7 +1499,9 @@ logical,intent(in),optional          :: echo
    endif
 
    PARSE_LINE : do
+      if(G_DEBUG_LEVEL.gt.0)call printit()
       call mat_parse()
+      if(G_DEBUG_LEVEL.gt.0)call printit()
       select case(G_FUN)
       case(1) ; call mat_matfn1()
       case(2) ; call mat_matfn2()
@@ -1502,9 +1509,12 @@ logical,intent(in),optional          :: echo
       case(4) ; call mat_matfn4()
       case(5) ; call mat_matfn5()
       case(6) ; call mat_matfn6()
+      case(7) ; call mat_matsets()
+      case(8) ; call mat_matorder()
       case(21); call mat_matfn1()
       case(99); exit PARSE_LINE
       case default
+         if(G_DEBUG_LEVEL.gt.0)call printit()
       end select
    enddo PARSE_LINE
 
@@ -1513,8 +1523,14 @@ end subroutine LALA_cmds
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine mat_err(n)
-
 ! ident_4="@(#) M_matrix mat_err(3fp) given error number write associated error message and set G_ERR"
+integer,intent(in)   :: n
+   call mat_err_en(n)
+end subroutine mat_err
+
+subroutine mat_err_en(n)
+
+! ident_5="@(#) M_matrix mat_err(3fp) given error number write associated error message and set G_ERR"
 
 integer,intent(in)   :: n
 
@@ -1527,7 +1543,7 @@ character(len=255)   :: msg
    G_ERR = n
    select case(n)
     case(1);  msg='Improper multiple assignment'
-    case(2);  msg='Improper factor'
+    case(2);  msg='Improper factor or unknown variable'
     case(3);  msg='Expected right parenthesis'
     case(4);  msg='Undefined variable: '//ade2str(G_IDS(:,G_PT+1)) ! extract variable name into buffer
     case(5);  msg='Column lengths do not match'
@@ -1561,7 +1577,7 @@ character(len=255)   :: msg
     case(29); msg='Not positive definite'
     case(30); msg='Improper exponent'
     case(31); msg='Improper string'
-    case(32); msg='Singularity of LOG or ATAN'
+    case(32); msg='Singularity of la%LOG or ATAN'
     case(33); msg='Too many colons'
     case(34); msg='Improper FOR clause'
     case(35); msg='Improper WHILE or IF clause'
@@ -1570,15 +1586,39 @@ character(len=255)   :: msg
     case(38); msg='Improper file name'
     case(39); msg='Incorrect number of arguments'
     case(40); msg='Expecting statement terminator'
+    case(41); msg='Incompatible for POWER'
+    case(42); msg='new shape is not the same size as input'
+    case(43); msg='shapes are not conformant'
+    case(44); msg='operation not defined for complex values'
+    case(45); msg='incorrect rank for argument'
+    case(46); msg='only scalars may be compared. See all(), any() ...'
     case default
        call journal('sc','*mat_err* internal error: unknown error code=',n)
        return
    end select
 
-   k = max(1,G_LINE_POINTER(2) - G_LINE_POINTER(1)) ! number of spaces to shift arrow by
-   call journal(' '//repeat(' ',k)//'/\--ERROR:'//msg)
+   if(G_system.and. n.eq.4)then
+      system: block
+      logical                      :: cmdstat
+      character(len=GG_LINELEN)    :: mline
+      call mat_buf2str(mline,G_BUF,GG_LINELEN) ! convert ADE buffer to character
+      if(.not.run(trim(mline)))then ! call system shell
+         call journal(mline)
+      else
+         call journal(mline)
+      endif
+      end block system
+   else
+      error: block
+      character(len=GG_LINELEN)    :: mline
+      call mat_buf2str(mline,G_BUF,GG_LINELEN) ! convert ADE buffer to character
+      k = max(1,G_LINE_POINTER(2) - G_LINE_POINTER(1)) ! number of spaces to shift arrow by
+      call journal('   '//mline)
+      call journal(' '//repeat(' ',k)//'/\--ERROR:'//msg)
+      endblock error
+   endif
 
-end subroutine mat_err
+end subroutine mat_err_en
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -1626,7 +1666,7 @@ integer                      :: ios
          if(ios.ne.0)then                                               ! general file open failure
             call journal('OPEN failed on file '//name)
             G_FILE_OPEN_ERROR=.true.                                    ! set the flag a file error occurred
-            G_RIO=G_INPUT_LUN                                           ! set current file to read input lines from/to G_INPUT_LUN
+            G_LUN_READING_FROM=G_INPUT_LUN                              ! set current file to read input lines from/to G_INPUT_LUN
          else
             G_FILE_OPEN_ERROR=.false.                                   ! set the flag a file error did not occur
          endif
@@ -1638,15 +1678,15 @@ end subroutine mat_files
 !==================================================================================================================================!
 subroutine mat_getsym()
 
-! ident_5="@(#) M_matrix mat_getsym(3fp) get a symbol"
+! ident_6="@(#) M_matrix mat_getsym(3fp) get a symbol"
 
-doubleprecision   :: syv
-doubleprecision   :: s
+doubleprecision :: syv
+doubleprecision :: s
 
-integer      :: sign
-integer      :: chcnt
-integer      :: ss
-integer      :: i
+integer         :: sign
+integer         :: chcnt
+integer         :: ss
+integer         :: i
 !.......................................................................
    INFINITE : do
       if (G_CHRA .ne. blank) exit INFINITE
@@ -1659,7 +1699,7 @@ integer      :: i
       call mat_getval(syv)
       if (G_CHRA .ne. dot) goto 60
       call mat_getch() ! get next character
-   elseif (verify(achar(G_CHRA),digit//big//little//achar(score))== 0) then ! alphameric (0-9a-zA-Z_)
+   elseif (verify(achar(G_CHRA),digit//big//little//achar(score)//achar(percent))== 0) then ! alphameric (0-9a-zA-Z_)
       ! name
       G_SYM = isname
       G_SYN=blank
@@ -1667,7 +1707,7 @@ integer      :: i
       do i=2,GG_MAX_NAME_LENGTH
          call mat_getch() ! get next character
          ! if not alphanumeric and not special like eol
-         if (verify(achar(G_CHRA),digit//big//little//achar(score))== 0 ) then
+         if (verify(achar(G_CHRA),digit//big//little//achar(score)//achar(percent))== 0 ) then
             G_SYN(i) = G_CHRA
          else
             exit
@@ -1683,8 +1723,8 @@ integer      :: i
       ! is dot part of number or operator
       syv = 0.0d0
       if (.not.(verify(achar(G_CHRA),digit)== 0) ) then ! not a number character
-         if (G_CHRA.eq.star.or.G_CHRA.eq.slash.or.G_CHRA.eq.bslash) goto 90
-         if (ss.eq.star .or. ss.eq.slash .or. ss.eq.bslash) goto 90
+         if (G_CHRA.eq.star.or.G_CHRA.eq.slash.or.G_CHRA.eq.bslash.or.G_CHRA.eq.caret) goto 90
+         if (ss.eq.star .or. ss.eq.slash .or. ss.eq.bslash .or. ss.eq.caret) goto 90
       endif
    endif
 
@@ -1723,7 +1763,7 @@ end subroutine mat_getsym
 !==================================================================================================================================!
 subroutine mat_str2buf(string,buf,lrecl)
 
-! ident_6="@(#) M_matrix mat_str2buf(3fp) convert string to hollerith"
+! ident_7="@(#) M_matrix mat_str2buf(3fp) convert string to hollerith"
 
 ! g95 compiler does not support Hollerith, this is a KLUDGE to give time to think about it
 
@@ -1743,7 +1783,7 @@ end subroutine mat_str2buf
 !==================================================================================================================================!
 function str2ade(string) result(vec)
 
-! ident_7="@(#) M_matrix mat_str2buf(3fp) convert CHARACTER TO ADE array vector"
+! ident_8="@(#) M_matrix mat_str2buf(3fp) convert CHARACTER TO ADE array vector"
 
 character(len=*),intent(in)  :: string
 integer,allocatable          :: vec(:)
@@ -1758,7 +1798,7 @@ end function str2ade
 !==================================================================================================================================!
 function ade2str(buf) result(string)
 
-! ident_8="@(#) M_matrix mat_str2buf(3fp) convert ADE array to CHARACTER"
+! ident_9="@(#) M_matrix mat_str2buf(3fp) convert ADE array to CHARACTER"
 
 character(len=:),allocatable :: string
 integer,intent(in)           :: buf(:)
@@ -1777,7 +1817,7 @@ end function ade2str
 !==================================================================================================================================!
 subroutine mat_buf2str(string,buf,lrecl)
 
-! ident_9="@(#) M_matrix mat_buf2string(3fp) convert hollerith to string"
+! ident_10="@(#) M_matrix mat_buf2string(3fp) convert hollerith to string"
 
 integer,intent(in)     :: lrecl
 integer,intent(in)     :: buf(:)
@@ -1795,7 +1835,7 @@ end subroutine mat_buf2str
 !==================================================================================================================================!
 subroutine ints2str(ints,string,ierr)
 
-! ident_10="@(#) M_matrix ints2str(3f) convert lala integers to a character variable"
+! ident_11="@(#) M_matrix ints2str(3f) convert lala integers to a character variable"
 
 ! temporary procedure while writing ASCII-based upgrade
 
@@ -1823,7 +1863,7 @@ end subroutine ints2str
 !==================================================================================================================================!
 subroutine mat_matfn6()
 !
-! ident_11="@(#) M_matrix mat_matfn6(3f) evaluate utility functions"
+! ident_12="@(#) M_matrix mat_matfn6(3f) evaluate utility functions"
 !
 integer :: i, j, k
 integer :: ia
@@ -1843,16 +1883,20 @@ integer :: mn
 integer :: n
 integer :: na
 integer :: nn
-integer,parameter :: unifor(GG_MAX_NAME_LENGTH) =  [iachar(['u','n','i','f','o','r','m']),GG_PAD(8:)]
-integer,parameter :: normal(GG_MAX_NAME_LENGTH) =  [iachar(['n','o','r','m','a','l',' ']),GG_PAD(8:)]
-integer,parameter :: seed(GG_MAX_NAME_LENGTH)   =  [iachar(['s','e','e','d',' ',' ',' ']),GG_PAD(8:)]
-integer           :: id(GG_MAX_NAME_LENGTH)
 doubleprecision   :: eps0,eps,s,sr,si,t
 character(len=80) :: message
 
-   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
-   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
-   n = G_VAR_COLS(G_ARGUMENT_POINTER)
+   if(G_ARGUMENT_POINTER.le.0)then
+      G_RHS=0
+      location = 1
+      m = 1
+      n = 1
+      G_ARGUMENT_POINTER=1
+   else
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      n = G_VAR_COLS(G_ARGUMENT_POINTER)
+   endif
 
 !  functions/G_FIN
 !  magi diag sum  prod user eye  rand ones chop shape kron  tril triu zeros
@@ -1861,12 +1905,22 @@ character(len=80) :: message
    FUN6: select case(G_FIN)
 !===================================================================================================================================
    case(1) ! COMMAND::MAGIC
-      N = MAX(int(GM_REALS(location)),0)
-      IF (N .EQ. 2) N = 0
-      IF (N .GT. 0) call mat_magic(GM_REALS(location),N,N)
-      call mat_rset(N*N,0.0D0,GM_IMAGS(location),1)
-      G_VAR_ROWS(G_ARGUMENT_POINTER) = N
-      G_VAR_COLS(G_ARGUMENT_POINTER) = N
+      if(G_RHS.ne.1)then
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      endif
+      N = nint(GM_REALS(location))
+      select case(N)
+      case(1,3:)
+         call mat_magic(GM_REALS(location),N,N)
+         !call mat_rset(N*N,0.0D0,GM_IMAGS(location),1) ! copy scalar to a vector, thus setting array to zero
+         GM_IMAGS(location:location+n*n-1)=0.0d0 ! set imaginary component to zero
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = N
+         G_VAR_COLS(G_ARGUMENT_POINTER) = N
+      case default  ! zero or negative dimension
+         call mat_err(29) ! Not positive definite
+         return
+      end select
 !===================================================================================================================================
    case(11,12,13) !  COMMAND::KRONECKER PRODUCT
       if (G_RHS .ne. 2) then
@@ -1944,18 +1998,58 @@ character(len=80) :: message
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
 !===================================================================================================================================
    case(3) ! COMMAND::SUM
-      sr = 0.0d0
-      si = 0.0d0
+!      sr = 0.0d0
+!      si = 0.0d0
+!      mn = m*n
+!      do i = 1, mn
+!         ls = location+i-1
+!         sr = mat_flop(SR+GM_REALS(LS))
+!         si = mat_flop(SI+GM_IMAGS(LS))
+!      enddo
+!      GM_REALS(location) = sr
+!      GM_IMAGS(location) = si
+!      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+!      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+
+      sum_command : block
+      real(kind=dp),allocatable :: sum_real(:), sum_imag(:)
+      integer                   :: dim
+      integer :: sz
+      dim=0
+      select case(G_RHS)
+      case(1)
+      case(2)  ! if two parameters assume second one is dimension
+         dim = int(GM_REALS(location))
+         if( dim.lt.0 .or. dim.gt.2 )then
+            call mat_err(21) ! Subscript out of range
+            return
+         endif
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+      sum_real = [0.0d0]
+      sum_imag = [0.0d0]
       mn = m*n
-      do i = 1, mn
-         ls = location+i-1
-         sr = mat_flop(SR+GM_REALS(LS))
-         si = mat_flop(SI+GM_IMAGS(LS))
-      enddo
-      GM_REALS(location) = sr
-      GM_IMAGS(location) = si
-      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      ! should do in a loop and call mat_flop on each number instead of sum to trim values?
+      if(dim.eq.0)then
+         sum_real = [ sum(gm_reals( location:location+mn-1 ) ) ]
+         sum_imag = [ sum(gm_imags( location:location+mn-1 ) ) ]
+         sz=1
+      else
+         sum_real = sum( reshape(gm_reals( location:location+mn-1 ),[m,n]), dim )
+         sum_imag = sum( reshape(gm_imags( location:location+mn-1 ),[m,n]), dim )
+         sz=size(sum_real)
+      endif
+      GM_REALS(location:location+sz-1) = sum_real
+      GM_IMAGS(location:location+sz-1) = sum_imag
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = sz
       G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+      endblock sum_command
 !===================================================================================================================================
    case(4) ! COMMAND::PROD
       SR = 1.0D0
@@ -1971,12 +2065,12 @@ character(len=80) :: message
       G_VAR_COLS(G_ARGUMENT_POINTER) = 1
 !===================================================================================================================================
    case(5) ! COMMAND::USER
-      ! The LALA statement "Y = user(X,s,t)" results in a call to the
+      ! The LALA statement "A = user(X,s,t)" results in a call to the
       ! subroutine with a copy of the matrix X stored in the argument A,
       ! its column and row dimensions in M and N, and the scalar parameters
       ! s and t stored in S and T. If s and t are omitted, they are set
       ! to 0.0. After the return, A is stored in Y. The dimensions M and
-      ! N may be reset within the subroutine. The statement Y = user(K)"
+      ! N may be reset within the subroutine. The statement A = user(K)"
       ! results in a call with M = 1, N = 1 and A(1,1) = "float(K)".
 
       ! all of the arguments are in a vector that is part of the stack.
@@ -2006,7 +2100,8 @@ character(len=80) :: message
       ! ??? if user routine changes size of array and/or should pass vector instead of address ???
       ! ??? user routine cannot do complex values? Just REAL ???
       call usersub(GM_REALS(location:),m,n,s,t)
-      call mat_rset(m*n,0.0d0,GM_IMAGS(location),1)      ! set the imaginary values to zero
+      !call mat_rset(m*n,0.0d0,GM_IMAGS(location),1)      ! set the imaginary values to zero
+      gm_imags(location:location+m*n-1)=0.0d0 ! set imaginary component to zero
       G_VAR_COLS(G_ARGUMENT_POINTER) = n               ! store the possibly new size
       G_VAR_ROWS(G_ARGUMENT_POINTER) = m
 !===================================================================================================================================
@@ -2094,9 +2189,9 @@ character(len=80) :: message
       endif
       exit FUN6
 !-----------------------------------------------------------------------------------------------------------------------------------
-   case(6,7,8,16) ! COMMAND::EYE,
-                  ! COMMAND::RAND,
-                  ! COMMAND::ONES,
+   case(6,7,8,16) ! COMMAND::EYE
+                  ! COMMAND::RAND
+                  ! COMMAND::ONES
                   ! COMMAND::ZEROS
       if (.not.(m.gt.1 .or. G_RHS.eq.0)) then
 
@@ -2105,26 +2200,6 @@ character(len=80) :: message
             G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
             location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
             n = G_VAR_COLS(G_ARGUMENT_POINTER)
-         endif
-
-         if (G_FIN.eq.7.and.n.lt.GG_MAX_NAME_LENGTH)then        ! a call to RAND might be RAND('UNIFORM'|'SEED'|'NORMAL')
-            id=blank
-            do i = 1, min(GG_MAX_NAME_LENGTH,n)  ! in case it is one of these words store it in the ID array to test if it matches
-               ls = location+i-1
-               id(i) = int(GM_REALS(ls))
-            enddo
-            if(mat_eqid(id,unifor).or.mat_eqid(id,normal))then ! SWITCH UNIFORM AND NORMAL(if a matrix just happens to match, a bug)
-               G_CURRENT_RANDOM_TYPE = id(1) - unifor(1)        ! set random type to generate by seeing if first letter is a "u"
-               G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
-               exit FUN6
-            elseif (mat_eqid(id,seed)) then                     ! if a matrix just happens to match "seed" , a bug)
-               if (G_RHS .eq. 2) G_CURRENT_RANDOM_SEED = nn
-               GM_REALS(location) = G_CURRENT_RANDOM_SEED
-               G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
-               if (G_RHS .eq. 2) G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
-               G_VAR_COLS(G_ARGUMENT_POINTER) = 1
-               exit FUN6
-            endif
          endif
 
          if (n .le. 1) then
@@ -2156,18 +2231,7 @@ character(len=80) :: message
                  GM_REALS(ll) = 0.0d0
               endif
            case( 7 ) !::RAND
-              IF(G_CURRENT_RANDOM_TYPE.EQ.0) then
                  GM_REALS(ll)=mat_flop(mat_urand(G_CURRENT_RANDOM_SEED))
-              else
-                 do
-                    sr = 2.0d0*mat_urand(G_CURRENT_RANDOM_SEED)-1.0d0
-                    si = 2.0d0*mat_urand(G_CURRENT_RANDOM_SEED)-1.0d0
-                    t = sr*sr + si*si
-                    if (t .le. 1.0d0) exit
-                 enddo
-
-                 GM_REALS(ll) = mat_flop(sr*dsqrt((-(2.0d0*dlog(t)))/t))
-              endif
            case( 8 ) !::ONES
               GM_REALS(ll) = 1.0d0
            case( 16) !::ZEROS
@@ -2179,7 +2243,7 @@ character(len=80) :: message
       enddo
       exit FUN6
 !===================================================================================================================================
-   case(17) ! COMMAND::GETENV JSU
+   case(17) ! COMMAND::GETENV
       GETENV : block
       character(len=:),allocatable :: answers(:)
       character(len=GG_LINELEN)    :: varname
@@ -2234,33 +2298,1132 @@ character(len=80) :: message
       endblock GETENV
       exit FUN6
 !===================================================================================================================================
-   case(18) ! COMMAND::DAT
+   case(18) ! COMMAND::DATE_AND_TIME
       DATETIME: block
-      integer :: time_values(8)
+      integer          :: time_values(8)
+      integer          :: indx
+      integer          :: keep
+      integer          :: ll
+      integer          :: weekday
+      character(len=9) :: day
+      integer          :: ierr
+      type(BAStime)    :: bas
+      if(G_RHS .eq. 1)then
+         call date_and_time(values=time_values)
+      elseif(G_RHS .eq. 2)then ! user-supplied DAT array
+         ! NOT COMPLETE
+         M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         N = G_VAR_COLS(G_ARGUMENT_POINTER)
+         if(M*N.ne.8)then
+            call mat_err(39) ! Incorrect number of arguments
+            return
+         endif
+         time_values=10
+      else
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      endif
+
+      M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      N = G_VAR_COLS(G_ARGUMENT_POINTER)
+      keep=0
+      do i = 1, m*n
+         indx = location+i-1
+         keep=keep+1
+         ll=location+keep-1
+         GM_IMAGS(ll:ll) = 0.0d0
+         select case(nint(GM_REALS(indx)))
+         case(1:8)
+            GM_REALS(ll:ll) = dble(time_values(nint(GM_REALS(indx))))
+         case(9)
+            GM_REALS(ll:ll) = d2u(time_values)
+         case(10)
+            GM_REALS(ll:ll) = d2j(time_values)
+         case(11)
+            GM_REALS(ll:ll) = d2m(time_values)
+         case(12)
+            bas = d2b(time_values)
+            GM_REALS(ll:ll) = bas%base_day ! whole days since the MJD Epoch date
+            GM_IMAGS(ll:ll) = bas%secs     ! offset in seconds from start of BASE_DAY
+         case(13)
+            GM_REALS(ll:ll) = d2o(time_values)
+         case(14)
+            call dow(time_values, weekday, day, ierr)
+            GM_REALS(ll:ll) = weekday
+         case default
+            keep=keep-1
+         end select
+      enddo
+      if(keep==0)then
+         keep=8
+         GM_REALS(location:location+8-1) = dble(time_values)
+         GM_IMAGS(location:location+8-1) = 0.0D0
+      endif
       ! store the two output values onto stack
-      call date_and_time(values=time_values)
-      GM_REALS(location:location+8-1) = dble(time_values)
-      GM_IMAGS(location:location+8-1) = 0.0D0
       ! output is a 1x8 array so store values indicating the size of the new stack value
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
-      G_VAR_COLS(G_ARGUMENT_POINTER) = 8
+      G_VAR_COLS(G_ARGUMENT_POINTER) = keep
       endblock DATETIME
 !===================================================================================================================================
+   case(19) ! COMMAND::ALL
+   all : block
+   integer           :: all_are_true
+   integer           :: indx
+   integer,parameter :: T=1, F=0
+      if(G_RHS .NE. 1) then
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      endif
+      all_are_true=T
+      M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      N = G_VAR_COLS(G_ARGUMENT_POINTER)
+      do i = 1, m*n
+         indx = location+i-1
+         if ( (GM_REALS(indx).eq.F).and.(GM_IMAGS(indx).eq.F) )then
+            all_are_true=F
+            exit
+         endif
+      enddo
+      GM_REALS(location) = all_are_true
+      GM_IMAGS(location) = 0.0d0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+   endblock all
+!===================================================================================================================================
+   case(20) ! COMMAND::ANY
+      any : block ! are any elements true
+      integer           :: are_any_true
+      integer           :: indx
+      integer,parameter :: T=1, F=0
+         if(G_RHS .NE. 1) then
+            call mat_err(39) ! Incorrect number of arguments
+            return
+         endif
+         are_any_true=F
+         M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         N = G_VAR_COLS(G_ARGUMENT_POINTER)
+         do i = 1, m*n
+            indx = location+i-1
+            if ( (GM_REALS(indx).eq.F).and.(GM_IMAGS(indx).eq.F) ) cycle
+            are_any_true=T
+            exit
+         enddo
+         GM_REALS(location) = are_any_true
+         GM_IMAGS(location) = 0.0d0
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+      endblock any
+!===================================================================================================================================
+   case(21,22,23) ! COMMAND::fmtc
+                  ! COMMAND::fmti
+                  ! COMMAND::fmtr
+      fmts : block ! are any elements true
+      integer                      :: indx
+      character(len=GG_LINELEN)    :: passedfmt
+      character(len=:),allocatable :: out
+      integer                      :: istore
+         !call mat_buf2str(passedfmt,G_BUF,GG_LINELEN) ! entire command
+         select case(G_RHS)
+         case(1)
+            passedfmt=''
+            M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+            N = G_VAR_COLS(G_ARGUMENT_POINTER)
+         case(2)
+            passedfmt=ade2str( int(GM_REALS(location:location+m*n-1)) )
+            G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+            location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+            M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+            N = G_VAR_COLS(G_ARGUMENT_POINTER)
+         case default
+            call mat_err(39) ! Incorrect number of arguments
+            return
+         end select
+         out=''
+         do i = 1, m*n
+            indx = location+i-1
+            select case(G_FIN)
+            case(21);
+                    if(passedfmt.eq.''.and.m*n>1)passedfmt= '("(",1pg0,",",1pg0,")")'
+                    out=out//fmt(cmplx(GM_REALS(indx),GM_IMAGS(indx),kind=dp),passedfmt)
+            case(22);
+                    if(passedfmt.eq.''.and.m*n>1)passedfmt='(i0,1x)'
+                    out=out//fmt(nint(GM_REALS(indx),kind=int64),passedfmt)
+            case(23);
+                    if(passedfmt.eq.''.and.m*n>1)passedfmt='(1pg0,1x)'
+                    out=out//fmt(GM_REALS(indx),passedfmt)
+            end select
+         enddo
+
+         istore=len(out)
+         GM_REALS(location:location+istore-1) = str2ade(out)
+         GM_IMAGS(location:location+istore-1) = 0.0d0
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = istore
+      endblock fmts
+!===================================================================================================================================
+   case(24,25) ! COMMAND::MAXVAL
+               ! COMMAND::MINVAL
+      select case(G_RHS)
+      case(1)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+      mn = m*n
+      select case(G_FIN)
+      case(24); sr = maxval(GM_REALS(location:location+mn-1))
+      case(25); sr = minval(GM_REALS(location:location+mn-1))
+      end select
+      GM_REALS(location) = sr
+      GM_IMAGS(location) = 0.0d0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+!===================================================================================================================================
+   case(26,27) ! COMMAND::RANDU
+               ! COMMAND::RANDN
+      rands: block
+      integer :: rows
+      integer :: cols
+
+      ! check arguments
+
+      if(m*n.ne.1)then    ! argument should be a scalar
+         call mat_err(45) ! incorrect rank for argument
+         return
+      endif
+
+      select case(G_RHS)
+      case(1)
+         rows = int(GM_REALS(location))
+         cols = rows
+      case(2)
+         cols = int(GM_REALS(location))
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m= G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n= G_VAR_COLS(G_ARGUMENT_POINTER)
+         if(m*n.ne.1)then    ! argument should be a scalar
+            call mat_err(45) ! incorrect rank for argument
+            return
+         endif
+         rows = int(GM_REALS(location))
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+      if(rows.lt.1 .or. cols.lt.1)then
+         call mat_err(36) ! Argument out of range
+         return
+      endif
+
+      if(too_much_memory( location+rows*cols - G_VAR_DATALOC(G_TOP_OF_SAVED))) return
+
+      ! create random values
+
+      do j = 1, cols
+         do i = 1, rows
+           ll = location+i-1+(j-1)*rows  ! location to place value
+           select case(G_FIN)
+           case( 26)
+              GM_REALS(ll)=mat_flop(mat_urand(G_CURRENT_RANDOM_SEED))
+           case( 27)
+              do
+                 sr = 2.0d0*mat_urand(G_CURRENT_RANDOM_SEED)-1.0d0
+                 si = 2.0d0*mat_urand(G_CURRENT_RANDOM_SEED)-1.0d0
+                 t = sr*sr + si*si
+                 if (t .le. 1.0d0) exit
+              enddo
+              GM_REALS(ll) = mat_flop(sr*dsqrt((-(2.0d0*dlog(t)))/t))
+           end select
+           GM_IMAGS(ll) = 0.0d0          ! all of these functions set imaginary values to zero
+         enddo
+      enddo
+
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = rows
+      G_VAR_COLS(G_ARGUMENT_POINTER) = cols
+
+      endblock rands
+!===================================================================================================================================
+   case(32) ! COMMAND::RANDI
+      cmd_randi: block
+      real(kind=dp) :: low
+      real(kind=dp) :: high
+      real(kind=dp) :: temp
+      integer       :: rows
+      integer       :: cols
+
+      ! check arguments
+
+      select case(G_RHS)
+      case(1)    ! generate a scalar
+         if(m*n.eq.1)then    ! a scalar
+            low=1.0d0
+            high = int(GM_REALS(location))
+         elseif(m*n.eq.2)then
+            low = int(GM_REALS(location))
+            high = int(GM_REALS(location+1))
+         else
+            call mat_err(45) ! incorrect rank for argument
+            return
+         endif
+         rows=1
+         cols=1
+      case(2)
+         if(m*n.eq.1)then    ! a scalar
+            rows = int(GM_REALS(location))
+            cols = int(GM_REALS(location))
+         elseif(m*n.eq.2)then
+            rows = int(GM_REALS(location))
+            cols = int(GM_REALS(location+1))
+         else
+            call mat_err(45) ! incorrect rank for argument
+            return
+         endif
+
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m= G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n= G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         if(m*n.eq.1)then    ! a scalar
+            low=1.0d0
+            high = int(GM_REALS(location))
+         elseif(m*n.eq.2)then
+            low = int(GM_REALS(location))
+            high = int(GM_REALS(location+1))
+         else
+            call mat_err(45) ! incorrect rank for argument
+            return
+         endif
+
+      case(3)
+         if(m*n.ne.1)then
+            call mat_err(45) ! incorrect rank for argument
+            return
+         endif
+         cols = int(GM_REALS(location))
+
+         ! go left to previous argument
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m= G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n= G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         if(m*n.ne.1)then
+            call mat_err(45) ! incorrect rank for argument
+            return
+         endif
+         rows = int(GM_REALS(location))
+
+         ! go left to previous argument
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m= G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n= G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         if(m*n.eq.1)then    ! a scalar
+            low=1.0d0
+            high = int(GM_REALS(location))
+         elseif(m*n.eq.2)then
+            low = int(GM_REALS(location))
+            high = int(GM_REALS(location+1))
+         else
+            call mat_err(45) ! incorrect rank for argument
+            return
+         endif
+
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      if(rows.lt.1 .or. cols.lt.1)then
+         call mat_err(36) ! Argument out of range
+         return
+      endif
+
+      if(too_much_memory( location+rows*cols - G_VAR_DATALOC(G_TOP_OF_SAVED))) return
+
+      if(high.lt.low)then
+         temp=low
+         low=high
+         high=temp
+      endif
+
+      ! create random values
+      do j = 1, cols
+         do i = 1, rows
+           ll = location+i-1+(j-1)*rows                                  ! location to place value
+              GM_REALS(ll) = mat_flop(mat_urand(G_CURRENT_RANDOM_SEED))
+              GM_REALS(ll) = low + floor((high-low+1)*GM_REALS(ll))      ! use value to choose integer from low to high
+              GM_IMAGS(ll) = 0.0d0                                       ! set imaginary values to zero
+         enddo
+      enddo
+
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = rows
+      G_VAR_COLS(G_ARGUMENT_POINTER) = cols
+
+      endblock cmd_randi
+!===================================================================================================================================
+   case(28) ! COMMAND::RANDSEED
+      select case(G_RHS)
+      case(0)
+      case(1)
+         if(m*n.ne.1)then
+            call mat_err(45) ! incorrect rank for argument
+            return
+         endif
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      if(too_much_memory( location+m*n - G_VAR_DATALOC(G_TOP_OF_SAVED))) return
+
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+
+      if(G_RHS.eq.0)then
+         GM_REALS(location) = G_CURRENT_RANDOM_SEED
+      else
+         G_CURRENT_RANDOM_SEED = GM_REALS(location)
+         GM_REALS(location) = G_CURRENT_RANDOM_SEED
+      endif
+      GM_IMAGS(location) = 0.0d0
+!===================================================================================================================================
+   case(29) ! COMMAND::QSORT
+      ! ignores imaginary component, change to sort rows and columns so could sort text, for example
+      qsort_command : block
+      integer :: dim
+      integer :: sz
+      dim=0
+      select case(G_RHS)
+      case(1)
+      case(2)  ! if two parameters assume second one is dimension
+         dim = int(GM_REALS(location))
+         if( dim.lt.0 .or. dim.gt.2 )then
+            call mat_err(21) ! Subscript out of range
+            return
+         endif
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+      ! should do in a loop and call mat_flop on each number instead of sort to trim values?
+      mn = m*n
+      GM_REALS(location:location+mn-1) = qsort(gm_reals( location:location+mn-1 ) )
+      GM_IMAGS(location:location+mn-1) = 0.0d0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = mn
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+      endblock qsort_command
+!===================================================================================================================================
+   case(30,31) ! COMMAND::maxloc
+               ! COMMAND::minloc
+   maxloc_cmd: block
+      select case(G_RHS)
+      case(1)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      select case(G_FIN)
+      case(30);sr = maxloc(GM_REALS(location:location+(m*n)-1),dim=1)
+      case(31);sr = minloc(GM_REALS(location:location+(m*n)-1),dim=1)
+      end select
+      GM_REALS(location) = sr-n*int((sr-1)/n)
+      GM_IMAGS(location) = 0.0d0
+      location=location+1
+      GM_REALS(location) = ceiling(sr/n)
+      GM_IMAGS(location) = 0.0d0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 2
+   endblock maxloc_cmd
+!===================================================================================================================================
+   case(33) ! COMMAND::SIZE
+      GM_REALS(location) = M*N
+      GM_IMAGS(location) = 0.0D0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+!===================================================================================================================================
+   case(34:49)
+      ELEMENTAL: block
+      integer          :: rowsX, colsX, startX
+      complex(kind=dp) :: canswer
+      real(kind=dp)    :: ranswer
+      integer          :: i, sz
+      select case(G_RHS)
+      case(1)  ! one parameter
+         startX = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         colsX  = G_VAR_COLS(G_ARGUMENT_POINTER)
+         rowsX  = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         sz=colsX*rowsX
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+      !  Fortran has strong support for complex values, including many intrinsics
+      !  that take or produce complex values in addition to algebraic and logical
+      !  expressions:
+
+      associate( AR=>gm_reals( startX:startX+sz-1 ) , AI=>gm_imags( startX:startX+sz-1 ) )
+      select case(G_FIN)
+      case(34) ! COMMAND::f%LOG
+         do i=1,sz
+            canswer=log(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(35) ! COMMAND::f%LOG10
+            ar=log10(AR)
+            ai=0.0d0
+      case(36) ! command::f%ACOSH
+         do i=1,sz
+            canswer=acosh(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(37) ! command::f%ACOS
+         do i=1,sz
+            canswer=acos(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(38) ! command::f%ASINH
+         do i=1,sz
+            canswer=asinh(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(39) ! command::f%ASIN
+         do i=1,sz
+            canswer=sin(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(40) ! command::f%TAN
+         do i=1,sz
+            canswer=tan(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(41) ! command::f%ATANH
+         do i=1,sz
+            canswer=atanh(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(42) ! command::f%ATAN
+         do i=1,sz
+            canswer=atan(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(43) ! command::f%COSH
+         do i=1,sz
+            canswer=cosh(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(44) ! command::f%COS
+         do i=1,sz
+            canswer=cos(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(45) ! command::f%SINH
+         do i=1,sz
+            canswer=sinh(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(46) ! command::f%SIN
+         do i=1,sz
+            canswer=sin(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(47) ! command::f%TANH
+         do i=1,sz
+            canswer=tanh(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(48) ! command::f%SQRT
+         do i=1,sz
+            canswer=sqrt(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+      case(49) ! command::f%EXP
+         do i=1,sz
+            canswer=exp(CMPLX(AR(i),AI(i),KIND=dp))
+            ar(i)=canswer%re
+            ai(i)=canswer%im
+         enddo
+
+     !case(NN) ! command::f%atan2
+
+     !case(NN) ! command::f%ABS
+     !case(NN) ! command::f%DOT_PRODUCT
+     !case(NN) ! command::f%INT
+     !case(NN) ! command::f%MATMUL
+     !case(NN) ! command::f%PRECISION
+     !case(NN) ! command::f%PRODUCT
+     !case(NN) ! command::f%RANGE
+     !case(NN) ! command::f%RANK
+     !case(NN) ! command::f%STORAGE_SIZE
+     !case(NN) ! command::f%SUM
+     !case(NN) ! command::f%UNPACK
+      end select
+      end associate
+      endblock ELEMENTAL
+!==================================================================================================================================!
    end select FUN6
+!==================================================================================================================================!
+
 end subroutine mat_matfn6
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+subroutine mat_matsets()
+!
+! ident_13="@(#) M_matrix mat_matsets(3f) evaluate set theory functions"
+!
+   if(G_ARGUMENT_POINTER.le.0)then
+      G_RHS=0
+      return
+   endif
+   ! set%issorted   703  ! report if A is sorted in ascending order or not.
+   ! set%unique     707  ! return unique values in array A
+   ! set%isequal    708  ! report if A is equal to B within a tolerance
+!===================================================================================================================================
+   FUN_SETS: select case(G_FIN)
+!===================================================================================================================================
+   case(1,2,4,5,6) ! COMMAND::SET%INTERSECT find the values common to both sets A and B
+                   ! COMMAND::SET%ISMEMBER  create a mask of A marking elements also in B
+                   ! COMMAND::SET%SETDIFF   find the values in A that are not in B
+                   ! COMMAND::SET%SETXOR    values of A and B not in both arrays
+                   ! COMMAND::SET%UNION     join two sets and removes duplicates of values
+      SET_INTERSECT: block
+      integer                   :: rowsX, rowsY, startX
+      integer                   :: colsX, colsY, startY
+      real(kind=dp),allocatable :: answer(:)
+      ! ignores imaginary component
+      ! check arguments
+      select case(G_RHS)
+      case(2)  ! two parameters
+         startY = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         colsY  = G_VAR_COLS(G_ARGUMENT_POINTER)
+         rowsY  = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         startX = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         colsX  = G_VAR_COLS(G_ARGUMENT_POINTER)
+         rowsX  = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+      associate( A=>gm_reals( startX:startX+(rowsX*colsX)-1) , B=>gm_reals( startY:startY+(rowsY*colsY)-1) )
+       select case(G_FIN)
+        case(1); answer=intersect(A , B ,setOrder='stable') ! set%intersect  701  ! find the value common to both sets A and B
+        case(2); answer=ismember (A , B )                   ! set%ismember   702  ! create a mask of A marking elements also in B
+        case(4); answer=setdiff  (A , B ,setOrder='stable') ! set%setdiff    704  ! find the values in A that are not in B
+        case(5); answer=setxor   (A , B ,setOrder='stable') ! set%setxor     705  ! find values of A and B not in both arrays
+        case(6); answer=union    (A , B ,setOrder='stable') ! set%union      706  ! join two sets and removes duplicates of values
+       end select
+      end associate
+      GM_REALS(STARTX:STARTX+size(answer)-1) =answer
+      GM_IMAGS(STARTX:STARTX+size(answer)-1) = 0.0d0
+      if(G_FIN .eq. 2)then
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = rowsX
+         G_VAR_COLS(G_ARGUMENT_POINTER) = colsX
+      else
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = size(answer)
+      endif
+      endblock SET_INTERSECT
+!===================================================================================================================================
+   case(7) ! COMMAND::SET%UNIQUE    return unique values in array A
+      SET_UNIQUE: block
+      integer                   :: rowsX, colsX, startX
+      real(kind=dp),allocatable :: answer(:)
+      ! ignores imaginary component
+      ! check arguments
+      select case(G_RHS)
+      case(1)  ! one parameter
+         startX = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         colsX = G_VAR_COLS(G_ARGUMENT_POINTER)
+         rowsX = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      associate( A=>gm_reals( startX:startX+(rowsX*colsX)-1) )
+      answer=unique   (A , setOrder='stable') ! set%unique     707  ! return unique values in array A
+      end associate
+
+      ! return answer
+      GM_REALS(STARTX:STARTX+size(answer)-1) =answer
+      GM_IMAGS(STARTX:STARTX+size(answer)-1) = 0.0d0
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = size(answer)
+      endblock SET_UNIQUE
+!===================================================================================================================================
+   case(3) ! COMMAND::SET%issorted report if A is sorted in ascending order or not.
+      SET_ISSORTED: block
+      integer :: rowsX, colsX, startX
+      ! ignores imaginary component
+      ! check arguments
+      select case(G_RHS)
+      case(1)  ! one parameter
+         startX = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         colsX = G_VAR_COLS(G_ARGUMENT_POINTER)
+         rowsX = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+      associate( A=>gm_reals( startX:startX+colsX*rowsX-1 ) )
+       GM_REALS(STARTX:STARTX) =issorted(A) ! set%issorted   703  ! report if A is sorted in ascending order or not.
+       GM_IMAGS(STARTX:STARTX) = 0.0d0
+      end associate
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+      endblock SET_ISSORTED
+!===================================================================================================================================
+   case(8) ! COMMAND::SET%isequal report if A is equal to B within a tolerance
+      SET_ISEQUAL: block
+      integer       :: rowsD, colsD, startD
+      integer       :: rowsX, colsX, startX
+      integer       :: rowsY, colsY, startY
+      real(kind=dp) :: delta
+      delta=0.0d0
+      ! check arguments
+      select case(G_RHS)
+      case(3)  ! three parameters
+         startD = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         delta=GM_REALS(startD)
+         if (G_VAR_COLS(G_ARGUMENT_POINTER)* G_VAR_ROWS(G_ARGUMENT_POINTER).ne.1)then
+            ! the third argument is supposed to be a scalar
+            call mat_err(39) ! Incorrect number of arguments
+            return
+         endif
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+      case(2)  ! two parameters
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+      startY = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      colsY  = G_VAR_COLS(G_ARGUMENT_POINTER)
+      rowsY  = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+      startX = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      colsX  = G_VAR_COLS(G_ARGUMENT_POINTER)
+      rowsX  = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      associate( A=>gm_reals( startX:startX+colsX*rowsX-1 ) , &
+                 B=>gm_reals( startY:startY+colsY*rowsY-1 ) , &
+                 C=>gm_imags( startX:startX+colsX*rowsX-1 ) , &
+                 D=>gm_imags( startY:startY+colsY*rowsY-1 ) )
+       if(delta.ne.0)then
+          GM_REALS(STARTX:STARTX) =min(isequal(A,B,delta),isequal(C,D,delta))
+       else
+          GM_REALS(STARTX:STARTX) =min(isequal(A,B),isequal(C,D))
+       endif
+       GM_IMAGS(STARTX:STARTX) =0.0d0
+      end associate
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+      G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+      endblock SET_ISEQUAL
+!===================================================================================================================================
+   end select FUN_SETS
+!==================================================================================================================================!
+end subroutine mat_matsets
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+subroutine mat_matorder()
+!
+! ident_14="@(#) M_matrix mat_matorder(3f) sorting and ordering"
+integer                   :: m, n
+integer                   :: location
+integer                   :: rowsX, colsX, startX
+real(kind=dp),allocatable :: answer(:)
+real(kind=dp)             :: value
+integer                   :: ivalue
+!
+! 801 sort(X,DIM)            - [SORT] Sorts array into ascending order
+! 802 rank(X,DIM)            - [RANK] produces an INDEX that sorts an input array
+! 808 occurrences(X,DIM)     - [MULTIPLICITY] Give the multiplicity for each array value (number of times it appears in the array)
+! 810 rank_decreasing(X,DIM) - [RANK:UNIQUE] ranks array in decreasing order, with duplicate entries assigned the same rank
+! 805 median(X,DIM)          - [MEDIAN] Calculates median VALUE. If number of elements is even, returns average of the two "medians".
+! 806 medianloc(X,DIM)       - [MEDIAN] Returns median value's INDEX.
+! 807 medianval(X,DIM)       - [MEDIAN] Returns median VALUE.
+! 811 rank_unique(X)         - [RANK:UNIQUE] ranks an array, with removal of duplicate entries
+! 803 orderloc(X)            - [FRACTILE] Return INDEX of Nth ordered value of array
+! 804 orderval(X)            - [FRACTILE] Return VALUE of Nth ordered element of array
+! 809 perturb                - [PERMUTATION] generate a random permutation of an array leaving elements close to initial locations
+
+   if(G_ARGUMENT_POINTER.le.0)then
+      G_RHS=0
+      return
+   endif
+
+   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+   n = G_VAR_COLS(G_ARGUMENT_POINTER)
+!===================================================================================================================================
+   FUN_SETS: select case(G_FIN)
+!===================================================================================================================================
+   case( 1) ! COMMAND::order%sort(X,DIM) - [SORT] Sorts array into ascending order
+   ORDER_SORT: block
+   integer :: i
+   integer :: dim
+   integer :: start, end
+
+      dim=0
+
+      select case(G_RHS)
+      case(1)
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      case(2)  ! if two parameters assume second one is dimension
+         dim = nint(GM_REALS(location))
+         if( dim.lt.0 .or. dim.gt.2 )then
+            call mat_err(21) ! Subscript out of range
+            return
+         endif
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      select case(dim)
+      case(0)
+         start=location
+         end=location+m*n-1
+         call sort(gm_reals( start:end ) )
+      case(1)
+         start=location
+         end=start+m-1
+         do i=1,n
+            call sort(gm_reals( start:end ) )
+            start=start+m
+            end=start+m-1
+         enddo
+      case(2)
+         start=location
+         end=start+(n-1)*m
+         do i=1,m
+            call sort(gm_reals( start:end:m ) )
+            start=start+1
+            end=start+(n-1)*m
+         enddo
+      end select
+
+      GM_IMAGS(location:location+m*n-1) = 0.0d0
+
+   endblock ORDER_SORT
+!===================================================================================================================================
+   case(2,8,10) ! COMMAND::order%rank(X,DIM)        - produces an INDEX rank that sorts an input array
+                ! COMMAND::order%occurrences(X,DIM) - Give the multiplicity (number of times a value  appears in the array)
+                ! COMMAND::order%rank_decreasing(X,DIM) - ranks array in decreasing order, with duplicate entries assigned the same rank
+   ORDER_RANK: block
+   integer             :: i
+   integer             :: dim
+   integer             :: start, end
+   integer,allocatable :: answer(:)
+   ! ignores imaginary component
+
+      dim=0
+
+      select case(G_RHS)
+      case(1)
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+      case(2)  ! if two parameters assume second one is dimension
+         dim = nint(GM_REALS(location))
+         if( dim.lt.0 .or. dim.gt.2 )then
+            call mat_err(21) ! Subscript out of range
+            return
+         endif
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      select case(dim)
+      case(0)
+         start=location
+         end=location+m*n-1
+         if(allocated(answer)) deallocate(answer)
+         allocate(answer(m*n))
+         select case(G_FIN)
+         case(2); call rank(GM_REALS(start:end), answer)
+         case(8); call occurrences(GM_REALS(start:end), answer)
+         case(10);call rank_decreasing(GM_REALS(start:end), answer)
+         case default
+           call journal('*order* internal error ',G_FIN)
+         end select
+         GM_REALS(start:end) =answer
+         deallocate(answer)
+      case(1)
+         start=location
+         end=start+m-1
+         if(allocated(answer)) deallocate(answer)
+         allocate(answer(m))
+         do i=1,n
+            select case(G_FIN)
+            case(2);  call rank(gm_reals(start:end),answer)
+            case(8);  call occurrences(gm_reals(start:end),answer)
+            case(10); call rank_decreasing(gm_reals(start:end),answer)
+            case default
+            write(*,*)'INTERNAL ERROR 802 B'
+            end select
+            GM_REALS(start:end) =answer
+            start=start+m
+            end=start+m-1
+         enddo
+         deallocate(answer)
+      case(2)
+         start=location
+         end=start+(n-1)*m
+         if(allocated(answer)) deallocate(answer)
+         allocate(answer(n))
+         do i=1,m
+            select case(G_FIN)
+            case(2) ; call rank(gm_reals(start:end:m),answer)
+            case(8) ; call occurrences(gm_reals(start:end:m),answer)
+            case(10); call rank_decreasing(gm_reals(start:end:m),answer)
+            case default
+            write(*,*)'INTERNAL ERROR 802 C'
+            end select
+            GM_REALS(start:end:m) =answer
+            start=start+1
+            end=start+(n-1)*m
+         enddo
+         deallocate(answer)
+      end select
+
+      GM_IMAGS(start:end) = 0.0d0
+
+   endblock ORDER_RANK
+!==================================================================================================================================!
+   case(3,4) ! COMMAND::order%orderloc(X,NTH) - [FRACTILE] Return INDEX of Nth ordered value of array (Quick-Sort-like)
+             ! COMMAND::order%orderval(X,NTH) - [FRACTILE] Return VALUE of Nth ordered element of array
+   ORDER_ORDERLOC: block
+   integer :: i
+   integer :: nth
+   integer :: start, end
+
+      nth=0
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+
+      select case(G_RHS)
+      case(2)  ! if two parameters
+         nth = nint(GM_REALS(location))
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         if( nth.lt.1 .or. nth.gt.m*n )then
+            call mat_err(21) ! Subscript out of range
+            return
+         endif
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      start=location
+      end=location+m*n-1
+      select case(G_FIN)
+      case(3);GM_REALS(location:location) = orderloc(gm_reals( start:end ),nth )
+      case(4);GM_REALS(location:location) = orderval(gm_reals( start:end ),nth )
+      case default
+      call journal('*order* internal error ',G_FIN)
+      end select
+      GM_IMAGS(location:location) = 0.0d0
+      G_VAR_ROWS(G_ARGUMENT_POINTER)=1
+      G_VAR_COLS(G_ARGUMENT_POINTER)=1
+
+   endblock ORDER_ORDERLOC
+!==================================================================================================================================!
+   case( 5,6,7) ! COMMAND::order%median(X,DIM)    - Calculate median VALUE. If element number is even return average of two "medians"
+                ! COMMAND::order%medianloc(X,DIM) - Returns median value's INDEX.
+                ! COMMAND::order%medianval(X,DIM) - Returns median VALUE.
+   ORDER_MEDIANVAL: block
+   integer             :: i
+   integer             :: dim
+   integer             :: start, end
+   integer,allocatable :: answer(:)
+   ! ignores imaginary component
+
+      dim=0
+
+      select case(G_RHS)
+      case(1)
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+      case(2)  ! if two parameters assume second one is dimension
+         dim = nint(GM_REALS(location))
+         if( dim.lt.0 .or. dim.gt.2 )then
+            call mat_err(21) ! Subscript out of range
+            return
+         endif
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      select case(dim)
+      case(0)
+         start=location
+         end=location+m*n-1
+         select case(G_FIN)
+         case(5); GM_REALS(location:location) = median(GM_REALS(start:end))
+         case(6); call medianloc(GM_REALS(start:end),ivalue)
+                  GM_REALS(location:location) = ivalue
+         case(7); GM_REALS(location:location) = medianval(GM_REALS(start:end))
+         end select
+         GM_IMAGS(location:location) = 0.0d0
+         G_VAR_COLS(G_ARGUMENT_POINTER)=1
+      case(1)
+         start=location
+         end=start+m-1
+         allocate(answer(m))
+         do i=1,n
+            select case(G_FIN)
+            case(5); GM_REALS(location+i-1:location+i-1) = median(GM_REALS(start:end))
+            case(6); call medianloc(GM_REALS(start:end),ivalue)
+                     GM_REALS(location+i-1:location+i-1) = ivalue
+            case(7); GM_REALS(location+i-1:location+i-1) = medianval(GM_REALS(start:end))
+            end select
+            start=start+m
+            end=start+m-1
+         enddo
+         GM_IMAGS(location:location+n-1) = 0.0d0
+         G_VAR_COLS(G_ARGUMENT_POINTER)=n
+      case(2)
+         start=location
+         end=start+(n-1)*m
+         do i=1,m
+            select case(G_FIN)
+            case(5); GM_REALS(location+i-1:location+i-1) = median(GM_REALS(start:end:m))
+            case(6); call medianloc(GM_REALS(start:end:m),ivalue)
+                     GM_REALS(location+i-1:location+i-1) = ivalue
+            case(7); GM_REALS(location+i-1:location+i-1) = medianval(GM_REALS(start:end:m))
+            end select
+            start=start+1
+            end=start+(n-1)*m
+         enddo
+         GM_IMAGS(location:location+m-1) = 0.0d0
+         G_VAR_COLS(G_ARGUMENT_POINTER)=m
+      end select
+      G_VAR_ROWS(G_ARGUMENT_POINTER)=1
+
+   endblock ORDER_MEDIANVAL
+!==================================================================================================================================!
+   case(11) ! COMMAND::order%rank_unique - ranks an array, with removal of duplicate entries
+   ORDER_RANK_UNIQUE: block
+   integer             :: start, end
+   integer             :: number_returned
+   integer,allocatable :: answer(:)
+   ! ignores imaginary component
+
+      select case(G_RHS)
+      case(1)
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      start=location
+      end=location+m*n-1
+      if(allocated(answer)) deallocate(answer)
+      allocate(answer(m*n))
+      call rank_unique(GM_REALS(start:end), answer,number_returned)
+      end=location+number_returned
+      G_VAR_ROWS(G_ARGUMENT_POINTER)=end-start+1
+      G_VAR_COLS(G_ARGUMENT_POINTER)=1
+      GM_REALS(start:end) =answer(start:end)
+      deallocate(answer)
+      GM_IMAGS(start:end) = 0.0d0
+
+   endblock ORDER_RANK_UNIQUE
+!==================================================================================================================================!
+   case( 9) ! COMMAND::perturb(X,PERCENT) -  generate a random permutation of an array leaving elements close to initial locations
+   ORDER_PERTURB: block
+   integer :: i
+   real    :: percent
+   integer :: start, end
+
+      percent=0
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+
+      select case(G_RHS)
+      case(2)  ! if two parameters
+         percent = GM_REALS(location)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         n = G_VAR_COLS(G_ARGUMENT_POINTER)
+         m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         if( percent.lt.0 .or. percent.gt.1 )then
+            call mat_err(21) ! Subscript out of range
+            return
+         endif
+      case default
+         call mat_err(39) ! Incorrect number of arguments
+         return
+      end select
+
+      start=location
+      end=location+m*n-1
+      call perturb(GM_REALS( start:end ),percent )
+      GM_IMAGS(start:end) = 0.0d0
+
+   endblock ORDER_PERTURB
+!==================================================================================================================================!
+   end select FUN_SETS
+!==================================================================================================================================!
+end subroutine mat_matorder
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine mat_funs(id)
 
-! ident_12="@(#) M_matrix ml_funcs(3fp) scan function list and set G_FUN and G_FIN"
+! ident_15="@(#) M_matrix ml_funcs(3fp) scan function list and set G_FUN and G_FIN"
 
 integer,intent(in)                :: id(GG_MAX_NAME_LENGTH)
 integer                           :: selector
 character(len=GG_MAX_NAME_LENGTH) :: name
 integer                           :: i
 
-   name=' '
+  name=' '
    do i=1,size(id)
       if(id(i).le.0)exit
       if(id(i).le.G_CHARSET_SIZE)then
@@ -2287,33 +3450,46 @@ integer                           :: i
    case('chol');            selector=106
    case('rref');            selector=107
 
-   case('sin');             selector=201
-   case('cos');             selector=202
-   case('atan');            selector=203
-   case('exp');             selector=204
-   case('sqrt');            selector=205
-   case('log');             selector=206
+   case('la%sin');             selector=201
+   case('la%cos');             selector=202
+   case('la%atan');            selector=203
+   case('la%exp');             selector=204
+   case('la%sqrt');            selector=205
+   case('la%log');             selector=206
+   case('la%pow','pow','power');     selector=306
+
    case('eig');             selector=211
    case('schur');           selector=212
    case('hess');            selector=213
    case('poly');            selector=214
    case('roots');           selector=215
    case('abs');             selector=221  !  calling  codes  corresponding  to  the  function  names
-   case('round');           selector=222
+   case('round','anint','nint');    selector=222
    case('real');            selector=223
    case('imag','aimag');    selector=224
    case('conjg');           selector=225
+   case('abcde');           selector=226
+   case('aint','int');      selector=227
 
    case('svd');             selector=301
    case('pinv');            selector=302
    case('cond');            selector=303
    case('norm');            selector=304
-   case('rank');            selector=305
+   case('la%rank','rank');  selector=305
+   case('reshape');         selector=307
+   case('lt');              selector=308
+   case('le');              selector=309
+   case('eq');              selector=310
+   case('ge');              selector=311
+   case('gt');              selector=312
+   case('ne');              selector=313
+   case('pack');            selector=314
+   case('cmplx');           selector=315
 
    case('qr');              selector=401
    case('orth');            selector=402
 
-   case('exec','include','source','script');  selector=501
+   case('exec','source','script');  selector=501
    case('save');            selector=502
    case('load');            selector=503
    case('print');           selector=504
@@ -2328,22 +3504,75 @@ integer                           :: i
    case('show');            selector=513
    case('delete');          selector=514
 
-   case('magic');           selector=601
-   case('diag');            selector=602
-   case('sum');             selector=603
-   case('prod');            selector=604
-   case('user');            selector=605
-   case('eye');             selector=606
-   case('rand','random');   selector=607
-   case('ones');            selector=608
-   case('chop');            selector=609
-   case('shape');           selector=610
-   case('kron');            selector=611
-   case('tril');            selector=614
-   case('triu');            selector=615
-   case('zeros');           selector=616
-   case('getenv');          selector=617
-   case('dat','date_and_time');   selector=618
+   case('magic');                 selector=601
+   case('diag');                  selector=602
+   case('sum');                   selector=603
+   case('prod','product');        selector=604
+   case('user');                  selector=605
+   case('eye');                   selector=606
+   case('rand','random');         selector=607
+   case('ones');                  selector=608
+   case('chop');                  selector=609
+   case('shape');                 selector=610
+   case('kron');                  selector=611
+   case('tril');                  selector=614
+   case('triu');                  selector=615
+   case('zeros');                 selector=616
+   case('getenv');                selector=617
+   case('date_and_time');         selector=618
+   case('all');                   selector=619
+   case('any');                   selector=620
+   case('fmtc');                  selector=621
+   case('fmti');                  selector=622
+   case('fmtr');                  selector=623
+   case('maxval');                selector=624
+   case('minval');                selector=625
+   case('randu','rand%uniform');  selector=626
+   case('randn','rand%normal');   selector=627
+   case('randseed');              selector=628
+   case('qsort');                 selector=629
+   case('maxloc');                selector=630
+   case('minloc');                selector=631
+
+   case('randi','rand%integer');  selector=632
+   case('f%size','size');         selector=633
+   case('f%log','log');           selector=634
+   case('f%log10','log10');       selector=635
+   case('f%acosh','acosh');       selector=636
+   case('f%acos','acos');         selector=637
+   case('f%asinh','asinh');       selector=638
+   case('f%asin','asin');         selector=639
+   case('f%tan','tan');           selector=640
+   case('f%atanh','atanh');       selector=641
+   case('f%atan','atan');         selector=642
+   case('f%cosh','cosh');         selector=643
+   case('f%cos','cos');           selector=644
+   case('f%sinh','sinh');         selector=645
+   case('f%sin','sin');           selector=646
+   case('f%tanh','tanh');         selector=647
+   case('f%sqrt','sqrt');         selector=648
+   case('f%exp','exp');           selector=649
+
+   case('set%intersect','intersect');  selector=701 ! find the value common to both sets A and B
+   case('set%ismember','ismember');   selector=702 ! create a mask of A marking elements also in B
+   case('set%issorted','issorted');   selector=703 ! report if A is sorted in ascending order or not.
+   case('set%setdiff','setdiff');    selector=704 ! find the values in A that are not in B
+   case('set%setxor','setxor');     selector=705 ! find values of A and B not in both arrays
+   case('set%union','union');      selector=706 ! join two sets and removes duplicates of values
+   case('set%unique','unique');     selector=707 ! return unique values in array A
+   case('set%isequal','isequal');     selector=708 ! report if A equals B
+
+   case('order%sort','sort');     selector=801 ! Sorts array into ascending order (Quick-sort)
+   case('order%rank');     selector=802 ! produces an INDEX that sorts an input array (optimized merge-sort)
+   case('order%orderloc','orderloc'); selector=803 ! [FRACTILE] Return INDEX of Nth ordered value of array (Quick-Sort-like)
+   case('order%orderval','orderval'); selector=804 ! [FRACTILE] Return VALUE of Nth ordered element of array (Quick-Sort-like)
+   case('order%median','median');   selector=805 ! median VALUE. If even number of elements, returns average of the two "medians".
+   case('order%medianloc','medianloc'); selector=806 ! Returns median value's INDEX.
+   case('order%medianval','medianval'); selector=807 ! Returns median VALUE.
+   case('order%occurrences','occurrences'); selector=808 ! Give multiplicity for each array value (number of times appearing )
+   case('order%perturb','perturb');  selector=809 ! generate random permutation of array leaving elements close to initial locations
+   case('order%rank_decreasing','rank_decreasing'); selector=810 ! ranks in decreasing order, duplicate entries assigned same rank
+   case('order%rank_unique','rank_unique'); selector=811 ! ranks an array, with removal of duplicate entries (Merge-Sort)
 
    case default !  function name was not found
       G_FIN = 0
@@ -2363,7 +3592,7 @@ end subroutine mat_funs
 !==================================================================================================================================!
 subroutine mat_copyid(x,y)
 
-! ident_13="@(#) M_matrix mat_copyid(3fp) copy a name to allow an easy way to store a name"
+! ident_16="@(#) M_matrix mat_copyid(3fp) copy a name to allow an easy way to store a name"
 
 integer,intent(out) :: x(GG_MAX_NAME_LENGTH)
 integer,intent(in)  :: y(GG_MAX_NAME_LENGTH)
@@ -2377,7 +3606,7 @@ end subroutine mat_copyid
 !==================================================================================================================================!
 subroutine mat_getval(s)
 
-! ident_14="@(#) M_matrix mat_getval(3fp) form numerical value from string of "integer" characters"
+! ident_17="@(#) M_matrix mat_getval(3fp) form numerical value from string of "integer" characters"
 
 doubleprecision,intent(out) :: s
       s = 0.0d0
@@ -2404,7 +3633,7 @@ end subroutine mat_getval
 !==================================================================================================================================!
 subroutine mat_getch()
 
-! ident_15="@(#) M_matrix mat_getch(3f) get next character from input line into G_CHRA"
+! ident_18="@(#) M_matrix mat_getch(3f) get next character from input line into G_CHRA"
 
    G_CHRA = G_LIN(G_LINE_POINTER(4))
    if (G_CHRA .ne. GG_EOL) G_LINE_POINTER(4) = G_LINE_POINTER(4) + 1
@@ -2415,7 +3644,7 @@ end subroutine mat_getch
 !==================================================================================================================================!
 subroutine mat_base(x,base,eps,s,n)
 
-! ident_16="@(#) M_matrix mat_base(3fp) store representation of x in s(1 n) using specified base"
+! ident_19="@(#) M_matrix mat_base(3fp) store representation of x in s(1 n) using specified base"
 
 doubleprecision            :: x
 doubleprecision,intent(in) :: base
@@ -2480,7 +3709,7 @@ end subroutine mat_base
 !==================================================================================================================================!
 subroutine mat_print(ID,K)
 
-! ident_17="@(#) M_matrix mat_print(3fp) primary output routine"
+! ident_20="@(#) M_matrix mat_print(3fp) primary output routine"
 
 integer           :: id(GG_MAX_NAME_LENGTH)
 integer           :: k
@@ -2687,7 +3916,7 @@ end subroutine mat_print
 !==================================================================================================================================!
 subroutine mat_formz(x,y)
 
-! ident_18="@(#) M_matrix mat_formz system dependent routine to print with z format"
+! ident_21="@(#) M_matrix mat_formz system dependent routine to print with z format"
 
 doubleprecision,intent(in) :: x,y
 
@@ -2707,7 +3936,7 @@ end subroutine mat_formz
 !==================================================================================================================================!
 subroutine mat_prompt(pause)
 
-! ident_19="@(#) M_matrix mat_prompt(3f) issue interactive prompt with optional pause"
+! ident_22="@(#) M_matrix mat_prompt(3f) issue interactive prompt with optional pause"
 
 integer,intent(in) :: pause
 character(len=1)   :: dummy
@@ -2725,7 +3954,7 @@ end subroutine mat_prompt
 !==================================================================================================================================!
 subroutine mat_stack1(op)
 
-! ident_20="@(#) M_matrix mat_stack1(3f) Unary Operations"
+! ident_23="@(#) M_matrix mat_stack1(3f) Unary Operations"
 
 integer           :: op
 integer           :: i
@@ -2769,7 +3998,7 @@ end subroutine mat_stack1
 !==================================================================================================================================!
 subroutine mat_print_id(id,argcnt)
 
-! ident_21="@(#) M_matrix mat_print_id(3fp) print table of variable id names (up to) eight per line"
+! ident_24="@(#) M_matrix mat_print_id(3fp) print table of variable id names (up to) eight per line"
 
 !     ID     Is array of GG_MAX_NAME_LENGTH character IDs to print
 !     ARGCNT is number of IDs to print
@@ -2815,7 +4044,7 @@ end subroutine mat_print_id
 !==================================================================================================================================!
 subroutine mat_stack_put(id)
 
-! ident_22="@(#) M_matrix mat_stack_put(3fp) put variables into storage"
+! ident_25="@(#) M_matrix mat_stack_put(3fp) put variable into storage or remove from storage"
 
 integer  :: id(GG_MAX_NAME_LENGTH)
 integer  :: i, j, k
@@ -2914,10 +4143,10 @@ integer  :: n, nk, nt
       G_TOP_OF_SAVED = G_TOP_OF_SAVED+1
    endif
 !
-   ! create new variable
-   if (mn .eq. 0) then
+   if (mn .eq. 0) then ! flag to delete so finished
       goto 99
    endif
+   ! create new variable
 
    if (G_TOP_OF_SAVED-2 .le. G_ARGUMENT_POINTER) then
       call mat_err(18) ! Too many names
@@ -3073,7 +4302,7 @@ end subroutine MAT_STACK_PUT
 !!
 !!          MAIN
 !!            |
-!!          LALA     |--CLAUSE
+!!          LALA      |--CLAUSE
 !!            |       |    |
 !!          PARSE-----|--EXPR----TERM----FACTOR
 !!                    |    |       |       |
@@ -3128,7 +4357,7 @@ end subroutine MAT_STACK_PUT
 !!    STACK subroutines manage the variable memory and perform elementary
 !!    operations, such as matrix addition and transposition.
 !!
-!!    The four subroutines MATFN1 though MATFN4 are called whenever "serious"
+!!    The subroutines MATFN1 though MATFN6 are called whenever "serious"
 !!    matrix computations are required. They are interface routines which
 !!    call the various LINPACK and EISPACK subroutines. MATFN5 primarily
 !!    handles the file access tasks.
@@ -3159,8 +4388,8 @@ character(len=:),allocatable :: symbol
       if (r.eq.16 .or. r.eq.17) goto 94
       G_SYM = GG_EOL
       G_ARGUMENT_POINTER = 0
-      if (G_RIO .ne. G_INPUT_LUN) call mat_files(-G_RIO,G_BUF)
-      G_RIO = G_INPUT_LUN
+      if (G_LUN_READING_FROM .ne. G_INPUT_LUN) call mat_files(-G_LUN_READING_FROM,G_BUF)
+      G_LUN_READING_FROM = G_INPUT_LUN
       G_LINECOUNT(3) = 0
       G_LINECOUNT(4) = 2
       G_LINE_POINTER(1) = 1
@@ -3390,10 +4619,13 @@ character(len=:),allocatable :: symbol
 !     finish statement
    80 continue
       G_FIN = 0
-      p = 0
-      r = 0
-      if (G_PT .gt. 0) p = G_PSTK(G_PT)
-      if (G_PT .gt. 0) r = G_RSTK(G_PT)
+      if (G_PT .gt. 0) then
+         p = G_PSTK(G_PT)
+         r = G_RSTK(G_PT)
+      else
+         p = 0
+         r = 0
+      endif
       if (G_SYM.eq.comma .or. G_SYM.eq.semi) goto 15
       if (r.eq.21 .and. p.eq.G_LINE_POINTER(1)) goto 49
       if (G_PT .gt. G_PTZ) goto 91
@@ -3426,7 +4658,7 @@ character(len=:),allocatable :: symbol
          if (G_SYM.eq.semi .or. G_SYM.eq.comma .or. G_SYM.eq.GG_EOL) goto 60
          if (G_SYM.eq.isname .and. mat_eqid(G_SYN,else)) goto 60
          if (G_SYM.eq.isname .and. mat_eqid(G_SYN,ennd)) goto 60
-         call mat_err(40)
+         call mat_err(40) ! 'Expecting statement terminator'
          if (G_ERR .gt. 0) goto 01
          goto 60
       case(3:5);   goto 91
@@ -3460,9 +4692,9 @@ character(len=:),allocatable :: symbol
       r = G_RSTK(G_PT)
       select case(R)
       case(8:9);   goto 93
-      case(10:11); goto 92
+      case(10:11); goto 92  ! expression
       case(12);    goto 94
-      case(16:17); goto 95
+      case(16:17); goto 95  ! call mat_matfns by returning to LALA
       case(18:19); goto 92
       case default
          write(*,*)'INTERNAL ERROR 94'
@@ -3490,61 +4722,116 @@ character(len=*),intent(in)  :: id
 integer                      :: chr
 integer                      :: i, k
 integer                      :: l
+character(len=:),allocatable :: filename
 
 ! a list of names this procedure matches to use for some preliminary tests
 character(len=10),parameter :: cmd(*)=[ character(len=10) :: &
- & 'clear', 'else',  'end',      'exit',   'for',  &
- & 'help',  'if',    'long',     'quit',   'semi', &
- & 'short', 'what',  'while',    'who',    'sh',   &
- & 'lala',  'shell', 'continue', 'return', 'fhelp'   &
+&  'clear',    'else',   'end',       'exit',    'for',   &
+&  'help',     'if',     'long',      'quit',    'semi',  &
+&  'short',    'what',   'while',     'who',     'sh',    &
+&  'lala',     'shell',  'continue',  'return',  'fhelp', &
+&  'include'                                              &
  & ]
 
 FINISHED: block
    G_FUN = 0
 
-   do k = size(cmd),0,-1
-     if(k.eq.0)then                          ! did not match anything
+   do k = size(cmd),-1,-1
+     if(k.eq.-1)then                            ! did not match anything
         G_FIN = 0
         return
-     elseif (id.eq.cmd(k))then               ! found match to command
+     elseif (k.eq.0)then                        ! see if exec file matches
+        filename=find_la_file(id)
+        if(filename.ne.'')then
+           call mat_getsym()
+           select case(G_CHRA)                  ! check next character
+           case(comma,semi,GG_EOL)              ! next character is end of a command so good to go
+              ! alphanumeric or a HELP command so good to go
+           case(iachar('0'):iachar('9'),iachar('a'):iachar('z'),iachar('A'):iachar('Z'),score,percent)
+           case default
+              cycle
+           end select
+           call source_file(-1,0,filename)       ! name becomes command if file can be opened
+           if(G_ERR.ne.0)cycle
+           G_PTZ=0
+           call mat_getsym()
+           G_FIN = 1                             ! found a file match
+           exit FINISHED
+        endif
+        cycle
+     elseif (id.eq.cmd(k))then                   ! found match to command
 
-        select case(G_CHRA)                  ! check next character
-        case(comma,semi,GG_EOL)               ! next character is end of a command so good to go
+        select case(G_CHRA)                      ! check next character
+        case(comma,semi,GG_EOL)                  ! next character is end of a command so good to go
            exit
-        case(iachar('0'):iachar('9'),iachar('a'):iachar('z'),iachar('A'):iachar('Z'),score) ! alphanumeric or a HELP command so good to go
+        ! alphanumeric or a HELP command so good to go
+        case(iachar('0'):iachar('9'),iachar('a'):iachar('z'),iachar('A'):iachar('Z'),score,percent)
            exit
         end select
 
-        if (id.eq.'help')then                ! special case where anything after the help could be a topic
+        if (id.eq.'help')then                    ! special case where anything after the help could be a topic
            exit
         elseif(id.eq.'fhelp')then
            exit
         else
-           call mat_err(16)                  ! improper command
+           call mat_err(16)                      ! improper command
            return
         endif
 
      endif
    enddo
 
-   G_FIN = 1                                 ! found a match and next character passed tests
+   G_FIN = 1                                     ! found a match and next character passed tests
 !===================================================================================================================================
    COMAND : select case(id)
 !===================================================================================================================================
-   case('clear')
-   ! alphameric character
+   case('clear') ! command::clear
+   CLEAR_CMD: block
+   character(len=GG_MAX_NAME_LENGTH) :: name
+      ! alphameric character
       if(verify(achar(G_CHRA),big//little//digit)==0)then ! is alphanumeric so good to go by name
-         call mat_getsym()
-         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
-         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
-         G_VAR_COLS(G_ARGUMENT_POINTER) = 0
-         G_RHS = 0
-         call mat_stack_put(G_SYN)
-         if (G_ERR .gt. 0) return
+         do
+            G_SYN=blank
+            call mat_getsym()
+            call mat_buf2str(name,G_SYN,len(name))             ! convert ADE array to string
+            if(name.eq.'')exit
+            G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+            G_VAR_ROWS(G_ARGUMENT_POINTER) = 0   ! if m*n=0 flags to delete instead of replace or create variable
+            G_VAR_COLS(G_ARGUMENT_POINTER) = 0
+            G_RHS = 0
+            call mat_stack_put(G_SYN)
+            if (G_ERR .gt. 0) return
+            if(G_CHRA.eq.GG_EOL)exit
+         enddo
          G_FIN = 1
-      else
+      else  ! remove all user-created variables
          G_TOP_OF_SAVED = GG_MAX_NUMBER_OF_NAMES-3
       endif
+   endblock CLEAR_CMD
+!===================================================================================================================================
+   case('include') ! command::include
+   INCLUDE_CMD: block
+   character(len=GG_MAX_NAME_LENGTH) :: name
+      ! alphameric character
+      if(verify(achar(G_CHRA),big//little//digit)==0)then ! is alphanumeric so good to go by name
+         do
+            G_SYN=blank
+            call mat_getsym()
+            call mat_buf2str(name,G_SYN,len(name))             ! convert ADE array to string
+            if(name.eq.'')exit
+            G_ARGUMENT_POINTER = G_ARGUMENT_POINTER+1
+            G_VAR_ROWS(G_ARGUMENT_POINTER) = 0   ! if m*n=0 flags to delete instead of replace or create variable
+            G_VAR_COLS(G_ARGUMENT_POINTER) = 0
+            G_RHS = 0
+            call source_file(-1,0,name)       ! include file if file can be opened
+            if (G_ERR .gt. 0) return
+            if(G_CHRA.eq.GG_EOL)exit
+         enddo
+         G_FIN = 1
+      else
+         write(*,*)'non-symbol include file name'
+      endif
+   endblock INCLUDE_CMD
 !===================================================================================================================================
    case('for')
       G_FIN = -11
@@ -3590,12 +4877,12 @@ FINISHED: block
          G_FUN = 99
          exit COMAND
       endif
-      call mat_files(-G_RIO,G_BUF)
+      call mat_files(-G_LUN_READING_FROM,G_BUF)
       G_LINE_POINTER(1) = G_LIN(K+1)
       G_LINE_POINTER(4) = G_LIN(K+2)
       G_LINE_POINTER(6) = G_LIN(K+3)
       G_PTZ = G_LIN(K+4)
-      G_RIO = G_LIN(K+5)
+      G_LUN_READING_FROM = G_LIN(K+5)
       G_LINECOUNT(4) = G_LIN(K+6)
       G_CHRA = BLANK
       G_SYM = COMMA
@@ -3606,10 +4893,11 @@ FINISHED: block
       exit FINISHED
 !===================================================================================================================================
    case('lala')
-      call journal('QUIT SINGING AND GET BACK TO WORK.')
+      call journal(' QUIT SINGING AND GET BACK TO WORK.')
+      if(1.eq.2) call journal(' Your place or mine?')
 !===================================================================================================================================
    case('shell')
-      call journal(' Your place or mine?')
+      G_system=.not.G_system
 !===================================================================================================================================
    case('short','long')
       if(k.eq.11)then
@@ -3620,7 +4908,7 @@ FINISHED: block
       if (G_CHRA.eq.e_low .or. G_CHRA.eq.d_low .or. G_CHRA.eq.e_up .or. chr.eq.d_up ) G_FMT = G_FMT+2
       if (G_CHRA .eq. z_low) G_FMT = 5
       if (G_CHRA.eq.e_low .or. G_CHRA.eq.d_low .or. G_CHRA.eq.z_low) call mat_getsym()
-      if (G_CHRA.eq.e_UP .or. G_CHRA.eq.d_up .or. G_CHRA.eq.z_up ) call mat_getsym()
+      if (G_CHRA.eq.e_UP .or. G_CHRA.eq.d_up .or. G_CHRA.eq.z_up )   call mat_getsym()
 !===================================================================================================================================
    case('semi')
       G_LINECOUNT(3) = 1 - G_LINECOUNT(3)  ! toggle "semi" mode
@@ -3639,46 +4927,45 @@ FINISHED: block
    case('sh')
       call sh_command()
 !===================================================================================================================================
-   case('help','fhelp')
+   case('help','fhelp') ! command::help
+                        ! command::fhelp
       HELP_ : block
       character(len=GG_LINELEN) :: topic_name
+      integer                   :: position(2)
          G_BUF=blank
-         if (G_CHRA .eq. GG_EOL) then                                ! if no topic
+         if (G_CHRA .eq. GG_EOL) then                                      ! if no topic
             topic_name= ' '
          else
-            call mat_getsym()                                       ! get next symbol or name
-            if (G_SYM .eq. isname)then                              ! use next word on line as topic
+            call mat_getsym()                                              ! get next symbol or name
+            if (G_SYM .eq. isname)then                                     ! use next word on line as topic
                  G_BUF(:GG_MAX_NAME_LENGTH) = G_SYN
-            else                                                    ! use next non-blank character as topic
+            else                                                           ! use next non-blank character as topic
                if (G_SYM .eq. 0) G_SYM = dot
                G_BUF(1)  = G_SYM
                G_BUF(2:) = blank
             endif
-            call mat_buf2str(topic_name,G_BUF,len(topic_name))      ! convert ADE array to string
+            call mat_buf2str(topic_name,G_BUF,len(topic_name))             ! convert ADE array to string
          endif
          if(topic_name.eq.'search')then
             topic_name=ade2str(pack(G_LIN,G_LIN.gt.0.and.G_LIN.lt.255))
-            i=index(topic_name,'search')                            ! assuming help command on line by itself to some extent
+            i=index(topic_name,'search')                                   ! assuming help command on line by itself to some extent
             if(i.ne.0)topic_name=topic_name(i:)
          endif
+         position=merge(G_LINECOUNT(:2),[0,huge(0)],G_PROMPT)              ! page length
          if(id.eq.'help')then
-            call help_command(G_HELP_TEXT,trim(topic_name),&
-            & merge(G_LINECOUNT(:2),[0,huge(0)],&                      ! page length
-            & G_PROMPT))
+            call help_command(G_HELP_TEXT,trim(topic_name),position)
          else
-            call help_command(G_FORTRAN_TEXT,trim(topic_name),&
-            & merge(G_LINECOUNT(:2),[0,huge(0)],&                      ! page length
-            & G_PROMPT))
+            call help_command(G_FORTRAN_TEXT,trim(topic_name),position)    ! page length
          endif
       endblock HELP_
 !===================================================================================================================================
    case default ! did not find a match
       G_FIN = 0
-      return
+      exit COMAND
 !===================================================================================================================================
    end select COMAND
-!===================================================================================================================================
    call mat_getsym()
+!===================================================================================================================================
 endblock FINISHED
 end subroutine mat_comand
 !==================================================================================================================================!
@@ -3686,16 +4973,16 @@ end subroutine mat_comand
 !==================================================================================================================================!
 subroutine sh_command()
 
-! ident_23="@(#) M_matrix sh_command(3f) start system shell interactively"
+! ident_26="@(#) M_matrix sh_command(3f) start system shell interactively"
 
 character(len=GG_LINELEN) :: line
-integer                   :: istat
+logical                   :: istat
 
-   call get_environment_variable('SHELL',line)               ! get command to execute
-   IF (G_CHRA .eq. GG_EOL )then                               ! if next character on stack is end-of-line call interactive shell
-      call execute_command_line(line,cmdstat=istat)          ! call shell interactively
-   else                                                      ! there were characters after SH on the line
-      call execute_command_line(line,cmdstat=istat)          ! call shell interactively
+   call get_environment_variable('SHELL',line)   ! get command to execute
+   IF (G_CHRA .eq. GG_EOL )then                  ! if next character on stack is end-of-line call interactive shell
+      istat=run(trim(line))                      ! call shell interactively
+   else                                          ! there were characters after SH on the line
+      istat=run(trim(line))                      ! call shell interactively
    endif
 
 end subroutine sh_command
@@ -3704,7 +4991,7 @@ end subroutine sh_command
 !==================================================================================================================================!
 subroutine mat_plot(lplot,x,y,n,p,k)
 
-! ident_24="@(#) M_matrix mat_plot(3fp) Plot X vs. Y on LPLOT. If K is nonzero then P(1) ... P(K) are extra parameters"
+! ident_27="@(#) M_matrix mat_plot(3fp) Plot X vs. Y on LPLOT. If K is nonzero then P(1) ... P(K) are extra parameters"
 
 integer           :: lplot
 integer           :: n
@@ -3725,6 +5012,7 @@ integer           :: i
 integer           :: j
 integer           :: jmax
 integer           :: l
+logical           :: istat
 
 !!      if (k .gt. 0) write(lplot,01) (p(i), i=1,k)
 !!   01 FORMAT('Extra parameters',*(f5.1,/))
@@ -3779,7 +5067,9 @@ integer           :: l
 
    ! call the external program xy(1) converting the parameters to a string of options
    call journal('sc','xy xy.dat ',trim(string))
-   call execute_command_line('xy xy.dat '//trim(string))
+   if(which('xy')/='')then
+      istat=run('xy xy.dat '//trim(string))
+   endif
    close(unit=tlun,status='delete',iostat=ios)
 
 end subroutine mat_plot
@@ -3788,7 +5078,7 @@ end subroutine mat_plot
 !==================================================================================================================================!
 subroutine mat_matfn1()
 
-! ident_25="@(#) M_matrix mat_matfn1(3fp) evaluate functions involving gaussian elimination"
+! ident_28="@(#) M_matrix mat_matfn1(3fp) evaluate functions involving gaussian elimination"
 
 doubleprecision   :: dtr(2)
 doubleprecision   :: dti(2)
@@ -3799,7 +5089,7 @@ doubleprecision   :: t
 doubleprecision   :: t0
 doubleprecision   :: t1
 doubleprecision   :: eps
-character(len=80) ::  mline
+character(len=80) :: mline
 integer           :: i
 integer           :: info
 integer           :: j
@@ -3884,7 +5174,8 @@ integer           :: nn
          si(1) = mat_wasum(n*n,GM_IMAGS(location),GM_IMAGS(location),1)
          eps = GM_REALS(GM_BIGMEM-4)
          t = eps*sr(1)
-         if (si(1) .le. eps*sr(1)) call mat_rset(n*n,0.0d0,GM_IMAGS(location),1)
+         !if (si(1) .le. eps*sr(1)) call mat_rset(n*n,0.0d0,GM_IMAGS(location),1) ! set imaginary values to zero
+         if (si(1) .le. eps*sr(1)) gm_imags(location:location+n*n-1)=0.0d0 ! set imaginary component to zero
          goto 99
    !
       endif
@@ -3955,7 +5246,8 @@ integer           :: nn
          enddo
       enddo
       call mat_inverse_hilbert(GM_REALS(location),n,n)
-      call mat_rset(n*n,0.0d0,GM_IMAGS(location),1)
+      !call mat_rset(n*n,0.0d0,GM_IMAGS(location),1) ! set imaginary values to zero
+      gm_imags(location:location+n*n-1)=0.0d0 ! set imaginary component to zero
       if (G_FIN .lt. 0) call mat_wscal(n*n,sr(1),si(1),GM_REALS(location),GM_IMAGS(location),1)
       goto 99
 32    continue
@@ -4085,7 +5377,8 @@ integer           :: nn
       G_VAR_ROWS(G_ARGUMENT_POINTER) = n
       G_VAR_COLS(G_ARGUMENT_POINTER) = n
       call mat_inverse_hilbert(GM_REALS(location),n,n)
-      call mat_rset(n*n,0.0d0,GM_IMAGS(location),1)
+      !call mat_rset(n*n,0.0d0,GM_IMAGS(location),1) ! set imaginary values to zero
+      gm_imags(location:location+n*n-1)=0.0d0 ! set imaginary component to zero
       if (G_FIN .lt. 0) call mat_wscal(n*n,sr(1),si(1),GM_REALS(location),GM_IMAGS(location),1)
 !===================================================================================================================================
     case(6) ! COMMAND::CHOLESKY
@@ -4148,23 +5441,29 @@ integer          :: nn
       logical herm,schur,vect,hess
 !
 !     functions/G_FIN
-!     **   SIN  COS ATAN  EXP  SQRT LOG
-!      0    1    2    3    4    5    6
+!     **   la%SIN  la%COS la%ATAN  la%EXP  la%SQRT la%LOG
+!      0    1    2    3    4     5    6
 !    EIG  SCHU HESS POLY ROOT
 !     11   12   13   14   15
 !    ABS  ROUN REAL IMAG CONJ
 !     21   22   23   24   25
-      if (G_FIN .ne. 0) goto 05
+      if (G_FIN .eq. 0) then
          location = G_VAR_DATALOC(G_ARGUMENT_POINTER+1)
          powr = GM_REALS(location)
          powi = GM_IMAGS(location)
-   05 continue
+      endif
       location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
       m = G_VAR_ROWS(G_ARGUMENT_POINTER)
       n = G_VAR_COLS(G_ARGUMENT_POINTER)
+
       if (G_FIN .ge. 11 .and. G_FIN .le. 13) goto 10
       if (G_FIN .eq. 14 .and. (m.eq.1 .or. n.eq.1))then
-         goto 50
+         ! POLY
+         ! form polynomial with given vector as roots
+         N = MAX(M,N)
+         LD = location+N+1
+         call mat_wcopy(N,GM_REALS(location),GM_IMAGS(location),1,GM_REALS(LD),GM_IMAGS(LD),1)
+         goto 52
       endif
       if (G_FIN .eq. 14) goto 10
       if (G_FIN .eq. 15) goto 60
@@ -4305,33 +5604,31 @@ integer          :: nn
           ti(1) = dexp(sr)*dsin(si)
         endif
 
+        if(G_RHS.ne.1)then;
+           call mat_err(39) ! Incorrect number of arguments
+           return
+        endif
         select case(G_FIN)
-        case( 1)                                      ! sin
-                 tr(1) = dsin(sr)*dcosh(si)
-                 ti(1) = dcos(sr)*dsinh(si)
-        case( 2)                                      ! cos
+        case( 1)                                        ! COMMAND::la%sin
+            tr(1) = dsin(sr)*dcosh(si)
+            ti(1) = dcos(sr)*dsinh(si)
+        case( 2)                                        ! COMMAND::la%cos
                  tr(1) = dcos(sr)*dcosh(si)
                  ti(1) = (-dsin(sr))*dsinh(si)
-        case( 3)                                      ! atan
-                 call mat_watan(sr,si,tr(1),ti(1))
-        case( 4)                                      ! exp
+        case( 3); call mat_watan(sr,si,tr(1),ti(1))     ! COMMAND::la%atan
+        case( 4)                                        ! COMMAND::la%exp
                  tr(1) = dexp(sr)*dcos(si)
                  ti(1) = dexp(sr)*dsin(si)
-        case( 5)                                      ! sqrt
-                 call mat_wsqrt(sr,si,tr(1),ti(1))
-        case( 6)                                      ! log
-                 call mat_wlog(sr,si,tr(1),ti(1))
-        case( 21)
-                 tr(1) = mat_pythag(sr,si)
-        case( 22)
-                 tr(1) = mat_round(sr)
-        case( 23)
-                 tr(1) = sr
-        case( 24)
-                 tr(1) = si
-        case( 25)
-                 tr(1) = sr
-                 ti(1) = -si
+        case( 5);  call mat_wsqrt(sr,si,tr(1),ti(1))    ! COMMAND::la%sqrt
+        case( 6);  call mat_wlog(sr,si,tr(1),ti(1))     ! COMMAND::la%log
+        case( 21); tr(1) = mat_pythag(sr,si)            ! COMMAND::abs
+        case( 22); tr(1) = mat_round(sr)                ! COMMAND::ROUND
+        case( 23); tr(1) = sr                           ! COMMAND::REAL
+        case( 24); tr(1) = si                           ! COMMAND::IMAG
+        case( 25); tr(1) = sr; ti(1) = -si              ! COMMAND::CONJG
+        case( 26); tr(1) = sr; ti(1) = si               ! COMMAND::abcde
+        case( 27); tr(1) = aint(sr)                     ! COMMAND::AINT
+
         end select
 
         if (G_ERR .gt. 0) return
@@ -4354,14 +5651,6 @@ integer          :: nn
       G_FIN = -1
       G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
       goto 99
-!===================================================================================================================================
-!     POLY
-      ! form polynomial with given vector as roots
-   50 continue
-      N = MAX(M,N)
-      LD = location+N+1
-      call mat_wcopy(N,GM_REALS(location),GM_IMAGS(location),1,GM_REALS(LD),GM_IMAGS(LD),1)
-      goto 52
 !===================================================================================================================================
 !     FORM CHARACTERISTIC POLYNOMIAL
    52 continue
@@ -4427,7 +5716,7 @@ end subroutine mat_matfn2
 !==================================================================================================================================!
 subroutine mat_matfn3()
 
-! ident_26="@(#) M_matrix mat_matfn3(3fp) evaluate functions involving singular value decomposition"
+! ident_29="@(#) M_matrix mat_matfn3(3fp) evaluate functions involving singular value decomposition"
 
 integer         :: i
 integer         :: j
@@ -4455,8 +5744,8 @@ doubleprecision :: p,s,t(1,1),tol,eps
    m = G_VAR_ROWS(G_ARGUMENT_POINTER)
    n = G_VAR_COLS(G_ARGUMENT_POINTER)
    mn = m*n
-   !      SVD PINV COND NORM RANK
-   !        1    2    3    4    5
+   !      SVD PINV COND NORM RANK POW RESHAPE
+   !        1    2    3    4    5   6       7
    FUN3: select case(G_FIN)
 !===================================================================================================================================
     case(3) ! COMMAND::COND
@@ -4496,8 +5785,8 @@ doubleprecision :: p,s,t(1,1),tol,eps
       inf = .false.
 
       if (G_RHS .eq. 2)then
-         fro = int(GM_REALS(location)).eq.iachar('f') .and. mn.gt.1
-         inf = int(GM_REALS(location)).eq.iachar('i') .and. mn.gt.1
+         fro = nint(GM_REALS(location)).eq.iachar('f') .and. mn.gt.1
+         inf = nint(GM_REALS(location)).eq.iachar('i') .and. mn.gt.1
          if (.not. fro) then
             p = GM_REALS(location)
          endif
@@ -4664,7 +5953,8 @@ doubleprecision :: p,s,t(1,1),tol,eps
          G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       endif
 !===================================================================================================================================
-    case(2,5) ! COMMAND::PINV AND RANK
+    case(2,5) ! COMMAND::PINV
+              ! COMMAND::RANK
       TOL = -1.0D0
       IF (G_RHS .EQ. 2) then
          TOL = GM_REALS(location)
@@ -4729,6 +6019,297 @@ doubleprecision :: p,s,t(1,1),tol,eps
          G_VAR_COLS(G_ARGUMENT_POINTER) = 1
       endif
 !===================================================================================================================================
+    case(6) ! COMMAND::POW
+            ! COMMAND::POWER
+      pow: block
+      integer :: MP, NP      ! shape of exponent
+      integer :: LOCP_START  ! location of first exponent
+      integer :: LOCP
+      integer :: LOCIN, LOCOUT, LOCIN_START,LOCOUT_START
+      IF (G_RHS .EQ. 2) then
+            LOCP_START=location
+            MP = G_VAR_ROWS(G_ARGUMENT_POINTER)
+            NP = G_VAR_COLS(G_ARGUMENT_POINTER)
+      else
+            call mat_err(39) ! Incorrect number of arguments
+            return
+      endif
+      G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+      LOCIN_START = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      M = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      N = G_VAR_COLS(G_ARGUMENT_POINTER)
+      LOCOUT_START = LOCIN_START + M*N + MP*NP
+      if(too_much_memory( LOCOUT_START + M*N+1 - G_VAR_DATALOC(G_TOP_OF_SAVED) ) )return
+
+      if(MP*NP .le. 1)then
+         DO J = 1, M*N
+            LOCIN =  LOCIN_START +J-1
+            LOCOUT = LOCOUT_START+J-1
+          call mat_wpow(GM_REALS(LOCIN),GM_IMAGS(LOCIN),GM_REALS(LOCOUT),GM_IMAGS(LOCOUT),GM_REALS(LOCP_START),GM_IMAGS(LOCP_START))
+         enddo
+      elseif(MP.eq.M .and. NP .eq. N)then
+         DO J = 1, M*N
+            LOCIN = LOCIN_START+J-1
+            LOCOUT = LOCOUT_START+J-1
+            LOCP=LOCP_START+J-1
+            call mat_wpow(GM_REALS(LOCIN),GM_IMAGS(LOCIN),GM_REALS(LOCOUT),GM_IMAGS(LOCOUT),GM_REALS(LOCP),GM_IMAGS(LOCP))
+         enddo
+      else
+         call mat_err(41) ! incompatible for powers
+         return
+      endif
+      ! move output data back
+      call mat_wcopy(M*N,GM_REALS(LOCOUT_START),GM_IMAGS(LOCOUT_START),1,GM_REALS(LOCIN_START),GM_IMAGS(LOCIN_START),1)
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = M
+      G_VAR_COLS(G_ARGUMENT_POINTER) = N
+      endblock pow
+!===================================================================================================================================
+    case(7) ! COMMAND::RESHAPE
+      reshape: block
+      integer :: input_rows,input_cols                 ! shape of array holding new shape for data
+      integer :: new_rows, new_columns                 ! new shape
+      IF (G_RHS .EQ. 2) then                           ! two arguments, input array and new shape
+         input_rows = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         input_cols = G_VAR_COLS(G_ARGUMENT_POINTER)
+         if(input_rows*input_cols.ne.2)then            ! new shape should be two values
+            call mat_err(39)                           ! Incorrect number of arguments
+            return
+         endif
+         new_rows=gm_reals(location)
+         new_columns=gm_reals(location+1)
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1     ! point to first argument instead of second
+         M = G_VAR_ROWS(G_ARGUMENT_POINTER)            ! get dimensions of first argument
+         N = G_VAR_COLS(G_ARGUMENT_POINTER)
+         if(new_rows*new_columns /= n*m)then
+            call mat_err(42) ! new shape is not the same size as input
+            return
+         endif
+      ELSEIF (G_RHS .EQ. 1) then                       ! one argument, input array
+         input_rows = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         input_cols = G_VAR_COLS(G_ARGUMENT_POINTER)
+         new_rows=1
+         new_columns=input_rows*input_cols
+      else
+         call mat_err(39)                              ! Incorrect number of arguments
+         return
+      endif
+      G_VAR_ROWS(G_ARGUMENT_POINTER) = new_rows
+      G_VAR_COLS(G_ARGUMENT_POINTER) = new_columns
+      endblock reshape
+!===================================================================================================================================
+       case(8:13) ! COMMAND::LT
+                  ! COMMAND::LE
+                  ! COMMAND::EQ
+                  ! COMMAND::GE
+                  ! COMMAND::GT
+                  ! COMMAND::NE
+         equate: block
+         integer                          :: right_rows,right_cols, left_rows,left_cols               ! shape of first array
+         integer                          :: right_array_start,left_array_start  ! location of first array
+         integer(kind=int8),allocatable   :: answer_array(:)
+         logical                          :: is_complex
+
+         IF (G_RHS .ne. 2) then
+            call mat_err(39) ! Incorrect number of arguments
+            return
+         endif
+
+         ! locate right_array
+         right_array_start=LOCATION
+         right_rows = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         right_cols = G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         ! locate left_array
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         left_array_start = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         left_rows = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         left_cols = G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         if(too_much_memory(right_array_start+right_rows*left_cols+left_rows*left_cols+1-G_VAR_DATALOC(G_TOP_OF_SAVED)))return
+
+         is_complex=.false.
+         if( any(GM_IMAGS(left_array_start:left_array_start+right_rows*right_cols-1).ne.0.0d0) )is_complex=.true.
+         if( any(GM_IMAGS(right_array_start:right_array_start+right_rows*right_cols-1).ne.0.0d0) )is_complex=.true.
+         if(is_complex)then ! only logical operators .eq. and .ne. can be used with complex values
+            complex_values: block
+            complex(kind=real64) :: right_array(right_cols*right_rows)
+            complex(kind=real64) :: left_array(left_cols*left_rows)
+               right_array=cmplx( GM_REALS(right_array_start:right_array_start+right_rows*right_cols-1), &
+                                  GM_IMAGS(right_array_start:right_array_start+right_rows*right_cols-1), KIND=REAL64 )
+               left_array=cmplx(  GM_REALS(left_array_start:left_array_start+left_rows*left_cols-1), &
+                                  GM_IMAGS(left_array_start:left_array_start+left_rows*left_cols-1), KIND=REAL64 )
+               if(right_rows*right_cols .eq. 1)then
+                  select case(G_FIN)
+                   case(10); answer_array=MERGE(1,0,left_array.eq.right_array(1))
+                   case(13); answer_array=MERGE(1,0,left_array.ne.right_array(1))
+                   case default
+                      call mat_err(44) ! operation not defined for complex values
+                      return
+                  end select
+               elseif((left_rows*left_cols).eq.1)then
+                  select case(G_FIN)
+                   case(10); answer_array=MERGE(1,0,left_array(1).eq.right_array)
+                   case(13); answer_array=MERGE(1,0,left_array(1).ne.right_array)
+                   case default
+                      call mat_err(44) ! operation not defined for complex values
+                      return
+                  end select
+               !elseif(right_rows.eq.left_rows .and. right_cols .eq. left_cols)then  ! same shape
+               elseif(right_rows*right_cols == left_rows*left_cols)then  ! same number of elements
+                  select case(G_FIN)
+                   case(10); answer_array=MERGE(1,0,left_array.eq.right_array)
+                   case(13); answer_array=MERGE(1,0,left_array.ne.right_array)
+                   case default
+                      call mat_err(44) ! operation not defined for complex values
+                      return
+                  end select
+               else
+                  call mat_err(43) !  shapes are not conformant
+                  return
+               endif
+            endblock complex_values
+         else
+         associate( &
+         right_array=> GM_REALS(right_array_start:right_array_start+right_rows*right_cols-1), &
+         left_array=> GM_REALS(left_array_start:left_array_start+left_rows*left_cols-1) &
+         )
+         if(right_rows*right_cols .eq. 1)then
+            select case(G_FIN)
+             case(8);  answer_array=MERGE(1,0,left_array.lt.right_array(1))
+             case(9);  answer_array=MERGE(1,0,left_array.le.right_array(1))
+             case(10); answer_array=MERGE(1,0,left_array.eq.right_array(1))
+             case(11); answer_array=MERGE(1,0,left_array.ge.right_array(1))
+             case(12); answer_array=MERGE(1,0,left_array.gt.right_array(1))
+             case(13); answer_array=MERGE(1,0,left_array.ne.right_array(1))
+            end select
+         elseif((left_rows*left_cols).eq.1)then
+            select case(G_FIN)
+             case(8);  answer_array=MERGE(1,0,left_array(1).lt.right_array)
+             case(9);  answer_array=MERGE(1,0,left_array(1).le.right_array)
+             case(10); answer_array=MERGE(1,0,left_array(1).eq.right_array)
+             case(11); answer_array=MERGE(1,0,left_array(1).ge.right_array)
+             case(12); answer_array=MERGE(1,0,left_array(1).gt.right_array)
+             case(13); answer_array=MERGE(1,0,left_array(1).ne.right_array)
+            end select
+         !elseif(right_rows.eq.left_rows .and. right_cols .eq. left_cols)then
+         elseif(right_rows*right_cols == left_rows*left_cols)then  ! same number of elements
+            select case(G_FIN)
+             case(8);  answer_array=MERGE(1,0,left_array.lt.right_array)
+             case(9);  answer_array=MERGE(1,0,left_array.le.right_array)
+             case(10); answer_array=MERGE(1,0,left_array.eq.right_array)
+             case(11); answer_array=MERGE(1,0,left_array.ge.right_array)
+             case(12); answer_array=MERGE(1,0,left_array.gt.right_array)
+             case(13); answer_array=MERGE(1,0,left_array.ne.right_array)
+            end select
+         else
+            call mat_err(43) !  shapes are not conformant
+            return
+         endif
+         end associate
+      endif
+      ! move output data back
+      mn=max(right_rows*right_cols,left_rows*left_cols)
+      GM_REALS(left_array_start:left_array_start+mn-1)=answer_array
+      GM_IMAGS(left_array_start:left_array_start+mn-1)=0.0d0
+      if( (left_rows*left_cols).ne.1 )then
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = left_rows
+         G_VAR_COLS(G_ARGUMENT_POINTER) = left_cols
+      else
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = right_rows
+         G_VAR_COLS(G_ARGUMENT_POINTER) = right_cols
+      endif
+      endblock equate
+!===================================================================================================================================
+       case(14) ! COMMAND::PACK
+         pack_array: block
+         integer  :: right_rows,right_cols, left_rows,left_cols   ! shape of arrays
+         integer  :: right_array_start,left_array_start           ! location of arrays
+
+         IF (G_RHS .ne. 2) then
+            call mat_err(39) ! Incorrect number of arguments
+            return
+         endif
+
+         ! locate right_array
+         right_array_start=LOCATION
+         right_rows = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         right_cols = G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         ! locate left_array
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         left_array_start = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         left_rows = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         left_cols = G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         if(too_much_memory(right_array_start+right_rows*left_cols+left_rows*left_cols+1-G_VAR_DATALOC(G_TOP_OF_SAVED)))return
+
+         cmplex_values: block
+         integer(kind=int8)               :: right_array(right_cols*right_rows)
+         complex(kind=real64)             :: left_array(left_cols*left_rows)
+         complex(kind=real64),allocatable :: answer_array(:)
+            right_array=nint(GM_REALS(right_array_start:right_array_start+right_rows*right_cols-1))
+            left_array=cmplx( GM_REALS(left_array_start:left_array_start+left_rows*left_cols-1), &
+                              GM_IMAGS(left_array_start:left_array_start+left_rows*left_cols-1), KIND=REAL64 )
+            if(right_rows.eq.left_rows .and. right_cols .eq. left_cols)then
+                answer_array=pack(left_array,right_array.eq.1)
+                ! move output data back
+                mn=size(answer_array)
+                GM_REALS(left_array_start:left_array_start+mn-1)=answer_array%re
+                GM_IMAGS(left_array_start:left_array_start+mn-1)=answer_array%im
+                G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+                G_VAR_COLS(G_ARGUMENT_POINTER) = size(answer_array)
+            else
+               call mat_err(41) ! incompatible for comparisions
+               return
+            endif
+         endblock cmplex_values
+      endblock pack_array
+!===================================================================================================================================
+       case(15) ! COMMAND::cmplx
+         cmd_cmplx: block
+         integer           :: right_rows,right_cols, left_rows,left_cols   ! shape of arrays
+         integer           :: right_array_start,left_array_start           ! location of arrays
+         real(kind=real64) :: constant
+
+         if (G_RHS .ne. 2) then
+            call mat_err(39) ! Incorrect number of arguments
+            return
+         endif
+
+         ! locate right_array
+         right_array_start=LOCATION
+         right_rows = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         right_cols = G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         ! locate left_array
+         G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
+         left_array_start = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+         left_rows = G_VAR_ROWS(G_ARGUMENT_POINTER)
+         left_cols = G_VAR_COLS(G_ARGUMENT_POINTER)
+
+         if(too_much_memory(right_array_start+right_rows*left_cols+left_rows*left_cols+1-G_VAR_DATALOC(G_TOP_OF_SAVED)))return
+
+         if( right_rows*right_cols .eq. 1)then
+            mn=left_rows*left_cols
+            constant= GM_REALS(right_array_start)
+            GM_IMAGS(left_array_start:left_array_start+mn-1)= constant
+         elseif( left_rows*left_cols .eq. 1 )then
+            mn=right_rows*right_cols
+            constant= GM_REALS(left_array_start)
+            GM_IMAGS(left_array_start:left_array_start+mn-1)= GM_REALS(right_array_start:right_array_start+mn-1)
+            GM_REALS(left_array_start:left_array_start+mn-1)= constant
+            G_VAR_ROWS(G_ARGUMENT_POINTER) = right_rows
+            G_VAR_COLS(G_ARGUMENT_POINTER) = right_cols
+         elseif( right_rows*right_cols .eq. left_rows*left_cols )then
+            mn=right_rows*right_cols
+            GM_IMAGS(left_array_start:left_array_start+mn-1)= GM_REALS(right_array_start:right_array_start+mn-1)
+         else
+            call mat_err(43) ! shapes are not conformant
+            return
+         endif
+
+      endblock cmd_cmplx
+!===================================================================================================================================
    end select FUN3
 !
 end subroutine mat_matfn3
@@ -4737,7 +6318,7 @@ end subroutine mat_matfn3
 !==================================================================================================================================!
 SUBROUTINE mat_matfn4()
 
-! ident_27="@(#) M_matrix mat_matfn4(3fp) evaluate functions involving qr decomposition (least squares)"
+! ident_30="@(#) M_matrix mat_matfn4(3fp) evaluate functions involving qr decomposition (least squares)"
 
 integer           :: info
 integer           :: j
@@ -4965,37 +6546,43 @@ END SUBROUTINE mat_matfn4
 !==================================================================================================================================!
 subroutine mat_matfn5()
 
-! ident_28="@(#) M_matrix mat_matfn5(3fp) file handling and other I/O"
+! ident_31="@(#) M_matrix mat_matfn5(3fp) file handling and other I/O"
 
-character(len=GG_LINELEN)  :: mline
-character(len=256)         :: errmsg
-integer,save               :: flag=0  ! should be saved or set at each call?
-integer,save               :: lrat=5
-integer,save               :: mrat=100
-integer                    :: ch,top2
-integer                    :: id(GG_MAX_NAME_LENGTH)
-doubleprecision            :: eps,b,s,t,tdum(2)
-logical                    :: text
-integer                    :: i, j, k, location, m, n
-integer                    :: img
-integer                    :: space_left
-integer                    :: l2
-integer                    :: ll
-integer                    :: ls
-integer                    :: lun
-integer                    :: lunit
-integer                    :: lw
-integer                    :: lx
-integer                    :: ly
-integer                    :: mn
+character(len=GG_LINELEN) :: mline
+character(len=256)        :: errmsg
+integer,save              :: flag=0  ! should be saved or set at each call?
+integer,save              :: lrat=5
+integer,save              :: mrat=100
+integer                   :: ch,top2
+integer                   :: id(GG_MAX_NAME_LENGTH)
+doubleprecision           :: eps,b,s,t,tdum(2)
+logical                   :: text
+integer                   :: i, j, k, location, m, n
+integer                   :: img
+integer                   :: space_left
+integer                   :: l2
+integer                   :: ll
+integer                   :: ls
+integer                   :: lun
+integer                   :: lw
+integer                   :: lx
+integer                   :: ly
+integer                   :: mn
 !
-   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
-   m = G_VAR_ROWS(G_ARGUMENT_POINTER)
-   n = G_VAR_COLS(G_ARGUMENT_POINTER)
+   if(G_ARGUMENT_POINTER.ne.0)then
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      m = G_VAR_ROWS(G_ARGUMENT_POINTER)
+      n = G_VAR_COLS(G_ARGUMENT_POINTER)
+   else
+      G_ARGUMENT_POINTER=1
+      location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+      m = 0
+      n = 0
+   endif
 
    !  functions/G_FIN
-   !  exec save load prin diar disp base line char plot rat  debu doc  delete
-   !    1    2    3    4    5    6    7    8    9   10   11   12   13      14
+   !  exec save load print diary display base line char plot rat  debug  doc  delete
+   !    1    2    3    4     5      6     7    8    9    10   11    12   13      14
 
    select case(G_FIN)
       case(:5,13,14) ! setup for filename parameter
@@ -5009,7 +6596,7 @@ integer                    :: mn
          endif
 
          if (G_RHS .ge. 2) then            ! if more than one parameter on exec('filename',flag) get value of FLAG
-            flag = int(GM_REALS(location))
+            flag = nint(GM_REALS(location))
             top2 = G_ARGUMENT_POINTER
             G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
             location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
@@ -5018,12 +6605,12 @@ integer                    :: mn
 
          ! if a single character and a digit set LUN to that so exec(0) works
          if (mn.eq.1 .and. GM_REALS(location).LT.10.0d0)then
-            lun = int(GM_REALS(location))
+            lun = nint(GM_REALS(location))
          else
             lun = -1
             do j = 1, GG_LINELEN
                ls = location+j-1
-               if (j .le. mn) ch = int(GM_REALS(ls))
+               if (j .le. mn) ch = nint(GM_REALS(ls))
                if (j .gt. mn) ch = blank
                if (ch.lt.0 .or. ch.ge.g_charset_size) then
                   call mat_err(38)
@@ -5036,54 +6623,21 @@ integer                    :: mn
 !===================================================================================================================================
       FUN5 : select case(G_FIN)
 !===================================================================================================================================
-      case(1)                                               ! command::exec
-      EXEC_CMD : block
-      character(len=:),allocatable :: filename
-      if (lun .eq. 0) then                                  ! exec(0)
-         G_RIO = G_INPUT_LUN
-         G_ERR = 99
-      else
-         k = G_LINE_POINTER(6)
-         G_LIN(k+1) = G_LINE_POINTER(1)
-         G_LIN(k+2) = G_LINE_POINTER(3)
-         G_LIN(k+3) = G_LINE_POINTER(6)
-         G_LIN(k+4) = G_PTZ
-         G_LIN(k+5) = G_RIO
-         G_LIN(k+6) = G_LINECOUNT(4)
-         G_LINE_POINTER(1) = k + 7
-         G_LINECOUNT(4) = flag
-         G_PTZ = G_PT - 4
-
-         if (G_RIO .eq. G_INPUT_LUN)then
-            G_RIO = 12
-         endif
-
-         G_RIO = G_RIO + 1
-
-         filename=find_exec_file(ade2str(G_BUF))
-         call mat_str2buf(filename,G_BUF,GG_LINELEN)    ! convert input line to ADE buffer
-         call mat_files(G_RIO,G_BUF,status='old')
-         if(G_FILE_OPEN_ERROR)then
-            G_RIO = G_INPUT_LUN
-            G_ERR = 99
-         endif
-
-         if (flag .ge. 4)then
-            call journal(' PAUSE MODE. Enter blank lines.')
-         endif
-
-         G_SYM = GG_EOL
-         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
-      endif
-      endblock EXEC_CMD
+      case(1) ! COMMAND::EXEC
+      call source_file(lun,flag) ! exec command
 !===================================================================================================================================
       case(2) ! COMMAND::SAVE
+      save_cmd: block
+      integer :: lunit
+      integer :: i, j, k, m, n
       lunit = 1
       call mat_files(lunit,G_BUF)
       k = GG_MAX_NUMBER_OF_NAMES-4
       if (k .lt. G_TOP_OF_SAVED) k = GG_MAX_NUMBER_OF_NAMES
-      if (G_RHS .eq. 2) k = top2
-      if (G_RHS .eq. 2) call mat_copyid(G_VAR_IDS(1,k),G_SYN)
+      if (G_RHS .eq. 2) then
+         k = top2
+         call mat_copyid(G_VAR_IDS(1,k),G_SYN)
+      endif
       do
          location = G_VAR_DATALOC(k)
          m = G_VAR_ROWS(k)
@@ -5098,8 +6652,9 @@ integer                    :: mn
          k = k-1
          if (k .lt. G_TOP_OF_SAVED) exit
       enddo
-      call mat_files(-lunit,G_BUF) ! close unit
+      call mat_files(-lunit,G_BUF)        ! close unit
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 0  ! do not set "ans" to filename
+      endblock save_cmd
 !===================================================================================================================================
       case(14) ! COMMAND::DELETE
          DELETE_IT: block
@@ -5122,6 +6677,8 @@ integer                    :: mn
          endblock DELETE_IT
 !===================================================================================================================================
       case(3) ! command::load
+      load_cmd : block
+      integer :: lunit
       call mat_buf2str(mline,G_BUF,GG_LINELEN)
 
       lunit = 2
@@ -5144,7 +6701,8 @@ integer                    :: mn
          mn = G_VAR_ROWS(G_ARGUMENT_POINTER)*G_VAR_COLS(G_ARGUMENT_POINTER)
 
          if (mn .ne. 0)then
-            if (img .eq. 0) call mat_rset(mn,0.0d0,GM_IMAGS(location),1)
+            !if (img .eq. 0) call mat_rset(mn,0.0d0,GM_IMAGS(location),1) ! set imaginary values to zero
+            if (img .eq. 0) gm_imags(location:location+mn-1)=0.0d0 ! set imaginary component to zero
 
             !do i = 1, GG_MAX_NAME_LENGTH
             !   do j=1,G_CHARSET_SIZE
@@ -5173,23 +6731,36 @@ integer                    :: mn
       call mat_files(-lunit,G_BUF) ! close unit
 
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+      endblock load_cmd
 !===================================================================================================================================
       case(4) ! command::print
+      print_cmd:block
+      integer :: hold
       call mat_files(7,G_BUF)
 
-      location = G_LINECOUNT(2)                       ! hold
-      G_LINECOUNT(2) = 999999                         ! turn off paging of output
+      hold = G_LINECOUNT(2)                        ! hold
+      G_LINECOUNT(2) = 99999999                    ! turn off paging of output
       if (G_RHS .gt. 1) call mat_print(G_SYN,top2)
-
-      G_LINECOUNT(2) = location                       ! restore
+      G_LINECOUNT(2) = hold                        ! restore
 
       G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+      endblock print_cmd
 !===================================================================================================================================
       case(5) ! command::diary
-      call mat_files(8,G_BUF)
-      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+      DIARY_CMD: block
+      integer :: diary_lun
+         diary_lun=8
+         if(m*n==1)then
+            if(gm_reals(location).eq.0)then
+               diary_lun=-8  ! close diary
+            endif
+         endif
+         call mat_files(diary_lun,G_BUF)
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+      endblock DIARY_CMD
 !===================================================================================================================================
       case(6,7) !     COMMAND::DISPLAY
+                !     COMMAND::BASE
 60    continue
       if (G_FIN.eq.7)goto 65
       if (G_RHS .ge. 2)then
@@ -5252,7 +6823,8 @@ integer                    :: mn
          ll = location+i-1
          call mat_base(GM_REALS(ll),b,eps,GM_REALS(ls),n)
       enddo
-      call mat_rset(m*n,0.0d0,GM_IMAGS(l2),1)
+      !call mat_rset(m*n,0.0d0,GM_IMAGS(l2),1) ! set imaginary values to zero
+      gm_imags(l2:l2+m*n-1)=0.0d0 ! set imaginary component to zero
       call mat_wcopy(m*n,GM_REALS(l2),GM_IMAGS(l2),1,GM_REALS(location),GM_IMAGS(location),1)
       G_VAR_ROWS(G_ARGUMENT_POINTER) = n
       G_VAR_COLS(G_ARGUMENT_POINTER) = m
@@ -5261,8 +6833,14 @@ integer                    :: mn
 !===================================================================================================================================
       case(8)
 !     command::lines
-      G_LINECOUNT(2) = int(GM_REALS(location))
-      G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+      if(m*n.eq.0)then
+         GM_REALS(location)=G_LINECOUNT(2)
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 1
+         G_VAR_COLS(G_ARGUMENT_POINTER) = 1
+      else
+         G_LINECOUNT(2) = int(GM_REALS(location))
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+      endif
 !===================================================================================================================================
       !!! BROKEN BY GOING TO ASCII. ELIMINATE OR CORRECT
       case(9) !     COMMAND::CHAR                   ! does currently not do anything
@@ -5315,7 +6893,8 @@ integer                    :: mn
          G_VAR_DATALOC(G_ARGUMENT_POINTER) = l2
          G_VAR_ROWS(G_ARGUMENT_POINTER) = m
          G_VAR_COLS(G_ARGUMENT_POINTER) = n
-         call mat_rset(G_lhs*mn,0.0d0,GM_IMAGS(location),1)
+         !call mat_rset(G_lhs*mn,0.0d0,GM_IMAGS(location),1) ! set imaginary values to zero
+         gm_imags(location:location+G_lhs*m*n-1)=0.0d0 ! set imaginary component to zero
          do i = 1, mn
             call mat_rat(GM_REALS(location),lrat,mrat,s,t,GM_REALS(lw))
             GM_REALS(location) = s
@@ -5346,9 +6925,60 @@ end subroutine mat_matfn5
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
+subroutine source_file(lun,flag,name)
+! G_BUF must contain filename
+integer,intent(in)                   :: flag
+integer,intent(in)                   :: lun
+integer                              :: k
+character(len=*),intent(in),optional :: name
+character(len=:),allocatable         :: filename
+   if (lun .eq. 0) then                              ! exec(0)
+      G_LUN_READING_FROM = G_INPUT_LUN
+      G_ERR = 99
+   else
+      k = G_LINE_POINTER(6)
+      G_LIN(k+1) = G_LINE_POINTER(1)
+      G_LIN(k+2) = G_LINE_POINTER(3)
+      G_LIN(k+3) = G_LINE_POINTER(6)
+      G_LIN(k+4) = G_PTZ
+      G_LIN(k+5) = G_LUN_READING_FROM
+      G_LIN(k+6) = G_LINECOUNT(4)
+      G_LINE_POINTER(1) = k + 7
+      G_LINECOUNT(4) = flag
+      G_PTZ = G_PT - 4
+
+      if (G_LUN_READING_FROM .eq. G_INPUT_LUN)then
+         G_LUN_READING_FROM = 12
+      endif
+
+      G_LUN_READING_FROM = G_LUN_READING_FROM + 1
+
+      if(present(name))then
+         filename=find_exec_file(name)
+      else
+         filename=find_exec_file(trim(ade2str(G_BUF)))
+      endif
+      call mat_str2buf(filename,G_BUF,GG_LINELEN)    ! convert input line to ADE buffer
+      call mat_files(G_LUN_READING_FROM,G_BUF,status='old')
+      if(G_FILE_OPEN_ERROR)then
+         G_LUN_READING_FROM = G_INPUT_LUN
+         G_ERR = 99
+      endif
+
+      if (flag .ge. 4)then
+         call journal(' PAUSE MODE. Enter blank lines.')
+      endif
+
+      G_SYM = GG_EOL
+      if(G_ARGUMENT_POINTER.gt.0) G_VAR_ROWS(G_ARGUMENT_POINTER) = 0
+   endif
+end subroutine source_file
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
 subroutine mat_stack_get(id)
 
-! ident_29="@(#) M_matrix mat_stack_get(3fp) get variables from storage"
+! ident_32="@(#) M_matrix mat_stack_get(3fp) get variables from storage"
 
 integer,intent(in)  :: id(GG_MAX_NAME_LENGTH)
 integer             :: i
@@ -5484,10 +7114,10 @@ END SUBROUTINE MAT_STACK_GET
 !==================================================================================================================================!
 subroutine mat_stack2(op)
 
-! ident_30="@(#) M_matrix ml_stackp(3fp) binary and ternary operations"
+! ident_33="@(#) M_matrix ml_stackp(3fp) binary and ternary operations"
 
 integer           :: op
-doubleprecision   :: sr,si,e1,st,e2
+doubleprecision   :: sr,si,e1,STEP,e2
 
 integer           ::  i
 integer           ::  j
@@ -5508,10 +7138,15 @@ integer           ::  n
 integer           ::  n2
 integer           ::  nexp
 integer           :: op_select
+logical           :: scalar
 
    l2 = G_VAR_DATALOC(G_ARGUMENT_POINTER)
    m2 = G_VAR_ROWS(G_ARGUMENT_POINTER)
    n2 = G_VAR_COLS(G_ARGUMENT_POINTER)
+   if(G_ARGUMENT_POINTER.le.1)then
+      call mat_err(39) ! Incorrect number of arguments
+      return
+   endif
    G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
    location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
    m = G_VAR_ROWS(G_ARGUMENT_POINTER)
@@ -5525,7 +7160,7 @@ integer           :: op_select
    endif
    DO_OP: select case(op_select)
 !-----------------------------------------------------------------------------------------------------------------------------------
-   case (PLUS) ! ADDITION
+   case (PLUS) ! COMMAND::ADDITION
       if (m .lt. 0) then
          if (m2 .ne. n2) then
             call mat_err(8)
@@ -5551,17 +7186,27 @@ integer           :: op_select
          call finish()
          exit DO_OP
       endif
-      if (m .ne. m2) then
+      if (m.eq.m2 .and. n.eq.n2)then
+         ! actual addition of two matrices using linear algebra
+         call matX_waxpy(m*n,1.0d0,0.0d0,GM_REALS(l2),GM_IMAGS(l2),1,GM_REALS(location),GM_IMAGS(location),1)
+      elseif(m*n.eq.1) then
+         ! elemental addition of scalar to array
+         GM_REALS(location:location+n2*m2-1) = GM_REALS(l2:l2+n2*m2-1) + GM_REALS(location)
+         GM_IMAGS(location:location+n2*m2-1) = GM_IMAGS(l2:l2+n2*m2-1) + GM_IMAGS(location)
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = m2
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n2
+      elseif(m2*n2.eq.1) then
+         ! elemental addition of scalar to array
+         GM_REALS(location:location+n*m-1) = GM_REALS(location:location+n*m-1) + GM_REALS(l2)
+         GM_IMAGS(location:location+n*m-1) = GM_IMAGS(location:location+n*m-1) + GM_IMAGS(l2)
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n
+      else
          call mat_err(8)
          exit DO_OP
       endif
-      if (n .ne. n2) then
-         call mat_err(8)
-         exit DO_OP
-      endif
-      call matX_waxpy(m*n,1.0d0,0.0d0,GM_REALS(l2),GM_IMAGS(l2),1,GM_REALS(location),GM_IMAGS(location),1)
 !-----------------------------------------------------------------------------------------------------------------------------------
-   case (MINUS) ! SUBTRACTION
+   case (MINUS) ! COMMAND::SUBTRACTION
       if (m .lt. 0) then
          if (m2 .ne. n2)then
             call mat_err(9)
@@ -5589,22 +7234,33 @@ integer           :: op_select
          call finish()
          exit DO_OP
       endif
-      if (m .ne. m2)then
-         call mat_err(9)
+
+      if (m.eq.m2 .and. n.eq.n2)then
+         ! actual subtraction of two matrices using linear algebra
+         call matX_waxpy(M*N,-1.0D0,0.0D0,GM_REALS(L2),GM_IMAGS(L2),1,GM_REALS(location),GM_IMAGS(location),1)
+      elseif(m*n.eq.1) then
+         ! elemental subtraction of scalar to array
+         GM_REALS(location:location+n2*m2-1) = GM_REALS(location) - GM_REALS(l2:l2+n2*m2-1)
+         GM_IMAGS(location:location+n2*m2-1) = GM_IMAGS(location) - GM_IMAGS(l2:l2+n2*m2-1)
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = m2
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n2
+      elseif(m2*n2.eq.1) then
+         ! elemental subtraction of scalar to array
+         GM_REALS(location:location+n*m-1) = GM_REALS(location:location+n*m-1) - GM_REALS(l2)
+         GM_IMAGS(location:location+n*m-1) = GM_IMAGS(location:location+n*m-1) - GM_IMAGS(l2)
+         G_VAR_ROWS(G_ARGUMENT_POINTER) = m
+         G_VAR_COLS(G_ARGUMENT_POINTER) = n
+      else
+         call mat_err(8)
          exit DO_OP
       endif
-      if (n .ne. n2) then
-         call mat_err(9)
-         exit DO_OP
-      endif
-      call matX_waxpy(M*N,-1.0D0,0.0D0,GM_REALS(L2),GM_IMAGS(L2),1,GM_REALS(location),GM_IMAGS(location),1)
 !-----------------------------------------------------------------------------------------------------------------------------------
-   case (STAR) ! MULTIPLICATION
+   case (STAR) ! COMMAND::MULTIPLICATION
       if (m2*m2*n2 .eq. 1) goto 10
       if (m*n .eq. 1) goto 11
       if (m2*n2 .eq. 1) goto 10
       if (n .ne. m2) then
-         call mat_err(10)
+         call mat_err(10) ! 'Incompatible for MULTIPLICATION'
          exit do_op
       endif
       mn = m*n2
@@ -5642,7 +7298,7 @@ integer           :: op_select
       call mat_wscal(mn,sr,si,GM_REALS(l1),GM_IMAGS(l1),1)
       if (l1.ne.location) call mat_wcopy(mn,GM_REALS(l1),GM_IMAGS(l1),1,GM_REALS(location),GM_IMAGS(location),1)
 !-----------------------------------------------------------------------------------------------------------------------------------
-   case (-DSTAR) ! POWER
+   case (-DSTAR,CARET) ! POWER
       IF (M2*N2 .NE. 1) then
          call mat_err(30)
          exit do_op
@@ -5679,7 +7335,7 @@ integer           :: op_select
          enddo
       enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
-   case (SLASH) ! right division
+   case (SLASH) ! COMMAND::right division
       if (m2*n2 .ne. 1) then
          if (m2 .eq. n2) G_FUN = 1
          if (m2 .ne. n2) G_FUN = 4
@@ -5696,7 +7352,7 @@ integer           :: op_select
          if (G_ERR .gt. 0) exit
       enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
-   case (BSLASH) ! LEFT DIVISION
+   case (BSLASH) ! COMMAND::LEFT DIVISION
       if (m*n .ne. 1) then
          if (m .eq. n) G_FUN = 1
          if (m .ne. n) G_FUN = 4
@@ -5715,37 +7371,40 @@ integer           :: op_select
          IF (G_ERR .GT. 0) exit
       enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
-   case (COLON) ! COLON
-      E2 = GM_REALS(L2)
-      ST = 1.0D0
+   case (COLON) ! COMMAND::COLON
       N = 0
-      IF (G_RHS .GE. 3) then
-         ST = GM_REALS(location)
+      if(G_RHS.GE.3)then
+         STEP = GM_REALS(L2)
+         E2 = GM_REALS(location)
          G_ARGUMENT_POINTER = G_ARGUMENT_POINTER-1
          location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
-         IF (ST .EQ. 0.0D0) goto 63
+         IF (STEP .EQ. 0.0D0) goto 63
+      else
+         E2 = GM_REALS(L2)
+         STEP = 1.0D0
       endif
 
       E1 = GM_REALS(location)
+
       ! CHECK FOR CLAUSE
       IF (G_RSTK(G_PT) .EQ. 3) then
    !     FOR CLAUSE
          GM_REALS(location) = E1
-         GM_REALS(location+1) = ST
          GM_REALS(location+2) = E2
+         GM_REALS(location+1) = STEP
          G_VAR_ROWS(G_ARGUMENT_POINTER) = -3
          G_VAR_COLS(G_ARGUMENT_POINTER) = -1
          exit DO_OP
       endif
 
-      if(too_much_memory( location + MAX(3,int((E2-E1)/ST)) - G_VAR_DATALOC(G_TOP_OF_SAVED) ) ) exit do_op
+      if(too_much_memory( location + MAX(3,int((E2-E1)/STEP)) - G_VAR_DATALOC(G_TOP_OF_SAVED) ) ) exit do_op
 
       do
-         IF (ST .GT. 0.0D0 .AND. GM_REALS(location) .GT. E2) exit
-         IF (ST .LT. 0.0D0 .AND. GM_REALS(location) .LT. E2) exit
+         IF (STEP .GT. 0.0D0 .AND. GM_REALS(location) .GT. E2) exit
+         IF (STEP .LT. 0.0D0 .AND. GM_REALS(location) .LT. E2) exit
          N = N+1
          location = location+1
-         GM_REALS(location) = E1 + dble(N)*ST
+         GM_REALS(location) = E1 + dble(N)*STEP
          GM_IMAGS(location) = 0.0D0
       enddo
 
@@ -5756,8 +7415,17 @@ integer           :: op_select
 !-----------------------------------------------------------------------------------------------------------------------------------
    case (1000:2000-1) ! element-wise operations
       op = op -1000
-      if (m.ne.m2 .or. n.ne.n2) then
-         call mat_err(10)
+      scalar=.false.
+      if (op.eq.CARET .and. m2*n2.eq.1)then
+         scalar=.true.
+      elseif (m.ne.m2 .or. n.ne.n2) then
+         select case(op)
+         case(STAR);   call mat_err(10) ! 'Incompatible for MULTIPLICATION'
+         case(SLASH);  call mat_err(11) ! 'Incompatible for RIGHT DIVISION'
+         case(BSLASH); call mat_err(12) ! 'Incompatible for LEFT DIVISION'
+         case(CARET);  call mat_err(41) ! 'Incompatible for POWER'
+         case default
+         end select
          exit do_op
       endif
       mn = m*n
@@ -5766,17 +7434,20 @@ integer           :: op_select
          k = l2+i-1
          select case(op)
          case(STAR)
-         call mat_wmul(GM_REALS(J),GM_IMAGS(J), &
-                                        GM_REALS(K),GM_IMAGS(K), &
-                                        GM_REALS(J),GM_IMAGS(J))
+                    !  in1  in2 out
+         call mat_wmul(GM_REALS(J),GM_IMAGS(J), GM_REALS(K),GM_IMAGS(K), GM_REALS(J),GM_IMAGS(J))
          case(SLASH)
-         call mat_wdiv(GM_REALS(J),GM_IMAGS(J), &
-                                        GM_REALS(K),GM_IMAGS(K), &
-                                        GM_REALS(J),GM_IMAGS(J))
+         call mat_wdiv(GM_REALS(J),GM_IMAGS(J), GM_REALS(K),GM_IMAGS(K), GM_REALS(J),GM_IMAGS(J))
          case(BSLASH)
-         call mat_wdiv(GM_REALS(K),GM_IMAGS(K), &
-                                        GM_REALS(J),GM_IMAGS(J), &
-                                        GM_REALS(J),GM_IMAGS(J))
+         call mat_wdiv(GM_REALS(K),GM_IMAGS(K), GM_REALS(J),GM_IMAGS(J), GM_REALS(J),GM_IMAGS(J))
+         case(CARET)
+         if(scalar)then
+            !    mat_wpow(in_real,    in_imag,    out_real,   out_imag,   power_real, power_imag)
+            call mat_wpow(GM_REALS(J),GM_IMAGS(J),GM_REALS(J),GM_IMAGS(J),GM_REALS(l2),GM_IMAGS(l2))
+         else
+            !    mat_wpow(in_real,    in_imag,    out_real,   out_imag,   power_real, power_imag)
+            call mat_wpow(GM_REALS(J),GM_IMAGS(J),GM_REALS(J),GM_IMAGS(J),GM_REALS(K),GM_IMAGS(K))
+         endif
          end select
          IF (G_ERR .GT. 0) exit
       enddo
@@ -5809,7 +7480,7 @@ subroutine mat_getlin() ! get a new input line
 character(len=GG_LINELEN) :: mline
 character(len=GG_LINELEN) :: shift_mline
 
-integer                   :: istat
+logical                   :: istat
 integer,parameter         :: retu(GG_MAX_NAME_LENGTH) =  [iachar(['q','u','i','t',' ',' ',' ']),GG_PAD(8:)]
 integer                   :: i, j, k
 integer                   :: l
@@ -5824,17 +7495,17 @@ integer                   :: ios
       n = GG_LINELEN+1
 
       ! get line of input and place it in line buffer
-      if(size(G_PSEUDO_FILE).eq.1.and.G_RIO.eq.STDIN)then
+      if(size(G_PSEUDO_FILE).eq.1.and.G_LUN_READING_FROM.eq.STDIN)then
          mline=get_pseudo_line()
-         G_RIO = G_INPUT_LUN
-      elseif(size(G_PSEUDO_FILE).ne.0.and.G_RIO.eq.STDIN)then
+         G_LUN_READING_FROM = G_INPUT_LUN
+      elseif(size(G_PSEUDO_FILE).ne.0.and.G_LUN_READING_FROM.eq.STDIN)then
          mline=get_pseudo_line()
       else
          mline(:)=' '
-         read(G_RIO,'(a)',iostat=ios) mline       ! read input line from file
+         read(G_LUN_READING_FROM,'(a)',iostat=ios) mline   ! read input line from file
          if( (ios.ne.0) ) then
-             if(is_iostat_end(ios))then           ! hit end of file
-                call mat_copyid(G_LIN(l),retu) ! store QUIT onto G_LIN(L) to simulate RETURN command
+             if(is_iostat_end(ios))then                    ! hit end of file
+                call mat_copyid(G_LIN(l),retu)             ! store QUIT onto G_LIN(L) to simulate RETURN command
                 l = l + 4
                 goto 45
              else
@@ -5844,17 +7515,17 @@ integer                   :: ios
       endif
       if(G_ECHO)write(*,'(*(g0))')'',trim(mline)
       shift_mline=adjustl(mline)
-      if(shift_mline(1:2).eq.'??')then            ! edit command line history
+      if(shift_mline(1:2).eq.'??')then                     ! edit command line history
          mline='. '//mline(3:)
       endif
 
-      if(G_RIO.eq.stdin)then
+      call redo(mline,'.')         ! pass line to REDO(3f). This is a no-op except for storing the line into the input history
+                                   ! (unless the input line is the "r" command)
+      if(G_LUN_READING_FROM.eq.stdin)then
          call journal('t',mline)   ! reading from standard input, so copy to trail file
       else
          call journal('c',mline)   ! reading from an exec() command, so write as a comment
       endif
-      call redo(mline,'.')         ! pass line to REDO(3f). This is a no-op except for storing the line into the input history
-                                   ! (unless the input line is the "r" command)
 
       ! look for other lines to immediately process and then ignore
       shift_mline=adjustl(mline)
@@ -5863,9 +7534,9 @@ integer                   :: ios
       elseif(shift_mline(1:1).eq.'!')then
          if(shift_mline.eq.'!')then
             call get_environment_variable('SHELL',shift_mline)         ! get command to execute
-            call execute_command_line(shift_mline,cmdstat=istat)       ! call system shell
+            istat=run(shift_mline)                                     ! call system shell
          else
-            call execute_command_line(shift_mline(2:),cmdstat=istat)   ! call system shell
+            istat=run(shift_mline(2:))                                 ! call system shell
          endif
          mline=''
       endif
@@ -5942,7 +7613,7 @@ end subroutine mat_getlin
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine mat_clause()
-doubleprecision    :: e1,e2
+doubleprecision    :: e1,e2, e1r,e2r, e1i, e2i
 integer            :: op
 integer            :: r
 integer,parameter  :: for(GG_MAX_NAME_LENGTH)   =  [iachar(['f','o','r',' ',' ',' ',' ']),GG_PAD(8:)]
@@ -5955,7 +7626,7 @@ integer,parameter  :: thenn(GG_MAX_NAME_LENGTH) =  [iachar(['t','h','e','n',' ',
 
 integer            :: j
 integer            :: kount
-integer            :: location
+integer            :: location, location1, location2, location3
 integer            :: l2
 integer            :: lj
 integer            :: m
@@ -6081,10 +7752,18 @@ integer            :: n
 45 continue
    op = mod(G_PSTK(G_PT),256)
    G_PSTK(G_PT) = G_PSTK(G_PT)/256
-   location = G_VAR_DATALOC(G_ARGUMENT_POINTER-1)
-   e1 = GM_REALS(location)
-   location = G_VAR_DATALOC(G_ARGUMENT_POINTER)
-   e2 = GM_REALS(location)
+   location1 = G_VAR_DATALOC(G_ARGUMENT_POINTER-1)
+   e1 = GM_REALS(location1)
+   e1r = GM_REALS(location1)
+   e1i = GM_IMAGS(location1)
+   location2 = G_VAR_DATALOC(G_ARGUMENT_POINTER)
+   e2 = GM_REALS(location2)
+   e2r = GM_REALS(location2)
+   e2i = GM_IMAGS(location2)
+   if(location2-location1 .ne. 1)then
+      call mat_err(46) ! only scalars may be compared. See all(), any() ...'
+      return
+   endif
    G_ARGUMENT_POINTER = G_ARGUMENT_POINTER - 2
    if (mat_eqid(G_SYN,do) .or. mat_eqid(G_SYN,thenn)) G_SYM = semi
    if (G_SYM .EQ. COMMA) G_SYM = SEMI
@@ -6092,7 +7771,7 @@ integer            :: n
       call mat_err(35) ! improper WHILE or IF clause
       return
    endif
-   if (op.eq.equal .and. e1.eq.e2) goto 50
+   if (op.eq.equal .and. (e1r.eq.e2r) .and. (e1i .eq. e2i)) goto 50
    if ((op.eq.less) .and. e1.lt.e2) goto 50
    if (op.eq.great         .and. e1.gt.e2) goto 50
    if (op.eq.(less+equal)  .and. e1.le.e2) goto 50
@@ -6138,7 +7817,6 @@ integer            :: n
    if (G_RSTK(G_PT) .eq. 13) G_PT = G_PT-2
    goto 80
 !.......................................................................
-!
 99 continue
    call mat_err(22)    ! recursion difficulties
 end subroutine mat_clause
@@ -6234,20 +7912,20 @@ end subroutine mat_expr
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine mat_factor()
-integer           :: r
-integer           :: id(gg_max_name_length)
-integer           :: excnt
-integer           :: i, j, k
-integer           :: location
-integer           :: ln
-integer           :: ls
-integer           :: n
+integer :: r
+integer :: id(gg_max_name_length)
+integer :: excnt
+integer :: i, j, k
+integer :: location
+integer :: ln
+integer :: ls
+integer :: n
 
    r = G_RSTK(G_PT)
    !      1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19
    goto (99,99,99,99,99,99,99,01,01,25,45,65,99,99,99,55,75,32,37),r
 01 continue
-   if (.not.(G_SYM.eq.isnum .or. G_SYM.eq.quote .or.  (G_SYM.EQ.less.or.G_SYM.eq.lbracket))) then
+   if (.not.(G_SYM.eq.isnum .or. G_SYM.eq.quote .or. (G_SYM.EQ.less.or.G_SYM.eq.lbracket))) then
 
       if (G_SYM .eq. great.or.G_SYM.eq.rbracket)then
          !  MACROS STRING
@@ -6287,7 +7965,10 @@ integer           :: n
       endif
       id(1) = BLANK
       if (G_SYM .eq. lparen .or. G_SYM.eq. lbrace) goto 42
-      call mat_err(2)
+      ! needs to allow for empty parenthesis() but does not
+      if ( G_SYM .ne. rparen ) then
+         call mat_err(2) ! improper factor or unknown variable
+      endif
       return
    endif
 !======================================================================
@@ -6327,6 +8008,7 @@ integer           :: n
 17 continue
    ln = location+n
    if (G_CHRA .eq. GG_EOL) then
+      write(*,*)'GOT HERE A:IMPROPER STRING',G_CHRA
       call mat_err(31) ! Improper string
       return
    endif
@@ -6342,6 +8024,7 @@ integer           :: n
 !==================================
 
    if (n .le. 0) then
+      write(*,*)'GOT HERE B:IMPROPER STRING',N
       call mat_err(31) ! Improper string
       return
    endif
@@ -6575,7 +8258,7 @@ integer                   :: op
       op = dot
       call mat_getsym()
    endif
-   if (.not.(G_SYM.eq.star .or. G_SYM.eq.slash .or. G_SYM.eq.bslash)) then
+   if (.not.(G_SYM.eq.star .or. G_SYM.eq.slash .or. G_SYM.eq.bslash .or. G_SYM.eq.caret )) then
       return
    endif
 
@@ -6603,12 +8286,12 @@ end subroutine mat_term
 !==================================================================================================================================!
 subroutine mat_savlod(lun,id,m,n,img,space_left,xreal,ximag)
 
-! ident_31="@(#) M_matrix mat_savlod(3fp) read next variable from a save file or write next variable to it"
+! ident_34="@(#) M_matrix mat_savlod(3fp) read next variable from a save file or write next variable to it"
 
 integer,intent(in)                :: lun                                       ! logical unit number
 integer                           :: id(GG_MAX_NAME_LENGTH)                    ! name, format 32a1
 integer                           :: m, n                                      ! dimensions
-integer                           :: img                                       ! nonzero if ximag is nonzero.  returned on a load
+integer                           :: img                                       ! nonzero if ximag is nonzero. returned on a load
 integer                           :: space_left                                ! 0 for save, = space available for load
 doubleprecision                   :: xreal(*), ximag(*)                        ! real and optional imaginary parts
 character(len=GG_MAX_NAME_LENGTH) :: cid
@@ -6714,15 +8397,15 @@ end function mat_eqid
 !!     unknown  F
 function ifin_lala(varname)
 
-! ident_32="@(#) M_matrix ifin_lala(3f) access LALA variable stack and see if a variable name exists"
+! ident_35="@(#) M_matrix ifin_lala(3f) access LALA variable stack and see if a variable name exists"
 
-character(len=*),intent(in)        :: varname
-integer                            :: id(GG_MAX_NAME_LENGTH)
-logical                            :: ifin_lala
-integer                            :: k
+character(len=*),intent(in) :: varname
+integer                     :: id(GG_MAX_NAME_LENGTH)
+logical                     :: ifin_lala
+integer                     :: k
 
    ifin_lala=.true.
-   if(GM_BIGMEM.LT.0) call lala_init(200000) ! if not initialized initialize
+   if(GM_BIGMEM.LT.0) call lala_init(400000) ! if not initialized initialize
    if( .not.mat_is_name(varname))then
       call journal('sc',varname,'is not a valid variable name')
       ifin_lala=.false.
@@ -6733,13 +8416,13 @@ integer                            :: k
    call mat_str2buf(varname,id,len(varname))
    call mat_copyid(G_VAR_IDS(1,G_TOP_OF_SAVED-1), ID)   ! copy ID to next blank entry in G_VAR_IDS for messages(?)
 
-   do k=GG_MAX_NUMBER_OF_NAMES,1,-1                       ! start at bottom and search up through names till find the name
+   do k=GG_MAX_NUMBER_OF_NAMES,1,-1                     ! start at bottom and search up through names till find the name
       if (mat_eqid(G_VAR_IDS(1:,k), id))exit            ! if found name exit loop
    enddo
 
    ! if matched the name inserted above did not find it.
-   if ( (k .ge. GG_MAX_NUMBER_OF_NAMES-1) .or.  (k .eq. G_TOP_OF_SAVED-1)) then
-      ifin_lala=.false.                              ! unknown variable name
+   if ( (k .ge. GG_MAX_NUMBER_OF_NAMES-1) .or. (k .eq. G_TOP_OF_SAVED-1)) then
+      ifin_lala=.false.                                 ! unknown variable name
    endif
 
 end function ifin_lala
@@ -6789,7 +8472,7 @@ end function ifin_lala
 !!    character(len=*),parameter  :: gen='(*(g0,1x))'
 !!
 !!       ! create an array in LALA so have something to get
-!!       call lala('A=rand(4,5)*10.5,long,A')
+!!       call lala('A=randu(4,5)*10.5,long,A')
 !!
 !!       ! get the array as a REAL array
 !!       call get_from_lala('A',rarr,ierr)
@@ -6848,7 +8531,7 @@ end function ifin_lala
 !!    > 2 8 0 3 7 7 9 7 9 1 6 7 8 2 6 2 2 2 9 7
 subroutine get_double_from_lala(varname,A,type,IERR)
 
-! ident_33="@(#) M_matrix get_double_from_lala(3f) access LALA variable stack and get a variable by name and its data from the stack"
+! ident_36="@(#) M_matrix get_double_from_lala(3f) access LALA variable stack and get a variable by name and its data from the stack"
 
 character(len=*),intent(in)              :: varname    ! the name of A.
 integer,intent(in)                       :: type       ! type =  0  get REAL A from LALA, type  = 1  get IMAGINARY A into LALA,
@@ -6858,7 +8541,7 @@ integer                                  :: id(GG_MAX_NAME_LENGTH)
 integer                                  :: i,j,k,location,m,n
 
    if(GM_BIGMEM.LT.0) then
-      call lala_init(200000) ! if not initialized initialize
+      call lala_init(400000) ! if not initialized initialize
    endif
    ierr=0
 
@@ -6961,7 +8644,7 @@ end function rowpack
 !!
 !!      > Your current variables are...
 !!      > C  B  A  eps  flops  eye  rand
-!!      >using 33 out of 200000 elements
+!!      >using 33 out of 400000 elements
 !!      >
 !!      > A  =
 !!      >     1.    2.    3.    4.    5.    6.    7.    8.    9.
@@ -6971,7 +8654,7 @@ end function rowpack
 !!      >This is my title
 subroutine store_double_into_lala(varname,realxx,imagxx,ierr)
 
-! ident_34="@(#) M_matrix _store_double_into_lala(3f) put a variable name and its data onto LALA stack"
+! ident_37="@(#) M_matrix _store_double_into_lala(3f) put a variable name and its data onto LALA stack"
 
 character(len=*),intent(in)          :: varname                ! the name of realxx.
 doubleprecision,intent(in)           :: realxx(:,:)            ! inputarray is an M by N matrix
@@ -6985,7 +8668,7 @@ integer                              :: location
 integer                              :: m,n                    ! m, n = dimensions
 
    if(GM_BIGMEM.LT.0) then
-      call lala_init(200000) ! if not initialized initialize
+      call lala_init(400000) ! if not initialized initialize
    else
    endif
 
@@ -7023,7 +8706,8 @@ integer                              :: m,n                    ! m, n = dimensio
       return
    else
       if (img .eq. 0)then
-         call mat_rset(m*n,0.0d0,GM_IMAGS(location),1) ! set imaginary values to zero
+         !call mat_rset(m*n,0.0d0,GM_IMAGS(location),1) ! set imaginary values to zero
+         gm_imags(location:location+m*n-1)=0.0d0 ! set imaginary component to zero
       else
          GM_IMAGS(location:location+m*n-1)=rowpack(imagxx)
       endif
@@ -7793,7 +9477,7 @@ function too_much_memory(expression)
 integer,intent(in) :: expression
 logical            :: too_much_memory
 
-! ident_35="@(#) too much memory required"
+! ident_38="@(#) too much memory required"
 
    G_ERR=expression
    if(G_ERR.gt.0)then
@@ -7809,7 +9493,7 @@ end function too_much_memory
 !===================================================================================================================================
 function system_getenv(name,default) result(value)
 
-! ident_36="@(#) M_system system_getenv(3f) call get_environment_variable as a function with a default value(3f)"
+! ident_39="@(#) M_system system_getenv(3f) call get_environment_variable as a function with a default value(3f)"
 
 character(len=*),intent(in)          :: name
 character(len=*),intent(in),optional :: default
@@ -7849,7 +9533,7 @@ function mat_is_name(line) result (lout)
 character(len=*),parameter   :: int='0123456789'
 character(len=*),parameter   :: lower='abcdefghijklmnopqrstuvwxyz'
 character(len=*),parameter   :: upper='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-character(len=*),parameter   :: allowed=upper//lower//int//'_'
+character(len=*),parameter   :: allowed=upper//lower//int//'_'//'%'
 character(len=*),intent(in)  :: line
 character(len=:),allocatable :: name
 logical                      :: lout
@@ -7953,7 +9637,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   nonsymmetric eigenvalue problems, to fairly sophisticated matrix             ',&
 '   tools such as the singular value decomposition.                              ',&
 '                                                                                ',&
-'   LALA should be useful in applied linear algebra, as well as more             ',&
+'   LALA should be useful in applied linear algebra,    as well as more          ',&
 '   general numerical analysis, matrix theory, statistics and applications       ',&
 '   of matrices to other disciplines.                                            ',&
 '                                                                                ',&
@@ -7992,7 +9676,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   In more advanced applications, LALA can be used in conjunction with          ',&
 '   other programs in several ways. It is possible to define new LALA            ',&
-'   functions and add them to the system.  it is possible to use the local       ',&
+'   functions and add them to the system. It is possible to use the local        ',&
 '   file system to pass matrices between LALA and other programs. LALA           ',&
 '   command and statement input can be obtained from a local file instead        ',&
 '   of from the terminal. The most power and flexibility is obtained by          ',&
@@ -8001,7 +9685,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   This document first gives an overview of LALA from the user''s               ',&
 '   point of view. Several extended examples involving data fitting,             ',&
 '   partial differential equations, eigenvalue sensitivity and other             ',&
-'   topics are included.  The system was designed and programmed using           ',&
+'   topics are included. The system was designed and programmed using            ',&
 '   techniques described by Wirth [6], implemented in nonrecursive,              ',&
 '   portable Fortran. There is a brief discussion of some of the matrix          ',&
 '   algorithms and of their numerical properties. A final section describes      ',&
@@ -8052,8 +9736,8 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '        -1.3000   0.8000   3.1416                                               ',&
 '                                                                                ',&
-'   The elementary functions available include sqrt, log, exp, sin, cos,         ',&
-'   atan, abs, round, real, imag, and conjg.                                     ',&
+'   The elementary functions available include la%sqrt, la%log, la%exp, sin, cos,',&
+'   atan, abs, round, real, imag, pow, and conjg.                                ',&
 '                                                                                ',&
 '   Large matrices can be spread across several input lines, with the            ',&
 '   carriage returns replacing the semicolons. The above matrix could            ',&
@@ -8062,6 +9746,12 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      A = < 1 2 3                                                               ',&
 '            4 5 6                                                               ',&
 '            7 8 9 >                                                             ',&
+'                                                                                ',&
+'   If the desired result is actually one row use line continuation              ',&
+'                                                                                ',&
+'       vector = < 1 2 3 ...                                                     ',&
+'                  4 5 6 ...                                                     ',&
+'                  7 8 9 >                                                       ',&
 '                                                                                ',&
 '   Matrices can be input from the local file system. Say a file named           ',&
 '   ''xyz'' contains five lines of text,                                         ',&
@@ -8143,7 +9833,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   Note that both upper and lower case letters are allowed for input            ',&
 '   (on those systems which have both).                                          ',&
 '                                                                                ',&
-'   There are two "matrix division" symbols in LALA, \ and / .  If A and         ',&
+'   There are two "matrix division" symbols in LALA, \ and / . If A and          ',&
 '   B are matrices, then A\B and B/A correspond formally to left and right       ',&
 '   multiplication of B by the inverse of A, that is inv(A)*B and B*inv(A),      ',&
 '   but the result is obtained directly without the computation of the           ',&
@@ -8197,14 +9887,14 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '           .0000                                                                ',&
 '                                                                                ',&
 '   The quantity 1.0e-15 is a scale factor which multiplies all the              ',&
-'   components which follow. Thus our vectors X and Y actually                   ',&
-'   agree to about 15 decimal places on this computer.                           ',&
+'   components which follow. Thus our vectors X and Y actually agree to          ',&
+'   about 15 decimal places on this computer.                                    ',&
 '                                                                                ',&
-'   It is also possible to obtain element-by-element                             ',&
-'   multiplicative operations. If A and B have the same dimensions,              ',&
-'   then A .* B denotes the matrix whose elements are simply the                 ',&
-'   products of the individual elements of A and B . The expressions             ',&
-'   A ./ B and A .\ B give the quotients of the individual elements.             ',&
+'   It is also possible to obtain element-by-element multiplicative              ',&
+'   operations. If A and B have the same dimensions, then A .* B denotes         ',&
+'   the matrix whose elements are simply the products of the individual          ',&
+'   elements of A and B . The expressions A ./ B and A .\ B give the             ',&
+'   quotients of the individual elements.                                        ',&
 '                                                                                ',&
 '   There are several possible output formats. The statement                     ',&
 '                                                                                ',&
@@ -8231,11 +9921,43 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   the eigenvalues and eigenvectors of A.                                       ',&
 '                                                                                ',&
 '   Previously defined matrices and matrix expressions can be                    ',&
-'   used inside brackets to generate larger matrices, for example                ',&
+'   used inside brackets to generate larger matrices. If conformable             ',&
+'   arrays can be concatenated top-to-bottom or left-to-right.                   ',&
+'                                                                                ',&
+'       a=[0:3;4:7]                                                              ',&
+'       a  =                                                                     ',&
+'           0.    1.    2.    3.                                                 ',&
+'           4.    5.    6.    7.                                                 ',&
+'                                                                                ',&
+'       b=[ 8  9 10 11                                                           ',&
+'          12 13 14 15 ];                                                        ',&
+'                                                                                ',&
+'       c=<a;b> // top to bottom with semi-colon                                 ',&
+'       c  =                                                                     ',&
+'           0.    1.    2.    3.                                                 ',&
+'           4.    5.    6.    7.                                                 ',&
+'           8.    9.   10.   11.                                                 ',&
+'          12.   13.   14.   15.                                                 ',&
+'                                                                                ',&
+'       d=<b;a>                                                                  ',&
+'       d  =                                                                     ',&
+'           8.    9.   10.   11.                                                 ',&
+'          12.   13.   14.   15.                                                 ',&
+'           0.    1.    2.    3.                                                 ',&
+'           4.    5.    6.    7.                                                 ',&
+'                                                                                ',&
+'       e=<c,d> // left to right with comma                                      ',&
+'       e  =                                                                     ',&
+'           0.    1.    2.    3.    8.    9.   10.   11.                         ',&
+'           4.    5.    6.    7.   12.   13.   14.   15.                         ',&
+'           8.    9.   10.   11.    0.    1.    2.    3.                         ',&
+'          12.   13.   14.   15.    4.    5.    6.    7.                         ',&
+'                                                                                ',&
+'   A more complex example is                                                    ',&
 '                                                                                ',&
 '      C = <A, B; <4 2 0>*X, X''>                                                ',&
 '                                                                                ',&
-'   results in                                                                   ',&
+'   which results in                                                             ',&
 '                                                                                ',&
 '      C     =                                                                   ',&
 '                                                                                ',&
@@ -8252,11 +9974,10 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   including zero. "eps" is changed by "chop", which is described later         ',&
 '   in this manual.                                                              ',&
 '                                                                                ',&
-'   The value of "rand" is a random variable, with a choice of a uniform         ',&
-'   or a normal distribution.                                                    ',&
+'   The value of "rand" is a random variable using a uniform distribution.       ',&
 '                                                                                ',&
 '   The name "eye" is used in place of "i" to denote identity matrices           ',&
-'   because "i" is often used as a subscript or as sqrt(-1).  The dimensions     ',&
+'   because "i" is often used as a subscript or as sqrt(-1). The dimensions      ',&
 '   of "eye" are determined by context. For example,                             ',&
 '                                                                                ',&
 '      B = A + 3*eye                                                             ',&
@@ -8285,7 +10006,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   numbers, rather than all zeros.)                                             ',&
 '                                                                                ',&
 '   All computations are done using double precision real arithmetic. There      ',&
-'   is no mixed-precision arithmetic.  The Fortran COMPLEX data type             ',&
+'   is no mixed-precision arithmetic. The Fortran COMPLEX data type              ',&
 '   is not used because many systems create unnecessary underflows and           ',&
 '   overflows with complex operations.                                           ',&
 '                                                                                ',&
@@ -8295,50 +10016,69 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   Much of LALA''s computational power comes from the various                   ',&
 '   matrix functions available. The current list includes:                       ',&
 '                                                                                ',&
-'      inv(A)          - Inverse.                                                ',&
-'      det(A)          - Determinant.                                            ',&
-'      cond(A)         - Condition number.                                       ',&
-'      rcond(A)        - A measure of nearness to singularity.                   ',&
-'      eig(A)          - Eigenvalues and eigenvectors.                           ',&
-'      schur(A)        - Schur triangular form.                                  ',&
-'      hess(A)         - Hessenberg or tridiagonal form.                         ',&
-'      poly(A)         - Characteristic polynomial.                              ',&
-'      svd(A)          - Singular value decomposition.                           ',&
-'      pinv(A,eps)     - Pseudo-inverse with optional tolerance.                 ',&
-'      rank(A,eps)     - Matrix rank with optional tolerance.                    ',&
-'      lu(A)           - Factors from Gaussian elimination.                      ',&
-'      chol(A)         - Factor from Cholesky factorization.                     ',&
-'      qr(A)           - Factors from Householder orthogonalization.             ',&
-'      rref(A)         - Reduced row echelon form.                               ',&
-'      orth(A)         - Orthogonal vectors spanning range of A.                 ',&
-'      exp(A)          - e to the A.                                             ',&
-'      log(A)          - Natural logarithm.                                      ',&
-'      sqrt(A)         - Square root.                                            ',&
-'      sin(A)          - Trigonometric sine.                                     ',&
-'      cos(A)          - Cosine.                                                 ',&
-'      atan(A)         - Arctangent.                                             ',&
-'      round(A)        - Round the elements to nearest integers.                 ',&
-'      abs(A)          - Absolute value of the elements.                         ',&
-'      real(A)         - Real parts of the elements.                             ',&
-'      imag(A)         - Imaginary parts of the elements.                        ',&
-'      conjg(A)        - Complex conjugate.                                      ',&
-'      sum(A)          - Sum of the elements.                                    ',&
-'      prod(A)         - Product of the elements.                                ',&
-'      diag(A)         - Extract or create diagonal matrices.                    ',&
-'      tril(A)         - Lower triangular part of A.                             ',&
-'      triu(A)         - Upper triangular part of A.                             ',&
-'      norm(A,p)       - Norm with p = 1, 2 or ''Infinity''.                     ',&
-'      eye(m,n)        - Portion of identity matrix.                             ',&
-'      rand(m,n)       - Matrix with random elements.                            ',&
-'      ones(m,n)       - Matrix of all ones.                                     ',&
-'      magic(n)        - Interesting test matrices.                              ',&
-'      invh(n)         - Inverse Hilbert matrices.                               ',&
-'      roots(C)        - Roots of polynomial with coefficients C.                ',&
-'      display(A,p)    - Print base p representation of A.                       ',&
-'      kron(A,B)       - Kronecker tensor product of A and B.                    ',&
-'      plot(X,Y)       - Plot Y as a function of X .                             ',&
-'      rat(A)          - Find "simple" rational approximation to A.              ',&
-'      user(A)         - Function defined by external program.                   ',&
+'      inv(A)           - Inverse.                                               ',&
+'      det(A)           - Determinant.                                           ',&
+'      cond(A)          - Condition number.                                      ',&
+'      rcond(A)         - A measure of nearness to singularity.                  ',&
+'      eig(A)           - Eigenvalues and eigenvectors.                          ',&
+'      schur(A)         - Schur triangular form.                                 ',&
+'      hess(A)          - Hessenberg or tridiagonal form.                        ',&
+'      poly(A)          - Characteristic polynomial.                             ',&
+'      svd(A)           - Singular value decomposition.                          ',&
+'      pinv(A,eps)      - Pseudo-inverse with optional tolerance.                ',&
+'      rank(A,eps)      - Matrix rank with optional tolerance.                   ',&
+'      lu(A)            - Factors from Gaussian elimination.                     ',&
+'      chol(A)          - Factor from Cholesky factorization.                    ',&
+'      qr(A)            - Factors from Householder orthogonalization.            ',&
+'      rref(A)          - Reduced row echelon form.                              ',&
+'      orth(A)          - Orthogonal vectors spanning range of A.                ',&
+'      la%exp(A)        - e to the A.                                            ',&
+'      la%log(A)        - Natural logarithm.                                     ',&
+'      la%sqrt(A)       - Square root.                                           ',&
+'      pow(A)           - raise the elements by a power                          ',&
+'      la%sin(A)        - Trigonometric sine.                                    ',&
+'      la%cos(A)        - Cosine.                                                ',&
+'      la%atan(A)       - Arctangent.                                            ',&
+'      round(A)         - Round the elements to nearest integers.                ',&
+'      abs(A)           - Absolute value of the elements.                        ',&
+'      real(A)          - Real parts of the elements.                            ',&
+'      imag(A)          - Imaginary parts of the elements.                       ',&
+'      conjg(A)         - Complex conjugate.                                     ',&
+'      sum(A)           - Sum of the elements.                                   ',&
+'      prod(A)          - Product of the elements.                               ',&
+'      diag(A)          - Extract or create diagonal matrices.                   ',&
+'      tril(A)          - Lower triangular part of A.                            ',&
+'      triu(A)          - Upper triangular part of A.                            ',&
+'      norm(A,p)        - Norm with p = 1, 2 or ''Infinity''.                    ',&
+'      eye(m,n)         - Portion of identity matrix.                            ',&
+'      randi(m,n)       - uniformly distributed random integers from 1 to m*n.   ',&
+'      randn(m,n)       - Matrix with normally distributed random elements.      ',&
+'      randu(m,n)       - Matrix with uniformly distributed random elements.     ',&
+'      ones(m,n)        - Matrix of all ones.                                    ',&
+'      magic(n)         - Interesting test matrices.                             ',&
+'      invh(n)          - Inverse Hilbert matrices.                              ',&
+'      roots(C)         - Roots of polynomial with coefficients C.               ',&
+'      display(A,p)     - Print base p representation of A.                      ',&
+'      kron(A,B)        - Kronecker tensor product of A and B.                   ',&
+'      plot(X,Y)        - Plot Y as a function of X .                            ',&
+'      rat(A)           - Find "simple" rational approximation to A.             ',&
+'      reshape(A,[m,n]) - Reshape an array                                       ',&
+'      size(A)          - size of an array                                       ',&
+'      maxval(A)        - maximum real component of array A                      ',&
+'      minval(A)        - minimum real component of array A                      ',&
+'      maxloc(A)        - location of maximum real component of array A          ',&
+'      minloc(A)        - location of minimum real component of array A          ',&
+'      user(A)          - Function defined by external program.                  ',&
+'      pack(A,mask)     - Pack selected array elements into a vector             ',&
+'                                                                                ',&
+'      fmtc|fmti|fmtr(A,f)    - convert numbers to strings                       ',&
+'      lt|le|eq|ge|gt|ne(A,B) - relational operators                             ',&
+'                                                                                ',&
+'   See Also:                                                                    ',&
+'                                                                                ',&
+'   Additional packages are included                                             ',&
+'      + SET THEORY   - starts with "set%"                                       ',&
+'      + ORDERING     - starts with "order%"                                     ',&
 '                                                                                ',&
 '   Some of these functions have different interpretations when the              ',&
 '   argument is a matrix or a vector and some of them have additional            ',&
@@ -8381,20 +10121,20 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      j:k    is the same as  <j, j+1, ..., k>                                   ',&
 '      j:k    is empty if  j > k .                                               ',&
-'      j:i:k  is the same as  <j, j+i, j+2i, ..., k>                             ',&
-'      j:i:k  is empty if  i > 0 and j > k or if i < 0 and j < k .               ',&
+'      j:k:i  is the same as  <j, j+i, j+2i, ..., k>                             ',&
+'      j:k:i  is empty if  i > 0 and j > k or if i < 0 and j < k .               ',&
 '                                                                                ',&
 '   The colon is usually used with integers, but it is possible to               ',&
 '   use arbitrary real scalars as well. Thus                                     ',&
 '                                                                                ',&
 '      1:4  is the same as  <1, 2, 3, 4>                                         ',&
-'      0: 0.1: 0.5 is the same as <0.0, 0.1, 0.2, 0.3, 0.4, 0.5>                 ',&
+'      0: 0.5: 0.1 is the same as <0.0, 0.1, 0.2, 0.3, 0.4, 0.5>                 ',&
 '                                                                                ',&
 '   In general, a subscript can be a vector. If X and V are vectors,             ',&
 '   then X(V) is <X(V(1)), X(V(2)), ..., X(V(n))> . This can also be             ',&
 '   used with matrices. If V has m components and W has n components,            ',&
 '   then A(V,W) is the m by n matrix formed from the elements of A whose         ',&
-'   subscripts are the elements of V and W.  Combinations of the colon           ',&
+'   subscripts are the elements of V and W. Combinations of the colon            ',&
 '   notation and the indirect subscripting allow manipulation of various         ',&
 '   submatrices. For example,                                                    ',&
 '                                                                                ',&
@@ -8459,14 +10199,14 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      while norm(E+F-E,1) > 0, E = E + F; F = A*F/n; n = n + 1;                 ',&
 '      E                                                                         ',&
 '                                                                                ',&
-'   The IF clause allows conditional execution of statements.  The general       ',&
+'   The IF clause allows conditional execution of statements. The general        ',&
 '   form is                                                                      ',&
 '                                                                                ',&
 '      if expr relop expr,  statement, ..., statement,                           ',&
 '         else statement, ..., statement                                         ',&
 '                                                                                ',&
 '   The first group of statements are executed if the relation is true and       ',&
-'   the second group are executed if the relation is false.  The "else"          ',&
+'   the second group are executed if the relation is false. The "else"           ',&
 '   and the statements following it may be omitted. For example,                 ',&
 '                                                                                ',&
 '      if abs(i-j) = 2, A(i,j) = 0;                                              ',&
@@ -8572,7 +10312,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   Minor modifications were made to all these subroutines. The LINPACK          ',&
 '   routines were changed to replace the Fortran complex arithmetic              ',&
-'   with explicit references to real and imaginary parts.  Since most            ',&
+'   with explicit references to real and imaginary parts. Since most             ',&
 '   of the floating point arithmetic is concentrated in a few low-level          ',&
 '   subroutines which perform vector operations (the Basic Linear Algebra        ',&
 '   Subprograms), this was not an extensive change. It also facilitated          ',&
@@ -8640,35 +10380,35 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   but this approach has the crucial advantage that it does not require         ',&
 '   very much additional code.                                                   ',&
 '                                                                                ',&
-'   The elementary functions "exp", "log", "sqrt", "sin", "cos" and "atan"       ',&
-'   are applied to square matrices by diagonalizing the matrix, applying         ',&
-'   the functions to the individual eigenvalues and then transforming            ',&
-'   back. For example, "exp(A)" is computed by                                   ',&
+'   The elementary functions "la%exp", "la%log", "la%sqrt", "la%sin",            ',&
+'   "la%cos" and "la%atan" are applied to square matrices by diagonalizing       ',&
+'   the matrix, applying the functions to the individual eigenvalues and         ',&
+'   then transforming back. For example, "la%exp(A)" is computed by              ',&
 '                                                                                ',&
 '         <X,D> = eig(A);                                                        ',&
-'         for j = 1:n, D(j,j) = exp(D(j,j));                                     ',&
+'         for j = 1:n, D(j,j) = la%exp(D(j,j));                                  ',&
 '         X*D/X                                                                  ',&
 '                                                                                ',&
 '   This is essentially method number 14 out of the 19 ''dubious''               ',&
-'   possibilities described in [8]. It is dubious because it doesn''t always     ',&
+'   possibilities described in [8]. It is dubious because it does not always     ',&
 '   work. The matrix of eigenvectors X can be arbitrarily badly conditioned      ',&
 '   and all accuracy lost in the computation of X*D/X. A warning message         ',&
 '   is printed if "rcond(X)" is very small, but this only catches the            ',&
 '   extreme cases. An example of a case not detected is when A has a double      ',&
 '   eigenvalue, but theoretically only one linearly independent eigenvector      ',&
-'   associated with it.  The computed eigenvalues will be separated by           ',&
+'   associated with it. The computed eigenvalues will be separated by            ',&
 '   something on the order of the square root of the roundoff level. This        ',&
 '   separation will be reflected in "rcond(X)" which will probably not           ',&
-'   be small enough to trigger the error message. The computed "exp(A)"          ',&
+'   be small enough to trigger the error message. The computed "la%exp(A)"       ',&
 '   will be accurate to only half precision. Better methods are known for        ',&
-'   computing "exp(A)", but they do not easily extend to the other five          ',&
+'   computing "la%exp(A)", but they do not easily extend to the other five       ',&
 '   functions and would require a considerable amount of additional code.        ',&
 '                                                                                ',&
 '   The expression A**p is evaluated by repeated multiplication if p is          ',&
 '   an integer greater than 1. Otherwise it is evaluated by                      ',&
 '                                                                                ',&
 '         <X,D> = eig(A);                                                        ',&
-'         for j = 1:n, D(j,j) = exp(p*log(D(j,j)))                               ',&
+'         for j = 1:n, D(j,j) = la%exp(p*la%log(D(j,j)))                         ',&
 '         X*D/X                                                                  ',&
 '                                                                                ',&
 '   This suffers from the same potential loss of accuracy if X is                ',&
@@ -8691,22 +10431,22 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   rref(A), the rank of A is the number of nonzero rows. The elimination        ',&
 '   algorithm used for "rref" is the fastest of the three rank-determining       ',&
 '   algorithms, but it is the least sophisticated numerically and the            ',&
-'   least reliable.  With A\B, the algorithm is essentially that used            ',&
+'   least reliable. With A\B, the algorithm is essentially that used             ',&
 '   by example subroutine SQRST in chapter 9 of the LINPACK guide. With          ',&
 '   pinv(A), the algorithm is based on the singular value decomposition          ',&
 '   and is described in chapter 11 of the LINPACK guide. The SVD algorithm       ',&
 '   is the most time-consuming, but the most reliable and is therefore           ',&
 '   also used for rank(A).                                                       ',&
 '                                                                                ',&
-'   The uniformly distributed random numbers in "rand" are obtained from         ',&
-'   the machine-independent random number generator URAND described in           ',&
-'   [9]. It is possible to switch to normally distributed random numbers,        ',&
-'   which are obtained using a transformation also described in [9].             ',&
+'   The uniformly distributed random numbers in "randi" and "randu"are           ',&
+'   obtained from the machine-independent random number generator URAND          ',&
+'   described in [9]. It is possible to use normally distributed random          ',&
+'   numbers using "randn", which are obtained using a transformation also        ',&
+'   described in [9].                                                            ',&
 '                                                                                ',&
-'        The computation of                                                      ',&
+'   The computation of                                                           ',&
 '                                                                                ',&
-'                   2    2                                                       ',&
-'             sqrt(a  + b )                                                      ',&
+'         la%sqrt( a**2 + b**2 )                                                 ',&
 '                                                                                ',&
 '   is required in many matrix algorithms, particularly those involving          ',&
 '   complex arithmetic. A new approach to carrying out this operation is         ',&
@@ -8740,7 +10480,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   statement when the statement is terminated by an extra comma. For            ',&
 '   example, the line                                                            ',&
 '                                                                                ',&
-'         n = 20;  rand(n)*rand(n);,                                             ',&
+'         n = 20;  randu(n)*randu(n);,                                           ',&
 '                                                                                ',&
 '   ends with an extra comma. Two 20 by 20 random matrices are generated         ',&
 '   and multiplied together. The result is assigned to "ans", but the            ',&
@@ -8888,7 +10628,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   or in a fancier, but perhaps clearer, way with                               ',&
 '                                                                                ',&
-'      t = 1900:10:1970;   t = (t - 1940*ones(t))/40                             ',&
+'      t = 1900:1970;10   t = (t - 1940*ones(t))/40                              ',&
 '                                                                                ',&
 '   Either of these is equivalent to                                             ',&
 '                                                                                ',&
@@ -9071,9 +10811,9 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   vector is the function applied to the individual components.                 ',&
 '                                                                                ',&
 '      X = A(:,1:2);                                                             ',&
-'      c = X\log(y)                                                              ',&
-'      p = exp(sum(c))                                                           ',&
-'      e = norm(exp(X*c)-y,''inf'')                                              ',&
+'      c = X\la%log(y)                                                           ',&
+'      p = la%exp(sum(c))                                                        ',&
+'      e = norm(la%exp(X*c)-y,''inf'')                                           ',&
 '                                                                                ',&
 '   The resulting output is                                                      ',&
 '                                                                                ',&
@@ -9093,14 +10833,14 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   The predicted population and maximum deviation appear satisfactory and       ',&
 '   indicate that the exponential model is a reasonable one to consider.         ',&
 '                                                                                ',&
-'   As a curiosity, we return to the degree six polynomial.  Since the           ',&
+'   As a curiosity, we return to the degree six polynomial. Since the            ',&
 '   coefficient of the high order term is negative and the value of the          ',&
 '   polynomial at t = 1 is positive, it must have a root at some value           ',&
 '   of t greater than one. The statements                                        ',&
 '                                                                                ',&
 '      X = A(:,1:7);                                                             ',&
 '      c = X\y;                                                                  ',&
-'      c = c(7:-1:1);  //reverse the order of the coefficients                   ',&
+'      c = c(7:1:-1);  //reverse the order of the coefficients                   ',&
 '      z = roots(c)                                                              ',&
 '                                                                                ',&
 '   produce                                                                      ',&
@@ -9197,7 +10937,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   conditions on the remaining edges are satisfied as well as possible. To      ',&
 '   accomplish this, pick m points (r,t) on the remaining edges. It is           ',&
 '   desirable to have m > n and in practice we usually choose m to be two        ',&
-'   or three times as large as n .  Typical values of n are 10 or 20 and         ',&
+'   or three times as large as n . Typical values of n are 10 or 20 and          ',&
 '   of m are 20 to 60. An m by n matrix A is generated. The i,j element          ',&
 '   is the j-th basis function, or its normal derivative, evaluated at           ',&
 '   the i-th boundary point. A right hand side with m components is also         ',&
@@ -9230,7 +10970,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      //initialize variables                                                    ',&
 '         m1 = round(m/3);   //number of points on each straight edge            ',&
 '         m2 = m - m1;       //number of points with Dirichlet conditions        ',&
-'         pi = 4*atan(1);                                                        ',&
+'         pi = 4*la%atan(1);                                                     ',&
 '      //generate points in Cartesian coordinates                                ',&
 '         //right hand edge                                                      ',&
 '         for i = 1:m1, x(i) = 1; y(i) = (1-rho)*(i-1)/(m1-1);                   ',&
@@ -9240,8 +10980,8 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '         for i = m1+1:m2, t = pi/2*(i-m1)/(m2-m1+1); ...                        ',&
 '            x(i) = 1-rho*sin(t);  y(i) = 1-rho*cos(t);                          ',&
 '      //convert to polar coordinates                                            ',&
-'         for i = 1:m-1, th(i) = atan(y(i)/x(i));  ...                           ',&
-'            r(i) = sqrt(x(i)**2+y(i)**2);                                       ',&
+'         for i = 1:m-1, th(i) = la%atan(y(i)/x(i));  ...                        ',&
+'            r(i) = la%sqrt(x(i)**2+y(i)**2);                                    ',&
 '         th(m) = pi/2;  r(m) = 1;                                               ',&
 '      //generate matrix                                                         ',&
 '         //Dirichlet conditions                                                 ',&
@@ -9256,7 +10996,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      //solve for coefficients                                                  ',&
 '         c = A\b                                                                ',&
 '      //compute effective conductivity                                          ',&
-'         c(2:2:n) = -c(2:2:n);                                                  ',&
+'         c(2:n:2) = -c(2:n:2);                                                  ',&
 '         sigma = sum(c)                                                         ',&
 '      //output total operation count                                            ',&
 '         ops = flop(2)                                                          ',&
@@ -9394,7 +11134,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '           .1782   -9.1284  -62.7136                                            ',&
 '          -.9800   46.4473  376.2818                                            ',&
 '                                                                                ',&
-'   Since A is similar to B, its eigenvalues are also 1, 2 and 3.  They          ',&
+'   Since A is similar to B, its eigenvalues are also 1, 2 and 3. They           ',&
 '   happen to be computed in another order by the EISPACK subroutines. The       ',&
 '   fact that the columns of X, which are the eigenvectors, are so far           ',&
 '   from being orthonormal is our first indication that the eigenvalues          ',&
@@ -9472,7 +11212,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '   These three numbers are the reciprocals of the cosines of the                ',&
 '   angles between the left and right eigenvectors. It can be shown that         ',&
 '   perturbation of the elements of A can result in a perturbation of            ',&
-'   the j-th eigenvalue which is c(j) times as large.  In this example,          ',&
+'   the j-th eigenvalue which is c(j) times as large. In this example,           ',&
 '   the first eigenvalue has the largest sensitivity.                            ',&
 '                                                                                ',&
 '   We now proceed to show that A is close to a matrix with a double             ',&
@@ -9522,7 +11262,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '           .450380734134507                                                     ',&
 '                                                                                ',&
 '   Finally, we display the perturbed matrix, which is obviously close           ',&
-'   to the original, and its pair of nearly equal eigenvalues.  (We have         ',&
+'   to the original, and its pair of nearly equal eigenvalues. (We have          ',&
 '   dropped a few digits from the long output.)                                  ',&
 '                                                                                ',&
 '      A+t*E,  eig(A+t*E)                                                        ',&
@@ -9682,7 +11422,6 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '            ...                                                                 ',&
 '            ...                                                                 ',&
 '                                                                                ',&
-'                                                                                ',&
 '   The most elaborate mechanism involves using LALA as a subroutine             ',&
 '   within another program. Communication with the LALA stack is                 ',&
 '   accomplished using subroutine lala().                                        ',&
@@ -9722,10 +11461,10 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '               enddo                                                            ',&
 '            enddo                                                               ',&
 '            call MATZ(A,LDA,N,N,''A'',1,IERR)                                   ',&
-'            IF (IERR .NE. 0) GO TO ...                                          ',&
+'            IF (IERR .NE. 0) GOTO ...                                           ',&
 '            call LALA(1,'''')                                                   ',&
 '            call MATZ(X,LDA,N,N,''X'',0,IERR)                                   ',&
-'            IF (IERR .NE. 0) GO TO ...                                          ',&
+'            IF (IERR .NE. 0) GOTO ...                                           ',&
 '            ...                                                                 ',&
 '            ...                                                                 ',&
 '                                                                                ',&
@@ -9751,7 +11490,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
 'ACKNOWLEDGEMENT                                                                 ',&
 '                                                                                ',&
-'   LALA was inspired by the MATLAB subroutine.  Most of the work on             ',&
+'   LALA was inspired by the MATLAB subroutine. Most of the work on              ',&
 '   MATLAB was carried out at the University of New Mexico, where it was         ',&
 '   being supported by the National Science Foundation. Additional work          ',&
 '   has been done during visits to Stanford Linear Accelerator Center,           ',&
@@ -9804,29 +11543,40 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '================================================================================',&
 'SUMMARY    A list of basic (case-sensitive) section and topic names             ',&
 '   .______________._________________________________________________________.   ',&
-'   |SYNTAX        | [ ] < > ( ) = .  , !  ; \ / '''' + - * : semi ?           | ',&
+'   |SYNTAX        | [] <> () = .  , !  ; \ / '''' + - * : ^ semi ? ./ .\ .*   | ',&
 '   |______________._________________________________________________________|   ',&
 '   |VARIABLES     | ans    clear who                                        |   ',&
 '   |______________._________________________________________________________|   ',&
-'   |BASIC         | atan   cos   exp    log    sin      sqrt                |   ',&
-'   |______________._________________________________________________________|   ',&
-'   |HIGH          | abs    base  chol   chop   cond     conjg  det    diag  |   ',&
-'   |              | eig    eye   hess   invh   imag     inv    kron   lu    |   ',&
-'   |              | magic  norm  ones   orth   pinv     poly   prod   qr    |   ',&
-'   |              | rand   rank  rcond  rat    real     rref   roots  round |   ',&
-'   |              | schur  shape sum    svd    tril     triu   user   zeros |   ',&
-'   |______________._________________________________________________________|   ',&
+'   |COMPLEX ELEMENTAL | acosh acos asinh asin atanh atan cosh cos sinh sin  |   ',&
+'   |                  | tanh tan log sqrt exp cmplx                         |   ',&
+'   |__________________._____________________________________________________|   ',&
+'   |REAL ELEMENTAL    | log10                                               |   ',&
+'   |______________.___._____________________________________________________|   ',&
+'   |RELATIONAL    | lt le eq ge gt ne                                       |   ',&
+'   |_______.________________________________________________________________|   ',&
+'   |INTEROGATE    | all any maxloc maxval minloc minval shape sum           |   ',&
+'   |________________________________________________________________________|   ',&
+'   |CREATE        | eye invh magic ones randi randn randu zeros             |   ',&
+'   |_______.________________________________________________________________|   ',&
+'   |HIGH   | abs    base   chol   chop   cond   conjg  det    diag     eig  |   ',&
+'   |       | hess   imag   inv    kron   lu     lnorm  orth   pack    pinv  |   ',&
+'   |       | poly   prod   qr     rcond  rank   rat    real   reshape       |   ',&
+'   |       | rref   roots  round  schur  svd    trill  triu   user          |   ',&
+'   |_______.________________________________________________________________|   ',&
 '   |FLOW control  | else   end   if     for    while    exit   quit         |   ',&
 '   |______________._________________________________________________________|   ',&
 '   |FILE access   | exec   load  print  save   delete                       |   ',&
 '   |______________._________________________________________________________|   ',&
-'   |OUTPUT options| lines  long  short  diary  display  plot                |   ',&
+'   |OUTPUT options| lines  long  short  diary  display  plot fmtc fmti fmtr |   ',&
 '   |______________._________________________________________________________|   ',&
-'   |ENVIRONMENT   | getenv                                                  |   ',&
+'   |ENVIRONMENT   | getenv date_and_time                                    |   ',&
 '   |______________._________________________________________________________|   ',&
 '   |DOCUMENTATION | help   fhelp  NEWS                                      |   ',&
 '   |______________._________________________________________________________|   ',&
 '   |MISCELLANEOUS | eps    debug  flops sh     MACROS   EDIT   CHARS        |   ',&
+'   |______________._________________________________________________________|   ',&
+'   |PACKAGES      | "SET THEORY", "ORDERING", "LINEAR ALGEBRA"              |   ',&
+'   |              | atan  cos  la%exp  log  pow  sin  la%sqrt               |   ',&
 '   |______________._________________________________________________________|   ',&
 '================================================================================',&
 'SAMPLE                                                                          ',&
@@ -9868,26 +11618,34 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      o  The special topic "search" shows lines from the manual                 ',&
 '         containing the subsequent string                                       ',&
 '                                                                                ',&
-'         Enter "h" at the "continue ..." prompt for additional options.         ',&
+'         Enter "h" at the "help:" prompt for additional options.                ',&
 '                                                                                ',&
 '      For example:                                                              ',&
 '                                                                                ',&
 '         help        // a list of common topics and section names               ',&
 '         help topics // a list of topics including the first line of            ',&
 '                     // the topic.                                              ',&
-'         help abs    // produces help on the function "abs".                    ',&
+'         help abs    // are_any_trueuces help on the function "abs".            ',&
 '         help FLOW   // the entire section on flow control is displayed.        ',&
 '         help manual // show all the help text                                  ',&
 '         help help   // obviously prints this message.                          ',&
 '         help search factor // show all lines containing "factor".              ',&
+'         help SUMMARY // shows a short crib sheet of basic features             ',&
 '                                                                                ',&
-'      Alternatively, To place all the documenation in a file, use               ',&
-'      "help manual" and enter "w help.txt" at the "continue .." prompt.         ',&
+'      Placing help text in a file is most simply done using the command         ',&
+'      line:                                                                     ',&
+'                                                                                ',&
+'            lala -topic manual # display user manual to stdout                  ',&
+'                                                                                ',&
+'      or as a command on the command line:                                      ',&
+'                                                                                ',&
+'            lala ''help manual''                                                ',&
+'            lala ''help search inverse''                                        ',&
+'                                                                                ',&
+'      Alternatively in interactive mode use the help "w" function.              ',&
+'      For example, to place all the documentation in a file, use                ',&
+'      "help manual" and enter "w help.txt" at the "help:" prompt.               ',&
 'NEWS                                                                            ',&
-'      LALA is intended to be used primarily by families of FORTRAN              ',&
-'      programs that wish to add a consistent interactive "calculator"           ',&
-'      mode for interactively inspecting and modifying data.                     ',&
-'                                                                                ',&
 '      May, 1981.                                                                ',&
 '                                                                                ',&
 '      This is a port of the Argonne National Lab. FORTRAN 77 MATLAB             ',&
@@ -9895,7 +11653,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      Mar, 1990.                                                                ',&
 '                                                                                ',&
-'      Input lines can now be recalled and edited.  A "??" on a line by          ',&
+'      Input lines can now be recalled and edited. A "??" on a line by           ',&
 '      itself calls the command history mode. Enter "?" after entering           ',&
 '      the mode for details.                                                     ',&
 '                                                                                ',&
@@ -9903,24 +11661,71 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      Rewritten but largely true to the original documentation.                 ',&
 '                                                                                ',&
-'what  does nothing for now                                                      ',&
+'      Mar, 2025.                                                                ',&
 '                                                                                ',&
-'sh    Starts the command shell interactively, using the command defined by      ',&
-'      the environment variable SHELL. Note that in addition any line            ',&
-'      starting with an exclamation (!) is passed to the system for              ',&
-'      execution.                                                                ',&
+'      Added a few functions                                                     ',&
+'                                                                                ',&
+'       * pow      raise elements of an array to a power and the                 ',&
+'                  equivalent .^ operator                                        ',&
+'       * ^        ^ was added as an alias of the ** operator                    ',&
+'       * reshape  added function to reshape arrays                              ',&
+'       * all      return 1 if all values are not zero,                          ',&
+'                  return 0 if any value is zero.                                ',&
+'       * any      return 1 if any values are not zero,                          ',&
+'                  return 0 if all value is zero.                                ',&
+'       * lt,le,eq,ge,gt,ne  added relational functions                          ',&
+'       * date_and_time      added additional representations of current         ',&
+'                            time.                                               ',&
+'       * fmtc,fmti,fmtr     convert numeric values to string                    ',&
+'       * pack               select array elements via a mask into a vector      ',&
+'       * minval,maxval      extrema of real component of an array               ',&
+'       * minloc,maxloc      location of extrema of real component of            ',&
+'                            an array                                            ',&
+'                                                                                ',&
+'      Enhancements                                                              ',&
+'                                                                                ',&
+'       * sum   Added the option to sum along rows or columns                    ',&
+'                                                                                ',&
+'      Differences                                                               ',&
+'                                                                                ',&
+'       * the original tertiary operator start:step:end was changed to be        ',&
+'''        start:end:step.                                                       ',&
+'                                                                                ',&
+'       * added randu(), randn(), and randseed() and eliminated overloading      ',&
+'         of the word "rank", which was error-prone and had improbable but       ',&
+'         possibly incorrect behavior if keywords were one-to-one matches to     ',&
+'         data.                                                                  ',&
+'                                                                                ',&
+'      May, 2025.                                                                ',&
+'       * Added randi(), and revised it to resemble the octave(1)                ',&
+'         and commercial Matlab functions of the same name.                      ',&
+'                                                                                ',&
+'       * allow a name on a line by itself to be equivalent to                   ',&
+'         "load(''name.la'')                                                     ',&
+'                                                                                ',&
+'       * Added set theory functions as per "help SET THEORY"                    ',&
+'                                                                                ',&
+'       * Added ordering functions as per "help ORDERING"                        ',&
+'                                                                                ',&
+'       * myfile  is equivalent to "exec(''myfile.la'')".                        ',&
+'                                                                                ',&
+'       * enforcing "if expression op expression," to scalar expressions, as     ',&
+'         the original behavior of only comparing the real component of the      ',&
+'         first element of a matrix was not intuitive and error-prone.           ',&
+'                                                                                ',&
+'       * Added set%isequal(A,B), size(A)                                        ',&
 '================================================================================',&
 'SYNTAX                                                                          ',&
 '[     See "<"                                                                   ',&
 ']     See "<"                                                                   ',&
 '>     See "<" . Also see MACROS.                                                ',&
 '<     < > or [ ] are brackets used in forming vectors and matrices.             ',&
-'      "<6.9 9.64 sqrt(-1)>" is a vector with three elements separated by        ',&
+'      "<6.9 9.64 la%sqrt(-1)>" is a vector with three elements separated by     ',&
 '      blanks. "[1+I 2-I 3]" and "[1 +I 2 -I 3]" are not the same. The           ',&
-'      first has three elements, the second has five.  <11 12 13; 21 22          ',&
+'      first has three elements, the second has five. <11 12 13; 21 22           ',&
 '      23> is a 2 by 3 matrix. The semicolon ends the first row.                 ',&
 '                                                                                ',&
-'      Vectors and matrices can be used inside < > brackets.  <A B; C>           ',&
+'      Vectors and matrices can be used inside < > brackets. <A B; C>            ',&
 '      is allowed if the number of rows of A equals the number of rows           ',&
 '      of B and the number of columns of A plus the number of columns of         ',&
 '      B equals the number of columns of C. This rule generalizes in a           ',&
@@ -9952,13 +11757,13 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '         X(3) is the third element of X .                                       ',&
 '         X([1 2 3]) is the first three elements of X. So is                     ',&
-'         X([sqrt(2), sqrt(3), 4*atan(1)]) .                                     ',&
-'         If X has N components, X(N:-1:1) reverses them.                        ',&
+'         X([la%sqrt(2), la%sqrt(3), 4*atan(1)]) .                               ',&
+'         If X has N components, X(N:1:-1) reverses them.                        ',&
 '                                                                                ',&
 '      The same indirect subscripting is used in matrices. If V has              ',&
 '      M components and W has N components, then A(V,W) is the M by N            ',&
 '      matrix formed from the elements of A whose subscripts are the             ',&
-'      elements of V and W. For example...  A(<1,5>,:) = A(<5,1>,:)              ',&
+'      elements of V and W. For example... A(<1,5>,:) = A(<5,1>,:)               ',&
 '      interchanges rows 1 and 5 of A.                                           ',&
 '                                                                                ',&
 '=     Used in assignment statements and to mean equality in "while"             ',&
@@ -9970,6 +11775,9 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      Element-by-element multiplicative operations are obtained                 ',&
 '      using .* , ./ , or .\ . For example, C = A ./ B is the                    ',&
 '      matrix with elements c(i,j) = a(i,j)/b(i,j) .                             ',&
+'                                                                                ',&
+'      C=A .^ B is an element-by-element operator equivalent                     ',&
+'      to pow(A,B).                                                              ',&
 '                                                                                ',&
 '      Kronecker tensor products and quotients are obtained with                 ',&
 '      .*. , ./. and .\. . See "kron".                                           ',&
@@ -10039,19 +11847,30 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '''     Transpose. X'' is the complex conjugate transpose of X .                 ',&
 '                                                                                ',&
-'      A quote is also use to delmit text. ''ANY TEXT'' is a vector whose        ',&
+'      A quote is also use to delimit text. ''ANY TEXT'' is a vector whose       ',&
 '      components are the LALA internal codes for the characters. A              ',&
 '      quote within the text is indicated by two quotes. See "display"           ',&
 '      and "FILE" .                                                              ',&
 '                                                                                ',&
-'+     Addition. X + Y . X and Y must have the same dimensions.                  ',&
+'+     Addition. X + Y . X and Y must have the same dimensions unless            ',&
+'      either is a scalar.                                                       ',&
 '                                                                                ',&
-'-     Subtraction. X - Y . X and Y must have the same                           ',&
-'      dimensions.                                                               ',&
+'      An exception is made if X or Y is scalar; in that case the scalar is      ',&
+'      expanded to an array of the size of the other argument.  That is,         ',&
+'      a scalar X is treated as ones(Y)*X and a scalar Y is treated as           ',&
+'      ones(X)*Y.                                                                ',&
 '                                                                                ',&
-'*     Matrix multiplication, X*Y . Any scalar (1 by 1 matrix)                   ',&
-'      may multiply anything. Otherwise, the number of columns of                ',&
-'      X must equal the number of rows of Y .                                    ',&
+'-     Subtraction. X - Y . X and Y must have the same dimensions unless         ',&
+'      either is scalar.                                                         ',&
+'                                                                                ',&
+'      An exception is made if X or Y is scalar; in that case the scalar is      ',&
+'      expanded to an array of the size of the other argument.  That is,         ',&
+'      a scalar X is treated as ones(Y)*X and a scalar Y is treated as           ',&
+'      ones(X)*Y.                                                                ',&
+'                                                                                ',&
+'*     Matrix multiplication, X*Y . Any scalar (1 by 1 matrix) may multiply      ',&
+'      anything. Otherwise, the number of columns of X must equal the            ',&
+'      number of rows of Y .                                                     ',&
 '                                                                                ',&
 '      Element-by-element multiplication is obtained with X .* Y .               ',&
 '                                                                                ',&
@@ -10065,11 +11884,11 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '        j:k   is the same as  <j, j+1, ..., k>                                  ',&
 '              is empty if  j > k .                                              ',&
-'        j:i:k is the same as [j, j+i,j+2*i, ..., k]                             ',&
+'        j:k:i is the same as [j, j+i,j+2*i, ..., k]                             ',&
 '              (Fortran DO loop users beware of the unusual order!)              ',&
 '                                                                                ',&
-'         j:i:k  is the same as  <j, j+i, j+2i, ..., k>                          ',&
-'         j:i:k  is empty if  i > 0 and j > k or if i < 0 and j < k .            ',&
+'         j:k:i  is the same as  <j, j+i, j+2i, ..., k>                          ',&
+'         j:k:i  is empty if  i > 0 and j > k or if i < 0 and j < k .            ',&
 '                                                                                ',&
 '      The colon notation can be used to pick out selected rows,                 ',&
 '      columns and elements of vectors and matrices.                             ',&
@@ -10084,6 +11903,36 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      For the use of the colon in the "for" statement, See "for" .              ',&
 '                                                                                ',&
+'^     A ^ B  The expression A^p means A to the p-th power. It is defined        ',&
+'      if A is a square matrix and p is a scalar. If p is an                     ',&
+'      integer greater than one, the power is computed by repeated               ',&
+'      multiplication. For other values of p the calculation involves            ',&
+'      the eigenvalues and eigenvectors of A.                                    ',&
+'                                                                                ',&
+'      The expression A^p is evaluated by repeated multiplication if             ',&
+'      p is an integer greater than 1. Otherwise it is evaluated by              ',&
+'                                                                                ',&
+'               <X,D> = eig(A);                                                  ',&
+'               for j = 1:n, D(j,j) = la%exp(p*log(D(j,j)))                      ',&
+'               X*D/X                                                            ',&
+'                                                                                ',&
+'      This suffers from a potential loss of accuracy if X is badly              ',&
+'      conditioned. It was partly for this reason that the case p =              ',&
+'      1 is included in the general case. Comparison of A**1 with A              ',&
+'      gives some idea of the loss of accuracy for other values of p             ',&
+'      and for the elementary functions.                                         ',&
+'                                                                                ',&
+'      A .^ B                                                                    ',&
+'                                                                                ',&
+'      If A and B are the same shape A .^ B is an element-wise                   ',&
+'      operation where each element of A is raised to the power in               ',&
+'      the corresponding element of B.                                           ',&
+'                                                                                ',&
+'      If B is a scalar, A .^ B raises each element of A to the power            ',&
+'      of B.                                                                     ',&
+'                                                                                ',&
+'      These elemental operations are equivalent to pow(A,B).                    ',&
+'                                                                                ',&
 'semi  "semi" toggles the action of semicolons at the end of lines.              ',&
 '      It will make semicolons cause rather than suppress printing.              ',&
 '      A second "semi" restores the initial interpretation.                      ',&
@@ -10093,76 +11942,226 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 'ans   Variable created automatically when expressions are not                   ',&
 '      assigned to anything else.                                                ',&
 '                                                                                ',&
-'clear  Erases all variables, except "eps", "flop", "eye" and "rand".            ',&
-'       X = <> erases only variable X . So does "clear X".                       ',&
+'clear  With no symbol names erases all variables, except "eps", "flop",         ',&
+'       "eye" and "rand". Otherwise "clear name1 name2 ..." erases the           ',&
+'       list of (non-permanent) variable names specified.                        ',&
+'                                                                                ',&
+'       Note "X = <>" erases variable X as well.                                 ',&
 '                                                                                ',&
 'who   Lists current variables.                                                  ',&
 '================================================================================',&
 'MACROS                                                                          ',&
 '                                                                                ',&
-'       The macro facility involves text and inward pointing angle               ',&
-'       brackets. If "STRING" is the source text for any LALA                    ',&
-'       expression or statement, then                                            ',&
+'    The macro facility involves text and inward pointing angle                  ',&
+'    brackets. If "STRING" is the source text for any LALA                       ',&
+'    expression or statement, then                                               ',&
 '                                                                                ',&
-'             t = ''STRING'';                                                    ',&
-'       encodes the text as a vector of integers and stores that                 ',&
-'       vector in t. "display(t)" will print the text and                        ',&
+'          t = ''STRING'';                                                       ',&
+'    encodes the text as a vector of integers and stores that                    ',&
+'    vector in t. "display(t)" will print the text and                           ',&
 '                                                                                ',&
-'             >t<                                                                ',&
-'       causes the text to be interpreted, either as a statement or              ',&
-'       as a factor in an expression. For example                                ',&
+'          >t<                                                                   ',&
+'    causes the text to be interpreted, either as a statement or                 ',&
+'    as a factor in an expression. For example                                   ',&
 '                                                                                ',&
-'             t = ''1/(i+j-1)'';                                                 ',&
-'             display(t)                                                         ',&
-'             for i = 1:n, for j = 1:n, a(i,j) = >t<;                            ',&
+'          t = ''1/(i+j-1)'';                                                    ',&
+'          display(t)                                                            ',&
+'          for i = 1:n, for j = 1:n, a(i,j) = >t<;                               ',&
 '                                                                                ',&
-'       generates the Hilbert matrix of order n.                                 ',&
-'       Another example showing indexed text,                                    ',&
+'    generates the Hilbert matrix of order n.                                    ',&
+'    Another example showing indexed text,                                       ',&
 '                                                                                ',&
-'             S = <''x = 3            ''                                         ',&
-'                  ''y = 4            ''                                         ',&
-'                  ''z = sqrt(x*x+y*y)''>                                        ',&
-'             for k = 1:3, >S(k,:)<                                              ',&
+'          S = <''x = 3            ''                                            ',&
+'               ''y = 4            ''                                            ',&
+'               ''z = la%sqrt(x*x+y*y)''>                                        ',&
+'          for k = 1:3, >S(k,:)<                                                 ',&
 '                                                                                ',&
-'       It is necessary that the strings making up the "rows" of                 ',&
-'       the "matrix" S have the same lengths.                                    ',&
-'                                                                                ',&
+'    It is necessary that the strings making up the "rows" of                    ',&
+'    the "matrix" S have the same lengths.                                       ',&
 '================================================================================',&
-'BASIC FUNCTIONS                                                                 ',&
+'COMPLEX ELEMENTAL                                                               ',&
 '                                                                                ',&
-'      For matrix arguments X , the functions "sin", "cos", "atan",              ',&
-'      "sqrt", "log", "exp" and X**p are computed using eigenvalues D            ',&
-'      and eigenvectors V . If <V,D> = eig(X) then f(X) = V*f(D)/V . This        ',&
-'      method may give inaccurate results if V is badly conditioned. Some        ',&
-'      idea of the accuracy can be obtained by comparing X**1 with X .           ',&
-'      For vector arguments, the function is applied to each component.          ',&
+'These elemental procedures are direct calls to their Fortran namesakes. They    ',&
+'are described under the "fhelp" command in greater detail. These members can    ',&
+'all take complex arguments.                                                     ',&
 '                                                                                ',&
-'atan  atan(X) is the arctangent of X . See "BASIC" .                            ',&
+'acos   arccosine function                                                       ',&
+'asin   Arcsine function                                                         ',&
+'atan2  Arctangent function                                                      ',&
+'cosh   Hyperbolic cosine function                                               ',&
+'sinh   Hyperbolic sine function                                                 ',&
+'tanh   Hyperbolic tangent function                                              ',&
+'acosh  Inverse hyperbolic cosine function                                       ',&
+'asinh  Inverse hyperbolic sine function                                         ',&
+'atanh  Inverse hyperbolic tangent function                                      ',&
+'tan    Tangent function                                                         ',&
 '                                                                                ',&
-'cos   cos(X) is the cosine of X . See "BASIC" .                                 ',&
+'log    Natural logarith                                                         ',&
+'sqrt   Square root                                                              ',&
+'exp    Base-e exponential function                                              ',&
+'================================================================================',&
+'REAL ELEMENTAL                                                                  ',&
 '                                                                                ',&
-'exp   exp(X) is the exponential of X , e to the X . See "BASIC".                ',&
+'These elemental procedures are direct calls to their Fortran namesakes. They    ',&
+'are described under the "fhelp" command in greater detail. These members can    ',&
+'all take real arguments and hence in lala(1) the imaginary components of input  ',&
+'values are ignored.                                                             ',&
 '                                                                                ',&
-'log   log(X) is the natural logarithm of X.                                     ',&
+'log10  Base 10 (ie "common") logarithm.                                         ',&
+'================================================================================',&
+'LINEAR ALGEBRA                                                                  ',&
 '                                                                                ',&
-'      Complex results are produced if X is not positive, or has                 ',&
-'      nonpositive eigenvalues.                                                  ',&
+'   For vector arguments, the function is applied to each component.             ',&
 '                                                                                ',&
-'      See "BASIC".                                                              ',&
+'   For matrix arguments X, the functions "la%sin", "la%cos", "la%atan",         ',&
+'   "la%sqrt", "la%log", "la%exp" and X**p are computed using eigenvalues        ',&
+'   D and eigenvectors V . If <V,D> = eig(X) then f(X) = V*f(D)/V . This         ',&
+'   method may give inaccurate results if V is badly conditioned. Some           ',&
+'   idea of the accuracy can be obtained by comparing X**1 with X .              ',&
 '                                                                                ',&
-'sin   sin(X) is the sine of X. See "BASIC".                                     ',&
+'la%atan  la%atan(X) is the arctangent of X. See "LINEAR ALGEBRA".               ',&
 '                                                                                ',&
-'sqrt  sqrt(X) is the square root of X. See "BASIC". Complex                     ',&
-'      results are produced if X is not positive, or has                         ',&
-'      nonpositive eigenvalues.                                                  ',&
+'la%cos   la%cos(X) is the cosine of X. See "LINEAR ALGEBRA".                    ',&
+'                                                                                ',&
+'la%exp   la%exp(X) is the exponential of X, e to the X.                         ',&
+'         See "LINEAR ALGEBRA".                                                  ',&
+'                                                                                ',&
+'la%log   la%log(X) is the natural logarithm of X.                               ',&
+'                                                                                ',&
+'         Complex results are produced if X is not positive, or has              ',&
+'         nonpositive eigenvalues.  See "LINEAR ALGEBRA".                        ',&
+'                                                                                ',&
+'la%sin   la%sin(X) is the sine of X. See "LINEAR ALGEBRA".                      ',&
+'                                                                                ',&
+'la%sqrt  la%sqrt(X) is the square root of X. See "LINEAR ALGEBRA". Complex      ',&
+'         results are produced if X is not positive, or has                      ',&
+'         nonpositive eigenvalues.                                               ',&
+'================================================================================',&
+'RELATIONAL                                                                      ',&
+'                                                                                ',&
+'   An alternative to using the scalar relational operators                      ',&
+'   ("<=,<,=,<>,>,>=") in flow control commands like "for" are the               ',&
+'   elemental relational functions "le(X,Y)", "lt(X,Y)","eq(X,Y)",               ',&
+'   "ne(X,Y)", "gt(X,Y)", "ge(X,Y)" combined with "all(X)", "all(Y)",            ',&
+'   and "isequal(X,Y,TOLERANCE)". These all return boolean values.               ',&
+'                                                                                ',&
+'   At least one of X or Y may be scalar. Otherwise X and Y must have the        ',&
+'   same number of elements but need not be the same shape. The returned         ',&
+'   value has the shape of X unless X is scalar, in which case the returned      ',&
+'   value has the shape of Y. If X or Y is scalar it is treated as if the        ',&
+'   same size as the other argument but will all of its elements set to the      ',&
+'   scalar value.                                                                ',&
+'                                                                                ',&
+'   The return values are zeros (regarded as false), and ones (non-zero          ',&
+'   values are to be considered true).                                           ',&
+'                                                                                ',&
+'   Note that only the REAL component of values is compared except for the       ',&
+'   "eq","ne" and "isequal" operators, which consider the entire value           ',&
+'   including imaginary components.                                              ',&
+'                                                                                ',&
+'   The "all(X)" and "any(X)" functions may then used to reduce the vectors      ',&
+'   returned by the relational functions to a scalar value suitable for          ',&
+'   use in "for" and "which".                                                    ',&
+'                                                                                ',&
+'   The "isequal(X,Y)" function is equivalent to "all(eq(X,Y))" except           ',&
+'   it also checks if the sizes of X and Y are conformant and reports            ',&
+'   false (0) if not, and allows for a tolerance in determining if values        ',&
+'   are equal.                                                                   ',&
+'                                                                                ',&
+'eq    "eq(X,Y)" sets output elements to 1 if X(i)=Y(i), 0 if not                ',&
+'                                                                                ',&
+'      "eq(X,Y)" is an elemental function that sets element values in the        ',&
+'      answer to 1 if the corresponding element in X is equal to the             ',&
+'      corresponding one in Y. Otherwise, the element is set to 0.               ',&
+'                                                                                ',&
+'          // return 1 if all elements are zero, else 0                          ',&
+'          allzero=all(eq(X,0))                                                  ',&
+'                                                                                ',&
+'          T=1;F=0;         // mneumonics for TRUE and FALSE                     ',&
+'          a=magic(4);      // make some arrays                                  ',&
+'          b=a;             // b is the same as a                                ',&
+'          c=b; c(4,4)=-10; // c is not the same as a                            ',&
+'          if all(eq(a,b))<>F,display(''SAME''),else display(''DIFFERENT'')      ',&
+'          if all(eq(a,c))<>F,display(''SAME''),else display(''DIFFERENT'')      ',&
+'                                                                                ',&
+'          T=1;F=0;                                                              ',&
+'          T=1;F=0;                                                              ',&
+'                                                                                ',&
+'      For further details see "help RELATIONAL".                                ',&
+'                                                                                ',&
+'lt    "lt(X,Y)" sets output elements to 1 if X(i) < Y(i); else to 0.            ',&
+'                                                                                ',&
+'      "lt(X,Y)" is an elemental function that sets element values to 1          ',&
+'      if the corresponding element in X is less than the one in Y.              ',&
+'      Otherwise, the element is set to 0.                                       ',&
+'                                                                                ',&
+'          count_of_true_results=sum(lt(X,Y))                                    ',&
+'                                                                                ',&
+'      For further details see "help RELATIONAL".                                ',&
+'                                                                                ',&
+'le    If X(i) <= Y(i) output elements are 1; else 0.                            ',&
+'                                                                                ',&
+'      "le(X,Y)" is an elemental function that sets element values to 1          ',&
+'      if the corresponding element in X is less than or equal to the one        ',&
+'      in Y; otherwise the corresponding element in the answer is set to 0.      ',&
+'                                                                                ',&
+'      For further details see "help RELATIONAL".                                ',&
+'                                                                                ',&
+'ge    If X(i) >= Y(i) output elements are 1; else 0.                            ',&
+'                                                                                ',&
+'      "ge(X,Y)" is an elemental function that sets element values to 1          ',&
+'      if the corresponding element in X is greater than or equal to the         ',&
+'      one in Y; if X is less than Y the element of the answer is 0.             ',&
+'                                                                                ',&
+'      For further details see "help RELATIONAL".                                ',&
+'                                                                                ',&
+'gt    If X(i) > Y(i) output elements are 1; else 0.                             ',&
+'                                                                                ',&
+'      "gt(X,Y)" is an elemental function that sets element values in the        ',&
+'      answer to 1 if the corresponding element in X is greater than the         ',&
+'      corresponding element in Y; or to zero (0) otherwise.                     ',&
+'                                                                                ',&
+'      For further details see "help RELATIONAL".                                ',&
+'                                                                                ',&
+'ne    If X(i) <> Y(i) output elements are 1; else 0.                            ',&
+'                                                                                ',&
+'      "ne(X,Y)" is an elemental function that sets element values to            ',&
+'      1 if the elements are not equal, and to 0 if they are not equal.          ',&
+'                                                                                ',&
+'      For further details see "help RELATIONAL".                                ',&
+'                                                                                ',&
+'all   all(X) returns FALSE(ie. 0) if any element value is FALSE(0).             ',&
+'      Otherwise, it returns TRUE(ie. 1).                                        ',&
+'                                                                                ',&
+'      0 is regarded as false and "not 0" signifies true in general in           ',&
+'      lala(1). so if F=0 and T=1                                                ',&
+'                                                                                ',&
+'          all(T,T,T,T,T]) // produces 1 (which is a TRUE value)                 ',&
+'          all(T,F,T,F,T]) // produces 0 (which is a FALSE value)                ',&
+'                                                                                ',&
+'any   any(X) returns TRUE(ie. 1) if any element value is TRUE(non-zero).        ',&
+'                                                                                ',&
+'      0 is regarded as false and "not 0" signifies true in general in           ',&
+'      lala(1).                                                                  ',&
+'                                                                                ',&
+'          all(T,T,T,T,T]) // produces 1 (which is a TRUE value)                 ',&
+'          all(T,F,F,F,F]) // produces 1 (which is a TRUE value)                 ',&
+'          all(F,F,F,F,F]) // produces 0 (which is a FALSE value)                ',&
+'                                                                                ',&
+'isequal  "isequal(X,Y)" returns 0 (ie. "false") if X(i) <> Y(i)                 ',&
+'                                                                                ',&
+'         "isequal(X,Y)" returns a scalar 0 (ie. "false") if X and Y             ',&
+'         are not the same size. If they are the same size it returns            ',&
+'         1(ie. "true") if all elements of X have the same value as the          ',&
+'         corresponding element in "Y".                                          ',&
 '================================================================================',&
 'HIGH LEVEL FUNCTIONS                                                            ',&
 '                                                                                ',&
 'abs   abs(X) is the absolute value, or complex modulus,                         ',&
 '      of the elements of X .                                                    ',&
 '                                                                                ',&
-'base  base(X,B) is a vector containing the base B representation                ',&
-'      of X. This is often used in conjunction with "display".                   ',&
+'base  base(X,B) is a vector containing the base B representation of X.          ',&
+'      This is often used in conjunction with "display".                         ',&
 '      "display(X,B)" is the same as "display(base(X,B))". For example,          ',&
 '      "display(4*atan(1),16)" prints the hexadecimal representation of pi.      ',&
 '                                                                                ',&
@@ -10183,6 +12182,39 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 'conjg  "conjg(X)" is the complex conjugate of X .                               ',&
 '                                                                                ',&
+'cmplx  "cmplx(R,I)" takes the real components of R and uses them for the        ',&
+'       real components of the results, and takes the real component of I        ',&
+'       and uses it for the imaginary components of the result.                  ',&
+'                                                                                ',&
+'       If R or I is a scalar it is treated as if it is a vector of the          ',&
+'       same size as the over argument with all values set to the constant.      ',&
+'                                                                                ',&
+'       Otherwise, both arguments must conform in size.                          ',&
+'                                                                                ',&
+'                                                                                ',&
+'date_and_time  date_and_time(IDS)" where an array of IDs indicate               ',&
+'               which values to return:                                          ',&
+'                                                                                ',&
+'               Id                                                               ',&
+'                1. The year, including the century.                             ',&
+'                2. The month of the year                                        ',&
+'                3. The day of the month                                         ',&
+'                4. Difference in minutes between the reported and UTC time.     ',&
+'                5. The hour of the day, in the range 0 to 23.                   ',&
+'                6. The minutes of the hour, in the range 0 to 59                ',&
+'                7. The seconds of the minute, in the range 0 to 60              ',&
+'                8. The milliseconds of the second, in the range 0 to 999.       ',&
+'                9. Unix epoch time                                              ',&
+'               10. Julian time                                                  ',&
+'               11. Modified Julian time                                         ',&
+'               12. Basename and Seconds (BAS) time                              ',&
+'               13. Ordinal day of the year                                      ',&
+'               14. Day of week                                                  ',&
+'                                                                                ',&
+'               dat=date_and_time(1:8)                                           ',&
+'               YEAR=1;MONTH=2;DAY=3;                                            ',&
+'               display(date_and_time(YEAR,MONTH,DAY))                           ',&
+'                                                                                ',&
 'det   "det(X)" is the determinant of the square matrix X .                      ',&
 '                                                                                ',&
 'diag  If V is a row or column vector with N components,                         ',&
@@ -10196,8 +12228,8 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      produces a tridiagonal matrix of order 2*M+1 .                            ',&
 '                                                                                ',&
 '      If X is a matrix, "diag(X,K)" is a column vector formed from the          ',&
-'      elements of the K-th diagonal of X.  "diag(X)" is the main diagonal       ',&
-'      of X.  "diag(diag(X))" is a diagonal matrix .                             ',&
+'      elements of the K-th diagonal of X. "diag(X)" is the main diagonal        ',&
+'      of X. "diag(diag(X))" is a diagonal matrix .                              ',&
 '                                                                                ',&
 'eig   Eigenvalues and eigenvectors.                                             ',&
 '      "eig(X)" is a vector containing the eigenvalues of a square               ',&
@@ -10212,6 +12244,30 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      with no arguments is an identity matrix of whatever order                 ',&
 '      is appropriate in the context. For example "A + 3*eye"                    ',&
 '      adds 3 to each diagonal element of A.                                     ',&
+'                                                                                ',&
+'fmtc  "fmtc(A,''format'')" converts given numbers to strings representing       ',&
+'       a complex number using the optional specified Fortran format. Note       ',&
+'       the format is used repeatedly to output each string. It is not           ',&
+'       used to print multiple values as once.                                   ',&
+'                                                                                ',&
+'         A=10+la%sqrt(-1)*20                                                    ',&
+'         display(fmtc(A))                                                       ',&
+'                                                                                ',&
+'fmti  "fmti(A,''format'')" converts given numbers to strings representing       ',&
+'       the nearest integer values using the optional specified Fortran          ',&
+'       format. Note the format is used repeatedly to output each string.        ',&
+'       It is not used to print multiple values as once.                         ',&
+'                                                                                ',&
+'         A=magic(3)                                                             ',&
+'         display(fmti(A,''i0,1x''))                                             ',&
+'         8 3 4 1 5 9 6 7 2                                                      ',&
+'                                                                                ',&
+'fmtr  "fmtr(A,''format'')" converts given numbers to strings representing       ',&
+'       real values using the optional specified Fortran format. Note            ',&
+'       the format is used repeatedly to output each string. It is not           ',&
+'       used to print multiple values as once.                                   ',&
+'                                                                                ',&
+'         display(fmtr(A,''g0,1x''))                                             ',&
 '                                                                                ',&
 'hess  Hessenberg form. The Hessenberg form of a matrix is zero                  ',&
 '      below the first subdiagonal. If the matrix is symmetric or                ',&
@@ -10230,7 +12286,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '      "invh" has an alias of "inverse_hilbert" and "invhilb".                   ',&
 '                                                                                ',&
-'aimag see "imag"                                                                ',&
+'aimag  see "imag"                                                               ',&
 'imag  "imag(X)" is the imaginary part of X .                                    ',&
 '                                                                                ',&
 'inv   "inv(X)" is the inverse of the square matrix X . A warning                ',&
@@ -10267,6 +12323,18 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '       from the integers 1 through N**2 with equal row, column and              ',&
 '       diagonal sums. N must be a positive whole number not equal to two.       ',&
 '                                                                                ',&
+'maxloc  "maxloc(A)" returns the location of the maximum real component          ',&
+'        found in the elements of A                                              ',&
+'                                                                                ',&
+'maxval  "maxval(A)" returns the maximum real component found in the             ',&
+'        elements of A                                                           ',&
+'                                                                                ',&
+'minloc  "minloc(A)" returns the location of the minimum real component          ',&
+'        found in the elements of A                                              ',&
+'                                                                                ',&
+'minval  "minval(A)" returns the minimum real component found in the             ',&
+'        elements of A                                                           ',&
+'                                                                                ',&
 'norm  computes the norm or P-norm of X                                          ',&
 '                                                                                ',&
 '      norm(X,P) computes the P-norm of X. P=2 is the default, which defines     ',&
@@ -10282,7 +12350,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '          norm(X,''inf'')  is the infinity norm of X; ie. the largest row       ',&
 '                         sum of X.                                              ',&
 '                                                                                ',&
-'          norm(X,''fro'')  is the F-norm, i.e. "sqrt(sum(diag(X''*X)))" .       ',&
+'          norm(X,''fro'')  is the F-norm, i.e. "la%sqrt(sum(diag(X''*X)))" .    ',&
 '                                                                                ',&
 '      For vectors..                                                             ',&
 '          norm(V,P)      the same as sum(V(I)**P)**(1/P) .                      ',&
@@ -10297,7 +12365,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '!!                                                                                    ',&
 '!!            norm(x,p) = sum(abs(x) .^ p) ^ (1/p)                                    ',&
 '!!            norm(x,1) is the sum of the absolute values of X.                       ',&
-'!!            norm(x)/sqrt(n) is the root-mean-square value.                          ',&
+'!!            norm(x)/la%sqrt(n) is the root-mean-square value.                       ',&
 '!!            norm(x,-inf)=min(abs(x))                                                ',&
 '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<      ',&
 '                                                                                      ',&
@@ -10311,6 +12379,17 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 'orth  Orthogonalization. "Q = orth(X)" is a matrix with                               ',&
 '      orthonormal columns, i.e. Q''*Q = eye, which span the same                      ',&
 '      space as the columns of X .                                                     ',&
+'                                                                                      ',&
+'pack  "pack(A,mask)" select the elements of an array whose corresponding              ',&
+'      mask element is not zero into a vector. The logical mask must be                ',&
+'      the same size as the array.                                                     ',&
+'                                                                                      ',&
+'          a=magic(10)                                                                 ',&
+'          b=pack(a,ge(a,80)) // select elements >= 80                                 ',&
+'                                                                                      ',&
+'      Note that A(:) used in an expression also converts a matrix to a                ',&
+'      one-column vector (but used on the LHS of an assignment causes A                ',&
+'      to retain its current shape).                                                   ',&
 '                                                                                      ',&
 'pinv  Pseudoinverse.                                                                  ',&
 '                                                                                      ',&
@@ -10328,40 +12407,87 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      polynomial, "det(lambda*eye - A)" .                                             ',&
 '                                                                                      ',&
 '      If V is a vector, "poly(V)" is a vector whose elements are the                  ',&
-'      coefficients of the polynomial whose roots are the elements of V                ',&
-'      . For vectors, "roots" and "poly" are inverse functions of each                 ',&
-'      other, up to ordering, scaling, and roundoff error.                             ',&
+'      coefficients of the polynomial whose roots are the elements of V.               ',&
+'      For vectors, "roots" and "poly" are inverse functions of each other,            ',&
+'      up to ordering, scaling, and roundoff error.                                    ',&
 '                                                                                      ',&
 '      "roots(poly(1:20))" generates Wilkinson''s famous example.                      ',&
 '                                                                                      ',&
-'prod  "prod(X)" is the product of all the elements of X .                             ',&
+'pow   For a scalar exponent pow(X,exponent) raises each element of X to               ',&
+'      the specified power. pow(X,Y) raise each element in X by the                    ',&
+'      corresponding element in Y. X and Y must have the same shape.                   ',&
 '                                                                                      ',&
-'qr    Orthogonal-triangular decomposition.  "<Q,R> = qr(X)" produces an               ',&
+'          A=magic(3);                                                                 ',&
+'          pow(A,3)                                                                    ',&
+'                                                                                      ',&
+'      Alternatively FOR loops can be used to perform most elemental                   ',&
+'      operations:                                                                     ',&
+'                                                                                      ',&
+'          a=ones(A)      // create output array same size as input                    ',&
+'          <m,n>=shape(A);for i=1:n, for j=1:m, a(i,j)=A(i,j)**3;                      ',&
+'                                                                                      ',&
+'      or for low whole number exponents elemental multiplication is                   ',&
+'      sufficient                                                                      ',&
+'                                                                                      ',&
+'          b = A .* A .* A // elemental multiplication                                 ',&
+'                                                                                      ',&
+'prod  "prod(X)" is the product of all the elements of X.                              ',&
+'                                                                                      ',&
+'           A=prod(1:10) // the factorial of 10                                        ',&
+'           B=2*3*4*5*6*7*8*9*10                                                       ',&
+'                                                                                      ',&
+'qr    Orthogonal-triangular decomposition. "<Q,R> = qr(X)" produces an                ',&
 '      upper triangular matrix R of the same                                           ',&
 '      dimension as X and a unitary matrix Q so that X = Q*R .                         ',&
 '                                                                                      ',&
 '      "<Q,R,E> = qr(X)" produces a permutation matrix E, an upper                     ',&
 '      triangular R with decreasing diagonal elements and a unitary Q                  ',&
-'      so that X*E = Q*R .  By itself, "qr(X)" returns the output of                   ',&
+'      so that X*E = Q*R . By itself, "qr(X)" returns the output of                    ',&
 '      "cqrdc". "triu(qr(X))" is R .                                                   ',&
 '                                                                                      ',&
-'rand  Random numbers and matrices. "rand(N)" is an N by N matrix                      ',&
-'      with random entries. "rand(M,N)" is an M by N matrix with                       ',&
-'      random entries. "rand(A)" is the same size as A. "rand"                         ',&
-'      with no arguments is a scalar whose value changes each time                     ',&
-'      it is referenced.                                                               ',&
+'qsort sort elements into a one-column vector                                          ',&
 '                                                                                      ',&
-'      Ordinarily, random numbers are uniformly distributed in                         ',&
-'      the interval "(0.0,1.0). rand(''normal'')" switches to a                        ',&
-'      normal distribution with mean 0.0 and variance 1.0.                             ',&
-'      "rand(''uniform'')" switches back to the uniform distribution.                  ',&
-'      "rand(''seed'')" returns the current value of the seed for the                  ',&
-'      generator. "rand(''seed'',n)" sets the seed to n.                               ',&
-'      "rand(''seed'',0)" resets the seed to 0, its value when LALA                    ',&
-'      is first entered.                                                               ',&
+'rand  "rand" with no arguments is a scalar whose value changes each time              ',&
+'      it is referenced. See "randn" and "randu" for generating random                 ',&
+'      matrices.                                                                       ',&
 '                                                                                      ',&
-'rank  Rank. "K = rank(X)" is the number of singular values of X                       ',&
-'      that are larger than "norm(shape(X),''inf'')*norm(X)*eps".                      ',&
+'randi  "randi([L,H],[R,C]) Uniformly distributed random integers                      ',&
+'       in the interval (L)ow to (H)igh of shape [(Rows),(Columns)]                    ',&
+'                                                                                      ',&
+'       If [L,H] is a scalar it is assumed to be [1,H].                                ',&
+'       If [R,C] is a scalar it is assumed to be a square matrix [N,N].                ',&
+'                                                                                      ',&
+'           scalar=randi(10) // number between 1 and 10                                ',&
+'           square=randi([-5,5],9) // square matrix                                    ',&
+'           row=randi([0,1],[1,9]) // row vector                                       ',&
+'           column=randi([100,199],[40,1]) // row vector                               ',&
+'                                                                                      ',&
+'       Currently "randi()" calls "randu" and uses the following formula               ',&
+'       using 64-bit floating-point values so very high upper limits                   ',&
+'       conform to the spacing between representable numbers so values that            ',&
+'       would be spaced more than one unit apart will not be uniformly                 ',&
+'       spaced across all whole numbers in that range. So range maximums               ',&
+'       should best be restricted to the range of integers on the current              ',&
+'       platform at most if strict uniformity is required.                             ',&
+'                                                                                      ',&
+'           value = low + floor((high-low+1)*randu)                                    ',&
+'                                                                                      ',&
+'randn  randn(N) or randn(N,M) produces random numbers with a normal                   ',&
+'       distribution with mean 0.0 and variance 1.0. "randn(N)" is an N                ',&
+'       by N matrix with random entries. "randn(M,N)" is an M by N matrix              ',&
+'       with random entries.                                                           ',&
+'                                                                                      ',&
+'randu  Uniformly distributed random numbers and matrices in the interval              ',&
+'       "(0.0,1.0). "randu(N)" is an N by N matrix with random                         ',&
+'       entries. "randu(M,N)" is an M by N matrix with random entries.                 ',&
+'                                                                                      ',&
+'randseed  "randseed()" returns the current value of the seed for the                  ',&
+'          generator. "randseed(n)" sets the seed to n.                                ',&
+'          "randseed(0)" resets the seed to 0, its value when LALA is                  ',&
+'          first entered.                                                              ',&
+'                                                                                      ',&
+'rank  Rank. "K = rank(X)" is the number of singular values of X that                  ',&
+'      are larger than "norm(shape(X),''inf'')*norm(X)*eps".                           ',&
 '      "K = rank(X,tol)" is the number of singular values of X that                    ',&
 '      are larger than tol.                                                            ',&
 '                                                                                      ',&
@@ -10409,6 +12535,27 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                      ',&
 'real  "real(X)" is the real part of X.                                                ',&
 '                                                                                      ',&
+'reshape  "reshape(A,[M,N])" reshapes the elements in array A to a                     ',&
+'         new configuration with M rows and N columns. The size of                     ',&
+'         A must match the value M*N.                                                  ',&
+'                                                                                      ',&
+'             A=reshape(1:100,[10,10])                                                 ',&
+'             B=reshape(A,[20,5])                                                      ',&
+'                                                                                      ',&
+'         "reshape(A)" reshapes the elements in array A to one column.                 ',&
+'                                                                                      ',&
+'         Alternatively note that using (:) on the LHS prevents the array              ',&
+'         from being reshaped, allowing arbitrary shapes to be created                 ',&
+'         and filled as well, but incurring the overhead of copying the data.          ',&
+'                                                                                      ',&
+'             C=zeros(25,4) // create array of desired shape                           ',&
+'             C(:)=A       // copy values from A into C ignoring shape of A            ',&
+'                                                                                      ',&
+'         In contrast, A(:) used in an expression converts a matrix to a               ',&
+'         one-column vector.                                                           ',&
+'                                                                                      ',&
+'             A=A(:)  // converts matrix A to a one-column vector                      ',&
+'                                                                                      ',&
 'rref  "rref(A)" is the reduced row echelon form of the rectangular                    ',&
 '      matrix. rref(A,B) is the same as rref(<A,B>) .                                  ',&
 '                                                                                      ',&
@@ -10421,6 +12568,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '       See "poly".                                                                    ',&
 '                                                                                      ',&
 'round  "round(X)" rounds the elements of X to the nearest integers.                   ',&
+'       "anint(X)" is a synonym for "round(X)".                                        ',&
 '                                                                                      ',&
 'schur  Schur decomposition. "<U,T> = schur(X)" produces an upper                      ',&
 '       triangular matrix T , with the eigenvalues of X on the                         ',&
@@ -10431,8 +12579,24 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '       Can also be used with a multiple assignment,                                   ',&
 '            <M, N> = shape(X) .                                                       ',&
 '                                                                                      ',&
+'size   "size(X)" returns the number of elements in X.                                 ',&
+'                                                                                      ',&
+'           [[1,2,3],magic(4),random(3,8)]                                             ',&
+'            ans                                                                       ',&
+'             3 16 24                                                                  ',&
+'                                                                                      ',&
 'sum   "sum(X)" is the sum of all the elements of X.                                   ',&
 '      "sum(diag(X))" is the trace of X.                                               ',&
+'                                                                                      ',&
+'      "sum(X,dim)" is the vector of sums of elements along the                        ',&
+'      specified dimension, where 1 <= dim <= 2.                                       ',&
+'                                                                                      ',&
+'          matrix=[  1,   2,   3,   4                                                  ',&
+'                    10,  20,  30,  40                                                 ',&
+'                    100, 200, 300, 400  ];                                            ',&
+'          s=sum(matrix)                                                               ',&
+'          sum_of_columns=sum(matrix,1)                                                ',&
+'          sum_of_rows=sum(matrix,2)                                                   ',&
 '                                                                                      ',&
 'svd   Singular value decomposition. "<U,S,V> = svd(X)" produces a                     ',&
 '      diagonal matrix S , of the same dimension as X and with                         ',&
@@ -10472,12 +12636,293 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      the subroutine has been written, it must be compiled and linked                 ',&
 '      to the LALA object code within the local operating system.                      ',&
 '                                                                                      ',&
-'zeros                                                                                 ',&
-'      Returns a matrix of all zeros.                                                  ',&
+'what  does nothing for now                                                            ',&
+'                                                                                      ',&
+'zeros  Returns a matrix of all zeros.                                                 ',&
 '                                                                                      ',&
 '         zeros(N)    returns an N by N matrix of zeroes.                              ',&
 '         zeros(M,N)  returns an M by N matrix of zeroes.                              ',&
 '         zeros(X)    returns a matrix of zeroes of the same order as X.               ',&
+'================================================================================      ',&
+'ORDERING                                                                              ',&
+'  + order%median(X)           Calculates median VALUE                                 ',&
+'  + order%medianloc(X)        Returns median value''s INDEX.                          ',&
+'  + order%medianval(X)        Returns median VALUE.                                   ',&
+'  + order%occurrences(X)      Assign each value a count of the values'' occurrence    ',&
+'  + order%orderloc(X)         Return LOCATION of Nth ordered value of array           ',&
+'  + order%orderval(X)         Return VALUE of Nth ordered element of array            ',&
+'  + order%perturb(X)          a permutation controlling how far elements are moved    ',&
+'  + order%rank(X,DIM)         produces an array rank (an INDEX to sort an array)      ',&
+'  + order%rank_decreasing(X)  ranks an array in decreasing order,                     ',&
+'                              with duplicate entries assigned the same rank           ',&
+'  + order%rank_unique(X)      ranks an array, with removal of duplicate entries       ',&
+'  + order%sort(X,DIM)         Sorts array into ascending order                        ',&
+'                                                                                      ',&
+'order%median       Calculates median VALUE. If number of elements                     ',&
+'                   is even, returns average of the two "medians".                     ',&
+'                                                                                      ',&
+'                   "order%median(X,dim)" returns medians along the                    ',&
+'                   specified dimension, where 1 <= dim <= 2.                          ',&
+'                                                                                      ',&
+'                   "median(X)" or "median(X,0)" calculates the median                 ',&
+'                   value of the array X().  It is different from                      ',&
+'                   "medianval(X)" in that the average of the two                      ',&
+'                   middle values is returned when the size of X                       ',&
+'                   is even.                                                           ',&
+'                     [                                                                ',&
+'                      median( [80.0,70.0,20.0,10.0,1000.0] )                          ',&
+'                      median( [11, 22, 33, 44, 55, 66, 77, 88] )                      ',&
+'                      median( [11,22,33,66,77,88])                                    ',&
+'                     ]                                                                ',&
+'                     ans                                                              ',&
+'                      70, 49, 49.5                                                    ',&
+'                                                                                      ',&
+'order%medianloc    "order%medianloc(X)" returns the median value''s                   ',&
+'                   index, where the median is defined as the value                    ',&
+'                   at the index (((size(X)+1))/2^th of the sorted                     ',&
+'                   ascending values of X.                                             ',&
+'                                                                                      ',&
+'                   "order%medianloc(X,dim)" returns median locations                  ',&
+'                   along the specified dimension, where 1 <= dim <= 2.                ',&
+'                                                                                      ',&
+'                   The locations are scalar values indicating                         ',&
+'                   the index into the vector "X(:)". These may                        ',&
+'                   be converted to <row,column> values using                          ',&
+'                   "location(X,N)".                                                   ',&
+'                                                                                      ',&
+'                    [ order%medianloc( [80,70,20,10,1000] ) ...                       ',&
+'                      order%medianloc( [11,22,33,44,55,66,77,88] ) ...                ',&
+'                      order%medianloc( [11, 22, 33, 66, 77, 88] )                     ',&
+'                    ]                                                                 ',&
+'                     magic(5)*10                                                      ',&
+'                     order%medianloc(magic(5)*10,1)                                   ',&
+'                     order%medianloc(magic(5)*10,2)                                   ',&
+'                                                                                      ',&
+'order%medianval    "order%medianval(X)" returns the median value,                     ',&
+'                   where the median is defined as the value at                        ',&
+'                   the index (((size(X)+1))/2^th of the sorted                        ',&
+'                   ascending values of X.                                             ',&
+'                                                                                      ',&
+'                   "order%medianval(X,dim)" returns medians along                     ',&
+'                   the specified dimension, where 1 <= dim <= 2.                      ',&
+'                                                                                      ',&
+'                    [ order%medianval( [80,70,20,10,1000] ) ...                       ',&
+'                      order%medianval( [11,22,33,44,55,66,77,88] ) ...                ',&
+'                      order%medianval( [11, 22, 33, 66, 77, 88] )                     ',&
+'                    ]                                                                 ',&
+'                     ans  =                                                           ',&
+'                        70.   44.   33.                                               ',&
+'                     order%median(magic(5),1)                                         ',&
+'                     order%median(magic(5),2)                                         ',&
+'                                                                                      ',&
+'order%orderloc     Return fractile location (INDEX of Nth ordered                     ',&
+'                   value of array)                                                    ',&
+'                                                                                      ',&
+'                   The locations are scalar values indicating                         ',&
+'                   the index into the vector "X(:)".                                  ',&
+'                                                                                      ',&
+'order%orderval     Return fractile (VALUE of Nth ordered element                      ',&
+'                   of array)                                                          ',&
+'                                                                                      ',&
+'                       X=reshape([1:100:1],[10,10])                                   ',&
+'                       order%minval(X)                                                ',&
+'                       order%maxval(X)                                                ',&
+'                       order%medianval(X)                                             ',&
+'                       order%orderval(X,1)                                            ',&
+'                       order%orderval(X,size(X))                                      ',&
+'                       order%orderval(X,size(X)/2)                                    ',&
+'                                                                                      ',&
+'order%occurrences  Give the multiplicity for each array value                         ',&
+'                                                                                      ',&
+'                   "occurrences(X)" gives, for each array element,                    ',&
+'                   its multiplicity (number of times that it appears                  ',&
+'                   in the array).                                                     ',&
+'                                                                                      ',&
+'order%perturb      "order%perturb(X,CLOSENESS)" generates a random                    ',&
+'                   permutation of an array leaving elements close to                  ',&
+'                   initial locations.                                                 ',&
+'                                                                                      ',&
+'                   Nearbyness is controlled by CLOSENESS. The relative                ',&
+'                   proportion of initial order and random order is defined            ',&
+'                   as 1-CLOSENESS / CLOSENESS, thus when CLOSENESS =                  ',&
+'                   0, there is no change in the order whereas the new                 ',&
+'                   order is fully random when CLOSENESS = 1.                          ',&
+'                                                                                      ',&
+'                   Note this differs from adding random noise to the                  ',&
+'                   values. The original values remain unchanged but are               ',&
+'                   shuffled, their order is just perturbed                            ',&
+'                                                                                      ',&
+'order%rank         produces an INDEX that sorts an input array in                     ',&
+'                   ascending order.                                                   ',&
+'                                                                                      ',&
+'                   The locations are scalar values indicating                         ',&
+'                   the index into the vector "X(:)". These may                        ',&
+'                   be converted to <row,column> values using                          ',&
+'                   "location(X,N)", but may also be used as-is                        ',&
+'                   to index into a two-dimensional matrix.                            ',&
+'                                                                                      ',&
+'order%rank_decreasing  ranks an array in decreasing order, with duplicate             ',&
+'                       entries assigned the same rank                                 ',&
+'                                                                                      ',&
+'                       "order%rank_decreasing(X) " generates an inverse               ',&
+'                       ranking of an array, but with duplicate entries                ',&
+'                       assigned the same rank.                                        ',&
+'                                                                                      ',&
+'                        X=[11, 11, 22, 11, 33, 33, 22, 33, 33]                        ',&
+'                        Y=order%rank_decreasing(X)                                    ',&
+'                        X(Y)                                                          ',&
+'                                                                                      ',&
+'order%rank_unique  ranks an array, with removal of duplicate entries.                 ',&
+'                   Returns a vector of the locations of the unique                    ',&
+'                   values in the array with the values pointed to                     ',&
+'                   sorted in ascending order.                                         ',&
+'                                                                                      ',&
+'                     X=randi(100,[10,10]); // generate some numbers                   ',&
+'                     U=order%rank_unique(X);                                          ',&
+'                     size(U) // how many unique values                                ',&
+'                     Y=X(U) // the unique values in ascending order                   ',&
+'                                                                                      ',&
+'order%sort  Sorts array into ascending order.                                         ',&
+'                                                                                      ',&
+'            "order%sort(X)" returns all elements sorted in row-column order.          ',&
+'            The shape of the output is the same as the input.                         ',&
+'                                                                                      ',&
+'            "order%sort(X,dim)" returns X with sorts of elements along                ',&
+'            the specified dimension, where 1 <= dim <= 2.                             ',&
+'                                                                                      ',&
+'                matrix=[  1,   2,   3,   4                                            ',&
+'                          10,  20,  30,  40                                           ',&
+'                          100, 200, 300, 400  ];                                      ',&
+'                s=order%sort(matrix)                                                  ',&
+'                sort_of_columns=order%sort(matrix,1)                                  ',&
+'                sort_of_rows=order%sort(matrix,2)                                     ',&
+'                                                                                      ',&
+'================================================================================      ',&
+'SET THEORY                                                                            ',&
+'   + set%intersect(A,B)  find the values common to both sets A and B                  ',&
+'   + set%isequal(A)      report if A is equal to B within a tolerance                 ',&
+'   + set%ismember(A,B)   create a mask of A marking elements also in B                ',&
+'   + set%issorted(A)     report if A is sorted in ascending order or not.             ',&
+'   + set%setdiff(A,B)    find the values in A that are not in B                       ',&
+'   + set%setxor(A,B)     find values of A and B not in both arrays                    ',&
+'   + set%union(A,B)      join two sets and removes duplicates of values               ',&
+'   + set%unique(A,B)     return unique values in array A                              ',&
+'                                                                                      ',&
+'set%intersect  "set%intersect(A,B)" finds the values that occur in both               ',&
+'               sets A and B with no repetitions in stable order.                      ',&
+'                                                                                      ',&
+'                   A= [ 7 1 7 7 4 ];                                                  ',&
+'                   B= [ 7 0 4 4 0 ];                                                  ',&
+'                   set%intersect(A,B) // Find values common to both A and B.          ',&
+'                   ans =                                                              ',&
+'                      7 4                                                             ',&
+'                                                                                      ',&
+'set%isequal   "set%isequal(A)," reports if A is equal to B within a tolerance         ',&
+'                                                                                      ',&
+'              Equality is defined as having the same size with the same               ',&
+'              element values in the same order. If equal the result is                ',&
+'              zero (0) else if not equal the result is one (1).                       ',&
+'                                                                                      ',&
+'                 A= [ 10 -10 0 1 2 3 3 2 1 -10 ];                                     ',&
+'                 B= [ 10 -10 0 1 2 3 3 2 1  10 ];                                     ',&
+'                 D= [ ...                                                             ',&
+'                 set%isequal(A,B), ...     // not the same                            ',&
+'                 set%isequal(A,A), ...     // the same                                ',&
+'                 set%isequal(A,A(1:9)) ... // different size                          ',&
+'                 ]                                                                    ',&
+'                  D  =                                                                ',&
+'                      0.    1.    0.                                                  ',&
+'                                                                                      ',&
+'set%ismember   "set%ismember(A,B)" creates a mask of A marking elements               ',&
+'               also in B.                                                             ',&
+'                                                                                      ',&
+'               The returned array is a mask of the first array containing             ',&
+'               a 1 (aka. "true") where the data in A is found in                      ',&
+'               B. Elsewhere, the array contains 0 (aka. "false").                     ',&
+'                                                                                      ',&
+'                   // ISMEMBER Determine which elements of A are also in B.           ',&
+'                   A= [ 5 3 4 2 ];                                                    ',&
+'                   B= [ 2 4 4 4 6 8 ];                                                ',&
+'                   set%ismember(A,B)                                                  ',&
+'                   ans =                                                              ',&
+'                      0 0 1 1                                                         ',&
+'                                                                                      ',&
+'set%issorted   "set%issorted(A)," reports if A is sorted in ascending                 ',&
+'               order or not.                                                          ',&
+'                                                                                      ',&
+'               A 1 (true) is returned when the elements of A are listed               ',&
+'               in ascending (row-column) order and 0 (false) otherwise.               ',&
+'                                                                                      ',&
+'                 // ISSORTED Find the sorted elements of vector A.                    ',&
+'                 A= [ 10 -10 0 1 2 3 3 2 1 -10 ];                                     ',&
+'                 set%issorted(A)                                                      ',&
+'                 ans =                                                                ',&
+'                    0                                                                 ',&
+'                 A= [ -10 10 100 201 ];                                               ',&
+'                 set%issorted(A)                                                      ',&
+'                 ans =                                                                ',&
+'                    1                                                                 ',&
+'                                                                                      ',&
+'                 A=magic(12) // for even magic squares from magic()                   ',&
+'                 set%issorted(A)                                                      ',&
+'                 ans =                                                                ',&
+'                    0                                                                 ',&
+'                 set%issorted(A([A]))                                                 ',&
+'                 ans =                                                                ',&
+'                    1                                                                 ',&
+'                                                                                      ',&
+'set%setdiff    "set%setdiff(A,B)" finds the values in A that are not in B             ',&
+'                                                                                      ',&
+'                 // Find the values in A that are not in B.                           ',&
+'                 A= [ 3 6 2 1 5 1 1 ];                                                ',&
+'                 B= [ 2 4 6 ];                                                        ',&
+'                 set%setdiff(A,B)                                                     ',&
+'                 ans =                                                                ',&
+'                    3 1 5                                                             ',&
+'                                                                                      ',&
+'set%setxor  "set%setxor(A,B)" finds values of A and B not in both arrays.             ',&
+'                                                                                      ',&
+'            "setxfor(A,B)" returns the exclusive OR of two arrays. That               ',&
+'            is, it returns the data of A and B that are not in their                  ',&
+'            intersection (the symmetric difference), with no repetitions.             ',&
+'                                                                                      ',&
+'            Another way of defining the result is that setxor(3f)                     ',&
+'            returns the data that occurs in A or B, but not both.                     ',&
+'                                                                                      ',&
+'               // Find values of A and B not in their intersection.                   ',&
+'               A = [5,1,3,3,3];                                                       ',&
+'               B = [4,1,2];                                                           ',&
+'               set%setxor(A,B)                                                        ',&
+'               ans =                                                                  ',&
+'                  5 3 4 2                                                             ',&
+'                                                                                      ',&
+'set%union   "set%union(A,B)" joins two sets and removes duplicates                    ',&
+'            of values.                                                                ',&
+'                                                                                      ',&
+'            The two sets are combined and repetitions are removed and the             ',&
+'            answer is returned in stable order (ie. the order discovered).            ',&
+'                                                                                      ',&
+'              // Find the union of vectors A and B.                                   ',&
+'              A= [5 7 1];                                                             ',&
+'              B= [3 1 1];                                                             ',&
+'              set%union(A,B)                                                          ',&
+'              ans=                                                                    ',&
+'                 5 7 1 3                                                              ',&
+'              A= [5 5 3];                                                             ',&
+'              B= [1 2 5];                                                             ',&
+'              set%union(A,B)                                                          ',&
+'              ans=                                                                    ',&
+'                 5 3 1 2                                                              ',&
+'                                                                                      ',&
+'set%unique  "set%unique(A,B)" returns unique values in array A in                     ',&
+'            stable order. That is, it removes duplicates from an                      ',&
+'            array.                                                                    ',&
+'                                                                                      ',&
+'              A = [44, 33, 33, 33, 22, 11, 33, 44, 55, 33];                           ',&
+'              set%unique(A)                                                           ',&
+'                 ans =                                                                ',&
+'              44, 33, 22, 11, 55                                                      ',&
+'                                                                                      ',&
 '================================================================================      ',&
 'FLOW CONTROL                                                                          ',&
 '                                                                                      ',&
@@ -10508,10 +12953,17 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                      ',&
 '         if expression rop expression, statements                                     ',&
 '                                                                                      ',&
-'      where rop is =, <, >, <=, >=, or <> (not equal). The                            ',&
-'      statements are executed once if the indicated comparison                        ',&
-'      between the real parts of the first components of the two                       ',&
-'      expressions is true, otherwise the statements are skipped.                      ',&
+'      where rop is =, <, >, <=, >=, or <> (not equal).                                ',&
+'                                                                                      ',&
+'      The expressions must result in a scalar value. See "for", all(),                ',&
+'      any(), and the relational operators (eq(), ne(), gt(), lt(), ge(),              ',&
+'      le()) for comparing arrays element-by-element.                                  ',&
+'                                                                                      ',&
+'      Only the real part of the expressions is compared accept for                    ',&
+'      = and <>.                                                                       ',&
+'                                                                                      ',&
+'      The statements are executed once if the indicated comparison between            ',&
+'      the two expressions is true, otherwise the statements are skipped.              ',&
 '                                                                                      ',&
 '      EXAMPLE                                                                         ',&
 '        Enter                                                                         ',&
@@ -10542,7 +12994,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      The "end" at the end of a line may be omitted. The comma before the             ',&
 '      "end" may also be omitted. The columns of the expression are stored             ',&
 '      one at a time in the variable and then the following statements,                ',&
-'      up to the "end", are executed.  The expression is often of the form             ',&
+'      up to the "end", are executed. The expression is often of the form              ',&
 '      X:Y, in which case its columns are simply scalars. Some examples                ',&
 '      (assume N has already been assigned a value).                                   ',&
 '                                                                                      ',&
@@ -10584,13 +13036,13 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 'FILE ACCESS                                                                           ',&
 '                                                                                      ',&
 '      The "exec", "save", "delete", "load", "diary", and "print"                      ',&
-'      functions access files.  The ''file'' parameter takes different                 ',&
+'      functions access files. The ''file'' parameter takes different                  ',&
 '      forms for different operating systems. On most systems, ''file''                ',&
 '      may be a string of up to 1024 characters in quotes. For example,                ',&
 '      "save(''A'')" or "exec(''LALA/demo.exec'')" . The string will be used           ',&
 '      as the name of a file in the local operating system.                            ',&
 '                                                                                      ',&
-'      Check your local installation for details.  The filename must be                ',&
+'      Check your local installation for details. The filename must be                 ',&
 '      composed of recognized characters. See "char".                                  ',&
 '                                                                                      ',&
 '      Also see "quit" and "exit".                                                     ',&
@@ -10628,6 +13080,13 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                      ',&
 '      "exec"s may also be driven by "for" and "while" loops.                          ',&
 '                                                                                      ',&
+'      For convenience, a file with a simple alphanumeric name ending                  ',&
+'      in ".la" may be read by entering the leaf name sans the suffix                  ',&
+'      on a line by itself. That is, "exec(''myfile.la'')" may be entered              ',&
+'      as                                                                              ',&
+'                                                                                      ',&
+'         myfile                                                                       ',&
+'                                                                                      ',&
 'include  "include" is an alias for "exec".                                            ',&
 '                                                                                      ',&
 'load  "load(''file'')" retrieves all the variables from the file .                    ',&
@@ -10644,7 +13103,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      "save(''file'',X)" saves only X . See FILE .                                    ',&
 '                                                                                      ',&
 '      The variables may be retrieved later by "load(''file'')" or by your             ',&
-'      own program using the following code for each matrix.  The lines                ',&
+'      own program using the following code for each matrix. The lines                 ',&
 '      involving "ximag" may be eliminated if everything is known to                   ',&
 '      be real.                                                                        ',&
 '                                                                                      ',&
@@ -10715,7 +13174,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      Otherwise or if the base is one, + , - and blank are printed for                ',&
 '      positive, negative and zero elements.                                           ',&
 '                                                                                      ',&
-'         display(rand(24,80)-rand(24,80))                                             ',&
+'         display(randu(24,80)-randu(24,80))                                           ',&
 '                                                                                      ',&
 '      Imaginary parts are ignored.                                                    ',&
 '                                                                                      ',&
@@ -10750,6 +13209,12 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '            // read commands from a file if an environment variable is set.           ',&
 '            MATRC=getenv(''MATRC'');                                                  ',&
 '            if MATRC <> '' '', exec(''MATRC'');                                       ',&
+'                                                                                      ',&
+'sh    Starts the command shell interactively, using the command defined by            ',&
+'      the environment variable SHELL. Note that in addition any line                  ',&
+'      starting with an exclamation (!) is passed to the system for                    ',&
+'      execution.                                                                      ',&
+'                                                                                      ',&
 '================================================================================      ',&
 'PERFORMANCE INFORMATION                                                               ',&
 '                                                                                      ',&
@@ -10792,7 +13257,6 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                      ',&
 '      ''2*A + 3''        //  is the same as  < 50 42 65 32 43 32 51 >.                ',&
 '      display(32:126)  //  display the basic visible ASCII characters                 ',&
-'                                                                                      ',&
 '                                                                                      ',&
 '   So if you wanted to home the cursor and clear the screen on an                     ',&
 '   ANSI-compatible terminal and entered                                               ',&
@@ -10846,7 +13310,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '                                                                                      ',&
 '      In editor mode the command to be edited is shifted over one and the             ',&
 '      first character of input determines the edit mode. The letter "c"               ',&
-'      begins a string change (ie. "c/oldstring/newstring/").  The "l"                 ',&
+'      begins a string change (ie. "c/oldstring/newstring/"). The "l"                  ',&
 '      command lists the lines. A number goes to that command line as                  ',&
 '      listed by the "l" command. If the change command begins with a                  ',&
 '      space a letter replaces the one above it with the exception of                  ',&
@@ -10887,10 +13351,14 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      values may be assigned. "eps" is used as a default tolerance by "pinv"          ',&
 '      and "rank".                                                                     ',&
 '                                                                                      ',&
+'debug  "debug(1)" turns on verbose low-level debugging for the developer,             ',&
+'       "debug(0)" turns it back off.                                                  ',&
+'                                                                                      ',&
 'lala  A placeholder for a new command.                                                ',&
 '                                                                                      ',&
-'debug  "debu(1)" turns on verbose low-level debugging for the developer,              ',&
-'       "debu(0)" turns it back off.                                                   ',&
+'      LALA is intended to be used primarily by families of FORTRAN                    ',&
+'      programs that wish to add a consistent interactive "calculator"                 ',&
+'      mode for interactively inspecting and modifying data.                           ',&
 '                                                                                      ',&
 '================================================================================      ',&
 '']
@@ -10899,28 +13367,55 @@ end subroutine mat_help_text
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 function find_exec_file(filename) result(returned)
-! look for file. If not found look for file.la. If not found, repeat using directories in MATRIX_PATH=DIR1:DIR2:DIR3...
+! ident_40="@(#) M_matrix find_exec_file(3fp) look for "file" or "file.la" in currect directory and those in LALA_PATH=DIR1 DIR2 DIR3..."
 character(len=*),intent(in)  :: filename
 character(len=:),allocatable :: returned
-   if(exists(filename))then
-      returned=filename
-   elseif(exists(trim(filename)//'.la'))then
-      returned=filename//'.la'
-   else
-      returned=lookfor(filename,'LALA_PATH')
-      if(returned.eq.'')then
-         returned=lookfor(filename//'.la','LALA_PATH')
+   returned=''
+   if(filename.ne.'')then
+      if(exists(filename))then
+         returned=filename
+      elseif(exists(trim(filename)//'.la'))then
+         returned=filename//'.la'
+      elseif(filename(1:1).ne.'/')then
+         returned=lookfor(filename,'LALA_PATH')
+         if(returned.eq.'')then
+            returned=lookfor(filename//'.la','LALA_PATH')
+         endif
       endif
-      if(returned.eq.'')returned=filename
    endif
+   if(returned.eq.'')returned=filename
 end function find_exec_file
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+function find_la_file(filename) result(returned)
+! ident_41="@(#) M_matrix find_la_file(3fp) look for "file.la" in currect directory and those in LALA_PATH=DIR1 DIR2 DIR3..."
+! add .la suffix if it is missing
+! assume it is a full pathname if starts with / or \ and do not search LALA_PATH
+! return blank if file not found
+character(len=*),intent(in)  :: filename
+character(len=:),allocatable :: local_filename
+character(len=:),allocatable :: returned
+   returned=''
+   if(filename.eq.'')return
+   if(index(filename,'.la').ne.len_trim(filename)-3)then
+      local_filename=trim(filename)//'.la'
+   else
+      local_filename=trim(filename)
+   endif
+   if(exists(local_filename))then
+      returned=local_filename
+   elseif(local_filename(1:1).ne.'/'.and.local_filename(1:1).ne.'\')then
+      returned=lookfor(local_filename,'LALA_PATH')
+   endif
+end function find_la_file
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 logical function exists(filename) result(r)
 character(len=*), intent(in) :: filename
-    inquire(file=filename, exist=r)
-end function
+   inquire(file=filename, exist=r)
+end function exists
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -10940,9 +13435,9 @@ write(*,gen1)'G_LINE_POINTER:',G_LINE_POINTER
 !                                              ! [6]
 write(*,gen1)'G_LHS:',G_LHS,':G_RHS:',G_RHS
 write(*,gen1)'G_FIN:',G_FIN,':G_FUN:',G_FUN,':G_FMT:',G_FMT
-write(*,gen1)'G_RIO:',G_RIO,':G_INPUT_LUN:',G_INPUT_LUN
+write(*,gen1)'G_LUN_READING_FROM:',G_LUN_READING_FROM,':G_INPUT_LUN:',G_INPUT_LUN
 write(*,gen1)'G_PTZ:',G_PTZ,':G_SYM:',G_SYM,':G_SYN:',trim(ade2str(G_SYN))
-write(*,gen1)'G_CURRENT_RANDOM_SEED:',G_CURRENT_RANDOM_SEED,':G_CURRENT_RANDOM_TYPE:',G_CURRENT_RANDOM_TYPE
+write(*,gen1)'G_CURRENT_RANDOM_SEED:',G_CURRENT_RANDOM_SEED
 write(*,gen1)'G_FLOP_COUNTER:',G_FLOP_COUNTER
 write(*,gen1)'G_DEBUG_LEVEL:',G_DEBUG_LEVEL
 write(*,gen1)'G_FILE_OPEN_ERROR:',G_FILE_OPEN_ERROR,':G_ERR:',G_ERR
@@ -10980,7 +13475,7 @@ end subroutine printit
 !===================================================================================================================================
 subroutine mat_wdiv(ar,ai,br,bi,cr,ci)
 
-! ident_17="@(#)M_LA::mat_wdiv(3fp): c = a/b"
+! ident_42="@(#) M_matrix mat_wdiv(3fp) c = a/b"
 
 doubleprecision :: ar
 doubleprecision :: ai
@@ -11015,7 +13510,7 @@ end subroutine mat_wdiv
 !==================================================================================================================================!
 subroutine mat_wlog(in_real,in_imag,out_real,out_imag)
 
-! ident_22="@(#)M_LA::mat_wlog(3fp): y = log(x)"
+! ident_43="@(#) M_matrix mat_wlog(3fp) y = la%log(x)"
 
 doubleprecision :: in_real, in_imag
 doubleprecision :: out_real, out_imag
@@ -11024,7 +13519,7 @@ doubleprecision :: r
    r = mat_pythag(in_real,in_imag)
 
    if (r .eq. 0.0d0) then
-      call mat_err(32) !  Singularity of LOG or ATAN
+      call mat_err(32) !  Singularity of la%LOG or la%ATAN
    else
       t = datan2(in_imag,in_real)
       if (in_imag.eq.0.0d0 .and. in_real.lt.0.0d0) t = dabs(t)
@@ -11038,7 +13533,7 @@ end subroutine mat_wlog
 !==================================================================================================================================!
 subroutine mat_watan(xr,xi,yr,yi)
 
-! ident_37="@(#) M_LA mat_watan(3fp) y = atan(x) = (i/2)*log((i+x)/(i-x))" --"
+! ident_44="@(#) M_LA mat_watan(3fp) y = atan(x) = (i/2)*la%log((i+x)/(i-x))"
 
 doubleprecision,intent(in)  :: xr, xi
 doubleprecision,intent(out) :: yr, yi
@@ -11053,10 +13548,59 @@ doubleprecision             :: tr, ti
       yr = -(ti/2.0d0)
       yi = tr/2.0d0
    else
-      call mat_err(32) ! Singularity of LOG or ATAN
+      call mat_err(32) ! Singularity of la%LOG or ATAN
    endif
 
 end subroutine mat_watan
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+pure recursive function qsort(values) result(sorted)
+! concise quicksort from @arjen and @beliavsky shows recursion, array sections, and vectorized comparisons.
+!
+intrinsic pack, size
+real(kind=dp), intent(in) :: values(:)
+real(kind=dp)             :: sorted(size(values))
+   if (size(values) > 1) then
+      sorted = &
+      & [qsort(pack(values(2:),values(2:)<values(1))), values(1), &
+      & qsort(pack(values(2:),values(2:)>=values(1)))]
+   else
+      sorted = values
+   endif
+end function qsort
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+elemental impure function run(command)
+! a functional interface for calling system commands
+use, intrinsic :: iso_fortran_env, only : &
+& stderr=>ERROR_UNIT, stdout=>OUTPUT_UNIT
+character(len=*),intent(in) :: command
+logical                     :: run
+logical                     :: wait
+integer                     :: exitstat
+integer                     :: cmdstat
+character(len=256)          :: cmdmsg
+   wait=.true.
+   exitstat=0
+   cmdstat=0
+   call execute_command_line(command=command,wait=wait, &
+   & exitstat=exitstat,cmdstat=cmdstat,cmdmsg=cmdmsg)
+   if(cmdstat.ne.0)then
+      flush(stdout)
+      write(stderr,'(*(g0))')'<ERROR>',trim(command)
+      write(stderr,'(*(g0))')'<ERROR>',trim(cmdmsg)
+      flush(stderr)
+   endif
+   if(exitstat.ne.0)then
+      flush(stdout)
+      write(stderr,'(*(g0))')'<ERROR>',trim(command)
+      write(stderr,'(*(g0))')'<ERROR>','exitstat=',exitstat,':',trim(command)
+      flush(stderr)
+   endif
+   run=merge(.true.,.false.,exitstat==0)
+end function run
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -11064,3 +13608,8 @@ end module M_matrix
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
+!write(*,*)'GOT HERE Z:RAND:M:',m,':N:',n,':G_RHS:',G_RHS,':LOCATION:',location
+!write(*,*)'GOT HERE Z:RANDU:M:',m,':N:',n,':G_RHS:',G_RHS,':LOCATION:',location
+!write(*,*)'GOT HERE Z:MAT_FUNS:NAME:',name,':G_FIN:',G_FIN,':G_RHS:',G_RHS
+!write(*,*)'GOT HERE Z:MAT_MATFN6:G_RHS:',G_RHS,':G_ARGUMENT_POINTER:',G_ARGUMENT_POINTER
+!write(*,*)'GOT HERE Z:MAT_MATFN6:M:',m,':N:',n,':G_RHS:',G_RHS,':LOCATION:',location,':G_ARGUMENT_POINTER:',G_ARGUMENT_POINTER

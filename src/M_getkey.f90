@@ -214,8 +214,8 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_getkey()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_verify, only : unit_test_level
 
 !! setup
 call test_system_getkey()
@@ -224,9 +224,9 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_system_getkey()
 
-   call unit_check_start('system_getkey',msg='')
-   !!call unit_check('system_getkey', 0.eq.0, 'checking',100)
-   call unit_check_done('system_getkey',msg='')
+   call unit_test_start('system_getkey',msg='')
+   !!call unit_test('system_getkey', 0.eq.0, 'checking',100)
+   call unit_test_done('system_getkey',msg='')
 end subroutine test_system_getkey
 
 end subroutine test_suite_M_getkey

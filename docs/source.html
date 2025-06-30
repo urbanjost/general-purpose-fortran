@@ -305,12 +305,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_DRAW:author - John S. Urban<br/>
 	M_DRAW:version - 3.0, Mar 1995,2004<br/>
 </td>
-<tr><td><a href="../src/C-pcl5.c">../src/C-pcl5.c</a></td>
-<td>
-	M_DRAW:driver/pcl5.c - M_DRAW driver for PCL5 and HPGL2<br/>
-	M_DRAW:author - John S. Urban<br/>
-	M_DRAW:version - 1.0, Dec 1996<br/>
-</td>
 <tr><td><a href="../src/C-pdf.c">../src/C-pdf.c</a></td>
 <td>
 	M_DRAW:source - driver/pdf.c - M_DRAW driver for Adobe Illustrator PDF <br/>
@@ -375,11 +369,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/C-read_line.c">../src/C-read_line.c</a></td>
 <td>
 	read_line(3c):Paranoid function to read a line of text from a text file or terminal<br/>
-</td>
-<tr><td><a href="../src/C-rect.c">../src/C-rect.c</a></td>
-<td>
-	M_DRAW:rect - draw a rectangle given two opposite corners<br/>
-	M_DRAW:srect - draw a rectangle given two opposite corners in screen coords.<br/>
 </td>
 <tr><td><a href="../src/C-rgbhls.c">../src/C-rgbhls.c</a></td>
 <td>
@@ -587,7 +576,6 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_anything.f90">../src/M_anything.f90</a></td>
 <td>
-	 M_anything anyscalar_to_real128(3f) convert integer or real parameter of any kind to real128<br/>
 	 M_anything anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision<br/>
 	 M_anything anyscalar_to_real(3f) convert integer or real parameter of any kind to real<br/>
 	 M_anything anyscalar_to_int64(3f) convert parameter of any intrinsic kind to 64-bit integer<br/>
@@ -955,6 +943,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_intrinsics.f90">../src/M_intrinsics.f90</a></td>
 <td>
+	 M_strings::paragraph(3f): wrap a long string into a paragraph<br/>
+	 M_strings::strtok(3f): Tokenize a string<br/>
 	 grab lines in NAME section and append them to generate an index of manpages<br/>
 	 upper(3): function to return a trimmed uppercase-only string', &<br/>
 	 print small 2d logical scalar, vector, or matrix', &<br/>
@@ -963,11 +953,13 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 print small 2d logical scalar, vector, matrix in row-column format', &<br/>
 	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
 	 print_inquire(3f) print INQUIRE of file by name/number', &<br/>
+	 showme(3f) - display type and kind of intrinsic value', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
 	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
+	 convenience routine:', &<br/>
 	 M_strings::lower(3f): Changes a string to lowercase over specified range<br/>
 </td>
 <tr><td><a href="../src/M_io.f90">../src/M_io.f90</a></td>
@@ -1127,6 +1119,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_matrix lala(3f) run an array of commands in matrix laboratory interpreter and return to calling program<br/>
 	 M_matrix ints2str(3f) convert lala integers to a character variable<br/>
 	 M_matrix mat_matfn6(3f) evaluate utility functions<br/>
+	 M_matrix mat_matsets(3f) evaluate set theory functions<br/>
+	 M_matrix mat_matorder(3f) sorting and ordering<br/>
 	 M_matrix mat_getch(3f) get next character from input line into G_CHRA<br/>
 	 M_matrix mat_formz system dependent routine to print with z format<br/>
 	 M_matrix mat_prompt(3f) issue interactive prompt with optional pause<br/>
@@ -1159,6 +1153,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_msg fmt(3f) convert any intrinsic to a string using specified format<br/>
 	 M_msg stderr(3f) writes a message to standard error using a standard f2003 method<br/>
 	 M_msg write(3f) writes a message to any number of open files with any scalar values<br/>
+</td>
+<tr><td><a href="../src/M_namelist.f90">../src/M_namelist.f90</a></td>
+<td>
+	 M_namelist namelist_to_dictionary(3f) parse user command and store tokens into dictionary<br/>
+	 M_strings oneline(3f) append an array of character variables with space separator into a single CHARACTER variable<br/>
 </td>
 <tr><td><a href="../src/M_ncurses.f90">../src/M_ncurses.f90</a></td>
 <td>
@@ -1419,10 +1418,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_sort sort_quick_compact_integer_int64(3f) recursive quicksort of a integer(kind=int64) array<br/>
 	 M_sort sort_quick_compact_real_real32(3f) recursive quicksort of a real(kind=real32) array<br/>
 	 M_sort sort_quick_compact_real_real64(3f) recursive quicksort of a real(kind=real64) array<br/>
-	 M_sort sort_quick_compact_real_real128(3f) recursive quicksort of a real(kind=real128) array<br/>
 	 M_sort sort_quick_compact_complex_real32(3f) recursive quicksort of a complex(kind=real32) array<br/>
 	 M_sort sort_quick_compact_complex_real64(3f) recursive quicksort of a complex(kind=real64) array<br/>
-	 M_sort sort_quick_compact_complex_real128(3f) recursive quicksort of a complex(kind=real128) array<br/>
 	 M_sort sort_quick_compact_character_ascii(3f) recursive quicksort of a character(kind=ascii) array<br/>
 	 M_sort tree_insert(3f) sort a number of integers by building a tree sorted in infix order<br/>
 	 M_sort tree_print(3f)<br/>
@@ -1472,7 +1469,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings switch(3f) toggle between string and array of characters; generic{a2s s2a}<br/>
 	 M_strings string_to_value(3f) Generic subroutine converts numeric string to a number (a2d a2r a2i)<br/>
 	 M_strings v2s(3f) Generic function returns string given REAL|INTEGER|DOUBLEPRECISION value(d2s r2s i2s)<br/>
-	 M_strings str(3f) convert up to twenty scalar values to a (CSV) string. Alternatively can also handle one-dimensional arrays<br/>
+	 M_strings str(3f) convert up to twenty scalar values or arrays to a string with optional CSV mode.<br/>
 	 M_strings glob(3f) function compares text strings one of which can have wildcards ('*' or '?').<br/>
 	 M_strings sep(3f) parse string on delimiter characters and store tokens into an allocatable array<br/>
 	 M_strings split(3f) parse string on delimiter characters and store tokens into an allocatable array<br/>
@@ -1548,6 +1545,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings tobase(3f) given integer and base return string<br/>
 	 M_strings paragraph(3f) wrap a long string into a paragraph<br/>
 	 M_strings fmt(3f) convert any intrinsic to a string using specified format<br/>
+</td>
+<tr><td><a href="../src/M_strings__chars.f90">../src/M_strings__chars.f90</a></td>
+<td>
+	 M_strings__chars(3f) Fortran module containing routines that deal with character strings<br/>
+	 M_strings__chars toupper(3f) returns copy of input array accept lowercase letters are converted to uppercase characters<br/>
+	 M_strings__chars tolower(3f) returns copy of input array accept uppercase letters are converted to lowercase characters<br/>
 </td>
 <tr><td><a href="../src/M_strings__oop.f90">../src/M_strings__oop.f90</a></td>
 <td>
@@ -1742,17 +1745,20 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_uuid M_uid(3fm) generate UUIDs according to RFC 4122<br/>
 	 M_uuid generate_uuid(3f) generate(approximately) a UUID (Universally Unique IDentifier) string per RFC 4122<br/>
 </td>
+<tr><td><a href="../src/M_vendor.f90">../src/M_vendor.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_verify.f90">../src/M_verify.f90</a></td>
 <td>
-	 M_verify unit_check_msg(3f) writes a message to a string composed of any standard scalar types<br/>
+	 M_verify unit_test_msg(3f) writes a message to a string composed of any standard scalar types<br/>
 	 M_verify stderr(3f) writes a message to standard error using a standard f2003 method<br/>
 	 M_verify fstop(3f) calls 'STOP VALUE' passing in a value (1-32) with optional message<br/>
-	 M_verify unit_check(3f) if .not.expression call 'goodbad NAME bad' & stop program<br/>
-	 M_verify unit_check_start(3f) call 'goodbad NAME start'<br/>
-	 M_verify unit_check_stop(3f) stop program with report on calls to unit_check(3f)<br/>
-	 M_verify unit_check_done(3f) call 'goodbad NAME bad'<br/>
-	 M_verify unit_check_bad(3f) call 'goodbad NAME bad'<br/>
-	 M_verify unit_check_good(3f) call 'goodbad NAME good'<br/>
+	 M_verify unit_test(3f) if .not.expression call 'goodbad NAME bad' & stop program<br/>
+	 M_verify unit_test_start(3f) call 'goodbad NAME start'<br/>
+	 M_verify unit_test_stop(3f) stop program with report on calls to unit_test(3f)<br/>
+	 M_verify unit_test_done(3f) call 'goodbad NAME bad'<br/>
+	 M_verify unit_test_bad(3f) call 'goodbad NAME bad'<br/>
+	 M_verify unit_test_good(3f) call 'goodbad NAME good'<br/>
 	 M_verify pdec(3f) write ASCII Decimal Equivalent (ADE) numbers vertically beneath string<br/>
 	 M_verify assert(3f) writes a message to a string composed of any standard scalar types<br/>
 	 M_verify julian(3f) Converts proleptic Gregorian DAT date-time array to Julian Date<br/>

@@ -1,7 +1,7 @@
      program demo_glob
      implicit none
      ! This main routine passes a bunch of test strings
-     ! into the above code.  In performance comparison mode,
+     ! into the above code. In performance comparison mode,
      ! it does that over and over. Otherwise, it does it just
      ! once. Either way, it outputs a passed/failed result.
      !

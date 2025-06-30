@@ -34,7 +34,7 @@
 !!##OPTIONS
 !!   optstring  contains characters that are recognized as options.
 !!              If a character is followed by a colon, then it takes a
-!!              required argument.  For example, "x" recognizes "-x", while
+!!              required argument. For example, "x" recognizes "-x", while
 !!              "x:" recognizes "-x arg" or "-xarg".
 !!   opterr     Errors are printed by default. Set opterr=.false. to
 !!              suppress them.

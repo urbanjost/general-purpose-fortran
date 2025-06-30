@@ -238,12 +238,12 @@ procedure or closely related procedures in the fpm test/ directory.
 <P>
 <PRE>
  + make a subroutine for each component to be tested
- + in each test procedure start it with a call to UNIT\_CHECK\_START(3f)
- + end each test procedure it with a call to UNIT\_CHECK\_END(3f)
- + make multiple calls to UNIT\_CHECK(3f) in-between to generate
+ + in each test procedure start it with a call to UNIT\_TEST\_START(3f)
+ + end each test procedure it with a call to UNIT\_TEST\_END(3f)
+ + make multiple calls to UNIT\_TEST(3f) in-between to generate
    test results
  + call each of those test routines from the main program
- + end the main program with a call to UNIT\_CHECK\_STOP(3f)
+ + end the main program with a call to UNIT\_TEST\_STOP(3f)
 <P>
 </PRE>
 Optionally, before starting set preferred non-default modes.
@@ -262,7 +262,7 @@ routines. Using
 <P>
 </PRE>
 to create the skeleton program and then adding a few actual
-calls to unit\_test\_check(3f) results in
+calls to unit\_test\_test(3f) results in
 <P>
 <PRE>
   Sample program:
@@ -287,18 +287,18 @@ calls to unit\_test\_check(3f) results in
       !  the executable running tests, but they can be
       !  altered. For example:
       CHECK_PREFIX=prefix(                  &
-       check_MSG    =  &#146;check_msg:   &#146;, &
-       check        =  &#146;check:       &#146;, &
-       check_START  =  &#146;check_start: &#146;, &
-       check_STOP   =  &#146;check_stop:  &#146;, &
-       check_END    =  &#146;check_end:   &#146;  &
+       test_MSG    =  &#146;test_msg:   &#146;, &
+       test        =  &#146;test:      &#146;,  &
+       test_START  =  &#146;test_start: &#146;, &
+       test_STOP   =  &#146;test_stop:  &#146;, &
+       test_END    =  &#146;test_end:   &#146;  &
       )
       !---------------------------------------------------
       !OPTIONAL:
       ! the options available at run-time on the command
       ! line can have their defaults selected. See the
       ! man-page for the procedure for details.
-      call unit_check_mode(
+      call unit_test_mode(
         ( keep_going=.true. ,
         flags=[character(len=0) ::],
         luns=[stdout],
@@ -349,12 +349,12 @@ the procedure gets an "UNTESTED" entry to remind you to make
 some tests ..).
 <P>
 <PRE>
-   &gt; check:       sqrt   SUCCESS : check table of values
-   &gt; check:       sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
-   &gt; check_end:   sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
-   &gt; check_end:   cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
-   &gt; check_end:   sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
-   &gt; check_stop:  TALLY  PASSED  : GOOD:        2 BAD:        0 DURATION:00000000000000
+   &gt; test:       sqrt   SUCCESS : check table of values
+   &gt; test:       sqrt   SUCCESS : got 5.0000000000000000 expected 5.0000000000000000
+   &gt; test_end:   sqrt   PASSED  : GOOD:        2 BAD:        0 DURATION:00000000012000:
+   &gt; test_end:   cos    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+   &gt; test_end:   sin    UNTESTED: GOOD:        0 BAD:        0 DURATION:00000000000000:
+   &gt; test_stop:  TALLY  PASSED  : GOOD:        2 BAD:        0 DURATION:00000000000000
    &gt; STOP 0
 <P>
 </PRE>
@@ -414,7 +414,7 @@ The example programs also contain a placeholder call to unit\_test\_mode(3f).
     <H4>&nbsp; &nbsp; PROCEDURAL AND COMMAND LINE MODE OPTIONS</H4>
 </A>
 <BLOCKQUOTE>
-The dummy skeleton routines all start with a call to unix\_check\_mode(3f).
+The dummy skeleton routines all start with a call to unix\_test\_mode(3f).
 Its documentation describes a few default modes you can change with the
 routine. Essentially the same options are available on the command line
 of the test program(s) as well.
@@ -586,18 +586,18 @@ if you have sqlite3(1) installed.
 <P>
 <PRE>
    .mode csv
-   .import bookkeeper.csv unit_check
-   .schema unit_check
+   .import bookkeeper.csv unit_test
+   .schema unit_test
    ---
    --- show all data to show it worked
-   SELECT * FROM unit_check;
+   SELECT * FROM unit_test;
    ---
    --- example lists unique names
-   SELECT name FROM unit_check GROUP BY name ORDER BY name ;
+   SELECT name FROM unit_test GROUP BY name ORDER BY name ;
    ---
    --- tally up passed, failed, skipped in a text table
    .header on
-   .mode column unit_check
+   .mode column unit_test
    .width 64 9 9 9
    SELECT name,
    --- depending on SQL version a simpler IIF/IF, IFNULL, or TOTAL might be better but this works well
@@ -606,7 +606,7 @@ if you have sqlite3(1) installed.
    CASE  sum( passed == &#146;passed&#146;  ) WHEN NULL THEN 0 ELSE sum ( passed == &#146;passed&#146;)  END  AS &#146;ok&#146;,
    CASE  sum( passed == &#146;failed&#146;  ) WHEN NULL THEN 0 ELSE sum ( passed == &#146;failed&#146;)  END  AS &#146;not ok&#146;,
    CASE  sum( passed == &#146;skipped&#146; ) WHEN NULL THEN 0 ELSE sum ( passed == &#146;skipped&#146;) END  AS &#146;skip&#146;
-   FROM unit_check
+   FROM unit_test
    --- WHERE condition
    GROUP BY name
    ORDER BY name ;
@@ -615,8 +615,8 @@ if you have sqlite3(1) installed.
    --- including the first row, in the CSV file as the actual data to import.
    --- Therefore, you should delete the first row of the CSV file with the
    --- header labels if adding to an existing table instead of creating
-   DROP TABLE IF EXISTS unit_check;
-   --- CREATE TABLE unit_check(
+   DROP TABLE IF EXISTS unit_test;
+   --- CREATE TABLE unit_test(
    ---   name   TEXT NOT NULL,
    ---   date   DATE NOT NULL,
    ---   passed TEXT NOT NULL,
@@ -1001,7 +1001,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 0c0e2ebf-4a89-459c-a08c-e9ca9494a6ea using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_framework (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7b62c530-92aa-4c0a-ac89-5e4040e1b454 using man macros.</FONT>
 <br><br><center><img src="images/M_framework.3m_framework.gif"></center>
 </div>
 </div>

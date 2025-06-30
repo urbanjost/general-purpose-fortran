@@ -4,7 +4,7 @@
        implicit none
        character(len=80) :: s
        integer           :: lgth, lastnb
-       intrinsic len
+       intrinsic         :: len
 
        s=' ABCDEFG abcdefg '
        lgth = len(s)

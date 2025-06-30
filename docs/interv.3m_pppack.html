@@ -1,0 +1,180 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>interv (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by C. de Boor
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>computes</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+left = max( i :  xt(i) .lt. xt(lxt) .and.  xt(i) .le. x )  .
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>xt&#46;&#46;&#46;..a real sequence, of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+lxt , assumed to be nondecreasing
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>lxt&#46;&#46;&#46;..number of terms in the sequence</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+xt .
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>x&#46;&#46;&#46;..the point whose location with respect to the sequence</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+xt  is
+to be determined.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+left, mflag&#46;&#46;&#46;..both integers, whose value is
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>1</B> </TD><TD valign=bottom>
+<B>-1</B>      if               x .lt.  xt(1)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>i</B> </TD><TD valign=bottom>
+0      if   xt(i)  .le. x .lt. xt(i+1)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>i</B> </TD><TD valign=bottom>
+0      if   xt(i)  .lt. x .eq. xt(i+1) .eq. xt(lxt)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>i</B> </TD><TD valign=bottom>
+1      if   xt(i)  .lt.        xt(i+1) .eq. xt(lxt) .lt. x
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+        In particular,  mflag = 0  is the &#146;usual&#146; case.  mflag .ne. 0
+        indicates that  x  lies outside the CLOSED interval
+        xt(1) .le. y .le. xt(lxt) . The asymmetric treatment of the
+        intervals is due to the decision to make all pp functions cont-
+        inuous from the right, but, by returning  mflag = 0  even if
+        x = xt(lxt), there is the option of having the computed pp function
+        continuous from the left at  xt(lxt) .
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+The program is designed to be efficient in the common situation that
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>it is called repeatedly, with</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+x  taken from an increasing or decrea-
+sing sequence. This will happen, e.g., when a pp function is to be
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>graphed. The first guess for</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+left  is therefore taken to be the val-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ue returned at the previous call and stored in the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+l o c a l  varia-
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ble</B> </TD><TD valign=bottom>
+ilo . A first check ascertains that  ilo .lt. lxt (this is nec-
+essary since the present call may have nothing to do with the previ-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ous call). Then, if</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+xt(ilo) .le. x .lt. xt(ilo+1), we set  left =
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ilo</B> </TD><TD valign=bottom>
+and are done after just three comparisons.
+<TABLE width=100% cellpadding=3><!-- tsb: and are done after just three comparisons.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Otherwise, we repeatedly double the difference</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+istep = ihi - ilo
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>while also moving</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+ilo  and  ihi  in the direction of  x , until
+xt(ilo) .le. x .lt. xt(ihi) ,
+after which we use bisection to get, in addition, ilo+1 = ihi .
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>left = ilo</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is then returned.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>interv (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4369f5b6-55f3-40e3-84a9-5dea3c899e82 using man macros.</FONT>
+<br><br><center><img src="images/interv.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

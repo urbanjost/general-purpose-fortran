@@ -59,7 +59,6 @@ append("system_sleep.3m_system.html");
 append("system_srand.3m_system.html");
 append("system_stat.3m_system.html");
 append("system_stat_print.3m_system.html");
-append("system_system.3m_system.html");
 append("system_uname.3m_system.html");
 append("system_unlink.3m_system.html");
 append("system_unsetenv.3m_system.html");

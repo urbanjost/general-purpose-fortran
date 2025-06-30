@@ -1,0 +1,228 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>tautsp (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>tautsp (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+constructs cubic spline interpolant to given data
+tau(i), gtau(i), i=1,&#46;&#46;&#46;,ntau.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>if</B> </TD><TD valign=bottom>
+gamma .gt. 0., additional knots are introduced where needed to
+make the interpolant more flexible locally. this avoids extraneous
+inflection points typical of cubic spline interpolation at knots to
+rapidly changing data.
+</TD></TR>
+<TR><TD colspan=2>
+parameters
+input
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>tau</B> </TD><TD valign=bottom>
+sequence of data points. must be strictly increasing.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>gtau</B> </TD><TD valign=bottom>
+corresponding sequence of function values.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ntau</B> </TD><TD valign=bottom>
+number of data points. must be at least  4 .
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>gamma</B> </TD><TD valign=bottom>
+indicates whether additional flexibility is desired.
+= 0., no additional knots
+in (0.,3.), under certain conditions on the given data at
+points i-1, i, i+1, and i+2, a knot is added in the
+i-th interval, i=2,&#46;&#46;&#46;,ntau-2. see description of meth-
+od below. the interpolant gets rounded with increasing
+<TABLE width=100% cellpadding=3><!-- tsb: indicates whether additional flexibility is desired.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>gamma. a value of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+2.5  for gamma is typical.
+in (3.,6.), same , except that knots might also be added in
+intervals in which an inflection point would be permit-
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ted.</B> </TD><TD valign=bottom>
+a value of  5.5  for gamma is typical.
+output
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>break, coef, l, k</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+give the pp-representation of the interpolant.
+specifically, for break(i) .le. x .le. break(i+1), the
+interpolant has the form
+f(x) = coef(1,i) +dx(coef(2,i) +(dx/2)(coef(3,i) +(dx/3)coef(4,i)))
+<TABLE width=100% cellpadding=3><!-- tsb: give the pp-representation of the interpolant.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>with</B> </TD><TD valign=bottom>
+dx = x - break(i) and i=1,&#46;&#46;&#46;,l .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>iflag</B> </TD><TD valign=bottom>
+= 1, ok
+= 2, input was incorrect. a printout specifying the mistake
+was made.
+workspace
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>s</B> </TD><TD valign=bottom>
+is required, of size (ntau,6). the individual columns of this
+array contain the following quantities mentioned in the write-
+up and below.
+s(.,1) = dtau = tau(.+1) - tau
+s(.,2) = diag = diagonal in linear system
+s(.,3) = u = upper diagonal in linear system
+s(.,4) = r = right side for linear system (initially)
+= fsecnd = solution of linear system , namely the second
+<TABLE width=100% cellpadding=3><!-- tsb: is required, of size (ntau,6). the individual columns of this
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>derivatives of interpolant at</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+tau
+s(.,5) = z = indicator of additional knots
+s(.,6) = 1/hsecnd(1,x) with x = z or = 1-z. see below.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>------</B> </TD><TD valign=bottom>
+m e t h o d  ------
+on the i-th interval, (tau(i), tau(i+1)), the interpolant is of the
+form
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>(*)</B> </TD><TD valign=bottom>
+f(u(x)) = a + b*u + c*h(u,z) + d*h(1-u,1-z) ,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>with</B> </TD><TD valign=bottom>
+u = u(x) = (x - tau(i))/dtau(i). here,
+z = z(i) = addg(i+1)/(addg(i) + addg(i+1))
+(= .5, in case the denominator vanishes). with
+addg(j) = abs(ddg(j)), ddg(j) = dg(j+1) - dg(j),
+dg(j) = divdif(j) = (gtau(j+1) - gtau(j))/dtau(j)
+and
+h(u,z) = alpha*u**3 + (1 - alpha)*(max(((u-zeta)/(1-zeta)),0)**3
+with
+alpha(z) = (1-gamma/3)/zeta
+zeta(z) = 1 - gamma*min((1 - z), 1/3)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>thus, for 1/3 .le. z .le. 2/3,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  is just a cubic polynomial on
+the interval i. otherwise, it has one additional knot, at
+tau(i) + zeta*dtau(i) .
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>as</B> </TD><TD valign=bottom>
+z  approaches  1, h(.,z) has an increasingly sharp bend  near 1,
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>thus allowing</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  to turn rapidly near the additional knot.
+in terms of f(j) = gtau(j) and
+<TABLE width=100% cellpadding=3><!-- tsb: f  to turn rapidly near the additional knot.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>fsecnd(j) = 2.derivative of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  at  tau(j),
+the coefficients for (*) are given as
+a = f(i) - d
+b = (f(i+1) - f(i)) - (c - d)
+c = fsecnd(i+1)*dtau(i)**2/hsecnd(1,z)
+d = fsecnd(i)*dtau(i)**2/hsecnd(1,1-z)
+hence can be computed once fsecnd(i),i=1,&#46;&#46;&#46;,ntau, is fixed.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>f</B> </TD><TD valign=bottom>
+is automatically continuous and has a continuous second derivat-
+ive (except when z = 0 or 1 for some i). we determine fscnd(.) from
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the requirement that also the first derivative of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  be contin-
+uous. in addition, we require that the third derivative be continuous
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>across</B> </TD><TD valign=bottom>
+tau(2) and across  tau(ntau-1) . this leads to a strictly
+diagonally dominant tridiagonal linear system for the fsecnd(i)
+which we solve by gauss elimination without pivoting.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>tautsp (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 7c5c6c41-50bf-4f7a-8d49-fcc17c97b2f9 using man macros.</FONT>
+<br><br><center><img src="images/tautsp.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

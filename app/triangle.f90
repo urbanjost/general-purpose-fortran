@@ -110,7 +110,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    resolution of a triangle>',&
 '@(#)VERSION:        1.0, 20190315>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2025-02-23 19:26:09 UTC-300>',&
+'@(#)COMPILED:       2025-06-29 08:22:33 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -1,0 +1,220 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>eqblok (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+</TD></TR>
+<TR><TD colspan=2>
+calls putit(difequ,bsplvd(bsplvb))
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>to be called in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+c o l l o c
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>t</B> </TD><TD valign=bottom>
+the knot sequence, of length n+kpm
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>n</B> </TD><TD valign=bottom>
+the dimension of the approximating spline space, i.e., the order
+of the linear system to be constructed.
+kpm = k+m, the order of the approximating spline
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lenblk</B> </TD><TD valign=bottom>
+the maximum length of the array  bloks  as allowed by the
+<TABLE width=100% cellpadding=3><!-- tsb: the maximum length of the array  bloks  as allowed by the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>dimension statement in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+colloc .
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+w o r k   a r e a s  ******
+<TABLE width=100% cellpadding=3><!-- tsb: w o r k   a r e a s  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>work1</B> </TD><TD valign=bottom>
+used in  putit, of size (kpm,kpm)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>work2</B> </TD><TD valign=bottom>
+used in  putit, of size (kpm,m+1)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>bloks</B> </TD><TD valign=bottom>
+the coefficient matrix of the linear system, stored in al-
+most block diagonal form, of size
+kpm*sum(integs(1,i) , i=1,&#46;&#46;&#46;,nbloks)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>integs</B> </TD><TD valign=bottom>
+an integer array, of size (3,nbloks), describing the block
+structure.
+<TABLE width=100% cellpadding=3><!-- tsb: an integer array, of size (3,nbloks), describing the block
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>integs(1,i)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+=  number of rows in block  i
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integs(2,i)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+=  number of columns in block  i
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integs(3,i)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+=  number of elimination steps which can be
+<TABLE width=100% cellpadding=3><!-- tsb: =  number of elimination steps which can be
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>carried out in block</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+i  before pivoting might
+bring in an equation from the next block.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nbloks</B> </TD><TD valign=bottom>
+number of blocks, equals number of polynomial pieces
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>b</B> </TD><TD valign=bottom>
+the right side of the linear system, stored corresponding to the
+almost block diagonal form, of size sum(integs(1,i) , i=1,&#46;&#46;&#46;,
+nbloks).
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+each breakpoint interval gives rise to a block in the linear system.
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>this block is determined by the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k  colloc.equations in the interval
+with the side conditions (if any) in the interval interspersed ap-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>propriately, and involves the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+kpm  b-splines having the interval in
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>their support. correspondingly, such a block has</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+nrow = k + isidel
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>rows, with</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+isidel = number of side conditions in this and the prev-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ious intervals, and</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+ncol = kpm  columns.
+<TABLE width=100% cellpadding=3><!-- tsb: ncol = kpm  columns.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>further, because the interior knots have multiplicity</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k, we can
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>carry out (in slvblk)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k  elimination steps in a block before pivot-
+ing might involve an equation from the next block. in the last block,
+of course, all kpm elimination steps will be carried out (in slvblk).
+</TD></TR>
+<TR></TR></TABLE>see the detailed comments in the solveblok package for further in-
+formation about the almost block diagonal form used here.
+</TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>eqblok (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from cc7d770f-8935-4d00-9a39-917dc497e4b9 using man macros.</FONT>
+<br><br><center><img src="images/eqblok.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

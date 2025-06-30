@@ -5,12 +5,13 @@ program runtest
 use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor 
 use M_io
 use M_framework__msg
-use :: M_framework__verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
-use :: M_framework__verify, only : unit_check_stop
-use :: M_framework__verify, only : unit_check_level
+use :: M_framework__verify, only : unit_test_start, unit_test, unit_test_done, unit_test_good, unit_test_bad, unit_test_msg
+use :: M_framework__verify, only : unit_test_stop
+use :: M_framework__verify, only : unit_test_level
 use,intrinsic :: iso_fortran_env, only : stdin_lun  => input_unit
 use,intrinsic :: iso_fortran_env, only : stderr_lun => error_unit
 use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
+character(len=:),allocatable :: tmsg
 
 !! setup
 
@@ -30,6 +31,7 @@ use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
    call test_number_of_lines()
    call test_basename()
    call test_joinpath()
+   call test_is_hidden_file()
    call test_fileopen()
    call test_fileclose()
    call test_filewrite()
@@ -44,34 +46,35 @@ use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
    call test_getname()
    call test_lookfor()
 !! teardown
-   call unit_check_stop()
+   call unit_test_stop()
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_dirname()
-
-call unit_check_start('dirname',msg='')
-call unit_check('dirname',  dirname('/usr/bin/')  ==  '/usr', '/usr/bin ==>',dirname('/usr/bin'))
-call unit_check('dirname',  dirname('dir1/str/')  ==  'dir1', 'dir1/str ==>',dirname('dir1/str/'))
-call unit_check('dirname',  dirname('stdio.h')    ==  '.',    '/stdio.h ==>',dirname('stdio.h'))
-call unit_check_done('dirname',msg='')
+   tmsg='strip last component from filename'
+   call unit_test_start('dirname',msg=tmsg)
+   call unit_test('dirname',  dirname('/usr/bin/')  ==  '/usr', '/usr/bin ==>',dirname('/usr/bin'))
+   call unit_test('dirname',  dirname('dir1/str/')  ==  'dir1', 'dir1/str ==>',dirname('dir1/str/'))
+   call unit_test('dirname',  dirname('stdio.h')    ==  '.',    '/stdio.h ==>',dirname('stdio.h'))
+   call unit_test_done('dirname',msg='')
 end subroutine test_dirname
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_tmp()
-
-   call unit_check_start('get_tmp',msg='')
-   !!call unit_check('get_tmp', 0 == 0, 'checking',100)
-   call unit_check_done('get_tmp',msg='')
+   tmsg='Return the name of the scratch directory'
+   call unit_test_start('get_tmp',msg=tmsg)
+   !!call unit_test('get_tmp', 0 == 0, 'checking',100)
+   call unit_test_done('get_tmp',msg='')
 end subroutine test_get_tmp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filename_generator()
 
-   call unit_check_start('filename_generator',msg='')
-   call unit_check_msg('filename_generator','generate a filename containing a whole number')
+   tmsg='generate a filename containing a number'
+   call unit_test_start('filename_generator',msg=tmsg)
+   call unit_test_msg('filename_generator','generate a filename containing a whole number')
 
-   call unit_check('filename_generator', filename_generator('head','.tail',100) ==  'head100.tail' )
-   call unit_check('filename_generator', filename_generator('head','.tail',1,3) ==  'head001.tail' )
+   call unit_test('filename_generator', filename_generator('head','.tail',100) ==  'head100.tail' )
+   call unit_test('filename_generator', filename_generator('head','.tail',1,3) ==  'head001.tail' )
 
-   call unit_check_done('filename_generator',msg='')
+   call unit_test_done('filename_generator',msg='')
 
 end subroutine test_filename_generator
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -79,17 +82,18 @@ subroutine test_notopen()
 
 integer :: i, bug, ierr, ierr2
 
-   call unit_check_start('notopen',msg='')
-   call unit_check_msg('notopen','check for preassigned files from unit 0 to unit 1000')
-   call unit_check_msg('notopen','assume 5 and 6 always return -1')
+   tmsg='Find a FUN/LUN (Fortran-unit-number) that is not in use'
+   call unit_test_start('notopen',msg=tmsg)
+   call unit_test_msg('notopen','check for preassigned files from unit 0 to unit 1000')
+   call unit_test_msg('notopen','assume 5 and 6 always return -1')
 
    do i=0,1000
       if(notopen(i,i,ierr)  /=  i)then
          bug=notopen(i,i,ierr2) ! gfortran 11 bug; OK in 9, 10
-         call unit_check_msg('notopen','INUSE:',i,ierr,bug )
+         call unit_test_msg('notopen','INUSE:',i,ierr,bug )
       endif
    enddo
-   call unit_check('notopen', notopen(5,6,ierr)            ==  -1 ,'preassigned')
+   call unit_test('notopen', notopen(5,6,ierr)            ==  -1 ,'preassigned')
 
    do i=10,30,1
      open(unit=i,status="scratch")
@@ -97,34 +101,35 @@ integer :: i, bug, ierr, ierr2
 
    close(25)
    close(28)
-   call unit_check('notopen', notopen(10,30)            ==  25 )
-   call unit_check('notopen', notopen()                 ==  25 )
-   call unit_check('notopen', notopen(start=12,end=30)  ==  25 )
-   call unit_check('notopen', notopen(26)               ==  28 )
-   call unit_check('notopen', notopen(26,99)            ==  28 )
+   call unit_test('notopen', notopen(10,30)            ==  25 )
+   call unit_test('notopen', notopen()                 ==  25 )
+   call unit_test('notopen', notopen(start=12,end=30)  ==  25 )
+   call unit_test('notopen', notopen(26)               ==  28 )
+   call unit_test('notopen', notopen(26,99)            ==  28 )
 
-   call unit_check_done('notopen',msg='')
+   call unit_test_done('notopen',msg='')
 
 end subroutine test_notopen
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_print_inquire()
-
-   call unit_check_start('print_inquire',msg='')
-   !!call unit_check('print_inquire', 0 == 0, 'checking',100)
-   call unit_check_done('print_inquire',msg='')
+   tmsg='Do INQUIRE on file by name/number and print results'
+   call unit_test_start('print_inquire',msg=tmsg)
+   !!call unit_test('print_inquire', 0 == 0, 'checking',100)
+   call unit_test_done('print_inquire',msg='')
 end subroutine test_print_inquire
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rd()
-
-   call unit_check_start('rd',msg='')
-   !!call unit_check('rd_character', 0 == 0, 'checking',100)
-   call unit_check_done('rd',msg='')
+   tmsg='ask for string from standard input with user-definable prompt'
+   call unit_test_start('rd',msg=tmsg)
+   !!call unit_test('rd_character', 0 == 0, 'checking',100)
+   call unit_test_done('rd',msg='')
 end subroutine test_rd
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getline()
 character(len=:),allocatable :: line, last, expected
 integer                      :: lun, ierr, stat, icount
-   call unit_check_start('getline',msg='')
+   tmsg='read a line from specified LUN into allocatable string up to line length limit'
+   call unit_test_start('getline',msg=tmsg)
    ierr=filewrite('_scratch_getline.txt>',[ character(len=80) :: &
    &achar(9)//'abcdefghij\ ', &
    &'klmnop'//achar(8)//'\' , &
@@ -135,21 +140,22 @@ integer                      :: lun, ierr, stat, icount
    INFINITE: do while (getline(line,lun,stat) == 0)
       icount=icount+1
       last=line
-      if(unit_check_level.gt.0.or..true.) write (*, '(*(g0))') 'getline>>>>',icount,' [',line,']'
+      if(unit_test_level.gt.0.or..true.) write (*, '(*(g0))') 'getline>>>>',icount,' [',line,']'
    enddo INFINITE
    expected='wxyz'
-   call unit_check('getline',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
-   call unit_check('getline',icount.eq.4,'expected ',4,'lines got',icount)
-   call unit_check('getline',last.eq.expected,'expected',expected,'got',last)
+   call unit_test('getline',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
+   call unit_test('getline',icount.eq.4,'expected ',4,'lines got',icount)
+   call unit_test('getline',last.eq.expected,'expected',expected,'got',last)
    ierr=filedelete('_scratch_getline.txt')
-   call unit_check_done('getline',msg='')
+   call unit_test_done('getline',msg='')
 
 end subroutine test_getline
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_line()
 character(len=:),allocatable :: line, last, expected
 integer                      :: lun, ierr, stat, icount
-   call unit_check_start('read_line',msg='')
+   tmsg='read a sanitized line from specified LUN into allocatable string'
+   call unit_test_start('read_line',msg=tmsg)
    ierr=filewrite('_scratch_read_line.txt>',[ character(len=80) :: &
    &achar(9)//'abcdefghij\ ', &
    &'klmnop'//achar(8)//'\' , &
@@ -160,22 +166,24 @@ integer                      :: lun, ierr, stat, icount
    INFINITE: do while (read_line(line,lun,ios=stat) == 0)
       icount=icount+1
       last=line
-      if(unit_check_level.gt.0) write (*, '(*(g0))') 'read_line>>>>',icount,' [',line,']'
+      if(unit_test_level.gt.0) write (*, '(*(g0))') 'read_line>>>>',icount,' [',line,']'
    enddo INFINITE
    expected='        abcdefghijklmnop qrstuvwxyz'
-   call unit_check('read_line',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
-   call unit_check('read_line',icount.eq.1,'expected ',1,'lines got',icount)
-   call unit_check('read_line',last.eq.expected,'expected',expected,'got',last)
+   call unit_test('read_line',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
+   call unit_test('read_line',icount.eq.1,'expected ',1,'lines got',icount)
+   call unit_test('read_line',last.eq.expected,'expected',expected,'got',last)
    ierr=filedelete('_scratch_read_line.txt')
-   call unit_check_done('read_line',msg='')
+   call unit_test_done('read_line',msg='')
 
 end subroutine test_read_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_table()
 doubleprecision,allocatable :: array(:,:)
 integer :: ierr
-
-   call unit_check_start('read_table',msg='')
+integer, allocatable :: expected(:)
+integer, allocatable :: answer(:)
+   tmsg='read file containing a table of numeric values'
+   call unit_test_start('read_table',msg=tmsg)
    ! create test file
    open(file='inputfile',unit=10,action='write')
    write(10,'(a)') [character(len=80):: &
@@ -194,22 +202,24 @@ integer :: ierr
    ! read file as a table
    call read_table('inputfile',array,ierr,comment='#')
       ! print values
-   call unit_check( 'read_table', size(array      )  ==  6,                 'checking size' )
-   call unit_check( 'read_table', size(array,dim=1)  ==  2,                 'checking rows' )
-   call unit_check( 'read_table', size(array,dim=2)  ==  3,                 'checking columns' )
-   call unit_check( 'read_table', sum(nint(array))   ==  308,               'sum' )
-   call unit_check( 'read_table', all([nint(array)]  ==  [1,4,-5,2,300,6]), 'values' )
+   call unit_test( 'read_table', size(array      )  ==  6,   'checking size' ,  'expected',6,'got',size(array) )
+   call unit_test( 'read_table', size(array,dim=1)  ==  2,   'checking rows' ,  'expected',2,'got',size(array,dim=1) )
+   call unit_test( 'read_table', size(array,dim=2)  ==  3,   'checking columns','expected',3,'got',size(array,dim=2) )
+   call unit_test( 'read_table', sum(nint(array))   ==  308, 'sum' ,'expected',308,'got',sum(nint(array)) )
+   expected= [1,4,-5,2,300,6]
+   answer=[nint(array)]
+   call unit_test( 'read_table', all(answer == expected), 'values' ,'expected',str(expected),'got',str(answer))
+
    ! remove sample file
    open(file='inputfile',unit=10)
    close(unit=10,status='delete')
-   call unit_check_done('read_table',msg='')
+   call unit_test_done('read_table',msg='')
 end subroutine test_read_table
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filebyte()
 character(len=1),allocatable :: data2(:)
 character(len=:),allocatable :: line
 integer :: ierr
-   call unit_check_start('fileread',msg='')
    ierr=filewrite('_scratch.txt>',[ character(len=10) :: &
    &'abcdefghij', &
    &'klmnop    ', &
@@ -217,17 +227,18 @@ integer :: ierr
    &'wxyz      ', &
    &''])
 
-   call unit_check_start('filebyte',msg='')
+   tmsg='read a file into a character array'
+   call unit_test_start('filebyte',msg=tmsg)
    call filebyte('_scratch.txt',data2)
    if(.not.allocated(data2))then
-      call unit_check_bad('filebyte','failed to load file','_scratch.txt')
+      call unit_test_bad('filebyte','failed to load file','_scratch.txt')
    else
       line=repeat(' ',size(data2))
       write(line,'(*(a))')pack(data2,index('abcdefghijklmnopqrstuvwxyz',data2).ne.0)
-      call unit_check('filebyte',line.eq.'abcdefghijklmnopqrstuvwxyz','find all the letters',line)
+      call unit_test('filebyte',line.eq.'abcdefghijklmnopqrstuvwxyz','find all the letters',line)
    endif
    ierr=filedelete('_scratch.txt')
-   call unit_check_done('filebyte',msg='')
+   call unit_test_done('filebyte',msg='')
 end subroutine test_filebyte
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fileread()
@@ -240,11 +251,13 @@ integer :: ierr
    &'                           ', &
    &'     That is all Folks!    ']
    ierr=filewrite('_scratch.txt',data)
+   tmsg='read a file into a string array'
+   call unit_test_start('fileread',msg=tmsg)
    call fileread('_scratch.txt',data2)
    if(.not.allocated(data2))then
-      call unit_check_bad('fileread','failed to load file','_scratch.txt')
+      call unit_test_bad('fileread','failed to load file','_scratch.txt')
    else
-      call unit_check('fileread', all(data==data2) , 'check read back file written')
+      call unit_test('fileread', all(data==data2) , 'check read back file written')
       if(.not.all(data==data2))then
          write(*,'(a)')'DATA:',size(data)
          write(*,'(a)')data
@@ -253,14 +266,15 @@ integer :: ierr
       endif
    endif
    ierr=filedelete('_scratch.txt')
-   call unit_check_done('fileread',msg='')
+   call unit_test_done('fileread',msg='')
 end subroutine test_fileread
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_number_of_lines()
 integer,parameter  :: lun=10
 character(len=256) :: iomsg
 integer            :: iostat
-   call unit_check_start('number_of_lines',msg='')
+   tmsg='read an open sequential file to get number of lines'
+   call unit_test_start('number_of_lines',msg=tmsg)
    ! create test file
    open(file='inputfile',unit=LUN,action='write')
    write(LUN,'(a)') [character(len=80):: &
@@ -269,53 +283,76 @@ integer            :: iostat
        '3                       ', &
        '4                       ', &
        '5                       ']
-   call unit_check('number_of_lines', number_of_lines(LUN) == -1, 'expected -1 lines, got', number_of_lines(LUN))
+   call unit_test('number_of_lines', number_of_lines(LUN) == -1, 'expected -1 lines, got', number_of_lines(LUN))
    close(unit=LUN,iostat=iostat)
    open(file='inputfile',unit=LUN,action='read')
    if(iostat /= 0)write(*,*)'<ERROR>*test_number_of_lines* 1:',trim(iomsg)
-   call unit_check('number_of_lines', number_of_lines(LUN) == 5, 'expected 5 lines, got', number_of_lines(LUN))
+   call unit_test('number_of_lines', number_of_lines(LUN) == 5, 'expected 5 lines, got', number_of_lines(LUN))
    close(unit=LUN,iostat=iostat,iomsg=iomsg)
    if(iostat /= 0)write(*,*)'<ERROR>*test_number_of_lines* 2:',trim(iomsg)
    ! read file as a table
    open(file='inputfile',unit=LUN)
    close(unit=LUN,status='delete',iostat=iostat)
    if(iostat /= 0)write(*,*)'<ERROR>*test_number_of_lines* 3:',trim(iomsg)
-   call unit_check_done('number_of_lines',msg='')
+   call unit_test_done('number_of_lines',msg='')
 end subroutine test_number_of_lines
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_basename()
 character(len=:),allocatable :: fn
-   call unit_check_start('basename',msg='')
+   tmsg='return last component from filename '
+   call unit_test_start('basename',msg=tmsg)
    fn='/home/user/src/code.f90'
-   call unit_check('basename', basename(fn) == 'code',            ' leaf with any suffix removed'    ,basename(fn) )
-   call unit_check('basename', basename(fn,'') == 'code.f90',     ' leaf with suffix retained'       ,basename(fn,'') )
-   call unit_check('basename', basename(fn,'.f90') == 'code',     ' with suffix unless it is ".f90"' ,basename(fn,'.f90') )
-   call unit_check('basename', basename(fn,'.F90') == 'code.f90', ' with suffix unless it is ".F90"' ,basename(fn,'.F90') )
-   call unit_check_done('basename',msg='')
+   call unit_test('basename', basename(fn) == 'code',            ' leaf with any suffix removed'    ,basename(fn) )
+   call unit_test('basename', basename(fn,'') == 'code.f90',     ' leaf with suffix retained'       ,basename(fn,'') )
+   call unit_test('basename', basename(fn,'.f90') == 'code',     ' with suffix unless it is ".f90"' ,basename(fn,'.f90') )
+   call unit_test('basename', basename(fn,'.F90') == 'code.f90', ' with suffix unless it is ".F90"' ,basename(fn,'.F90') )
+   call unit_test_done('basename',msg='')
 end subroutine test_basename
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_joinpath()
-   call unit_check_start('joinpath',msg='')
-   !!call unit_check('joinpath', 0 == 0, 'checking',100)
-   call unit_check_done('joinpath',msg='')
+   tmsg='join parts of a pathname together'
+   call unit_test_start('joinpath',msg=tmsg)
+   !!call unit_test('joinpath', 0 == 0, 'checking',100)
+   call unit_test_done('joinpath',msg='')
 end subroutine test_joinpath
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_is_hidden_file()
+logical,parameter :: F=.false., T=.true.
+   call unit_test_start('is_hidden_file', msg='categorize pathname as a hidden filename or not')
+   call showit_is_hidden_file('.abc', T)
+   call showit_is_hidden_file('./.', F)
+   call showit_is_hidden_file('..', F)
+   call showit_is_hidden_file('...', T)
+   call showit_is_hidden_file('/abc/def/notes.txt', F)
+   call showit_is_hidden_file('/abc/def/.hide', T)
+   call unit_test_done('is_hidden_file', msg='')
+end subroutine test_is_hidden_file
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine showit_is_hidden_file(path, expected)
+character(len=*), intent(in) :: path
+logical, intent(in) :: expected
+   call unit_test('is_hidden_file', is_hidden_file(path) .eqv.expected, 'for', path, 'expected', expected)
+end subroutine showit_is_hidden_file
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fileopen()
-   call unit_check_start('fileopen',msg='')
-   !!call unit_check('fileopen', 0 == 0, 'checking',100)
-   call unit_check_done('fileopen',msg='')
+   tmsg='A simple open of a sequential file'
+   call unit_test_start('fileopen',msg=tmsg)
+   !!call unit_test('fileopen', 0 == 0, 'checking',100)
+   call unit_test_done('fileopen',msg='')
 end subroutine test_fileopen
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fileclose()
-   call unit_check_start('fileclose',msg='')
-   !!call unit_check('fileclose', 0 == 0, 'checking',100)
-   call unit_check_done('fileclose',msg='')
+   tmsg='A simple close of a sequential file'
+   call unit_test_start('fileclose',msg=tmsg)
+   !!call unit_test('fileclose', 0 == 0, 'checking',100)
+   call unit_test_done('fileclose',msg='')
 end subroutine test_fileclose
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filewrite()
 integer :: ierr
 character(len=:),allocatable :: data(:), data2(:)
-   call unit_check_start('filewrite',msg='')
+   tmsg='A simple write of a CHARACTER array to a file'
+   call unit_test_start('filewrite',msg=tmsg)
    data=[ character(len=80) :: &
    &'This is the text to write  ', &
    &'into the file. It will be  ', &
@@ -326,9 +363,9 @@ character(len=:),allocatable :: data(:), data2(:)
    ! allocate character array and copy file into it
    call fileread('_scratch.txt',data2)
    if(.not.allocated(data2))then
-      call unit_check_bad('filewrite','failed to load file','_scratch.txt')
+      call unit_test_bad('filewrite','failed to load file','_scratch.txt')
    else
-      call unit_check('filewrite', all(data==data2) , 'check read back file written')
+      call unit_test('filewrite', all(data==data2) , 'check read back file written')
       if(.not.all(data==data2))then
          write(*,'(a)')'DATA:',size(data)
          write(*,'(a)')data
@@ -337,43 +374,49 @@ character(len=:),allocatable :: data(:), data2(:)
       endif
    endif
    ierr=filedelete('_scratch.txt')
-   call unit_check_done('filewrite',msg='')
+   call unit_test_done('filewrite',msg='')
 end subroutine test_filewrite
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filedelete()
-   call unit_check_start('filedelete',msg='')
-   !!call unit_check('filedelete', 0 == 0, 'checking',100)
-   call unit_check_done('filedelete',msg='')
+   tmsg='A simple close of an open file with STATUS="DELETE"'
+   call unit_test_start('filedelete',msg=tmsg)
+   !!call unit_test('filedelete', 0 == 0, 'checking',100)
+   call unit_test_done('filedelete',msg='')
 end subroutine test_filedelete
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_scratch
-   call unit_check_start('scratch',msg='')
-   !!call unit_check('scratch', 0 == 0, 'checking',100)
-   call unit_check_done('scratch',msg='')
+   tmsg='Return the name of a scratch file'
+   call unit_test_start('scratch',msg=tmsg)
+   !!call unit_test('scratch', 0 == 0, 'checking',100)
+   call unit_test_done('scratch',msg='')
 end subroutine test_scratch
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_separator()
-   call unit_check_start('separator',msg='')
-   !!call unit_check('separator', 0 == 0, 'checking',100)
-   call unit_check_done('separator',msg='')
+   tmsg='try to determine pathname directory separator character'
+   call unit_test_start('separator',msg=tmsg)
+   !!call unit_test('separator', 0 == 0, 'checking',100)
+   call unit_test_done('separator',msg='')
 end subroutine test_separator
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_which()
-   call unit_check_start('which',msg='')
-   !!call unit_check('which', 0 == 0, 'checking',100)
-   call unit_check_done('which',msg='')
+   tmsg='find the pathname of a command by searching the directories in $PATH'
+   call unit_test_start('which',msg=tmsg)
+   !!call unit_test('which', 0 == 0, 'checking',100)
+   call unit_test_done('which',msg='')
 end subroutine test_which
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lookfor()
-   call unit_check_start('lookfor',msg='')
-   !!call unit_check('lookfor', 0 == 0, 'checking',100)
-   call unit_check_done('lookfor',msg='')
+   tmsg='look for a filename in directories specified by an environment variable'
+   call unit_test_start('lookfor',msg=tmsg)
+   !!call unit_test('lookfor', 0 == 0, 'checking',100)
+   call unit_test_done('lookfor',msg='')
 end subroutine test_lookfor
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getname()
-   call unit_check_start('getname',msg='')
-   !!call unit_check('getname', 0 == 0, 'checking',100)
-   call unit_check_done('getname',msg='')
+   tmsg='get name of the current executable'
+   call unit_test_start('getname',msg=tmsg)
+   !!call unit_test('getname', 0 == 0, 'checking',100)
+   call unit_test_done('getname',msg='')
 end subroutine test_getname
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_splitpath()
@@ -382,48 +425,49 @@ character(len=maxlen)  :: dir
 character(len=maxlen)  :: name
 character(len=maxlen)  :: basename
 character(len=maxlen)  :: ext
-   call unit_check_start('splitpath',msg='')
+   tmsg='split a Unix pathname into components'
+   call unit_test_start('splitpath',msg=tmsg)
    call splitpath('/usr/local/bin/test.exe', dir, name, basename, ext)
-   call unit_check('splitpath', dir=='/usr/local/bin', 'directory','/usr/local/bin/',dir)
-   call unit_check('splitpath', name=='test.exe', 'name','test.exe',name)
-   call unit_check('splitpath', basename=='test', 'basename','test',basename)
-   call unit_check('splitpath', ext=='.exe', 'ext','.exe',ext)
+   call unit_test('splitpath', dir=='/usr/local/bin', 'directory','/usr/local/bin/',dir)
+   call unit_test('splitpath', name=='test.exe', 'name','test.exe',name)
+   call unit_test('splitpath', basename=='test', 'basename','test',basename)
+   call unit_test('splitpath', ext=='.exe', 'ext','.exe',ext)
 
    call splitpath('/usr/local/bin/test.exe', dir=dir)
-   call unit_check('splitpath', dir=='/usr/local/bin', 'directory','/usr/local/bin/',dir)
+   call unit_test('splitpath', dir=='/usr/local/bin', 'directory','/usr/local/bin/',dir)
 
    call splitpath('/usr/local/bin/test.exe', name=name)
-   call unit_check('splitpath', name=='test.exe', 'name','test.exe',name)
+   call unit_test('splitpath', name=='test.exe', 'name','test.exe',name)
 
    call splitpath('/usr/local/bin/test.exe', ext=ext)
-   call unit_check('splitpath', ext=='.exe', 'ext','.exe',ext)
+   call unit_test('splitpath', ext=='.exe', 'ext','.exe',ext)
 
    call splitpath('/usr/local/bin/test.exe', basename=basename)
-   call unit_check('splitpath', basename=='test', 'basename','test',basename)
+   call unit_test('splitpath', basename=='test', 'basename','test',basename)
 
-   call unit_check_done('splitpath',msg='')
+   call unit_test_done('splitpath',msg='')
 
 end subroutine test_splitpath
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_uniq()
-
-   call unit_check_start('uniq',msg='')
-   !!call unit_check('uniq', 0 == 0, 'checking',100)
-   call unit_check_done('uniq',msg='')
+   tmsg='append a number to the end of filename to make a unique name if name exists'
+   call unit_test_start('uniq',msg=tmsg)
+   !!call unit_test('uniq', 0 == 0, 'checking',100)
+   call unit_test_done('uniq',msg='')
 end subroutine test_uniq
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_env()
-
-   call unit_check_start('get_env',msg='')
-   !!call unit_check('get_env', 0 == 0, 'checking',100)
-   call unit_check_done('get_env',msg='')
+   tmsg='a function returning the value of an environment variable'
+   call unit_test_start('get_env',msg=tmsg)
+   !!call unit_test('get_env', 0 == 0, 'checking',100)
+   call unit_test_done('get_env',msg='')
 end subroutine test_get_env
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_next_char()
-
-   call unit_check_start('get_next_char',msg='')
-   !!call unit_check('get_next_char', 0 == 0, 'checking',100)
-   call unit_check_done('get_next_char',msg='')
+   tmsg='read from a file one character at a time'
+   call unit_test_start('get_next_char',msg=tmsg)
+   !!call unit_test('get_next_char', 0 == 0, 'checking',100)
+   call unit_test_done('get_next_char',msg='')
 end subroutine test_get_next_char
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

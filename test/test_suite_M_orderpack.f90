@@ -3,8 +3,8 @@ program runtest
 use M_framework__msg
 use M_framework__msg, only : str
 use M_framework__verify
-use M_framework__verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
-use M_framework__verify, only : unit_check_stop
+use M_framework__verify, only : unit_test_start, unit_test, unit_test_done, unit_test_good, unit_test_bad, unit_test_msg
+use M_framework__verify, only : unit_test_stop
 ! full ranking
 use M_orderpack__mrgref, only : mrgref
 use M_orderpack__mrgrnk, only : mrgrnk
@@ -36,7 +36,7 @@ implicit none
 character(len=*),parameter :: g='(*(g0,1x))'
 integer,parameter          :: dp=kind(0.0d0)
 
-   unit_check_level=0
+   unit_test_level=0
 
    call test_gen('mrgref')
    call test_gen('mrgrnk')
@@ -60,7 +60,7 @@ integer,parameter          :: dp=kind(0.0d0)
    call test_unista()
    call test_uniinv()
 
-   call unit_check_stop()
+   call unit_test_stop()
 
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -74,7 +74,7 @@ character(len=10)             :: cc(isz)
 integer                       :: indx(isz)
 integer                       :: i
 
-   call unit_check_start(name, '-library orderpack') ! start tests
+   call unit_test_start(name, '-library orderpack') ! start tests
 
    CALL RANDOM_NUMBER(RR)
    rr = rr*huge(0.0)
@@ -84,7 +84,7 @@ integer                       :: i
    case('mrgrnk');call mrgrnk(rr,indx); rr=rr(indx)
    case('mrgref');call mrgref(rr,indx); rr=rr(indx)
    endselect
-   call unit_check(name,all(rr(1:isz-1) .le. rr(2:isz)),'real test',isz,'values')
+   call unit_test(name,all(rr(1:isz-1) .le. rr(2:isz)),'real test',isz,'values')
 
    CALL RANDOM_NUMBER(RR)
    ii = rr*huge(0)
@@ -94,7 +94,7 @@ integer                       :: i
    case('mrgrnk');call mrgrnk(ii,indx); ii=ii(indx)
    case('mrgref');call mrgref(ii,indx); ii=ii(indx)
    endselect
-   call unit_check(name,all(ii(1:isz-1) .le. ii(2:isz)),'integer test',isz,'values')
+   call unit_test(name,all(ii(1:isz-1) .le. ii(2:isz)),'integer test',isz,'values')
 
    CALL RANDOM_NUMBER(DD)
    dd = dd*huge(0.0_dp)
@@ -104,7 +104,7 @@ integer                       :: i
    case('mrgrnk');call mrgrnk(dd,indx); dd=dd(indx)
    case('mrgref');call mrgref(dd,indx); dd=dd(indx)
    endselect
-   call unit_check(name,all(dd(1:isz-1) .le. dd(2:isz)),'double test',isz,'values')
+   call unit_test(name,all(dd(1:isz-1) .le. dd(2:isz)),'double test',isz,'values')
 
    do i=1,isz
       cc(i) = random_string('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',10)
@@ -115,9 +115,9 @@ integer                       :: i
    case('mrgrnk');call mrgrnk(cc,indx); cc=cc(indx)
    case('mrgref');call mrgref(cc,indx); cc=cc(indx)
    endselect
-   call unit_check(name,all(cc(1:isz-1) .le. cc(2:isz)),'string test, random',isz,'values')
+   call unit_test(name,all(cc(1:isz-1) .le. cc(2:isz)),'string test, random',isz,'values')
 
-   call unit_check_done(name,msg='test completed')
+   call unit_test_done(name,msg='test completed')
 
 end subroutine test_gen
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -127,7 +127,7 @@ integer,allocatable :: row(:)
 integer,allocatable :: xout(:,:)
 integer             :: isz, i, j, jsz
 real,allocatable    :: perturb(:)
-   call unit_check_start('ctrper', '-library orderpack') ! start tests
+   call unit_test_start('ctrper', '-library orderpack') ! start tests
         perturb=[0.0,0.1,1.0]
         jsz=size(perturb)
         isz=200
@@ -147,8 +147,8 @@ real,allocatable    :: perturb(:)
         !   write(*,'(*(i8,1x))')i,xout(:,i)
         !enddo
 
-   call unit_check('ctrper',all(xout(1,:) .eq. row),'perturb 0 should not change')
-   call unit_check('ctrper',.not.(all(xout(3,:) .eq. row)),'perturb 1 should be random,unlikely not changed')
+   call unit_test('ctrper',all(xout(1,:) .eq. row),'perturb 0 should not change')
+   call unit_test('ctrper',.not.(all(xout(3,:) .eq. row)),'perturb 1 should be random,unlikely not changed')
 
      char: block
       character(len=:),allocatable :: xdont(:)
@@ -159,7 +159,7 @@ real,allocatable    :: perturb(:)
       !write(*,g)'Perturbed ...............:',(trim(xdont(i)),i=1,isz)
       !write(*,g)
      endblock char
-   call unit_check_done('ctrper',msg='test completed')
+   call unit_test_done('ctrper',msg='test completed')
 
 end subroutine test_ctrper
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -169,20 +169,20 @@ implicit none
 integer,allocatable :: iarr(:)
 integer :: i
 integer :: imiddle
-   call unit_check_start('valnth', '-library orderpack') ! start tests
+   call unit_test_start('valnth', '-library orderpack') ! start tests
    ! find Nth lowest value in an array without sorting entire array
    iarr=[80,70,30,40,50,60,20,10]
    ! can return the same values as intrinsics minval() and maxval()
-   call unit_check('valnth',valnth(iarr,1).eq.minval(iarr),'like minval()')
-   call unit_check('valnth',valnth(iarr,size(iarr)).eq.maxval(iarr),'like maxval()')
+   call unit_test('valnth',valnth(iarr,1).eq.minval(iarr),'like minval()')
+   call unit_test('valnth',valnth(iarr,size(iarr)).eq.maxval(iarr),'like maxval()')
    ! but more generally it can return the Nth lowest value.
-   call unit_check('valnth',valnth(iarr,8).eq.80,'Nth value')
+   call unit_test('valnth',valnth(iarr,8).eq.80,'Nth value')
    ! so a value at the middle would be
    imiddle=(size(iarr)+1)/2
-   call unit_check('valnth',valnth(iarr,imiddle).eq.40,'find median')
+   call unit_test('valnth',valnth(iarr,imiddle).eq.40,'find median')
    ! sort the hard way, one value at a time
-   call unit_check('valnth', all([(valnth(iarr,i),i=1,size(iarr))].eq.[10,20,30,40,50,60,70,80]),'sort hard way')
-   call unit_check_done('valnth',msg='test completed')
+   call unit_test('valnth', all([(valnth(iarr,i),i=1,size(iarr))].eq.[10,20,30,40,50,60,70,80]),'sort hard way')
+   call unit_test_done('valnth',msg='test completed')
    if(allocated(iarr))deallocate(iarr)
 end subroutine test_valnth
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -192,22 +192,22 @@ implicit none
 integer,allocatable :: iarr(:)
 integer :: i
 integer :: imiddle
-   call unit_check_start('indnth', '-library orderpack') ! start tests
+   call unit_test_start('indnth', '-library orderpack') ! start tests
    ! find Nth lowest value in an array without sorting entire array
    iarr=[80,70,30,40,50,60,20,10]
    ! can return the same values as intrinsics minloc() and maxloc()
-   call unit_check('indnth',all(indnth(iarr,1         ).eq.minloc(iarr)),'like minloc()')
-   call unit_check('indnth',all(indnth(iarr,size(iarr)).eq.maxloc(iarr)),'like maxloc()')
+   call unit_test('indnth',all(indnth(iarr,1         ).eq.minloc(iarr)),'like minloc()')
+   call unit_test('indnth',all(indnth(iarr,size(iarr)).eq.maxloc(iarr)),'like maxloc()')
 
    ! but more generally it can return the Nth lowest value.
-   call unit_check('indnth',iarr(indnth(iarr,8)).eq.80,'Nth value')
+   call unit_test('indnth',iarr(indnth(iarr,8)).eq.80,'Nth value')
    ! so a value at the middle would be
    imiddle=(size(iarr)+1)/2
-   call unit_check('indnth',iarr(indnth(iarr,imiddle)).eq.40,'find median')
+   call unit_test('indnth',iarr(indnth(iarr,imiddle)).eq.40,'find median')
    ! sort the hard way, one value at a time
-   call unit_check('indnth', all([(iarr(indnth(iarr,i)),i=1,size(iarr))].eq.[10,20,30,40,50,60,70,80]),'sort hard way')
+   call unit_test('indnth', all([(iarr(indnth(iarr,i)),i=1,size(iarr))].eq.[10,20,30,40,50,60,70,80]),'sort hard way')
 
-   call unit_check_done('indnth',msg='test completed')
+   call unit_test_done('indnth',msg='test completed')
 end subroutine test_indnth
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fndnth
@@ -216,20 +216,20 @@ implicit none
 integer,allocatable :: iarr(:)
 integer :: i
 integer :: imiddle
-   call unit_check_start('fndnth', '-library orderpack') ! start tests
+   call unit_test_start('fndnth', '-library orderpack') ! start tests
    ! find Nth lowest value in an array without sorting entire array
    iarr=[80,70,30,40,50,60,20,10]
    ! can return the same values as intrinsics minval() and maxval()
-   call unit_check('fndnth',fndnth(iarr,1).eq.minval(iarr),'like minval()')
-   call unit_check('fndnth',fndnth(iarr,size(iarr)).eq.maxval(iarr),'like maxval()')
+   call unit_test('fndnth',fndnth(iarr,1).eq.minval(iarr),'like minval()')
+   call unit_test('fndnth',fndnth(iarr,size(iarr)).eq.maxval(iarr),'like maxval()')
    ! but more generally it can return the Nth lowest value.
-   call unit_check('fndnth',fndnth(iarr,8).eq.80,'Nth value')
+   call unit_test('fndnth',fndnth(iarr,8).eq.80,'Nth value')
    ! so a value at the middle would be
    imiddle=(size(iarr)+1)/2
-   call unit_check('fndnth',fndnth(iarr,imiddle).eq.40,'find median')
+   call unit_test('fndnth',fndnth(iarr,imiddle).eq.40,'find median')
    ! sort the hard way, one value at a time
-   call unit_check('fndnth', all([(fndnth(iarr,i),i=1,size(iarr))].eq.[10,20,30,40,50,60,70,80]),'sort hard way')
-   call unit_check_done('fndnth',msg='test completed')
+   call unit_test('fndnth', all([(fndnth(iarr,i),i=1,size(iarr))].eq.[10,20,30,40,50,60,70,80]),'sort hard way')
+   call unit_test_done('fndnth',msg='test completed')
 end subroutine test_fndnth
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_indmed
@@ -240,25 +240,25 @@ real(kind=dp),allocatable :: ddont(:)
 integer,allocatable :: idont(:)
 character(len=:),allocatable :: cdont(:)
 integer :: ii
-   call unit_check_start('indmed', '-library orderpack') ! start tests
+   call unit_test_start('indmed', '-library orderpack') ! start tests
 
    xdont=[80.0,70.0,20.0,10.0,1000.0]
    call indmed(xdont,ii)
-   call unit_check('indmed', ii.eq.2.and.xdont(ii).eq.70.0, 'real median',ii,xdont(ii))
+   call unit_test('indmed', ii.eq.2.and.xdont(ii).eq.70.0, 'real median',ii,xdont(ii))
    !
    idont=[11, 22, 33, 44, 55, 66, 77, 88]
    call indmed(idont,ii)
-   call unit_check('indmed', ii.eq.4.and.idont(ii).eq.44, 'integer median',ii,idont(ii))
+   call unit_test('indmed', ii.eq.4.and.idont(ii).eq.44, 'integer median',ii,idont(ii))
    !
    ddont=[11.0d0,77.0d0,22.0d0,66.0d0,33.0d0,88.0d0]
    call indmed(ddont,ii)
-   call unit_check('indmed', ii.eq.5.and.ddont(ii).eq.33.0d0, 'doubleprecision median',ii,ddont(ii))
+   call unit_test('indmed', ii.eq.5.and.ddont(ii).eq.33.0d0, 'doubleprecision median',ii,ddont(ii))
    !
    cdont=[character(len=20) :: 'apple','bee','cherry','duck','elephant','finger','goose','h','insect','j']
    call indmed(cdont,ii)
-   call unit_check('indmed', ii.eq.5.and.cdont(ii).eq.'elephant', 'character median',ii,cdont(ii))
+   call unit_test('indmed', ii.eq.5.and.cdont(ii).eq.'elephant', 'character median',ii,cdont(ii))
    !
-   call unit_check_done('indmed',msg='test completed')
+   call unit_test_done('indmed',msg='test completed')
 end subroutine test_indmed
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_valmed
@@ -267,18 +267,18 @@ implicit none
 real,allocatable :: xdont(:)
 real(kind=dp),allocatable :: ddont(:)
 integer,allocatable :: idont(:)
-   call unit_check_start('valmed', '-library orderpack') ! start tests
+   call unit_test_start('valmed', '-library orderpack') ! start tests
 
    xdont=[80.0,70.0,20.0,10.0,1000.0]
-   call unit_check('valmed', valmed(xdont).eq.70.0, 'real valmed',valmed(xdont),70.0)
+   call unit_test('valmed', valmed(xdont).eq.70.0, 'real valmed',valmed(xdont),70.0)
    !
    idont=[11, 22, 33, 44, 55, 66, 77, 88]
-   call unit_check('valmed', valmed(idont).eq.44, 'integer valmed',valmed(idont),44)
+   call unit_test('valmed', valmed(idont).eq.44, 'integer valmed',valmed(idont),44)
    !
    ddont=[11.0d0, 77.0d0, 22.0d0, 66.0d0, 33.0d0, 88.0d0]
-   call unit_check('valmed', valmed(ddont).eq.33.0d0, 'doubleprecision valmed',valmed(ddont),33.0)
+   call unit_test('valmed', valmed(ddont).eq.33.0d0, 'doubleprecision valmed',valmed(ddont),33.0)
    !
-   call unit_check_done('valmed',msg='test completed')
+   call unit_test_done('valmed',msg='test completed')
 end subroutine test_valmed
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_median
@@ -287,31 +287,31 @@ implicit none
 real,allocatable :: xdont(:)
 real(kind=dp),allocatable :: ddont(:)
 integer,allocatable :: idont(:)
-   call unit_check_start('median', '-library orderpack') ! start tests
+   call unit_test_start('median', '-library orderpack') ! start tests
 
    xdont=[80.0,70.0,20.0,10.0,1000.0]
-   call unit_check('median', median(xdont).eq.70.0, 'real median',median(xdont),70.0)
+   call unit_test('median', median(xdont).eq.70.0, 'real median',median(xdont),70.0)
    !
    idont=[11, 22, 33, 44, 55, 66, 77, 88]
-   call unit_check('median', median(idont).eq.49, 'integer median',median(idont),49)
+   call unit_test('median', median(idont).eq.49, 'integer median',median(idont),49)
    !
    ddont=[11.0d0,77.0d0,22.0d0,66.0d0,33.0d0,88.0d0]
-   call unit_check('median', median(ddont).eq.49.5d0, 'doubleprecision median',median(ddont),49.5)
+   call unit_test('median', median(ddont).eq.49.5d0, 'doubleprecision median',median(ddont),49.5)
    !
-   call unit_check_done('median',msg='test completed')
+   call unit_test_done('median',msg='test completed')
 end subroutine test_median
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_inspar()
 implicit none
 integer,parameter :: big=2000, little=300
 real              :: valsr(big)
-   call unit_check_start('inspar', '-library orderpack') ! start tests
+   call unit_test_start('inspar', '-library orderpack') ! start tests
    call random_seed()
    call random_number(valsr)
    valsr=valsr*1000000.0-500000.0
    call inspar(valsr,little)
-   call unit_check('inspar',all(valsr(1:little-1) .le. valsr(2:little)),'real test',little,'out of',big,'values')
-   call unit_check_done('inspar',msg='test completed')
+   call unit_test('inspar',all(valsr(1:little-1) .le. valsr(2:little)),'real test',little,'out of',big,'values')
+   call unit_test_done('inspar',msg='test completed')
 end subroutine test_inspar
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rapknr()
@@ -319,14 +319,14 @@ implicit none
 integer,parameter :: big=2000, little=300
 real              :: valsr(big)
 integer           :: indx(little)
-   call unit_check_start('rapknr', '-library orderpack') ! start tests
+   call unit_test_start('rapknr', '-library orderpack') ! start tests
    call random_seed()
    call random_number(valsr)
    valsr=valsr*1000000.0-500000.0
    call rapknr(valsr,indx,little)
    valsr(:300)=valsr(indx(:little))
-   call unit_check('rapknr',all(valsr(1:little-1) .ge. valsr(2:little)),'real test',little,'out of',big,'values')
-   call unit_check_done('rapknr',msg='test completed')
+   call unit_test('rapknr',all(valsr(1:little-1) .ge. valsr(2:little)),'real test',little,'out of',big,'values')
+   call unit_test_done('rapknr',msg='test completed')
 end subroutine test_rapknr
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rnkpar()
@@ -334,14 +334,14 @@ implicit none
 integer,parameter :: big=2000, little=300
 real              :: valsr(big)
 integer           :: indx(little)
-   call unit_check_start('rnkpar', '-library orderpack') ! start tests
+   call unit_test_start('rnkpar', '-library orderpack') ! start tests
    call random_seed()
    call random_number(valsr)
    valsr=valsr*1000000.0-500000.0
    call rnkpar(valsr,indx,little)
    valsr(:300)=valsr(indx(:little))
-   call unit_check('rnkpar',all(valsr(1:little-1) .le. valsr(2:little)),'real test',little,'out of',big,'values')
-   call unit_check_done('rnkpar',msg='test completed')
+   call unit_test('rnkpar',all(valsr(1:little-1) .le. valsr(2:little)),'real test',little,'out of',big,'values')
+   call unit_test_done('rnkpar',msg='test completed')
 end subroutine test_rnkpar
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rinpar()
@@ -349,14 +349,14 @@ implicit none
 integer,parameter :: big=2000, little=300
 real              :: valsr(big)
 integer           :: indx(little)
-   call unit_check_start('rinpar', '-library orderpack') ! start tests
+   call unit_test_start('rinpar', '-library orderpack') ! start tests
    call random_seed()
    call random_number(valsr)
    valsr=valsr*1000000.0-500000.0
    call rinpar(valsr,indx,little)
    valsr(:300)=valsr(indx(:little))
-   call unit_check('rinpar',all(valsr(1:little-1) .le. valsr(2:little)),'real test',little,'out of',big,'values')
-   call unit_check_done('rinpar',msg='test completed')
+   call unit_test('rinpar',all(valsr(1:little-1) .le. valsr(2:little)),'real test',little,'out of',big,'values')
+   call unit_test_done('rinpar',msg='test completed')
 end subroutine test_rinpar
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_refpar()
@@ -364,14 +364,14 @@ implicit none
 integer,parameter :: big=2000, little=300
 real              :: valsr(big)
 integer           :: indx(little)
-   call unit_check_start('refpar', '-library orderpack') ! start tests
+   call unit_test_start('refpar', '-library orderpack') ! start tests
    call random_seed()
    call random_number(valsr)
    valsr=valsr*1000000.0-500000.0
    call refpar(valsr,indx,little)
    valsr(:300)=valsr(indx(:little))
-   call unit_check('refpar',all(valsr(1:little-1) .le. valsr(2:little)),'real test',little,'out of',big,'values')
-   call unit_check_done('refpar',msg='test completed')
+   call unit_test('refpar',all(valsr(1:little-1) .le. valsr(2:little)),'real test',little,'out of',big,'values')
+   call unit_test_done('refpar',msg='test completed')
 end subroutine test_refpar
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unipar()
@@ -380,7 +380,7 @@ implicit none
 integer,allocatable :: xdont(:)
 integer,allocatable :: irngt(:)
 integer :: nord
-   call unit_check_start('unipar', '-library orderpack') ! start tests
+   call unit_test_start('unipar', '-library orderpack') ! start tests
    !
    xdont=[10,5,7,1,4,5,6,8,9,10,1]
    nord=5
@@ -389,18 +389,18 @@ integer :: nord
    !
    call unipar(xdont,irngt,nord)
 
-   call unit_check('unipar',nord.eq.5,'number of unique values found',nord,5)
-   call unit_check('unipar',all(irngt(1:nord) .eq. [11,5,2,7,3]) ,'returned indices')
-   call unit_check('unipar',all(xdont(irngt(1:nord)) .eq.[1,4,5,6,7]) ,'returned values')
+   call unit_test('unipar',nord.eq.5,'number of unique values found',nord,5)
+   call unit_test('unipar',all(irngt(1:nord) .eq. [11,5,2,7,3]) ,'returned indices')
+   call unit_test('unipar',all(xdont(irngt(1:nord)) .eq.[1,4,5,6,7]) ,'returned values')
 
-   call unit_check_done('unipar',msg='test completed')
+   call unit_test_done('unipar',msg='test completed')
 end subroutine test_unipar
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_mulcnt()
 character(len=20),allocatable :: strings(:)
 integer,allocatable :: cindx(:)
 integer :: csz
-   call unit_check_start('mulcnt', '-library orderpack') ! start tests
+   call unit_test_start('mulcnt', '-library orderpack') ! start tests
    !
    strings= [ character(len=20) ::                   &
     & 'two  ',  'four ', 'three', 'five',   'five',  &
@@ -410,34 +410,34 @@ integer :: csz
    if(allocated(cindx))deallocate(cindx)
    allocate(cindx(csz))
    call mulcnt(strings,cindx)
-   call unit_check('mulcnt',all(cindx .eq.  [2,4,3,5,5,2,4,3,5,5,4,4,3,1,5]) ,'returned values')
-   call unit_check_done('mulcnt',msg='test completed')
+   call unit_test('mulcnt',all(cindx .eq.  [2,4,3,5,5,2,4,3,5,5,4,4,3,1,5]) ,'returned values')
+   call unit_test_done('mulcnt',msg='test completed')
 end subroutine test_mulcnt
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unirnk()
 integer,allocatable :: xvalt(:)
 integer,allocatable :: irngt(:)
 integer :: nuni
-   call unit_check_start('unirnk', '-library orderpack') ! start tests
+   call unit_test_start('unirnk', '-library orderpack') ! start tests
    xvalt=[10,5,7,1,4,5,6,8,9,10,1]
    if(allocated(irngt))deallocate(irngt)
    allocate(irngt(size(xvalt)))
    call unirnk(xvalt,irngt,nuni)
-   call unit_check('unirnk',nuni.eq.8,'number of indices. got',nuni,'expected',8)
-   call unit_check('unirnk',all(irngt(:nuni) .eq.  [ 4,5,2,7,3,8,9,1 ]) ,'returned indices')
-   call unit_check('unirnk',all(xvalt(irngt(:nuni)) .eq.  [ 1,4,5,6,7,8,9,10 ]) ,'sorted data')
-   call unit_check_done('unirnk',msg='test completed')
+   call unit_test('unirnk',nuni.eq.8,'number of indices. got',nuni,'expected',8)
+   call unit_test('unirnk',all(irngt(:nuni) .eq.  [ 4,5,2,7,3,8,9,1 ]) ,'returned indices')
+   call unit_test('unirnk',all(xvalt(irngt(:nuni)) .eq.  [ 1,4,5,6,7,8,9,10 ]) ,'sorted data')
+   call unit_test_done('unirnk',msg='test completed')
 end subroutine test_unirnk
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_unista()
 integer,allocatable :: xdont(:)
 integer :: nuni
-   call unit_check_start('unista', '-library orderpack') ! start tests
+   call unit_test_start('unista', '-library orderpack') ! start tests
    xdont=[44,33,33,33,22,11,33,44,55,33]
    call unista(xdont,nuni)
-   call unit_check('unista',nuni.eq.5,'number of indices. got',nuni,'expected',5)
-   call unit_check('unista',all(xdont(:nuni) .eq.  [ 44,33,22,11,55 ]) ,'unique values')
-   call unit_check_done('unista',msg='test completed')
+   call unit_test('unista',nuni.eq.5,'number of indices. got',nuni,'expected',5)
+   call unit_test('unista',all(xdont(:nuni) .eq.  [ 44,33,22,11,55 ]) ,'unique values')
+   call unit_test_done('unista',msg='test completed')
 end subroutine test_unista
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_uniinv()
@@ -452,16 +452,16 @@ integer :: i
 
    call uniinv(xdont,igoest)
 
-   call unit_check('uniinv',all(igoest .eq.  [ 1,2,3,1,2,3,1,2,3 ]) ,'returned indices')
+   call unit_test('uniinv',all(igoest .eq.  [ 1,2,3,1,2,3,1,2,3 ]) ,'returned indices')
    imx=maxval(igoest)
-   call unit_check('unista',imx.eq.3,'unique indices. got',imx,'expected',3)
+   call unit_test('unista',imx.eq.3,'unique indices. got',imx,'expected',3)
    if(allocated(out))deallocate(out)
    allocate(out(imx))
    do i=1,imx
            out(igoest(i))=xdont(i)
    enddo
-   call unit_check('uniinv',all(out .eq.  [ 10,20,30 ]) ,'sorted unique values')
-   call unit_check_done('uniinv',msg='test completed')
+   call unit_test('uniinv',all(out .eq.  [ 10,20,30 ]) ,'sorted unique values')
+   call unit_test_done('uniinv',msg='test completed')
 end subroutine test_uniinv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 function random_string(chars,length) result(out)

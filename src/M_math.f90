@@ -4421,11 +4421,11 @@ integer                         :: ind(1)
 end function closest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_closest()
-use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_framework__verify, only : unit_check_level
-   call unit_check_start('closest',msg='')
-   !*!call unit_check('closest', 0.eq.0, 'checking',100)
-   call unit_check_done('closest',msg='')
+use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_framework__verify, only : unit_test_level
+   call unit_test_start('closest',msg='')
+   !*!call unit_test('closest', 0.eq.0, 'checking',100)
+   call unit_test_done('closest',msg='')
 end subroutine test_closest
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

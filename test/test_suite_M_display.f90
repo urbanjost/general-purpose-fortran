@@ -1,5 +1,5 @@
 PROGRAM TEST_M_display
-use M_framework__verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad
+use M_framework__verify, only : unit_test, unit_test_start, unit_test_good, unit_test_bad
 
   ! MAIN TEST PROGRAM FOR M_display. SEE ALSO test_M_display_fpp.F90
 
@@ -32,17 +32,8 @@ use M_framework__verify, only : unit_check, unit_check_start, unit_check_good, u
   character(3)  :: adv = 'no'
   character(90) :: fmt = '("  Testing M_display, int kind=",I0,", real kind=",I0,", logical kind=",I0,"...")'
 
-   write(*,'(a)')'STARTED M_display'
   ! Use goodbad(1) to indicate the test sequence was begun
-   call unit_check_start('M_display',' &
-      & -section 3  &
-      & -library libGPF  &
-      & -filename `pwd`/M_display.FF &
-      & -documentation y &
-      &  -prep         y &
-      &  -ccall        n &
-      &  -archive      GPF.a &
-      & ')
+   call unit_test_start('M_display',' print small arrays ')
 
   if (verbose > 0) adv = 'yes'
   write(*, fmt, advance = adv) sik, srk, logikind
@@ -65,7 +56,7 @@ use M_framework__verify, only : unit_check, unit_check_start, unit_check_good, u
   call test_error_messages
   call close_8
   write(*,'("  OK")')
-  call unit_check_good('M_display')
+  call unit_test_good('M_display')
   write(*,'(a)')'COMPLETED M_display'
 
 CONTAINS

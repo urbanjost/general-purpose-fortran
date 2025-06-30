@@ -59,15 +59,15 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <dt> DESCRIPTION </dt>
 <dd>
 <p>
-   The M_time(3f) Fortran module and associated utility programs
-   provide date and time-related procedures. Both a procedural and OOP
-   (Object Oriented Programming) interface are provided.
-   The primary conversion procedures are provided as both a simple function
-   and a subroutine returning error flags and finer-grained control.
+   The M_time(3f) Fortran module and associated utility programs provide
+   date and time-related procedures. Both a procedural and OOP (Object
+   Oriented Programming) interface are provided.  The primary conversion
+   procedures are provided as both a simple function, and as a subroutine
+   which returns an error flag and finer-grained control.
 
    Each routine is accompanied by a man-page which includes a sample
-   program for that procedure. This is also provided in HTML format
-   both in individual pages and a book format.
+   program for that procedure. This is also provided in HTML format both
+   in individual pages and a book format.
 
    The man-page example programs, unit tests and additional examples
    are all provided in the distribution package.
@@ -195,7 +195,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr>
    <td><a href="date_to_bas.3m_time.html"> date_to_bas(dat,BAS,IERR)      </a>
    </br>or</br>
-   <a href="d2m.3m_time.html"> d2m(dat)&nbsp;result(BAS)    </a>
+   <a href="d2b.3m_time.html"> d2b(dat)&nbsp;result(BAS)    </a>
    </td>
    <td>%nbsp; </td>
    <td> Converts date array to Baseday And Seconds date</td>
@@ -243,7 +243,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 first day of given month name in specified year</td></tr>
 
 <tr><th colspan="3">DAY OF WEEK               </th></tr>
-<tr><td><a href="dow.3m_time.html"> dow(dat,[WEEKDAY],[DAY],IERR)  </a></td><td>%weekday() </td><td> Convert date array to day of the week as number(Mon=1) and name</td></tr>
+<tr><td><a href="dow.3m_time.html"> dow(dat,[WEEKDAY],[DAY],[IERR],[SHORT])  </a></td><td>%weekday() </td><td> Convert date array to day of the week as number(Mon=1) and name</td></tr>
 
 <tr><th colspan="3">LOCALE                    </th></tr>
 <tr><td><a href="locale.3m_time.html"> locale(name,month_names,weekday_names,month_names_abbr,weekday_names_abbr,IERR)  </a></td><td>&nbsp; </td><td> basic ASCII locale definition</td></tr>

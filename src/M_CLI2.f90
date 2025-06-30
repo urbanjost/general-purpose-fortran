@@ -2689,6 +2689,7 @@ subroutine ifnull()
 
    if(upper(oldvalue(1:1)) == 'F'.or.upper(oldvalue(1:1)) == 'T')then
       call update(lastkeyword,'T')
+      !call update(lastkeyword,upper(oldvalue(1:1)))
    elseif(oldvalue(1:1) == '"')then
       call update(lastkeyword,'" "')
    else

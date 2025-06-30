@@ -15,9 +15,9 @@
 
       !! unit test
       subroutine test_suite_M_demo
-      use M_verify, only: unit_check_start, unit_check
-      use M_verify, only: unit_check_good, unit_check_bad, unit_check_done
-      use M_verify, only: unit_check_msg, unit_check_stop
+      use M_verify, only: unit_test_start, unit_test
+      use M_verify, only: unit_test_good, unit_test_bad, unit_test_done
+      use M_verify, only: unit_test_msg, unit_test_stop
       implicit none
       integer :: i, j, k
       integer,allocatable :: array(:)
@@ -36,26 +36,26 @@
 
       subroutine test_one()
       !  register an entry for specified name ("one") in database with status of zero (0)
-      call unit_check_start('one')
+      call unit_test_start('one')
 
       !  if mask test fails, can
       !  * produce a SUCCESS: or FAIL: message and stop program
       !  * change database status for specified entry to -1 and stop program, else continue
       !  * produce a SUCCESS: or FAIL: message and keep going
       !  * produce a FAIL: message if test fails but no SUCCESS: message if test passes
-      call unit_check('one',i > 0,msg='I > 0')
+      call unit_test('one',i > 0,msg='I > 0')
 
       ! using ANY(3f) and ALL(3f)
-      call unit_check('one',all([i,j,k] > 0),      'testing if everyone greater than zero')
+      call unit_test('one',all([i,j,k] > 0),      'testing if everyone greater than zero')
       ! display message built of scalars as well
-      call unit_check('one',all(.not.[i,j,k] == 4),'for set ',i,j,k,'testing if no one is equal to four')
+      call unit_test('one',all(.not.[i,j,k] == 4),'for set ',i,j,k,'testing if no one is equal to four')
 
-      ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
+      ! for tests that are hard to reduce to a logical test just call unit_test_bad(3f) if fail
       if(i+j+k < 1)then
-         call unit_check_bad('one')
+         call unit_test_bad('one')
       endif
 
-      call unit_check_done('one','checks on "one" ended')
+      call unit_test_done('one','checks on "one" ended')
       end subroutine test_one
 
       subroutine test_two
@@ -70,9 +70,9 @@
       ! write(*,*)all([a,b,c,d] == [21,51,14,45]) ! compare a list. This would return T
       ! write(*,*)all(arr == [21,51,14,45])       ! compare an array. This would return T
       ! you know how valuable ANY(3f) and ALL(3f) will be
-      call unit_check_start('two','check on "two" passed')
-      call unit_check('two', 1 > 0 .and. abs(10.10000-10.10001) < 0.0001,msg='two looks good')
-      call unit_check_done('two','checks on "two" ended')
+      call unit_test_start('two','check on "two" passed')
+      call unit_test('two', 1 > 0 .and. abs(10.10000-10.10001) < 0.0001,msg='two looks good')
+      call unit_test_done('two','checks on "two" ended')
       end subroutine test_two
 
       end subroutine test_suite_M_demo
@@ -81,9 +81,9 @@
 
       program demo_M_verify
       use M_msg__demo,  only: test_suite_M_demo
-      use M_verify, only: unit_check_command, unit_check_keep_going,unit_check_level
-      unit_check_command=''
-      unit_check_keep_going=.true.
-      unit_check_level=0
+      use M_verify, only: unit_test_command, unit_test_keep_going,unit_test_level
+      unit_test_command=''
+      unit_test_keep_going=.true.
+      unit_test_level=0
         call test_suite_M_demo
       end program demo_M_verify

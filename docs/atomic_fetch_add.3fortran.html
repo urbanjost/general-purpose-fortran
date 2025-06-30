@@ -58,7 +58,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-ATOMIC_FETCH_ADD(3) - [ATOMIC] Atomic ADD operation with prior fetch
+ATOMIC_FETCH_ADD(3) - [ATOMIC] Atomic fetch and add operation
 <P>
 </BLOCKQUOTE>
 <BLOCKQUOTE>
@@ -93,12 +93,32 @@ call atomic_fetch_add(atom, value, old [,stat] )
 <BLOCKQUOTE>
 <P>
 ATOMIC_FETCH_ADD(3) atomically stores the value of ATOM in OLD and adds
-the value of VAR to the variable ATOM. When STAT is present and the
-invocation was successful, it is assigned the value 0. If it is present
-and the invocation has failed, it is assigned a positive value; in
-particular, for a coindexed ATOM, if the remote image has stopped, it is
-assigned the value of iso_fortran_env&#146;s stat_stopped_image and if the
-remote image has failed, the value stat_failed_image.
+the value of VAR to the variable ATOM.
+<P>
+This operation is performed atomically, ensuring thread safety in
+parallel environments, such as when using coarrays in Fortran for
+parallel programming. It is part of the atomic operations defined in the
+Fortran 2008 standard and later, typically used with the ISO_FORTRAN_ENV
+module.
+<P>
+ATOMIC_FETCH_ADD(3) is useful in parallel programming to avoid race
+conditions when multiple images update a shared variable.
+<P>
+The operation is only guaranteed to be atomic for variables of kind
+ATOMIC_INT_KIND.
+<P>
+For coindexed variables (e.g., counter[1]), the operation targets the
+specified image’s coarray.
+<P>
+Always use synchronization (e.g., sync all) to ensure consistent state
+across images before and after atomic operations.
+<P>
+When STAT is present and the invocation was successful, it is assigned
+the value 0. If it is present and the invocation has failed, it is
+assigned a positive value; in particular, for a coindexed ATOM, if the
+remote image has stopped, it is assigned the value of ISO_FORTRAN_ENV&#146;s
+STAT_STOPPED_IMAGE and if the remote image has failed, the value
+STAT_FAILED_IMAGE.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -112,7 +132,9 @@ remote image has failed, the value stat_failed_image.
 o
 </TD><TD>
 ATOM : Scalar coarray or coindexed variable of integer type with
-atomic_int_kind kind. atomic_logical_kind kind.
+kind ATOMIC_INT_KIND (from ISO_FORTRAN_ENV).
+<P>
+Must be accessible across images in a parallel execution context.
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
@@ -125,12 +147,27 @@ o
 </TD><TD>
 OLD : Scalar of the same type and kind as ATOM.
 </TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+    On return, it contains the value of ATOM before the addition.
+<P>
+</PRE>
+<TABLE cellpadding=3>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-STAT : (optional) Scalar default-kind integer variable.
+STAT : (optional) Scalar default-kind integer variable. If present:
 </TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+          Set to 0 if the operation is successful.
+          Set to a positive value if the operation fails (e.g.,
+          STAT_STOPPED_IMAGE if the remote image has stopped, or
+          STAT_FAILED_IMAGE if the remote image has failed, as defined
+          in ISO_FORTRAN_ENV).
+<P>
+</PRE>
+</BLOCKQUOTE>
 <A name=5>
 
      <H3>EXAMPLES</H3>
@@ -138,17 +175,86 @@ STAT : (optional) Scalar default-kind integer variable.
 </A>
 <BLOCKQUOTE>
 <P>
+The following program demonstrates the use of ATOMIC_FETCH_ADD in a
+parallel context using coarrays. It increments a shared counter
+atomically across multiple images and retrieves the original value
+before the addition.
+<P>
 Sample program:
 <P>
 <PRE>
     program demo_atomic_fetch_add
-    use iso_fortran_env
-    implicit none
-    integer(atomic_int_kind) :: atom[*], old
-       call atomic_add(atom[1], this_image(), old)
+      use iso_fortran_env
+      implicit none
+      integer(atomic_int_kind) :: counter[*]  ! Coarray for shared counter
+      integer(atomic_int_kind) :: old_value   ! Stores value before addition
+      integer :: stat, me, i
+<P>
+      ! Initialize counter on image 1
+      if (this_image() == 1) counter = 0
+      sync all  ! Ensure all images see initialized counter
+<P>
+      me = this_image()  ! Get current image number
+<P>
+      ! Each image atomically adds its image number to the counter
+      call atomic_fetch_add(counter[1], me, old_value, stat)
+<P>
+      ! Check for errors
+      if (stat /= 0) then
+        print *, "Image", me, ": Operation failed with STAT =", stat
+      else
+        print *, "Image", me, ": Old value =", old_value, ", Added", me
+      end if
+<P>
+      ! Synchronize all images before printing final result
+      sync all
+<P>
+      ! Image 1 prints the final counter value
+      if (this_image() == 1) then
+        print *, "Final counter value:", counter
+      end if
     end program demo_atomic_fetch_add
 <P>
 </PRE>
+Explanation of Example
+<P>
+<PRE>
+    Setup: The program uses the ISO_FORTRAN_ENV module to access
+    ATOMIC_INT_KIND for the correct integer kind for atomic operations.
+<P>
+    Coarray: counter[*] is a coarray, allowing shared access across images
+    (parallel processes).
+<P>
+    Initialization: Image 1 sets counter to 0, and sync all ensures all
+    images see this initial value.
+<P>
+    Atomic Operation: Each image calls ATOMIC_FETCH_ADD to add its
+    image number (me) to counter[1] (the counter on image 1), storing
+    the value of counter[1] before the addition in old_value.
+<P>
+    Error Handling: The stat argument checks for operation success or failure.
+<P>
+    Output: Each image prints the value of counter[1] before its addition
+    and the value added. Image 1 prints the final counter value after
+    all operations.
+<P>
+</PRE>
+Expected Output
+<P>
+When run with 4 images (e.g., using cafrun <B>-np</B> 4 with a Fortran compiler
+supporting coarrays, like gfortran), the output might look like (order
+of image prints may vary due to parallelism):
+<P>
+<PRE>
+        &gt; Image 1: Old value = 0, Added 1
+        &gt; Image 2: Old value = 1, Added 2
+        &gt; Image 3: Old value = 3, Added 3
+        &gt; Image 4: Old value = 6, Added 4
+        &gt; Final counter value: 10
+<P>
+</PRE>
+The final counter value is the sum of image numbers (1 + 2 + 3 + 4 =
+10), confirming atomic updates.
 </BLOCKQUOTE>
 <A name=6>
 
@@ -172,10 +278,13 @@ ATOMIC_FETCH_AND(3), ATOMIC_FETCH_OR(3),
 <P>
 ATOMIC_FETCH_XOR(3)
 <P>
+See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND,
+STAT_STOPPED_IMAGE, and STAT_FAILED_IMAGE.
+<P>
 Fortran intrinsic descriptions
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atomic_fetch_add (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f7d38389-ce18-446a-8189-564e396f7b77 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atomic_fetch_add (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c7f0136c-d567-49d4-88ef-41804708d2b7 using man macros.</FONT>
 <br><br><center><img src="images/atomic_fetch_add.3fortran.gif"></center>
 </div>
 </div>

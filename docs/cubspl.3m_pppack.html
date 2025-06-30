@@ -1,0 +1,125 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cubspl (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>cubspl (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+<TABLE width=100% cellpadding=3><!-- tsb: * a practical guide to splines *  by c. de boor
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>************************</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+input  ***************************
+n = number of data points. assumed to be .ge. 2.
+(tau(i), c(1,i), i=1,&#46;&#46;&#46;,n) = abscissae and ordinates of the
+data points. tau is assumed to be strictly increasing.
+ibcbeg, ibcend = boundary condition indicators, and
+c(2,1), c(2,n) = boundary condition information. specifically,
+<TABLE width=100% cellpadding=3><!-- tsb: input  ***************************
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>ibcbeg = 0</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+means no boundary condition at tau(1) is given.
+in this case, the not-a-knot condition is used, i.e. the
+jump in the third derivative across tau(2) is forced to
+zero, thus the first and the second cubic polynomial pieces
+are made to coincide.)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ibcbeg = 1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+means that the slope at tau(1) is made to equal
+c(2,1), supplied by input.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ibcbeg = 2</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+means that the second derivative at tau(1) is
+made to equal c(2,1), supplied by input.
+ibcend = 0, 1, or 2 has analogous meaning concerning the
+boundary condition at tau(n), with the additional infor-
+mation taken from c(2,n).
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>***********************</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+output  **************************
+c(j,i), j=1,&#46;&#46;&#46;,4; i=1,...,l (= n-1) = the polynomial coefficients
+of the cubic interpolating spline with interior knots (or
+joints) tau(2), &#46;&#46;&#46;, tau(n-1). precisely, in the interval
+(tau(i), tau(i+1)), the spline f is given by
+f(x) = c(1,i)+h*(c(2,i)+h*(c(3,i)+h*c(4,i)/3.)/2.)
+where h = x - tau(i). the function program *ppvalu* may be
+used to evaluate f or its derivatives from tau,c, l = n-1,
+and k=4.
+****** a tridiagonal linear system for the unknown slopes s(i) of
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>f</B> </TD><TD valign=bottom>
+at tau(i), i=1,&#46;&#46;&#46;,n, is generated and then solved by gauss elim-
+ination, with s(i) ending up in c(2,i), all i.
+c(3,.) and c(4,.) are used initially for temporary storage.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>cubspl (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 87867f7d-f263-4e8e-ab15-79bfdc1e8c73 using man macros.</FONT>
+<br><br><center><img src="images/cubspl.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

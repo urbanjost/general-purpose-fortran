@@ -1,0 +1,178 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>putit (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>putit (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de Boor (7 may 92)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>calls</B> </TD><TD valign=bottom>
+bsplvd(bsplvb),difequ(*)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>to be called by</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+e q b l o k .
+</TD></TR>
+<TR></TR></TABLE>puts together one block of the collocation equation system
+</BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: puts together one block of the collocation equation system
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>t</B> </TD><TD valign=bottom>
+knot sequence, of size  left+kpm (at least)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>kpm</B> </TD><TD valign=bottom>
+order of spline
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>left</B> </TD><TD valign=bottom>
+integer indicating interval of interest, viz the interval
+(t(left), t(left+1))
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nrow</B> </TD><TD valign=bottom>
+number of rows in block to be put together
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+w o r k  a r e a  ******
+<TABLE width=100% cellpadding=3><!-- tsb: w o r k  a r e a  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>scrtch</B> </TD><TD valign=bottom>
+used in bsplvd, of size (kpm,kpm)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>dbiatx</B> </TD><TD valign=bottom>
+used to contain derivatives of b-splines, of size (kpm,m+1)
+with dbiatx(j,i+1) containing the i-th derivative of the
+j-th b-spline of interest
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>q</B> </TD><TD valign=bottom>
+the block, of size (nrow,kpm)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>b</B> </TD><TD valign=bottom>
+the corresponding piece of the right side, of size (nrow)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>the</B> </TD><TD valign=bottom>
+k  collocation equations for the interval  (t(left),t(left+1))
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>are constructed with the aid of the subroutine</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+d i f e q u ( 2, .,
+[char46] ) and interspersed (in order) with the side conditions (if any) in
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>this interval, using</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+d i f e q u ( 3, ., . )  for the information.
+<TABLE width=100% cellpadding=3><!-- tsb: d i f e q u ( 3, ., . )  for the information.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>the block</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+q  has  kpm  columns, corresponding to the  kpm  b-
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>splines of order</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+kpm  which have the interval (t(left),t(left+1))
+in their support. the block&#146;s diagonal is part of the diagonal of the
+total system. the first equation in this block not overlapped by the
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>preceding block is therefore equation</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+l o w r o w , with lowrow = 1+
+number of side conditions in preceding intervals (or blocks).
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>putit (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 80c79603-b797-474e-98b9-7d00bb41243c using man macros.</FONT>
+<br><br><center><img src="images/putit.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

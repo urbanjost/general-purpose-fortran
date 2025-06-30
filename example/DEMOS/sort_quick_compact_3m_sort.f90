@@ -1,10 +1,10 @@
        program demo_sort_quick_compact
        use M_sort, only : sort_quick_compact
        implicit none
-       integer,parameter            :: isz=10000
-       real                         :: rrin(isz)
-       real                         :: rrout(isz)
-       integer                      :: i
+       integer,parameter :: isz=10000
+       real              :: rrin(isz)
+       real              :: rrout(isz)
+       integer           :: i
        write(*,*)'initializing array with ',isz,' random numbers'
        CALL RANDOM_NUMBER(rrin)
        rrin=rrin*450000.0

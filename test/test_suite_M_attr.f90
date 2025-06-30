@@ -17,7 +17,7 @@ end subroutine test_suite_m_attr
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_attr()
 logical :: allpassed
-   call unit_check_start('attr',' -description display text with attributes'//OPTIONS)
+   call unit_test_start('attr',' -description display text with attributes'//OPTIONS)
    allpassed = .true.
 
    call attr_mode('color')
@@ -74,8 +74,8 @@ logical :: allpassed
    allpassed=  test('<EBONY>EBONY',      '<EBONY>EBONY'      ) .and. allpassed
    allpassed=  test('<WHITE>WHITE',      '<WHITE>WHITE'      ) .and. allpassed
 
-   call unit_check('attr',allpassed,msg='basic colors passed foreground and background')
-   call unit_check_done('attr')
+   call unit_test('attr',allpassed,msg='basic colors passed foreground and background')
+   call unit_test_done('attr')
 
    contains
 
@@ -99,8 +99,8 @@ end subroutine test_attr
 subroutine test_attr_update()
 character(len=:),allocatable :: in
 character(len=:),allocatable :: out
-   call unit_check_start('attr_update',' '//OPTIONS)
-   if(unit_check_level.gt.0)then
+   call unit_test_start('attr_update',' '//OPTIONS)
+   if(unit_test_level.gt.0)then
    endif
    call attr_mode(manner='color')
    call attr_update('/b','>>>>')
@@ -113,17 +113,17 @@ character(len=:),allocatable :: out
 
    in=attr('<blink>blink!</blink> stare!')
    out=esc//'[5mblink!'//esc//'[25m stare!'//esc//'[0m'
-   call unit_check('attr_update',in.eq.out,'add blink, in=',in,'out=',attr(in),'expect=',out)
+   call unit_test('attr_update',in.eq.out,'add blink, in=',in,'out=',attr(in),'expect=',out)
 
    in=attr('<r>red removed</r>')
    out='<r>red removed</r>'
-   call unit_check('attr_update',in.eq.out,'in=',in,'out=',attr(in),'expect=',out)
+   call unit_test('attr_update',in.eq.out,'in=',in,'out=',attr(in),'expect=',out)
 
    in=attr('<b>blue replaced</b>')
    out='<<<<blue replaced>>>>'
-   call unit_check('attr_update',in.eq.out,'in=',in,'out=',attr(in),'expect=',out)
+   call unit_test('attr_update',in.eq.out,'in=',in,'out=',attr(in),'expect=',out)
 
-   call unit_check_done('attr_update')
+   call unit_test_done('attr_update')
 end subroutine test_attr_update
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_attr_mode()
@@ -133,30 +133,30 @@ character(len=*),parameter :: expected_color= &
    & esc//'[22m'//esc//'[49m '//esc//'[42m'//esc//'[33mHello Again!'// &
    & esc//'[39m'//esc//'[49m'//esc//'[0m'
 character(len=*),parameter :: expected_plain='Hello! Hello Again!'
-   call unit_check_start('attr_mode',' '//OPTIONS)
+   call unit_test_start('attr_mode',' '//OPTIONS)
    call attr_mode(manner='color')
-   call unit_check('attr_mode',attr(in).eq.expected_color,'color')
+   call unit_test('attr_mode',attr(in).eq.expected_color,'color')
    call attr_mode(manner='plain')
-   call unit_check('attr_mode',attr(in).eq.expected_plain,'plain')
+   call unit_test('attr_mode',attr(in).eq.expected_plain,'plain')
    call attr_mode(manner='raw')
-   call unit_check('attr_mode',attr(in).eq.in,'raw')
-   call unit_check_done('attr_mode')
+   call unit_test('attr_mode',attr(in).eq.in,'raw')
+   call unit_test_done('attr_mode')
 end subroutine test_attr_mode
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_alert()
-   call unit_check_start('alert',' '//OPTIONS)
-   !call unit_check('alert',targetline.eq.'a b ab baaa aaCCCC CCCC CCCC a a a aa aaaaaa','example of using RANGE',targetline)
-   call unit_check_done('alert')
+   call unit_test_start('alert',' '//OPTIONS)
+   !call unit_test('alert',targetline.eq.'a b ab baaa aaCCCC CCCC CCCC a a a aa aaaaaa','example of using RANGE',targetline)
+   call unit_test_done('alert')
 end subroutine test_alert
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 end module M_testsuite_M_attr
 
 program runtest
 use M_framework__msg
-use M_framework__verify, only : unit_check_level, unit_check_stop
+use M_framework__verify, only : unit_test_level, unit_test_stop
 use M_testsuite_M_attr
-   unit_check_level=0
+   unit_test_level=0
    call test_suite_M_attr()
-   call unit_check_stop
+   call unit_test_stop
 end program runtest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

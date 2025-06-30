@@ -83,7 +83,7 @@
 !!
 !!
 !!    The man-page for journal(3f) describes all the options for the
-!!    action field WHERE.  In addition to being used to generate a journal,
+!!    action field WHERE. In addition to being used to generate a journal,
 !!    the routine can be used for producing optional debug messages and
 !!    timing information.
 !!

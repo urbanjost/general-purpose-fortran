@@ -1,4 +1,6 @@
 function loadthem(){
+append("M_namelist.3m_namelist.html");
+append("print_dictionary.3m_namelist.html");
 append("M_kracken.3m_kracken.html");
 append("dget.3m_kracken.html");
 append("dgets.3m_kracken.html");

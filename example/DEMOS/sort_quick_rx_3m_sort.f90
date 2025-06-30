@@ -1,10 +1,10 @@
      program demo_sort_quick_rx
      use M_sort, only : sort_quick_rx
      implicit none
-     integer,parameter            :: isz=10000
-     real                         :: rr(isz)
-     integer                      :: ii(isz)
-     integer                      :: i
+     integer,parameter :: isz=10000
+     real              :: rr(isz)
+     integer           :: ii(isz)
+     integer           :: i
      write(*,*)'initializing array with ',isz,' random numbers'
      CALL RANDOM_NUMBER(RR)
      rr=rr*450000.0

@@ -1,8 +1,8 @@
       program demo_join
       use M_strings, only: join
       implicit none
-      character(len=*),parameter :: w='(/,*(g0,/,g0))'
-      character(len=:),allocatable  :: s(:)
+      character(len=*),parameter   :: w='(/,*(g0,/,g0))'
+      character(len=:),allocatable :: s(:)
         s=[character(len=10) :: &
           & ' United', &
           & 'we', &

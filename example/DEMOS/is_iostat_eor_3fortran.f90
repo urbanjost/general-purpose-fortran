@@ -18,15 +18,15 @@
             read(lun, *, iostat=ios) inums
             write(*,*)'iostat=',ios
             if(is_iostat_eor(ios)) then
-           inums=-huge(0)
+               inums=-huge(0)
                print *, 'end of record'
             elseif(is_iostat_end(ios)) then
                print *,'end of file'
-           inums=-huge(0)
+               inums=-huge(0)
                exit
             elseif(ios.ne.0)then
                print *,'I/O error',ios
-           inums=-huge(0)
+               inums=-huge(0)
                exit
             else
                write(*,'(*(g0,1x))')'inums=',inums

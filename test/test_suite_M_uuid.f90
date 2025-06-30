@@ -1,6 +1,6 @@
 module M_test_suite_M_uuid
 use M_framework__msg
-use M_framework__verify, only : unit_check, unit_check_start, unit_check_good, unit_check_bad, unit_check_done
+use M_framework__verify, only : unit_test, unit_test_start, unit_test_good, unit_test_bad, unit_test_done
 use M_uuid, only : generate_uuid
 private
 public test_suite_m_uuid
@@ -21,28 +21,28 @@ subroutine test_generate_uuid()
 !   now this is enough.
 
 character(len=36) :: uuid
-   call unit_check_start('generate_uuid') ! start tests
+   call unit_test_start('generate_uuid') ! start tests
 
    uuid = generate_uuid(0)
-   call unit_check('generate_uuid',check_uuid(uuid).and.(uuid =='00000000-0000-0000-0000-000000000000'),msg='Version 0 '//uuid)
+   call unit_test('generate_uuid',check_uuid(uuid).and.(uuid =='00000000-0000-0000-0000-000000000000'),msg='Version 0 '//uuid)
 
    uuid = generate_uuid(1)
-   call unit_check('generate_uuid',check_uuid(uuid),msg='Version 1 '//uuid)
+   call unit_test('generate_uuid',check_uuid(uuid),msg='Version 1 '//uuid)
 
    uuid = generate_uuid(2)
-   call unit_check('generate_uuid',uuid=='',msg='Version 2 (NOT IMPLEMENTED)')
+   call unit_test('generate_uuid',uuid=='',msg='Version 2 (NOT IMPLEMENTED)')
 
    uuid = generate_uuid(3)
-   call unit_check('generate_uuid',uuid=='',msg='Version 3 (NOT IMPLEMENTED)')
+   call unit_test('generate_uuid',uuid=='',msg='Version 3 (NOT IMPLEMENTED)')
 
    uuid = generate_uuid(4)
-   call unit_check('generate_uuid',check_uuid(uuid),msg='Version 4 '//uuid)
+   call unit_test('generate_uuid',check_uuid(uuid),msg='Version 4 '//uuid)
 
    uuid = generate_uuid(5)
-   call unit_check('generate_uuid',uuid=='',msg='Version 5 (NOT IMPLEMENTED)')
+   call unit_test('generate_uuid',uuid=='',msg='Version 5 (NOT IMPLEMENTED)')
 
-   call unit_check('compare',exercise(1000000),msg='test for duplicates in 1000000 values')
-   call unit_check_done('generate_uuid')
+   call unit_test('compare',exercise(1000000),msg='test for duplicates in 1000000 values')
+   call unit_test_done('generate_uuid')
 !==================================================================================================================================!
 contains
 !==================================================================================================================================!
@@ -151,10 +151,10 @@ end module M_test_suite_M_uuid
 !==================================================================================================================================!
 program runtest
 use M_framework__msg
-use M_framework__verify, only : unit_check_stop
+use M_framework__verify, only : unit_test_stop
 use M_test_suite_M_uuid
 implicit none
    call test_suite_M_uuid()
-   call unit_check_stop()
+   call unit_test_stop()
 end program runtest
 !==================================================================================================================================!

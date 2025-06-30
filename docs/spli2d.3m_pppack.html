@@ -1,0 +1,270 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>spli2d (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>spli2d (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+</TD></TR>
+<TR><TD colspan=2>
+calls bsplvb, banfac/slv
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>this is an extended version of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+splint , for the use in tensor prod-
+uct interpolation.
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+   spli2d  produces the b-spline coeff.s  bcoef(j,.)  of the spline of
+   order  k  with knots  t (i), i=1,&#46;&#46;&#46;, n + k , which takes on the
+   value  gtau (i,j)  at  tau (i), i=1,&#46;&#46;&#46;, n , j=1,..., m .
+<P>
+</PRE>
+</BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>tau&#46;&#46;&#46;..array of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n , containing data point abscissae.
+<TABLE width=100% cellpadding=3><!-- tsb: n , containing data point abscissae.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>a s s u m p t i o n . . .</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+tau  is strictly increasing
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>gtau(.,j)..corresponding array of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n , containing data point
+ordinates, j=1,&#46;&#46;&#46;,m
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>t&#46;&#46;&#46;..knot sequence, of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n+k
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>n&#46;&#46;&#46;..number of data points and dimension of spline space</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+s(k,t)
+k&#46;&#46;&#46;..order of spline
+m&#46;&#46;&#46;..number of data sets
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+w o r k   a r e a  ******
+<TABLE width=100% cellpadding=3><!-- tsb: w o r k   a r e a  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>work</B> </TD><TD valign=bottom>
+a vector of length  n
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>q&#46;&#46;&#46;..array of size</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(2*k-1)*n , containing the triangular factoriz-
+ation of the coefficient matrix of the linear system for the b-
+coefficients of the spline interpolant.
+the b-coeffs for the interpolant of an additional data set
+<TABLE width=100% cellpadding=3><!-- tsb: (2*k-1)*n , containing the triangular factoriz-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>(tau(i),htau(i)), i=1,&#46;&#46;&#46;,n</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+with the same data abscissae can
+be obtained without going through all the calculations in this
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>routine, simply by loading</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+htau  into  bcoef  and then execut-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ing the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+call banslv ( q, 2*k-1, n, k-1, k-1, bcoef )
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>bcoef&#46;&#46;&#46;..the b-coefficients of the interpolant, of length</B> <!-- Consumed .TP -->
+<BR>
+<B>iflag&#46;&#46;&#46;..an integer indicating success (= 1)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+or failure (= 2)
+the linear system to be solved is (theoretically) invertible if
+and only if
+<TABLE width=100% cellpadding=3><!-- tsb: or failure (= 2)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>t(i) .lt. tau(i) .lt. tau(i+k),</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+all i.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>violation of this condition is certain to lead to</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+iflag = 2 .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>the i-th equation of the linear system</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a*bcoef = b  for the b-co-
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>effs of the interpolant enforces interpolation at</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+tau(i), i=1,&#46;&#46;&#46;,n.
+<TABLE width=100% cellpadding=3><!-- tsb: tau(i), i=1,&#46;&#46;&#46;,n.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>hence,</B> </TD><TD valign=bottom>
+b(i) = gtau(i), all i, and  a  is a band matrix with  2k-1
+bands (if it is invertible).
+<TABLE width=100% cellpadding=3><!-- tsb: b(i) = gtau(i), all i, and  a  is a band matrix with  2k-1
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>the matrix</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  is generated row by row and stored, diagonal by di-
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>agonal, in the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+r o w s  of the array  q , with the main diagonal go-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ing into row</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k .  see comments in the program below.
+<TABLE width=100% cellpadding=3><!-- tsb: k .  see comments in the program below.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>the banded system is then solved by a call to</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+banfac (which con-
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>structs the triangular factorization for</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  and stores it again in
+<TABLE width=100% cellpadding=3><!-- tsb: a  and stores it again in
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>q ), followed by a call to</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+banslv (which then obtains the solution
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>bcoef</B> </TD><TD valign=bottom>
+by substitution).
+<TABLE width=100% cellpadding=3><!-- tsb: by substitution).
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>banfac</B> </TD><TD valign=bottom>
+does no pivoting, since the total positivity of the matrix
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>a</B> </TD><TD valign=bottom>
+makes this unnecessary.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+     dimension q(2*k-1,n), t(n+k)
+</PRE>
+current fortran standard makes it impossible to specify precisely the
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>dimension of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+q  and  t  without the introduction of otherwise super-
+fluous additional arguments.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>spli2d (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5ac62116-c409-4fd0-85b9-f25b5123fc2d using man macros.</FONT>
+<br><br><center><img src="images/spli2d.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

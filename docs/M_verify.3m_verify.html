@@ -80,9 +80,9 @@ processing, debugging procedures and unit testing.
 Module procedures
 <P>
 <PRE>
-   use M_verify, only : unit_check, unit_check_start, unit_check_done, unit_check_stop
-   use M_verify, only : unit_check_good, unit_check_bad
-   use M_verify, only : unit_check_msg
+   use M_verify, only : unit_test, unit_test_start, unit_test_done, unit_test_stop
+   use M_verify, only : unit_test_good, unit_test_bad
+   use M_verify, only : unit_test_msg
    use M_verify, only : debug
    use M_verify, only : fstop
    use M_verify, only : assert
@@ -91,8 +91,8 @@ Module procedures
 Module values
 <P>
 <PRE>
-   use M_verify, only : unit_check_limit, unit_check_keep_going
-   use M_verify, only : unit_check_command
+   use M_verify, only : unit_test_limit, unit_test_keep_going
+   use M_verify, only : unit_test_command
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -149,17 +149,17 @@ provides for a non-zero exit code if any tests fail
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>unit_check_keep_going</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B>unit_test_keep_going</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 logical variable that can be used to turn off
 program termination on errors.
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_level</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B>unit_test_level</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 An integer that can be used to specify
 different debug levels
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_command</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B>unit_test_command</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 name of command to execute. Defaults to the name
 "".
 </TD></TR>
@@ -171,7 +171,7 @@ name of command to execute. Defaults to the name
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
 <TR valign=top><TD colspan=2>
-<B>unit_check_start(3f)</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+<B>unit_test_start(3f)</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
 start tests of a procedure and optionally call
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
@@ -182,7 +182,7 @@ start tests of a procedure and optionally call
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 if expression is false optionally call
 </TD></TR>
 <TR><TD colspan=2>
@@ -193,7 +193,7 @@ if expression is false optionally call
 and stop program (by default)
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_done(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_done(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 call
 </TD></TR>
 <TR></TR></TABLE><!-- .nf -->
@@ -211,14 +211,14 @@ if no failures; else call
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_stop(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_stop(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 stop program with exit value of 0 if no failures
 else with an exit value of 1
 <TABLE width=100% cellpadding=3><!-- tsb: stop program with exit value of 0 if no failures
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_good(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_good(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 call command
 </TD></TR>
 <TR><TD colspan=2>
@@ -228,7 +228,7 @@ call command
 </PRE>
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_bad(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_bad(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 call command
 </TD></TR>
 <TR><TD colspan=2>
@@ -239,7 +239,7 @@ call command
 and stop program by default
 </TD></TR>
 <TR valign=top><TD colspan=2>
-<B>unit_check_msg(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+<B>unit_test_msg(3f)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
 write message
 </TD></TR>
 <TR></TR></TABLE></TD></TR>
@@ -289,7 +289,7 @@ Comparisons of real values can be done with a tolerance with
 M_Compare_Float_Numbers(3fm), for example.
 <P>
 The intrinsics ANY(3f) and ALL(3f) are particularly useful in calls
-to unit_check(3f).
+to unit_test(3f).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -317,9 +317,9 @@ Sample program
 <P>
     !! unit test
     subroutine test_suite_M_demo
-    use M_verify, only: unit_check_start, unit_check
-    use M_verify, only: unit_check_good, unit_check_bad, unit_check_done
-    use M_verify, only: unit_check_msg, unit_check_stop
+    use M_verify, only: unit_test_start, unit_test
+    use M_verify, only: unit_test_good, unit_test_bad, unit_test_done
+    use M_verify, only: unit_test_msg, unit_test_stop
     implicit none
     integer :: i, j, k
     integer,allocatable :: array(:)
@@ -338,26 +338,26 @@ Sample program
 <P>
     subroutine test_one()
     !  register an entry for specified name ("one") in database with status of zero (0)
-    call unit_check_start(&#146;one&#146;)
+    call unit_test_start(&#146;one&#146;)
 <P>
     !  if mask test fails, can
     !  * produce a SUCCESS: or FAIL: message and stop program
     !  * change database status for specified entry to -1 and stop program, else continue
     !  * produce a SUCCESS: or FAIL: message and keep going
     !  * produce a FAIL: message if test fails but no SUCCESS: message if test passes
-    call unit_check(&#146;one&#146;,i &gt; 0,msg=&#146;I &gt; 0&#146;)
+    call unit_test(&#146;one&#146;,i &gt; 0,msg=&#146;I &gt; 0&#146;)
 <P>
     ! using ANY(3f) and ALL(3f)
-    call unit_check(&#146;one&#146;,all([i,j,k] &gt; 0),      &#146;testing if everyone greater than zero&#146;)
+    call unit_test(&#146;one&#146;,all([i,j,k] &gt; 0),      &#146;testing if everyone greater than zero&#146;)
     ! display message built of scalars as well
-    call unit_check(&#146;one&#146;,all(.not.[i,j,k] == 4),&#146;for set &#146;,i,j,k,&#146;testing if no one is equal to four&#146;)
+    call unit_test(&#146;one&#146;,all(.not.[i,j,k] == 4),&#146;for set &#146;,i,j,k,&#146;testing if no one is equal to four&#146;)
 <P>
-    ! for tests that are hard to reduce to a logical test just call unit_check_bad(3f) if fail
+    ! for tests that are hard to reduce to a logical test just call unit_test_bad(3f) if fail
     if(i+j+k &lt; 1)then
-       call unit_check_bad(&#146;one&#146;)
+       call unit_test_bad(&#146;one&#146;)
     endif
 <P>
-    call unit_check_done(&#146;one&#146;,&#146;checks on "one" ended&#146;)
+    call unit_test_done(&#146;one&#146;,&#146;checks on "one" ended&#146;)
     end subroutine test_one
 <P>
     subroutine test_two
@@ -372,9 +372,9 @@ Sample program
     ! write(*,*)all([a,b,c,d] == [21,51,14,45]) ! compare a list. This would return T
     ! write(*,*)all(arr == [21,51,14,45])       ! compare an array. This would return T
     ! you know how valuable ANY(3f) and ALL(3f) will be
-    call unit_check_start(&#146;two&#146;,&#146;check on "two" passed&#146;)
-    call unit_check(&#146;two&#146;, 1 &gt; 0 .and. abs(10.10000-10.10001) &lt; 0.0001,msg=&#146;two looks good&#146;)
-    call unit_check_done(&#146;two&#146;,&#146;checks on "two" ended&#146;)
+    call unit_test_start(&#146;two&#146;,&#146;check on "two" passed&#146;)
+    call unit_test(&#146;two&#146;, 1 &gt; 0 .and. abs(10.10000-10.10001) &lt; 0.0001,msg=&#146;two looks good&#146;)
+    call unit_test_done(&#146;two&#146;,&#146;checks on "two" ended&#146;)
     end subroutine test_two
 <P>
     end subroutine test_suite_M_demo
@@ -383,10 +383,10 @@ Sample program
 <P>
     program demo_M_verify
     use M_msg__demo,  only: test_suite_M_demo
-    use M_verify, only: unit_check_command, unit_check_keep_going,unit_check_level
-    unit_check_command=&#146;&#146;
-    unit_check_keep_going=.true.
-    unit_check_level=0
+    use M_verify, only: unit_test_command, unit_test_keep_going,unit_test_level
+    unit_test_command=&#146;&#146;
+    unit_test_keep_going=.true.
+    unit_test_level=0
       call test_suite_M_demo
     end program demo_M_verify
 <P>
@@ -394,13 +394,13 @@ Sample program
 Expected output:
 <P>
 <PRE>
-    unit_check:       one                  SUCCESS:I &gt; 0
-    unit_check:       one                  SUCCESS:testing if everyone greater than zero
-    unit_check:       one                  SUCCESS:for set 1 2 3 testing if no one is equal to four
-    unit_check_done:  one                  PASSED   GOOD:3  BAD:0
+    unit_test:       one                  SUCCESS:I &gt; 0
+    unit_test:       one                  SUCCESS:testing if everyone greater than zero
+    unit_test:       one                  SUCCESS:for set 1 2 3 testing if no one is equal to four
+    unit_test_done:  one                  PASSED   GOOD:3  BAD:0
 <P>
-    unit_check:       two                  SUCCESS:two looks good
-    unit_check_done:  two                  PASSED   GOOD:1  BAD:0
+    unit_test:       two                  SUCCESS:two looks good
+    unit_test_done:  two                  PASSED   GOOD:1  BAD:0
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -421,7 +421,7 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_verify (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e67ae716-a46d-446f-bc47-9d47423be471 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_verify (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1cef1350-8481-4ed5-b93b-184043d67f4a using man macros.</FONT>
 <br><br><center><img src="images/M_verify.3m_verify.gif"></center>
 </div>
 </div>

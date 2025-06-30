@@ -2,7 +2,7 @@ program runtest
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
 use,intrinsic :: iso_fortran_env, only : real32, real64
 use M_framework
-use M_sets, only: unique, intersect, union, setdiff, ismember, setxor, issorted, bool
+use M_sets, only: unique, intersect, union, setdiff, ismember, setxor, issorted, isequal, bool 
 !
 implicit none
 integer,allocatable           :: a(:)
@@ -27,6 +27,7 @@ character(len=:),allocatable  :: strexpected(:)
    call test_ismember()
    call test_setxor()
    call test_issorted()
+   call test_isequal()
    call test_bool()
 
    call unit_test_stop()
@@ -415,6 +416,28 @@ call unit_test_start('ismember', 'report which values in A are also in B') ! sta
 
    call unit_test_done('ismember',msg='test completed')
 end subroutine test_ismember
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_isequal
+use M_sets, only: isequal
+
+call unit_test_start( 'isequal','Find if vector A and B are identical.')
+
+   A = [10, -10, 0, 1, 2, 3, 3, 2, 1, -10]
+   B = [10, -10, 0, 1, 2, 3,-3, 2, 1, -10]
+   call unit_test('isequal', isequal(A,B).eq.0,'integer A,B expected 0 got',isequal(A,B))
+   call unit_test('isequal', isequal(A,A).eq.1,'integer A,A expected 1 got',isequal(A,A))
+
+   strA = ["0", "0", "1", "2", "3", "3", "2", "1" ]
+   strB = ["0", "O", "1", "2", "3", "3", "2", "1" ]
+   call unit_test('isequal', isequal(strA,strB).eq.0,'string A,B expected 0 got',isequal(strA,strB))
+   call unit_test('isequal', isequal(strA,strA).eq.1,'string A,A expected 1 got',isequal(strA,strA))
+
+   fltA = [ 0.5469, 0.5469, 1.5469, 2.5469, 3.5469, 3.5469, 2.5469, 1.5469 ]
+   fltB = [ 0.5469, 0.5469, 1.5469, 2.5469, 3.5469, 3.4569, 2.5469, 1.5469 ]
+   call unit_test('isequal', isequal(fltA,fltB).eq.0,'flting A,B expected 0 got',isequal(fltA,fltB))
+   call unit_test('isequal', isequal(fltA,fltA).eq.1,'flting A,A expected 1 got',isequal(fltA,fltA))
+
+end subroutine test_isequal
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_issorted
 use M_sets, only: issorted

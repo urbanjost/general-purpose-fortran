@@ -1,9 +1,9 @@
      program demo_decodebase
      use M_strings, only : codebase, decodebase
      implicit none
-     integer           :: bd, i, r
-     character(len=40) :: x
-     character(len=*), parameter :: input(*) = [character(len=80) :: &
+     integer                      :: bd, i, r
+     character(len=40)            :: x
+     character(len=*), parameter  :: input(*) = [character(len=80) :: &
         '10  12345',   &
         '2   10111',   &
         '6   12345',   &

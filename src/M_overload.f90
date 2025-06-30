@@ -9,6 +9,10 @@
 
 
 
+!-----------------------------------------------------------------------------------------------------------------------------------
+
+
+!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    M_overload(3fm) - [M_overload::INTRO] overloads of standard operators and intrinsic procedures
@@ -32,9 +36,12 @@
 !!    ! dble('string')  dble(logical)  dble(class(*))
 !!
 !!    use M_overload, only : sign
-!!    ! When sign(3f) is given a single value, call sign(1,value); ie.  sign(value)
+!!    ! When sign(3f) is given a single value, call sign(1,value); ie. sign(value)
 !!    use M_overload, only : merge
 !!    ! Allow strings of different length in MERGE
+!!
+!!    use M_overload, only : operator(+)
+!!    ! use + to append elements into a character array
 !!
 !!  other operators
 !!
@@ -85,6 +92,8 @@
 !!            compiler supports this non-standard (but intuitive-looking)
 !!            syntax you can use this module to allow the syntax in a
 !!            portable manner with a standard method.
+!!
+!!  +         used to append strings to a string array
 !!
 !!    int(), real(), dble()  allow strings to be converted to numeric values
 !!                           using the standard intrinsic names
@@ -199,7 +208,7 @@
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-module m_overload
+module M_overload
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 use,intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT,stdin=>INPUT_UNIT,stdout=>OUTPUT_UNIT
 implicit none
@@ -213,6 +222,23 @@ public operator(/=)
 public operator(//)
 public operator(.fmt.)
 public operator(.to.)
+public :: operator(+)
+public :: operator(.append.)
+public :: append
+
+interface append
+   module procedure charray_scal_scal, charray_vect_scal, charray_scal_vect, charray_vector_vector
+end interface append
+
+interface operator (+)
+   !procedure append
+   module procedure charray_scal_scal, charray_vect_scal, charray_scal_vect, charray_vector_vector
+end interface
+
+interface operator (.append.)
+   !procedure append
+   module procedure charray_scal_scal, charray_vect_scal, charray_scal_vect, charray_vector_vector
+end interface
 
 interface operator(.to.)
    module procedure to
@@ -255,7 +281,6 @@ interface sign;    module procedure sign_int32;           end interface
 interface sign;    module procedure sign_int64;           end interface
 interface sign;    module procedure sign_real32;          end interface
 interface sign;    module procedure sign_real64;          end interface
-interface sign;    module procedure sign_real128;         end interface
 ! allow for minimum length option on adjustl and adjustr
 interface adjustl; module procedure adjustl_atleast;      end interface
 interface adjustr; module procedure adjustr_atleast;      end interface
@@ -285,7 +310,7 @@ public bool
 !!##DESCRIPTION
 !!
 !!    In order to be able to rename intrinsics they are all loaded in
-!!    the M_overload module.  That allows for them to be renamed via a
+!!    the M_overload module. That allows for them to be renamed via a
 !!    USE statement.
 !!
 !!##EXAMPLES
@@ -519,7 +544,7 @@ end function adjustr_atleast
 !!    magnitude is 1 if only one argument is supplied.
 !!
 !!    SIGN(3f) returns a value with the magnitude of MAGNITUDE but with the
-!!    sign of COPYSIGN.  All three must be of the same type, which may be
+!!    sign of COPYSIGN. All three must be of the same type, which may be
 !!    INTEGER or REAL.
 !!
 !!##OPTIONS
@@ -586,12 +611,6 @@ end function adjustr_atleast
 !!##LICENSE
 !!    Public Domain
 
-elemental function sign_real128(value)
-real(kind=real128),intent(in) :: value
-real(kind=real128)            :: sign_real128
-intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
-   sign_real128=sign(1.0_real128,value)
-end function sign_real128
 elemental function sign_real64(value)
 real(kind=real64),intent(in) :: value
 real(kind=real64)            :: sign_real64
@@ -824,6 +843,120 @@ end function dbles_s2v
 !===================================================================================================================================
 !>
 !!##NAME
+!!    append(3f) - [M_overload] append sets of strings to one another
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    function append(set1,set2) result(array)
+!!
+!!     character(len=*),intent(in),optional :: set1, set2
+!!     character(len=:),allocatable :: array(:)
+!!
+!!##DESCRIPTION
+!!    append(3f) appends any standard intrinsic string or string array
+!!               to another, creating a new array containing all the elements
+!!               of both inputs.
+!!
+!!               It is also available as the .append. operator, or as an
+!!               overload of the plus operator (+).
+!!
+!!##OPTIONS
+!!    set1,set2  character strings or arrays to append to one another, adjusting
+!!               the width to accomodate the longest width.
+!!
+!!##RETURNS
+!!    array   A string array composed of all the elements from both input strings
+!!            or arrays.
+!!
+!!##EXAMPLES
+!!
+!!   Sample program:
+!!
+!!     program demo_append
+!!     use :: M_overload, only : append
+!!     use :: M_overload, only : operator(.append.)
+!!     use :: M_overload, only : operator( + )
+!!     implicit none
+!!     character(:), allocatable :: str(:)
+!!        !
+!!        ! plus (+) operator overload
+!!        str = "This" + "is" + "an" + "array" + "of" + "characters"
+!!        print "(('[',A,']'))", str
+!!        print '(*(g0))', 'size=',size(str), ',len=',len(str)
+!!        !
+!!        ! .append.
+!!        str = &
+!!        "This" .append. "is" &
+!!        .append. "an" .append. "array" &
+!!        .append. "of" .append. "characters"
+!!        print "(('[',A,']'))", str
+!!        !
+!!        ! append()
+!!        str = append("This","is") + &
+!!              append("an","array") + &
+!!              append("of","characters")
+!!        print "(('[',A,']'))", str
+!!
+!!     end program demo_append
+!!
+!!   Results:
+!!
+!!     > [This      ]
+!!     > [is        ]
+!!     > [an        ]
+!!     > [array     ]
+!!     > [of        ]
+!!     > [characters]
+!!     > size=6,len=10
+!!     > [This      ]
+!!     > [is        ]
+!!     > [an        ]
+!!     > [array     ]
+!!     > [of        ]
+!!     > [characters]
+!!     > [This      ]
+!!     > [is        ]
+!!     > [an        ]
+!!     > [array     ]
+!!     > [of        ]
+!!     > [characters]
+!!
+!!##AUTHOR
+!!    John S. Urban; Based on a Fortran Discourse example by PierU, May 15, 2025.
+!!
+!!##LICENSE
+!!    MIT
+
+function charray_scal_scal(x,y) result(z)
+character(*), intent(in)  :: x, y
+character(:), allocatable :: z(:)
+   z = charray_vector_vector([x],[y])
+end function charray_scal_scal
+
+function charray_vect_scal(x,y) result(z)
+character(*), intent(in)  :: x(:), y
+character(:), allocatable :: z(:)
+   z = charray_vector_vector(x,[y])
+end function charray_vect_scal
+
+function charray_scal_vect(x,y) result(z)
+character(*), intent(in)  :: x, y(:)
+character(:), allocatable :: z(:)
+   z = charray_vector_vector([x],y)
+end function charray_scal_vect
+
+function charray_vector_vector(x,y) result(z)
+character(*), intent(in)  :: x(:), y(:)
+character(:), allocatable :: z(:)
+   allocate( character(max(len(x),len(y))) :: z(size(x)+size(y)) )
+   z( :size(x))   = x
+   z(size(x)+1: ) = y
+end function charray_vector_vector
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!>
+!!##NAME
 !!    fmt(3f) - [M_overload] convert any intrinsic to a string using specified format
 !!    (LICENSE:PD)
 !!##SYNOPSIS
@@ -1003,9 +1136,6 @@ logical                      :: trimit
          if(fmt_local == '') fmt_local='(1pg0,a)'
          write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
       type is (real(kind=real64))
-         if(fmt_local == '') fmt_local='(1pg0,a)'
-         write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
-      type is (real(kind=real128))
          if(fmt_local == '') fmt_local='(1pg0,a)'
          write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
       type is (logical)
@@ -1230,11 +1360,6 @@ doubleprecision           :: d_out
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
-   type is (real(kind=real128))
-      !x!if(valuein.gt.big)then
-      !x!   write(stderr,*)'*anyscalar_to_double* value too large ',valuein
-      !x!endif
-      d_out=dble(valuein)
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
    class default
@@ -1260,7 +1385,6 @@ class(*),intent(in)    :: valuein
    type is (integer(kind=int64));  ii38=valuein
    type is (real(kind=real32));    ii38=int(valuein,kind=int64)
    type is (real(kind=real64));    ii38=int(valuein,kind=int64)
-   Type is (real(kind=real128));   ii38=int(valuein,kind=int64)
    type is (logical);              ii38=merge(0_int64,1_int64,valuein)
    type is (character(len=*))   ;
       read(valuein,*,iostat=ios,iomsg=message)ii38
@@ -1290,11 +1414,6 @@ real                :: r_out
    type is (integer(kind=int64));  r_out=real(valuein)
    type is (real(kind=real32));    r_out=real(valuein)
    type is (real(kind=real64))
-      !x!if(valuein.gt.big)then
-      !x!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
-      !x!endif
-      r_out=real(valuein)
-   type is (real(kind=real128))
       !x!if(valuein.gt.big)then
       !x!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
       !x!endif

@@ -12631,8 +12631,8 @@ end subroutine illusion
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_xyplot()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_verify, only : unit_test_level
 
 ! setup
    call test_plot_axes()
@@ -12697,345 +12697,345 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_illusion()
 implicit none
-   call unit_check_start('illusion',msg='')
-   !!call unit_check('illusion', 0.eq.0, 'checking',100)
-   call unit_check_done('illusion',msg='')
+   call unit_test_start('illusion',msg='')
+   !!call unit_test('illusion', 0.eq.0, 'checking',100)
+   call unit_test_done('illusion',msg='')
 end subroutine test_illusion
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_axes()
-   call unit_check_start('plot_axes',msg='')
-   !!call unit_check('plot_axes', 0.eq.0,'checking',100)
-   call unit_check_done('plot_axes',msg='')
+   call unit_test_start('plot_axes',msg='')
+   !!call unit_test('plot_axes', 0.eq.0,'checking',100)
+   call unit_test_done('plot_axes',msg='')
 end subroutine test_plot_axes
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_clear()
-   call unit_check_start('plot_clear',msg='')
-   !!call unit_check('plot_clear', 0.eq.0,'checking',100)
-   call unit_check_done('plot_clear',msg='')
+   call unit_test_start('plot_clear',msg='')
+   !!call unit_test('plot_clear', 0.eq.0,'checking',100)
+   call unit_test_done('plot_clear',msg='')
 end subroutine test_plot_clear
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_drawplot()
-   call unit_check_start('plot_drawplot',msg='')
-   !!call unit_check('plot_drawplot', 0.eq.0,'checking',100)
-   call unit_check_done('plot_drawplot',msg='')
+   call unit_test_start('plot_drawplot',msg='')
+   !!call unit_test('plot_drawplot', 0.eq.0,'checking',100)
+   call unit_test_done('plot_drawplot',msg='')
 end subroutine test_plot_drawplot
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_get_plot_area()
-   call unit_check_start('plot_get_plot_area',msg='')
-   !!call unit_check('plot_get_plot_area', 0.eq.0,'checking',100)
-   call unit_check_done('plot_get_plot_area',msg='')
+   call unit_test_start('plot_get_plot_area',msg='')
+   !!call unit_test('plot_get_plot_area', 0.eq.0,'checking',100)
+   call unit_test_done('plot_get_plot_area',msg='')
 end subroutine test_plot_get_plot_area
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_getdatarange()
-   call unit_check_start('plot_getdatarange',msg='')
-   !!call unit_check('plot_getdatarange', 0.eq.0,'checking',100)
-   call unit_check_done('plot_getdatarange',msg='')
+   call unit_test_start('plot_getdatarange',msg='')
+   !!call unit_test('plot_getdatarange', 0.eq.0,'checking',100)
+   call unit_test_done('plot_getdatarange',msg='')
 end subroutine test_plot_getdatarange
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_hcopy()
-   call unit_check_start('plot_hcopy',msg='')
-   !!call unit_check('plot_hcopy', 0.eq.0,'checking',100)
-   call unit_check_done('plot_hcopy',msg='')
+   call unit_test_start('plot_hcopy',msg='')
+   !!call unit_test('plot_hcopy', 0.eq.0,'checking',100)
+   call unit_test_done('plot_hcopy',msg='')
 end subroutine test_plot_hcopy
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_id()
-   call unit_check_start('plot_id',msg='')
-   !!call unit_check('plot_id', 0.eq.0,'checking',100)
-   call unit_check_done('plot_id',msg='')
+   call unit_test_start('plot_id',msg='')
+   !!call unit_test('plot_id', 0.eq.0,'checking',100)
+   call unit_test_done('plot_id',msg='')
 end subroutine test_plot_id
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_init()
-   call unit_check_start('plot_init',msg='')
-   !!call unit_check('plot_init', 0.eq.0,'checking',100)
-   call unit_check_done('plot_init',msg='')
+   call unit_test_start('plot_init',msg='')
+   !!call unit_test('plot_init', 0.eq.0,'checking',100)
+   call unit_test_done('plot_init',msg='')
 end subroutine test_plot_init
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_init_globals()
-   call unit_check_start('plot_init_globals',msg='')
-   !!call unit_check('plot_init_globals', 0.eq.0,'checking',100)
-   call unit_check_done('plot_init_globals',msg='')
+   call unit_test_start('plot_init_globals',msg='')
+   !!call unit_test('plot_init_globals', 0.eq.0,'checking',100)
+   call unit_test_done('plot_init_globals',msg='')
 end subroutine test_plot_init_globals
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_jupage()
-   call unit_check_start('plot_jupage',msg='')
-   !!call unit_check('plot_jupage', 0.eq.0,'checking',100)
-   call unit_check_done('plot_jupage',msg='')
+   call unit_test_start('plot_jupage',msg='')
+   !!call unit_test('plot_jupage', 0.eq.0,'checking',100)
+   call unit_test_done('plot_jupage',msg='')
 end subroutine test_plot_jupage
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_juparea()
-   call unit_check_start('plot_juparea',msg='')
-   !!call unit_check('plot_juparea', 0.eq.0,'checking',100)
-   call unit_check_done('plot_juparea',msg='')
+   call unit_test_start('plot_juparea',msg='')
+   !!call unit_test('plot_juparea', 0.eq.0,'checking',100)
+   call unit_test_done('plot_juparea',msg='')
 end subroutine test_plot_juparea
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_jut()
-   call unit_check_start('plot_jut',msg='')
-   !!call unit_check('plot_jut', 0.eq.0,'checking',100)
-   call unit_check_done('plot_jut',msg='')
+   call unit_test_start('plot_jut',msg='')
+   !!call unit_test('plot_jut', 0.eq.0,'checking',100)
+   call unit_test_done('plot_jut',msg='')
 end subroutine test_plot_jut
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_label()
-   call unit_check_start('plot_label',msg='')
-   !!call unit_check('plot_label', 0.eq.0,'checking',100)
-   call unit_check_done('plot_label',msg='')
+   call unit_test_start('plot_label',msg='')
+   !!call unit_test('plot_label', 0.eq.0,'checking',100)
+   call unit_test_done('plot_label',msg='')
 end subroutine test_plot_label
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_line()
-   call unit_check_start('plot_line',msg='')
-   !!call unit_check('plot_line', 0.eq.0,'checking',100)
-   call unit_check_done('plot_line',msg='')
+   call unit_test_start('plot_line',msg='')
+   !!call unit_test('plot_line', 0.eq.0,'checking',100)
+   call unit_test_done('plot_line',msg='')
 end subroutine test_plot_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_marks()
-   call unit_check_start('plot_marks',msg='')
-   !!call unit_check('plot_marks', 0.eq.0,'checking',100)
-   call unit_check_done('plot_marks',msg='')
+   call unit_test_start('plot_marks',msg='')
+   !!call unit_test('plot_marks', 0.eq.0,'checking',100)
+   call unit_test_done('plot_marks',msg='')
 end subroutine test_plot_marks
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_page()
-   call unit_check_start('plot_page',msg='')
-   !!call unit_check('plot_page', 0.eq.0,'checking',100)
-   call unit_check_done('plot_page',msg='')
+   call unit_test_start('plot_page',msg='')
+   !!call unit_test('plot_page', 0.eq.0,'checking',100)
+   call unit_test_done('plot_page',msg='')
 end subroutine test_plot_page
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_page_aspect()
-   call unit_check_start('plot_page_aspect',msg='')
-   !!call unit_check('plot_page_aspect', 0.eq.0,'checking',100)
-   call unit_check_done('plot_page_aspect',msg='')
+   call unit_test_start('plot_page_aspect',msg='')
+   !!call unit_test('plot_page_aspect', 0.eq.0,'checking',100)
+   call unit_test_done('plot_page_aspect',msg='')
 end subroutine test_plot_page_aspect
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_resetplot()
-   call unit_check_start('plot_resetplot',msg='')
-   !!call unit_check('plot_resetplot', 0.eq.0,'checking',100)
-   call unit_check_done('plot_resetplot',msg='')
+   call unit_test_start('plot_resetplot',msg='')
+   !!call unit_test('plot_resetplot', 0.eq.0,'checking',100)
+   call unit_test_done('plot_resetplot',msg='')
 end subroutine test_plot_resetplot
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_set_nice_range()
-   call unit_check_start('plot_set_nice_range',msg='')
-   !!call unit_check('plot_set_nice_range', 0.eq.0,'checking',100)
-   call unit_check_done('plot_set_nice_range',msg='')
+   call unit_test_start('plot_set_nice_range',msg='')
+   !!call unit_test('plot_set_nice_range', 0.eq.0,'checking',100)
+   call unit_test_done('plot_set_nice_range',msg='')
 end subroutine test_plot_set_nice_range
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_set_plot_area()
-   call unit_check_start('plot_set_plot_area',msg='')
-   !!call unit_check('plot_set_plot_area', 0.eq.0,'checking',100)
-   call unit_check_done('plot_set_plot_area',msg='')
+   call unit_test_start('plot_set_plot_area',msg='')
+   !!call unit_test('plot_set_plot_area', 0.eq.0,'checking',100)
+   call unit_test_done('plot_set_plot_area',msg='')
 end subroutine test_plot_set_plot_area
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_set_xmin()
-   call unit_check_start('plot_set_xmin',msg='')
-   !!call unit_check('plot_set_xmin', 0.eq.0,'checking',100)
-   call unit_check_done('plot_set_xmin',msg='')
+   call unit_test_start('plot_set_xmin',msg='')
+   !!call unit_test('plot_set_xmin', 0.eq.0,'checking',100)
+   call unit_test_done('plot_set_xmin',msg='')
 end subroutine test_plot_set_xmin
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_setdash()
-   call unit_check_start('plot_setdash',msg='')
-   !!call unit_check('plot_setdash', 0.eq.0,'checking',100)
-   call unit_check_done('plot_setdash',msg='')
+   call unit_test_start('plot_setdash',msg='')
+   !!call unit_test('plot_setdash', 0.eq.0,'checking',100)
+   call unit_test_done('plot_setdash',msg='')
 end subroutine test_plot_setdash
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_setfill()
-   call unit_check_start('plot_setfill',msg='')
-   !!call unit_check('plot_setfill', 0.eq.0,'checking',100)
-   call unit_check_done('plot_setfill',msg='')
+   call unit_test_start('plot_setfill',msg='')
+   !!call unit_test('plot_setfill', 0.eq.0,'checking',100)
+   call unit_test_done('plot_setfill',msg='')
 end subroutine test_plot_setfill
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_setmark()
-   call unit_check_start('plot_setmark',msg='')
-   !!call unit_check('plot_setmark', 0.eq.0,'checking',100)
-   call unit_check_done('plot_setmark',msg='')
+   call unit_test_start('plot_setmark',msg='')
+   !!call unit_test('plot_setmark', 0.eq.0,'checking',100)
+   call unit_test_done('plot_setmark',msg='')
 end subroutine test_plot_setmark
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_setticper()
-   call unit_check_start('plot_setticper',msg='')
-   !!call unit_check('plot_setticper', 0.eq.0,'checking',100)
-   call unit_check_done('plot_setticper',msg='')
+   call unit_test_start('plot_setticper',msg='')
+   !!call unit_test('plot_setticper', 0.eq.0,'checking',100)
+   call unit_test_done('plot_setticper',msg='')
 end subroutine test_plot_setticper
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_storage()
-   call unit_check_start('plot_storage',msg='')
-   !!call unit_check('plot_storage', 0.eq.0,'checking',100)
-   call unit_check_done('plot_storage',msg='')
+   call unit_test_start('plot_storage',msg='')
+   !!call unit_test('plot_storage', 0.eq.0,'checking',100)
+   call unit_test_done('plot_storage',msg='')
 end subroutine test_plot_storage
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_sz()
-   call unit_check_start('plot_sz',msg='')
-   !!call unit_check('plot_sz', 0.eq.0,'checking',100)
-   call unit_check_done('plot_sz',msg='')
+   call unit_test_start('plot_sz',msg='')
+   !!call unit_test('plot_sz', 0.eq.0,'checking',100)
+   call unit_test_done('plot_sz',msg='')
 end subroutine test_plot_sz
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_title()
-   call unit_check_start('plot_title',msg='')
-   !!call unit_check('plot_title', 0.eq.0,'checking',100)
-   call unit_check_done('plot_title',msg='')
+   call unit_test_start('plot_title',msg='')
+   !!call unit_test('plot_title', 0.eq.0,'checking',100)
+   call unit_test_done('plot_title',msg='')
 end subroutine test_plot_title
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_toggle()
-   call unit_check_start('plot_toggle',msg='')
-   !!call unit_check('plot_toggle', 0.eq.0,'checking',100)
-   call unit_check_done('plot_toggle',msg='')
+   call unit_test_start('plot_toggle',msg='')
+   !!call unit_test('plot_toggle', 0.eq.0,'checking',100)
+   call unit_test_done('plot_toggle',msg='')
 end subroutine test_plot_toggle
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_z()
-   call unit_check_start('plot_z',msg='')
-   !!call unit_check('plot_z', 0.eq.0,'checking',100)
-   call unit_check_done('plot_z',msg='')
+   call unit_test_start('plot_z',msg='')
+   !!call unit_test('plot_z', 0.eq.0,'checking',100)
+   call unit_test_done('plot_z',msg='')
 end subroutine test_plot_z
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plot_zmode()
-   call unit_check_start('plot_zmode',msg='')
-   !!call unit_check('plot_zmode', 0.eq.0,'checking',100)
-   call unit_check_done('plot_zmode',msg='')
+   call unit_test_start('plot_zmode',msg='')
+   !!call unit_test('plot_zmode', 0.eq.0,'checking',100)
+   call unit_test_done('plot_zmode',msg='')
 end subroutine test_plot_zmode
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_aspct()
-   call unit_check_start('xy_aspct',msg='')
-   !!call unit_check('xy_aspct', 0.eq.0,'checking',100)
-   call unit_check_done('xy_aspct',msg='')
+   call unit_test_start('xy_aspct',msg='')
+   !!call unit_test('xy_aspct', 0.eq.0,'checking',100)
+   call unit_test_done('xy_aspct',msg='')
 end subroutine test_xy_aspct
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_con_x()
-   call unit_check_start('xy_con_x',msg='')
-   !!call unit_check('xy_con_x', 0.eq.0,'checking',100)
-   call unit_check_done('xy_con_x',msg='')
+   call unit_test_start('xy_con_x',msg='')
+   !!call unit_test('xy_con_x', 0.eq.0,'checking',100)
+   call unit_test_done('xy_con_x',msg='')
 end subroutine test_xy_con_x
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_con_y()
-   call unit_check_start('xy_con_y',msg='')
-   !!call unit_check('xy_con_y', 0.eq.0,'checking',100)
-   call unit_check_done('xy_con_y',msg='')
+   call unit_test_start('xy_con_y',msg='')
+   !!call unit_test('xy_con_y', 0.eq.0,'checking',100)
+   call unit_test_done('xy_con_y',msg='')
 end subroutine test_xy_con_y
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_getdat()
-   call unit_check_start('xy_getdat',msg='')
-   !!call unit_check('xy_getdat', 0.eq.0,'checking',100)
-   call unit_check_done('xy_getdat',msg='')
+   call unit_test_start('xy_getdat',msg='')
+   !!call unit_test('xy_getdat', 0.eq.0,'checking',100)
+   call unit_test_done('xy_getdat',msg='')
 end subroutine test_xy_getdat
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_getmark()
-   call unit_check_start('xy_getmark',msg='')
-   !!call unit_check('xy_getmark', 0.eq.0,'checking',100)
-   call unit_check_done('xy_getmark',msg='')
+   call unit_test_start('xy_getmark',msg='')
+   !!call unit_test('xy_getmark', 0.eq.0,'checking',100)
+   call unit_test_done('xy_getmark',msg='')
 end subroutine test_xy_getmark
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_getrel()
-   call unit_check_start('xy_getrel',msg='')
-   !!call unit_check('xy_getrel', 0.eq.0,'checking',100)
-   call unit_check_done('xy_getrel',msg='')
+   call unit_test_start('xy_getrel',msg='')
+   !!call unit_test('xy_getrel', 0.eq.0,'checking',100)
+   call unit_test_done('xy_getrel',msg='')
 end subroutine test_xy_getrel
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_getscale()
-   call unit_check_start('xy_getscale',msg='')
-   !!call unit_check('xy_getscale', 0.eq.0,'checking',100)
-   call unit_check_done('xy_getscale',msg='')
+   call unit_test_start('xy_getscale',msg='')
+   !!call unit_test('xy_getscale', 0.eq.0,'checking',100)
+   call unit_test_done('xy_getscale',msg='')
 end subroutine test_xy_getscale
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_ifdrawn()
-   call unit_check_start('xy_ifdrawn',msg='')
-   !!call unit_check('xy_ifdrawn', 0.eq.0,'checking',100)
-   call unit_check_done('xy_ifdrawn',msg='')
+   call unit_test_start('xy_ifdrawn',msg='')
+   !!call unit_test('xy_ifdrawn', 0.eq.0,'checking',100)
+   call unit_test_done('xy_ifdrawn',msg='')
 end subroutine test_xy_ifdrawn
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_jucurv()
-   call unit_check_start('xy_jucurv',msg='')
-   !!call unit_check('xy_jucurv', 0.eq.0,'checking',100)
-   call unit_check_done('xy_jucurv',msg='')
+   call unit_test_start('xy_jucurv',msg='')
+   !!call unit_test('xy_jucurv', 0.eq.0,'checking',100)
+   call unit_test_done('xy_jucurv',msg='')
 end subroutine test_xy_jucurv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_judraw()
-   call unit_check_start('xy_judraw',msg='')
-   !!call unit_check('xy_judraw', 0.eq.0,'checking',100)
-   call unit_check_done('xy_judraw',msg='')
+   call unit_test_start('xy_judraw',msg='')
+   !!call unit_test('xy_judraw', 0.eq.0,'checking',100)
+   call unit_test_done('xy_judraw',msg='')
 end subroutine test_xy_judraw
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_jugetwn()
-   call unit_check_start('xy_jugetwn',msg='')
-   !!call unit_check('xy_jugetwn', 0.eq.0,'checking',100)
-   call unit_check_done('xy_jugetwn',msg='')
+   call unit_test_start('xy_jugetwn',msg='')
+   !!call unit_test('xy_jugetwn', 0.eq.0,'checking',100)
+   call unit_test_done('xy_jugetwn',msg='')
 end subroutine test_xy_jugetwn
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_jumapc()
-   call unit_check_start('xy_jumapc',msg='')
-   !!call unit_check('xy_jumapc', 0.eq.0,'checking',100)
-   call unit_check_done('xy_jumapc',msg='')
+   call unit_test_start('xy_jumapc',msg='')
+   !!call unit_test('xy_jumapc', 0.eq.0,'checking',100)
+   call unit_test_done('xy_jumapc',msg='')
 end subroutine test_xy_jumapc
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_juprint()
-   call unit_check_start('xy_juprint',msg='')
-   !!call unit_check('xy_juprint', 0.eq.0,'checking',100)
-   call unit_check_done('xy_juprint',msg='')
+   call unit_test_start('xy_juprint',msg='')
+   !!call unit_test('xy_juprint', 0.eq.0,'checking',100)
+   call unit_test_done('xy_juprint',msg='')
 end subroutine test_xy_juprint
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_juput()
-   call unit_check_start('xy_juput',msg='')
-   !!call unit_check('xy_juput', 0.eq.0,'checking',100)
-   call unit_check_done('xy_juput',msg='')
+   call unit_test_start('xy_juput',msg='')
+   !!call unit_test('xy_juput', 0.eq.0,'checking',100)
+   call unit_test_done('xy_juput',msg='')
 end subroutine test_xy_juput
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_jurang()
-   call unit_check_start('xy_jurang',msg='')
-   !!call unit_check('xy_jurang', 0.eq.0,'checking',100)
-   call unit_check_done('xy_jurang',msg='')
+   call unit_test_start('xy_jurang',msg='')
+   !!call unit_test('xy_jurang', 0.eq.0,'checking',100)
+   call unit_test_done('xy_jurang',msg='')
 end subroutine test_xy_jurang
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_jutitlx()
-   call unit_check_start('xy_jutitlx',msg='')
-   !!call unit_check('xy_jutitlx', 0.eq.0,'checking',100)
-   call unit_check_done('xy_jutitlx',msg='')
+   call unit_test_start('xy_jutitlx',msg='')
+   !!call unit_test('xy_jutitlx', 0.eq.0,'checking',100)
+   call unit_test_done('xy_jutitlx',msg='')
 end subroutine test_xy_jutitlx
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_line()
-   call unit_check_start('xy_line',msg='')
-   !!call unit_check('xy_line', 0.eq.0,'checking',100)
-   call unit_check_done('xy_line',msg='')
+   call unit_test_start('xy_line',msg='')
+   !!call unit_test('xy_line', 0.eq.0,'checking',100)
+   call unit_test_done('xy_line',msg='')
 end subroutine test_xy_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_obj12345()
-   call unit_check_start('xy_obj12345',msg='')
-   !!call unit_check('xy_obj12345', 0.eq.0,'checking',100)
-   call unit_check_done('xy_obj12345',msg='')
+   call unit_test_start('xy_obj12345',msg='')
+   !!call unit_test('xy_obj12345', 0.eq.0,'checking',100)
+   call unit_test_done('xy_obj12345',msg='')
 end subroutine test_xy_obj12345
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_pickpnt()
-   call unit_check_start('xy_pickpnt',msg='')
-   !!call unit_check('xy_pickpnt', 0.eq.0,'checking',100)
-   call unit_check_done('xy_pickpnt',msg='')
+   call unit_test_start('xy_pickpnt',msg='')
+   !!call unit_test('xy_pickpnt', 0.eq.0,'checking',100)
+   call unit_test_done('xy_pickpnt',msg='')
 end subroutine test_xy_pickpnt
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_resetpens()
-   call unit_check_start('xy_resetpens',msg='')
-   !!call unit_check('xy_resetpens', 0.eq.0,'checking',100)
-   call unit_check_done('xy_resetpens',msg='')
+   call unit_test_start('xy_resetpens',msg='')
+   !!call unit_test('xy_resetpens', 0.eq.0,'checking',100)
+   call unit_test_done('xy_resetpens',msg='')
 end subroutine test_xy_resetpens
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_setcnv()
-   call unit_check_start('xy_setcnv',msg='')
-   !!call unit_check('xy_setcnv', 0.eq.0,'checking',100)
-   call unit_check_done('xy_setcnv',msg='')
+   call unit_test_start('xy_setcnv',msg='')
+   !!call unit_test('xy_setcnv', 0.eq.0,'checking',100)
+   call unit_test_done('xy_setcnv',msg='')
 end subroutine test_xy_setcnv
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_setdatarange()
-   call unit_check_start('xy_setdatarange',msg='')
-   !!call unit_check('xy_setdatarange', 0.eq.0,'checking',100)
-   call unit_check_done('xy_setdatarange',msg='')
+   call unit_test_start('xy_setdatarange',msg='')
+   !!call unit_test('xy_setdatarange', 0.eq.0,'checking',100)
+   call unit_test_done('xy_setdatarange',msg='')
 end subroutine test_xy_setdatarange
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_setsize()
-   call unit_check_start('xy_setsize',msg='')
-   !!call unit_check('xy_setsize', 0.eq.0,'checking',100)
-   call unit_check_done('xy_setsize',msg='')
+   call unit_test_start('xy_setsize',msg='')
+   !!call unit_test('xy_setsize', 0.eq.0,'checking',100)
+   call unit_test_done('xy_setsize',msg='')
 end subroutine test_xy_setsize
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_toa()
-   call unit_check_start('xy_toa',msg='')
-   !!call unit_check('xy_toa', 0.eq.0,'checking',100)
-   call unit_check_done('xy_toa',msg='')
+   call unit_test_start('xy_toa',msg='')
+   !!call unit_test('xy_toa', 0.eq.0,'checking',100)
+   call unit_test_done('xy_toa',msg='')
 end subroutine test_xy_toa
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xy_units()
-   call unit_check_start('xy_units',msg='')
-   !!call unit_check('xy_units', 0.eq.0,'checking',100)
-   call unit_check_done('xy_units',msg='')
+   call unit_test_start('xy_units',msg='')
+   !!call unit_test('xy_units', 0.eq.0,'checking',100)
+   call unit_test_done('xy_units',msg='')
 end subroutine test_xy_units
 !===================================================================================================================================
 end subroutine test_suite_M_xyplot

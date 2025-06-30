@@ -1,0 +1,186 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>colloc (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>colloc (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+Chapter xv, example. solution of an ode by collocation.
+calls colpnt, difequ(ppvalu(interv)), knots, eqblok(putit(difequ*,
+bsplvd(bsplvb)))), slvblk(various subprograms), bsplpp(bsplvb*),
+newnot
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Chapter xv, example. solution of an ode by collocation.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>aleft, aright</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+endpoints of interval of approximation
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lbegin</B> </TD><TD valign=bottom>
+initial number of polynomial pieces in the approximation.
+a uniform breakpoint sequence is chosen.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>iorder</B> </TD><TD valign=bottom>
+order of polynomial pieces in the approximation
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ntimes</B> </TD><TD valign=bottom>
+number of passes through  n e w n o t  to be made
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>addbrk</B> </TD><TD valign=bottom>
+the number (possibly fractional) of breaks to be added per
+pass through newnot. e.g., if addbrk = .33334, then a break-
+point will be added at every third pass through newnot.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>relerr</B> </TD><TD valign=bottom>
+a tolerance. newton iteration is stopped if the difference
+between the b-coeffs of two successive iterates is no more
+<TABLE width=100% cellpadding=3><!-- tsb: a tolerance. newton iteration is stopped if the difference
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>than</B> </TD><TD valign=bottom>
+relerr*(absol.largest b-coefficient).
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+p r i n t e d   o u t p u t  ******
+consists of the pp-representation of the approximate solution,
+and of the error at selected points.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>the m-th order ordinary differential equation with</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+m  side condit-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ions, to be specified in subroutine</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+d i f e q u, is solved approx-
+imately by collocation.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the approximation</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  to the solution  g  is pp of order  k+m  with
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>l</B> </TD><TD valign=bottom>
+pieces and  m-1 continuous derivatives.  f  is determined by the
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>requirement that it satisfy the d.e. at</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k  points per interval (to
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>be specified in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+c o l p n t ) and the  m  side conditions.
+<TABLE width=100% cellpadding=3><!-- tsb: c o l p n t ) and the  m  side conditions.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>this usually nonlinear system of equations for</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  is solved by
+newton&#146;s method. the resulting linear system for the b-coeffs of an
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>iterate is constructed appropriately in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+e q b l o k  and then solved
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>in</B> </TD><TD valign=bottom>
+s l v b l k, a program designed to solve  a l m o s t  b l o c k
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>d i a g o n a l</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+linear systems efficiently.
+there is an opportunity to attempt improvement of the breakpoint
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>sequence (both in number and location) through use of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n e w n o t .
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>colloc (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8a6f8b4c-0824-446b-96e7-4647662ae79b using man macros.</FONT>
+<br><br><center><img src="images/colloc.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

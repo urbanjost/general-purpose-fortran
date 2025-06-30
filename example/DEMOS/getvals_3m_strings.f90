@@ -1,10 +1,10 @@
         program demo_getvals
         use M_strings, only: getvals
         implicit none
-        integer,parameter  :: longest_line=256
+        integer,parameter           :: longest_line=256
         character(len=longest_line) :: line
-        real               :: values(longest_line/2+1)
-        integer            :: iostat,icount,ierr
+        real                        :: values(longest_line/2+1)
+        integer                     :: iostat,icount,ierr
         INFINITE: do
            read(*,'(a)',iostat=iostat) line
            if(iostat /= 0)exit INFINITE

@@ -1,0 +1,209 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bsplvd (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bsplvd (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de Boor (7 may 92)
+alls bsplvb
+alculates value and deriv.s of all b-splines which do not vanish at x
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>t</B> </TD><TD valign=bottom>
+the knot array, of length left+k (at least)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>k</B> </TD><TD valign=bottom>
+the order of the b-splines to be evaluated
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>x</B> </TD><TD valign=bottom>
+the point at which these values are sought
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>left</B> </TD><TD valign=bottom>
+an integer indicating the left endpoint of the interval of
+<TABLE width=100% cellpadding=3><!-- tsb: an integer indicating the left endpoint of the interval of
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>interest. the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k  b-splines whose support contains the interval
+(t(left), t(left+1))
+are to be considered.
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>a s s u m p t i o n</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+- - -  it is assumed that
+t(left) .lt. t(left+1)
+<TABLE width=100% cellpadding=3><!-- tsb: - - -  it is assumed that
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>division by zero will result otherwise (in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+b s p l v b ).
+also, the output is as advertised only if
+t(left) .le. x .le. t(left+1) .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nderiv</B> </TD><TD valign=bottom>
+an integer indicating that values of b-splines and their
+<TABLE width=100% cellpadding=3><!-- tsb: an integer indicating that values of b-splines and their
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>derivatives up to but not including the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+nderiv-th  are asked
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>for. ( nderiv</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is replaced internally by the integer  m h i g h
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>in</B> </TD><TD valign=bottom>
+(1,k)  closest to it.)
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+w o r k   a r e a  ******
+<TABLE width=100% cellpadding=3><!-- tsb: w o r k   a r e a  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>a</B> </TD><TD valign=bottom>
+an array of order (k,k), to contain b-coeff.s of the derivat-
+<TABLE width=100% cellpadding=3><!-- tsb: an array of order (k,k), to contain b-coeff.s of the derivat-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>ives of a certain order of the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k  b-splines of interest.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>dbiatx</B> </TD><TD valign=bottom>
+an array of order (k,nderiv). its entry  (i,m)  contains
+<TABLE width=100% cellpadding=3><!-- tsb: an array of order (k,nderiv). its entry  (i,m)  contains
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>value of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(m-1)st  derivative of  (left-k+i)<B>-th</B>  b-spline of
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>order</B> </TD><TD valign=bottom>
+k  for knot sequence  t , i=1,&#46;&#46;&#46;,k, m=1,...,nderiv.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>values at</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+x  of all the relevant b-splines of order k,k-1,&#46;&#46;&#46;,
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>k+1-nderiv</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+are generated via  bsplvb  and stored temporarily in
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>dbiatx .</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+then, the b-coeffs of the required derivatives of the b-
+splines of interest are generated by differencing, each from the pre-
+ceding one of lower order, and combined with the values of b-splines
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>of corresponding order in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+dbiatx  to produce the desired values .
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bsplvd (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4f177330-7ef4-4f16-82a2-f8541453ee9b using man macros.</FONT>
+<br><br><center><img src="images/bsplvd.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

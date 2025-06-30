@@ -96,11 +96,10 @@ It provides comprehensive vector and tensor operations in a package
 which may be programmed, either through a macro language or through
 execution of script files.
 <P>
-LALA(3f) Functions supported include (but are not by any means limited
+LALA(3f) functions supported include (but are not by any means limited
 to) sin, cos, tan, arcfunctions, upper triangular, lower triangular,
 determinants, matrix multiplication, identity, Hilbert matrices,
-eigenvalues and eigenvectors, matrix roots and products, inversion
-and so on and so forth.
+eigenvalues and eigenvectors, matrix roots and products, and inversion.
 <P>
 LALA() can be used
 <BLOCKQUOTE>
@@ -167,7 +166,7 @@ reallocated by another call to lala()).
 If no parameters are supplied interactive mode is entered.
 <P>
 If a CMD is passed and no previous initialization call was made the
-scratch space will be allocated to 200000.
+scratch space will be allocated to 400000 64-bit complex values.
 </BLOCKQUOTE>
 <A name=4>
 
@@ -211,17 +210,17 @@ Example 2:
       call lala(20000)                  ! initialize silently
       call lala( &#146;a=[1 2 3 4; 5 6 7 8]&#146;)
       call lala( [character(len=80) :: &
-       & &#146;semi;lines(999999)                                    &#146;,&
-       & &#146;// create a magic square and add 100 to all the values&#146;,&
-       & &#146;A=magic(4),&lt;X,Y&gt;=shape(A)                             &#146;,&
-       & &#146;B=A+ones(X,Y)*100                                     &#146;,&
-       & &#146;// save all current values to a file                  &#146;,&
-       & "save(&#146;sample.laf&#146;)                                    ",&
-       & &#146;// clear all user values                              &#146;,&
-       & &#146;clear                                                 &#146;,&
-       & &#146;// show variable names, load values from file         &#146;,&
-       & &#146;// and show again to show the variables are restored  &#146;,&
-       & "who;load(&#146;sample.laf&#146;);who                            "])
+       & &#146;semi;lines(999999)                                     &#146;,&
+       & &#146;// create a magic square and add 100 to all the values &#146;,&
+       & &#146;A=magic(4),&lt;X,Y&gt;=shape(A)                              &#146;,&
+       & &#146;B=A+ones(X,Y)*100                                      &#146;,&
+       & &#146;// save all current values to a file                   &#146;,&
+       & "save(&#146;sample.laf&#146;)                                     ",&
+       & &#146;// clear all user values                               &#146;,&
+       & &#146;clear                                                  &#146;,&
+       & &#146;// show variable names, load values from file          &#146;,&
+       & &#146;// and show again to show the variables are restored   &#146;,&
+       & "who;load(&#146;sample.laf&#146;);who                             "])
    end program bigmat
 <P>
 </PRE>
@@ -289,14 +288,14 @@ Example inputs
 <PRE>
      &gt;:avg:
 <P>
-     &gt;for i = 2:2:n, for j = 2:2:n, t = (a(i-1,j-1)+a(i-1,j)+a(i,j-1)+a(i,j))/4; &#46;&#46;&#46;
+     &gt;for i = 2:n:2, for j = 2:n:2, t = (a(i-1,j-1)+a(i-1,j)+a(i,j-1)+a(i,j))/4; &#46;&#46;&#46;
      &gt;a(i-1,j-1) = t; a(i,j-1) = t; a(i-1,j) = t; a(i,j) = t;
 <P>
      &gt;:cdiv:
 <P>
      &gt;// ======================================================
      &gt;// cdiv
-     &gt;a=sqrt(random(8))
+     &gt;a=la%sqrt(random(8))
      &gt;ar = real(a); ai = imag(a); br = real(b); bi = imag(b);
      &gt;p = bi/br;
      &gt;t = (ai - p*ar)/(br + p*bi);
@@ -317,7 +316,7 @@ Example inputs
      &gt;[cr ci; cr2 ci2; cr3 ci3]
      &gt;// ======================================================
 <P>
-     &gt;:exp:
+     &gt;:la%exp:
 <P>
      &gt;t = 0*x + eye; s = 0*eye(x); n = 1;
      &gt;while abs(s+t-s) &gt; 0, s = s+t, t = x*t/n, n = n + 1
@@ -325,19 +324,19 @@ Example inputs
      &gt;:four:
      &gt; n
      &gt; pi = 4*atan(1);
-     &gt; i = sqrt(-1);
-     &gt; w = exp(2*pi*i/n);
+     &gt; i = la%sqrt(-1);
+     &gt; w = la%exp(2*pi*i/n);
      &gt; F = [];
      &gt; for k = 1:n, for j = 1:n, F(k,j) = w**((j-1)*(k-1));
-     &gt; F = F/sqrt(n);
+     &gt; F = F/la%sqrt(n);
      &gt; alpha = r*pi;
-     &gt; rho = exp(i*alpha);
-     &gt; S = log(rho*F)/i - alpha*eye;
+     &gt; rho = la%exp(i*alpha);
+     &gt; S = la%log(rho*F)/i - alpha*eye;
      &gt; serr = norm(imag(S),1);
      &gt; S = real(S);
      &gt; serr = serr + norm(S-S&#146;,1)
      &gt; S = (S + S&#146;)/2;
-     &gt; ferr = norm(F-exp(i*S),1)
+     &gt; ferr = norm(F-la%exp(i*S),1)
 <P>
      &gt; :gs:
      &gt; for k = 1:n, for j = 1:k-1, d = x(k,:)*x(j,:)&#146;; x(k,:) = x(k,:) - d*x(j,:); &#46;&#46;&#46;
@@ -364,9 +363,9 @@ Example inputs
      &gt; :jacstep:
 <P>
      &gt; d = (a(q,q)-a(p,p))*0.5/a(p,q);
-     &gt; t = 1/(abs(d)+sqrt(d*d+1));
+     &gt; t = 1/(abs(d)+la%sqrt(d*d+1));
      &gt; if d &lt; 0, t = -t; end;
-     &gt; c = 1/sqrt(1+t*t);  s = t*c;
+     &gt; c = 1/la%sqrt(1+t*t);  s = t*c;
      &gt; R = eye(n); r(p,p)=c; r(q,q)=c; r(p,q)=s; r(q,p)=-s;
      &gt; X = X*R;
      &gt; A = R&#146;*A*R;
@@ -383,7 +382,7 @@ Example inputs
      &gt; :lanczos:
 <P>
      &gt; [n,n] = shape(A);
-     &gt; q1 = rand(n,1);
+     &gt; q1 = randu(n,1);
      &gt; ort
      &gt; alpha = []; beta = [];
      &gt; q = q1/norm(q1); r = A*q(:,1);
@@ -452,8 +451,8 @@ Example inputs
      &gt; for i=1:n, for j=2:m, k=c(i,j); if k&gt;0, a(i,k)=1;
      &gt; check = norm(A-A&#146;,1), if check &gt; 0, quit
      &gt; [X,D] = eig(A+eye);
-     &gt; D = diag(D);  D = D(n:-1:1)
-     &gt; X = X(:,n:-1:1);
+     &gt; D = diag(D);  D = D(n:1:-1)
+     &gt; X = X(:,n:1:-1);
      &gt; [x(:,1)/sum(x(:,1)) x(:,2) x(:,3) x(:,19)]
 <P>
      &gt; :pascal:
@@ -490,7 +489,7 @@ Example inputs
 <P>
      &gt; y = [ 75.995   91.972  105.711  123.203   &#46;&#46;&#46;
      &gt;      131.669  150.697  179.323  203.212]&#146;
-     &gt; t = [ 1900:10:1970 ]&#146;
+     &gt; t = [ 1900:1970:10 ]&#146;
      &gt; t = (t - 1940*ones(t))/40;   [t y]
      &gt; n = 8;  A(:,1) = ones(t);  for j = 2:n, A(:,j) = t .* A(:,j-1);
      &gt; A
@@ -503,7 +502,7 @@ Example inputs
      &gt; sl = s(l)/scale; el = e(l)/scale;
      &gt; b = ((smm1 + sm)*(smm1 - sm) + emm1**2)/2;
      &gt; c = (sm*emm1)**2;
-     &gt; shift = sqrt(b**2+c); if b &lt; 0, shift = -shift;
+     &gt; shift = la%sqrt(b**2+c); if b &lt; 0, shift = -shift;
      &gt; shift = c/(b + shift)
      &gt; f = (sl + sm)*(sl-sm) - shift
      &gt; g = sl*el
@@ -548,7 +547,7 @@ Example inputs
      &gt;       x(i) = 1-rho*sin(t);  y(i) = 1-rho*cos(t);
      &gt; //convert to polar coordinates
      &gt;    for i = 1:m-1, th(i) = atan(y(i)/x(i));  &#46;&#46;&#46;
-     &gt;       r(i) = sqrt(x(i)**2+y(i)**2);
+     &gt;       r(i) = la%sqrt(x(i)**2+y(i)**2);
      &gt;    th(m) = pi/2;  r(m) = 1;
      &gt; //generate matrix
      &gt;    //Dirichlet conditions
@@ -563,7 +562,7 @@ Example inputs
      &gt; //solve for coefficients
      &gt;    c = A\b
      &gt; //compute effective conductivity
-     &gt;    c(2:2:n) = -c(2:2:n)
+     &gt;    c(2:n:2) = -c(2:n:2)
      &gt;    sigma = sum(c)
      &gt; //output total operation count
      &gt;    ops = flop(2)
@@ -575,7 +574,7 @@ Example inputs
      &gt; wv = ncen/sum(ncen);           // ncen contains population sizes
      &gt; pbar = wv*p;                   // weighted average of p
      &gt; p = p - ones(g,1)*pbar;        // deviations from mean
-     &gt; p = sqrt(diag(wv)) * p;        // weight rows of p by sqrt of pop size
+     &gt; p = la%sqrt(diag(wv)) * p;        // weight rows of p by sqrt of pop size
      &gt; h = diag(pbar); h = h*(eye-h); // diagonal contains binomial variance: p*(1-p)
      &gt; r = p*inv(h)*p&#146;/k;             // normalized covariance matrix
      &gt; eig(r)&#146;
@@ -626,7 +625,7 @@ Example inputs
      &gt; :strut.laf:
 <P>
      &gt; // Structure problem, Forsythe, Malcolm and Moler, p. 62
-     &gt; s =  sqrt(2)/2;
+     &gt; s =  la%sqrt(2)/2;
      &gt; A = [
      &gt; -s  .  .  1  s   .  .  .  .  .  .  .  .  .  .  .  .
      &gt; -s  . -1  . -s   .  .  .  .  .  .  .  .  .  .  .  .
@@ -683,7 +682,7 @@ Example inputs
      &gt; X = data;
      &gt; [n,p] = shape(X)
      &gt; mu = ones(1,n)*X/n
-     &gt; X = X - ones(n,1)*mu;  X = X/diag(sqrt(diag(X&#146;*X)))
+     &gt; X = X - ones(n,1)*mu;  X = X/diag(la%sqrt(diag(X&#146;*X)))
      &gt; corr = X&#146;*X
      &gt; y = data(:,p); X = [ones(y) data(:,1:p-1)];
      &gt; long e
@@ -747,7 +746,7 @@ Example inputs
 </PRE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lala (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 67915ee5-af6b-4570-bdd1-fb64fbc7dad3 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>lala (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 41c971f2-2c95-4aa5-be3a-01fa0100abfe using man macros.</FONT>
 <br><br><center><img src="images/lala.3m_matrix.gif"></center>
 </div>
 </div>

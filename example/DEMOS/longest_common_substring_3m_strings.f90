@@ -10,9 +10,9 @@
      contains
 
      subroutine compare(a,b,answer)
-     character(len=*),intent(in) :: a, b, answer
+     character(len=*),intent(in)  :: a, b, answer
      character(len=:),allocatable :: match
-     character(len=*),parameter :: g='(*(g0))'
+     character(len=*),parameter   :: g='(*(g0))'
         match=longest_common_substring(a,b)
         write(*,g) 'comparing "',a,'" and "',b,'"'
         write(*,g) merge('(PASSED) "','(FAILED) "',answer == match), &

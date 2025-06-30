@@ -19,12 +19,14 @@ logical,intent(in),optional                       :: prefix
 logical,intent(in),optional                       :: topic
 logical,intent(in),optional                       :: m_help
 character(len=256),allocatable                    :: textblock(:)
+character(len=256),allocatable                    :: narrow(:)
+character(len=256)                                :: header
 character(len=:),allocatable                      :: a, b, c
-integer                                           :: i, p, pg
+integer                                           :: i, j, k, p, pg
    select case(name)
    case('','manual','intrinsics','fortranmanual','fortran_manual')
       textblock=help_intrinsics_all(prefix,topic,m_help)
-   case('fortran','toc')
+   case('fortran','toc','toc3','toc5','toc7')
       textblock=help_intrinsics_section()
       do i=1,size(textblock)
          p = index(textblock(i), '[')
@@ -37,10 +39,147 @@ integer                                           :: i, p, pg
          endif
       enddo
       call sort_name(textblock)
+      allocate(narrow(0))
+      header=''
+      do i=1,size(textblock)
+       j=index(textblock(i),']')
+       select case(name)
+       case('toc3')
+          if(index(textblock(i),'(3)').eq.0)cycle
+       case('toc5')
+          if(index(textblock(i),'(5)').eq.0)cycle
+       case('toc7')
+          k=0
+          k=max(k,index(textblock(i),'(7)'))
+          k=max(k,index(textblock(i),'(7f)'))
+          if(k==0)cycle
+       end select
+       if (textblock(i)(:j).ne.header)then
+          header=textblock(i)(:j)
+          narrow=[character(len=256) :: narrow,header]
+       endif
+       textblock(i)=textblock(i)(j+1:)
+       narrow=[character(len=256) :: narrow,'     '//paragraph(textblock(i),70)]
+      enddo
+      textblock=narrow
    case default
       textblock=help_intrinsics_one(name,prefix,topic,m_help)
    end select
 end function help_intrinsics
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+function paragraph(source_string,length)
+
+!$@(#) M_strings::paragraph(3f): wrap a long string into a paragraph
+
+character(len=*),intent(in)       :: source_string
+integer,intent(in)                :: length
+integer                           :: itoken
+integer                           :: ibegin
+integer                           :: iend
+character(len=*),parameter        :: delimiters=' '
+character(len=:),allocatable      :: paragraph(:)
+integer                           :: ilines
+integer                           :: ilength
+integer                           :: iword, iword_max
+integer                           :: i
+!-----------------------------------------------------------------------------------------------------------------------------------
+!  parse string once to find out how big to make the returned array, then redo everything but store the data
+!  could store array of endpoints and leave original whitespace alone or many other options
+   do i=1,2
+      iword_max=0                                  ! length of longest token
+      ilines=1                                     ! number of output line output will go on
+      ilength=0                                    ! length of output line so far
+      itoken=0                                     ! must set ITOKEN=0 before looping on strtok(3f) on a new string.
+      do while ( strtok(source_string,itoken,ibegin,iend,delimiters) )
+         iword=iend-ibegin+1
+         iword_max=max(iword_max,iword)
+         if(iword > length)then                   ! this token is longer than the desired line length so put it on a line by itself
+            if(ilength /= 0)then
+               ilines=ilines+1
+            endif
+            if(i == 2)then     ! if paragraph has been allocated store data, else just gathering data to determine size of paragraph
+               paragraph(ilines)=source_string(ibegin:iend)//' '
+            endif
+            ilength=iword+1
+         elseif(ilength+iword <= length)then       ! this word will fit on current line
+            if(i == 2)then
+               paragraph(ilines)=paragraph(ilines)(:ilength)//source_string(ibegin:iend)
+            endif
+            ilength=ilength+iword+1
+         else                                      ! adding this word would make line too long so start new line
+            ilines=ilines+1
+            ilength=0
+            if(i == 2)then
+               paragraph(ilines)=paragraph(ilines)(:ilength)//source_string(ibegin:iend)
+            endif
+            ilength=iword+1
+         endif
+      enddo
+      if(i==1)then                                 ! determined number of lines needed so allocate output array
+         allocate(character(len=max(length,iword_max)) :: paragraph(ilines))
+         paragraph=' '
+      endif
+   enddo
+   paragraph=paragraph(:ilines)
+end function paragraph
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+FUNCTION strtok(source_string,itoken,token_start,token_end,delimiters) result(strtok_status)
+! JSU- 20151030
+
+!$@(#) M_strings::strtok(3f): Tokenize a string
+
+character(len=*),intent(in)  :: source_string    ! Source string to tokenize.
+character(len=*),intent(in)  :: delimiters       ! list of separator characters. May change between calls
+integer,intent(inout)        :: itoken           ! token count since started
+logical                      :: strtok_status    ! returned value
+integer,intent(out)          :: token_start      ! beginning of token found if function result is .true.
+integer,intent(inout)        :: token_end        ! end of token found if function result is .true.
+integer,save                 :: isource_len
+!----------------------------------------------------------------------------------------------------------------------------
+!  calculate where token_start should start for this pass
+   if(itoken <= 0)then                           ! this is assumed to be the first call
+      token_start=1
+   else                                          ! increment start to previous end + 1
+      token_start=token_end+1
+   endif
+!----------------------------------------------------------------------------------------------------------------------------
+   isource_len=len(source_string)                ! length of input string
+!----------------------------------------------------------------------------------------------------------------------------
+   if(token_start > isource_len)then            ! user input error or at end of string
+      token_end=isource_len                      ! assume end of token is end of string until proven otherwise so it is set
+      strtok_status=.false.
+      return
+   endif
+!----------------------------------------------------------------------------------------------------------------------------
+   ! find beginning of token
+   do while (token_start  <=  isource_len)       ! step thru each character to find next delimiter, if any
+      if(index(delimiters,source_string(token_start:token_start))  /=  0) then
+         token_start = token_start + 1
+      else
+         exit
+      endif
+   enddo
+!----------------------------------------------------------------------------------------------------------------------------
+   token_end=token_start
+   do while (token_end  <=  isource_len-1)       ! step thru each character to find next delimiter, if any
+      if(index(delimiters,source_string(token_end+1:token_end+1))  /=  0) then  ! found a delimiter in next character
+         exit
+      endif
+      token_end = token_end + 1
+   enddo
+!----------------------------------------------------------------------------------------------------------------------------
+   if (token_start  >  isource_len) then        ! determine if finished
+      strtok_status=.false.                      ! flag that input string has been completely processed
+   else
+      itoken=itoken+1                            ! increment count of tokens found
+      strtok_status=.true.                       ! flag more tokens may remain
+   endif
+!----------------------------------------------------------------------------------------------------------------------------
+end function strtok
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -296,62 +435,62 @@ textblock=[character(len=256) :: &
 '      contains', &
 '', &
 '        subroutine DUSTY_CORNERS_1(message)', &
-'           character(len=*),intent(in) :: message', &
+'        character(len=*),intent(in) :: message', &
 '', &
-'           ! A dusty corner is that abs(-huge(0)-1) of an integer would be', &
-'           ! a representable negative value on most machines but result in a', &
-'           ! positive value out of range.', &
+'          ! A dusty corner is that abs(-huge(0)-1) of an integer would be', &
+'          ! a representable negative value on most machines but result in a', &
+'          ! positive value out of range.', &
 '', &
-'           print gen,  message', &
-'           ! By definition:', &
-'           !   You can take the absolute value of any value whose POSITIVE value', &
-'           !   is representable with the same type and kind.', &
+'          print gen,  message', &
+'          ! By definition:', &
+'          !   You can take the absolute value of any value whose POSITIVE value', &
+'          !   is representable with the same type and kind.', &
 '', &
-'           print gen, ''abs range test : '', abs(huge(0)), abs(-huge(0))', &
-'           print gen, ''abs range test : '', abs(huge(0.0)), abs(-huge(0.0))', &
-'           print gen, ''abs range test : '', abs(tiny(0.0)), abs(-tiny(0.0))', &
+'          print gen, ''abs range test : '', abs(huge(0)), abs(-huge(0))', &
+'          print gen, ''abs range test : '', abs(huge(0.0)), abs(-huge(0.0))', &
+'          print gen, ''abs range test : '', abs(tiny(0.0)), abs(-tiny(0.0))', &
 '', &
 '        end subroutine DUSTY_CORNERS_1', &
 '', &
 '        subroutine DUSTY_CORNERS_2(message)', &
-'           character(len=*),intent(in) :: message', &
+'        character(len=*),intent(in) :: message', &
 '', &
-'           ! dusty corner: "kind=dp" is required or the value returned by', &
-'           ! CMPLX() is a default real instead of double precision.', &
+'          ! dusty corner: "kind=dp" is required or the value returned by', &
+'          ! CMPLX() is a default real instead of double precision.', &
 '', &
-'           ! Working with complex values you often encounter the CMPLX(3)', &
-'           ! function. CMPLX(3) defaults to returning a default REAL regardless', &
-'           ! of input type. Not really a direct problem with ABS(2f) per-se,', &
-'           ! but a common error when working with doubleprecision complex values', &
+'          ! Working with complex values you often encounter the CMPLX(3)', &
+'          ! function. CMPLX(3) defaults to returning a default REAL regardless', &
+'          ! of input type. Not really a direct problem with ABS(2f) per-se,', &
+'          ! but a common error when working with doubleprecision complex values', &
 '', &
-'           print gen,  message', &
-'           print gen, ''real result versus doubleprecision result'', &', &
-'           & abs(cmplx(30.0_dp,40.0_dp)), &', &
-'           & abs(cmplx(30.0_dp,40.0_dp,kind=dp))', &
+'          print gen,  message', &
+'          print gen, ''real result versus doubleprecision result'', &', &
+'          & abs(cmplx(30.0_dp,40.0_dp)), &', &
+'          & abs(cmplx(30.0_dp,40.0_dp,kind=dp))', &
 '', &
 '        end subroutine DUSTY_CORNERS_2', &
 '', &
 '        subroutine DUSTY_CORNERS_3(message)', &
-'           character(len=*),intent(in) :: message', &
-'           print gen, message', &
+'        character(len=*),intent(in) :: message', &
+'          print gen, message', &
 '', &
-'           ! this will probably cause an overflow error, or', &
-'           !print gen,  abs(cmplx( huge(0.0), huge(0.0) ))', &
+'          ! this will probably cause an overflow error, or', &
+'          !print gen,  abs(cmplx( huge(0.0), huge(0.0) ))', &
 '', &
-'           print gen, ''because the biggest default real is'',huge(0.0)', &
-'           print gen, ''because returning magnitude of sqrt(x%re**2,x%im**2)''', &
+'          print gen, ''because the biggest default real is'',huge(0.0)', &
+'          print gen, ''because returning magnitude of sqrt(x%re**2,x%im**2)''', &
 '', &
 '        end subroutine DUSTY_CORNERS_3', &
 '', &
 '        subroutine DUSTY_CORNERS_4(message)', &
-'           character(len=*),intent(in) :: message', &
-'           print gen, message', &
+'        character(len=*),intent(in) :: message', &
+'          print gen, message', &
 '', &
-'           ! if you do not want the distance for a complex value you', &
-'           ! might want something like returning a complex value with', &
-'           ! both the imaginary and real parts. One way to do that is', &
+'          ! if you do not want the distance for a complex value you', &
+'          ! might want something like returning a complex value with', &
+'          ! both the imaginary and real parts. One way to do that is', &
 '', &
-'           print gen, cmplx(abs(z%re),abs(z%im),kind=kind(z))', &
+'          print gen, cmplx(abs(z%re),abs(z%im),kind=kind(z))', &
 '', &
 '        end subroutine DUSTY_CORNERS_4', &
 '', &
@@ -361,7 +500,7 @@ textblock=[character(len=256) :: &
 '', &
 '       >  integer         In: -1                        Out: 1', &
 '       >  real            In: -1.00000000               Out: 1.00000000', &
-'       >  doubleprecision  In: -45.780000000000001      Out: 45.780000000000001', &
+'       >  doubleprecision  In: -45.78000000000000       Out: 45.78000000000000', &
 '       >  complex         In: (-3.00000000,-4.00000000) Out: 5.00000000', &
 '       > abs is elemental: 20 0 1 3 100', &
 '       > distance of ( -3.00000000 -4.00000000 ) from zero is 5.00000000', &
@@ -370,7 +509,7 @@ textblock=[character(len=256) :: &
 '       > abs range test :  0.340282347E+39 0.340282347E+39', &
 '       > abs range test :  0.117549435E-37 0.117549435E-37', &
 '       > beware of losing precision using CMPLX(3)', &
-'       > real result versus doubleprecision result 50.0000000 50.000000000000000', &
+'       > real result versus doubleprecision result 50.0000000 50.00000000000000', &
 '       > beware of overflow of complex values', &
 '       > because the biggest default real is 0.340282347E+39', &
 '       > because returning magnitude of sqrt(x%re**2,x%im**2)', &
@@ -385,7 +524,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 abs(3fortran)', &
+'                                June 27, 2025                   abs(3fortran)', &
 '']
 
 shortname="abs"
@@ -543,7 +682,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               achar(3fortran)', &
+'                                June 27, 2025                 achar(3fortran)', &
 '']
 
 shortname="achar"
@@ -637,7 +776,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                acos(3fortran)', &
+'                                June 27, 2025                  acos(3fortran)', &
 '']
 
 shortname="acos"
@@ -723,7 +862,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               acosd(3fortran)', &
+'                                June 27, 2025                 acosd(3fortran)', &
 '']
 
 shortname="acosd"
@@ -797,7 +936,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               acosh(3fortran)', &
+'                                June 27, 2025                 acosh(3fortran)', &
 '']
 
 shortname="acosh"
@@ -898,7 +1037,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              acospi(3fortran)', &
+'                                June 27, 2025                acospi(3fortran)', &
 '']
 
 shortname="acospi"
@@ -912,7 +1051,7 @@ textblock=[character(len=256) :: &
 'adjustl(3fortran)                                           adjustl(3fortran)', &
 '', &
 'NAME', &
-'  ADJUSTL(3) - [CHARACTER:WHITESPACE] Left-justified a string', &
+'  ADJUSTL(3) - [CHARACTER:WHITESPACE] Left-justify a string', &
 '', &
 'SYNOPSIS', &
 '  result = adjustl(string)', &
@@ -988,7 +1127,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             adjustl(3fortran)', &
+'                                June 27, 2025               adjustl(3fortran)', &
 '']
 
 shortname="adjustl"
@@ -1074,7 +1213,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             adjustr(3fortran)', &
+'                                June 27, 2025               adjustr(3fortran)', &
 '']
 
 shortname="adjustr"
@@ -1196,7 +1335,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               aimag(3fortran)', &
+'                                June 27, 2025                 aimag(3fortran)', &
 '']
 
 shortname="aimag"
@@ -1289,7 +1428,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                aint(3fortran)', &
+'                                June 27, 2025                  aint(3fortran)', &
 '']
 
 shortname="aint"
@@ -1402,7 +1541,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 all(3fortran)', &
+'                                June 27, 2025                   all(3fortran)', &
 '']
 
 shortname="all"
@@ -1502,7 +1641,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025           allocated(3fortran)', &
+'                                June 27, 2025             allocated(3fortran)', &
 '']
 
 shortname="allocated"
@@ -1621,7 +1760,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               anint(3fortran)', &
+'                                June 27, 2025                 anint(3fortran)', &
 '']
 
 shortname="anint"
@@ -1780,7 +1919,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 any(3fortran)', &
+'                                June 27, 2025                   any(3fortran)', &
 '']
 
 shortname="any"
@@ -1895,7 +2034,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                asin(3fortran)', &
+'                                June 27, 2025                  asin(3fortran)', &
 '']
 
 shortname="asin"
@@ -1983,7 +2122,7 @@ textblock=[character(len=256) :: &
 '       print all, ''percent grade='',rise/run*100.0_dp', &
 '      contains', &
 '      subroutine sub1()', &
-'      ! notice the (incidently empty) type is defined below', &
+'      ! notice the (incidentally empty) type is defined below', &
 '      ! the implicit statement', &
 '      implicit type(nil) (a)', &
 '      type nil', &
@@ -2020,7 +2159,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               asind(3fortran)', &
+'                                June 27, 2025                 asind(3fortran)', &
 '']
 
 shortname="asind"
@@ -2094,7 +2233,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               asinh(3fortran)', &
+'                                June 27, 2025                 asinh(3fortran)', &
 '']
 
 shortname="asinh"
@@ -2226,7 +2365,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              asinpi(3fortran)', &
+'                                June 27, 2025                asinpi(3fortran)', &
 '']
 
 shortname="asinpi"
@@ -2249,7 +2388,7 @@ textblock=[character(len=256) :: &
 '', &
 '       [ construct-name : ] ASSOCIATE ( associate-name => selector ...)', &
 '         :', &
-'         : the associate-block; a sequence of zero or more statements or constructs', &
+'         : the associate-block; zero or more statements or constructs', &
 '         :', &
 '       END ASSOCIATE [ construct-name ]', &
 '', &
@@ -2290,8 +2429,8 @@ textblock=[character(len=256) :: &
 '', &
 '             MYNAME: associate', &
 '              :', &
-'         if(something_is_true) exit MYNAME', &
-'          :', &
+'             if(something_is_true) exit MYNAME', &
+'              :', &
 '             end associate MYNAME', &
 '', &
 '  sample program:', &
@@ -2479,7 +2618,7 @@ textblock=[character(len=256) :: &
 '  selector.', &
 '', &
 '  The associating entity itself is a variable, but if the selector is not a', &
-'  denable variable, the associating entity is not definable and shall not be', &
+'  definable variable, the associating entity is not definable and shall not be', &
 '  defined or become undefined.', &
 '', &
 '  If a selector is not permitted to appear in a variable definition context,', &
@@ -2529,7 +2668,9 @@ textblock=[character(len=256) :: &
 '', &
 '  The next example illustrates multiple associations.', &
 '', &
-'            associate ( w => result(i,j)%w, zx => ax%b(i,j)%d, zy => ay%b(i,j)%d )', &
+'            associate ( w => result(i,j)%w, &', &
+'            & zx => ax%b(i,j)%d, &', &
+'            & zy => ay%b(i,j)%d )', &
 '              w = zx*x + zy*y', &
 '            end associate', &
 '', &
@@ -2549,41 +2690,40 @@ textblock=[character(len=256) :: &
 '        character(len=*),parameter :: g=''(*(g0,1x))''', &
 '        character :: array(-5:5,-5:5)      ! custom non-normal bounds', &
 '        ! note the different between queries of ARRAY versus ARRAY(:,:)', &
-'           write(*,g)''array:    '',  ''lbound='',lbound(array), &', &
-'                                     ''ubound='',ubound(array)', &
-'           write(*,g)''array(:,:): '', ''lbound='',lbound(array(:,:)), &', &
-'                                     ''ubound='',ubound(array(:,:))', &
+'          write(*,g)''array:    '',  ''lbound='',lbound(array), &', &
+'                                    ''ubound='',ubound(array)', &
+'          write(*,g)''array(:,:): '', ''lbound='',lbound(array(:,:)), &', &
+'                                    ''ubound='',ubound(array(:,:))', &
 '        ! the bounds assigned to the identifiers are what UBOUND(3f)', &
 '        ! and LBOUND(3f) return given the selector as an argument', &
-'           associate ( &', &
-'              alias=>   array,              & ! keeps the custom bounds', &
-'              normal=>  array(:,:),         & ! gets normal bounds', &
-'              quadI=>   array(+1:+5,-5:-1), & ! quad* will have normal bounds', &
-'              quadII=>  array(-5:-1,-5:-1), & !', &
-'              quadIII=> array(-5:-1,+1:+5), & !', &
-'              quadIV=>  array(+1:+5,+1:+5), & !', &
-'              xaxis=>array(:,0), &', &
-'              yaxis=>array(0,:) &', &
-'              )', &
-'              array=''.'' ! selector name is still valid in the block', &
-'              xaxis=''-''', &
-'              yaxis=''|''', &
-'              alias(0,0)=''+'' ! uses non-normal bounds, equivalent to array(0,0)=''+''', &
-'              write(*,''(11(g0,1x))'') alias', &
-'              ! the quads have normalized dimension bounds (1:5,1:5):', &
-'              quadI    =  ''1'';  quadI(1,1)    =  ''a'';      quadI(5,5)    =  ''A''', &
-'              quadII   =  ''2'';  quadII(1,1)   =  ''b'';      quadII(5,5)   =  ''B''', &
-'              quadIII  =  ''3'';  quadIII(1,1)  =  ''c'';      quadIII(5,5)  =  ''C''', &
-'              quadIV   =  ''4'';  quadIV(1,1)   =  ''d'';      quadIV(5,5)   =  ''D''', &
-'              write(*,''(11(g0,1x))'') alias', &
-'', &
-'              write(*,g)''array:   lbound='',lbound(array),  ''ubound='',ubound(array)', &
-'              write(*,g)''alias:   lbound='',lbound(alias),  ''ubound='',ubound(alias)', &
-'              write(*,g)''normal:  lbound='',lbound(normal), ''ubound='',ubound(normal)', &
-'              write(*,g)''quadI:   lbound='',lbound(quadI),  ''ubound='',ubound(quadI)', &
-'              write(*,g)''quadII:  lbound='',lbound(quadII), ''ubound='',ubound(quadII)', &
-'              write(*,g)''quadIV:  lbound='',lbound(quadIV), ''ubound='',ubound(quadIV)', &
-'           end associate', &
+'          associate ( &', &
+'           alias=>   array,              & ! keeps the custom bounds', &
+'           normal=>  array(:,:),         & ! gets normal bounds', &
+'           quadI=>   array(+1:+5,-5:-1), & ! quad* will have normal bounds', &
+'           quadII=>  array(-5:-1,-5:-1), & !', &
+'           quadIII=> array(-5:-1,+1:+5), & !', &
+'           quadIV=>  array(+1:+5,+1:+5), & !', &
+'           xaxis=>array(:,0), &', &
+'           yaxis=>array(0,:) &', &
+'           )', &
+'           array=''.'' ! selector name is still valid in the block', &
+'           xaxis=''-''', &
+'           yaxis=''|''', &
+'           alias(0,0)=''+'' ! uses non-normal bounds, equivalent to array(0,0)=''+''', &
+'           write(*,''(11(g0,1x))'') alias', &
+'           ! the quads have normalized dimension bounds (1:5,1:5):', &
+'           quadI    =  ''1'';  quadI(1,1)    =  ''a'';  quadI(5,5)    =  ''A''', &
+'           quadII   =  ''2'';  quadII(1,1)   =  ''b'';  quadII(5,5)   =  ''B''', &
+'           quadIII  =  ''3'';  quadIII(1,1)  =  ''c'';  quadIII(5,5)  =  ''C''', &
+'           quadIV   =  ''4'';  quadIV(1,1)   =  ''d'';  quadIV(5,5)   =  ''D''', &
+'           write(*,''(11(g0,1x))'') alias', &
+'           write(*,g)''array:  lbound='',lbound(array), ''ubound='',ubound(array)', &
+'           write(*,g)''alias:  lbound='',lbound(alias), ''ubound='',ubound(alias)', &
+'           write(*,g)''normal: lbound='',lbound(normal),''ubound='',ubound(normal)', &
+'           write(*,g)''quadI:  lbound='',lbound(quadI), ''ubound='',ubound(quadI)', &
+'           write(*,g)''quadII: lbound='',lbound(quadII),''ubound='',ubound(quadII)', &
+'           write(*,g)''quadIV: lbound='',lbound(quadIV),''ubound='',ubound(quadIV)', &
+'          end associate', &
 '        end program demo_associate', &
 '', &
 '  Results:', &
@@ -2627,8 +2767,8 @@ textblock=[character(len=256) :: &
 '', &
 '  Selected variable names are still accessible in the ASSOCIATE block. This', &
 '  is confusing and should be avoided, particular if the selectors are', &
-'  allocatable or pointers. This is similiar to variables passed as arguments', &
-'  to contained procedures but referenced via the argument name and the name in', &
+'  allocatable or pointers. This is similar to variables passed as arguments to', &
+'  contained procedures but referenced via the argument name and the name in', &
 '  the surrounding scope. The behavior is ill-defined. Does a change to the', &
 '  argument take affect immediately or upon return from the procedure? If the', &
 '  argument is not declared allocatable or is a pointer does the argument name', &
@@ -2653,8 +2793,12 @@ textblock=[character(len=256) :: &
 '        end program main', &
 '', &
 '  are you allowed to allocate v to a different size before the ASSOCIATE is', &
-'  terminated? If so, what happens to c? ```fortran program', &
-'  demonstrate_associate implicit none integer, allocatable :: v(:) v = [3,4]', &
+'  terminated? If so, what happens to c?', &
+'', &
+'          program demonstrate_associate', &
+'          implicit none', &
+'          integer, allocatable :: v(:)', &
+'          v = [3,4]', &
 '', &
 '          associate (c => v) ; call disp("1",v,c)', &
 '          c = c*10           ; call disp("2",v,c)', &
@@ -2688,14 +2832,13 @@ textblock=[character(len=256) :: &
 '        type(type(a)),intent(in) :: a(..) ! if a in an expression', &
 '        type(type(a))            :: a(..) ! if a in a variable', &
 '        end subroutine assoc', &
+'        ! somewhat like the parameters being class(*) but without all the', &
+'        ! SELECT statements like type(type(a)) worked.', &
 '', &
-'        ! somewhat like the parameters being class(*) but without all the SELECT statements', &
-'        ! like type(type(a)) worked.', &
-'', &
-'        ! so "a" in the subroutine does not have the allocatable, optional, or pointer', &
-'        ! attributes even if AA did, and it is up to the programmer to make sure AA is allocated', &
-'        ! or assigned a target or present if optional when making the call if it has those', &
-'        ! attributes.', &
+'        ! so "a" in the subroutine does not have the allocatable, optional,', &
+'        ! or pointer attributes even if AA did, and it is up to the programmer', &
+'        ! to make sure AA is allocated or assigned a target or present if', &
+'        ! optional when making the call if it has those attributes.', &
 '', &
 '        ! but it can have the target attribute.', &
 '', &
@@ -2723,7 +2866,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025           associate(7fortran)', &
+'                                June 27, 2025             associate(7fortran)', &
 '']
 
 shortname="associate"
@@ -2843,7 +2986,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025          associated(3fortran)', &
+'                                June 27, 2025            associated(3fortran)', &
 '']
 
 shortname="associated"
@@ -2966,8 +3109,8 @@ textblock=[character(len=256) :: &
 '          call cartesian_to_polar(vals(i), radius,ang)', &
 '          write(*,101)vals(i),ang,r2d(ang),radius', &
 '       enddo', &
-'       101 format( ''X= '',f5.2,'' Y= '',f5.2,'' ANGLE= '',g0, &', &
-'       & T38,''DEGREES= '',g0.4, T54,''DISTANCE='',g0)', &
+'       101 format( ''X='',f5.2,'' Y='',f5.2,'' ANGLE='',g0, &', &
+'       & T38,''DEGREES='',g0.4, T54,''DISTANCE='',g0)', &
 '       endblock COMPLEX_VALS', &
 '      !', &
 '      contains', &
@@ -2999,13 +3142,13 @@ textblock=[character(len=256) :: &
 '       >  elemental  0.321750551      0.463647604', &
 '       >  elemental  0.197395563      0.380506366', &
 '       >  complex            (0.00000000,1.00000000)   1.57079637', &
-'       > X=  1.00 Y=  0.00 ANGLE= 0.00000000  DEGREES= 0.000  DISTANCE=1.00000000', &
-'       > X=  1.00 Y=  1.00 ANGLE= 0.785398185 DEGREES= 45.00  DISTANCE=1.41421354', &
-'       > X=  0.00 Y=  1.00 ANGLE= 1.57079637  DEGREES= 90.00  DISTANCE=1.00000000', &
-'       > X= -1.00 Y=  1.00 ANGLE= 2.35619450  DEGREES= 135.0  DISTANCE=1.41421354', &
-'       > X= -1.00 Y=  0.00 ANGLE= 3.14159274  DEGREES= 180.0  DISTANCE=1.00000000', &
-'       > X= -1.00 Y= -1.00 ANGLE= 3.92699075  DEGREES= 225.0  DISTANCE=1.41421354', &
-'       > X=  0.00 Y= -1.00 ANGLE= 4.71238899  DEGREES= 270.0  DISTANCE=1.00000000', &
+'       > X= 1.00 Y= 0.00 ANGLE= 0.00000000  DEGREES= 0.000 DISTANCE=1.00000000', &
+'       > X= 1.00 Y= 1.00 ANGLE= 0.785398185 DEGREES= 45.00 DISTANCE=1.41421354', &
+'       > X= 0.00 Y= 1.00 ANGLE= 1.57079637  DEGREES= 90.00 DISTANCE=1.00000000', &
+'       > X=-1.00 Y= 1.00 ANGLE= 2.35619450  DEGREES= 135.0 DISTANCE=1.41421354', &
+'       > X=-1.00 Y= 0.00 ANGLE= 3.14159274  DEGREES= 180.0 DISTANCE=1.00000000', &
+'       > X=-1.00 Y=-1.00 ANGLE= 3.92699075  DEGREES= 225.0 DISTANCE=1.41421354', &
+'       > X= 0.00 Y=-1.00 ANGLE= 4.71238899  DEGREES= 270.0 DISTANCE=1.00000000', &
 '', &
 '      # STANDARD', &
 '', &
@@ -3019,10 +3162,11 @@ textblock=[character(len=256) :: &
 '', &
 '      # RESOURCES', &
 '', &
-'      - [arctan:wikipedia](https://en.wikipedia.org/wiki/Inverse_trigonometric_functions)', &
+'      - [arctan:wikipedia]', &
+'       (https://en.wikipedia.org/wiki/Inverse_trigonometric_functions)', &
 '       _Fortran intrinsic descriptions (license: MIT) \@urbanjost_', &
 '', &
-'                              February 19, 2025               atan2(3fortran)', &
+'                                June 27, 2025                 atan2(3fortran)', &
 '']
 
 shortname="atan2"
@@ -3194,7 +3338,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              atan2d(3fortran)', &
+'                                June 27, 2025                atan2d(3fortran)', &
 '']
 
 shortname="atan2d"
@@ -3352,7 +3496,7 @@ textblock=[character(len=256) :: &
 'RESOURCES', &
 '  o  arctan:wikipedia Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             atan2pi(3fortran)', &
+'                                June 27, 2025               atan2pi(3fortran)', &
 '']
 
 shortname="atan2pi"
@@ -3385,7 +3529,24 @@ textblock=[character(len=256) :: &
 '  o  The returned value is of the same type and kind as X.', &
 '', &
 'DESCRIPTION', &
-'  ATAN(3) computes the arctangent of X.', &
+'  ATAN(X)(3) returns the inverse tangent (ie. arctangent) of the elements of X', &
+'  in radians. The function accepts both real and complex inputs, specified as', &
+'  a scalar, vector, matrix. The atan operation is element-wise when X is', &
+'  nonscalar.', &
+'', &
+'  o  For real values of X, atan(X) returns values in the interval [-PI/2,', &
+'     PI/2].', &
+'', &
+'  o  For complex values of X, atan(X) returns complex values.', &
+'', &
+'  When Y is not supplied the inverse tangent is defined as', &
+'', &
+'      i=sqrt(-1)', &
+'      atan(z)=>(i/2)*log(i+z/i-z).', &
+'', &
+'  This definition of the atan function returns angles in radians within the', &
+'  interval [-PI/2, PI/2]. To find the four-quadrant inverse tangent, where the', &
+'  returned angles are in the interval [-PI, PI], use atan2.', &
 '', &
 'OPTIONS', &
 '  o  X : The value to compute the arctangent of. if Y is present, X shall be', &
@@ -3438,7 +3599,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                atan(3fortran)', &
+'                                June 27, 2025                  atan(3fortran)', &
 '']
 
 shortname="atan"
@@ -3525,7 +3686,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               atand(3fortran)', &
+'                                June 27, 2025                 atand(3fortran)', &
 '']
 
 shortname="atand"
@@ -3591,7 +3752,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               atanh(3fortran)', &
+'                                June 27, 2025                 atanh(3fortran)', &
 '']
 
 shortname="atanh"
@@ -3679,7 +3840,7 @@ textblock=[character(len=256) :: &
 'RESOURCES', &
 '  o  wikipedia: inverse trigonometric functions', &
 '', &
-'                              February 19, 2025              atanpi(3fortran)', &
+'                                June 27, 2025                atanpi(3fortran)', &
 '']
 
 shortname="atanpi"
@@ -3708,48 +3869,78 @@ textblock=[character(len=256) :: &
 '  o  ATOM is a scalar coarray or coindexed variable of integer type with', &
 '     atomic_int_kind kind.', &
 '', &
-'  o  VALUE is a scalar of the same type as ATOM. If the kind is different, the', &
-'     value is converted to the kind of ATOM.', &
+'  o  VALUE is a ,scalar of the same type as ATOM. If the kind is different,', &
+'     the value is converted to the kind of ATOM.', &
 '', &
-'  o  STAT is a Scalar default-kind integer variable.', &
+'  o  STAT is a scalar default-kind integer variable.', &
 '', &
 'DESCRIPTION', &
-'  ATOMIC_ADD(3) atomically adds the value of VAR to the variable ATOM. When', &
-'  STAT is present and the invocation was successful, it is assigned the value', &
-'  0. If it is present and the invocation has failed, it is assigned a positive', &
-'  value; in particular, for a coindexed ATOM, if the remote image has stopped,', &
-'  it is assigned the value of iso_fortran_env''s STAT_STOPPED_IMAGE and if the', &
-'  remote image has failed, the value STAT_FAILED_IMAGE.', &
+'  ATOMIC_ADD(ATOM, VALUE, STAT) atomically adds the value of VALUE to the', &
+'  variable ATOM. This operation ensures thread safety in parallel', &
+'  environments, such as when using coarrays. It is part of the atomic', &
+'  operations in Fortran 2008 and later, typically used with the', &
+'  ISO_FORTRAN_ENV module.', &
+'', &
+'  Unlike ATOMIC_FETCH_ADD(3), this procedure does not return the previous', &
+'  value of ATOM.', &
+'', &
+'  Use sync all to ensure consistent coarray state across images.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of iso_fortran_env''s STAT_STOPPED_IMAGE', &
+'  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
 '', &
 'OPTIONS', &
-'  o  ATOM : Scalar coarray or coindexed variable of integer type with', &
-'     atomic_int_kind kind.', &
+'  o  ATOM : Scalar coarray or coindexed variable of integer type with kind', &
+'     ATOMIC_INT_KIND.(from ISO_FORTRAN_ENV).', &
 '', &
 '  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
 '     value is converted to the kind of ATOM.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'  o  STAT : (optional) Scalar default-kind integer variable. Set to 0 on', &
+'     success, or a positive value (e.g., STAT_STOPPED_IMAGE or', &
+'     STAT_FAILED_IMAGE from ISO_FORTRAN_ENV) on failure.', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
 '      program demo_atomic_add', &
-'      use iso_fortran_env', &
-'      implicit none', &
-'      integer(atomic_int_kind) :: atom[*]', &
-'        call atomic_add (atom[1], this_image())', &
+'       use iso_fortran_env', &
+'       implicit none', &
+'       integer(atomic_int_kind) :: counter[*]', &
+'       integer :: stat, me', &
+'', &
+'       if (this_image() == 1) counter = 0', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_add(counter[1], me, stat)', &
+'', &
+'       if (stat /= 0) print *, "Image", me, ": Failed with STAT =", stat', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final counter:", counter', &
 '      end program demo_atomic_add', &
 '', &
+'  Expected Output (4 images)', &
+'', &
+'         > Final counter: 10', &
+'', &
 'STANDARD', &
-'  TS 18508', &
+'  Fortran 2008 and later, per TS 18508', &
 '', &
 'SEE ALSO', &
 '  ATOMIC_DEFINE(3), ATOMIC_FETCH_ADD(3), ATOMIC_AND(3), ATOMIC_OR(3),', &
 '  ATOMIC_XOR(3) ISO_FORTRAN_ENV(3),', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025          atomic_add(3fortran)', &
+'                                June 27, 2025            atomic_add(3fortran)', &
 '']
 
 shortname="atomic_add"
@@ -3784,22 +3975,35 @@ textblock=[character(len=256) :: &
 '  o  STAT is a Scalar default-kind integer variable.', &
 '', &
 'DESCRIPTION', &
-'  ATOMIC_AND(3) atomically defines ATOM with the bitwise AND between the', &
-'  values of ATOM and VALUE. When STAT is present and the invocation was', &
-'  successful, it is assigned the value 0. If it is present and the invocation', &
-'  has failed, it is assigned a positive value; in particular, for a coindexed', &
-'  ATOM, if the remote image has stopped, it is assigned the value of', &
-'  iso_fortran_env''s stat_stopped_image and if the remote image has failed, the', &
-'  value stat_failed_image.', &
+'  ATOMIC_AND(ATOM, VALUE, STAT) atomically performs a bitwise AND operation', &
+'  between the value of ATOM and VALUE, storing the result in ATOM. This', &
+'  ensures thread-safe updates in parallel contexts.', &
+'', &
+'  Unlike ATOMIC_FETCH_ADD, this procedure does not return the previous value', &
+'  of ATOM.', &
+'', &
+'  The result is the bitwise AND of ATOM and VALUE (e.g., 1111 AND 1010 =', &
+'  1010).', &
+'', &
+'  Useful for manipulating bit flags atomically.', &
+'', &
+'  Use sync all to ensure consistent coarray state across images.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of ISO_FORTRAN_ENV''s STAT_STOPPED_IMAGE', &
+'  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
 '', &
 'OPTIONS', &
-'  o  ATOM : Scalar coarray or coindexed variable of integer type with', &
-'     atomic_int_kind kind.', &
+'  o  ATOM : Scalar coarray or coindexed variable of integer type with kind', &
+'     ATOMIC_INT_KIND .', &
 '', &
 '  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
 '     value is converted to the kind of ATOM.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'  o  STAT : (optional) Scalar default-kind integer variable. Set to 0 on', &
+'     success, or a positive value on failure.', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
@@ -3807,20 +4011,38 @@ textblock=[character(len=256) :: &
 '      program demo_atomic_and', &
 '      use iso_fortran_env', &
 '      implicit none', &
-'      integer(atomic_int_kind) :: atom[*]', &
-'        call atomic_and(atom[1], int(b''10100011101''))', &
+'      integer(atomic_int_kind) :: counter[*]', &
+'      integer :: stat, me', &
+'', &
+'       if (this_image() == 1) counter = 0', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_add(counter[1], me, stat)', &
+'', &
+'       if (stat /= 0) print *, "Image", me, ": Failed with STAT =", stat', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final counter:", counter', &
 '      end program demo_atomic_and', &
 '', &
+'  Expected Output (4 images)', &
+'', &
+'         > Final counter: 10', &
+'', &
 'STANDARD', &
-'  TS 18508', &
+'  Fortran 2008 and later, per TS 18508', &
 '', &
 'SEE ALSO', &
 '  ATOMIC_FETCH_AND(3), ATOMIC_DEFINE(3), ATOMIC_REF(3), ATOMIC_CAS(3),', &
 '  ISO_FORTRAN_ENV(3), ATOMIC_ADD(3), ATOMIC_OR(3), ATOMIC_XOR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025          atomic_and(3fortran)', &
+'                                June 27, 2025            atomic_and(3fortran)', &
 '']
 
 shortname="atomic_and"
@@ -3834,7 +4056,7 @@ textblock=[character(len=256) :: &
 'atomic_cas(3fortran)                                     atomic_cas(3fortran)', &
 '', &
 'NAME', &
-'  ATOMIC_CAS(3) - [ATOMIC] Atomic compare and swap', &
+'  ATOMIC_CAS(3) - [ATOMIC] Atomically compare and swap a set of values', &
 '', &
 'SYNOPSIS', &
 '  call atomic_cas (atom, old, compare, new [,stat] )', &
@@ -3843,47 +4065,87 @@ textblock=[character(len=256) :: &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
-'  ATOMIC_CAS(3) compares the variable ATOM with the value of COMPARE; if the', &
-'  value is the same, ATOM is set to the value of NEW. Additionally, OLD is set', &
-'  to the value of ATOM that was used for the comparison. When STAT is present', &
-'  and the invocation was successful, it is assigned the value 0. If it is', &
-'  present and the invocation has failed, it is assigned a positive value; in', &
-'  particular, for a coindexed ATOM, if the remote image has stopped, it is', &
-'  assigned the value of iso_fortran_env''s stat_stopped_image and if the remote', &
-'  image has failed, the value stat_failed_image.', &
+'  ATOMIC_CAS(ATOM, OLD, COMPARE, NEW, STAT) atomically compares the value of', &
+'  ATOM with COMPARE. If they are equal, ATOM is set to NEW, and OLD receives', &
+'  the previous value of ATOM. If not equal, ATOM is unchanged, and OLD still', &
+'  receives the current value of ATOM.', &
+'', &
+'  ATOMIC_CAS is useful for implementing locks or conditional updates.', &
+'', &
+'  Only one image''s NEW value is set if multiple images attempt the operation', &
+'  simultaneously.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of ISO_FORTRAN_ENV''s STAT_STOPPED_IMAGE', &
+'  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
 '', &
 'OPTIONS', &
+'  STAT (optional): A scalar default-kind integer. Set to 0 on success, or a', &
+'  positive value on failure.', &
+'', &
 '  o  ATOM : Scalar coarray or coindexed variable of either integer type with', &
-'     atomic_int_kind kind or logical type with atomic_logical_kind kind.', &
+'     ATOMIC_INT_KIND kind or logical type with kind ATOMIC_LOGICAL_KIND.', &
 '', &
-'  o  OLD : Scalar of the same type and kind as ATOM.', &
+'     o OLD : Scalar of the same type and kind as ATOM. It receives the value', &
+'       of ATOM before the operation.', &
 '', &
-'  o  COMPARE : Scalar variable of the same type and kind as ATOM.', &
+'     o COMPARE : Scalar variable of the same type and kind as ATOM. Used for', &
+'       comparison.', &
 '', &
-'  o  NEW : Scalar variable of the same type as ATOM. If kind is different, the', &
-'     value is converted to the kind of ATOM.', &
+'     o NEW : Scalar variable of the same type as ATOM. If kind is different,', &
+'       the value is converted to the kind of ATOM. It is given the new value', &
+'       from ATOM if the comparison succeeds.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'     o STAT : (optional) Scalar default-kind integer variable.', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
-'      program demo_atomic_cas', &
+'      program demo_atomic_cas_example', &
 '      use iso_fortran_env', &
 '      implicit none', &
-'      logical(atomic_logical_kind) :: atom[*], prev', &
-'        call atomic_cas(atom[1], prev, .false., .true.)', &
-'      end program demo_atomic_cas', &
+'      integer(atomic_int_kind) :: lock[*]', &
+'      integer(atomic_int_kind) :: old', &
+'      integer :: stat, me', &
+'', &
+'       if (this_image() == 1) lock = 0', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_cas(lock[1], old, 0, me, stat)', &
+'', &
+'       if (stat /= 0) then', &
+'         print *, "Image", me, ": Failed with STAT =", stat', &
+'       else', &
+'         print *, "Image", me, ": Old =", old, ", New =", lock[1]', &
+'       end if', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final lock:", lock', &
+'      end program demo_atomic_cas_example', &
+'', &
+'  Expected Output (4 images, order varies)', &
+'', &
+'         > Image 1: Old = 0, New = 1', &
+'         > Image 2: Old = 1, New = 1', &
+'         > Image 3: Old = 1, New = 1', &
+'         > Image 4: Old = 1, New = 1', &
+'         > Final lock: 1', &
 '', &
 'STANDARD', &
-'  TS 18508', &
+'  Fortran 2008 and later, per TS 18508', &
 '', &
 'SEE ALSO', &
 '  ATOMIC_DEFINE(3), ATOMIC_REF(3), ISO_FORTRAN_ENV(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025          atomic_cas(3fortran)', &
+'                                June 27, 2025            atomic_cas(3fortran)', &
 '']
 
 shortname="atomic_cas"
@@ -3897,7 +4159,7 @@ textblock=[character(len=256) :: &
 'atomic_define(3fortran)                               atomic_define(3fortran)', &
 '', &
 'NAME', &
-'  ATOMIC_DEFINE(3) - [ATOMIC] Setting a variable atomically', &
+'  ATOMIC_DEFINE(3) - [ATOMIC] Atomically define the value of a variable', &
 '', &
 'SYNOPSIS', &
 '  call atomic_define (atom, value [,stat] )', &
@@ -3910,7 +4172,7 @@ textblock=[character(len=256) :: &
 '', &
 'CHARACTERISTICS', &
 '  o  ATOM : Scalar coarray or coindexed variable of either integer type with', &
-'     atomic_int_kind kind or logical type with atomic_logical_kind kind.', &
+'     ATOMIC_INT_KIND kind or logical type with ATOMIC_LOGICAL_KIND kind.', &
 '', &
 '  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
 '     value is converted to the kind of ATOM.', &
@@ -3918,7 +4180,14 @@ textblock=[character(len=256) :: &
 '  o  STAT : (optional) Scalar default-kind integer variable.', &
 '', &
 'DESCRIPTION', &
-'  ATOMIC_DEFINE(3) defines the variable ATOM with the value VALUE atomically.', &
+'  ATOMIC_DEFINE(ATOM, VALUE, STAT) atomically sets the value of ATOM to VALUE.', &
+'  This ensures thread-safe assignment in parallel environments.', &
+'', &
+'  Use for simple atomic assignments, unlike ATOMIC_CAS(3) which involves', &
+'  comparison.', &
+'', &
+'  Only one image should call ATOMIC_DEFINE(3) to avoid undefined behavior in', &
+'  this context.', &
 '', &
 'OPTIONS', &
 '  o  ATOM : Scalar coarray or coindexed variable to atomically assign the', &
@@ -3937,11 +4206,26 @@ textblock=[character(len=256) :: &
 '  Sample program:', &
 '', &
 '      program demo_atomic_define', &
-'      use iso_fortran_env', &
-'      implicit none', &
-'      integer(atomic_int_kind) :: atom[*]', &
-'         call atomic_define(atom[1], this_image())', &
+'       use iso_fortran_env', &
+'       implicit none', &
+'       integer(atomic_int_kind) :: counter[*]', &
+'       integer :: stat, me', &
+'', &
+'       if (this_image() == 1) counter = 0', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       if (me == 2) call atomic_define(counter[1], 42, stat)', &
+'', &
+'       if (stat /= 0) print *, "Image", me, ": Failed with STAT =", stat', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final counter:", counter', &
 '      end program demo_atomic_define', &
+'', &
+'  Expected Output (4 images)', &
+'', &
+'         > Final counter: 42', &
 '', &
 'STANDARD', &
 '  Fortran 2008 ; with STAT, TS 18508', &
@@ -3950,9 +4234,12 @@ textblock=[character(len=256) :: &
 '  ATOMIC_REF(3), ATOMIC_CAS(3), ISO_FORTRAN_ENV(3), ATOMIC_ADD(3),', &
 '  ATOMIC_AND(3), ATOMIC_OR(3), ATOMIC_XOR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025       atomic_define(3fortran)', &
+'                                June 27, 2025         atomic_define(3fortran)', &
 '']
 
 shortname="atomic_define"
@@ -3966,7 +4253,7 @@ textblock=[character(len=256) :: &
 'atomic_fetch_add(3fortran)                         atomic_fetch_add(3fortran)', &
 '', &
 'NAME', &
-'  ATOMIC_FETCH_ADD(3) - [ATOMIC] Atomic ADD operation with prior fetch', &
+'  ATOMIC_FETCH_ADD(3) - [ATOMIC] Atomic fetch and add operation', &
 '', &
 'SYNOPSIS', &
 '  call atomic_fetch_add(atom, value, old [,stat] )', &
@@ -3976,33 +4263,126 @@ textblock=[character(len=256) :: &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
 '  ATOMIC_FETCH_ADD(3) atomically stores the value of ATOM in OLD and adds the', &
-'  value of VAR to the variable ATOM. When STAT is present and the invocation', &
-'  was successful, it is assigned the value 0. If it is present and the', &
-'  invocation has failed, it is assigned a positive value; in particular, for a', &
-'  coindexed ATOM, if the remote image has stopped, it is assigned the value of', &
-'  iso_fortran_env''s stat_stopped_image and if the remote image has failed, the', &
-'  value stat_failed_image.', &
+'  value of VAR to the variable ATOM.', &
+'', &
+'  This operation is performed atomically, ensuring thread safety in parallel', &
+'  environments, such as when using coarrays in Fortran for parallel', &
+'  programming. It is part of the atomic operations defined in the Fortran 2008', &
+'  standard and later, typically used with the ISO_FORTRAN_ENV module.', &
+'', &
+'  ATOMIC_FETCH_ADD(3) is useful in parallel programming to avoid race', &
+'  conditions when multiple images update a shared variable.', &
+'', &
+'  The operation is only guaranteed to be atomic for variables of kind', &
+'  ATOMIC_INT_KIND.', &
+'', &
+'  For coindexed variables (e.g., counter[1]), the operation targets the', &
+'  specified image''s coarray.', &
+'', &
+'  Always use synchronization (e.g., sync all) to ensure consistent state', &
+'  across images before and after atomic operations.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of ISO_FORTRAN_ENV''s STAT_STOPPED_IMAGE', &
+'  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
 '', &
 'OPTIONS', &
-'  o  ATOM : Scalar coarray or coindexed variable of integer type with', &
-'     atomic_int_kind kind. atomic_logical_kind kind.', &
+'  o  ATOM : Scalar coarray or coindexed variable of integer type with kind', &
+'     ATOMIC_INT_KIND (from ISO_FORTRAN_ENV).', &
+'', &
+'     Must be accessible across images in a parallel execution context.', &
 '', &
 '  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
 '     value is converted to the kind of ATOM.', &
 '', &
 '  o  OLD : Scalar of the same type and kind as ATOM.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'      On return, it contains the value of ATOM before the addition.', &
+'', &
+'  o  STAT : (optional) Scalar default-kind integer variable. If present:', &
+'', &
+'           Set to 0 if the operation is successful.', &
+'           Set to a positive value if the operation fails (e.g.,', &
+'           STAT_STOPPED_IMAGE if the remote image has stopped, or', &
+'           STAT_FAILED_IMAGE if the remote image has failed, as defined', &
+'           in ISO_FORTRAN_ENV).', &
 '', &
 'EXAMPLES', &
+'  The following program demonstrates the use of ATOMIC_FETCH_ADD in a parallel', &
+'  context using coarrays. It increments a shared counter atomically across', &
+'  multiple images and retrieves the original value before the addition.', &
+'', &
 '  Sample program:', &
 '', &
 '      program demo_atomic_fetch_add', &
-'      use iso_fortran_env', &
-'      implicit none', &
-'      integer(atomic_int_kind) :: atom[*], old', &
-'        call atomic_add(atom[1], this_image(), old)', &
+'       use iso_fortran_env', &
+'       implicit none', &
+'       integer(atomic_int_kind) :: counter[*]  ! Coarray for shared counter', &
+'       integer(atomic_int_kind) :: old_value   ! Stores value before addition', &
+'       integer :: stat, me, i', &
+'', &
+'       ! Initialize counter on image 1', &
+'       if (this_image() == 1) counter = 0', &
+'       sync all  ! Ensure all images see initialized counter', &
+'', &
+'       me = this_image()  ! Get current image number', &
+'', &
+'       ! Each image atomically adds its image number to the counter', &
+'       call atomic_fetch_add(counter[1], me, old_value, stat)', &
+'', &
+'       ! Check for errors', &
+'       if (stat /= 0) then', &
+'         print *, "Image", me, ": Operation failed with STAT =", stat', &
+'       else', &
+'         print *, "Image", me, ": Old value =", old_value, ", Added", me', &
+'       end if', &
+'', &
+'       ! Synchronize all images before printing final result', &
+'       sync all', &
+'', &
+'       ! Image 1 prints the final counter value', &
+'       if (this_image() == 1) then', &
+'         print *, "Final counter value:", counter', &
+'       end if', &
 '      end program demo_atomic_fetch_add', &
+'', &
+'  Explanation of Example', &
+'', &
+'      Setup: The program uses the ISO_FORTRAN_ENV module to access', &
+'      ATOMIC_INT_KIND for the correct integer kind for atomic operations.', &
+'', &
+'      Coarray: counter[*] is a coarray, allowing shared access across images', &
+'      (parallel processes).', &
+'', &
+'      Initialization: Image 1 sets counter to 0, and sync all ensures all', &
+'      images see this initial value.', &
+'', &
+'      Atomic Operation: Each image calls ATOMIC_FETCH_ADD to add its', &
+'      image number (me) to counter[1] (the counter on image 1), storing', &
+'      the value of counter[1] before the addition in old_value.', &
+'', &
+'      Error Handling: The stat argument checks for operation success or failure.', &
+'', &
+'      Output: Each image prints the value of counter[1] before its addition', &
+'      and the value added. Image 1 prints the final counter value after', &
+'      all operations.', &
+'', &
+'  Expected Output', &
+'', &
+'  When run with 4 images (e.g., using cafrun -np 4 with a Fortran compiler', &
+'  supporting coarrays, like gfortran), the output might look like (order of', &
+'  image prints may vary due to parallelism):', &
+'', &
+'         > Image 1: Old value = 0, Added 1', &
+'         > Image 2: Old value = 1, Added 2', &
+'         > Image 3: Old value = 3, Added 3', &
+'         > Image 4: Old value = 6, Added 4', &
+'         > Final counter value: 10', &
+'', &
+'  The final counter value is the sum of image numbers (1 + 2 + 3 + 4 = 10),', &
+'  confirming atomic updates.', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -4014,9 +4394,12 @@ textblock=[character(len=256) :: &
 '', &
 '  ATOMIC_FETCH_XOR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025    atomic_fetch_add(3fortran)', &
+'                                June 27, 2025      atomic_fetch_add(3fortran)', &
 '']
 
 shortname="atomic_fetch_add"
@@ -4040,37 +4423,69 @@ textblock=[character(len=256) :: &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
-'  ATOMIC_FETCH_AND(3) atomically stores the value of ATOM in OLD and defines', &
-'  ATOM with the bitwise AND between the values of ATOM and VALUE.  When STAT', &
-'  is present and the invocation was successful, it is assigned the value 0. If', &
-'  it is present and the invocation has failed, it is assigned a positive', &
-'  value; in particular, for a coindexed ATOM, if the remote image has stopped,', &
-'  it is assigned the value of iso_fortran_env''s stat_stopped_image and if the', &
-'  remote image has failed, the value stat_failed_image.', &
+'  ATOMIC_FETCH_AND(3) atomically fetches and performs a bitwise AND operation.', &
+'', &
+'  It is similar to ATOMIC_AND(3), but returns the previous value of ATOM.', &
+'  That is, it atomically stores the value of ATOM in OLD and performs a', &
+'  bitwise AND operation between ATOM and VALUE, storing the result in ATOM.', &
+'', &
+'  Useful for bit flag manipulation with feedback.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of iso_fortran_env''s STAT_STOPPED_IMAGE', &
+'  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
 '', &
 'OPTIONS', &
 '  o  ATOM : Scalar coarray or coindexed variable of integer type with', &
-'     atomic_int_kind kind.', &
+'     ATOMIC_INT_KIND kind.', &
 '', &
 '  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
 '     value is converted to the kind of ATOM.', &
 '', &
-'  o  OLD : Scalar of the same type and kind as ATOM.', &
+'  o  OLD : Scalar of the same type and kind as ATOM. Receives the value of', &
+'     ATOM before the operation.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'  o  STAT : (optional) Scalar default-kind integer variable. Set to 0 on', &
+'     success, or a positive value on failure.', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
 '      program demo_atomic_fetch_and', &
-'      use iso_fortran_env', &
-'      implicit none', &
-'      integer(atomic_int_kind) :: atom[*], old', &
-'        call atomic_fetch_and (atom[1], int(b''10100011101''), old)', &
+'', &
+'       use iso_fortran_env', &
+'       implicit none', &
+'       integer(atomic_int_kind) :: flags[*], old', &
+'       integer :: stat, me', &
+'', &
+'       if (this_image() == 1) flags = int(b''1111'', atomic_int_kind)', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_fetch_and(flags[1], int(b''1010'', atomic_int_kind), old, stat)', &
+'', &
+'       if (stat /= 0) print *, "Image", me, ": Failed with STAT =", stat', &
+'       print *, "Image", me, ": Old =", old', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final flags:", flags', &
 '      end program demo_atomic_fetch_and', &
 '', &
+'  Expected Output (4 images, order varies)', &
+'', &
+'         > Image 1: Old = 15', &
+'         > Image 2: Old = 10', &
+'         > Image 3: Old = 10', &
+'         > Image 4: Old = 10', &
+'         > Final flags: 10', &
+'', &
 'STANDARD', &
-'  TS 18508', &
+'  Fortran 2008 and later, TS 18508', &
+'', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
 '', &
 'SEE ALSO', &
 '  ATOMIC_DEFINE(3), ATOMIC_AND(3), ISO_FORTRAN_ENV(3),', &
@@ -4079,9 +4494,12 @@ textblock=[character(len=256) :: &
 '', &
 '  ATOMIC_FETCH_XOR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025    atomic_fetch_and(3fortran)', &
+'                                June 27, 2025      atomic_fetch_and(3fortran)', &
 '']
 
 shortname="atomic_fetch_and"
@@ -4095,8 +4513,8 @@ textblock=[character(len=256) :: &
 'atomic_fetch_or(3fortran)                           atomic_fetch_or(3fortran)', &
 '', &
 'NAME', &
-'  ATOMIC_FETCH_OR(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation', &
-'  with prior fetch', &
+'  ATOMIC_FETCH_OR(3) - [ATOMIC:BIT MANIPULATION] Atomically fetch and perform', &
+'  a bitwise OR operation', &
 '', &
 'SYNOPSIS', &
 '  call atomic_fetch_or(atom, value, old [,stat] )', &
@@ -4105,24 +4523,32 @@ textblock=[character(len=256) :: &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
-'  ATOMIC_FETCH_OR(3) atomically stores the value of ATOM in OLD and defines', &
-'  ATOM with the bitwise OR between the values of ATOM and VALUE.  When STAT is', &
-'  present and the invocation was successful, it is assigned the value 0. If it', &
-'  is present and the invocation has failed, it is assigned a positive value;', &
-'  in particular, for a coindexed ATOM, if the remote image has stopped, it is', &
-'  assigned the value of iso_fortran_env''s stat_stopped_image and if the remote', &
-'  image has failed, the value stat_failed_image.', &
+'  ATOMIC_FETCH_OR(ATOM, VALUE, OLD, STAT) atomically stores the value of ATOM', &
+'  in OLD and performs a bitwise OR operation between ATOM and VALUE, storing', &
+'  the result in ATOM.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of iso_fortran_env''s stat_stopped_image', &
+'  and if the remote image has failed, the value stat_failed_image.', &
+'', &
+'  The result is the bitwise OR (e.g., 1000 OR 0011 = 1011).', &
+'', &
+'  It is useful for setting bit flags atomically.', &
 '', &
 'OPTIONS', &
 '  o  ATOM : Scalar coarray or coindexed variable of integer type with', &
-'     atomic_int_kind kind.', &
+'     ATOMIC_INT_KIND kind.', &
 '', &
 '  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
 '     value is converted to the kind of ATOM.', &
 '', &
-'  o  OLD : Scalar of the same type and kind as ATOM.', &
+'  o  OLD : Scalar of the same type and kind as ATOM. Receives the value of', &
+'     ATOM before the operation.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'  o  STAT : (optional) Scalar default-kind integer variable. Set to 0 on', &
+'     success, or a positive value on failure.', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
@@ -4130,9 +4556,30 @@ textblock=[character(len=256) :: &
 '      program demo_atomic_fetch_or', &
 '      use iso_fortran_env', &
 '      implicit none', &
-'      integer(atomic_int_kind) :: atom[*], old', &
-'        call atomic_fetch_or(atom[1], int(b''10100011101''), old)', &
+'      integer(atomic_int_kind) :: flags[*], old', &
+'      integer :: stat, me', &
+'', &
+'       if (this_image() == 1) flags = int(b''1000'', atomic_int_kind)', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_fetch_or(flags[1], int(b''0011'', atomic_int_kind), old, stat)', &
+'', &
+'       if (stat /= 0) print *, "Image", me, ": Failed with STAT =", stat', &
+'       print *, "Image", me, ": Old =", old', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final flags:", flags', &
+'', &
 '      end program demo_atomic_fetch_or', &
+'', &
+'  Expected Output (4 images, order varies)', &
+'', &
+'         > Image 1: Old = 8', &
+'         > Image 2: Old = 11', &
+'         > Image 3: Old = 11', &
+'         > Image 4: Old = 11', &
+'         > Final flags: 11', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -4144,9 +4591,12 @@ textblock=[character(len=256) :: &
 '', &
 '  ATOMIC_FETCH_XOR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025     atomic_fetch_or(3fortran)', &
+'                                June 27, 2025       atomic_fetch_or(3fortran)', &
 '']
 
 shortname="atomic_fetch_or"
@@ -4160,8 +4610,8 @@ textblock=[character(len=256) :: &
 'atomic_fetch_xor(3fortran)                         atomic_fetch_xor(3fortran)', &
 '', &
 'NAME', &
-'  ATOMIC_FETCH_XOR(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise XOR operation', &
-'  with prior fetch', &
+'  ATOMIC_FETCH_XOR(3) - [ATOMIC:BIT MANIPULATION] Atomically fetch and perform', &
+'  a bitwise XOR operation', &
 '', &
 'SYNOPSIS', &
 '  call atomic_fetch_xor (atom, value, old [,stat] )', &
@@ -4169,14 +4619,29 @@ textblock=[character(len=256) :: &
 '          subroutine atomic_fetch_xor (atom, value, old, stat)', &
 '', &
 'CHARACTERISTICS', &
+'  o  ATOM: A scalar coarray or coindexed variable of integer type with kind', &
+'     ATOMIC_INT_KIND.', &
+'', &
+'  o  VALUE: A scalar of the same type as ATOM.', &
+'', &
+'  o  OLD: A scalar of the same type and kind as ATOM.', &
+'', &
+'  o  STAT (optional): A scalar default-kind integer.', &
+'', &
 'DESCRIPTION', &
-'  ATOMIC_FETCH_XOR(3) atomically stores the value of ATOM in OLD and defines', &
-'  ATOM with the bitwise XOR between the values of ATOM and VALUE.  When STAT', &
-'  is present and the invocation was successful, it is assigned the value 0. If', &
-'  it is present and the invocation has failed, it is assigned a positive', &
-'  value; in particular, for a coindexed ATOM, if the remote image has stopped,', &
-'  it is assigned the value of iso_fortran_env''s stat_stopped_image and if the', &
-'  remote image has failed, the value stat_failed_image.', &
+'  ATOMIC_FETCH_XOR(ATOM, VALUE, OLD, STAT) atomically stores the value of ATOM', &
+'  in OLD and performs a bitwise XOR operation between ATOM and VALUE, storing', &
+'  the result in ATOM.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of ISO_FORTRAN_ENV''s STAT_STOPPED_IMAGE', &
+'  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
+'', &
+'  The result is the bitwise XOR (e.g., 1100 XOR 1010 = 0110).', &
+'', &
+'  It is useful for toggling bits atomically.', &
 '', &
 'OPTIONS', &
 '  o  ATOM : Scalar coarray or coindexed variable of integer type with', &
@@ -4193,11 +4658,32 @@ textblock=[character(len=256) :: &
 '  Sample program:', &
 '', &
 '      program demo_atomic_fetch_xor', &
-'      use iso_fortran_env', &
-'      implicit none', &
-'      integer(atomic_int_kind) :: atom[*], old', &
-'        call atomic_fetch_xor (atom[1], int(b''10100011101''), old)', &
+'', &
+'       use iso_fortran_env', &
+'       implicit none', &
+'       integer(atomic_int_kind) :: flags[*], old', &
+'       integer :: stat, me', &
+'', &
+'       if (this_image() == 1) flags = int(b''1100'', atomic_int_kind)', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_fetch_xor(flags[1], int(b''1010'', atomic_int_kind), old, stat)', &
+'', &
+'       if (stat /= 0) print *, "Image", me, ": Failed with STAT =", stat', &
+'       print *, "Image", me, ": Old =", old', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final flags:", flags', &
 '      end program demo_atomic_fetch_xor', &
+'', &
+'  Expected Output (4 images, order varies)', &
+'', &
+'         > Image 1: Old = 12', &
+'         > Image 2: Old = 6', &
+'         > Image 3: Old = 6', &
+'         > Image 4: Old = 6', &
+'         > Final flags: 6', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -4209,9 +4695,12 @@ textblock=[character(len=256) :: &
 '', &
 '  ATOMIC_FETCH_OR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025    atomic_fetch_xor(3fortran)', &
+'                                June 27, 2025      atomic_fetch_xor(3fortran)', &
 '']
 
 shortname="atomic_fetch_xor"
@@ -4225,7 +4714,8 @@ textblock=[character(len=256) :: &
 'atomic_or(3fortran)                                       atomic_or(3fortran)', &
 '', &
 'NAME', &
-'  ATOMIC_OR(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation', &
+'  ATOMIC_OR(3) - [ATOMIC:BIT MANIPULATION] Atomically perform a bitwise OR', &
+'  operation', &
 '', &
 'SYNOPSIS', &
 '  call atomic_or(atom, value [,stat] )', &
@@ -4246,13 +4736,18 @@ textblock=[character(len=256) :: &
 '  o  STAT is a Scalar default-kind integer variable.', &
 '', &
 'DESCRIPTION', &
-'  ATOMIC_OR(3) atomically defines ATOM with the bitwise OR between the values', &
-'  of ATOM and VALUE. When STAT is present and the invocation was successful,', &
-'  it is assigned the value 0. If it is present and the invocation has failed,', &
-'  it is assigned a positive value; in particular, for a coindexed ATOM, if the', &
-'  remote image has stopped, it is assigned the value of iso_fortran_env''s', &
-'  stat_stopped_image and if the remote image has failed, the value', &
-'  stat_failed_image.', &
+'  ATOMIC_OR(ATOM, VALUE, STAT) atomically performs a bitwise OR operation', &
+'  between the value of ATOM and VALUE, storing the result in ATOM.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of ISO_FORTRAN_ENV''s STAT_STOPPED_IMAGE', &
+'  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
+'', &
+'  Unlike ATOMIC_FETCH_OR, this does not return the previous value.', &
+'', &
+'  Use for setting bits without needing the prior state.', &
 '', &
 'OPTIONS', &
 '  o  ATOM : Scalar coarray or coindexed variable of integer type with', &
@@ -4261,17 +4756,33 @@ textblock=[character(len=256) :: &
 '  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
 '     value is converted to the kind of ATOM.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'  o  STAT : (optional) Scalar default-kind integer variable. Set to 0 on', &
+'     success, or a positive value on failure.', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
 '      program demo_atomic_or', &
-'      use iso_fortran_env', &
-'      implicit none', &
-'      integer(atomic_int_kind) :: atom[*]', &
-'        call atomic_or(atom[1], int(b''10100011101''))', &
+'       use iso_fortran_env', &
+'       implicit none', &
+'       integer(atomic_int_kind) :: flags[*]', &
+'       integer :: stat, me', &
+'', &
+'       if (this_image() == 1) flags = int(b''1000'', atomic_int_kind)', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_or(flags[1], int(b''0011'', atomic_int_kind), stat)', &
+'', &
+'       if (stat /= 0) print *, "Image", me, ": Failed with STAT =", stat', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final flags:", flags', &
 '      end program demo_atomic_or', &
+'', &
+'  Expected Output (4 images)', &
+'', &
+'         > Final flags: 11', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -4283,9 +4794,12 @@ textblock=[character(len=256) :: &
 '', &
 '  ATOMIC_XOR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           atomic_or(3fortran)', &
+'                                June 27, 2025             atomic_or(3fortran)', &
 '']
 
 shortname="atomic_or"
@@ -4299,7 +4813,7 @@ textblock=[character(len=256) :: &
 'atomic_ref(3fortran)                                     atomic_ref(3fortran)', &
 '', &
 'NAME', &
-'  ATOMIC_REF(3) - [ATOMIC] Obtaining the value of a variable atomically', &
+'  ATOMIC_REF(3) - [ATOMIC] Atomically retrieve the value in a variable', &
 '', &
 'SYNOPSIS', &
 '  call atomic_ref(value, atom [,stat] )', &
@@ -4320,35 +4834,57 @@ textblock=[character(len=256) :: &
 '  o  STAT is a Scalar default-kind integer variable.', &
 '', &
 'DESCRIPTION', &
-'  ATOMIC_REF(3) atomically assigns the value of the variable ATOM to VALUE.', &
+'  ATOMIC_REF(VALUE, ATOM, STAT) atomically retrieves the value of ATOM and', &
+'  stores it in VALUE. This ensures a thread-safe read operation.', &
+'', &
 '  When STAT is present and the invocation was successful, it is assigned the', &
 '  value 0. If it is present and the invocation has failed, it is assigned a', &
 '  positive value; in particular, for a coindexed ATOM, if the remote image has', &
 '  stopped, it is assigned the value of iso_fortran_env''s STAT_STOPPED_IMAGE', &
 '  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
 '', &
+'  Use for safe reading of shared variables in parallel contexts.', &
+'', &
+'  It complements ATOMIC_DEFINE for read-write operations.', &
+'', &
 'OPTIONS', &
-'  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
-'     value is converted to the kind of ATOM.', &
+'  o  VALUE : Receives the value of ATOM. : Scalar of the same type as ATOM. If', &
+'     the kind is different, the value is converted to the kind of ATOM.', &
 '', &
 '  o  ATOM : Scalar coarray or coindexed variable of either integer type with', &
-'     atomic_int_kind kind or logical type with atomic_logical_kind kind.', &
+'     ATOMIC_INT_KIND kind or logical type with ATOMIC_LOGICAL_KIND kind.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'  o  STAT : (optional) Scalar default-kind integer variable. Set to 0 on', &
+'     success, or a positive value on failure.', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
 '      program demo_atomic_ref', &
-'      use iso_fortran_env', &
-'      implicit none', &
-'      logical(atomic_logical_kind) :: atom[*]', &
-'      logical :: val', &
-'        call atomic_ref( val, atom[1] )', &
-'        if (val) then', &
-'           print *, "Obtained"', &
-'        endif', &
+'       use iso_fortran_env', &
+'       implicit none', &
+'       integer(atomic_int_kind) :: counter[*], value', &
+'       integer :: stat, me', &
+'', &
+'       if (this_image() == 1) counter = 42', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_ref(value, counter[1], stat)', &
+'', &
+'       if (stat /= 0) then', &
+'         print *, "Image", me, ": Failed with STAT =", stat', &
+'       else', &
+'         print *, "Image", me, ": Retrieved value =", value', &
+'       end if', &
 '      end program demo_atomic_ref', &
+'', &
+'  Expected Output (4 images, order varies)', &
+'', &
+'         > Image 1: Retrieved value = 42', &
+'         > Image 2: Retrieved value = 42', &
+'         > Image 3: Retrieved value = 42', &
+'         > Image 4: Retrieved value = 42', &
 '', &
 'STANDARD', &
 '  Fortran 2008 ; with STAT, TS 18508', &
@@ -4360,9 +4896,12 @@ textblock=[character(len=256) :: &
 '', &
 '  ATOMIC_FETCH_OR(3), ATOMIC_FETCH_XOR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025          atomic_ref(3fortran)', &
+'                                June 27, 2025            atomic_ref(3fortran)', &
 '']
 
 shortname="atomic_ref"
@@ -4376,7 +4915,8 @@ textblock=[character(len=256) :: &
 'atomic_xor(3fortran)                                     atomic_xor(3fortran)', &
 '', &
 'NAME', &
-'  ATOMIC_XOR(3) - [ATOMIC:BIT MANIPULATION] Atomic bitwise OR operation', &
+'  ATOMIC_XOR(3) - [ATOMIC:BIT MANIPULATION] Atomically perform a bitwise XOR', &
+'  operation', &
 '', &
 'SYNOPSIS', &
 '  call atomic_xor(atom, value [,stat] )', &
@@ -4398,13 +4938,18 @@ textblock=[character(len=256) :: &
 '', &
 'CHARACTERISTICS', &
 'DESCRIPTION', &
-'  ATOMIC_XOR(3) atomically defines ATOM with the bitwise XOR between the', &
-'  values of ATOM and VALUE. When STAT is present and the invocation was', &
-'  successful, it is assigned the value 0. If it is present and the invocation', &
-'  has failed, it is assigned a positive value; in particular, for a coindexed', &
-'  ATOM, if the remote image has stopped, it is assigned the value of', &
-'  iso_fortran_env''s stat_stopped_image and if the remote image has failed, the', &
-'  value stat_failed_image.', &
+'  ATOMIC_XOR(ATOM, VALUE, STAT) atomically performs a bitwise XOR operation', &
+'  between the value of ATOM and VALUE, storing the result in ATOM.', &
+'', &
+'  When STAT is present and the invocation was successful, it is assigned the', &
+'  value 0. If it is present and the invocation has failed, it is assigned a', &
+'  positive value; in particular, for a coindexed ATOM, if the remote image has', &
+'  stopped, it is assigned the value of ISO_FORTRAN_ENV''s STAT_STOPPED_IMAGE', &
+'  and if the remote image has failed, the value STAT_FAILED_IMAGE.', &
+'', &
+'  Unlike ATOMIC_FETCH_XOR, this does not return the previous value.', &
+'', &
+'  Use for toggling bits atomically.', &
 '', &
 'OPTIONS', &
 '  o  ATOM : Scalar coarray or coindexed variable of integer type with', &
@@ -4413,17 +4958,33 @@ textblock=[character(len=256) :: &
 '  o  VALUE : Scalar of the same type as ATOM. If the kind is different, the', &
 '     value is converted to the kind of ATOM.', &
 '', &
-'  o  STAT : (optional) Scalar default-kind integer variable.', &
+'  o  STAT : (optional) Scalar default-kind integer variable. Set to 0 on', &
+'     success, or a positive value on failure.', &
 '', &
 'EXAMPLES', &
 '  Sample program:', &
 '', &
 '      program demo_atomic_xor', &
-'      use iso_fortran_env', &
-'      implicit none', &
-'      integer(atomic_int_kind) :: atom[*]', &
-'        call atomic_xor(atom[1], int(b''10100011101''))', &
+'       use iso_fortran_env', &
+'       implicit none', &
+'       integer(atomic_int_kind) :: flags[*]', &
+'       integer :: stat, me', &
+'', &
+'       if (this_image() == 1) flags = int(b''1100'', atomic_int_kind)', &
+'       sync all', &
+'', &
+'       me = this_image()', &
+'       call atomic_xor(flags[1], int(b''1010'', atomic_int_kind), stat)', &
+'', &
+'       if (stat /= 0) print *, "Image", me, ": Failed with STAT =", stat', &
+'       sync all', &
+'', &
+'       if (this_image() == 1) print *, "Final flags:", flags', &
 '      end program demo_atomic_xor', &
+'', &
+'  Expected Output (4 images)', &
+'', &
+'         > Final flags: 6', &
 '', &
 'STANDARD', &
 '  TS 18508', &
@@ -4432,9 +4993,12 @@ textblock=[character(len=256) :: &
 '  ATOMIC_DEFINE(3), ATOMIC_FETCH_XOR(3), ISO_FORTRAN_ENV(3), ATOMIC_ADD(3),', &
 '  ATOMIC_OR(3), ATOMIC_XOR(3)', &
 '', &
+'  See ISO_FORTRAN_ENV for constants like ATOMIC_INT_KIND, STAT_STOPPED_IMAGE,', &
+'  and STAT_FAILED_IMAGE.', &
+'', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025          atomic_xor(3fortran)', &
+'                                June 27, 2025            atomic_xor(3fortran)', &
 '']
 
 shortname="atomic_xor"
@@ -4563,7 +5127,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025           backspace(7fortran)', &
+'                                June 27, 2025             backspace(7fortran)', &
 '']
 
 shortname="backspace"
@@ -4625,7 +5189,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           bessel_j0(3fortran)', &
+'                                June 27, 2025             bessel_j0(3fortran)', &
 '']
 
 shortname="bessel_j0"
@@ -4686,7 +5250,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           bessel_j1(3fortran)', &
+'                                June 27, 2025             bessel_j1(3fortran)', &
 '']
 
 shortname="bessel_j1"
@@ -4781,7 +5345,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           bessel_jn(3fortran)', &
+'                                June 27, 2025             bessel_jn(3fortran)', &
 '']
 
 shortname="bessel_jn"
@@ -4842,7 +5406,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           bessel_y0(3fortran)', &
+'                                June 27, 2025             bessel_y0(3fortran)', &
 '']
 
 shortname="bessel_y0"
@@ -4902,7 +5466,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           bessel_y1(3fortran)', &
+'                                June 27, 2025             bessel_y1(3fortran)', &
 '']
 
 shortname="bessel_y1"
@@ -4997,7 +5561,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           bessel_yn(3fortran)', &
+'                                June 27, 2025             bessel_yn(3fortran)', &
 '']
 
 shortname="bessel_yn"
@@ -5155,7 +5719,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 bge(3fortran)', &
+'                                June 27, 2025                   bge(3fortran)', &
 '']
 
 shortname="bge"
@@ -5260,7 +5824,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 bgt(3fortran)', &
+'                                June 27, 2025                   bgt(3fortran)', &
 '']
 
 shortname="bgt"
@@ -5346,7 +5910,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025            bit_size(3fortran)', &
+'                                June 27, 2025              bit_size(3fortran)', &
 '']
 
 shortname="bit_size"
@@ -5440,7 +6004,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 ble(3fortran)', &
+'                                June 27, 2025                   ble(3fortran)', &
 '']
 
 shortname="ble"
@@ -5468,8 +6032,8 @@ textblock=[character(len=256) :: &
 '  declarations, and may be exited using the EXIT(7F) statement.', &
 '', &
 '  Aside from the following restrictions a block construct is in many ways', &
-'  similiar to a contained procedure without parameters accept it is', &
-'  constructed in-line instead of after the body of the current procedure.', &
+'  similar to a contained procedure without parameters accept it is constructed', &
+'  in-line instead of after the body of the current procedure.', &
 '', &
 '  So if you are thinking about making a contained procedure that will be', &
 '  called once it will probably be clearer inlined using a block construct.', &
@@ -5517,7 +6081,7 @@ textblock=[character(len=256) :: &
 '           TESTFORZERO: block', &
 '              integer :: I      ! local block variable', &
 '              intrinsic :: tan  ! can use the TAN intrinsic in the block now', &
-'                                ! as this definition supercedes the one in the', &
+'                                ! as this definition supersedes the one in the', &
 '                                ! parent body', &
 '              do i=1,size(a)', &
 '                 if(a(i).eq.0) then', &
@@ -5564,7 +6128,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               block(7fortran)', &
+'                                June 27, 2025                 block(7fortran)', &
 '']
 
 shortname="block"
@@ -5652,7 +6216,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 blt(3fortran)', &
+'                                June 27, 2025                   blt(3fortran)', &
 '']
 
 shortname="blt"
@@ -5783,7 +6347,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               btest(3fortran)', &
+'                                June 27, 2025                 btest(3fortran)', &
 '']
 
 shortname="btest"
@@ -5854,7 +6418,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025        c_associated(3fortran)', &
+'                                June 27, 2025          c_associated(3fortran)', &
 '']
 
 shortname="c_associated"
@@ -6090,7 +6654,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             ceiling(3fortran)', &
+'                                June 27, 2025               ceiling(3fortran)', &
 '']
 
 shortname="ceiling"
@@ -6111,7 +6675,7 @@ textblock=[character(len=256) :: &
 '', &
 '          subroutine c_f_pointer(cptr, fptr ,shape )', &
 '', &
-'           type(c_ptr),intent(in) :: cprt', &
+'           type(c_ptr),intent(in) :: cptr', &
 '           type(TYPE),pointer,intent(out) :: fprt', &
 '           integer,intent(in),optional :: shape(:)', &
 '', &
@@ -6159,7 +6723,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025         c_f_pointer(3fortran)', &
+'                                June 27, 2025           c_f_pointer(3fortran)', &
 '']
 
 shortname="c_f_pointer"
@@ -6181,7 +6745,7 @@ textblock=[character(len=256) :: &
 '', &
 '          subroutine c_f_procpointer(cptr, fptr )', &
 '', &
-'           type(c_funptr),intent(in) :: cprt', &
+'           type(c_funptr),intent(in) :: cptr', &
 '           type(TYPE),pointer,intent(out) :: fprt', &
 '', &
 'CHARACTERISTICS', &
@@ -6227,7 +6791,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025     c_f_procpointer(3fortran)', &
+'                                June 27, 2025       c_f_procpointer(3fortran)', &
 '']
 
 shortname="c_f_procpointer"
@@ -6295,7 +6859,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025            c_funloc(3fortran)', &
+'                                June 27, 2025              c_funloc(3fortran)', &
 '']
 
 shortname="c_funloc"
@@ -6424,7 +6988,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                char(3fortran)', &
+'                                June 27, 2025                  char(3fortran)', &
 '']
 
 shortname="char"
@@ -6479,7 +7043,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025               c_loc(3fortran)', &
+'                                June 27, 2025                 c_loc(3fortran)', &
 '']
 
 shortname="c_loc"
@@ -6610,7 +7174,7 @@ textblock=[character(len=256) :: &
 '  BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7), PRINT(7),', &
 '  READ(7), REWIND(7), WAIT(7), WRITE(7)', &
 '', &
-'                              February 19, 2025               close(7fortran)', &
+'                                June 27, 2025                 close(7fortran)', &
 '']
 
 shortname="close"
@@ -6875,7 +7439,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               cmplx(3fortran)', &
+'                                June 27, 2025                 cmplx(3fortran)', &
 '']
 
 shortname="cmplx"
@@ -6937,7 +7501,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025        co_broadcast(3fortran)', &
+'                                June 27, 2025          co_broadcast(3fortran)', &
 '']
 
 shortname="co_broadcast"
@@ -7051,7 +7615,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025              co_max(3fortran)', &
+'                                June 27, 2025                co_max(3fortran)', &
 '']
 
 shortname="co_max"
@@ -7114,7 +7678,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025              co_min(3fortran)', &
+'                                June 27, 2025                co_min(3fortran)', &
 '']
 
 shortname="co_min"
@@ -7185,7 +7749,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 20command_argument_count(3fortran)', &
+'                                June 27, 2025command_argument_count(3fortran)', &
 '']
 
 shortname="command_argument_count"
@@ -7264,7 +7828,7 @@ textblock=[character(len=256) :: &
 '  environment are useful.', &
 '', &
 '  A particularly irksome form of over-commenting explains exactly what each', &
-'  statement does, even when it is obvious to any reasonably competant', &
+'  statement does, even when it is obvious to any reasonably competent', &
 '  programmer.', &
 '', &
 'EXAMPLES', &
@@ -7314,7 +7878,7 @@ textblock=[character(len=256) :: &
 'SEE ALSO', &
 '  CONTINUATION(5),', &
 '', &
-'                              February 19, 2025             comment(5fortran)', &
+'                                June 27, 2025               comment(5fortran)', &
 '']
 
 shortname="comment"
@@ -7395,7 +7959,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025    compiler_options(3fortran)', &
+'                                June 27, 2025      compiler_options(3fortran)', &
 '']
 
 shortname="compiler_options"
@@ -7463,7 +8027,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025    compiler_version(3fortran)', &
+'                                June 27, 2025      compiler_version(3fortran)', &
 '']
 
 shortname="compiler_version"
@@ -7497,8 +8061,8 @@ textblock=[character(len=256) :: &
 '  That is, If Z is the complex value (X, Y) then the result is (X, -Y).', &
 '', &
 '  In mathematics, the complex conjugate of a complex number is a value whose', &
-'  real and imaginary part are equal parts are equal in magnitude to each other', &
-'  but the Y value has opposite sign.', &
+'  real and imaginary part are equal in magnitude to each other but the Y value', &
+'  has opposite sign.', &
 '', &
 '  For matrices of complex numbers, CONJG(ARRAY) represents the element-by-', &
 '  element conjugation of ARRAY; not the conjugate transpose of the ARRAY .', &
@@ -7586,7 +8150,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               conjg(3fortran)', &
+'                                June 27, 2025                 conjg(3fortran)', &
 '']
 
 shortname="conjg"
@@ -7644,7 +8208,7 @@ textblock=[character(len=256) :: &
 '  details to cover.', &
 '', &
 '  When a line is split using the general rule any trailing spaces before the', &
-'  amersand at the end of the line are included in the equivalent single-line', &
+'  ampersand at the end of the line are included in the equivalent single-line', &
 '  statement.', &
 '', &
 '  However, spaces before the ampersand beginning the second line are ignored.', &
@@ -7696,7 +8260,7 @@ textblock=[character(len=256) :: &
 '  Note no line shall contain a single "&" as the only nonblank character or as', &
 '  the only nonblank character before an ! that initiates a comment.', &
 '', &
-'  you have to have the leading amersand on continued lines when splitting', &
+'  you have to have the leading ampersand on continued lines when splitting', &
 '  quoted strings or lexical words or constant values.', &
 '', &
 '  But try to never split constants or lexical words!', &
@@ -7712,7 +8276,7 @@ textblock=[character(len=256) :: &
 '         &cond str''', &
 '', &
 '  where things were split in two in a haphazard way as long as no spaces are', &
-'  introduced before the ending amersand and after the leading amersand that', &
+'  introduced before the ending ampersand and after the leading ampersand that', &
 '  would make the statement illegal if all appearing on one line (ignoring', &
 '  length for the moment).', &
 '', &
@@ -7743,7 +8307,7 @@ textblock=[character(len=256) :: &
 '  Fortran character set in column six. If a quoted string is broken the first', &
 '  line acts as if padded with spaces out to column 72.', &
 '', &
-'  Even though the rules for continueing statements on multiple lines are so', &
+'  Even though the rules for continuing statements on multiple lines are so', &
 '  different, source code can be formatted in a format that works in both free', &
 '  and fixed-format files.', &
 '', &
@@ -7962,7 +8526,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025        continuation(5fortran)', &
+'                                June 27, 2025          continuation(5fortran)', &
 '']
 
 shortname="continuation"
@@ -8039,7 +8603,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran statement descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025            continue(7fortran)', &
+'                                June 27, 2025              continue(7fortran)', &
 '']
 
 shortname="continue"
@@ -8138,7 +8702,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           co_reduce(3fortran)', &
+'                                June 27, 2025             co_reduce(3fortran)', &
 '']
 
 shortname="co_reduce"
@@ -8187,27 +8751,150 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_cos', &
 '      implicit none', &
-'      character(len=*),parameter :: g2=''(a,t20,g0)''', &
-'      doubleprecision,parameter  :: PI=atan(1.0d0)*4.0d0', &
-'        write(*,g2)''COS(0.0)=    '', cos(0.0)', &
-'        write(*,g2)''COS(PI)=     '', cos(PI)', &
-'        write(*,g2)''COS(PI/2.0d0)='', cos(PI/2.0d0),''EPSILON='',epsilon(PI)', &
-'        write(*,g2)''COS(2*PI)=    '', cos(2*PI)', &
-'        write(*,g2)''COS(-2*PI)=   '', cos(-2*PI)', &
-'        write(*,g2)''COS(-2000*PI)='', cos(-2000*PI)', &
-'        write(*,g2)''COS(3000*PI)= '', cos(3000*PI)', &
+'      real,parameter      :: PI=atan(1.0d0)*4.0d0', &
+'      real                :: val', &
+'      character,parameter  :: nl=NEW_LINE(''A'')', &
+'        write(*,''(*(g0))'',advance=''no'') &', &
+'', &
+'      ''basics:'',                                          nl, &', &
+'      '' COS(0.0) =       '', cos(0.0),                     nl, &', &
+'      '' COS(PI) =        '', cos(PI),                      nl, &', &
+'      '' '',                                                nl, &', &
+'      ''X may be any real value'',                          nl, &', &
+'      '' COS(222*PI) =    '', cos(222*PI),                  nl, &', &
+'      '' COS(-333*PI) =           '', cos(-333*PI),                 nl, &', &
+'      '' '',                                                nl, &', &
+'      ''note: probably not exactly zero ....'',                     nl, &', &
+'      '' COS(PI/2.0)=     '', cos(PI/2.0),                  nl, &', &
+'      '' EPSILON=         '', epsilon(PI),                  nl, &', &
+'      '' '',                                                nl, &', &
+'      ''COS() is elemental'',                               nl, &', &
+'      '' COS([0.0,PI/4,PI/2,PI*3/4,PI]) = '',               nl', &
+'        write(*,''(*(1x,g0,1x))'') COS([0.0,PI/4,PI/2,PI*3/4,PI])', &
+'', &
+'        write(*,''(*(g0))'',advance=''no'') &', &
+'      '' '',                                                nl, &', &
+'      ''Law of Cosines:'',                                  nl, &', &
+'      '' '',                                                nl, &', &
+'      ''right triangle'',                                   nl, &', &
+'      two_sides_and_degrees_between(3.0,4.0,90.0),          nl, &', &
+'      ''equilateral'',                                      nl, &', &
+'      two_sides_and_degrees_between(3.3,3.3,60.0),          nl, &', &
+'      '' '',                                                nl, &', &
+'      ''Dusty Corners:'',                                   nl, &', &
+'      '' '',                                                nl, &', &
+'      ''If very large, representable numbers are far apart'',  nl, &', &
+'      ''so adding or subtracting a few radians can not even'', nl, &', &
+'      ''change the value! Note the expected values here:'',    nl', &
+'        val=0.0', &
+'        call delta( val-2.0, val-1.0 )', &
+'', &
+'        write(*,''(a)'') ''but look at the same call when the values are huge;''', &
+'        val=huge(0.0)/1000', &
+'        call delta( val-2.0, val-1.0 )', &
+'', &
+'      contains', &
+'', &
+'      subroutine delta(A,B)', &
+'      real(kind=kind(0.0)),intent(in) :: a,b', &
+'      print ''(a,t30,g0)'' , &', &
+'      '' A=                   '', A, &', &
+'      '' B=                   '', B, &', &
+'      '' B-A=                 '', B-A, &', &
+'      '' COS(A*PI)=           '', cos(A*PI), &', &
+'      '' COS(B*PI)=           '', cos(B*PI), &', &
+'      '' spacing(A)=          '', spacing(A), &', &
+'      '' COS((B-A)*PI)=               '', cos((B-A)*PI), &', &
+'      '' COS(B*PI)-COS(A*PI)=   '', cos(B*PI)-cos(A*PI), &', &
+'      repeat(''='',40)', &
+'      end subroutine delta', &
+'', &
+'      function two_sides_and_degrees_between(a,b,X) result(str)', &
+'      real,intent(in)             :: a,b,X', &
+'      real                        :: c', &
+'      real,parameter              :: PI = atan(1.0d0) * 4.0d0', &
+'      real,parameter              :: degrees_to_radians = PI / 180.0', &
+'      character,parameter         :: nl=NEW_LINE(''A'')', &
+'      character(len=:),allocatable :: str', &
+'      ! The law of cosines states that for a', &
+'      ! triangle with sides of length a, b, and c', &
+'      ! that if the angle X is formed by sides a and', &
+'      ! b that the length of the third side c is', &
+'      !', &
+'        c = sqrt( a**2 + b**2 - 2*a*b*cos(degrees_to_radians*X) )', &
+'        allocate( character(len=132) :: str )', &
+'        write(str,''(*(g0))'')&', &
+'        ''For sides A='',a,'', B='',b,'' and X='',x,'' degrees,'',nl,''side C='',c', &
+'        str=trim(str)', &
+'      !', &
+'      !                       \', &
+'      !                      / \', &
+'      !                     / Y \', &
+'      !                    /     \', &
+'      !                   /       \', &
+'      !                  /         \', &
+'      !               b /           \ c', &
+'      !                /             \', &
+'      !               /               \', &
+'      !              /                 \', &
+'      !             /                   \', &
+'      !            / X                 Z \', &
+'      !           -------------------------', &
+'      !                       a', &
+'      end function two_sides_and_degrees_between', &
 '      end program demo_cos', &
 '', &
 '  Results:', &
 '', &
-'       > COS(0.0)=         1.000000', &
-'       > COS(PI)=          -1.000000000000000', &
-'       > COS(PI/2.0d0)=     .6123233995736766E-16', &
-'       > EPSILON=          .2220446049250313E-15', &
-'       > COS(2*PI)=        1.000000000000000', &
-'       > COS(-2*PI)=       1.000000000000000', &
-'       > COS(-2000*PI)=     1.000000000000000', &
-'       > COS(3000*PI)=     1.000000000000000', &
+'       > basics:', &
+'       >  COS(0.0) =        1.00000000', &
+'       >  COS(PI) =         -1.00000000', &
+'       >', &
+'       > X may be any real value', &
+'       >  COS(222*PI) =      1.00000000', &
+'       >  COS(-333*PI) =     -1.00000000', &
+'       >', &
+'       > note: probably not exactly zero ....', &
+'       >  COS(PI/2.0)=      -0.437113883E-7', &
+'       >  EPSILON=          0.119209290E-6', &
+'       >', &
+'       > COS() is elemental', &
+'       >  COS([0.0,PI/4,PI/2,PI*3/4,PI]) =', &
+'       >  1.00000000  0.707106769  -0.437113883E-7  -0.707106769  -1.00000000', &
+'       >', &
+'       > Law of Cosines:', &
+'       >', &
+'       > right triangle', &
+'       > For sides A=3.00000000, B=4.00000000 and X=90.0000000 degrees,', &
+'       > side C=5.00000000', &
+'       > equilateral', &
+'       > For sides A=3.29999995, B=3.29999995 and X=60.0000000 degrees,', &
+'       > side C=3.29999995', &
+'       >', &
+'       > Dusty Corners:', &
+'       >', &
+'       > If very large, representable numbers are far apart', &
+'       > so adding or subtracting a few radians can not even', &
+'       > change the value! Note the expected values here:', &
+'       >  A=                         -2.00000000', &
+'       >  B=                         -1.00000000', &
+'       >  B-A=                       1.00000000', &
+'       >  COS(A*PI)=                 1.00000000', &
+'       >  COS(B*PI)=                 -1.00000000', &
+'       >  spacing(A)=                0.238418579E-6', &
+'       >  COS((B-A)*PI)=             -1.00000000', &
+'       >  COS(B*PI)-COS(A*PI)=       -2.00000000', &
+'       > ========================================', &
+'       > but look at the same call when the values are huge;', &
+'       >  A=                         0.340282343E+36', &
+'       >  B=                         0.340282343E+36', &
+'       >  B-A=                       0.00000000', &
+'       >  COS(A*PI)=                 0.766595423', &
+'       >  COS(B*PI)=                 0.766595423', &
+'       >  spacing(A)=                0.396140813E+29', &
+'       >  COS((B-A)*PI)=             1.00000000', &
+'       >  COS(B*PI)-COS(A*PI)=       0.00000000', &
+'       > ========================================', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -8220,7 +8907,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025                 cos(3fortran)', &
+'                                June 27, 2025                   cos(3fortran)', &
 '']
 
 shortname="cos"
@@ -8305,7 +8992,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025                cosd(3fortran)', &
+'                                June 27, 2025                  cosd(3fortran)', &
 '']
 
 shortname="cosd"
@@ -8372,7 +9059,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025                cosh(3fortran)', &
+'                                June 27, 2025                  cosh(3fortran)', &
 '']
 
 shortname="cosh"
@@ -8463,7 +9150,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025               cospi(3fortran)', &
+'                                June 27, 2025                 cospi(3fortran)', &
 '']
 
 shortname="cospi"
@@ -8534,7 +9221,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025              co_sum(3fortran)', &
+'                                June 27, 2025                co_sum(3fortran)', &
 '']
 
 shortname="co_sum"
@@ -8818,7 +9505,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               count(3fortran)', &
+'                                June 27, 2025                 count(3fortran)', &
 '']
 
 shortname="count"
@@ -8924,7 +9611,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025            cpu_time(3fortran)', &
+'                                June 27, 2025              cpu_time(3fortran)', &
 '']
 
 shortname="cpu_time"
@@ -9055,7 +9742,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025              cshift(3fortran)', &
+'                                June 27, 2025                cshift(3fortran)', &
 '']
 
 shortname="cshift"
@@ -9115,7 +9802,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025            c_sizeof(3fortran)', &
+'                                June 27, 2025              c_sizeof(3fortran)', &
 '']
 
 shortname="c_sizeof"
@@ -9297,7 +9984,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025       date_and_time(3fortran)', &
+'                                June 27, 2025         date_and_time(3fortran)', &
 '']
 
 shortname="date_and_time"
@@ -9311,7 +9998,7 @@ textblock=[character(len=256) :: &
 'dble(3fortran)                                                 dble(3fortran)', &
 '', &
 'NAME', &
-'  DBLE(3) - [TYPE:CONVERSION] Converstion to double precision real', &
+'  DBLE(3) - [TYPE:CONVERSION] Conversion to double precision real', &
 '', &
 'SYNOPSIS', &
 '  result = dble(a)', &
@@ -9369,7 +10056,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                dble(3fortran)', &
+'                                June 27, 2025                  dble(3fortran)', &
 '']
 
 shortname="dble"
@@ -9538,7 +10225,7 @@ textblock=[character(len=256) :: &
 '     shall retain its previous allocation status or pointer association', &
 '     status.', &
 '', &
-'                              February 19, 2025          deallocate(7fortran)', &
+'                                June 27, 2025            deallocate(7fortran)', &
 '']
 
 shortname="deallocate"
@@ -9607,7 +10294,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              digits(3fortran)', &
+'                                June 27, 2025                digits(3fortran)', &
 '']
 
 shortname="digits"
@@ -9710,7 +10397,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 dim(3fortran)', &
+'                                June 27, 2025                   dim(3fortran)', &
 '']
 
 shortname="dim"
@@ -9807,7 +10494,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025         dot_product(3fortran)', &
+'                                June 27, 2025           dot_product(3fortran)', &
 '']
 
 shortname="dot_product"
@@ -9914,7 +10601,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               dprod(3fortran)', &
+'                                June 27, 2025                 dprod(3fortran)', &
 '']
 
 shortname="dprod"
@@ -10057,7 +10744,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             dshiftl(3fortran)', &
+'                                June 27, 2025               dshiftl(3fortran)', &
 '']
 
 shortname="dshiftl"
@@ -10203,7 +10890,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             dshiftr(3fortran)', &
+'                                June 27, 2025               dshiftr(3fortran)', &
 '']
 
 shortname="dshiftr"
@@ -10295,7 +10982,7 @@ textblock=[character(len=256) :: &
 '  BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7), PRINT(7),', &
 '  READ(7), REWIND(7), WAIT(7), WRITE(7)', &
 '', &
-'                              February 19, 2025             endfile(7fortran)', &
+'                                June 27, 2025               endfile(7fortran)', &
 '']
 
 shortname="endfile"
@@ -10370,7 +11057,7 @@ textblock=[character(len=256) :: &
 '         Character(len)|  LEN blanks', &
 '', &
 '  These are the only types for which BOUNDARY may not be present. For these', &
-'  types the kind is converted as neccessary to the kind of ARRAY.', &
+'  types the kind is converted as necessary to the kind of ARRAY.', &
 '', &
 '  o  DIM : DIM is in the range of', &
 '', &
@@ -10473,7 +11160,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             eoshift(3fortran)', &
+'                                June 27, 2025               eoshift(3fortran)', &
 '']
 
 shortname="eoshift"
@@ -10598,7 +11285,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             epsilon(3fortran)', &
+'                                June 27, 2025               epsilon(3fortran)', &
 '']
 
 shortname="epsilon"
@@ -10663,7 +11350,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025                 erf(3fortran)', &
+'                                June 27, 2025                   erf(3fortran)', &
 '']
 
 shortname="erf"
@@ -10743,7 +11430,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                erfc(3fortran)', &
+'                                June 27, 2025                  erfc(3fortran)', &
 '']
 
 shortname="erfc"
@@ -10818,7 +11505,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025         erfc_scaled(3fortran)', &
+'                                June 27, 2025           erfc_scaled(3fortran)', &
 '']
 
 shortname="erfc_scaled"
@@ -10902,7 +11589,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025         event_query(3fortran)', &
+'                                June 27, 2025           event_query(3fortran)', &
 '']
 
 shortname="event_query"
@@ -11083,7 +11770,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025execute_command_line(3fortran)', &
+'                                June 27, 2025  execute_command_line(3fortran)', &
 '']
 
 shortname="execute_command_line"
@@ -11232,7 +11919,7 @@ textblock=[character(len=256) :: &
 '        ! This technique can let your code gracefully handle being used with', &
 '        ! problems bigger than it was intended for, or not loop infinitely', &
 '        ! if some unexpected or incorrect input or condition is encountered.', &
-'        ! It might make it stop unitentionally as well.', &
+'        ! It might make it stop unintentionally as well.', &
 '          !', &
 '           ! run a loop but quit as soon as 200 random integers are odd', &
 '           j=0', &
@@ -11278,7 +11965,7 @@ textblock=[character(len=256) :: &
 '        ! It is simple to EXIT nested loops from an inner loop.', &
 '        ! Just use a construct name. Lets start with the nested loop above', &
 '        ! that only repeatedly exited the inner loop and label the outer', &
-'        ! loop "OUTER". Now our exit can explicity name what loop it wants', &
+'        ! loop "OUTER". Now our exit can explicitly name what loop it wants', &
 '        ! to exit ...', &
 '', &
 '           k=0', &
@@ -11345,7 +12032,7 @@ textblock=[character(len=256) :: &
 '        !x!LOOP_2 : DO I = 1, 15', &
 '        !x!  CRITICAL', &
 '        !x!    N = N + 1', &
-'        !x!    IF (N > I) EXIT LOOP_2 ! cannott EXIT outer construct from inside', &
+'        !x!    IF (N > I) EXIT LOOP_2 ! cannot EXIT outer construct from inside', &
 '        !x!  END CRITICAL             ! CHANGE TEAM, DO CONCURRENT, or CRITICAL', &
 '        !x!END DO LOOP_2', &
 '', &
@@ -11392,7 +12079,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                exit(7fortran)', &
+'                                June 27, 2025                  exit(7fortran)', &
 '']
 
 shortname="exit"
@@ -11426,17 +12113,29 @@ textblock=[character(len=256) :: &
 '', &
 '  "e" is also known as Euler''s constant.', &
 '', &
+'  So for either a real or complex scalar X, it returns eX , where e is the', &
+'  base of the natural logarithm (approximately 2.718281828459045).', &
+'', &
+'  For real inputs, EXP returns a real result.', &
+'', &
 '  If X is of type complex, its imaginary part is regarded as a value in', &
-'  radians such that if (see Euler''s formula):', &
+'  radians such that (see Euler''s formula):', &
 '', &
-'         cx=(re,im)', &
-'', &
-'  then', &
-'', &
-'         exp(cx) = exp(re) * cmplx(cos(im),sin(im),kind=kind(cx))', &
+'         exp((re,im)) = exp(re) * cmplx(cos(im),sin(im),kind=kind(cx))', &
 '', &
 '  Since EXP(3) is the inverse function of LOG(3) the maximum valid magnitude', &
 '  of the real component of X is LOG(HUGE(X)).', &
+'', &
+'  EXP being elemental, when X is an array (real or complex), the function is', &
+'  applied element-wise, returning an array of the same shape.', &
+'', &
+'      Numerical Considerations', &
+'', &
+'       For very large real X, the result may overflow to infinity in', &
+'       finite-precision arithmetic. For very small (negative) real X ,', &
+'       the result approaches zero. Complex inputs with large imaginary', &
+'       parts may produce results with significant numerical errors due', &
+'       to the trigonometric functions involved.', &
 '', &
 'OPTIONS', &
 '  o  X : The type shall be real or complex.', &
@@ -11452,8 +12151,12 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_exp', &
 '      implicit none', &
-'      real :: x, re, im', &
-'      complex :: cx', &
+'      integer,parameter :: dp=kind(0.0d0)', &
+'      real             :: x, re, im', &
+'      complex          :: cx', &
+'      real             :: r_array(3), r_array_result(3)', &
+'      complex          :: c_array(2), c_array_result(2)', &
+'      integer          :: i', &
 '', &
 '        x = 1.0', &
 '        write(*,*)"Euler''s constant is approximately",exp(x)', &
@@ -11478,6 +12181,20 @@ textblock=[character(len=256) :: &
 '        ! but since the imaginary component is passed to the cos(3) and sin(3)', &
 '        ! functions the imaginary component can be any real value', &
 '', &
+'        ! Real array example', &
+'        r_array = [0.0, 1.0, -1.0]', &
+'        r_array_result = exp(r_array)', &
+'        do i = 1, size(r_array)', &
+'          write(*, ''(A, I0, A, F15.10)'') "exp(r_array(", i, ")) = ", r_array_result(i)', &
+'        enddo', &
+'', &
+'        ! Complex array example', &
+'        c_array = [cmplx(0.0, 0.0, kind=dp), cmplx(1.0, 1.0, kind=dp)]', &
+'        c_array_result = exp(c_array)', &
+'        do i = 1, size(c_array)', &
+'          write(*, ''(A, I0, A, F15.10, A, F15.10, A)'') "exp(c_array(", i, ")) = (", &', &
+'          real(c_array_result(i)), ", ", aimag(c_array_result(i)), ")"', &
+'        enddo', &
 '      end program demo_exp', &
 '', &
 '  Results:', &
@@ -11488,6 +12205,11 @@ textblock=[character(len=256) :: &
 '       >  is the same as          (-13.1287832,-15.2007847)', &
 '       >  maximum real component   88.7228394', &
 '       >  maximum doubleprecision component   709.78271289338397', &
+'       > exp(r_array(1)) =    1.0000000000', &
+'       > exp(r_array(2)) =    2.7182817459', &
+'       > exp(r_array(3)) =    0.3678794503', &
+'       > exp(c_array(1)) = (   1.0000000000,   0.0000000000)', &
+'       > exp(c_array(2)) = (   1.4686938524,   2.2873551846)', &
 '', &
 'STANDARD', &
 '  FORTRAN 77', &
@@ -11502,7 +12224,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 exp(3fortran)', &
+'                                June 27, 2025                   exp(3fortran)', &
 '']
 
 shortname="exp"
@@ -11577,7 +12299,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025            exponent(3fortran)', &
+'                                June 27, 2025              exponent(3fortran)', &
 '']
 
 shortname="exponent"
@@ -11751,7 +12473,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025     extends_type_of(3fortran)', &
+'                                June 27, 2025       extends_type_of(3fortran)', &
 '']
 
 shortname="extends_type_of"
@@ -12040,7 +12762,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             findloc(3fortran)', &
+'                                June 27, 2025               findloc(3fortran)', &
 '']
 
 shortname="findloc"
@@ -12147,7 +12869,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               floor(3fortran)', &
+'                                June 27, 2025                 floor(3fortran)', &
 '']
 
 shortname="floor"
@@ -12239,7 +12961,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               flush(7fortran)', &
+'                                June 27, 2025                 flush(7fortran)', &
 '']
 
 shortname="flush"
@@ -12313,7 +13035,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025            fraction(3fortran)', &
+'                                June 27, 2025              fraction(3fortran)', &
 '']
 
 shortname="fraction"
@@ -12459,7 +13181,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025               gamma(3fortran)', &
+'                                June 27, 2025                 gamma(3fortran)', &
 '']
 
 shortname="gamma"
@@ -12561,7 +13283,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025         get_command(3fortran)', &
+'                                June 27, 2025           get_command(3fortran)', &
 '']
 
 shortname="get_command"
@@ -12607,9 +13329,9 @@ textblock=[character(len=256) :: &
 '  are quoted. IFS values (Internal Field Separators) used by common shells are', &
 '  typically ignored and unquoted whitespace is almost always the separator.', &
 '', &
-'  Shells have often expanded command arguments and spell characters before', &
-'  passing them to the program, so the strings read are often not exactly what', &
-'  the user typed on the command line.', &
+'  Shells have often expanded command arguments before passing them to the', &
+'  program, so the strings read are often not exactly what the user typed on', &
+'  the command line.', &
 '', &
 'OPTIONS', &
 '  o  NUMBER : is a non-negative number indicating which argument of the', &
@@ -12643,35 +13365,45 @@ textblock=[character(len=256) :: &
 '', &
 '      program demo_get_command_argument', &
 '      implicit none', &
-'      character(len=255)          :: progname', &
-'      integer                     :: count, i, argument_length, istat', &
+'      integer                     :: count, i, istat', &
 '      character(len=:),allocatable :: arg', &
 '', &
-'       ! command name assuming it is less than 255 characters in length', &
-'       call get_command_argument (0, progname, status=istat)', &
+'       ! command name', &
+'       arg=get_arg(0,istat)', &
 '       if (istat == 0) then', &
-'          print *, "The program''s name is " // trim (progname)', &
+'          print *, "The program''s name is " // trim (arg)', &
 '       else', &
-'          print *, "Could not get the program''s name " // trim (progname)', &
+'          print *, "Could not get the program''s name " // trim (arg)', &
 '       endif', &
 '', &
 '       ! get number of arguments', &
 '       count = command_argument_count()', &
 '       write(*,*)''The number of arguments is '',count', &
 '', &
-'       !', &
-'       ! allocate string array big enough to hold command line', &
-'       ! argument strings and related information', &
-'       !', &
+'       ! show argument values', &
 '       do i=1,count', &
-'          call get_command_argument(number=i,length=argument_length)', &
-'          if(allocated(arg))deallocate(arg)', &
-'          allocate(character(len=argument_length) :: arg)', &
-'          call get_command_argument(i, arg,status=istat)', &
+'          arg=get_arg(i,istat)', &
 '          ! show the results', &
 '          write (*,''(i3.3,1x,i0.5,1x,i0.5,1x,"[",a,"]")'') &', &
-'          & i,istat,argument_length,arg', &
+'          & i,istat,len(arg),arg', &
 '       enddo', &
+'', &
+'      contains', &
+'', &
+'      function get_arg(n,status) result(arg)', &
+'      integer,intent(in)          :: n', &
+'      integer,intent(out),optional :: status', &
+'      integer                     :: argument_length, istat', &
+'      character(len=:),allocatable :: arg', &
+'       !', &
+'       ! allocate string big enough to hold command line argument', &
+'       !', &
+'        call get_command_argument( number=n, length=argument_length )', &
+'        if(allocated(arg))deallocate( arg )', &
+'        allocate(character(len=argument_length) :: arg )', &
+'        call get_command_argument(n, arg, status=istat )', &
+'        if(present(status)) status=istat', &
+'      end function get_arg', &
 '', &
 '      end program demo_get_command_argument', &
 '', &
@@ -12694,7 +13426,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025get_command_argument(3fortran)', &
+'                                June 27, 2025  get_command_argument(3fortran)', &
 '']
 
 shortname="get_command_argument"
@@ -12846,7 +13578,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, get_environment_variable(3fortran)', &
+'                                June 27, 20get_environment_variable(3fortran)', &
 '']
 
 shortname="get_environment_variable"
@@ -12984,7 +13716,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                huge(3fortran)', &
+'                                June 27, 2025                  huge(3fortran)', &
 '']
 
 shortname="huge"
@@ -13084,57 +13816,10 @@ textblock=[character(len=256) :: &
 '  Fortran 2008', &
 '', &
 'SEE ALSO', &
-'  o  acos(3) - Arccosine (inverse cosine) function', &
-'', &
-'  o  acosh(3) - Inverse hyperbolic cosine function', &
-'', &
-'  o  asin(3) - Arcsine function', &
-'', &
-'  o  asinh(3) - Inverse hyperbolic sine function', &
-'', &
-'  o  atan(3) - Arctangent AKA inverse tangent function', &
-'', &
-'  o  atan2(3) - Arctangent (inverse tangent) function', &
-'', &
-'  o  atanh(3) - Inverse hyperbolic tangent function', &
-'', &
-'  o  cos(3) - Cosine function', &
-'', &
-'  o  cosh(3) - Hyperbolic cosine function', &
-'', &
-'  o  sin(3) - Sine function', &
-'', &
-'  o  sinh(3) - Hyperbolic sine function', &
-'', &
-'  o  tan(3) - Tangent function', &
-'', &
-'  o  tanh(3) - Hyperbolic tangent function', &
-'', &
-'  o  bessel_j0(3) - Bessel function of the first kind of order 0', &
-'', &
-'  o  bessel_j1(3) - Bessel function of the first kind of order 1', &
-'', &
-'  o  bessel_jn(3) - Bessel function of the first kind', &
-'', &
-'  o  bessel_y0(3) - Bessel function of the second kind of order 0', &
-'', &
-'  o  bessel_y1(3) - Bessel function of the second kind of order 1', &
-'', &
-'  o  bessel_yn(3) - Bessel function of the second kind', &
-'', &
-'  o  erf(3) - Error function', &
-'', &
-'  o  erfc(3) - Complementary error function', &
-'', &
-'  o  erfc_scaled(3) - Scaled complementary error function', &
-'', &
 '  o  exp(3) - Base-e exponential function', &
 '', &
 '  o  gamma(3) - Gamma function, which yields factorials for positive whole', &
 '     numbers', &
-'', &
-'  o  hypot(3) - Returns the Euclidean distance - the distance between a point', &
-'     and the origin.', &
 '', &
 '  o  log(3) - Natural logarithm', &
 '', &
@@ -13142,20 +13827,9 @@ textblock=[character(len=256) :: &
 '', &
 '  o  log_gamma(3) - Logarithm of the absolute value of the Gamma function', &
 '', &
-'  o  norm2(3) - Euclidean vector norm', &
-'', &
-'  o  sqrt(3) - Square-root function', &
-'', &
-'  o  random_init(3) - Initializes the state of the pseudorandom number', &
-'     generator', &
-'', &
-'  o  random_number(3) - Pseudo-random number', &
-'', &
-'  o  random_seed(3) - Initialize a pseudo-random number sequence', &
-'', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               hypot(3fortran)', &
+'                                June 27, 2025                 hypot(3fortran)', &
 '']
 
 shortname="hypot"
@@ -13270,7 +13944,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              iachar(3fortran)', &
+'                                June 27, 2025                iachar(3fortran)', &
 '']
 
 shortname="iachar"
@@ -13354,7 +14028,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                iall(3fortran)', &
+'                                June 27, 2025                  iall(3fortran)', &
 '']
 
 shortname="iall"
@@ -13440,7 +14114,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                iand(3fortran)', &
+'                                June 27, 2025                  iand(3fortran)', &
 '']
 
 shortname="iand"
@@ -13551,7 +14225,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                iany(3fortran)', &
+'                                June 27, 2025                  iany(3fortran)', &
 '']
 
 shortname="iany"
@@ -13650,7 +14324,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               ibclr(3fortran)', &
+'                                June 27, 2025                 ibclr(3fortran)', &
 '']
 
 shortname="ibclr"
@@ -13752,7 +14426,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               ibits(3fortran)', &
+'                                June 27, 2025                 ibits(3fortran)', &
 '']
 
 shortname="ibits"
@@ -13850,7 +14524,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               ibset(3fortran)', &
+'                                June 27, 2025                 ibset(3fortran)', &
 '']
 
 shortname="ibset"
@@ -13961,7 +14635,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               ichar(3fortran)', &
+'                                June 27, 2025                 ichar(3fortran)', &
 '']
 
 shortname="ichar"
@@ -14067,7 +14741,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                ieor(3fortran)', &
+'                                June 27, 2025                  ieor(3fortran)', &
 '']
 
 shortname="ieor"
@@ -14248,7 +14922,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                  if(7fortran)', &
+'                                June 27, 2025                    if(7fortran)', &
 '']
 
 shortname="if"
@@ -14299,7 +14973,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025         image_index(3fortran)', &
+'                                June 27, 2025           image_index(3fortran)', &
 '']
 
 shortname="image_index"
@@ -14405,7 +15079,7 @@ textblock=[character(len=256) :: &
 '           ! and a type is required so', &
 '           ! implicit (a-h)  ! NOTE: NOT ALLOWED. TYPE IS REQUIRE0', &
 '           ! but you can make the default an user-defined type ...', &
-'           ! notice the (incidently empty) type is defined below', &
+'           ! notice the (incidentally empty) type is defined below', &
 '           ! the implicit statement', &
 '           implicit nil(a-h) ! or implicit type(nil) (a)', &
 '           !', &
@@ -14418,7 +15092,7 @@ textblock=[character(len=256) :: &
 '  scoping unit. That is, a single "IMPLICIT NONE" in the global top section of', &
 '  a module makes the default be "IMPLICIT NONE" in any contained procedure.', &
 '', &
-'  Explicitly setting a variable type always overides the default so any data', &
+'  Explicitly setting a variable type always overrides the default so any data', &
 '  entity that is not explicitly declared by a type declaration statement, is', &
 '  not an intrinsic function, and is not accessed by use or host association is', &
 '  declared implicitly to be of the type (and type parameters) mapped from the', &
@@ -14577,7 +15251,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025            implicit(7fortran)', &
+'                                June 27, 2025              implicit(7fortran)', &
 '']
 
 shortname="implicit"
@@ -14761,7 +15435,7 @@ textblock=[character(len=256) :: &
 '      include "somemorecode.inc"', &
 '      end program show_include', &
 '', &
-'                              February 19, 2025             include(7fortran)', &
+'                                June 27, 2025               include(7fortran)', &
 '']
 
 shortname="include"
@@ -14863,7 +15537,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025               index(3fortran)', &
+'                                June 27, 2025                 index(3fortran)', &
 '']
 
 shortname="index"
@@ -15400,12 +16074,13 @@ textblock=[character(len=256) :: &
 '          & readwrite=readwrite,sign=sign,round=round,blank=blank,           &', &
 '          & decimal=decimal,delim=delim,encoding=encoding,pad=pad,           &', &
 '          & named=named,opened=opened,exist=exist,number=number,             &', &
-'      !bug & pending=pending,                                                &', &
+'          !bug & pending=pending,                                            &', &
 '          & asynchronous=asynchronous,                                       &', &
 '          & iostat=iostat,err=999,iomsg=message)', &
 '        elseif(filename_  /= '''')then', &
 '          write(*,*)''*print_inquire* checking file:''//filename_', &
-'          inquire(file=filename_ ,recl=recl,nextrec=nextrec,pos=pos,         &', &
+'          inquire(file=filename_,                                            &', &
+'          & recl=recl,nextrec=nextrec,pos=pos,                               &', &
 '          & size=size,position=position,name=name,                           &', &
 '          & form=form,formatted=formatted,unformatted=unformatted,           &', &
 '          & access=access,sequential=sequential,direct=direct,stream=stream, &', &
@@ -15415,13 +16090,14 @@ textblock=[character(len=256) :: &
 '          & number=number,pending=pending,asynchronous=asynchronous,         &', &
 '          & iostat=iostat,err=999,iomsg=message)', &
 '        else', &
-'           write(*,*)''*print_inquire* must specify either filename or unit number''', &
+'           write(*,*) &', &
+'           & ''*print_inquire* must specify either filename or unit number''', &
 '        endif', &
 '        write(*,nml=inquire,delim=''none'')', &
 '        return', &
 '      999   continue', &
 '        write(*,*)''*print_inquire* bad inquire''', &
-'      !  If an error condition occurs during execution of an INQUIRE  statement,', &
+'      !  If an error condition occurs during execution of an INQUIRE statement,', &
 '      !  all of the inquiry identifiers except iostat become undefined.', &
 '        write(*,*) ''*print_inquire* inquire call failed,iostat='',iostat, &', &
 '        & ''message='',message', &
@@ -15432,7 +16108,7 @@ textblock=[character(len=256) :: &
 '  BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7), PRINT(7),', &
 '  READ(7), REWIND(7), WAIT(7), WRITE(7)', &
 '', &
-'                              February 19, 2025             inquire(7fortran)', &
+'                                June 27, 2025               inquire(7fortran)', &
 '']
 
 shortname="inquire"
@@ -15561,7 +16237,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 int(3fortran)', &
+'                                June 27, 2025                   int(3fortran)', &
 '']
 
 shortname="int"
@@ -15643,7 +16319,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 ior(3fortran)', &
+'                                June 27, 2025                   ior(3fortran)', &
 '']
 
 shortname="ior"
@@ -15731,7 +16407,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025             iparity(3fortran)', &
+'                                June 27, 2025               iparity(3fortran)', &
 '']
 
 shortname="iparity"
@@ -15861,7 +16537,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025       is_contiguous(3fortran)', &
+'                                June 27, 2025         is_contiguous(3fortran)', &
 '']
 
 shortname="is_contiguous"
@@ -15957,7 +16633,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               ishft(3fortran)', &
+'                                June 27, 2025                 ishft(3fortran)', &
 '']
 
 shortname="ishft"
@@ -16099,7 +16775,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              ishftc(3fortran)', &
+'                                June 27, 2025                ishftc(3fortran)', &
 '']
 
 shortname="ishftc"
@@ -16226,7 +16902,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025       is_iostat_end(3fortran)', &
+'                                June 27, 2025         is_iostat_end(3fortran)', &
 '']
 
 shortname="is_iostat_end"
@@ -16289,15 +16965,15 @@ textblock=[character(len=256) :: &
 '           read(lun, *, iostat=ios) inums', &
 '           write(*,*)''iostat='',ios', &
 '           if(is_iostat_eor(ios)) then', &
-'          inums=-huge(0)', &
+'              inums=-huge(0)', &
 '              print *, ''end of record''', &
 '           elseif(is_iostat_end(ios)) then', &
 '              print *,''end of file''', &
-'          inums=-huge(0)', &
+'              inums=-huge(0)', &
 '              exit', &
 '           elseif(ios.ne.0)then', &
 '              print *,''I/O error'',ios', &
-'          inums=-huge(0)', &
+'              inums=-huge(0)', &
 '              exit', &
 '           else', &
 '              write(*,''(*(g0,1x))'')''inums='',inums', &
@@ -16343,7 +17019,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025       is_iostat_eor(3fortran)', &
+'                                June 27, 2025         is_iostat_eor(3fortran)', &
 '']
 
 shortname="is_iostat_eor"
@@ -16426,7 +17102,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                kind(3fortran)', &
+'                                June 27, 2025                  kind(3fortran)', &
 '']
 
 shortname="kind"
@@ -16595,7 +17271,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              lbound(3fortran)', &
+'                                June 27, 2025                lbound(3fortran)', &
 '']
 
 shortname="lbound"
@@ -16642,7 +17318,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025            lcobound(3fortran)', &
+'                                June 27, 2025              lcobound(3fortran)', &
 '']
 
 shortname="lcobound"
@@ -16728,7 +17404,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               leadz(3fortran)', &
+'                                June 27, 2025                 leadz(3fortran)', &
 '']
 
 shortname="leadz"
@@ -16742,7 +17418,7 @@ textblock=[character(len=256) :: &
 'len(3fortran)                                                   len(3fortran)', &
 '', &
 'NAME', &
-'  LEN(3) - [CHARACTER] Length of a character entity', &
+'  LEN(3) - [CHARACTER:INQUIRY] Length of a character entity', &
 '', &
 'SYNOPSIS', &
 '  result = len(string [,kind])', &
@@ -16870,7 +17546,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 len(3fortran)', &
+'                                June 27, 2025                   len(3fortran)', &
 '']
 
 shortname="len"
@@ -16884,7 +17560,7 @@ textblock=[character(len=256) :: &
 'len_trim(3fortran)                                         len_trim(3fortran)', &
 '', &
 'NAME', &
-'  LEN_TRIM(3) - [CHARACTER:WHITESPACE] Character length without trailing blank', &
+'  LEN_TRIM(3) - [CHARACTER:INQUIRY] Character length without trailing blank', &
 '  characters', &
 '', &
 'SYNOPSIS', &
@@ -16976,7 +17652,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025            len_trim(3fortran)', &
+'                                June 27, 2025              len_trim(3fortran)', &
 '']
 
 shortname="len_trim"
@@ -17087,7 +17763,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 lge(3fortran)', &
+'                                June 27, 2025                   lge(3fortran)', &
 '']
 
 shortname="lge"
@@ -17199,7 +17875,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 lgt(3fortran)', &
+'                                June 27, 2025                   lgt(3fortran)', &
 '']
 
 shortname="lgt"
@@ -17335,7 +18011,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 lle(3fortran)', &
+'                                June 27, 2025                   lle(3fortran)', &
 '']
 
 shortname="lle"
@@ -17450,7 +18126,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 llt(3fortran)', &
+'                                June 27, 2025                   llt(3fortran)', &
 '']
 
 shortname="llt"
@@ -17515,50 +18191,6 @@ textblock=[character(len=256) :: &
 '  FORTRAN 77', &
 '', &
 'SEE ALSO', &
-'  o  acos(3) - Arccosine (inverse cosine) function', &
-'', &
-'  o  acosh(3) - Inverse hyperbolic cosine function', &
-'', &
-'  o  asin(3) - Arcsine function', &
-'', &
-'  o  asinh(3) - Inverse hyperbolic sine function', &
-'', &
-'  o  atan(3) - Arctangent AKA inverse tangent function', &
-'', &
-'  o  atan2(3) - Arctangent (inverse tangent) function', &
-'', &
-'  o  atanh(3) - Inverse hyperbolic tangent function', &
-'', &
-'  o  cos(3) - Cosine function', &
-'', &
-'  o  cosh(3) - Hyperbolic cosine function', &
-'', &
-'  o  sin(3) - Sine function', &
-'', &
-'  o  sinh(3) - Hyperbolic sine function', &
-'', &
-'  o  tan(3) - Tangent function', &
-'', &
-'  o  tanh(3) - Hyperbolic tangent function', &
-'', &
-'  o  bessel_j0(3) - Bessel function of the first kind of order 0', &
-'', &
-'  o  bessel_j1(3) - Bessel function of the first kind of order 1', &
-'', &
-'  o  bessel_jn(3) - Bessel function of the first kind', &
-'', &
-'  o  bessel_y0(3) - Bessel function of the second kind of order 0', &
-'', &
-'  o  bessel_y1(3) - Bessel function of the second kind of order 1', &
-'', &
-'  o  bessel_yn(3) - Bessel function of the second kind', &
-'', &
-'  o  erf(3) - Error function', &
-'', &
-'  o  erfc(3) - Complementary error function', &
-'', &
-'  o  erfc_scaled(3) - Scaled complementary error function', &
-'', &
 '  o  exp(3) - Base-e exponential function', &
 '', &
 '  o  gamma(3) - Gamma function, which yields factorials for positive whole', &
@@ -17569,24 +18201,11 @@ textblock=[character(len=256) :: &
 '', &
 '  o  log(3) - Natural logarithm', &
 '', &
-'  o  log10(3) - Base 10 or common logarithm', &
-'', &
 '  o  log_gamma(3) - Logarithm of the absolute value of the Gamma function', &
-'', &
-'  o  norm2(3) - Euclidean vector norm', &
-'', &
-'  o  sqrt(3) - Square-root function', &
-'', &
-'  o  random_init(3) - Initializes the state of the pseudorandom number', &
-'     generator', &
-'', &
-'  o  random_number(3) - Pseudo-random number', &
-'', &
-'  o  random_seed(3) - Initialize a pseudo-random number sequence', &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025               log10(3fortran)', &
+'                                June 27, 2025                 log10(3fortran)', &
 '']
 
 shortname="log10"
@@ -17654,78 +18273,21 @@ textblock=[character(len=256) :: &
 '  FORTRAN 77', &
 '', &
 'SEE ALSO', &
-'  o  acos(3) - Arccosine (inverse cosine) function', &
-'', &
-'  o  acosh(3) - Inverse hyperbolic cosine function', &
-'', &
-'  o  asin(3) - Arcsine function', &
-'', &
-'  o  asinh(3) - Inverse hyperbolic sine function', &
-'', &
-'  o  atan(3) - Arctangent AKA inverse tangent function', &
-'', &
-'  o  atan2(3) - Arctangent (inverse tangent) function', &
-'', &
-'  o  atanh(3) - Inverse hyperbolic tangent function', &
-'', &
-'  o  cos(3) - Cosine function', &
-'', &
-'  o  cosh(3) - Hyperbolic cosine function', &
-'', &
-'  o  sin(3) - Sine function', &
-'', &
-'  o  sinh(3) - Hyperbolic sine function', &
-'', &
-'  o  tan(3) - Tangent function', &
-'', &
-'  o  tanh(3) - Hyperbolic tangent function', &
-'', &
-'  o  bessel_j0(3) - Bessel function of the first kind of order 0', &
-'', &
-'  o  bessel_j1(3) - Bessel function of the first kind of order 1', &
-'', &
-'  o  bessel_jn(3) - Bessel function of the first kind', &
-'', &
-'  o  bessel_y0(3) - Bessel function of the second kind of order 0', &
-'', &
-'  o  bessel_y1(3) - Bessel function of the second kind of order 1', &
-'', &
-'  o  bessel_yn(3) - Bessel function of the second kind', &
-'', &
-'  o  erf(3) - Error function', &
-'', &
-'  o  erfc(3) - Complementary error function', &
-'', &
-'  o  erfc_scaled(3) - Scaled complementary error function', &
+'  o  log10(3) - Base 10 or common logarithm', &
 '', &
 '  o  exp(3) - Base-e exponential function', &
-'', &
-'  o  gamma(3) - Gamma function, which yields factorials for positive whole', &
-'     numbers', &
 '', &
 '  o  hypot(3) - Returns the Euclidean distance - the distance between a point', &
 '     and the origin.', &
 '', &
-'  o  log(3) - Natural logarithm', &
-'', &
-'  o  log10(3) - Base 10 or common logarithm', &
+'  o  gamma(3) - Gamma function, which yields factorials for positive whole', &
+'     numbers', &
 '', &
 '  o  log_gamma(3) - Logarithm of the absolute value of the Gamma function', &
 '', &
-'  o  norm2(3) - Euclidean vector norm', &
-'', &
-'  o  sqrt(3) - Square-root function', &
-'', &
-'  o  random_init(3) - Initializes the state of the pseudorandom number', &
-'     generator', &
-'', &
-'  o  random_number(3) - Pseudo-random number', &
-'', &
-'  o  random_seed(3) - Initialize a pseudo-random number sequence', &
-'', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 log(3fortran)', &
+'                                June 27, 2025                   log(3fortran)', &
 '']
 
 shortname="log"
@@ -17788,7 +18350,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           log_gamma(3fortran)', &
+'                                June 27, 2025             log_gamma(3fortran)', &
 '']
 
 shortname="log_gamma"
@@ -17802,7 +18364,7 @@ textblock=[character(len=256) :: &
 'logical(3fortran)                                           logical(3fortran)', &
 '', &
 'NAME', &
-'  LOGICAL(3) - [TYPE:LOGICAL] Conversion between kinds of logical values', &
+'  LOGICAL(3) - [TYPE:CONVERSION] Conversion between kinds of logical values', &
 '', &
 'SYNOPSIS', &
 '  result = logical(l [,kind])', &
@@ -17838,19 +18400,89 @@ textblock=[character(len=256) :: &
 '  Sample program:', &
 '', &
 '      program demo_logical', &
-'      ! Access array containing the kind type parameter values supported by this', &
-'      ! compiler for entities of logical type', &
 '      use iso_fortran_env, only : logical_kinds', &
+'      use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64', &
+'      use,intrinsic :: iso_fortran_env, only : real32, real64, real128', &
 '      implicit none', &
-'      integer :: i', &
-'', &
-'        ! list kind values supported on this platform, which generally vary', &
-'        ! in storage size as alias declarations', &
+'      character(len=*),parameter :: g=''(*(g0))''', &
+'      integer :: i, i1, i2', &
+'      logical :: l1, l2', &
+'       !', &
+'       ! list kind values supported on this platform', &
+'       !', &
 '        do i =1, size(logical_kinds)', &
 '           write(*,''(*(g0))'')''integer,parameter :: boolean'', &', &
 '           & logical_kinds(i),''='', logical_kinds(i)', &
 '        enddo', &
+'       ! for performance and storage purposes you generally want', &
+'       ! to use the smallest storage size supported when using', &
+'       ! large arrays, but some existing routines may require', &
+'       ! the default kind. LOGICAL(3f) can change the kind of', &
+'       ! the variables.', &
+'       !', &
+'       ! But converting a logical to an integer is not done', &
+'       ! with LOGICAL(3f); but can be down with MERGE(3f).', &
+'       !', &
+'        l1=.true.', &
+'        l2=.false.', &
+'        i1=merge(0,1,l1)', &
+'        i2=merge(0,1,l2)', &
+'        write(*,g)''L1='',l1,'' L2='',l2,'' I1='',i1,'' I2='',i2', &
+'       !', &
+'       ! show type and kind of default logicals', &
+'        call showme(.true.)', &
+'        call showme(l1)', &
+'       ! show logical() changing type and kind', &
+'        call showme(logical(l1))', &
+'       ! you may have to delete unsupported kinds from this example', &
 '', &
+'       ! this is probably the default', &
+'        call showme(logical(l1,kind=4))', &
+'       ! note how showme shows different kinds are being passed to it', &
+'        call showme(logical(l1,kind=8))', &
+'        call showme(logical(l1,kind=2))', &
+'       ! this is probably the smallest storage size supported', &
+'       ! on this platform; but kind values are platform-specific', &
+'        call showme(logical(l1,kind=1))', &
+'      contains', &
+'      subroutine showme(val)', &
+'      ! @(#) showme(3f) - display type and kind of intrinsic value', &
+'      class(*),intent(in) :: val', &
+'        select type(val)', &
+'           type is (integer(kind=int8))', &
+'             write(*,''("integer(kind=int8) ",i0)'') val', &
+'           type is (integer(kind=int16))', &
+'              write(*,''("integer(kind=int16) ",i0)'') val', &
+'           type is (integer(kind=int32))', &
+'              write(*,''("integer(kind=int32) ",i0)'') val', &
+'           type is (integer(kind=int64))', &
+'              write(*,''("integer(kind=int64) ",i0)'') val', &
+'           type is (real(kind=real32))', &
+'              write(*,''("real(kind=real32) ",1pg0)'') val', &
+'           type is (real(kind=real64))', &
+'              write(*,''("real(kind=real64) ",1pg0)'') val', &
+'           type is (real(kind=real128))', &
+'             write(*,''("real(kind=real128) ",1pg0)'') val', &
+'           type is (logical(kind=1))', &
+'                 write(*,''("logical(kind=1) ",l1,a,i0)'') val, &', &
+'             & ''storage='',storage_size(val)', &
+'           type is (logical(kind=2))', &
+'                 write(*,''("logical(kind=2) ",l1,a,i0)'') val, &', &
+'             & ''storage='',storage_size(val)', &
+'           type is (logical(kind=4))', &
+'                 write(*,''("logical(kind=4) ",l1,a,i0)'') val, &', &
+'             & ''storage='',storage_size(val)', &
+'           type is (logical(kind=8))', &
+'                 write(*,''("logical(kind=8) ",l1,a,i0)'') val, &', &
+'             & ''storage='',storage_size(val)', &
+'           type is (character(len=*))', &
+'               write(*,''("character ",a)'') trim(val)', &
+'           type is (complex)', &
+'                        write(*,''("","(",1pg0,",",1pg0,")")'') val', &
+'           class default', &
+'           stop ''crud. showme() does not know about this type''', &
+'        end select', &
+'      end subroutine showme', &
 '      end program demo_logical', &
 '', &
 '  Results:', &
@@ -17860,16 +18492,38 @@ textblock=[character(len=256) :: &
 '       > integer,parameter :: boolean4=4', &
 '       > integer,parameter :: boolean8=8', &
 '       > integer,parameter :: boolean16=16', &
+'       > L1=T L2=F I1=0 I2=1', &
+'       > logical(kind=4) Tstorage=32', &
+'       > logical(kind=4) Tstorage=32', &
+'       > logical(kind=4) Tstorage=32', &
+'       > logical(kind=1) Tstorage=8', &
+'       > logical(kind=2) Tstorage=16', &
+'       > logical(kind=4) Tstorage=32', &
 '', &
 'STANDARD', &
 '  Fortran 95 , related ISO_FORTRAN_ENV module - fortran 2009', &
 '', &
 'SEE ALSO', &
-'  INT(3), REAL(3), CMPLX(3)', &
+'  o  AIMAG(3) - Imaginary part of complex number', &
+'', &
+'  o  CMPLX(3) - Conversion to a complex type', &
+'', &
+'  o  DBLE(3) - Conversion to double precision real', &
+'', &
+'  o  INT(3) - Truncate towards zero and convert to integer', &
+'', &
+'  o  NINT(3) - Nearest whole number', &
+'', &
+'  o  REAL(3) - Convert to real type', &
+'', &
+'  o  OUT_OF_RANGE(3) - Whether a numeric value can be converted safely to', &
+'     another type', &
+'', &
+'  o  TRANSFER(3) - Transfer bit patterns', &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             logical(3fortran)', &
+'                                June 27, 2025               logical(3fortran)', &
 '']
 
 shortname="logical"
@@ -17959,7 +18613,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               maskl(3fortran)', &
+'                                June 27, 2025                 maskl(3fortran)', &
 '']
 
 shortname="maskl"
@@ -18067,7 +18721,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               maskr(3fortran)', &
+'                                June 27, 2025                 maskr(3fortran)', &
 '']
 
 shortname="maskr"
@@ -18307,7 +18961,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              matmul(3fortran)', &
+'                                June 27, 2025                matmul(3fortran)', &
 '']
 
 shortname="matmul"
@@ -18466,7 +19120,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 max(3fortran)', &
+'                                June 27, 2025                   max(3fortran)', &
 '']
 
 shortname="max"
@@ -18531,7 +19185,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025         maxexponent(3fortran)', &
+'                                June 27, 2025           maxexponent(3fortran)', &
 '']
 
 shortname="maxexponent"
@@ -18654,7 +19308,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025              maxloc(3fortran)', &
+'                                June 27, 2025                maxloc(3fortran)', &
 '']
 
 shortname="maxloc"
@@ -18786,7 +19440,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              maxval(3fortran)', &
+'                                June 27, 2025                maxval(3fortran)', &
 '']
 
 shortname="maxval"
@@ -18965,7 +19619,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               merge(3fortran)', &
+'                                June 27, 2025                 merge(3fortran)', &
 '']
 
 shortname="merge"
@@ -19096,7 +19750,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025          merge_bits(3fortran)', &
+'                                June 27, 2025            merge_bits(3fortran)', &
 '']
 
 shortname="merge_bits"
@@ -19201,7 +19855,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost ''', &
 '', &
-'                              February 19, 2025                 min(3fortran)', &
+'                                June 27, 2025                   min(3fortran)', &
 '']
 
 shortname="min"
@@ -19265,7 +19919,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025         minexponent(3fortran)', &
+'                                June 27, 2025           minexponent(3fortran)', &
 '']
 
 shortname="minexponent"
@@ -19376,7 +20030,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              minloc(3fortran)', &
+'                                June 27, 2025                minloc(3fortran)', &
 '']
 
 shortname="minloc"
@@ -19394,17 +20048,17 @@ textblock=[character(len=256) :: &
 '  along dimension DIM corresponding to true elements of MASK.', &
 '', &
 'SYNOPSIS', &
-'  forms', &
+'  forms:', &
 '', &
-'         result = minval(array, [mask])', &
+'         result = minval(array [,mask])', &
 '', &
 '  or', &
 '', &
-'         result = minval(array [,dim] [,mask])', &
+'         result = minval(array ,dim [,mask])', &
 '', &
 '          type(TYPE(kind=**)) function minval(array, dim, mask)', &
 '', &
-'           NUMERIC,intent(in) :: array(..)', &
+'           type(TYPE(kind=**)),intent(in) :: array(..)', &
 '           integer(kind=**),intent(in),optional :: dim', &
 '           logical(kind=**),intent(in),optional :: mask(..)', &
 '', &
@@ -19575,11 +20229,11 @@ textblock=[character(len=256) :: &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  MIN(3), MINLOC(3) MAXLOC(3), MAXVAL(3), MIN(3)', &
+'  MAXVAL(3), MIN(3), MAX(3) MINLOC(3) MAXLOC(3),', &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              minval(3fortran)', &
+'                                June 27, 2025                minval(3fortran)', &
 '']
 
 shortname="minval"
@@ -19692,7 +20346,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 mod(3fortran)', &
+'                                June 27, 2025                   mod(3fortran)', &
 '']
 
 shortname="mod"
@@ -19776,7 +20430,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025              modulo(3fortran)', &
+'                                June 27, 2025                modulo(3fortran)', &
 '']
 
 shortname="modulo"
@@ -19884,7 +20538,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025          move_alloc(3fortran)', &
+'                                June 27, 2025            move_alloc(3fortran)', &
 '']
 
 shortname="move_alloc"
@@ -20038,7 +20692,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              mvbits(3fortran)', &
+'                                June 27, 2025                mvbits(3fortran)', &
 '']
 
 shortname="mvbits"
@@ -20633,7 +21287,7 @@ textblock=[character(len=256) :: &
 '      output procedure or by continuation of delimited character sequences,', &
 '      each output record begins with a blank character.', &
 '', &
-'                              February 19, 2025            namelist(7fortran)', &
+'                                June 27, 2025              namelist(7fortran)', &
 '']
 
 shortname="namelist"
@@ -20725,7 +21379,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025             nearest(3fortran)', &
+'                                June 27, 2025               nearest(3fortran)', &
 '']
 
 shortname="nearest"
@@ -20896,7 +21550,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025            new_line(3fortran)', &
+'                                June 27, 2025              new_line(3fortran)', &
 '']
 
 shortname="new_line"
@@ -21048,7 +21702,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                nint(3fortran)', &
+'                                June 27, 2025                  nint(3fortran)', &
 '']
 
 shortname="nint"
@@ -21102,7 +21756,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Case (ii) : The result of NORM2 (X, DIM=DIM) has a value equal to that of', &
 '  NORM2 (X) if X has rank one. Otherwise, the resulting array is reduced in', &
-'  rank with dimension DIM removed, and each remaining elment is the result of', &
+'  rank with dimension DIM removed, and each remaining element is the result of', &
 '  NORM2(X) for the values along dimension DIM.', &
 '', &
 '  It is recommended that the processor compute the result without undue', &
@@ -21167,7 +21821,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               norm2(3fortran)', &
+'                                June 27, 2025                 norm2(3fortran)', &
 '']
 
 shortname="norm2"
@@ -21258,7 +21912,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 not(3fortran)', &
+'                                June 27, 2025                   not(3fortran)', &
 '']
 
 shortname="not"
@@ -21386,7 +22040,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                null(3fortran)', &
+'                                June 27, 2025                  null(3fortran)', &
 '']
 
 shortname="null"
@@ -21472,7 +22126,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025          num_images(3fortran)', &
+'                                June 27, 2025            num_images(3fortran)', &
 '']
 
 shortname="num_images"
@@ -21795,7 +22449,7 @@ textblock=[character(len=256) :: &
 '  BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7), PRINT(7),', &
 '  READ(7), REWIND(7), WAIT(7), WRITE(7)', &
 '', &
-'                              February 19, 2025                open(7fortran)', &
+'                                June 27, 2025                  open(7fortran)', &
 '']
 
 shortname="open"
@@ -21949,7 +22603,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025        out_of_range(3fortran)', &
+'                                June 27, 2025          out_of_range(3fortran)', &
 '']
 
 shortname="out_of_range"
@@ -22055,7 +22709,7 @@ textblock=[character(len=256) :: &
 '         real             :: sorted(size(values))', &
 '            if (size(values) > 1) then', &
 '               sorted = &', &
-'           & [qsort(pack(values(2:),values(2:)<values(1))), values(1), &', &
+'               & [qsort(pack(values(2:),values(2:)<values(1))), values(1), &', &
 '               & qsort(pack(values(2:),values(2:)>=values(1)))]', &
 '            else', &
 '               sorted = values', &
@@ -22080,7 +22734,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                pack(3fortran)', &
+'                                June 27, 2025                  pack(3fortran)', &
 '']
 
 shortname="pack"
@@ -22189,7 +22843,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              parity(3fortran)', &
+'                                June 27, 2025                parity(3fortran)', &
 '']
 
 shortname="parity"
@@ -22275,7 +22929,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              popcnt(3fortran)', &
+'                                June 27, 2025                popcnt(3fortran)', &
 '']
 
 shortname="popcnt"
@@ -22367,7 +23021,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              poppar(3fortran)', &
+'                                June 27, 2025                poppar(3fortran)', &
 '']
 
 shortname="poppar"
@@ -22435,7 +23089,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025           precision(3fortran)', &
+'                                June 27, 2025             precision(3fortran)', &
 '']
 
 shortname="precision"
@@ -22560,7 +23214,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             present(3fortran)', &
+'                                June 27, 2025               present(3fortran)', &
 '']
 
 shortname="present"
@@ -22659,7 +23313,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               print(7fortran)', &
+'                                June 27, 2025                 print(7fortran)', &
 '']
 
 shortname="print"
@@ -22895,7 +23549,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             product(3fortran)', &
+'                                June 27, 2025               product(3fortran)', &
 '']
 
 shortname="product"
@@ -22986,7 +23640,7 @@ textblock=[character(len=256) :: &
 '  A main program, external subprogram, module, submodule, or block data', &
 '  program unit.', &
 '', &
-'                              February 19, 2025             program(7fortran)', &
+'                                June 27, 2025               program(7fortran)', &
 '']
 
 shortname="program"
@@ -23058,7 +23712,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               radix(3fortran)', &
+'                                June 27, 2025                 radix(3fortran)', &
 '']
 
 shortname="radix"
@@ -23134,11 +23788,11 @@ textblock=[character(len=256) :: &
 '  Fortran 2018', &
 '', &
 'SEE ALSO', &
-'  random_number, random_seed', &
+'  RANDOM_NUMBER(3), RANDOM_SEED(3)', &
 '', &
 '  _Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025         random_init(3fortran)', &
+'                                June 27, 2025           random_init(3fortran)', &
 '']
 
 shortname="random_init"
@@ -23233,11 +23887,11 @@ textblock=[character(len=256) :: &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  RANDOM_SEED(3)', &
+'  RANDOM_SEED(3), RANDOM_INIT(3)', &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025       random_number(3fortran)', &
+'                                June 27, 2025         random_number(3fortran)', &
 '']
 
 shortname="random_number"
@@ -23313,11 +23967,11 @@ textblock=[character(len=256) :: &
 '  Fortran 95', &
 '', &
 'SEE ALSO', &
-'  RANDOM_NUMBER(3)', &
+'  RANDOM_NUMBER(3), RANDOM_INIT(3)', &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025         random_seed(3fortran)', &
+'                                June 27, 2025           random_seed(3fortran)', &
 '']
 
 shortname="random_seed"
@@ -23397,7 +24051,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               range(3fortran)', &
+'                                June 27, 2025                 range(3fortran)', &
 '']
 
 shortname="range"
@@ -23566,7 +24220,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                rank(3fortran)', &
+'                                June 27, 2025                  rank(3fortran)', &
 '']
 
 shortname="rank"
@@ -23630,7 +24284,7 @@ textblock=[character(len=256) :: &
 '  BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7), PRINT(7),', &
 '  READ(7), REWIND(7), WAIT(7), WRITE(7)', &
 '', &
-'                              February 19, 2025                read(7fortran)', &
+'                                June 27, 2025                  read(7fortran)', &
 '']
 
 shortname="read"
@@ -23739,7 +24393,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                real(3fortran)', &
+'                                June 27, 2025                  real(3fortran)', &
 '']
 
 shortname="real"
@@ -23781,7 +24435,7 @@ textblock=[character(len=256) :: &
 '  o  OPERATION is a pure function with exactly two arguments', &
 '', &
 '     o each argument is scalar, non-allocatable, a nonpointer, nonpolymorphic', &
-'       and nonoptional with the same type and kind as array.', &
+'       and nonoptional with the same type and kind as ARRAY.', &
 '', &
 '     o if one argument has the asynchronous, target, or value attribute so', &
 '       shall the other.', &
@@ -23815,14 +24469,12 @@ textblock=[character(len=256) :: &
 'OPTIONS', &
 '  o  ARRAY : An array of any type and allowed rank to select values from.', &
 '', &
-'  o  OPERATION : shall be a pure function with exactly two arguments; each', &
-'     argument shall be a scalar, nonallocatable, nonpointer, nonpolymorphic,', &
-'     nonoptional dummy data object with the same type and type parameters as', &
-'     ARRAY. If one argument has the ASYNCHRONOUS, TARGET, or VALUE attribute,', &
-'     the other shall have that attribute. Its result shall be a nonpolymorphic', &
-'     scalar and have the same type and type parameters as ARRAY. OPERATION', &
-'     should implement a mathematically associative operation. It need not be', &
-'     commutative.', &
+'  o  OPERATION : shall be a pure function with exactly two arguments.', &
+'     OPERATION should implement a mathematically associative operation.  It', &
+'     need not be commutative.', &
+'', &
+'     The function result shall be a nonpolymorphic scalar and have the same', &
+'     type and type parameters as ARRAY.', &
 '', &
 '   NOTE', &
 '  If OPERATION is not computationally associative, REDUCE without', &
@@ -23837,17 +24489,21 @@ textblock=[character(len=256) :: &
 '  o  DIM : An integer scalar with a value in the range 1<= DIM <= n, where n', &
 '     is the rank of ARRAY.', &
 '', &
-'     o MASK : (optional) shall be of type logical and shall be conformable', &
-'       with ARRAY.', &
+'     If DIM is present, it indicates the one dimension along which to perform', &
+'     the reduction, and the resultant array has a rank reduced by one relative', &
+'     to the input array.', &
 '', &
-'       When present only those elements of ARRAY are passed to OPERATION for', &
-'       which the corresponding elements of MASK are true, as if ARRAY was', &
-'       filtered with PACK(3).', &
+'  o  MASK : (optional) shall be of type logical and shall be conformable with', &
+'     ARRAY.', &
 '', &
-'     o IDENTITY : shall be scalar with the same type and type parameters as', &
-'       ARRAY. If the initial sequence is empty, the result has the value', &
-'       IDENTIFY if IDENTIFY is present, and otherwise, error termination is', &
-'       initiated.', &
+'     When present only those elements of ARRAY are passed to OPERATION for', &
+'     which the corresponding elements of MASK are true, as if ARRAY was', &
+'     filtered with PACK(3).', &
+'', &
+'  o  IDENTITY : shall be scalar with the same type and type parameters as', &
+'     ARRAY. If the initial sequence is empty, the result has the value', &
+'     IDENTIFY if IDENTIFY is present, and otherwise, error termination is', &
+'     initiated.', &
 '', &
 '     o ORDERED : shall be a logical scalar. If ORDERED is present with the', &
 '       value .true., the calls to the OPERATOR function begins with the first', &
@@ -23858,8 +24514,9 @@ textblock=[character(len=256) :: &
 '       optimal way.', &
 '', &
 'RESULT', &
-'  The result is of the same type and type parameters as ARRAY. It is scalar if', &
-'  DIM does not appear.', &
+'  The result is of the same type and type parameters as ARRAY.', &
+'', &
+'  It is scalar if DIM does not appear.', &
 '', &
 '  If DIM is present, it indicates the one dimension along which to perform the', &
 '  reduction, and the resultant array has a rank reduced by one relative to the', &
@@ -23942,7 +24599,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              reduce(3fortran)', &
+'                                June 27, 2025                reduce(3fortran)', &
 '']
 
 shortname="reduce"
@@ -23956,7 +24613,7 @@ textblock=[character(len=256) :: &
 'repeat(3fortran)                                             repeat(3fortran)', &
 '', &
 'NAME', &
-'  REPEAT(3) - [CHARACTER] Repeated string concatenation', &
+'  REPEAT(3) - [CHARACTER:PAD] Repeated string concatenation', &
 '', &
 'SYNOPSIS', &
 '  result = repeat(string, ncopies)', &
@@ -23973,9 +24630,9 @@ textblock=[character(len=256) :: &
 '', &
 '  o  NCOPIES is a scalar integer.', &
 '', &
-'  o  the result is a new scalar of type character of the same kind as', &
+'  o  the result is a new scalar of type character of the same kind as the', &
+'     variable STRING.', &
 '', &
-'   STRING', &
 'DESCRIPTION', &
 '  REPEAT(3) concatenates copies of a string.', &
 '', &
@@ -24018,7 +24675,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              repeat(3fortran)', &
+'                                June 27, 2025                repeat(3fortran)', &
 '']
 
 shortname="repeat"
@@ -24232,7 +24889,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             reshape(3fortran)', &
+'                                June 27, 2025               reshape(3fortran)', &
 '']
 
 shortname="reshape"
@@ -24357,7 +25014,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran statement descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              return(7fortran)', &
+'                                June 27, 2025                return(7fortran)', &
 '']
 
 shortname="return"
@@ -24454,7 +25111,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran statement descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              rewind(7fortran)', &
+'                                June 27, 2025                rewind(7fortran)', &
 '']
 
 shortname="rewind"
@@ -24544,7 +25201,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025           rrspacing(3fortran)', &
+'                                June 27, 2025             rrspacing(3fortran)', &
 '']
 
 shortname="rrspacing"
@@ -24679,7 +25336,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025        same_type_as(3fortran)', &
+'                                June 27, 2025          same_type_as(3fortran)', &
 '']
 
 shortname="same_type_as"
@@ -24781,7 +25438,7 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               scale(3fortran)', &
+'                                June 27, 2025                 scale(3fortran)', &
 '']
 
 shortname="scale"
@@ -24880,14 +25537,47 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                scan(3fortran)', &
+'                                June 27, 2025                  scan(3fortran)', &
 '']
 
 shortname="scan"
 call process()
 
 
-case('205','select_case')
+case('205','select')
+
+textblock=[character(len=256) :: &
+'', &
+'select(7fortran)                                             select(7fortran)', &
+'', &
+'NAME', &
+'  select(7f) - [EXECUTION CONTROL] select a block based on a value, type, or', &
+'  rank', &
+'', &
+'SYNOPSIS', &
+'  See SELECT_CASE, SELECT_RANK, or SELECT_TYPE', &
+'', &
+'DESCRIPTION', &
+'  A SELECT CASE may be used to select and execute a block of statements based', &
+'  on a value somewhat like a special case of IF/ELSEIF/ELSE/ENDIF.', &
+'', &
+'  A SELECT RANK selects code to execute conditionally based on the RANK of a', &
+'  array in a polymorphic procedure.', &
+'', &
+'  Similarly a A SELECT TYPE selects code to execute conditionally based on the', &
+'  TYPE of a value passed to a procedure.', &
+'', &
+'  For further details see the specific documentation in the topics', &
+'  SELECT_CASE, SELECT_RANK, and SELECT_TYPE.', &
+'', &
+'                                June 27, 2025                select(7fortran)', &
+'']
+
+shortname="select"
+call process()
+
+
+case('206','select_case')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25043,14 +25733,14 @@ textblock=[character(len=256) :: &
 '              call other()', &
 '        end select', &
 '', &
-'                              February 19, 2025         select_case(7fortran)', &
+'                                June 27, 2025           select_case(7fortran)', &
 '']
 
 shortname="select_case"
 call process()
 
 
-case('206','selected_char_kind')
+case('207','selected_char_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25204,14 +25894,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025  selected_char_kind(3fortran)', &
+'                                June 27, 2025    selected_char_kind(3fortran)', &
 '']
 
 shortname="selected_char_kind"
 call process()
 
 
-case('207','selected_int_kind')
+case('208','selected_int_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25258,21 +25948,58 @@ textblock=[character(len=256) :: &
 '  Sample program:', &
 '', &
 '      program demo_selected_int_kind', &
+'      use,intrinsic :: iso_fortran_env, only : integer_kinds', &
+'      use,intrinsic :: iso_fortran_env, only : compiler_version', &
 '      implicit none', &
+'      character(len=*),parameter :: all=''(*(g0))''', &
 '      integer,parameter :: k5 = selected_int_kind(5)', &
 '      integer,parameter :: k15 = selected_int_kind(15)', &
+'      integer          :: i, ii', &
 '      integer(kind=k5) :: i5', &
 '      integer(kind=k15) :: i15', &
+'        print all,''program kinds''', &
+'        print all, &', &
+'           ''! This file was compiled by '', compiler_version()', &
+'        do i=1,size(INTEGER_KINDS)', &
+'           ii=integer_kinds(i)', &
+'           print all,''integer(kind='',ii,'') :: i'',ii', &
+'        enddo', &
+'        do i=1,size(INTEGER_KINDS)', &
+'           ii=integer_kinds(i)', &
+'           print all, &', &
+'           ''write(*,*)"huge(i'', &', &
+'           ii, &', &
+'           '')=",huge(i'', &', &
+'           ii, &', &
+'           '')''', &
 '', &
-'         print *, huge(i5), huge(i15)', &
+'        enddo', &
+'        print all,''end program kinds''', &
 '', &
-'         ! the following inequalities are always true', &
-'         print *, huge(i5) >= 10_k5**5-1', &
-'         print *, huge(i15) >= 10_k15**15-1', &
+'        print *', &
+'        print *, huge(i5), huge(i15)', &
+'        ! the following inequalities are always true', &
+'        print *, huge(i5) >= 10_k5**5-1', &
+'        print *, huge(i15) >= 10_k15**15-1', &
+'', &
 '      end program demo_selected_int_kind', &
 '', &
 '  Results:', &
 '', &
+'       > program kinds', &
+'       > ! This file was compiled by GCC version 15.0.0 20241103 (experimental)', &
+'       > integer(kind=1) :: i1', &
+'       > integer(kind=2) :: i2', &
+'       > integer(kind=4) :: i4', &
+'       > integer(kind=8) :: i8', &
+'       > integer(kind=16) :: i16', &
+'       > write(*,*)"huge(i1)=",huge(i1)', &
+'       > write(*,*)"huge(i2)=",huge(i2)', &
+'       > write(*,*)"huge(i4)=",huge(i4)', &
+'       > write(*,*)"huge(i8)=",huge(i8)', &
+'       > write(*,*)"huge(i16)=",huge(i16)', &
+'       > end program kinds', &
+'       >', &
 '       >   2147483647  9223372036854775807', &
 '       >  T', &
 '       >  T', &
@@ -25285,14 +26012,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025   selected_int_kind(3fortran)', &
+'                                June 27, 2025     selected_int_kind(3fortran)', &
 '']
 
 shortname="selected_int_kind"
 call process()
 
 
-case('208','selected_real_kind')
+case('209','selected_real_kind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25405,14 +26132,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025  selected_real_kind(3fortran)', &
+'                                June 27, 2025    selected_real_kind(3fortran)', &
 '']
 
 shortname="selected_real_kind"
 call process()
 
 
-case('209','set_exponent')
+case('210','set_exponent')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25482,14 +26209,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025        set_exponent(3fortran)', &
+'                                June 27, 2025          set_exponent(3fortran)', &
 '']
 
 shortname="set_exponent"
 call process()
 
 
-case('210','shape')
+case('211','shape')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25593,14 +26320,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               shape(3fortran)', &
+'                                June 27, 2025                 shape(3fortran)', &
 '']
 
 shortname="shape"
 call process()
 
 
-case('211','shifta')
+case('212','shifta')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25720,14 +26447,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              shifta(3fortran)', &
+'                                June 27, 2025                shifta(3fortran)', &
 '']
 
 shortname="shifta"
 call process()
 
 
-case('212','shiftl')
+case('213','shiftl')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25850,14 +26577,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              shiftl(3fortran)', &
+'                                June 27, 2025                shiftl(3fortran)', &
 '']
 
 shortname="shiftl"
 call process()
 
 
-case('213','shiftr')
+case('214','shiftr')
 
 textblock=[character(len=256) :: &
 '', &
@@ -25982,14 +26709,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              shiftr(3fortran)', &
+'                                June 27, 2025                shiftr(3fortran)', &
 '']
 
 shortname="shiftr"
 call process()
 
 
-case('214','sign')
+case('215','sign')
 
 textblock=[character(len=256) :: &
 '', &
@@ -26076,14 +26803,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                sign(3fortran)', &
+'                                June 27, 2025                  sign(3fortran)', &
 '']
 
 shortname="sign"
 call process()
 
 
-case('215','sin')
+case('216','sin')
 
 textblock=[character(len=256) :: &
 '', &
@@ -26107,11 +26834,24 @@ textblock=[character(len=256) :: &
 '  o  The returned value will be of the same type and kind as the argument X.', &
 '', &
 'DESCRIPTION', &
-'  SIN(3) computes the sine of an angle given the size of the angle in radians.', &
+'  SIN(X) computes the sine of X, where X is an angle in radians. The result is', &
+'  a scalar or array of the same type and kind as X. For real inputs, the', &
+'  result is in the range [-1, 1]. For complex inputs, the sine is computed', &
+'  using the complex trigonometric definition. That is, for complex inputs,', &
+'', &
+'       SIN(X) = (EXP(i*X) - EXP(-i*X)) / (2*i)', &
 '', &
 '  The sine of an angle in a right-angled triangle is the ratio of the length', &
 '  of the side opposite the given angle divided by the length of the', &
 '  hypotenuse.', &
+'', &
+'  For real inputs, ensure X is in radians, not degrees. Use', &
+'', &
+'       RADIAN = DEGREE * 3.14159265359 / 180.0', &
+'', &
+'  for conversion.', &
+'', &
+'  where i is the imaginary unit. The result''s kind matches the input''s kind.', &
 '', &
 'OPTIONS', &
 '  o  X : The angle in radians to compute the sine of.', &
@@ -26178,8 +26918,8 @@ textblock=[character(len=256) :: &
 '      ! given latitude and longitude in degrees', &
 '      !', &
 '      real,intent(in) :: latA,lonA,latB,lonB', &
-'      real :: a,c,dist,delta_lat,delta_lon,lat1,lat2', &
-'      real,parameter :: radius = 6371 ! mean earth radius in kilometers,', &
+'      real           :: a,c,dist,delta_lat,delta_lon,lat1,lat2', &
+'      real,parameter  :: radius = 6371 ! mean earth radius in kilometers,', &
 '      ! recommended by the International Union of Geodesy and Geophysics', &
 '', &
 '      ! generate constant pi/180', &
@@ -26211,14 +26951,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 sin(3fortran)', &
+'                                June 27, 2025                   sin(3fortran)', &
 '']
 
 shortname="sin"
 call process()
 
 
-case('216','sind')
+case('217','sind')
 
 textblock=[character(len=256) :: &
 '', &
@@ -26343,14 +27083,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                sind(3fortran)', &
+'                                June 27, 2025                  sind(3fortran)', &
 '']
 
 shortname="sind"
 call process()
 
 
-case('217','sinh')
+case('218','sinh')
 
 textblock=[character(len=256) :: &
 '', &
@@ -26441,14 +27181,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                sinh(3fortran)', &
+'                                June 27, 2025                  sinh(3fortran)', &
 '']
 
 shortname="sinh"
 call process()
 
 
-case('218','sinpi')
+case('219','sinpi')
 
 textblock=[character(len=256) :: &
 '', &
@@ -26547,14 +27287,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               sinpi(3fortran)', &
+'                                June 27, 2025                 sinpi(3fortran)', &
 '']
 
 shortname="sinpi"
 call process()
 
 
-case('219','size')
+case('220','size')
 
 textblock=[character(len=256) :: &
 '', &
@@ -26719,14 +27459,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                size(3fortran)', &
+'                                June 27, 2025                  size(3fortran)', &
 '']
 
 shortname="size"
 call process()
 
 
-case('220','spacing')
+case('221','spacing')
 
 textblock=[character(len=256) :: &
 '', &
@@ -26799,21 +27539,21 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025             spacing(3fortran)', &
+'                                June 27, 2025               spacing(3fortran)', &
 '']
 
 shortname="spacing"
 call process()
 
 
-case('221','split')
+case('222','split')
 
 textblock=[character(len=256) :: &
 '', &
 'split(3fortran)                                               split(3fortran)', &
 '', &
 'NAME', &
-'  SPLIT(3) - [CHARACTER:SPLIT] Parse a string into tokens, one at a time.', &
+'  SPLIT(3) - [CHARACTER:PARSE] Parse a string into tokens, one at a time', &
 '', &
 'SYNOPSIS', &
 '  call split (string, set, pos [, back])', &
@@ -26936,14 +27676,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               split(3fortran)', &
+'                                June 27, 2025                 split(3fortran)', &
 '']
 
 shortname="split"
 call process()
 
 
-case('222','spread')
+case('223','spread')
 
 textblock=[character(len=256) :: &
 '', &
@@ -27118,14 +27858,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              spread(3fortran)', &
+'                                June 27, 2025                spread(3fortran)', &
 '']
 
 shortname="spread"
 call process()
 
 
-case('223','sqrt')
+case('224','sqrt')
 
 textblock=[character(len=256) :: &
 '', &
@@ -27223,14 +27963,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                sqrt(3fortran)', &
+'                                June 27, 2025                  sqrt(3fortran)', &
 '']
 
 shortname="sqrt"
 call process()
 
 
-case('224','stop')
+case('225','stop')
 
 textblock=[character(len=256) :: &
 '', &
@@ -27342,14 +28082,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran statement descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                stop(7fortran)', &
+'                                June 27, 2025                  stop(7fortran)', &
 '']
 
 shortname="stop"
 call process()
 
 
-case('225','storage_size')
+case('226','storage_size')
 
 textblock=[character(len=256) :: &
 '', &
@@ -27446,21 +28186,22 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025        storage_size(3fortran)', &
+'                                June 27, 2025          storage_size(3fortran)', &
 '']
 
 shortname="storage_size"
 call process()
 
 
-case('226','sum')
+case('227','sum')
 
 textblock=[character(len=256) :: &
 '', &
 'sum(3fortran)                                                   sum(3fortran)', &
 '', &
 'NAME', &
-'  SUM(3) - [ARRAY:REDUCTION] Sum the elements of an array', &
+'  SUM(3) - [ARRAY:REDUCTION] Sum all elements of an array, optionally along a', &
+'  dimension or with a mask', &
 '', &
 'SYNOPSIS', &
 '  result = sum(array [,dim[,mask]] | [mask] )', &
@@ -27484,7 +28225,10 @@ textblock=[character(len=256) :: &
 '     not present or ARRAY is a vector, else it is an array.', &
 '', &
 'DESCRIPTION', &
-'  SUM(3) adds the elements of ARRAY.', &
+'  SUM(ARRAY, DIM, MASK) computes the sum of all elements in ARRAY, optionally', &
+'  along a specified dimension DIM or for elements where MASK is .TRUE.. The', &
+'  result is a scalar (if DIM is absent) or an array of rank reduced by one (if', &
+'  DIM is present).', &
 '', &
 '  When only ARRAY is specified all elements are summed, but groups of sums may', &
 '  be returned along the dimension specified by DIM and/or elements to add may', &
@@ -27666,14 +28410,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 sum(3fortran)', &
+'                                June 27, 2025                   sum(3fortran)', &
 '']
 
 shortname="sum"
 call process()
 
 
-case('227','system_clock')
+case('228','system_clock')
 
 textblock=[character(len=256) :: &
 '', &
@@ -27823,14 +28567,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025        system_clock(3fortran)', &
+'                                June 27, 2025          system_clock(3fortran)', &
 '']
 
 shortname="system_clock"
 call process()
 
 
-case('228','tan')
+case('229','tan')
 
 textblock=[character(len=256) :: &
 '', &
@@ -27884,14 +28628,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 tan(3fortran)', &
+'                                June 27, 2025                   tan(3fortran)', &
 '']
 
 shortname="tan"
 call process()
 
 
-case('229','tand')
+case('230','tand')
 
 textblock=[character(len=256) :: &
 '', &
@@ -27946,14 +28690,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                tand(3fortran)', &
+'                                June 27, 2025                  tand(3fortran)', &
 '']
 
 shortname="tand"
 call process()
 
 
-case('230','tanh')
+case('231','tanh')
 
 textblock=[character(len=256) :: &
 '', &
@@ -28016,14 +28760,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025                tanh(3fortran)', &
+'                                June 27, 2025                  tanh(3fortran)', &
 '']
 
 shortname="tanh"
 call process()
 
 
-case('231','tanpi')
+case('232','tanpi')
 
 textblock=[character(len=256) :: &
 '', &
@@ -28094,14 +28838,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025               tanpi(3fortran)', &
+'                                June 27, 2025                 tanpi(3fortran)', &
 '']
 
 shortname="tanpi"
 call process()
 
 
-case('232','this_image')
+case('233','this_image')
 
 textblock=[character(len=256) :: &
 '', &
@@ -28179,14 +28923,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025          this_image(3fortran)', &
+'                                June 27, 2025            this_image(3fortran)', &
 '']
 
 shortname="this_image"
 call process()
 
 
-case('233','tiny')
+case('234','tiny')
 
 textblock=[character(len=256) :: &
 '', &
@@ -28246,21 +28990,21 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                tiny(3fortran)', &
+'                                June 27, 2025                  tiny(3fortran)', &
 '']
 
 shortname="tiny"
 call process()
 
 
-case('234','tokenize')
+case('235','tokenize')
 
 textblock=[character(len=256) :: &
 '', &
 'tokenize(3fortran)                                         tokenize(3fortran)', &
 '', &
 'NAME', &
-'  TOKENIZE(3) - [CHARACTER:PARSE] Parse a string into tokens.', &
+'  TOKENIZE(3) - [CHARACTER:PARSE] Parse a string into tokens', &
 '', &
 'SYNOPSIS', &
 '  TOKEN form (returns array of strings)', &
@@ -28435,14 +29179,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025            tokenize(3fortran)', &
+'                                June 27, 2025              tokenize(3fortran)', &
 '']
 
 shortname="tokenize"
 call process()
 
 
-case('235','trailz')
+case('236','trailz')
 
 textblock=[character(len=256) :: &
 '', &
@@ -28536,21 +29280,21 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              trailz(3fortran)', &
+'                                June 27, 2025                trailz(3fortran)', &
 '']
 
 shortname="trailz"
 call process()
 
 
-case('236','transfer')
+case('237','transfer')
 
 textblock=[character(len=256) :: &
 '', &
 'transfer(3fortran)                                         transfer(3fortran)', &
 '', &
 'NAME', &
-'  TRANSFER(3) - [TYPE:MOLD] Transfer bit patterns', &
+'  TRANSFER(3) - [TYPE:CONVERSION] Transfer data as bit patterns using mold', &
 '', &
 'SYNOPSIS', &
 '  result = transfer(source, mold [,size] )', &
@@ -28662,14 +29406,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions', &
 '', &
-'                              February 19, 2025            transfer(3fortran)', &
+'                                June 27, 2025              transfer(3fortran)', &
 '']
 
 shortname="transfer"
 call process()
 
 
-case('237','transpose')
+case('238','transpose')
 
 textblock=[character(len=256) :: &
 '', &
@@ -28734,7 +29478,8 @@ textblock=[character(len=256) :: &
 '      integer,intent(in)          :: arr(:,:)', &
 '      integer                     :: i', &
 '      character(len=:),allocatable :: biggest', &
-'        write(*,''(a," shape(",i0,",",i0,")")'')trim(title),shape(arr)  ! print title', &
+'        ! print title', &
+'        write(*,''(a," shape(",i0,",",i0,")")'')trim(title),shape(arr)', &
 '        biggest=''          '' ! make buffer to write integer into', &
 '        ! find how many characters to use for integers', &
 '        write(biggest,''(i0)'')ceiling(log10(max(1.0,real(maxval(abs(arr))))))+2', &
@@ -28780,14 +29525,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025           transpose(3fortran)', &
+'                                June 27, 2025             transpose(3fortran)', &
 '']
 
 shortname="transpose"
 call process()
 
 
-case('238','trim')
+case('239','trim')
 
 textblock=[character(len=256) :: &
 '', &
@@ -28881,14 +29626,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                trim(3fortran)', &
+'                                June 27, 2025                  trim(3fortran)', &
 '']
 
 shortname="trim"
 call process()
 
 
-case('239','ubound')
+case('240','ubound')
 
 textblock=[character(len=256) :: &
 '', &
@@ -29058,14 +29803,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              ubound(3fortran)', &
+'                                June 27, 2025                ubound(3fortran)', &
 '']
 
 shortname="ubound"
 call process()
 
 
-case('240','ucobound')
+case('241','ucobound')
 
 textblock=[character(len=256) :: &
 '', &
@@ -29103,14 +29848,14 @@ textblock=[character(len=256) :: &
 'SEE ALSO', &
 '  LCOBOUND(3), LBOUND(3), UBOUND(3)', &
 '', &
-'                              February 19, 2025            ucobound(3fortran)', &
+'                                June 27, 2025              ucobound(3fortran)', &
 '']
 
 shortname="ucobound"
 call process()
 
 
-case('241','unpack')
+case('242','unpack')
 
 textblock=[character(len=256) :: &
 '', &
@@ -29145,10 +29890,16 @@ textblock=[character(len=256) :: &
 '  any rank using .true. values from MASK in array element order to specify', &
 '  placement of the VECTOR values.', &
 '', &
-'  So a copy of FIELD is generated with select elements replaced with values', &
-'  from VECTOR. This allows for complex replacement patterns that would be', &
-'  difficult when using array syntax or multiple assignment statements,', &
-'  particularly when the replacements are conditional.', &
+'  The result is a copy of FIELD generated with select elements replaced with', &
+'  values from VECTOR.', &
+'', &
+'  That is, FIELD and MASK are of the same shape. A copy of FIELD is made', &
+'  except that where any element of MASK is .true. the corresponding element in', &
+'  FIELD is replaced with the next value in VECTOR.', &
+'', &
+'  This allows for complex replacement patterns that would be difficult when', &
+'  using array syntax or multiple assignment statements, particularly when the', &
+'  replacements are conditional.', &
 '', &
 'OPTIONS', &
 '  o  VECTOR : New values to place into specified locations in FIELD. It shall', &
@@ -29157,71 +29908,64 @@ textblock=[character(len=256) :: &
 '  o  MASK : Shall be an array that specifies which values in FIELD are to be', &
 '     replaced with values from VECTOR.', &
 '', &
-'  o  FIELD : The input array to be altered.', &
+'  o  FIELD : The input array to be altered, or a scalar.', &
 '', &
 'RESULT', &
 '  The element of the result that corresponds to the ith true element of MASK,', &
-'  in array element order, has the value VECTOR(I) for i = 1, 2, . .  ., t,', &
-'  where t is the number of true values in MASK. Each other element has a value', &
-'  equal to FIELD if FIELD is scalar or to the corresponding element of FIELD', &
-'  if it is an array.', &
+'  in array element order, has the value VECTOR(I) for i = 1, 2, .., N, where N', &
+'  is the number of true values in MASK. Each other element has a value equal', &
+'  to FIELD if FIELD is scalar or to the corresponding element of FIELD if it', &
+'  is an array.', &
 '', &
 '  The resulting array corresponds to FIELD with .true. elements of MASK', &
 '  replaced by values from VECTOR in array element order.', &
 '', &
 'EXAMPLES', &
-'  Particular values may be "scattered" to particular positions in an array by', &
-'  using', &
-'', &
-'    1 0 0', &
-'', &
-'  If M is the array', &
-'    0 1 0 0 0 1', &
-'', &
-'    V is the array [1, 2, 3], . T .', &
-'', &
-'    and Q is the logical mask', &
-'      T . .  . . T where "T" represents true and "." represents false, then', &
-'      the result of', &
-'', &
-'    UNPACK (V, MASK = Q, FIELD = M) has the value', &
-'', &
-'      1 2 0 1 1 0 0 0 3', &
-'', &
-'    and the result of UNPACK (V, MASK = Q, FIELD = 0) has the value', &
-'', &
-'      0 2 0 1 0 0 0 0 3', &
-'', &
 '  Sample program:', &
 '', &
 '      program demo_unpack', &
 '      implicit none', &
 '      logical,parameter :: T=.true., F=.false.', &
+'      integer,parameter :: rows=3, cols=3', &
+'      integer          :: i', &
+'      logical          :: mask(rows,cols) = reshape([ &', &
+'        T, F, F, &', &
+'        F, T, F, &', &
+'        F, F, T  &', &
+'      ],[3,3])', &
+'      integer :: field(rows,cols) = reshape([ &', &
+'        1, 2, 3, &', &
+'        4, 5, 6, &', &
+'        7, 8, 9  &', &
+'      ],[3,3])', &
+'      integer :: result(rows,cols)', &
 '', &
-'      integer :: vector(2)  = [1,1]', &
+'       ! mask and field must conform or field must be a scalar', &
+'        write(*,*) ''if the logical mask is''', &
+'        do i=1,size(mask,dim=1)', &
+'           write(*,*)mask(i,:)', &
+'        enddo', &
+'        write(*,*) ''and field is a scalar (in this case, 0)''', &
+'        write(*,*) ''the result is the shape of the mask''', &
+'        write(*,*) ''with all values set to the scalar value''', &
+'        write(*,*) ''except the true elements of the mask are''', &
+'        write(*,*) ''filled in row-column order with values''', &
+'        write(*,*) ''from the vector of values [11,22,33]''', &
+'        result = unpack( [11,22,33], mask, field=0 )', &
+'        call print_matrix_int(''result='', result)', &
 '', &
-'      ! mask and field must conform', &
-'      integer,parameter :: r=2, c=2', &
-'      logical :: mask(r,c)  = reshape([ T,F,F,T ],[2,2])', &
-'      integer :: field(r,c) = 0, unity(2,2)', &
-'', &
-'        ! basic usage', &
-'        unity = unpack( vector, mask, field )', &
-'        call print_matrix_int(''unity='', unity)', &
-'', &
-'        ! if FIELD is a scalar it is used to fill all the elements', &
-'        ! not assigned to by the vector and mask.', &
-'        call print_matrix_int(''scalar field'',               &', &
-'        & unpack(                                     &', &
-'        & vector=[ 1, 2, 3, 4 ],                      &', &
-'        & mask=reshape([ T,F,T,F,F,F,T,F,T ], [3,3]), &', &
-'        & field=0) )', &
+'        write(*,*) ''if field is an array it must conform''', &
+'        write(*,*) ''to the shape of the mask''', &
+'        call print_matrix_int(''field='',field)', &
+'        write(*,*) ''and the combination results in''', &
+'        result = unpack( [11,22,33], mask, field )', &
+'        call print_matrix_int(''result='', result)', &
 '', &
 '      contains', &
 '', &
 '      subroutine print_matrix_int(title,arr)', &
-'      ! convenience routine:', &
-'      ! just prints small integer arrays in row-column format', &
+'      ! @(#) convenience routine:', &
+'      !      prints small integer arrays in row-column format', &
 '      implicit none', &
 '      character(len=*),intent(in)  :: title', &
 '      integer,intent(in)          :: arr(:,:)', &
@@ -29246,13 +29990,31 @@ textblock=[character(len=256) :: &
 '', &
 '  Results:', &
 '', &
-'        > unity=', &
-'        >  [ 1, 0 ]', &
-'        >  [ 0, 1 ]', &
-'        > scalar field', &
-'        >  [  1,  0,  3 ]', &
-'        >  [  0,  0,  0 ]', &
-'        >  [  2,  0,  4 ]', &
+'       >  if the logical mask is', &
+'       >  T F F', &
+'       >  F T F', &
+'       >  F F T', &
+'       >  and field is a scalar (in this case, 0)', &
+'       >  the result is the shape of the mask', &
+'       >  with all values set to the scalar value', &
+'       >  except the true elements of the mask are', &
+'       >  filled in row-column order with values', &
+'       >  from the vector of values [11,22,33]', &
+'       >  result=', &
+'       >   [  11,   0,  0 ]', &
+'       >   [   0,  22,  0 ]', &
+'       >   [   0,   0, 33 ]', &
+'       >  if field is an array it must conform', &
+'       >  to the shape of the mask', &
+'       >  field=', &
+'       >   [  1,  4,  7 ]', &
+'       >   [  2,  5,  8 ]', &
+'       >   [  3,  6,  9 ]', &
+'       >  and the combination results in', &
+'       >  result=', &
+'       >   [  11,   4,  7 ]', &
+'       >   [   2,  22,  8 ]', &
+'       >   [   3,   6, 33 ]', &
 '', &
 'STANDARD', &
 '  Fortran 95', &
@@ -29262,14 +30024,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              unpack(3fortran)', &
+'                                June 27, 2025                unpack(3fortran)', &
 '']
 
 shortname="unpack"
 call process()
 
 
-case('242','use')
+case('243','use')
 
 textblock=[character(len=256) :: &
 '', &
@@ -29368,16 +30130,16 @@ textblock=[character(len=256) :: &
 '  o  An only-use-name shall be a nongeneric name.', &
 '', &
 '  A USE statement with the ONLY option provides access only to those entities', &
-'  that appear as generic-specs, use-names, or use-dened-operators in the only-', &
-'  list.', &
+'  that appear as generic-specs, use-names, or use-defined-operators in the', &
+'  only-list.', &
 '', &
-'  There is no prohibition against a use-name or use-dened-operator appearing', &
-'  multiple times in one USE state- ment or in multiple USE statements', &
-'  involving the same module. As a result, it is possible for one use-', &
-'  associated entity to be accessible by more than one local identier.', &
+'  There is no prohibition against a use-name or use-defined-operator appearing', &
+'  multiple times in one USE statement or in multiple USE statements involving', &
+'  the same module. As a result, it is possible for one use-associated entity', &
+'  to be accessible by more than one local identifier.', &
 '', &
 '  An entity in a scoping unit that is accessed by use association through more', &
-'  than one use path, has the ASYN- CHRONOUS or VOLATILE attribute in any of', &
+'  than one use path, has the ASYNCHRONOUS or VOLATILE attribute in any of', &
 '  those use paths, and is not given that attribute in that scoping unit, shall', &
 '  have that attribute in all use paths.', &
 '', &
@@ -29520,14 +30282,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025                 use(7fortran)', &
+'                                June 27, 2025                   use(7fortran)', &
 '']
 
 shortname="use"
 call process()
 
 
-case('243','verify')
+case('244','verify')
 
 textblock=[character(len=256) :: &
 '', &
@@ -29535,7 +30297,7 @@ textblock=[character(len=256) :: &
 '', &
 'NAME', &
 '  VERIFY(3) - [CHARACTER:SEARCH] Position of a character in a string of', &
-'  characters that does not appear in a given set of characters.', &
+'  characters that does not appear in a given set of characters', &
 '', &
 'SYNOPSIS', &
 '  result = verify(string, set [,back] [,kind] )', &
@@ -29901,14 +30663,14 @@ textblock=[character(len=256) :: &
 '', &
 '  Fortran intrinsic descriptions (license: MIT) @urbanjost', &
 '', &
-'                              February 19, 2025              verify(3fortran)', &
+'                                June 27, 2025                verify(3fortran)', &
 '']
 
 shortname="verify"
 call process()
 
 
-case('244','wait')
+case('245','wait')
 
 textblock=[character(len=256) :: &
 '', &
@@ -29978,14 +30740,14 @@ textblock=[character(len=256) :: &
 '  BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7), PRINT(7),', &
 '  READ(7), REWIND(7), WAIT(7), WRITE(7)', &
 '', &
-'                              February 19, 2025                wait(7fortran)', &
+'                                June 27, 2025                  wait(7fortran)', &
 '']
 
 shortname="wait"
 call process()
 
 
-case('245','where')
+case('246','where')
 
 textblock=[character(len=256) :: &
 '', &
@@ -30191,14 +30953,14 @@ textblock=[character(len=256) :: &
 '       > iflag=', &
 '       >       0      0      0     0      0      1      0      0      0      0', &
 '', &
-'                              February 19, 2025               where(7fortran)', &
+'                                June 27, 2025                 where(7fortran)', &
 '']
 
 shortname="where"
 call process()
 
 
-case('246','write')
+case('247','write')
 
 textblock=[character(len=256) :: &
 '', &
@@ -30212,7 +30974,7 @@ textblock=[character(len=256) :: &
 '  BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7), PRINT(7),', &
 '  READ(7), REWIND(7), WAIT(7), WRITE(7)', &
 '', &
-'                              February 19, 2025               write(7fortran)', &
+'                                June 27, 2025                 write(7fortran)', &
 '']
 
 shortname="write"

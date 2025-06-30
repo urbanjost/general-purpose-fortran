@@ -9,9 +9,9 @@ module M_sets
 !!    Procedure names and syntax:
 !!
 !!     use M_sets, only : &
-!!     union, unique, intersect, setdiff, ismember, setxor
+!!     & union, unique, intersect, setdiff, ismember, setxor
 !!     use M_sets, only : &
-!!     issorted, bool
+!!     & issorted, isequal, bool
 !!
 !!##DESCRIPTION
 !!
@@ -42,6 +42,7 @@ module M_sets
 !!  + ismember(A,B,setOrder)  - Create a mask of A marking elements also in B
 !!  + setxor(A,B,setOrder)    - Find values of A and B not in both arrays
 !!  + issorted(A)             - Determine if array is already sorted
+!!  + isequal(A,B)             -Determine if two sets are equal with a tolerance
 !!  + bool(expr)              - 1 if logical expression is true, 0 if false.
 !!
 !!  The subsequent data may be produced sorted, or left in the order
@@ -54,7 +55,8 @@ module M_sets
 !!
 !!    program demo_M_sets
 !!    use M_sets, only: &
-!!    & unique, intersect, union, setdiff, ismember, setxor, issorted, bool
+!!    & unique, intersect, union, setdiff, setxor, bool, &
+!!    & ismember, issorted, isequal
 !!    character(len=*),parameter :: all='(*(g0,1x))'
 !!    character(len=*),parameter :: nl=new_line('A')
 !!    integer, allocatable      :: A(:)
@@ -129,6 +131,17 @@ module M_sets
 !!       'B=', B                                                     ,nl, &
 !!       'is A sorted?',issorted(A)                                  ,nl, &
 !!       'is B sorted?',issorted(B)
+!!
+!!       A=[1,2,3,4,5]
+!!       B=[1,2,3,4,5]
+!!       !
+!!       print all                                                   ,nl, &
+!!       'ISEQUAL'                                                     , &
+!!       'confirm whether sets have same elements in same order    ' ,nl, &
+!!       'A=', A                                                     ,nl, &
+!!       'B=', B                                                     ,nl, &
+!!       'is A equal to B?',isequal(A,B)                             ,nl, &
+!!       'is B equal to -B?',isequal(A,-B)
 !!
 !!       A=[1,2,3,4,5]
 !!       B=[5,2,3,4,1]
@@ -214,6 +227,8 @@ public :: setxor    ! C = setxor(A,B,setOrder)      returns the data of A and B 
                     !                               (the symmetric difference), with no repetitions. That is, setxor returns the
                     !                               data that occurs in A or B, but not both. C is in sorted order.
 public :: issorted  ! C = issorted(A)               determine if A is in ascending order or not
+public :: isequal   ! C = isequal(A,B,tolerance)    determine if set A has same element values in same order as B to
+                    !                               within a tolerance
 public :: bool      ! C = bool(logical_expression)  1 if logical expression is true, 0 if false.
 
 
@@ -225,6 +240,7 @@ interface setdiff;   module procedure setdiff_c;   end interface setdiff
 interface ismember;  module procedure ismember_c;  end interface ismember
 interface setxor;    module procedure setxor_c;    end interface setxor
 interface issorted;  module procedure issorted_c;  end interface issorted
+interface isequal;   module procedure isequal_c;   end interface isequal
 
 interface unique;    module procedure unique_int8;    end interface unique
 interface union;     module procedure union_int8;     end interface union
@@ -233,6 +249,7 @@ interface setdiff;   module procedure setdiff_int8;   end interface setdiff
 interface ismember;  module procedure ismember_int8;  end interface ismember
 interface setxor;    module procedure setxor_int8;    end interface setxor
 interface issorted;  module procedure issorted_int8;  end interface issorted
+interface isequal;   module procedure isequal_int8;   end interface isequal
 
 interface unique;    module procedure unique_int16;    end interface unique
 interface union;     module procedure union_int16;     end interface union
@@ -241,6 +258,7 @@ interface setdiff;   module procedure setdiff_int16;   end interface setdiff
 interface ismember;  module procedure ismember_int16;  end interface ismember
 interface setxor;    module procedure setxor_int16;    end interface setxor
 interface issorted;  module procedure issorted_int16;  end interface issorted
+interface isequal;   module procedure isequal_int16;   end interface isequal
 
 interface unique;    module procedure unique_int32;    end interface unique
 interface union;     module procedure union_int32;     end interface union
@@ -249,6 +267,7 @@ interface setdiff;   module procedure setdiff_int32;   end interface setdiff
 interface ismember;  module procedure ismember_int32;  end interface ismember
 interface setxor;    module procedure setxor_int32;    end interface setxor
 interface issorted;  module procedure issorted_int32;  end interface issorted
+interface isequal;   module procedure isequal_int32;   end interface isequal
 
 interface unique;    module procedure unique_int64;    end interface unique
 interface union;     module procedure union_int64;     end interface union
@@ -257,6 +276,7 @@ interface setdiff;   module procedure setdiff_int64;   end interface setdiff
 interface ismember;  module procedure ismember_int64;  end interface ismember
 interface setxor;    module procedure setxor_int64;    end interface setxor
 interface issorted;  module procedure issorted_int64;  end interface issorted
+interface isequal;   module procedure isequal_int64;   end interface isequal
 
 interface unique;    module procedure unique_real32;    end interface unique
 interface union;     module procedure union_real32;     end interface union
@@ -265,6 +285,7 @@ interface setdiff;   module procedure setdiff_real32;   end interface setdiff
 interface ismember;  module procedure ismember_real32;  end interface ismember
 interface setxor;    module procedure setxor_real32;    end interface setxor
 interface issorted;  module procedure issorted_real32;  end interface issorted
+interface isequal;   module procedure isequal_real32;   end interface isequal
 
 interface unique;    module procedure unique_real64;    end interface unique
 interface union;     module procedure union_real64;     end interface union
@@ -273,6 +294,7 @@ interface setdiff;   module procedure setdiff_real64;   end interface setdiff
 interface ismember;  module procedure ismember_real64;  end interface ismember
 interface setxor;    module procedure setxor_real64;    end interface setxor
 interface issorted;  module procedure issorted_real64;  end interface issorted
+interface isequal;   module procedure isequal_real64;   end interface isequal
 
 interface bool
         module procedure :: bool_expr
@@ -697,7 +719,7 @@ end function ismember_c
 !!
 !!##DESCRIPTION
 !!
-!! setxfor(3f) returns the exclusive OR of two arrays.  That is, it returns
+!! setxfor(3f) returns the exclusive OR of two arrays. That is, it returns
 !! the data of A and B that are not in their intersection (the symmetric
 !! difference), with no repetitions.
 !!
@@ -727,7 +749,7 @@ end function ismember_c
 !!       A = [5,1,3,3,3]
 !!       B = [4,1,2]
 !!       write(*,g) 'A=', A
-!!       write(*,g) 'A=', B
+!!       write(*,g) 'B=', B
 !!       write(*,g) setxor(A,B)
 !!       write(*,g) setxor(A,B,'stable')
 !!
@@ -737,7 +759,7 @@ end function ismember_c
 !!
 !!  > SETXOR Find values of A and B not in their intersection.
 !!  > A= 5 1 3 3 3
-!!  > A= 4 1 2
+!!  > B= 4 1 2
 !!  > 2 3 4 5
 !!  > 5 3 4 2
 !!
@@ -784,22 +806,118 @@ integer                                :: longest
 end function setxor_c
 !>
 !!##NAME
+!!    isequal(3f) - [M_sets] Report if vector A is equal to vector B
+!!
+!!##SYNOPSIS
+!!
+!!
+!!    isequal(A,B,TOLERANCE)
+!!
+!!      character(len=:)intent(in) :: A,B
+!!        or
+!!      integer|real|complex(in) :: A,B
+!!      real,optional            :: TOLERANCE
+!!
+!!##DESCRIPTION
+!!
+!!    Report if A is equal to B. Equality is defined as the same element
+!!    values in the same order.
+!!
+!!    A 1 (true) is returned when the elements of A have a one-to-one
+!!    correspondence to the elements of B with the same values in the
+!!    same order.  0 (false) is returned otherwise.
+!!
+!!##OPTIONS
+!!
+!!     A          input array to compare against
+!!     B          input array to compare to A
+!!     TOLERANCE  for numeric values consider the corresponding elements
+!!                of A and B equal if they are equal within the specified
+!!                tolerance.
+!!
+!!     A,B and TOLERANCE are of the same type and kind.
+!!
+!!##RETURNS
+!!
+!!     1 if input array A is to array B, 0 otherwise
+!!
+!!##EXAMPLES
+!!
+!!
+!!  sample program:
+!!
+!!    program demo_isequal
+!!    use M_sets, only: isequal
+!!    character(len=*),parameter :: g='(*(g0,1x))'
+!!    integer,allocatable        :: A(:)
+!!    integer,allocatable        :: B(:)
+!!
+!!    write(*,g) 'isequal','Find if A is equal to B. '
+!!        A = [10, -10, 0, 1, 2, 3, 3, 2, 1,-10]
+!!        B = [10, -10, 0, 1, 2, 3, 3, 2, 1, 10]
+!!        write(*,g) 'A=', A
+!!        write(*,g) 'B=', B
+!!        write(*,g) isequal(A,B)
+!!    write(*,g) 'isequal','Find if A is equal to A. '
+!!        write(*,g) isequal(A,A)
+!!
+!!    end program demo_isequal
+!!
+!! Results:
+!!
+!!  > isequal Find the isequal elements of vector A.
+!!  > A= 10 -10 0 1 2 3 3 2 1 -10
+!!  > 0
+!!  > A= -10 10 100 201
+!!  > 1
+!!
+!!##AUTHORS
+!!    John S. Urban, 2023-07-20
+!!
+!!##LICENSE
+!!    CC0-1.0
+!-----------------------------------------------------------------------------------------------------------------------------------
+function isequal_c(A,B) result(answer)
+! TF = isequal(A) returns the logical scalar 1 (true) when the elements of A are listed in ascending order and 0 (false) otherwise.
+character(len=*), intent(in) :: A(:)
+character(len=*), intent(in) :: B(:)
+integer                      :: answer
+integer                      :: i
+answer=1
+if(size(A).eq.size(B))then
+   ! A merge() might not short-circuit or make copies?
+   do i=1,size(A)
+      if(A(i) /= B(i))then
+         answer=0
+         exit
+      endif
+   enddo
+else
+   answer=0
+endif
+end function isequal_c
+!>
+!!##NAME
 !!    issorted(3f) - [M_sets] Report if A is sorted in ascending order or not.
 !!
 !!##SYNOPSIS
 !!
 !!
-!!    issorted(A,setOrder)
+!!    issorted(A)
+!!
+!!      character(len=:)intent(in) :: A
+!!        or
+!!      integer|real|complex(in) :: A
 !!
 !!##DESCRIPTION
 !!
-!!    Report if A is sorted in ascending order or not.  A 1 (true) is
+!!    Report if A is sorted in ascending order or not. A 1 (true) is
 !!    returned when the elements of A are listed in ascending order and 0
 !!    (false) otherwise.
 !!
 !!##OPTIONS
 !!
-!!     A     input array to test
+!!     A         input array to test
 !!
 !!##RETURNS
 !!
@@ -1004,7 +1122,7 @@ end function setxor_int8
 function issorted_int8(A) result(answer)
 ! TF = issorted(A) returns the logical scalar 1 (true) when the elements of A are listed in ascending order and 0 (false) otherwise.
 integer(kind=int8), intent(in) :: A(:)
-integer(kind=int8)             :: answer
+integer                           :: answer
 integer                           :: i
 answer=1
 do i=1,size(a)-1
@@ -1014,6 +1132,42 @@ do i=1,size(a)-1
    endif
 enddo
 end function issorted_int8
+
+function isequal_int8(A,B,TOLERANCE) result(answer)
+! TF = isequal(A) returns the logical scalar 1 (true) when the elements of A are identical to elementsof B or  0 (false) otherwise.
+integer(kind=int8), intent(in)           :: A(:)
+integer(kind=int8), intent(in)           :: B(:)
+integer(kind=int8), intent(in), optional :: TOLERANCE
+integer(kind=int8)                       :: DELTA
+integer                                     :: answer
+integer                                     :: i
+answer=1
+if(present(tolerance))then
+   delta=tolerance
+else
+   delta=0
+endif
+if(size(A).eq.size(B))then
+   ! A merge() might not short-circuit or make copies?
+   if(delta.eq.0)then
+      do i=1,size(A)
+         if(A(i) /= B(i))then
+            answer=0
+            exit
+         endif
+      enddo
+   else
+      do i=1,size(A)
+         if(abs(A(i)- B(i)).gt.delta)then
+            answer=0
+            exit
+         endif
+      enddo
+   endif
+else
+   answer=0
+endif
+end function isequal_int8
 
 function unique_int16(A, setOrder) result(answer)
 ! C = unique(A) returns the same data as in A, but with no repetitions. C is in sorted order.
@@ -1142,7 +1296,7 @@ end function setxor_int16
 function issorted_int16(A) result(answer)
 ! TF = issorted(A) returns the logical scalar 1 (true) when the elements of A are listed in ascending order and 0 (false) otherwise.
 integer(kind=int16), intent(in) :: A(:)
-integer(kind=int16)             :: answer
+integer                           :: answer
 integer                           :: i
 answer=1
 do i=1,size(a)-1
@@ -1152,6 +1306,42 @@ do i=1,size(a)-1
    endif
 enddo
 end function issorted_int16
+
+function isequal_int16(A,B,TOLERANCE) result(answer)
+! TF = isequal(A) returns the logical scalar 1 (true) when the elements of A are identical to elementsof B or  0 (false) otherwise.
+integer(kind=int16), intent(in)           :: A(:)
+integer(kind=int16), intent(in)           :: B(:)
+integer(kind=int16), intent(in), optional :: TOLERANCE
+integer(kind=int16)                       :: DELTA
+integer                                     :: answer
+integer                                     :: i
+answer=1
+if(present(tolerance))then
+   delta=tolerance
+else
+   delta=0
+endif
+if(size(A).eq.size(B))then
+   ! A merge() might not short-circuit or make copies?
+   if(delta.eq.0)then
+      do i=1,size(A)
+         if(A(i) /= B(i))then
+            answer=0
+            exit
+         endif
+      enddo
+   else
+      do i=1,size(A)
+         if(abs(A(i)- B(i)).gt.delta)then
+            answer=0
+            exit
+         endif
+      enddo
+   endif
+else
+   answer=0
+endif
+end function isequal_int16
 
 function unique_int32(A, setOrder) result(answer)
 ! C = unique(A) returns the same data as in A, but with no repetitions. C is in sorted order.
@@ -1280,7 +1470,7 @@ end function setxor_int32
 function issorted_int32(A) result(answer)
 ! TF = issorted(A) returns the logical scalar 1 (true) when the elements of A are listed in ascending order and 0 (false) otherwise.
 integer(kind=int32), intent(in) :: A(:)
-integer(kind=int32)             :: answer
+integer                           :: answer
 integer                           :: i
 answer=1
 do i=1,size(a)-1
@@ -1290,6 +1480,42 @@ do i=1,size(a)-1
    endif
 enddo
 end function issorted_int32
+
+function isequal_int32(A,B,TOLERANCE) result(answer)
+! TF = isequal(A) returns the logical scalar 1 (true) when the elements of A are identical to elementsof B or  0 (false) otherwise.
+integer(kind=int32), intent(in)           :: A(:)
+integer(kind=int32), intent(in)           :: B(:)
+integer(kind=int32), intent(in), optional :: TOLERANCE
+integer(kind=int32)                       :: DELTA
+integer                                     :: answer
+integer                                     :: i
+answer=1
+if(present(tolerance))then
+   delta=tolerance
+else
+   delta=0
+endif
+if(size(A).eq.size(B))then
+   ! A merge() might not short-circuit or make copies?
+   if(delta.eq.0)then
+      do i=1,size(A)
+         if(A(i) /= B(i))then
+            answer=0
+            exit
+         endif
+      enddo
+   else
+      do i=1,size(A)
+         if(abs(A(i)- B(i)).gt.delta)then
+            answer=0
+            exit
+         endif
+      enddo
+   endif
+else
+   answer=0
+endif
+end function isequal_int32
 
 function unique_int64(A, setOrder) result(answer)
 ! C = unique(A) returns the same data as in A, but with no repetitions. C is in sorted order.
@@ -1418,7 +1644,7 @@ end function setxor_int64
 function issorted_int64(A) result(answer)
 ! TF = issorted(A) returns the logical scalar 1 (true) when the elements of A are listed in ascending order and 0 (false) otherwise.
 integer(kind=int64), intent(in) :: A(:)
-integer(kind=int64)             :: answer
+integer                           :: answer
 integer                           :: i
 answer=1
 do i=1,size(a)-1
@@ -1428,6 +1654,42 @@ do i=1,size(a)-1
    endif
 enddo
 end function issorted_int64
+
+function isequal_int64(A,B,TOLERANCE) result(answer)
+! TF = isequal(A) returns the logical scalar 1 (true) when the elements of A are identical to elementsof B or  0 (false) otherwise.
+integer(kind=int64), intent(in)           :: A(:)
+integer(kind=int64), intent(in)           :: B(:)
+integer(kind=int64), intent(in), optional :: TOLERANCE
+integer(kind=int64)                       :: DELTA
+integer                                     :: answer
+integer                                     :: i
+answer=1
+if(present(tolerance))then
+   delta=tolerance
+else
+   delta=0
+endif
+if(size(A).eq.size(B))then
+   ! A merge() might not short-circuit or make copies?
+   if(delta.eq.0)then
+      do i=1,size(A)
+         if(A(i) /= B(i))then
+            answer=0
+            exit
+         endif
+      enddo
+   else
+      do i=1,size(A)
+         if(abs(A(i)- B(i)).gt.delta)then
+            answer=0
+            exit
+         endif
+      enddo
+   endif
+else
+   answer=0
+endif
+end function isequal_int64
 
 function unique_real32(A, setOrder) result(answer)
 ! C = unique(A) returns the same data as in A, but with no repetitions. C is in sorted order.
@@ -1556,7 +1818,7 @@ end function setxor_real32
 function issorted_real32(A) result(answer)
 ! TF = issorted(A) returns the logical scalar 1 (true) when the elements of A are listed in ascending order and 0 (false) otherwise.
 real(kind=real32), intent(in) :: A(:)
-real(kind=real32)             :: answer
+integer                           :: answer
 integer                           :: i
 answer=1
 do i=1,size(a)-1
@@ -1566,6 +1828,42 @@ do i=1,size(a)-1
    endif
 enddo
 end function issorted_real32
+
+function isequal_real32(A,B,TOLERANCE) result(answer)
+! TF = isequal(A) returns the logical scalar 1 (true) when the elements of A are identical to elementsof B or  0 (false) otherwise.
+real(kind=real32), intent(in)           :: A(:)
+real(kind=real32), intent(in)           :: B(:)
+real(kind=real32), intent(in), optional :: TOLERANCE
+real(kind=real32)                       :: DELTA
+integer                                     :: answer
+integer                                     :: i
+answer=1
+if(present(tolerance))then
+   delta=tolerance
+else
+   delta=0
+endif
+if(size(A).eq.size(B))then
+   ! A merge() might not short-circuit or make copies?
+   if(delta.eq.0)then
+      do i=1,size(A)
+         if(A(i) /= B(i))then
+            answer=0
+            exit
+         endif
+      enddo
+   else
+      do i=1,size(A)
+         if(abs(A(i)- B(i)).gt.delta)then
+            answer=0
+            exit
+         endif
+      enddo
+   endif
+else
+   answer=0
+endif
+end function isequal_real32
 
 function unique_real64(A, setOrder) result(answer)
 ! C = unique(A) returns the same data as in A, but with no repetitions. C is in sorted order.
@@ -1694,7 +1992,7 @@ end function setxor_real64
 function issorted_real64(A) result(answer)
 ! TF = issorted(A) returns the logical scalar 1 (true) when the elements of A are listed in ascending order and 0 (false) otherwise.
 real(kind=real64), intent(in) :: A(:)
-real(kind=real64)             :: answer
+integer                           :: answer
 integer                           :: i
 answer=1
 do i=1,size(a)-1
@@ -1704,6 +2002,42 @@ do i=1,size(a)-1
    endif
 enddo
 end function issorted_real64
+
+function isequal_real64(A,B,TOLERANCE) result(answer)
+! TF = isequal(A) returns the logical scalar 1 (true) when the elements of A are identical to elementsof B or  0 (false) otherwise.
+real(kind=real64), intent(in)           :: A(:)
+real(kind=real64), intent(in)           :: B(:)
+real(kind=real64), intent(in), optional :: TOLERANCE
+real(kind=real64)                       :: DELTA
+integer                                     :: answer
+integer                                     :: i
+answer=1
+if(present(tolerance))then
+   delta=tolerance
+else
+   delta=0
+endif
+if(size(A).eq.size(B))then
+   ! A merge() might not short-circuit or make copies?
+   if(delta.eq.0)then
+      do i=1,size(A)
+         if(A(i) /= B(i))then
+            answer=0
+            exit
+         endif
+      enddo
+   else
+      do i=1,size(A)
+         if(abs(A(i)- B(i)).gt.delta)then
+            answer=0
+            exit
+         endif
+      enddo
+   endif
+else
+   answer=0
+endif
+end function isequal_real64
 !>
 !!##NAME
 !!    bool(3f) - [M_sets::LOGICAL] returns One if expression is TRUE,

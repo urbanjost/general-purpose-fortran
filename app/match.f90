@@ -171,7 +171,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
 '@(#)COMPILED:       Fri, Apr 24th, 2020 3:14:50 PM>',&
-'@(#)COMPILED:       2025-02-23 19:24:51 UTC-300>',&
+'@(#)COMPILED:       2025-06-29 08:20:20 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

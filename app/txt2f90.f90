@@ -38,40 +38,39 @@ contains
 subroutine setup()
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME',&
-'   txt2f90(1f) - [FUNIX:ENCODE] encode a file as a Fortran character    ',&
-'   variable declaration                                                 ',&
-'   (LICENSE:MIT)                                                        ',&
-'                                                                        ',&
-'SYNOPSIS                                                                ',&
-'    txt2f90 [FILE]                                                      ',&
-'    |[ --help|--version]                                                ',&
-'                                                                        ',&
-'DESCRIPTION                                                             ',&
-' Read a file or stdin and write it back out as a Fortran character variable  ',&
-' declaration.                                                                ',&
-'                                                                             ',&
-'OPTIONS                                                                      ',&
-'                                                                             ',&
-'    filename             name of file to encode                              ',&
-'    --version,-v         Print version information on standard output then   ',&
-'                         exit successfully.                                  ',&
-'    --help,-h            Print usage information on standard output then     ',&
-'                         exit successfully.                                  ',&
-'EXAMPLE                                                                      ',&
-'   Sample commands                                                           ',&
-'                                                                             ',&
-'    txt2f90 input > output.f90                                               ',&
-'                                                                             ',&
-'SEE ALSO                                                                     ',&
-'    prep(1)                                                                  ',&
+'   txt2f90(1f) - [FUNIX:ENCODE] encode a file as a Fortran character            ',&
+'   variable declaration                                                         ',&
+'   (LICENSE:MIT)                                                                ',&
+'                                                                                ',&
+'SYNOPSIS                                                                        ',&
+'    txt2f90 [FILE]                                                              ',&
+'    |[ --help|--version]                                                        ',&
+'                                                                                ',&
+'DESCRIPTION                                                                     ',&
+' Read a file or stdin and write it back out as a Fortran character variable     ',&
+' declaration.                                                                   ',&
+'                                                                                ',&
+'OPTIONS                                                                         ',&
+'                                                                                ',&
+'    filename             name of file to encode                                 ',&
+'    --version,-v         Print version information on standard output then      ',&
+'                         exit successfully.                                     ',&
+'    --help,-h            Print usage information on standard output then        ',&
+'                         exit successfully.                                     ',&
+'EXAMPLE                                                                         ',&
+'   Sample commands                                                              ',&
+'                                                                                ',&
+'    txt2f90 input > output.f90                                                  ',&
+'SEE ALSO                                                                        ',&
+'    prep(1)                                                                     ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
-'PRODUCT:        GPF (General Purpose Fortran) utilities and examples     ',&
-'PROGRAM:        txt2f90(1f)                                              ',&
-'DESCRIPTION:    encode a file as a Fortran character variable declaration',&
-'VERSION:        1.0, 2024-11-24                                          ',&
-'AUTHOR:         John S. Urban                                            ',&
-'LICENSE:        MIT                                                      ',&
+'PRODUCT:        GPF (General Purpose Fortran) utilities and examples            ',&
+'PROGRAM:        txt2f90(1f)                                                     ',&
+'DESCRIPTION:    encode a file as a Fortran character variable declaration       ',&
+'VERSION:        1.0, 2024-11-24                                                 ',&
+'AUTHOR:         John S. Urban                                                   ',&
+'LICENSE:        MIT                                                             ',&
 '']
 end subroutine setup
 end program txt2f90

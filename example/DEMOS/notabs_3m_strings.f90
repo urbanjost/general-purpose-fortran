@@ -19,9 +19,9 @@
      write(*,*)'['//string//']'
      contains
      subroutine makefile(lun)
-     integer :: lun
-     integer :: i
-     character(len=80),parameter  :: fakefile(*)=[character(len=80) :: &
+     integer                     :: lun
+     integer                     :: i
+     character(len=80),parameter :: fakefile(*)=[character(len=80) :: &
      'col1'//t//'col2' ,&
      'a'//t//'one'     ,&
      'bb'//t//'two'    ,&

@@ -1,0 +1,203 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bsplpp (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bsplpp (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de Boor (7 may 92)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>alls</B> </TD><TD valign=bottom>
+bsplvb
+<TABLE width=100% cellpadding=3><!-- tsb: bsplvb
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>onverts the b-representation</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t, bcoef, n, k  of some spline into its
+<TABLE width=100% cellpadding=3><!-- tsb: t, bcoef, n, k  of some spline into its
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>pp-representation</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+break, coef, l, k .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>t&#46;&#46;&#46;..knot sequence, of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n+k
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>bcoef&#46;&#46;&#46;..b-spline coefficient sequence, of length</B> <!-- Consumed .TP -->
+<BR>
+<B>n&#46;&#46;&#46;..length of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+bcoef  and  dimension of spline space  spline(k,t)
+k&#46;&#46;&#46;..order of the spline
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>w a r n i n g</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+[char46] . .  the restriction   k .le. kmax (= 20)   is impo-
+<TABLE width=100% cellpadding=3><!-- tsb: [char46] . .  the restriction   k .le. kmax (= 20)   is impo-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>sed by the arbitrary dimension statement for</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+biatx  below, but
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>is</B> </TD><TD valign=bottom>
+n o w h e r e   c h e c k e d   for.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+w o r k   a r e a  ******
+<TABLE width=100% cellpadding=3><!-- tsb: w o r k   a r e a  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>scrtch&#46;&#46;&#46;...of size</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(k,k) , needed to contain bcoeffs of a piece of
+<TABLE width=100% cellpadding=3><!-- tsb: (k,k) , needed to contain bcoeffs of a piece of
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>the spline and its</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k-1  derivatives
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>break&#46;&#46;&#46;..breakpoint sequence, of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+l+1, contains (in increas-
+<TABLE width=100% cellpadding=3><!-- tsb: l+1, contains (in increas-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>ing order) the distinct points in the sequence</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t(k),&#46;&#46;&#46;,t(n+1)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>coef&#46;&#46;&#46;..array of size (k,l), with</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+coef(i,j) = (i-1)st derivative of
+spline at break(j) from the right
+l&#46;&#46;&#46;..number of polynomial pieces which make up the spline in the in-
+<TABLE width=100% cellpadding=3><!-- tsb: coef(i,j) = (i-1)st derivative of
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>terval</B> </TD><TD valign=bottom>
+(t(k), t(n+1))
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>for each breakpoint interval, the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k  relevant b-coeffs of the
+spline are found and then differenced repeatedly to get the b-coeffs
+of all the derivatives of the spline on that interval. the spline and
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>its first</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+k-1  derivatives are then evaluated at the left end point
+<TABLE width=100% cellpadding=3><!-- tsb: k-1  derivatives are then evaluated at the left end point
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>of that interval, using</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+bsplvb  repeatedly to obtain the values of
+all b-splines of the appropriate order at that point.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bsplpp (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 424d86af-8f7e-447a-83ee-40137c44e683 using man macros.</FONT>
+<br><br><center><img src="images/bsplpp.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

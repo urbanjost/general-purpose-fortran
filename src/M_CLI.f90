@@ -464,7 +464,7 @@ end subroutine check_commandline
 !!     and add it to the NAMELIST definition.
 !!
 !!     Note that since all the arguments are defined in a NAMELIST group that
-!!     config files can easily be used for the same options.  Just create
+!!     config files can easily be used for the same options. Just create
 !!     a NAMELIST input file and read it.
 !!
 !!     NAMELIST syntax can vary between different programming environments.

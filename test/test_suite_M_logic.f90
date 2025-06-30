@@ -17,7 +17,7 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_cond()
 
-use M_framework__verify, only      : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only      : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
 use M_strings, only    : lower, delim, v2s  ! convert character case and split a string
 use M_calculator, only : inum0 
 use M_io, only         : gulp
@@ -87,7 +87,7 @@ expected=[ CHARACTER(LEN=128) :: &
 'COMMENT ! GOT TO END',&
 '']
    rewind(io)
-   call unit_check_start('cond')                           ! Change database entry to indicate changes have begun
+   call unit_test_start('cond')                           ! Change database entry to indicate changes have begun
    READLINE: do                                            ! read loop to read input file
       read(io,'(a)',iostat=ios) line
       if(ios.ne.0)then
@@ -120,8 +120,8 @@ expected=[ CHARACTER(LEN=128) :: &
 !  assuming check_count is set to zero initially and  incremented only in the sections it should not an error
 !  if variable is not zero.
    icheck=inum0('check_count')
-   call unit_check('cond',icheck.eq.0,'CALCULATOR VARIABLE check_count should be zero',icheck)
-   call unit_check('cond',nest_level.eq.0,'nesting level should be zero at end of file')
+   call unit_test('cond',icheck.eq.0,'CALCULATOR VARIABLE check_count should be zero',icheck)
+   call unit_test('cond',nest_level.eq.0,'nesting level should be zero at end of file')
 !-----------------------------------------------------------------------------------------------------------------------------------
    ! reopen ioout as a stream for use with gulp(3f)
    close(unit=ioout)
@@ -130,12 +130,12 @@ expected=[ CHARACTER(LEN=128) :: &
    close(unit=ioout,iostat=ios,status='delete')
 
    if(.not.allocated(text))then
-      call unit_check_bad('cond','failed to load file of expected results') ! flag that got unexpected ending
+      call unit_test_bad('cond','failed to load file of expected results') ! flag that got unexpected ending
    else
       do i=1,size(text)
-         call unit_check('cond',text(i).eq.expected(i),'EXPECTED:',expected(i),'GOT:',text(i))
+         call unit_test('cond',text(i).eq.expected(i),'EXPECTED:',expected(i),'GOT:',text(i))
       enddo
-      call unit_check_done('cond') ! flag that got unexpected ending
+      call unit_test_done('cond') ! flag that got unexpected ending
    endif
 
    if(allocated(text))then
@@ -156,10 +156,10 @@ end module M_test_suite_M_logic
 !==================================================================================================================================!
 program runtest
 use M_framework__msg
-use M_framework__verify, only : unit_check_stop
+use M_framework__verify, only : unit_test_stop
 use M_test_suite_M_logic
 implicit none
    call test_suite_M_logic()
-   call unit_check_stop()
+   call unit_test_stop()
 end program runtest
 !==================================================================================================================================!

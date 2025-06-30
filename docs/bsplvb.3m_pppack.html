@@ -1,0 +1,305 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bsplvb (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bsplvb (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>calculates the value of all possibly nonzero b-splines at</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+x  of order
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+               jout  =  max( jhigh , (j+1)*(index-1) )
+<P>
+</PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>with knot sequence</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>t&#46;&#46;&#46;..knot sequence, of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+left + jout  , assumed to be nonde-
+<TABLE width=100% cellpadding=3><!-- tsb: left + jout  , assumed to be nonde-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>creasing.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a s s u m p t i o n . . . .
+<TABLE width=100% cellpadding=3><!-- tsb: a s s u m p t i o n . . . .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>t(left)</B> </TD><TD valign=bottom>
+[char46]lt.  t(left + 1)   .
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>d i v i s i o n</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+b y  z e r o  will result if  t(left) = t(left+1)
+jhigh,
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>index&#46;&#46;&#46;..integers which determine the order</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+jout = max(jhigh,
+<TABLE width=100% cellpadding=3><!-- tsb: jout = max(jhigh,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>(j+1)*(index-1))</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+of the b-splines whose values at  x  are to
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>be returned.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+index  is used to avoid recalculations when seve-
+ral columns of the triangular array of b-spline values are nee-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ded (e.g., in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+bsplpp  or in  bsplvd ). precisely,
+<TABLE width=100% cellpadding=3><!-- tsb: bsplpp  or in  bsplvd ). precisely,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>if</B> </TD><TD valign=bottom>
+index = 1 ,
+the calculation starts from scratch and the entire triangular
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>array of b-spline values of orders 1,2,&#46;&#46;&#46;,jhigh</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is generated
+order by order , i.e., column by column .
+<TABLE width=100% cellpadding=3><!-- tsb: is generated
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>if</B> </TD><TD valign=bottom>
+index = 2 ,
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>only the b-spline values of order</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+j+1, j+2, &#46;&#46;&#46;, jout  are ge-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>nerated, the assumption being that</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+biatx , j , deltal , deltar
+are, on entry, as they were on exit at the previous call.
+<TABLE width=100% cellpadding=3><!-- tsb: biatx , j , deltal , deltar
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>in particular, if</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+jhigh = 0, then  jout = j+1, i.e., just
+the next column of b-spline values is generated.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>w a r n i n g . . .</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the restriction   jout .le. jmax (= 20)  is im-
+<TABLE width=100% cellpadding=3><!-- tsb: the restriction   jout .le. jmax (= 20)  is im-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>posed arbitrarily by the dimension statement for</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+deltal  and
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>deltar</B> </TD><TD valign=bottom>
+below, but is  n o w h e r e  c h e c k e d  for .
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+x&#46;&#46;&#46;..the point at which the b-splines are to be evaluated.
+left&#46;&#46;&#46;..an integer chosen (usually) so that
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>t(left) .le. x .le. t(left+1)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>biatx&#46;&#46;&#46;..array of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+jout , with  biatx(i)  containing the val-
+<TABLE width=100% cellpadding=3><!-- tsb: jout , with  biatx(i)  containing the val-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ue at</B> </TD><TD valign=bottom>
+x  of the polynomial of order  jout  which agrees with
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the b-spline</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+b(left-jout+i,jout,t)  on the interval (t(left),
+t(left+1)) .
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+the recurrence relation
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                       x - t(i)              t(i+j+1) - x
+</PRE>
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>b(i,j+1)(x)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+=  <B>-----------b</B>(i,j)(x) + <B>---------------b</B>(i+1,j)(x)
+<TABLE width=100% cellpadding=3><!-- tsb: =  <B>-----------b</B>(i,j)(x) + <B>---------------b</B>(i+1,j)(x)
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>t(i+j)</B><B>-t</B>(i) </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t(i+j+1)<B>-t</B>(i+1)
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>is used (repeatedly) to generate the (j+1)</B><B>-vector</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+b(left-j,j+1)(x),
+<TABLE width=100% cellpadding=3><!-- tsb: b(left-j,j+1)(x),
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>&#46;&#46;&#46;,b(left,j+1)(x)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+from the j-vector  b(left-j+1,j)(x),...,
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>b(left,j)(x), storing the new values in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+biatx  over the old. the
+facts that
+<TABLE width=100% cellpadding=3><!-- tsb: biatx  over the old. the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>b(i,1) = 1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+if  t(i) .le. x .lt. t(i+1)
+and that
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>b(i,j)(x) = 0</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+unless  t(i) .le. x .lt. t(i+j)
+are used. the particular organization of the calculations follows al-
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>gorithm</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(8)  in chapter x of the text.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+     real biatx(jhigh),t(*),x,   deltal(20),deltar(20),saved,term
+     dimension biatx(jout), t(left+jout)
+</PRE>
+current fortran standard makes it impossible to specify the length of
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>t</B> </TD><TD valign=bottom>
+and of  biatx  precisely without the introduction of otherwise
+superfluous additional arguments.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bsplvb (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4d798d82-6cb8-4074-8591-836614302e10 using man macros.</FONT>
+<br><br><center><img src="images/bsplvb.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

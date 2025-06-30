@@ -77,7 +77,7 @@ Syntax:
 <PRE>
       [ construct-name : ] ASSOCIATE ( associate-name =&gt; selector &#46;&#46;&#46;)
         :
-        : the associate-block; a sequence of zero or more statements or constructs
+        : the associate-block; zero or more statements or constructs
         :
       END ASSOCIATE [ construct-name ]
 <P>
@@ -132,8 +132,8 @@ CONSTRUCT-NAME
 <P>
             MYNAME: associate
              :
-        if(something_is_true) exit MYNAME
-         :
+            if(something_is_true) exit MYNAME
+             :
             end associate MYNAME
 <P>
 </PRE>
@@ -379,7 +379,7 @@ cobounds of each codimension of the associating entity are the same as
 those of the selector.
 <P>
 The associating entity itself is a variable, but if the selector is not
-a deﬁnable variable, the associating entity is not definable and shall
+a definable variable, the associating entity is not definable and shall
 not be defined or become undefined.
 <P>
 If a selector is not permitted to appear in a variable definition
@@ -453,7 +453,9 @@ association with an array section:
 The next example illustrates multiple associations.
 <P>
 <PRE>
-           associate ( w =&gt; result(i,j)%w, zx =&gt; ax%b(i,j)%d, zy =&gt; ay%b(i,j)%d )
+           associate ( w =&gt; result(i,j)%w, &
+           & zx =&gt; ax%b(i,j)%d, &
+           & zy =&gt; ay%b(i,j)%d )
              w = zx*x + zy*y
            end associate
 <P>
@@ -484,41 +486,40 @@ Sample program:
        character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
        character :: array(-5:5,-5:5)      ! custom non-normal bounds
        ! note the different between queries of ARRAY versus ARRAY(:,:)
-          write(*,g)&#146;array:     &#146;,  &#146;lbound=&#146;,lbound(array), &
-                                    &#146;ubound=&#146;,ubound(array)
-          write(*,g)&#146;array(:,:): &#146;, &#146;lbound=&#146;,lbound(array(:,:)), &
-                                    &#146;ubound=&#146;,ubound(array(:,:))
+         write(*,g)&#146;array:     &#146;,  &#146;lbound=&#146;,lbound(array), &
+                                   &#146;ubound=&#146;,ubound(array)
+         write(*,g)&#146;array(:,:): &#146;, &#146;lbound=&#146;,lbound(array(:,:)), &
+                                   &#146;ubound=&#146;,ubound(array(:,:))
        ! the bounds assigned to the identifiers are what UBOUND(3f)
        ! and LBOUND(3f) return given the selector as an argument
-          associate ( &
-             alias=&gt;   array,              & ! keeps the custom bounds
-             normal=&gt;  array(:,:),         & ! gets normal bounds
-             quadI=&gt;   array(+1:+5,-5:-1), & ! quad* will have normal bounds
-             quadII=&gt;  array(-5:-1,-5:-1), & !
-             quadIII=&gt; array(-5:-1,+1:+5), & !
-             quadIV=&gt;  array(+1:+5,+1:+5), & !
-             xaxis=&gt;array(:,0), &
-             yaxis=&gt;array(0,:) &
-             )
-             array=&#146;.&#146; ! selector name is still valid in the block
-             xaxis=&#146;-&#146;
-             yaxis=&#146;|&#146;
-             alias(0,0)=&#146;+&#146; ! uses non-normal bounds, equivalent to array(0,0)=&#146;+&#146;
-             write(*,&#146;(11(g0,1x))&#146;) alias
-             ! the quads have normalized dimension bounds (1:5,1:5):
-             quadI    =  &#146;1&#146;;  quadI(1,1)    =  &#146;a&#146;;  quadI(5,5)    =  &#146;A&#146;
-             quadII   =  &#146;2&#146;;  quadII(1,1)   =  &#146;b&#146;;  quadII(5,5)   =  &#146;B&#146;
-             quadIII  =  &#146;3&#146;;  quadIII(1,1)  =  &#146;c&#146;;  quadIII(5,5)  =  &#146;C&#146;
-             quadIV   =  &#146;4&#146;;  quadIV(1,1)   =  &#146;d&#146;;  quadIV(5,5)   =  &#146;D&#146;
-             write(*,&#146;(11(g0,1x))&#146;) alias
-<P>
-             write(*,g)&#146;array:   lbound=&#146;,lbound(array),  &#146;ubound=&#146;,ubound(array)
-             write(*,g)&#146;alias:   lbound=&#146;,lbound(alias),  &#146;ubound=&#146;,ubound(alias)
-             write(*,g)&#146;normal:  lbound=&#146;,lbound(normal), &#146;ubound=&#146;,ubound(normal)
-             write(*,g)&#146;quadI:   lbound=&#146;,lbound(quadI),  &#146;ubound=&#146;,ubound(quadI)
-             write(*,g)&#146;quadII:  lbound=&#146;,lbound(quadII), &#146;ubound=&#146;,ubound(quadII)
-             write(*,g)&#146;quadIV:  lbound=&#146;,lbound(quadIV), &#146;ubound=&#146;,ubound(quadIV)
-          end associate
+         associate ( &
+          alias=&gt;   array,              & ! keeps the custom bounds
+          normal=&gt;  array(:,:),         & ! gets normal bounds
+          quadI=&gt;   array(+1:+5,-5:-1), & ! quad* will have normal bounds
+          quadII=&gt;  array(-5:-1,-5:-1), & !
+          quadIII=&gt; array(-5:-1,+1:+5), & !
+          quadIV=&gt;  array(+1:+5,+1:+5), & !
+          xaxis=&gt;array(:,0), &
+          yaxis=&gt;array(0,:) &
+          )
+          array=&#146;.&#146; ! selector name is still valid in the block
+          xaxis=&#146;-&#146;
+          yaxis=&#146;|&#146;
+          alias(0,0)=&#146;+&#146; ! uses non-normal bounds, equivalent to array(0,0)=&#146;+&#146;
+          write(*,&#146;(11(g0,1x))&#146;) alias
+          ! the quads have normalized dimension bounds (1:5,1:5):
+          quadI    =  &#146;1&#146;;  quadI(1,1)    =  &#146;a&#146;;  quadI(5,5)    =  &#146;A&#146;
+          quadII   =  &#146;2&#146;;  quadII(1,1)   =  &#146;b&#146;;  quadII(5,5)   =  &#146;B&#146;
+          quadIII  =  &#146;3&#146;;  quadIII(1,1)  =  &#146;c&#146;;  quadIII(5,5)  =  &#146;C&#146;
+          quadIV   =  &#146;4&#146;;  quadIV(1,1)   =  &#146;d&#146;;  quadIV(5,5)   =  &#146;D&#146;
+          write(*,&#146;(11(g0,1x))&#146;) alias
+          write(*,g)&#146;array:  lbound=&#146;,lbound(array), &#146;ubound=&#146;,ubound(array)
+          write(*,g)&#146;alias:  lbound=&#146;,lbound(alias), &#146;ubound=&#146;,ubound(alias)
+          write(*,g)&#146;normal: lbound=&#146;,lbound(normal),&#146;ubound=&#146;,ubound(normal)
+          write(*,g)&#146;quadI:  lbound=&#146;,lbound(quadI), &#146;ubound=&#146;,ubound(quadI)
+          write(*,g)&#146;quadII: lbound=&#146;,lbound(quadII),&#146;ubound=&#146;,ubound(quadII)
+          write(*,g)&#146;quadIV: lbound=&#146;,lbound(quadIV),&#146;ubound=&#146;,ubound(quadIV)
+         end associate
        end program demo_associate
 <P>
 </PRE>
@@ -565,7 +566,7 @@ block is entered?
 <P>
 Selected variable names are still accessible in the ASSOCIATE block.
 This is confusing and should be avoided, particular if the selectors are
-allocatable or pointers. This is similiar to variables passed as
+allocatable or pointers. This is similar to variables passed as
 arguments to contained procedures but referenced via the argument name
 and the name in the surrounding scope. The behavior is ill-defined. Does
 a change to the argument take affect immediately or upon return from the
@@ -594,11 +595,14 @@ longer exist?
 <P>
 </PRE>
 are you allowed to allocate v to a different size before the ASSOCIATE
-is terminated? If so, what happens to c? &#145;&#145;&#145;fortran program
-demonstrate_associate implicit none integer, allocatable :: v(:) v =
-[3,4]
+is terminated? If so, what happens to c?
 <P>
 <PRE>
+         program demonstrate_associate
+         implicit none
+         integer, allocatable :: v(:)
+         v = [3,4]
+<P>
          associate (c =&gt; v) ; call disp("1",v,c)
          c = c*10           ; call disp("2",v,c)
          v = [2,4,6]        ; call disp("3",v,c)
@@ -642,14 +646,13 @@ is equivalent to
        type(type(a)),intent(in) :: a(..) ! if a in an expression
        type(type(a))            :: a(..) ! if a in a variable
        end subroutine assoc
+       ! somewhat like the parameters being class(*) but without all the
+       ! SELECT statements like type(type(a)) worked.
 <P>
-       ! somewhat like the parameters being class(*) but without all the SELECT statements
-       ! like type(type(a)) worked.
-<P>
-       ! so "a" in the subroutine does not have the allocatable, optional, or pointer
-       ! attributes even if AA did, and it is up to the programmer to make sure AA is allocated
-       ! or assigned a target or present if optional when making the call if it has those
-       ! attributes.
+       ! so "a" in the subroutine does not have the allocatable, optional,
+       ! or pointer attributes even if AA did, and it is up to the programmer
+       ! to make sure AA is allocated or assigned a target or present if
+       ! optional when making the call if it has those attributes.
 <P>
        ! but it can have the target attribute.
 <P>
@@ -719,7 +722,7 @@ case)
 <TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>associate (7)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e43be77d-4f4c-4c8d-acf3-170b027e9cc4 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>associate (7)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 18c52c54-38b9-4f90-900c-a4dbee49d4ed using man macros.</FONT>
 <br><br><center><img src="images/associate.7fortran.gif"></center>
 </div>
 </div>

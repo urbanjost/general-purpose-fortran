@@ -1,0 +1,283 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>smooth (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>smooth (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>calls</B> </TD><TD valign=bottom>
+setupq, chol1d
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>constructs the cubic smoothing spline</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  to given data  (x(i),y(i)),
+i=1,&#46;&#46;&#46;,npoint, which has as small a second derivative as possible
+while
+s(f) = sum( ((y(i)<B>-f</B>(x(i)))/dy(i))**2 , i=1,&#46;&#46;&#46;,npoint ) .le. s .
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>x(1),&#46;&#46;&#46;,x(npoint)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+data abscissae,  a s s u m e d  to be strictly
+increasing .
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>y(1),&#46;&#46;&#46;,y(npoint)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+corresponding data ordinates .
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>dy(1),&#46;&#46;&#46;,dy(npoint)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+estimate of uncertainty in data,  a s s u m-
+<TABLE width=100% cellpadding=3><!-- tsb: estimate of uncertainty in data,  a s s u m-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>e d</B> </TD><TD valign=bottom>
+to be positive .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>npoint&#46;&#46;&#46;..number of data points,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a s s u m e d  .gt. 1
+s&#46;&#46;&#46;..upper bound on the discrete weighted mean square distance of
+<TABLE width=100% cellpadding=3><!-- tsb: a s s u m e d  .gt. 1
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>the approximation</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  from the data .
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+w o r k  a r r a y s  *****
+v&#46;&#46;&#46;..of size (npoint,7)
+a&#46;&#46;&#46;..of size (npoint,4)
+<TABLE width=100% cellpadding=3><!-- tsb: w o r k  a r r a y s  *****
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>*****</B> </TD><TD valign=bottom>
+o u t p u t  *****
+a(.,1)&#46;&#46;&#46;..contains the sequence of smoothed ordinates .
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  *****
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>a(i,j) = f^(j-1)(x(i)), j=2,3,4, i=1,&#46;&#46;&#46;,npoint-1 ,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+i.e., the
+<TABLE width=100% cellpadding=3><!-- tsb: i.e., the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>first three derivatives of the smoothing spline</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  at the
+left end of each of the data intervals .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>w a r n i n g . . .</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  would have to be transposed before it
+<TABLE width=100% cellpadding=3><!-- tsb: a  would have to be transposed before it
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>could be used in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+ppvalu .
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>The matrices</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Q-transp*d  and  Q-transp*D**2*Q  are constructed in
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>s e t u p q</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+from  x  and  dy , as is the vector  qty = Q-transp*y .
+<TABLE width=100% cellpadding=3><!-- tsb: from  x  and  dy , as is the vector  qty = Q-transp*y .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Then, for given</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+p , the vector  u  is determined in  c h o l 1 d  as
+the solution of the linear system
+<TABLE width=100% cellpadding=3><!-- tsb: p , the vector  u  is determined in  c h o l 1 d  as
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>(6(1-p)Q-transp*D**2*Q + p*Q)u</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+= qty  .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>From</B> </TD><TD valign=bottom>
+u , the smoothing spline  f  (for this choice of smoothing par-
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ameter</B> </TD><TD valign=bottom>
+p ) is obtained in the sense that
+<TABLE width=100% cellpadding=3><!-- tsb: p ) is obtained in the sense that
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>f(x(.))</B> </TD><TD valign=bottom>
+=  y - 6(1-p)D**2*Q*u        and
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>f&#146;&#146;(x(.))</B> </TD><TD valign=bottom>
+=  6*p*u                      .
+<TABLE width=100% cellpadding=3><!-- tsb: =  6*p*u                      .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>The smoothing parameter</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+p  is found (if possible) so that
+<TABLE width=100% cellpadding=3><!-- tsb: p  is found (if possible) so that
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>sf(p)</B> </TD><TD valign=bottom>
+=  s ,
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>with</B> </TD><TD valign=bottom>
+sf(p) = s(f) , where  f  is the smoothing spline as it depends
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>on</B> </TD><TD valign=bottom>
+p .  if  s = 0, then p = 1 . if  sf(0) .le. s , then p = 0 .
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Otherwise, the secant method is used to locate an appropriate</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+p  in
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the open interval</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(0,1) . However, straightforward application of
+the secant method, as done in the original version of this program,
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>can be very slow and is influenced by the units in which</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+x  and  y
+are measured, as C. Reinsch has pointed out. Instead, on recommend-
+ation from C. Reinsch, the secant method is applied to the function
+g:q |--&gt; 1/sqrt{sfq(q)} - 1/sqrt{s} ,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>with</B> </TD><TD valign=bottom>
+sfq(q) := sf(q/(1+q)), since  1/sqrt{sfq}  is monotone increasing
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>and close to linear for larger</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+q . One starts at  q = 0  with a
+Newton step, i.e.,
+<TABLE width=100% cellpadding=3><!-- tsb: q . One starts at  q = 0  with a
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>q_0 = 0,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+q_1 = <B>-g</B>(0)/g&#146;(0)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>with</B> </TD><TD valign=bottom>
+g&#146;(0) = -(1/2) sfq(0)^{<B>-3</B>/2} dsfq, where dsfq = <B>-12</B>*u-transp*r*u ,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>and</B> </TD><TD valign=bottom>
+u  as obtained for  p = 0 . Iteration terminates as soon as
+abs(sf - s) .le. .01*s .
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>smooth (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 27b43555-6364-4770-8b64-e8628403ba63 using man macros.</FONT>
+<br><br><center><img src="images/smooth.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,280 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>splopt (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>splopt (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+alls bsplvb, banfac/slv
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>omputes the knots</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t  for the optimal recovery scheme of order  k
+<TABLE width=100% cellpadding=3><!-- tsb: t  for the optimal recovery scheme of order  k
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>for data at</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+tau(i), i=1,&#46;&#46;&#46;,n .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>tau&#46;&#46;&#46;..array of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n , containing the interpolation points.
+<TABLE width=100% cellpadding=3><!-- tsb: n , containing the interpolation points.
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>a s s u m e d</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+to be nondecreasing, with tau(i).lt.tau(i+k),all i.
+n&#46;&#46;&#46;..number of data points .
+k&#46;&#46;&#46;..order of the optimal recovery scheme to be used .
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+w o r k  a r r a y  *****
+<TABLE width=100% cellpadding=3><!-- tsb: w o r k  a r r a y  *****
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>scrtch&#46;&#46;&#46;..array of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(n-k)(2k+3) + 5k + 3 . the various
+contents are specified in the text below .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+iflag&#46;&#46;&#46;..integer indicating success (=1) or failure (=2) .
+if iflag = 1, then
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>t&#46;&#46;&#46;..array of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n+k  containing the optimal knots ready for
+<TABLE width=100% cellpadding=3><!-- tsb: n+k  containing the optimal knots ready for
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>use in optimal recovery. specifically,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t(1) = &#46;&#46;&#46; = t(k) =
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>tau(1)</B> </TD><TD valign=bottom>
+and  t(n+1) = &#46;&#46;&#46; = t(n+k) = tau(n) , while the  n-k
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>interior knots</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t(k+1), &#46;&#46;&#46;, t(n)  are calculated as described
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>below under</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+*method* .
+if iflag = 2, then
+k .lt. 3, or n .lt. k, or a certain linear system was found to
+be singular.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+p r i n t e d  o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: p r i n t e d  o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>a comment will be printed in case</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+iflag = 2  or newton iterations
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>failed to converge in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n e w t m x  iterations .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>the (interior) knots</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t(k+1), &#46;&#46;&#46;, t(n)  are determined by newtons
+method in such a way that the signum function which changes sign at
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>t(k+1), &#46;&#46;&#46;, t(n)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+and nowhere else in  (tau(1),tau(n)) is orthogon-
+<TABLE width=100% cellpadding=3><!-- tsb: and nowhere else in  (tau(1),tau(n)) is orthogon-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>al to the spline space</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+spline( k , tau )  on that interval .
+<TABLE width=100% cellpadding=3><!-- tsb: spline( k , tau )  on that interval .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>let</B> </TD><TD valign=bottom>
+xi(j)  be the current guess for  t(k+j), j=1,&#46;&#46;&#46;,n-k. then
+the next newton iterate is of the form
+<TABLE width=100% cellpadding=3><!-- tsb: xi(j)  be the current guess for  t(k+j), j=1,&#46;&#46;&#46;,n-k. then
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>xi(j)</B> </TD><TD valign=bottom>
++  (-)**(n-k-j)*x(j)  ,  j=1,&#46;&#46;&#46;,n-k,
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>with</B> </TD><TD valign=bottom>
+x  the solution of the linear system
+<TABLE width=100% cellpadding=3><!-- tsb: x  the solution of the linear system
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>c*x</B> </TD><TD valign=bottom>
+=  d  .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>here,</B> </TD><TD valign=bottom>
+c(i,j) = b(i)(xi(j)), all j, with  b(i)  the i-th b-spline of
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>order</B> </TD><TD valign=bottom>
+k  for the knot sequence  tau , all i, and  d  is the vector
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>given by</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+d(i) = sum( <B>-a</B>(j) , j=i,&#46;&#46;&#46;,n )*(tau(i+k)<B>-tau</B>(i))/k, all i,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>with</B> </TD><TD valign=bottom>
+a(i) = sum ( (-)**(n-k-j)*b(i,k+1,tau)(xi(j)) , j=1,&#46;&#46;&#46;,n-k )
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>for i=1,&#46;&#46;&#46;,n-1, and</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a(n) = -.5 .
+<TABLE width=100% cellpadding=3><!-- tsb: a(n) = -.5 .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>(see chapter</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+xiii  of text and references there for a derivation)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the first guess for</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t(k+j)  is  (tau(j+1)+&#46;&#46;&#46;+tau(j+k-1))/(k-1) .
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>iteration terminates if</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+max(abs(x(j))) .lt. t o l  , with
+<TABLE width=100% cellpadding=3><!-- tsb: max(abs(x(j))) .lt. t o l  , with
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>t o l</B> </TD><TD valign=bottom>
+=  t o l r t e *(tau(n)<B>-tau</B>(1))/(n-k) ,
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>or else after</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+n e w t m x  iterations , currently,
+newtmx, tolrte / 10, .000001
+<P>
+dimension scrtch((n-k)*(2*k+3)+5*k+3), t(n+k)
+current fortran standard makes it impossible to specify the precise dim-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ensions of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+scrtch  and  t  without the introduction of otherwise
+superfluous additional arguments .
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>splopt (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a76b1647-dc3b-4658-a48b-94843d135e86 using man macros.</FONT>
+<br><br><center><img src="images/splopt.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

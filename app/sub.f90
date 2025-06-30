@@ -146,83 +146,80 @@ logical                      :: exists, open
 
 end subroutine dofile
 
-!>
-!!##NAME
-!!      scratch(3f) - [M_io:QUERY] Return the name of a scratch file
-!!      (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!     function scratch(prefix) result(tname)
-!!
-!!      character(len=:),allocatable         :: tname
-!!      character(len=*),intent(in),optional :: prefix
-!!##DESCRIPTION
-!!
-!!    Fortran supports non-retainable scratch files via
-!!    OPEN(STATUS='SCRATCH',...) . There are circumstances where a file with
-!!    a unique name is required instead. Specifying the pathname of a file
-!!    can be required for performance reasons, file space limitations, or
-!!    to support the ability for other processes or subprocesses to access
-!!    the file.
-!!
-!!    SCRATCH(3f) Return the name of a scratch file in the scratch directory
-!!    set by the most common environment variables used to designate a
-!!    scratch directory unless the prefix contains the character "/" or "\".
-!!
-!!    $TMPDIR is the canonical environment variable in Unix and POSIX[1]
-!!    used to specify a temporary directory for scratch space. If $TMPDIR
-!!    is not set, $TEMP, $TEMPDIR, and $TMP are examined in that order. If
-!!    nothing is set "/tmp/" is used.
-!!
-!!##OPTIONS
-!!    prefix  an optional prefix for the leaf of the filename. A suffix
-!!            created by genuuid(3) is used to make the name unique. The
-!!            prefix is used as-is if it contains the character "/" or
-!!            "\". Otherwise, the prefix is prefixed by the first value
-!!            that is not blank from the set
-!!            {$TMPDIR, $TEMP, $TEMPDIR, $TMP, /tmp}.
-!!
-!!            The default prefix is the basename of the program that
-!!            called the procedure (the name trimmed of directories and
-!!            anything from the right-most period in the name to the end
-!!            of the name).
-!!##EXAMPLE
-!!
-!!   Sample:
-!!
-!!     program demo_scratch
-!!     use M_io, only : scratch
-!!     implicit none
-!!     write(*,*)'find good scratch file name candidates; one should test if writable'
-!!     call printit('JUNK:')
-!!     call printit('./')
-!!     call printit('/var/tmp/')
-!!     call printit('')
-!!     call printit()
-!!     contains
-!!     subroutine printit(NAME)
-!!     character(len=*),intent(in),optional :: NAME
-!!     if(present(NAME))then
-!!        write(*,'(a,t20,a)')NAME,scratch(NAME)
-!!     else
-!!        write(*,'(a,t20,a)')'*NOT PRESENT*',scratch()
-!!     endif
-!!     end subroutine printit
-!!     end program demo_scratch
-!!
-!!   Results:
-!!
-!!    >  find good scratch file name candidates; one should test if writable
-!!    > JUNK:              /tmp/JUNK:405d766e-1320-4405-50e1-5d88fffbee9a.scr
-!!    > ./                 ./xx-901606b1-6ad2-4e96-6b17-e8bffedf2452.scr
-!!    > /var/tmp/          /var/tmp/xx-3f5c55fa-17ca-4020-4a05-a9d9cfad8dbe.scr
-!!    >                    /tmp/f10e0491-a2ff-4455-5ff6-55d7dfe7fa8c.scr
-!!    > *NOT PRESENT*      /tmp/xx-f4fed5f7-3694-4609-5af4-8902ffa75839.scr
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
+! NAME
+!      scratch(3f) - [M_io:QUERY] Return the name of a scratch file
+!      (LICENSE:PD)
+! SYNOPSIS
+!     function scratch(prefix) result(tname)
+! 
+!      character(len=:),allocatable         :: tname
+!      character(len=*),intent(in),optional :: prefix
+! DESCRIPTION
+! 
+!    Fortran supports non-retainable scratch files via
+!    OPEN(STATUS='SCRATCH',...) . There are circumstances where a file with
+!    a unique name is required instead. Specifying the pathname of a file
+!    can be required for performance reasons, file space limitations, or
+!    to support the ability for other processes or subprocesses to access
+!    the file.
+! 
+!    SCRATCH(3f) Return the name of a scratch file in the scratch directory
+!    set by the most common environment variables used to designate a
+!    scratch directory unless the prefix contains the character "/" or "\".
+! 
+!    $TMPDIR is the canonical environment variable in Unix and POSIX[1]
+!    used to specify a temporary directory for scratch space. If $TMPDIR
+!    is not set, $TEMP, $TEMPDIR, and $TMP are examined in that order. If
+!    nothing is set "/tmp/" is used.
+! 
+! OPTIONS
+!    prefix  an optional prefix for the leaf of the filename. A suffix
+!            created by genuuid(3) is used to make the name unique. The
+!            prefix is used as-is if it contains the character "/" or
+!            "\". Otherwise, the prefix is prefixed by the first value
+!            that is not blank from the set
+!            {$TMPDIR, $TEMP, $TEMPDIR, $TMP, /tmp}.
+! 
+!            The default prefix is the basename of the program that
+!            called the procedure (the name trimmed of directories and
+!            anything from the right-most period in the name to the end
+!            of the name).
+! EXAMPLE
+!   Sample:
+! 
+!     program demo_scratch
+!     use M_io, only : scratch
+!     implicit none
+!     write(*,*)'find good scratch file name candidates; one should test if writable'
+!     call printit('JUNK:')
+!     call printit('./')
+!     call printit('/var/tmp/')
+!     call printit('')
+!     call printit()
+!     contains
+!     subroutine printit(NAME)
+!     character(len=*),intent(in),optional :: NAME
+!     if(present(NAME))then
+!        write(*,'(a,t20,a)')NAME,scratch(NAME)
+!     else
+!        write(*,'(a,t20,a)')'*NOT PRESENT*',scratch()
+!     endif
+!     end subroutine printit
+!     end program demo_scratch
+! 
+!   Results:
+! 
+!    >  find good scratch file name candidates; one should test if writable
+!    > JUNK:              /tmp/JUNK:405d766e-1320-4405-50e1-5d88fffbee9a.scr
+!    > ./                 ./xx-901606b1-6ad2-4e96-6b17-e8bffedf2452.scr
+!    > /var/tmp/          /var/tmp/xx-3f5c55fa-17ca-4020-4a05-a9d9cfad8dbe.scr
+!    >                    /tmp/f10e0491-a2ff-4455-5ff6-55d7dfe7fa8c.scr
+!    > *NOT PRESENT*      /tmp/xx-f4fed5f7-3694-4609-5af4-8902ffa75839.scr
+! 
+! AUTHOR
+!    John S. Urban
+! LICENSE
+!    Public Domain
 function scratch(prefix) result(tname)
 
 ! ident_1="@(#) M_io scratch(3f) Return the name of a scratch file"

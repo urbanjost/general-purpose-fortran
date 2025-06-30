@@ -1,0 +1,247 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>newnot (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>returns</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+lnew+1  knots in  brknew  which are equidistributed on (a,b)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>= (break(1),break(l+1)) wrto a certain monotone fctn</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+g  related to
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the k-th root of the k-th derivative of the pp function</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  whose pp-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>representation is contained in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+break, coef, l, k .
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t ******
+break, coef, l, k&#46;&#46;&#46;..contains the pp-representation of a certain
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>function</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  of order  k . Specifically,
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>d**(k-1)f(x) = coef(k,i)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+for  break(i).le. x .lt.break(i+1)
+lnew&#46;&#46;&#46;..number of intervals into which the interval (a,b) is to be
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>sectioned by the new breakpoint sequence</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+brknew .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>brknew&#46;&#46;&#46;..array of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+lnew+1  containing the new breakpoint se-
+quence
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>coefg&#46;&#46;&#46;..the coefficient part of the pp-repr.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+break, coefg, l, 2
+<TABLE width=100% cellpadding=3><!-- tsb: break, coefg, l, 2
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>for the monotone p.linear function</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+g  wrto which  brknew  will
+be equidistributed.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+optional  p r i n t e d  o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: optional  p r i n t e d  o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>coefg&#46;&#46;&#46;..the pp coeffs of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+g  are printed out if  iprint  is set
+<TABLE width=100% cellpadding=3><!-- tsb: g  are printed out if  iprint  is set
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>.gt. 0</B> </TD><TD valign=bottom>
+in data statement below.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>The k-th derivative of the given pp function</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+f  does not exist
+(except perhaps as a linear combination of delta functions). Never-
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>theless, we construct a p.constant function</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+h  with breakpoint se-
+<TABLE width=100% cellpadding=3><!-- tsb: h  with breakpoint se-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>quence</B> </TD><TD valign=bottom>
+break  which is approximately proportional to abs(d**k(f)).
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>Specifically, on</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(break(i), break(i+1)),
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+     abs(jump at break(i) of pc)    abs(jump at break(i+1) of pc)
+</PRE>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>h = --------------------------</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
++  ----------------------------
+<TABLE width=100% cellpadding=3><!-- tsb: +  ----------------------------
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>break(i+1) - break(i-1)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+break(i+2) - break(i)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>with</B> </TD><TD valign=bottom>
+pc  the p.constant (k-1)st derivative of  f .
+<TABLE width=100% cellpadding=3><!-- tsb: pc  the p.constant (k-1)st derivative of  f .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>Then, the p.linear function</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+g  is constructed as
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>g(x)</B> </TD><TD valign=bottom>
+=  integral of  h(y)**(1/k)  for  y  from  a  to  x
+<TABLE width=100% cellpadding=3><!-- tsb: =  integral of  h(y)**(1/k)  for  y  from  a  to  x
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>and its pp coeffs. stored in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+coefg .
+<TABLE width=100% cellpadding=3><!-- tsb: coefg .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>then</B> </TD><TD valign=bottom>
+brknew  is determined by
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+        brknew(i)  =  a + g**(-1)((i-1)*step) , i=1,&#46;&#46;&#46;,lnew+1
+<P>
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>where</B> </TD><TD valign=bottom>
+step = g(b)/lnew  and  (a,b) = (break(1),break(l+1)) .
+<TABLE width=100% cellpadding=3><!-- tsb: step = g(b)/lnew  and  (a,b) = (break(1),break(l+1)) .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>In the event that</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+pc = d**(k-1)(f) is constant in  (a,b)  and
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>therefore</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+h = 0 identically,  brknew  is chosen uniformly spaced.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>newnot (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from df6d780c-0e4c-4234-bd40-194323e78eb0 using man macros.</FONT>
+<br><br><center><img src="images/newnot.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -65,50 +65,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!      area_of_simple_polygon(1f) - determine area of simple (non-intersecting) polygon given coordinates of points
-!!      (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!      area_of_simple_polygon [file(s)|[ --help| --version]]
-!!##DESCRIPTION
-!!      read file(s) composed of lines of xy pairs and calculate
-!!      area of polygon, assuming points define a simple (non-intersecting)
-!!      polygon. If not closed, the last point will be connected to the
-!!      first point.
-!!
-!!      Shows example of reading arguments from command line of arbitrary
-!!      length and files of numbers of arbitrary size.
-!!##OPTIONS
-!!      filenames  name of files containing xy pairs defining a simple polygon
-!!      --help     display this help and exit
-!!      --version   output version information and exit
-!!##EXAMPLE
-!!
-!!   Given file in.1 with the following contents:
-!!
-!!    -5 -5
-!!    0 0
-!!    -5 5
-!!    5 5
-!!    0 0
-!!    5 -5
-!!
-!!   Expected output:
-!!
-!!              14           7           2
-!!    -5.0000000000000000 -5.0000000000000000
-!!    0.0000000000000000 0.0000000000000000
-!!    -5.0000000000000000 5.0000000000000000
-!!    5.0000000000000000 5.0000000000000000
-!!    0.0000000000000000 0.0000000000000000
-!!    5.0000000000000000 -5.0000000000000000
-!!     area=  -50.000000000000000
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -128,7 +84,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20181231>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2025-02-23 19:26:05 UTC-300>',&
+'@(#)COMPILED:       2025-06-29 07:11:07 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

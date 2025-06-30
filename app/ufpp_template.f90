@@ -64,7 +64,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180223>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2025-02-23 19:25:49 UTC-300>',&
+'@(#)COMPILED:       2025-06-29 08:21:56 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -90,8 +90,8 @@ example_text=[ CHARACTER(LEN=128) :: &
 'program krackenbasic                                                                                                      ',&
 'use M_kracken, only : kracken, retrev, lget, rget, iget, sget, sgets                                                      ',&
 'use M_strings, only : describe                                                                                            ',&
-'use M_debug,   only : unit_check                                                                                          ',&
-'use M_debug,   only : unit_check_start, unit_check_good                                                                   ',&
+'use M_debug,   only : unit_test                                                                                           ',&
+'use M_debug,   only : unit_test_start, unit_test_good                                                                     ',&
 'implicit none                                                                                                             ',&
 '                                                                                                                          ',&
 '@@(#) module::name(3f) description                                                                                        ',&
@@ -133,9 +133,9 @@ example_text=[ CHARACTER(LEN=128) :: &
 '                                                                                                                          ',&
 '   call execute_command_line(''goodbad xmple start'')                                                                     ',&
 '   ! or                                                                                                                   ',&
-'   call unit_check_start(''xmple'')                                                                                       ',&
+'   call unit_test_start(''xmple'')                                                                                        ',&
 '!!                                                                                                                        ',&
-'   call unit_check(''xmple'',describe(char(126)).ne.''~ tilde'')                                                          ',&
+'   call unit_test(''xmple'',describe(char(126)).ne.''~ tilde'')                                                           ',&
 '   ! or                                                                                                                   ',&
 '   if (describe( char(126) ).ne. ''~ tilde'') then                                                                        ',&
 '      write(*,*)''DESCRIBE OUTPUT=[''//describe(char(126))//'']''                                                         ',&
@@ -146,7 +146,7 @@ example_text=[ CHARACTER(LEN=128) :: &
 '   ! if got here without being stopped assume passed test                                                                 ',&
 '   call execute_command_line(''goodbad xmple good'')                                                                      ',&
 '   ! or                                                                                                                   ',&
-'   call unit_check_good(''xmple'')                                                                                        ',&
+'   call unit_test_good(''xmple'')                                                                                         ',&
 '                                                                                                                          ',&
 'contains                                                                                                                  ',&
 '                                                                                                                          ',&

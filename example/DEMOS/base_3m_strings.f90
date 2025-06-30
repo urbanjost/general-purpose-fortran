@@ -1,9 +1,9 @@
      program demo_base
      use M_strings, only: base
      implicit none
-     integer           :: ba, bd, i
-     character(len=40) :: x, y
-     character(len=*), parameter :: input(*) = [character(len=80) :: &
+     integer                      :: ba, bd, i
+     character(len=40)            :: x, y
+     character(len=*), parameter  :: input(*) = [character(len=80) :: &
         '10 12345 10', &
         '2 10111 10', &
         '10 12345 20', &

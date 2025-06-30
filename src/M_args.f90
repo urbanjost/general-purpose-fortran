@@ -107,7 +107,7 @@
 !!##LICENSE
 !!    Public Domain
 module M_args
-use M_framework__journal, only : journal
+use M_framework, only : journal
 use M_list,    only : insert, locate, replace, remove
 use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT,stdin=>INPUT_UNIT    ! access computing environment
 use M_strings, only : isupper, lower, quote, upper
@@ -242,7 +242,7 @@ end function get_command_arguments_stack
 !!   Sample usage
 !!
 !!    program demo_get_command_arguments_string
-!!    use M_framework__journal, only : journal
+!!    use M_framework, only : journal
 !!    use M_args, only : get_command_arguments_string
 !!    implicit none
 !!    integer :: ier

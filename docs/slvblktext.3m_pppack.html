@@ -1,0 +1,395 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>slvblktext (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>slvblktext (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>this program solves</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the  linear system  a*x = b  where a is an
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>almost block diagonal matrix.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+such almost block diagonal matrices
+arise naturally in piecewise polynomial interpolation or approx-
+imation and in finite element methods for two-point boundary value
+<TABLE width=100% cellpadding=3><!-- tsb: such almost block diagonal matrices
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>problems.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+the plu factorization method is implemented here to take
+advantage of the special structure of such systems for savings in
+computing time and storage requirements.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                  parameters
+</PRE>
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>bloks</B> </TD><TD valign=bottom>
+a one-dimenional array, of length
+sum( integs(1,i)*integs(2,i) ; i = 1,nbloks )
+on input, contains the blocks of the almost block diagonal
+<TABLE width=100% cellpadding=3><!-- tsb: a one-dimenional array, of length
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>matrix</B> </TD><TD valign=bottom>
+a  .  the array integs (see below and the example)
+describes the block structure.
+on output, contains correspondingly the plu factorization
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>of</B> </TD><TD valign=bottom>
+a  (if iflag .ne. 0).  certain of the entries into bloks
+are arbitrary (where the blocks overlap).
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>integs</B> </TD><TD valign=bottom>
+integer array description of the block structure of  a .
+<TABLE width=100% cellpadding=3><!-- tsb: integer array description of the block structure of  a .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>integs(1,i) = no. of rows of block i</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+=  nrow
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integs(2,i) = no. of colums of block i</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+=  ncol
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>integs(3,i) = no. of elim. steps in block i =</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+last
+<TABLE width=100% cellpadding=3><!-- tsb: last
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>i</B> </TD><TD valign=bottom>
+= 1,2,&#46;&#46;&#46;,nbloks
+the linear system is of order
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>n</B> </TD><TD valign=bottom>
+=  sum ( integs(3,i) , i=1,&#46;&#46;&#46;,nbloks ),
+but the total number of rows in the blocks is
+nbrows = sum( integs(1,i) ; i = 1,&#46;&#46;&#46;,nbloks)
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>nbloks</B> </TD><TD valign=bottom>
+number of blocks
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>b</B> </TD><TD valign=bottom>
+right side of the linear system, array of length nbrows.
+certain of the entries are arbitrary, corresponding to
+rows of the blocks which overlap (see block structure and
+the example below).
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ipivot</B> </TD><TD valign=bottom>
+on output, integer array containing the pivoting sequence
+used. length is nbrows
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>x</B> </TD><TD valign=bottom>
+on output, contains the computed solution (if iflag .ne. 0)
+length is n.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>iflag</B> </TD><TD valign=bottom>
+on output, integer
+= (<B>-1</B>)**(no. of interchanges during factorization)
+<TABLE width=100% cellpadding=3><!-- tsb: on output, integer
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>if</B> </TD><TD valign=bottom>
+a  is invertible
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>= 0</B> </TD><TD valign=bottom>
+if  a  is singular
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                   auxiliary programs
+</PRE>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>fcblok (bloks,integs,nbloks,ipivot,scrtch,iflag)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+factors the matrix
+a , and is used for this purpose in slvblk. its arguments
+are as in slvblk, except for
+scrtch = a work array of length max(integs(1,i)).
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>sbblok (bloks,integs,nbloks,ipivot,b,x)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+solves the system a*x = b
+<TABLE width=100% cellpadding=3><!-- tsb: solves the system a*x = b
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>once</B> </TD><TD valign=bottom>
+a  is factored. this is done automatically by slvblk
+for one right side b, but subsequent solutions may be
+obtained for additional b-vectors. the arguments are all
+as in slvblk.
+</TD></TR>
+<TR></TR></TABLE><!-- .PP -->
+</TD></TR>
+<TR><TD colspan=2>
+dtblok (bloks,integs,nbloks,ipivot,iflag,detsgn,detlog) computes the
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>determinant of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  once slvblk or fcblok has done the fact-
+orization.the first five arguments are as in slvblk.
+<TABLE width=100% cellpadding=3><!-- tsb: a  once slvblk or fcblok has done the fact-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>detsgn</B> </TD><TD valign=bottom>
+= sign of the determinant
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>detlog</B> </TD><TD valign=bottom>
+= natural log of the determinant
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>------ block structure of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  ------
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the nbloks blocks are stored consecutively in the array</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+bloks .
+the first block has its (1,1)<B>-entry</B> at bloks(1), and, if the i-th
+block has its (1,1)<B>-entry</B> at bloks(index(i)), then
+<TABLE width=100% cellpadding=3><!-- tsb: bloks .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>index(i+1) = index(i)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
++  nrow(i)*ncol(i) .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>the blocks are pieced together to give the interesting part of</B> <!-- Consumed .TP -->
+<BR>
+<B>as follows.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+for i = 1,2,&#46;&#46;&#46;,nbloks-1, the (1,1)<B>-entry</B> of the next
+block (the (i+1)st block ) corresponds to the (last+1,last+1)<B>-entry</B>
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>of the current i-th block.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+recall last = integs(3,i) and note that
+this means that
+<TABLE width=100% cellpadding=3><!-- tsb: recall last = integs(3,i) and note that
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>a. every block starts on the diagonal of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a .
+b. the blocks overlap (usually). the rows of the (i+1)st block
+which are overlapped by the i-th block may be arbitrarily de-
+fined initially. they are overwritten during elimination.
+the right side for the equations in the i-th block are stored cor-
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>respondingly as the last entries of a piece of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+b  of length  nrow
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>(= integs(1,i)) and following immediately in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+b  the corresponding
+piece for the right side of the preceding block, with the right side
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>for the first block starting at</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+b(1) . in this, the right side for
+an equation need only be specified once on input, in the first block
+in which the equation appears.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+             ------ example and test driver ------
+</PRE>
+the test driver for this package contains an example, a linear
+system of order 11, whose nonzero entries are indicated in the fol-
+lowing schema by their row and column index modulo 10. next to it
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>are the contents of the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+integs  arrray when the matrix is taken to
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>be almost block diagonal with</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+nbloks = 5, and below it are the five
+blocks.
+</TD></TR>
+<TR><TD colspan=2>
+<PRE>
+                      nrow1 = 3, ncol1 = 4
+</PRE>
+11 12 13 14
+</TD></TR>
+<TR><TD width=6%>&nbsp;</TD><TD>
+<TABLE width=100% cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>21 22 23 24</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+nrow2 = 3, ncol2 = 3
+31 32 33 34
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>last1 = 2</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+43 44 45
+<TABLE width=100% cellpadding=3><!-- tsb: 43 44 45
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>53 54 55</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+nrow3 = 3, ncol3 = 4
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>last2 = 3</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+66 67 68 69   nrow4 = 3, ncol4 = 4
+<TABLE width=100% cellpadding=3><!-- tsb: 66 67 68 69   nrow4 = 3, ncol4 = 4
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>76 77 78 79</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+nrow5 = 4, ncol5 = 4
+86 87 88 89
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>last3 = 1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+97 98 99 90
+<TABLE width=100% cellpadding=3><!-- tsb: 97 98 99 90
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>last4 = 1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+08 09 00 01
+18 19 10 11
+last5 = 4
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>actual input to bloks shown by rows of blocks of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a .
+(the ** items are arbitrary, this storage is used by slvblk)
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>11 12 13 14</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+/ ** ** **  / 66 67 68 69  / ** ** ** **  / ** ** ** **
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>21 22 23 24 /</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+43 44 45 /  76 77 78 79 /  ** ** ** ** /  ** ** ** **
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>31 32 33 34/</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+53 54 55/   86 87 88 89/   97 98 99 90/   08 09 00 01
+18 19 10 11
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>index = 1</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+index = 13  index = 22     index = 34     index = 46
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+         actual right side values with ** for arbitrary values
+</PRE>
+b1 b2 b3 ** b4 b5 b6 b7 b8 ** ** b9 ** ** b10 b11
+<P>
+(it would have been more efficient to combine block 3 with block 4)
+<P>
+<PRE>
+     in the call to fcblok,  x  is used for temporary storage.
+</PRE>
+</TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>slvblktext (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from beeb6c0d-efac-422a-832f-74260b0a280d using man macros.</FONT>
+<br><br><center><img src="images/slvblktext.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

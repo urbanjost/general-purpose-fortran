@@ -40,7 +40,7 @@
          ! This technique can let your code gracefully handle being used with
          ! problems bigger than it was intended for, or not loop infinitely
          ! if some unexpected or incorrect input or condition is encountered.
-         ! It might make it stop unitentionally as well.
+         ! It might make it stop unintentionally as well.
            !
             ! run a loop but quit as soon as 200 random integers are odd
             j=0
@@ -86,7 +86,7 @@
          ! It is simple to EXIT nested loops from an inner loop.
          ! Just use a construct name. Lets start with the nested loop above
          ! that only repeatedly exited the inner loop and label the outer
-         ! loop "OUTER". Now our exit can explicity name what loop it wants
+         ! loop "OUTER". Now our exit can explicitly name what loop it wants
          ! to exit ...
 
             k=0
@@ -153,7 +153,7 @@
          !x!LOOP_2 : DO I = 1, 15
          !x!  CRITICAL
          !x!    N = N + 1
-         !x!    IF (N > I) EXIT LOOP_2 ! cannott EXIT outer construct from inside
+         !x!    IF (N > I) EXIT LOOP_2 ! cannot EXIT outer construct from inside
          !x!  END CRITICAL             ! CHANGE TEAM, DO CONCURRENT, or CRITICAL
          !x!END DO LOOP_2
 

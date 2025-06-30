@@ -8,8 +8,8 @@ contains
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_steam67()
-use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_framework__verify, only : unit_check_mode
+use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_framework__verify, only : unit_test_mode
 
 !! setup
    call test_condl67()
@@ -66,345 +66,345 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_condl67()
 
-   call unit_check_start('condl67',msg='')
-   !!call unit_check('condl67', 0.eq.0, 'checking',100
-   call unit_check_done('condl67',msg='')
+   call unit_test_start('condl67',msg='')
+   !!call unit_test('condl67', 0.eq.0, 'checking',100
+   call unit_test_done('condl67',msg='')
 end subroutine test_condl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_condv67()
 
-   call unit_check_start('condv67',msg='')
-   !!call unit_check('condv67', 0.eq.0, 'checking',100
-   call unit_check_done('condv67',msg='')
+   call unit_test_start('condv67',msg='')
+   !!call unit_test('condv67', 0.eq.0, 'checking',100
+   call unit_test_done('condv67',msg='')
 end subroutine test_condv67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_cpl67()
 
-   call unit_check_start('cpl67',msg='')
-   !!call unit_check('cpl67', 0.eq.0, 'checking',100
-   call unit_check_done('cpl67',msg='')
+   call unit_test_start('cpl67',msg='')
+   !!call unit_test('cpl67', 0.eq.0, 'checking',100
+   call unit_test_done('cpl67',msg='')
 end subroutine test_cpl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_cpv67()
 
-   call unit_check_start('cpv67',msg='')
-   !!call unit_check('cpv67', 0.eq.0, 'checking',100
-   call unit_check_done('cpv67',msg='')
+   call unit_test_start('cpv67',msg='')
+   !!call unit_test('cpv67', 0.eq.0, 'checking',100
+   call unit_test_done('cpv67',msg='')
 end subroutine test_cpv67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_crflo67()
 
-   call unit_check_start('crflo67',msg='')
-   !!call unit_check('crflo67', 0.eq.0, 'checking',100
-   call unit_check_done('crflo67',msg='')
+   call unit_test_start('crflo67',msg='')
+   !!call unit_test('crflo67', 0.eq.0, 'checking',100
+   call unit_test_done('crflo67',msg='')
 end subroutine test_crflo67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_critvs67()
 
-   call unit_check_start('critvs67',msg='')
-   !!call unit_check('critvs67', 0.eq.0, 'checking',100
-   call unit_check_done('critvs67',msg='')
+   call unit_test_start('critvs67',msg='')
+   !!call unit_test('critvs67', 0.eq.0, 'checking',100
+   call unit_test_done('critvs67',msg='')
 end subroutine test_critvs67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_critvw67()
 
-   call unit_check_start('critvw67',msg='')
-   !!call unit_check('critvw67', 0.eq.0, 'checking',100
-   call unit_check_done('critvw67',msg='')
+   call unit_test_start('critvw67',msg='')
+   !!call unit_test('critvw67', 0.eq.0, 'checking',100
+   call unit_test_done('critvw67',msg='')
 end subroutine test_critvw67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_crvel67()
 
-   call unit_check_start('crvel67',msg='')
-   !!call unit_check('crvel67', 0.eq.0, 'checking',100
-   call unit_check_done('crvel67',msg='')
+   call unit_test_start('crvel67',msg='')
+   !!call unit_test('crvel67', 0.eq.0, 'checking',100
+   call unit_test_done('crvel67',msg='')
 end subroutine test_crvel67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hcl67()
 
-   call unit_check_start('hcl67',msg='')
-   !!call unit_check('hcl67', 0.eq.0, 'checking',100
-   call unit_check_done('hcl67',msg='')
+   call unit_test_start('hcl67',msg='')
+   !!call unit_test('hcl67', 0.eq.0, 'checking',100
+   call unit_test_done('hcl67',msg='')
 end subroutine test_hcl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hcsl67()
 
-   call unit_check_start('hcsl67',msg='')
-   !!call unit_check('hcsl67', 0.eq.0, 'checking',100
-   call unit_check_done('hcsl67',msg='')
+   call unit_test_start('hcsl67',msg='')
+   !!call unit_test('hcsl67', 0.eq.0, 'checking',100
+   call unit_test_done('hcsl67',msg='')
 end subroutine test_hcsl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hcslv167()
 
-   call unit_check_start('hcslv167',msg='')
-   !!call unit_check('hcslv167', 0.eq.0, 'checking',100
-   call unit_check_done('hcslv167',msg='')
+   call unit_test_start('hcslv167',msg='')
+   !!call unit_test('hcslv167', 0.eq.0, 'checking',100
+   call unit_test_done('hcslv167',msg='')
 end subroutine test_hcslv167
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hcslv267()
 
-   call unit_check_start('hcslv267',msg='')
-   !!call unit_check('hcslv267', 0.eq.0, 'checking',100
-   call unit_check_done('hcslv267',msg='')
+   call unit_test_start('hcslv267',msg='')
+   !!call unit_test('hcslv267', 0.eq.0, 'checking',100
+   call unit_test_done('hcslv267',msg='')
 end subroutine test_hcslv267
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hisiss67()
 
-   call unit_check_start('hisiss67',msg='')
-   !!call unit_check('hisiss67', 0.eq.0, 'checking',100
-   call unit_check_done('hisiss67',msg='')
+   call unit_test_start('hisiss67',msg='')
+   !!call unit_test('hisiss67', 0.eq.0, 'checking',100
+   call unit_test_done('hisiss67',msg='')
 end subroutine test_hisiss67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hpsiss67()
 
-   call unit_check_start('hpsiss67',msg='')
-   !!call unit_check('hpsiss67', 0.eq.0, 'checking',100
-   call unit_check_done('hpsiss67',msg='')
+   call unit_test_start('hpsiss67',msg='')
+   !!call unit_test('hpsiss67', 0.eq.0, 'checking',100
+   call unit_test_done('hpsiss67',msg='')
 end subroutine test_hpsiss67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hsl67()
 
-   call unit_check_start('hsl67',msg='')
-   !!call unit_check('hsl67', 0.eq.0, 'checking',100
-   call unit_check_done('hsl67',msg='')
+   call unit_test_start('hsl67',msg='')
+   !!call unit_test('hsl67', 0.eq.0, 'checking',100
+   call unit_test_done('hsl67',msg='')
 end subroutine test_hsl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hss167()
 
-   call unit_check_start('hss167',msg='')
-   !!call unit_check('hss167', 0.eq.0, 'checking',100
-   call unit_check_done('hss167',msg='')
+   call unit_test_start('hss167',msg='')
+   !!call unit_test('hss167', 0.eq.0, 'checking',100
+   call unit_test_done('hss167',msg='')
 end subroutine test_hss167
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hss67()
 
-   call unit_check_start('hss67',msg='')
-   !!call unit_check('hss67', 0.eq.0, 'checking',100
-   call unit_check_done('hss67',msg='')
+   call unit_test_start('hss67',msg='')
+   !!call unit_test('hss67', 0.eq.0, 'checking',100
+   call unit_test_done('hss67',msg='')
 end subroutine test_hss67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hssicl67()
 
-   call unit_check_start('hssicl67',msg='')
-   !!call unit_check('hssicl67', 0.eq.0, 'checking',100
-   call unit_check_done('hssicl67',msg='')
+   call unit_test_start('hssicl67',msg='')
+   !!call unit_test('hssicl67', 0.eq.0, 'checking',100
+   call unit_test_done('hssicl67',msg='')
 end subroutine test_hssicl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hssiss67()
 
-   call unit_check_start('hssiss67',msg='')
-   !!call unit_check('hssiss67', 0.eq.0, 'checking',100
-   call unit_check_done('hssiss67',msg='')
+   call unit_test_start('hssiss67',msg='')
+   !!call unit_test('hssiss67', 0.eq.0, 'checking',100
+   call unit_test_done('hssiss67',msg='')
 end subroutine test_hssiss67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hsv67()
 
-   call unit_check_start('hsv67',msg='')
-   !!call unit_check('hsv67', 0.eq.0, 'checking',100
-   call unit_check_done('hsv67',msg='')
+   call unit_test_start('hsv67',msg='')
+   !!call unit_test('hsv67', 0.eq.0, 'checking',100
+   call unit_test_done('hsv67',msg='')
 end subroutine test_hsv67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_pls67()
 
-   call unit_check_start('pls67',msg='')
-   !!call unit_check('pls67', 0.eq.0, 'checking',100
-   call unit_check_done('pls67',msg='')
+   call unit_test_start('pls67',msg='')
+   !!call unit_test('pls67', 0.eq.0, 'checking',100
+   call unit_test_done('pls67',msg='')
 end subroutine test_pls67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_prliq67()
 
-   call unit_check_start('prliq67',msg='')
-   !!call unit_check('prliq67', 0.eq.0, 'checking',100
-   call unit_check_done('prliq67',msg='')
+   call unit_test_start('prliq67',msg='')
+   !!call unit_test('prliq67', 0.eq.0, 'checking',100
+   call unit_test_done('prliq67',msg='')
 end subroutine test_prliq67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_prstm67()
 
-   call unit_check_start('prstm67',msg='')
-   !!call unit_check('prstm67', 0.eq.0, 'checking',100
-   call unit_check_done('prstm67',msg='')
+   call unit_test_start('prstm67',msg='')
+   !!call unit_test('prstm67', 0.eq.0, 'checking',100
+   call unit_test_done('prstm67',msg='')
 end subroutine test_prstm67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_psl167()
 
-   call unit_check_start('psl167',msg='')
-   !!call unit_check('psl167', 0.eq.0, 'checking',100
-   call unit_check_done('psl167',msg='')
+   call unit_test_start('psl167',msg='')
+   !!call unit_test('psl167', 0.eq.0, 'checking',100
+   call unit_test_done('psl167',msg='')
 end subroutine test_psl167
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_psl67()
 
-   call unit_check_start('psl67',msg='')
-   !!call unit_check('psl67', 0.eq.0, 'checking',100
-   call unit_check_done('psl67',msg='')
+   call unit_test_start('psl67',msg='')
+   !!call unit_test('psl67', 0.eq.0, 'checking',100
+   call unit_test_done('psl67',msg='')
 end subroutine test_psl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_psv167()
 
-   call unit_check_start('psv167',msg='')
-   !!call unit_check('psv167', 0.eq.0, 'checking',100
-   call unit_check_done('psv167',msg='')
+   call unit_test_start('psv167',msg='')
+   !!call unit_test('psv167', 0.eq.0, 'checking',100
+   call unit_test_done('psv167',msg='')
 end subroutine test_psv167
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_psv267()
 
-   call unit_check_start('psv267',msg='')
-   !!call unit_check('psv267', 0.eq.0, 'checking',100
-   call unit_check_done('psv267',msg='')
+   call unit_test_start('psv267',msg='')
+   !!call unit_test('psv267', 0.eq.0, 'checking',100
+   call unit_test_done('psv267',msg='')
 end subroutine test_psv267
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_psv67()
 
-   call unit_check_start('psv67',msg='')
-   !!call unit_check('psv67', 0.eq.0, 'checking',100
-   call unit_check_done('psv67',msg='')
+   call unit_test_start('psv67',msg='')
+   !!call unit_test('psv67', 0.eq.0, 'checking',100
+   call unit_test_done('psv67',msg='')
 end subroutine test_psv67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sisiss67()
 
-   call unit_check_start('sisiss67',msg='')
-   !!call unit_check('sisiss67', 0.eq.0, 'checking',100
-   call unit_check_done('sisiss67',msg='')
+   call unit_test_start('sisiss67',msg='')
+   !!call unit_test('sisiss67', 0.eq.0, 'checking',100
+   call unit_test_done('sisiss67',msg='')
 end subroutine test_sisiss67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_spsiss67()
 
-   call unit_check_start('spsiss67',msg='')
-   !!call unit_check('spsiss67', 0.eq.0, 'checking',100
-   call unit_check_done('spsiss67',msg='')
+   call unit_test_start('spsiss67',msg='')
+   !!call unit_test('spsiss67', 0.eq.0, 'checking',100
+   call unit_test_done('spsiss67',msg='')
 end subroutine test_spsiss67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_ssl67()
 
-   call unit_check_start('ssl67',msg='')
-   !!call unit_check('ssl67', 0.eq.0, 'checking',100
-   call unit_check_done('ssl67',msg='')
+   call unit_test_start('ssl67',msg='')
+   !!call unit_test('ssl67', 0.eq.0, 'checking',100
+   call unit_test_done('ssl67',msg='')
 end subroutine test_ssl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sssicl67()
 
-   call unit_check_start('sssicl67',msg='')
-   !!call unit_check('sssicl67', 0.eq.0, 'checking',100
-   call unit_check_done('sssicl67',msg='')
+   call unit_test_start('sssicl67',msg='')
+   !!call unit_test('sssicl67', 0.eq.0, 'checking',100
+   call unit_test_done('sssicl67',msg='')
 end subroutine test_sssicl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sssiss67()
 
-   call unit_check_start('sssiss67',msg='')
-   !!call unit_check('sssiss67', 0.eq.0, 'checking',100
-   call unit_check_done('sssiss67',msg='')
+   call unit_test_start('sssiss67',msg='')
+   !!call unit_test('sssiss67', 0.eq.0, 'checking',100
+   call unit_test_done('sssiss67',msg='')
 end subroutine test_sssiss67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_steamv67()
 
-   call unit_check_start('steamv67',msg='')
-   !!call unit_check('steamv67', 0.eq.0, 'checking',100
-   call unit_check_done('steamv67',msg='')
+   call unit_test_start('steamv67',msg='')
+   !!call unit_test('steamv67', 0.eq.0, 'checking',100
+   call unit_test_done('steamv67',msg='')
 end subroutine test_steamv67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tph67()
 
-   call unit_check_start('tph67',msg='')
-   !!call unit_check('tph67', 0.eq.0, 'checking',100
-   call unit_check_done('tph67',msg='')
+   call unit_test_start('tph67',msg='')
+   !!call unit_test('tph67', 0.eq.0, 'checking',100
+   call unit_test_done('tph67',msg='')
 end subroutine test_tph67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tphl67()
 
-   call unit_check_start('tphl67',msg='')
-   !!call unit_check('tphl67', 0.eq.0, 'checking',100
-   call unit_check_done('tphl67',msg='')
+   call unit_test_start('tphl67',msg='')
+   !!call unit_test('tphl67', 0.eq.0, 'checking',100
+   call unit_test_done('tphl67',msg='')
 end subroutine test_tphl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tps67()
 
-   call unit_check_start('tps67',msg='')
-   !!call unit_check('tps67', 0.eq.0, 'checking',100
-   call unit_check_done('tps67',msg='')
+   call unit_test_start('tps67',msg='')
+   !!call unit_test('tps67', 0.eq.0, 'checking',100
+   call unit_test_done('tps67',msg='')
 end subroutine test_tps67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tpsl67()
 
-   call unit_check_start('tpsl67',msg='')
-   !!call unit_check('tpsl67', 0.eq.0, 'checking',100
-   call unit_check_done('tpsl67',msg='')
+   call unit_test_start('tpsl67',msg='')
+   !!call unit_test('tpsl67', 0.eq.0, 'checking',100
+   call unit_test_done('tpsl67',msg='')
 end subroutine test_tpsl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tsl167()
 
-   call unit_check_start('tsl167',msg='')
-   !!call unit_check('tsl167', 0.eq.0, 'checking',100
-   call unit_check_done('tsl167',msg='')
+   call unit_test_start('tsl167',msg='')
+   !!call unit_test('tsl167', 0.eq.0, 'checking',100
+   call unit_test_done('tsl167',msg='')
 end subroutine test_tsl167
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tsl67()
 
-   call unit_check_start('tsl67',msg='')
-   !!call unit_check('tsl67', 0.eq.0, 'checking',100
-   call unit_check_done('tsl67',msg='')
+   call unit_test_start('tsl67',msg='')
+   !!call unit_test('tsl67', 0.eq.0, 'checking',100
+   call unit_test_done('tsl67',msg='')
 end subroutine test_tsl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_tslh67()
 
-   call unit_check_start('tslh67',msg='')
-   !!call unit_check('tslh67', 0.eq.0, 'checking',100
-   call unit_check_done('tslh67',msg='')
+   call unit_test_start('tslh67',msg='')
+   !!call unit_test('tslh67', 0.eq.0, 'checking',100
+   call unit_test_done('tslh67',msg='')
 end subroutine test_tslh67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_vcl67()
 
-   call unit_check_start('vcl67',msg='')
-   !!call unit_check('vcl67', 0.eq.0, 'checking',100
-   call unit_check_done('vcl67',msg='')
+   call unit_test_start('vcl67',msg='')
+   !!call unit_test('vcl67', 0.eq.0, 'checking',100
+   call unit_test_done('vcl67',msg='')
 end subroutine test_vcl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_visl67()
 
-   call unit_check_start('visl67',msg='')
-   !!call unit_check('visl67', 0.eq.0, 'checking',100
-   call unit_check_done('visl67',msg='')
+   call unit_test_start('visl67',msg='')
+   !!call unit_test('visl67', 0.eq.0, 'checking',100
+   call unit_test_done('visl67',msg='')
 end subroutine test_visl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_visv67()
 
-   call unit_check_start('visv67',msg='')
-   !!call unit_check('visv67', 0.eq.0, 'checking',100
-   call unit_check_done('visv67',msg='')
+   call unit_test_start('visv67',msg='')
+   !!call unit_test('visv67', 0.eq.0, 'checking',100
+   call unit_test_done('visv67',msg='')
 end subroutine test_visv67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_vsl67()
 
-   call unit_check_start('vsl67',msg='')
-   !!call unit_check('vsl67', 0.eq.0, 'checking',100
-   call unit_check_done('vsl67',msg='')
+   call unit_test_start('vsl67',msg='')
+   !!call unit_test('vsl67', 0.eq.0, 'checking',100
+   call unit_test_done('vsl67',msg='')
 end subroutine test_vsl67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_zsdh67()
 
-   call unit_check_start('zsdh67',msg='')
-   !!call unit_check('zsdh67', 0.eq.0, 'checking',100
-   call unit_check_done('zsdh67',msg='')
+   call unit_test_start('zsdh67',msg='')
+   !!call unit_test('zsdh67', 0.eq.0, 'checking',100
+   call unit_test_done('zsdh67',msg='')
 end subroutine test_zsdh67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_zsdt67()
 
-   call unit_check_start('zsdt67',msg='')
-   !!call unit_check('zsdt67', 0.eq.0, 'checking',100
-   call unit_check_done('zsdt67',msg='')
+   call unit_test_start('zsdt67',msg='')
+   !!call unit_test('zsdt67', 0.eq.0, 'checking',100
+   call unit_test_done('zsdt67',msg='')
 end subroutine test_zsdt67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_zsrh67()
 
-   call unit_check_start('zsrh67',msg='')
-   !!call unit_check('zsrh67', 0.eq.0, 'checking',100
-   call unit_check_done('zsrh67',msg='')
+   call unit_test_start('zsrh67',msg='')
+   !!call unit_test('zsrh67', 0.eq.0, 'checking',100
+   call unit_test_done('zsrh67',msg='')
 end subroutine test_zsrh67
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_zsrt67()
 
-   call unit_check_start('zsrt67',msg='')
-   !!call unit_check('zsrt67', 0.eq.0, 'checking',100
-   call unit_check_done('zsrt67',msg='')
+   call unit_test_start('zsrt67',msg='')
+   !!call unit_test('zsrt67', 0.eq.0, 'checking',100
+   call unit_test_done('zsrt67',msg='')
 end subroutine test_zsrt67
 !===================================================================================================================================
 end subroutine test_suite_M_steam67
@@ -413,10 +413,10 @@ end module M_test_suite_M_steam67
 !==================================================================================================================================!
 program runtest
 use M_framework__msg
-use M_framework__verify, only : unit_check_stop
+use M_framework__verify, only : unit_test_stop
 use M_test_suite_M_steam67
 implicit none
    call test_suite_M_steam67()
-   call unit_check_stop()
+   call unit_test_stop()
 end program runtest
 !==================================================================================================================================!

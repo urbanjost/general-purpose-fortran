@@ -80,7 +80,7 @@ contains
 !!       #----------------------------------------------------#
 !!       A blank repeats last positioning command. Anything else is ignored.
 !!       Line count is 25 out of 54 . Page size is 23 (see "lines")
-!!       continue ..
+!!       help:
 !!
 !!
 !!    A normal topic is displayed until another topic line (line beginning
@@ -235,6 +235,7 @@ integer                                :: old_position
             if(want_to_stop())exit INFINITE
             if(old_topic /= '')cycle INFINITE
             if(i >= howbig) then
+               if(position(2)>howbig)exit INFINITE
                do j=1,max_toomany
                   call journal('sc','[end-of-file] (line',i,')')
                   position(1)=position(2)+1
@@ -303,6 +304,7 @@ integer                                :: old_position
                endif
                if(want_to_stop())exit INFINITE
                if(i >= howbig) then
+                  if(position(2)>howbig)exit INFINITE
                   do j=1,max_toomany
                      call journal('sc','[end-of-file] (line',i,')')
                      position(1)=position(2)+1
@@ -394,14 +396,14 @@ integer                              :: ierr
    want_to_stop=.false.
    PROMPT: do
       if(position(1)  >  position(2)) then
-         call journal('sc','continue ..')
-         read(stdin,'(a)',iostat=ios) response         ! read letter to pause from standard input
+         call journal('+sc','help:')
+         read(stdin,'(a)',iostat=ios) response                ! read letter to pause from standard input
          if(response.eq.' ')response=last_response
          response=adjustl(response)
          letter=response(1:1)
          select case(letter)
-         case('f')                                        ! next page
-            position(1) = 0                                ! start new page
+         case('f')                                            ! next page
+            position(1) = 0                                   ! start new page
             last_response='f'
          case('b')                                            ! back one page
             call pageback(2)

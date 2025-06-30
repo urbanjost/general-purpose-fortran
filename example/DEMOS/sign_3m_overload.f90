@@ -21,8 +21,8 @@
      & .and. sign(-10.0_real32).eq.-1.0  )
      write(*,*) merge('sign works','sign fails', sign(10.0_real64).eq.1.0d0 &
      & .and. sign(-10.0_real64).eq.-1.0d0 )
-     write(*,*) merge('sign works','sign fails', sign(10.0_real128).eq.1.0  &
-     & .and. sign(-10.0_real128).eq.-1.0 )
+     !write(*,*) merge('sign works','sign fails', sign(10.0_real128).eq.1.0  &
+     !& .and. sign(-10.0_real128).eq.-1.0 )
      !
      !write (*, *) sign(10 < 20)
      !

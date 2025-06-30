@@ -83,17 +83,18 @@ using internal files and list-directed output:
       print *, trim(s)
 <P>
 </PRE>
-but this is cumbersome, and also there is the disadvantage that the result is compiler-dependent.
-M_display has a function, TOSTRING, which overcomes this disadvantage and offers additional
-flexibility. With x = 1.5 the following statement will produce the same output as Matlab and Java
-give:
+but this is cumbersome, and also there is the disadvantage that the
+result is compiler-dependent. M_display has a function, TOSTRING, which
+overcomes this disadvantage and offers additional flexibility. With x =
+1.5 the following statement will produce the same output as Matlab and
+Java give:
 <P>
 <PRE>
       CALL DISP(&#146;The square of &#146;//TOSTRING(X)//&#146; is &#146;//TOSTRING(X*X))
 <P>
 </PRE>
-TOSTRING accepts integer, logical or real scalars or vectors. The subroutine TOSTRING_SET may be
-used to change settings for TOSTRING.
+TOSTRING accepts integer, logical or real scalars or vectors. The
+subroutine TOSTRING_SET may be used to change settings for TOSTRING.
 </BLOCKQUOTE>
 <A name=2>
 
@@ -102,28 +103,31 @@ used to change settings for TOSTRING.
 </A>
 <BLOCKQUOTE>
 <P>
-Apart from the item to be turned into a string, an edit descriptor to use can optionally be
-supplied as the second argument to TOSTRING. The two ways to invoke TOSTRING are:
+Apart from the item to be turned into a string, an edit descriptor to
+use can optionally be supplied as the second argument to TOSTRING. The
+two ways to invoke TOSTRING are:
 <P>
 <PRE>
       TOSTRING(X)
       TOSTRING(X, FMT)
 <P>
 </PRE>
-These invocations return a character string representing the value of the argument X. When X is a
-vector individual elements are separated by a string, with the original (or factory) default value
-", ". By (original) default G editing is used to convert real numbers, I editing integers, and
-blanks are trimmed from (each element of) X, both from the left and the right. In addition
-trailing zeroes are trimmed from the fractional part of real X-elements, as well as a trailing
-decimal point. The separating string, trimming behavior, and default editing may be changed by
-calling TOSTRING_SET
-<TABLE cellpadding=3><!-- tsb: These invocations return a character string representing the value of the argument X. When X is a
+These invocations return a character string representing the value of
+the argument X. When X is a vector individual elements are separated
+by a string, with the original (or factory) default value ", ". By
+(original) default G editing is used to convert real numbers, I editing
+integers, and blanks are trimmed from (each element of) X, both from
+the left and the right. In addition trailing zeroes are trimmed from
+the fractional part of real X-elements, as well as a trailing decimal
+point. The separating string, trimming behavior, and default editing
+may be changed by calling TOSTRING_SET
+<TABLE cellpadding=3><!-- tsb: These invocations return a character string representing the value of
  -->
 <TR></TR><TR></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>X</B> </TD><TD valign=bottom>
-The item to be changed to a string. X may be a scalar or a vector (i.e. of rank 0 or 1) and
-of one of the following kinds:
+The item to be changed to a string. X may be a scalar or a vector
+(i.e. of rank 0 or 1) and of one of the following kinds:
 </TD></TR>
 <TR><TD colspan=2>
 <PRE>
@@ -136,11 +140,12 @@ of one of the following kinds:
 </TD></TR>
 <TR valign=top><TD width=6% nowrap>
 <B>FMT</B> </TD><TD valign=bottom>
-Character string with an edit descriptor used to format each element of X. The possible edit
-descriptors are given in section 3.1, except that A and Aw can of course not be used. When
-FMT is absent, a default edit descriptor is used. The default may be set by calling
-TOSTRING_SET but the original (or factory) defaults are I0 for integers, L1 for logicals and
-1PG12.5 for reals.
+Character string with an edit descriptor used to format each
+element of X. The possible edit descriptors are given in section
+3.1, except that A and Aw can of course not be used. When FMT is
+absent, a default edit descriptor is used. The default may be set
+by calling TOSTRING_SET but the original (or factory) defaults
+are I0 for integers, L1 for logicals and 1PG12.5 for reals.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -149,12 +154,15 @@ TOSTRING_SET but the original (or factory) defaults are I0 for integers, L1 for 
 
 </A>
 <BLOCKQUOTE>
-Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
+Based on dispmodule(3f),
+"A Fortran 95 module for pretty-printing matrices".
+Version number 1.02 6-Sept-2008,
+Kristjan Jonasson,
+Dept. of Computer Science,
+University of Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>tostring (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from fe971f77-ea3d-4e6f-9f07-706cfcb6159e using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>tostring (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 08f4a6a7-77fd-45dd-a31d-661a28a5c4e5 using man macros.</FONT>
 <br><br><center><img src="images/tostring.3m_display.gif"></center>
 </div>
 </div>

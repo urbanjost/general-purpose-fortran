@@ -1,0 +1,66 @@
+name: ubuntu with gfortran
+
+on: [push, pull_request]
+
+jobs:
+  Build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest ]
+        include:
+        - os: ubuntu-latest
+          gcc_v: 12
+
+    env:
+      FC: gfortran
+      GCC_V: ${{ matrix.gcc_v }}
+      TZ: UTC+04:00
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Install GFortran Linux
+      run: |
+        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_V} 100 \
+        --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-${GCC_V} \
+        --slave /usr/bingcov gcov /usr/bin/gcov-${GCC_V}
+
+    - name: Install fpm
+      run: |
+           echo $PATH
+           pwd
+           uname -a
+           wget https://raw.githubusercontent.com/lockstockandbarrel/mars/main/bootstrap/fpm.F90
+           mkdir -p /home/runner/.local/bin tmp
+           ulimit -c unlimited -d unlimited -f unlimited -m unlimited -s unlimited -t unlimited -v unlimited -x unlimited
+           gfortran fpm.F90 -Itmp -Jtmp -static -o /home/runner/.local/bin/fpm
+           rm -f tmp/*.mod
+           ls -l
+
+    - name: Display environment
+      run: |
+        #make -k -p -fNOTTHERE
+        echo "end" > foo.f90
+        ulimit -c unlimited -d unlimited -f unlimited -m unlimited -s unlimited -t unlimited -v unlimited -x unlimited
+        gfortran -cpp -E -dM foo.f90
+        gfortran --version
+        fpm --version
+
+    - name: ubuntu with gfortran (debug)
+      run: |
+           ulimit -c unlimited -d unlimited -f unlimited -m unlimited -s unlimited -t unlimited -v unlimited -x unlimited
+           fpm test --profile debug --verbose
+
+    - name: ubuntu with gfortran (release)
+      run: |
+           ulimit -c unlimited -d unlimited -f unlimited -m unlimited -s unlimited -t unlimited -v unlimited -x unlimited
+           fpm test --profile release 
+
+#    - name: Run demo programs (fpm run)
+#      run: fpm run --profile release
+
+    - name: cleanup Linux
+      run: ls -ltras

@@ -7,7 +7,7 @@
       block
         character (len=:), allocatable :: string
         character (len=:), allocatable :: tokens(:)
-        character (len=*),parameter :: set = " ,"
+        character (len=*),parameter    :: set = " ,"
         string = 'first,second,third'
         call split2020(string, set, tokens )
         write(*,gen)tokens
@@ -20,8 +20,8 @@
 
       block
         character (len=:), allocatable :: string
-        character (len=*),parameter :: set = " ,"
-        integer, allocatable        :: first(:), last(:)
+        character (len=*),parameter    :: set = " ,"
+        integer, allocatable           :: first(:), last(:)
         string =    'first,second,,forth'
         call split2020 (string, set, first, last)
         write(*,gen)first
@@ -34,8 +34,8 @@
       ! Execution of STEP form
       block
         character (len=:), allocatable :: string
-        character (len=*),parameter :: set = " ,"
-        integer :: p, ibegin, iend
+        character (len=*),parameter    :: set = " ,"
+        integer                        :: p, ibegin, iend
         string = " one,   last  example  "
         do while (p < len(string))
           ibegin = p + 1

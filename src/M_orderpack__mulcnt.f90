@@ -37,9 +37,9 @@ public :: mulcnt
 !!     the locations in the original set. It uses subroutine RANK_ORDERS(3f).
 !!
 !!##OPTIONS
-!!     INVALS      input array
-!!     IMULT      array containing how often the value in INVALS
-!!                appears in INVALS
+!!     INVALS   input array
+!!     IMULT    array containing how often the value in INVALS appears
+!!              in INVALS
 !!
 !!##EXAMPLES
 !!

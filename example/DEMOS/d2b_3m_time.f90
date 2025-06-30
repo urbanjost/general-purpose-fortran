@@ -26,11 +26,15 @@
        integer :: i,j
          call date_and_time(values=dat)
          write(*,'(" Today is:",*(i0:,":"))')dat
-         write(*,*)'Baseday and Seconds is',d2b(dat)
+         bas=d2b(dat)
+         write(*,*)'Baseday and Seconds is',bas
+         write(*,*)'Baseday is', bas%base_day ! whole days since the MJD Epoch date
+         write(*,*)'Seconds is', bas%secs     ! offset in seconds from start of BASE_DAY
+         ! print any date that does not match regression test values
          do i=2000,2009
           do j=1,12
            !dat=[ year,month,day,timezone,hour,minutes,seconds,milliseconds]
-           dat=[i,j,1,0,0,0,0,0]
+           dat=[i,j,1,0,0,0,0,0]   ! first day of month
            bas=d2b(dat)
            if(array(j,i)+1.ne.bas%base_day)then
               write(*,*)i,j,array(j,i)+1,d2b(dat),d2m(dat),d2j(dat)-2400000.5

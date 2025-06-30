@@ -2369,8 +2369,8 @@ end subroutine my_print
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine test_suite_M_sqlite()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_verify, only : unit_test_level
 
 !! setup
    call test_sqlite3_begin()
@@ -2409,219 +2409,219 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_begin()
 
-   call unit_check_start('sqlite3_begin',msg='')
-   !!call unit_check('sqlite3_begin', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_begin',msg='')
+   call unit_test_start('sqlite3_begin',msg='')
+   !!call unit_test('sqlite3_begin', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_begin',msg='')
 end subroutine test_sqlite3_begin
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_close()
 
-   call unit_check_start('sqlite3_close',msg='')
-   !!call unit_check('sqlite3_close', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_close',msg='')
+   call unit_test_start('sqlite3_close',msg='')
+   !!call unit_test('sqlite3_close', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_close',msg='')
 end subroutine test_sqlite3_close
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_column_props()
 
-   call unit_check_start('sqlite3_column_props',msg='')
-   !!call unit_check('sqlite3_column_props', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_column_props',msg='')
+   call unit_test_start('sqlite3_column_props',msg='')
+   !!call unit_test('sqlite3_column_props', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_column_props',msg='')
 end subroutine test_sqlite3_column_props
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_column_query()
 
-   call unit_check_start('sqlite3_column_query',msg='')
-   !!call unit_check('sqlite3_column_query', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_column_query',msg='')
+   call unit_test_start('sqlite3_column_query',msg='')
+   !!call unit_test('sqlite3_column_query', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_column_query',msg='')
 end subroutine test_sqlite3_column_query
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_commit()
 
-   call unit_check_start('sqlite3_commit',msg='')
-   !!call unit_check('sqlite3_commit', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_commit',msg='')
+   call unit_test_start('sqlite3_commit',msg='')
+   !!call unit_test('sqlite3_commit', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_commit',msg='')
 end subroutine test_sqlite3_commit
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_create_table()
 
-   call unit_check_start('sqlite3_create_table',msg='')
-   !!call unit_check('sqlite3_create_table', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_create_table',msg='')
+   call unit_test_start('sqlite3_create_table',msg='')
+   !!call unit_test('sqlite3_create_table', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_create_table',msg='')
 end subroutine test_sqlite3_create_table
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_delete_table()
 
-   call unit_check_start('sqlite3_delete_table',msg='')
-   !!call unit_check('sqlite3_delete_table', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_delete_table',msg='')
+   call unit_test_start('sqlite3_delete_table',msg='')
+   !!call unit_test('sqlite3_delete_table', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_delete_table',msg='')
 end subroutine test_sqlite3_delete_table
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_do()
 
-   call unit_check_start('sqlite3_do',msg='')
-   !!call unit_check('sqlite3_do', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_do',msg='')
+   call unit_test_start('sqlite3_do',msg='')
+   !!call unit_test('sqlite3_do', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_do',msg='')
 end subroutine test_sqlite3_do
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_errmsg()
 
-   call unit_check_start('sqlite3_errmsg',msg='')
-   !!call unit_check('sqlite3_errmsg', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_errmsg',msg='')
+   call unit_test_start('sqlite3_errmsg',msg='')
+   !!call unit_test('sqlite3_errmsg', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_errmsg',msg='')
 end subroutine test_sqlite3_errmsg
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_error()
 
-   call unit_check_start('sqlite3_error',msg='')
-   !!call unit_check('sqlite3_error', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_error',msg='')
+   call unit_test_start('sqlite3_error',msg='')
+   !!call unit_test('sqlite3_error', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_error',msg='')
 end subroutine test_sqlite3_error
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_finalize()
 
-   call unit_check_start('sqlite3_finalize',msg='')
-   !!call unit_check('sqlite3_finalize', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_finalize',msg='')
+   call unit_test_start('sqlite3_finalize',msg='')
+   !!call unit_test('sqlite3_finalize', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_finalize',msg='')
 end subroutine test_sqlite3_finalize
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_get_column_char()
 
-   call unit_check_start('sqlite3_get_column_char',msg='')
-   !!call unit_check('sqlite3_get_column_char', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_get_column_char',msg='')
+   call unit_test_start('sqlite3_get_column_char',msg='')
+   !!call unit_test('sqlite3_get_column_char', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_get_column_char',msg='')
 end subroutine test_sqlite3_get_column_char
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_get_column_double()
 
-   call unit_check_start('sqlite3_get_column_double',msg='')
-   !!call unit_check('sqlite3_get_column_double', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_get_column_double',msg='')
+   call unit_test_start('sqlite3_get_column_double',msg='')
+   !!call unit_test('sqlite3_get_column_double', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_get_column_double',msg='')
 end subroutine test_sqlite3_get_column_double
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_get_column_int()
 
-   call unit_check_start('sqlite3_get_column_int',msg='')
-   !!call unit_check('sqlite3_get_column_int', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_get_column_int',msg='')
+   call unit_test_start('sqlite3_get_column_int',msg='')
+   !!call unit_test('sqlite3_get_column_int', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_get_column_int',msg='')
 end subroutine test_sqlite3_get_column_int
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_get_column_real()
 
-   call unit_check_start('sqlite3_get_column_real',msg='')
-   !!call unit_check('sqlite3_get_column_real', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_get_column_real',msg='')
+   call unit_test_start('sqlite3_get_column_real',msg='')
+   !!call unit_test('sqlite3_get_column_real', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_get_column_real',msg='')
 end subroutine test_sqlite3_get_column_real
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_get_table()
 
-   call unit_check_start('sqlite3_get_table',msg='')
-   !!call unit_check('sqlite3_get_table', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_get_table',msg='')
+   call unit_test_start('sqlite3_get_table',msg='')
+   !!call unit_test('sqlite3_get_table', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_get_table',msg='')
 end subroutine test_sqlite3_get_table
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_insert()
 
-   call unit_check_start('sqlite3_insert',msg='')
-   !!call unit_check('sqlite3_insert', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_insert',msg='')
+   call unit_test_start('sqlite3_insert',msg='')
+   !!call unit_test('sqlite3_insert', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_insert',msg='')
 end subroutine test_sqlite3_insert
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_libversion()
 
-   call unit_check_start('sqlite3_libversion',msg='')
-   !!call unit_check('sqlite3_libversion', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_libversion',msg='')
+   call unit_test_start('sqlite3_libversion',msg='')
+   !!call unit_test('sqlite3_libversion', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_libversion',msg='')
 end subroutine test_sqlite3_libversion
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_next_row()
 
-   call unit_check_start('sqlite3_next_row',msg='')
-   !!call unit_check('sqlite3_next_row', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_next_row',msg='')
+   call unit_test_start('sqlite3_next_row',msg='')
+   !!call unit_test('sqlite3_next_row', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_next_row',msg='')
 end subroutine test_sqlite3_next_row
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_open()
 
-   call unit_check_start('sqlite3_open',msg='')
-   !!call unit_check('sqlite3_open', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_open',msg='')
+   call unit_test_start('sqlite3_open',msg='')
+   !!call unit_test('sqlite3_open', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_open',msg='')
 end subroutine test_sqlite3_open
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_prepare()
 
-   call unit_check_start('sqlite3_prepare',msg='')
-   !!call unit_check('sqlite3_prepare', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_prepare',msg='')
+   call unit_test_start('sqlite3_prepare',msg='')
+   !!call unit_test('sqlite3_prepare', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_prepare',msg='')
 end subroutine test_sqlite3_prepare
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_prepare_select()
 
-   call unit_check_start('sqlite3_prepare_select',msg='')
-   !!call unit_check('sqlite3_prepare_select', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_prepare_select',msg='')
+   call unit_test_start('sqlite3_prepare_select',msg='')
+   !!call unit_test('sqlite3_prepare_select', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_prepare_select',msg='')
 end subroutine test_sqlite3_prepare_select
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_query_table()
 
-   call unit_check_start('sqlite3_query_table',msg='')
-   !!call unit_check('sqlite3_query_table', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_query_table',msg='')
+   call unit_test_start('sqlite3_query_table',msg='')
+   !!call unit_test('sqlite3_query_table', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_query_table',msg='')
 end subroutine test_sqlite3_query_table
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_reset()
 
-   call unit_check_start('sqlite3_reset',msg='')
-   !!call unit_check('sqlite3_reset', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_reset',msg='')
+   call unit_test_start('sqlite3_reset',msg='')
+   !!call unit_test('sqlite3_reset', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_reset',msg='')
 end subroutine test_sqlite3_reset
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_rollback()
 
-   call unit_check_start('sqlite3_rollback',msg='')
-   !!call unit_check('sqlite3_rollback', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_rollback',msg='')
+   call unit_test_start('sqlite3_rollback',msg='')
+   !!call unit_test('sqlite3_rollback', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_rollback',msg='')
 end subroutine test_sqlite3_rollback
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_set_column_char()
 
-   call unit_check_start('sqlite3_set_column_char',msg='')
-   !!call unit_check('sqlite3_set_column_char', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_set_column_char',msg='')
+   call unit_test_start('sqlite3_set_column_char',msg='')
+   !!call unit_test('sqlite3_set_column_char', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_set_column_char',msg='')
 end subroutine test_sqlite3_set_column_char
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_set_column_double()
 
-   call unit_check_start('sqlite3_set_column_double',msg='')
-   !!call unit_check('sqlite3_set_column_double', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_set_column_double',msg='')
+   call unit_test_start('sqlite3_set_column_double',msg='')
+   !!call unit_test('sqlite3_set_column_double', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_set_column_double',msg='')
 end subroutine test_sqlite3_set_column_double
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_set_column_int()
 
-   call unit_check_start('sqlite3_set_column_int',msg='')
-   !!call unit_check('sqlite3_set_column_int', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_set_column_int',msg='')
+   call unit_test_start('sqlite3_set_column_int',msg='')
+   !!call unit_test('sqlite3_set_column_int', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_set_column_int',msg='')
 end subroutine test_sqlite3_set_column_int
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_set_column_real()
 
-   call unit_check_start('sqlite3_set_column_real',msg='')
-   !!call unit_check('sqlite3_set_column_real', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_set_column_real',msg='')
+   call unit_test_start('sqlite3_set_column_real',msg='')
+   !!call unit_test('sqlite3_set_column_real', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_set_column_real',msg='')
 end subroutine test_sqlite3_set_column_real
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_sourceid()
 
-   call unit_check_start('sqlite3_sourceid',msg='')
-   !!call unit_check('sqlite3_sourceid', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_sourceid',msg='')
+   call unit_test_start('sqlite3_sourceid',msg='')
+   !!call unit_test('sqlite3_sourceid', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_sourceid',msg='')
 end subroutine test_sqlite3_sourceid
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_sqlite3_step()
 
-   call unit_check_start('sqlite3_step',msg='')
-   !!call unit_check('sqlite3_step', 0.eq.0, 'checking',100)
-   call unit_check_done('sqlite3_step',msg='')
+   call unit_test_start('sqlite3_step',msg='')
+   !!call unit_test('sqlite3_step', 0.eq.0, 'checking',100)
+   call unit_test_done('sqlite3_step',msg='')
 end subroutine test_sqlite3_step
 !===================================================================================================================================
 end subroutine test_suite_M_sqlite

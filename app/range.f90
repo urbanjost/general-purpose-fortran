@@ -34,30 +34,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    range(1f) - [M_strings] expand list of whole numbers where negative curve numbers designate ranges (1 -10 means 1 thru 10)
-!!    (LICENSE:PD)
-!!##SYNOPSIS
-!!
-!!    range VALUES
-!!
-!!##DESCRIPTION
-!!    Given a list of integers expand it to a list of up to 1000 positive
-!!    integers assuming negative numbers denote the end of a range
-!!    (1 -10 means 1 through 10, for example).
-!!
-!!##OPTIONS
-!!    VALUES  list of whole numbers. Negative numbers designate the end of ranges.
-!!
-!!##EXAMPLE
-!!
-!!    range 1 20 -30 101 100 99 100 -120 222 -200
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 subroutine help_version(l_version)
 implicit none
 character(len=*),parameter     :: ident="@(#)help_version(3f): prints version information"
@@ -73,7 +49,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    expand list of whole numbers where negative curve numbers designate ranges (1 -10 means 1 thru 10)>',&
 '@(#)VERSION:        1.0, 20170812>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2025-02-23 19:26:15 UTC-300>',&
+'@(#)COMPILED:       2025-06-29 07:11:20 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

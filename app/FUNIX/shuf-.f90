@@ -70,7 +70,7 @@ stopit=.false.
 if(l_help)then
 help_text=[ CHARACTER(LEN=128) :: &
 'NAME                                                                            ',&
-'   shuf- - [FUNIX] generate random permutations of file lines, whole            ',&
+'   shuf- - [FUNIX] generate a random permutation of file lines, whole           ',&
 '   numbers, or strings                                                          ',&
 '   (LICENSE:PD)                                                                 ',&
 'SYNOPSIS                                                                        ',&
@@ -96,6 +96,8 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   shuf- -i 0 100 -n 1                                                          ',&
 '   # randomly select xterm(1) color                                             ',&
 '   xterm -bg `shuf- -e green black gray blue -n 1`                              ',&
+'   # output up to five randomly selected lines from a file                      ',&
+'   shuf -n 5 FILE                                                               ',&
 'AUTHOR                                                                          ',&
 '   John S. Urban                                                                ',&
 'LICENSE                                                                         ',&
@@ -107,7 +109,7 @@ endif
 end subroutine help_usage
 !>
 !!##NAME
-!!    shuf- - [FUNIX] generate random permutations of file lines, whole
+!!    shuf- - [FUNIX] generate a random permutation of file lines, whole
 !!    numbers, or strings
 !!    (LICENSE:PD)
 !!##SYNOPSIS
@@ -135,6 +137,8 @@ end subroutine help_usage
 !!    shuf- -i 0 100 -n 1
 !!    # randomly select xterm(1) color
 !!    xterm -bg `shuf- -e green black gray blue -n 1`
+!!    # output up to five randomly selected lines from a file
+!!    shuf -n 5 FILE
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
@@ -156,7 +160,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)LICENSE:        Public Domain. This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2025-02-23 19:23:51 UTC-300>',&
+'@(#)COMPILED:       2025-06-29 08:18:17 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

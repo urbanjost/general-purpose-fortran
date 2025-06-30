@@ -3073,8 +3073,8 @@ end subroutine seefont
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine test_suite_M_drawplus()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_verify, only : unit_test_level
 implicit none
 !! setup
    call test_arrowhead()
@@ -3097,107 +3097,107 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_arrowhead()
 implicit none
-   call unit_check_start('arrowhead',msg='')
-   !!call unit_check('arrowhead', 0.eq.0, 'checking',100)
-   call unit_check_done('arrowhead',msg='')
+   call unit_test_start('arrowhead',msg='')
+   !!call unit_test('arrowhead', 0.eq.0, 'checking',100)
+   call unit_test_done('arrowhead',msg='')
 end subroutine test_arrowhead
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_barcode()
 implicit none
-   call unit_check_start('barcode',msg='')
-   !!call unit_check('barcode', 0.eq.0, 'checking',100)
-   call unit_check_done('barcode',msg='')
+   call unit_test_start('barcode',msg='')
+   !!call unit_test('barcode', 0.eq.0, 'checking',100)
+   call unit_test_done('barcode',msg='')
 end subroutine test_barcode
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_call_draw()
 implicit none
-   call unit_check_start('call_draw',msg='')
-   !!call unit_check('call_draw', 0.eq.0, 'checking',100)
-   call unit_check_done('call_draw',msg='')
+   call unit_test_start('call_draw',msg='')
+   !!call unit_test('call_draw', 0.eq.0, 'checking',100)
+   call unit_test_done('call_draw',msg='')
 end subroutine test_call_draw
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_draw_interpret()
 implicit none
-   call unit_check_start('draw_interpret',msg='')
-   !!call unit_check('draw_interpret', 0.eq.0, 'checking',100)
-   call unit_check_done('draw_interpret',msg='')
+   call unit_test_start('draw_interpret',msg='')
+   !!call unit_test('draw_interpret', 0.eq.0, 'checking',100)
+   call unit_test_done('draw_interpret',msg='')
 end subroutine test_draw_interpret
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_ellipse()
 implicit none
-   call unit_check_start('ellipse',msg='')
-   !!call unit_check('ellipse', 0.eq.0, 'checking',100)
-   call unit_check_done('ellipse',msg='')
+   call unit_test_start('ellipse',msg='')
+   !!call unit_test('ellipse', 0.eq.0, 'checking',100)
+   call unit_test_done('ellipse',msg='')
 end subroutine test_ellipse
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_plain_rect()
 implicit none
-   call unit_check_start('plain_rect',msg='')
-   !!call unit_check('plain_rect', 0.eq.0, 'checking',100)
-   call unit_check_done('plain_rect',msg='')
+   call unit_test_start('plain_rect',msg='')
+   !!call unit_test('plain_rect', 0.eq.0, 'checking',100)
+   call unit_test_done('plain_rect',msg='')
 end subroutine test_plain_rect
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_polyline2_i()
 implicit none
-   call unit_check_start('polyline2_i',msg='')
-   !!call unit_check('polyline2_i', 0.eq.0, 'checking',100)
-   call unit_check_done('polyline2_i',msg='')
+   call unit_test_start('polyline2_i',msg='')
+   !!call unit_test('polyline2_i', 0.eq.0, 'checking',100)
+   call unit_test_done('polyline2_i',msg='')
 end subroutine test_polyline2_i
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_polyline2_r()
 implicit none
-   call unit_check_start('polyline2_r',msg='')
-   !!call unit_check('polyline2_r', 0.eq.0, 'checking',100)
-   call unit_check_done('polyline2_r',msg='')
+   call unit_test_start('polyline2_r',msg='')
+   !!call unit_test('polyline2_r', 0.eq.0, 'checking',100)
+   call unit_test_done('polyline2_r',msg='')
 end subroutine test_polyline2_r
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rdbox()
 implicit none
-   call unit_check_start('rdbox',msg='')
-   !!call unit_check('rdbox', 0.eq.0, 'checking',100)
-   call unit_check_done('rdbox',msg='')
+   call unit_test_start('rdbox',msg='')
+   !!call unit_test('rdbox', 0.eq.0, 'checking',100)
+   call unit_test_done('rdbox',msg='')
 end subroutine test_rdbox
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rdpnt()
 implicit none
-   call unit_check_start('rdpnt',msg='')
-   !!call unit_check('rdpnt', 0.eq.0, 'checking',100)
-   call unit_check_done('rdpnt',msg='')
+   call unit_test_start('rdpnt',msg='')
+   !!call unit_test('rdpnt', 0.eq.0, 'checking',100)
+   call unit_test_done('rdpnt',msg='')
 end subroutine test_rdpnt
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_seefont()
 implicit none
-   call unit_check_start('seefont',msg='')
-   !!call unit_check('seefont', 0.eq.0, 'checking',100)
-   call unit_check_done('seefont',msg='')
+   call unit_test_start('seefont',msg='')
+   !!call unit_test('seefont', 0.eq.0, 'checking',100)
+   call unit_test_done('seefont',msg='')
 end subroutine test_seefont
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_smoot()
 implicit none
-   call unit_check_start('smoot',msg='')
-   !!call unit_check('smoot', 0.eq.0, 'checking',100)
-   call unit_check_done('smoot',msg='')
+   call unit_test_start('smoot',msg='')
+   !!call unit_test('smoot', 0.eq.0, 'checking',100)
+   call unit_test_done('smoot',msg='')
 end subroutine test_smoot
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_spirograph()
 implicit none
-   call unit_check_start('spirograph',msg='')
-   !!call unit_check('spirograph', 0.eq.0, 'checking',100)
-   call unit_check_done('spirograph',msg='')
+   call unit_test_start('spirograph',msg='')
+   !!call unit_test('spirograph', 0.eq.0, 'checking',100)
+   call unit_test_done('spirograph',msg='')
 end subroutine test_spirograph
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_uarc()
 implicit none
-   call unit_check_start('uarc',msg='')
-   !!call unit_check('uarc', 0.eq.0, 'checking',100)
-   call unit_check_done('uarc',msg='')
+   call unit_test_start('uarc',msg='')
+   !!call unit_test('uarc', 0.eq.0, 'checking',100)
+   call unit_test_done('uarc',msg='')
 end subroutine test_uarc
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_uconic()
 implicit none
-   call unit_check_start('uconic',msg='')
-   !!call unit_check('uconic', 0.eq.0, 'checking',100)
-   call unit_check_done('uconic',msg='')
+   call unit_test_start('uconic',msg='')
+   !!call unit_test('uconic', 0.eq.0, 'checking',100)
+   call unit_test_done('uconic',msg='')
 end subroutine test_uconic
 !===================================================================================================================================
 end subroutine test_suite_M_drawplus

@@ -3,14 +3,12 @@
 !===================================================================================================================================
 program runtest
 use M_framework__msg
-use M_framework__verify, only : unit_check_level
-use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
+use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
 use M_pixel
 use,intrinsic :: ISO_FORTRAN_ENV, only : int8,int16,int32,int64,real32,real64,real128
 implicit none
 integer(kind=int64) :: answer
 integer(kind=int64) :: expected
-   unit_check_level=0
    write(*,*)'CHECK RESULTS HAVE NOT CHANGED'
    call test_suite_M_pixel()
 contains
@@ -115,7 +113,7 @@ integer,save                 :: icalled=0
 end function crc32_hash_arr
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_arc()
-   call unit_check_start('arc',msg='')
+   call unit_test_start('arc',msg='')
 
    call prefsize(300,300)
    call vinit(' ')
@@ -127,297 +125,297 @@ subroutine test_arc()
    expected= 729245524
    answer=crc32_hash_arr(pack(P_pixel,.true.))
    write(*,*)'answer=',answer
-   call unit_check('arc', answer.eq.expected, 'checking checksum, expected=',expected,' answer=',answer)
+   call unit_test('arc', answer.eq.expected, 'checking checksum, expected=',expected,' answer=',answer)
    call vexit()
 
-   call unit_check_done('arc',msg='')
+   call unit_test_done('arc',msg='')
 end subroutine test_arc
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_centertext()
 implicit none
-   call unit_check_start('centertext',msg='')
-   !!call unit_check('centertext', 0.eq.0, 'checking',100)
-   call unit_check_done('centertext',msg='')
+   call unit_test_start('centertext',msg='')
+   !!call unit_test('centertext', 0.eq.0, 'checking',100)
+   call unit_test_done('centertext',msg='')
 end subroutine test_centertext
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_circle()
 implicit none
-   call unit_check_start('circle',msg='')
-   !!call unit_check('circle', 0.eq.0, 'checking',100)
-   call unit_check_done('circle',msg='')
+   call unit_test_start('circle',msg='')
+   !!call unit_test('circle', 0.eq.0, 'checking',100)
+   call unit_test_done('circle',msg='')
 end subroutine test_circle
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_circleprecision()
 implicit none
-   call unit_check_start('circleprecision',msg='')
-   !!call unit_check('circleprecision', 0.eq.0, 'checking',100)
-   call unit_check_done('circleprecision',msg='')
+   call unit_test_start('circleprecision',msg='')
+   !!call unit_test('circleprecision', 0.eq.0, 'checking',100)
+   call unit_test_done('circleprecision',msg='')
 end subroutine test_circleprecision
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_clear()
 implicit none
-   call unit_check_start('clear',msg='')
-   !!call unit_check('clear', 0.eq.0, 'checking',100)
-   call unit_check_done('clear',msg='')
+   call unit_test_start('clear',msg='')
+   !!call unit_test('clear', 0.eq.0, 'checking',100)
+   call unit_test_done('clear',msg='')
 end subroutine test_clear
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_closepoly()
 implicit none
-   call unit_check_start('closepoly',msg='')
-   !!call unit_check('closepoly', 0.eq.0, 'checking',100)
-   call unit_check_done('closepoly',msg='')
+   call unit_test_start('closepoly',msg='')
+   !!call unit_test('closepoly', 0.eq.0, 'checking',100)
+   call unit_test_done('closepoly',msg='')
 end subroutine test_closepoly
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_color()
 implicit none
-   call unit_check_start('color',msg='')
-   !!call unit_check('color', 0.eq.0, 'checking',100)
-   call unit_check_done('color',msg='')
+   call unit_test_start('color',msg='')
+   !!call unit_test('color', 0.eq.0, 'checking',100)
+   call unit_test_done('color',msg='')
 end subroutine test_color
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_draw2()
 implicit none
-   call unit_check_start('draw2',msg='')
-   !!call unit_check('draw2', 0.eq.0, 'checking',100)
-   call unit_check_done('draw2',msg='')
+   call unit_test_start('draw2',msg='')
+   !!call unit_test('draw2', 0.eq.0, 'checking',100)
+   call unit_test_done('draw2',msg='')
 end subroutine test_draw2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_drawchar()
 implicit none
-   call unit_check_start('drawchar',msg='')
-   !!call unit_check('drawchar', 0.eq.0, 'checking',100)
-   call unit_check_done('drawchar',msg='')
+   call unit_test_start('drawchar',msg='')
+   !!call unit_test('drawchar', 0.eq.0, 'checking',100)
+   call unit_test_done('drawchar',msg='')
 end subroutine test_drawchar
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_drawstr()
 implicit none
-   call unit_check_start('drawstr',msg='')
-   !!call unit_check('drawstr', 0.eq.0, 'checking',100)
-   call unit_check_done('drawstr',msg='')
+   call unit_test_start('drawstr',msg='')
+   !!call unit_test('drawstr', 0.eq.0, 'checking',100)
+   call unit_test_done('drawstr',msg='')
 end subroutine test_drawstr
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_font()
 implicit none
-   call unit_check_start('font',msg='')
-   !!call unit_check('font', 0.eq.0, 'checking',100)
-   call unit_check_done('font',msg='')
+   call unit_test_start('font',msg='')
+   !!call unit_test('font', 0.eq.0, 'checking',100)
+   call unit_test_done('font',msg='')
 end subroutine test_font
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getdisplaysize()
 implicit none
-   call unit_check_start('getdisplaysize',msg='')
-   !!call unit_check('getdisplaysize', 0.eq.0, 'checking',100)
-   call unit_check_done('getdisplaysize',msg='')
+   call unit_test_start('getdisplaysize',msg='')
+   !!call unit_test('getdisplaysize', 0.eq.0, 'checking',100)
+   call unit_test_done('getdisplaysize',msg='')
 end subroutine test_getdisplaysize
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getgp2()
 implicit none
-   call unit_check_start('getgp2',msg='')
-   !!call unit_check('getgp2', 0.eq.0, 'checking',100)
-   call unit_check_done('getgp2',msg='')
+   call unit_test_start('getgp2',msg='')
+   !!call unit_test('getgp2', 0.eq.0, 'checking',100)
+   call unit_test_done('getgp2',msg='')
 end subroutine test_getgp2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getviewport()
 implicit none
-   call unit_check_start('getviewport',msg='')
-   !!call unit_check('getviewport', 0.eq.0, 'checking',100)
-   call unit_check_done('getviewport',msg='')
+   call unit_test_start('getviewport',msg='')
+   !!call unit_test('getviewport', 0.eq.0, 'checking',100)
+   call unit_test_done('getviewport',msg='')
 end subroutine test_getviewport
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_hershey()
 implicit none
-   call unit_check_start('hershey',msg='')
-   !!call unit_check('hershey', 0.eq.0, 'checking',100)
-   call unit_check_done('hershey',msg='')
+   call unit_test_start('hershey',msg='')
+   !!call unit_test('hershey', 0.eq.0, 'checking',100)
+   call unit_test_done('hershey',msg='')
 end subroutine test_hershey
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_justfy()
 implicit none
-   call unit_check_start('justfy',msg='')
-   !!call unit_check('justfy', 0.eq.0, 'checking',100)
-   call unit_check_done('justfy',msg='')
+   call unit_test_start('justfy',msg='')
+   !!call unit_test('justfy', 0.eq.0, 'checking',100)
+   call unit_test_done('justfy',msg='')
 end subroutine test_justfy
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_line()
 implicit none
-   call unit_check_start('line',msg='')
-   !!call unit_check('line', 0.eq.0, 'checking',100)
-   call unit_check_done('line',msg='')
+   call unit_test_start('line',msg='')
+   !!call unit_test('line', 0.eq.0, 'checking',100)
+   call unit_test_done('line',msg='')
 end subroutine test_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_linewidth()
 implicit none
-   call unit_check_start('linewidth',msg='')
-   !!call unit_check('linewidth', 0.eq.0, 'checking',100)
-   call unit_check_done('linewidth',msg='')
+   call unit_test_start('linewidth',msg='')
+   !!call unit_test('linewidth', 0.eq.0, 'checking',100)
+   call unit_test_done('linewidth',msg='')
 end subroutine test_linewidth
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_makepoly()
 implicit none
-   call unit_check_start('makepoly',msg='')
-   !!call unit_check('makepoly', 0.eq.0, 'checking',100)
-   call unit_check_done('makepoly',msg='')
+   call unit_test_start('makepoly',msg='')
+   !!call unit_test('makepoly', 0.eq.0, 'checking',100)
+   call unit_test_done('makepoly',msg='')
 end subroutine test_makepoly
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_mapcolor()
 implicit none
-   call unit_check_start('mapcolor',msg='')
-   !!call unit_check('mapcolor', 0.eq.0, 'checking',100)
-   call unit_check_done('mapcolor',msg='')
+   call unit_test_start('mapcolor',msg='')
+   !!call unit_test('mapcolor', 0.eq.0, 'checking',100)
+   call unit_test_done('mapcolor',msg='')
 end subroutine test_mapcolor
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_move2()
 implicit none
-   call unit_check_start('move2',msg='')
-   !!call unit_check('move2', 0.eq.0, 'checking',100)
-   call unit_check_done('move2',msg='')
+   call unit_test_start('move2',msg='')
+   !!call unit_test('move2', 0.eq.0, 'checking',100)
+   call unit_test_done('move2',msg='')
 end subroutine test_move2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_ortho2()
 implicit none
-   call unit_check_start('ortho2',msg='')
-   !!call unit_check('ortho2', 0.eq.0, 'checking',100)
-   call unit_check_done('ortho2',msg='')
+   call unit_test_start('ortho2',msg='')
+   !!call unit_test('ortho2', 0.eq.0, 'checking',100)
+   call unit_test_done('ortho2',msg='')
 end subroutine test_ortho2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_page()
 implicit none
-   call unit_check_start('page',msg='')
-   !!call unit_check('page', 0.eq.0, 'checking',100)
-   call unit_check_done('page',msg='')
+   call unit_test_start('page',msg='')
+   !!call unit_test('page', 0.eq.0, 'checking',100)
+   call unit_test_done('page',msg='')
 end subroutine test_page
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_point2()
 implicit none
-   call unit_check_start('point2',msg='')
-   !!call unit_check('point2', 0.eq.0, 'checking',100)
-   call unit_check_done('point2',msg='')
+   call unit_test_start('point2',msg='')
+   !!call unit_test('point2', 0.eq.0, 'checking',100)
+   call unit_test_done('point2',msg='')
 end subroutine test_point2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_poly2()
 implicit none
-   call unit_check_start('poly2',msg='')
-   !!call unit_check('poly2', 0.eq.0, 'checking',100)
-   call unit_check_done('poly2',msg='')
+   call unit_test_start('poly2',msg='')
+   !!call unit_test('poly2', 0.eq.0, 'checking',100)
+   call unit_test_done('poly2',msg='')
 end subroutine test_poly2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_polyline2()
 implicit none
-   call unit_check_start('polyline2',msg='')
-   !!call unit_check('polyline2', 0.eq.0, 'checking',100)
-   call unit_check_done('polyline2',msg='')
+   call unit_test_start('polyline2',msg='')
+   !!call unit_test('polyline2', 0.eq.0, 'checking',100)
+   call unit_test_done('polyline2',msg='')
 end subroutine test_polyline2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_prefsize()
 implicit none
-   call unit_check_start('prefsize',msg='')
-   !!call unit_check('prefsize', 0.eq.0, 'checking',100)
-   call unit_check_done('prefsize',msg='')
+   call unit_test_start('prefsize',msg='')
+   !!call unit_test('prefsize', 0.eq.0, 'checking',100)
+   call unit_test_done('prefsize',msg='')
 end subroutine test_prefsize
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_print_ascii()
 implicit none
-   call unit_check_start('print_ascii',msg='')
-   !!call unit_check('print_ascii', 0.eq.0, 'checking',100)
-   call unit_check_done('print_ascii',msg='')
+   call unit_test_start('print_ascii',msg='')
+   !!call unit_test('print_ascii', 0.eq.0, 'checking',100)
+   call unit_test_done('print_ascii',msg='')
 end subroutine test_print_ascii
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_print_ppm()
 implicit none
-   call unit_check_start('print_ppm',msg='')
-   !!call unit_check('print_ppm', 0.eq.0, 'checking',100)
-   call unit_check_done('print_ppm',msg='')
+   call unit_test_start('print_ppm',msg='')
+   !!call unit_test('print_ppm', 0.eq.0, 'checking',100)
+   call unit_test_done('print_ppm',msg='')
 end subroutine test_print_ppm
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rdraw2()
 implicit none
-   call unit_check_start('rdraw2',msg='')
-   !!call unit_check('rdraw2', 0.eq.0, 'checking',100)
-   call unit_check_done('rdraw2',msg='')
+   call unit_test_start('rdraw2',msg='')
+   !!call unit_test('rdraw2', 0.eq.0, 'checking',100)
+   call unit_test_done('rdraw2',msg='')
 end subroutine test_rdraw2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rect()
 implicit none
-   call unit_check_start('rect',msg='')
-   !!call unit_check('rect', 0.eq.0, 'checking',100)
-   call unit_check_done('rect',msg='')
+   call unit_test_start('rect',msg='')
+   !!call unit_test('rect', 0.eq.0, 'checking',100)
+   call unit_test_done('rect',msg='')
 end subroutine test_rect
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rmove2()
 implicit none
-   call unit_check_start('rmove2',msg='')
-   !!call unit_check('rmove2', 0.eq.0, 'checking',100)
-   call unit_check_done('rmove2',msg='')
+   call unit_test_start('rmove2',msg='')
+   !!call unit_test('rmove2', 0.eq.0, 'checking',100)
+   call unit_test_done('rmove2',msg='')
 end subroutine test_rmove2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_state()
 implicit none
-   call unit_check_start('state',msg='')
-   !!call unit_check('state', 0.eq.0, 'checking',100)
-   call unit_check_done('state',msg='')
+   call unit_test_start('state',msg='')
+   !!call unit_test('state', 0.eq.0, 'checking',100)
+   call unit_test_done('state',msg='')
 end subroutine test_state
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_strlength()
 implicit none
-   call unit_check_start('strlength',msg='')
-   !!call unit_check('strlength', 0.eq.0, 'checking',100)
-   call unit_check_done('strlength',msg='')
+   call unit_test_start('strlength',msg='')
+   !!call unit_test('strlength', 0.eq.0, 'checking',100)
+   call unit_test_done('strlength',msg='')
 end subroutine test_strlength
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_textang()
 implicit none
-   call unit_check_start('textang',msg='')
-   !!call unit_check('textang', 0.eq.0, 'checking',100)
-   call unit_check_done('textang',msg='')
+   call unit_test_start('textang',msg='')
+   !!call unit_test('textang', 0.eq.0, 'checking',100)
+   call unit_test_done('textang',msg='')
 end subroutine test_textang
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_textsize()
 implicit none
-   call unit_check_start('textsize',msg='')
-   !!call unit_check('textsize', 0.eq.0, 'checking',100)
-   call unit_check_done('textsize',msg='')
+   call unit_test_start('textsize',msg='')
+   !!call unit_test('textsize', 0.eq.0, 'checking',100)
+   call unit_test_done('textsize',msg='')
 end subroutine test_textsize
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_vexit()
 implicit none
-   call unit_check_start('vexit',msg='')
-   !!call unit_check('vexit', 0.eq.0, 'checking',100)
-   call unit_check_done('vexit',msg='')
+   call unit_test_start('vexit',msg='')
+   !!call unit_test('vexit', 0.eq.0, 'checking',100)
+   call unit_test_done('vexit',msg='')
 end subroutine test_vexit
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_vflush()
 implicit none
-   call unit_check_start('vflush',msg='')
-   !!call unit_check('vflush', 0.eq.0, 'checking',100)
-   call unit_check_done('vflush',msg='')
+   call unit_test_start('vflush',msg='')
+   !!call unit_test('vflush', 0.eq.0, 'checking',100)
+   call unit_test_done('vflush',msg='')
 end subroutine test_vflush
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_viewport()
 implicit none
-   call unit_check_start('viewport',msg='')
-   !!call unit_check('viewport', 0.eq.0, 'checking',100)
-   call unit_check_done('viewport',msg='')
+   call unit_test_start('viewport',msg='')
+   !!call unit_test('viewport', 0.eq.0, 'checking',100)
+   call unit_test_done('viewport',msg='')
 end subroutine test_viewport
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_vinit()
 implicit none
-   call unit_check_start('vinit',msg='')
-   !!call unit_check('vinit', 0.eq.0, 'checking',100)
-   call unit_check_done('vinit',msg='')
+   call unit_test_start('vinit',msg='')
+   !!call unit_test('vinit', 0.eq.0, 'checking',100)
+   call unit_test_done('vinit',msg='')
 end subroutine test_vinit
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_xcentertext()
 implicit none
-   call unit_check_start('xcentertext',msg='')
-   !!call unit_check('xcentertext', 0.eq.0, 'checking',100)
-   call unit_check_done('xcentertext',msg='')
+   call unit_test_start('xcentertext',msg='')
+   !!call unit_test('xcentertext', 0.eq.0, 'checking',100)
+   call unit_test_done('xcentertext',msg='')
 end subroutine test_xcentertext
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_ycentertext()
 implicit none
-   call unit_check_start('ycentertext',msg='')
-   !!call unit_check('ycentertext', 0.eq.0, 'checking',100)
-   call unit_check_done('ycentertext',msg='')
+   call unit_test_start('ycentertext',msg='')
+   !!call unit_test('ycentertext', 0.eq.0, 'checking',100)
+   call unit_test_done('ycentertext',msg='')
 end subroutine test_ycentertext
 !===================================================================================================================================
 end program runtest

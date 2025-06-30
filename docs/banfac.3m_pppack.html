@@ -1,0 +1,267 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>banfac (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>banfac (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>returns in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w  the lu-factorization (without pivoting) of the banded
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>matrix</B> </TD><TD valign=bottom>
+a  of order  nrow  with  (nbandl + 1 + nbandu) bands or diag-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>onals in the work array</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w .
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>w&#46;&#46;&#46;..work array of size</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+(nroww,nrow)  containing the interesting
+<TABLE width=100% cellpadding=3><!-- tsb: (nroww,nrow)  containing the interesting
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>part of a banded matrix</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a , with the diagonals or bands of  a
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>stored in the rows of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w , while columns of  a  correspond to
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>columns of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w . this is the storage mode used in  linpack  and
+results in efficient innermost loops.
+<TABLE width=100% cellpadding=3><!-- tsb: w . this is the storage mode used in  linpack  and
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>explicitly,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  has  nbandl  bands below the diagonal
+<TABLE width=100% cellpadding=3><!-- tsb: a  has  nbandl  bands below the diagonal
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+1 (main) diagonal
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+nbandu bands above the diagonal
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>and thus, with</B> </TD></TR><TR valign=top><TD width=3%>&nbsp;</TD><TD>
+middle = nbandu + 1,
+<TABLE width=100% cellpadding=3><!-- tsb: middle = nbandu + 1,
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>a(i+j,j)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+is in  w(i+middle,j)  for i=<B>-nbandu</B>,&#46;&#46;&#46;,nbandl
+j=1,&#46;&#46;&#46;,nrow .
+for example, the interesting entries of a (1,2)<B>-banded</B> matrix
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>of order</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+9  would appear in the first  1+1+2 = 4  rows of  w
+as follows.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>all other entries of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w  not identified in this way with an en-
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>try of</B> </TD><TD valign=bottom>
+a  are never referenced .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>nroww&#46;&#46;&#46;..row dimension of the work array</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w .
+<TABLE width=100% cellpadding=3><!-- tsb: w .
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>must be</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+[char46]ge.  nbandl + 1 + nbandu  .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>nbandl&#46;&#46;&#46;..number of bands of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  below the main diagonal
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>nbandu&#46;&#46;&#46;..number of bands of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  above the main diagonal .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+iflag&#46;&#46;&#46;..integer indicating success( = 1) or failure ( = 2) .
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>if</B> </TD><TD valign=bottom>
+iflag = 1, then
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>w&#46;&#46;&#46;..contains the lu-factorization of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  into a unit lower triangu-
+<TABLE width=100% cellpadding=3><!-- tsb: a  into a unit lower triangu-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>lar matrix</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+l  and an upper triangular matrix  u (both banded)
+and stored in customary fashion over the corresponding entries
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>of</B> </TD><TD valign=bottom>
+a . this makes it possible to solve any particular linear
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>system</B> </TD><TD valign=bottom>
+a*x = b  for  x  by a
+call banslv ( w, nroww, nrow, nbandl, nbandu, b )
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>with the solution x</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+contained in  b  on return .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>if</B> </TD><TD valign=bottom>
+iflag = 2, then
+<TABLE width=100% cellpadding=3><!-- tsb: iflag = 2, then
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>one of</B> </TD><TD valign=bottom>
+nrow-1, nbandl,nbandu failed to be nonnegative, or else
+one of the potential pivots was found to be zero indicating
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>that</B> </TD><TD valign=bottom>
+a  does not have an lu-factorization. this implies that
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>a</B> </TD><TD valign=bottom>
+is singular in case it is totally positive .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>gauss elimination</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w i t h o u t  pivoting is used. the routine is
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>intended for use with matrices</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+a  which do not require row inter-
+<TABLE width=100% cellpadding=3><!-- tsb: a  which do not require row inter-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>changes during factorization, especially for the</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t o t a l l y
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>p o s i t i v e</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+matrices which occur in spline calculations.
+the routine should not be used for an arbitrary banded matrix.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>banfac (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4d57c793-6942-4ade-bee8-84ff23c5bc41 using man macros.</FONT>
+<br><br><center><img src="images/banfac.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

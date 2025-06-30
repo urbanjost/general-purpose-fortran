@@ -900,40 +900,40 @@ Sample program:
     integer                               ::  lun
     ! STATUS=NEW|REPLACE|OLD|SCRATCH|UNKNOWN
     ! SEQUENTIAL | DIRECT | STREAM | UNDEFINED
-    character(len=20)  ::  access        ;  namelist/inquire/access 
-    character(len=20)  ::  asynchronous  ;  namelist/inquire/asynchronous                                   
-    character(len=20)  ::  blank         ;  namelist/inquire/blank                                          
-    character(len=20)  ::  decimal       ;  namelist/inquire/decimal                                        
-    character(len=20)  ::  delim         ;  namelist/inquire/delim                                          
-    character(len=20)  ::  direct        ;  namelist/inquire/direct                                         
-    character(len=20)  ::  encoding      ;  namelist/inquire/encoding                                       
-    !  FORMATTED   |  UNFORMATTED    
-    character(len=20)  ::  form          ;  namelist/inquire/form        
-    character(len=20)  ::  formatted     ;  namelist/inquire/formatted                                      
-    character(len=20)  ::  unformatted   ;  namelist/inquire/unformatted                                    
-    character(len=20)  ::  name          ;  namelist/inquire/name                                           
-    character(len=20)  ::  pad           ;  namelist/inquire/pad                                            
+    character(len=20)  ::  access        ;  namelist/inquire/access
+    character(len=20)  ::  asynchronous  ;  namelist/inquire/asynchronous
+    character(len=20)  ::  blank         ;  namelist/inquire/blank
+    character(len=20)  ::  decimal       ;  namelist/inquire/decimal
+    character(len=20)  ::  delim         ;  namelist/inquire/delim
+    character(len=20)  ::  direct        ;  namelist/inquire/direct
+    character(len=20)  ::  encoding      ;  namelist/inquire/encoding
+    !  FORMATTED   |  UNFORMATTED
+    character(len=20)  ::  form          ;  namelist/inquire/form
+    character(len=20)  ::  formatted     ;  namelist/inquire/formatted
+    character(len=20)  ::  unformatted   ;  namelist/inquire/unformatted
+    character(len=20)  ::  name          ;  namelist/inquire/name
+    character(len=20)  ::  pad           ;  namelist/inquire/pad
     !  ASIS        |  REWIND       |  APPEND
     character(len=20)  ::  position      ;  namelist/inquire/position
     !  READ        |  WRITE        |  READWRITE
-    character(len=20)  ::  action        ;  namelist/inquire/action  
-    character(len=20)  ::  read          ;  namelist/inquire/read                                           
-    character(len=20)  ::  readwrite     ;  namelist/inquire/readwrite                                      
-    character(len=20)  ::  write         ;  namelist/inquire/write                                          
-    character(len=20)  ::  round         ;  namelist/inquire/round                                          
-    character(len=20)  ::  sequential    ;  namelist/inquire/sequential                                     
-    character(len=20)  ::  sign          ;  namelist/inquire/sign                                           
-    character(len=20)  ::  stream        ;  namelist/inquire/stream                                         
-    integer            ::  id            ;  namelist/inquire/id                                             
-    integer            ::  nextrec       ;  namelist/inquire/nextrec                                        
-    integer            ::  number        ;  namelist/inquire/number                                         
-    integer            ::  pos           ;  namelist/inquire/pos                                            
-    integer            ::  recl          ;  namelist/inquire/recl                                           
-    integer            ::  size          ;  namelist/inquire/size                                           
-    logical            ::  exist         ;  namelist/inquire/exist                                          
-    logical            ::  named         ;  namelist/inquire/named                                          
-    logical            ::  opened        ;  namelist/inquire/opened                                         
-    logical            ::  pending       ;  namelist/inquire/pending                                        
+    character(len=20)  ::  action        ;  namelist/inquire/action
+    character(len=20)  ::  read          ;  namelist/inquire/read
+    character(len=20)  ::  readwrite     ;  namelist/inquire/readwrite
+    character(len=20)  ::  write         ;  namelist/inquire/write
+    character(len=20)  ::  round         ;  namelist/inquire/round
+    character(len=20)  ::  sequential    ;  namelist/inquire/sequential
+    character(len=20)  ::  sign          ;  namelist/inquire/sign
+    character(len=20)  ::  stream        ;  namelist/inquire/stream
+    integer            ::  id            ;  namelist/inquire/id
+    integer            ::  nextrec       ;  namelist/inquire/nextrec
+    integer            ::  number        ;  namelist/inquire/number
+    integer            ::  pos           ;  namelist/inquire/pos
+    integer            ::  recl          ;  namelist/inquire/recl
+    integer            ::  size          ;  namelist/inquire/size
+    logical            ::  exist         ;  namelist/inquire/exist
+    logical            ::  named         ;  namelist/inquire/named
+    logical            ::  opened        ;  namelist/inquire/opened
+    logical            ::  pending       ;  namelist/inquire/pending
 <P>
        if(present(filename))then
           filename_ =filename
@@ -952,12 +952,13 @@ Sample program:
          & readwrite=readwrite,sign=sign,round=round,blank=blank,           &
          & decimal=decimal,delim=delim,encoding=encoding,pad=pad,           &
          & named=named,opened=opened,exist=exist,number=number,             &
-    !bug & pending=pending,                                                 &
+         !bug & pending=pending,                                            &
          & asynchronous=asynchronous,                                       &
          & iostat=iostat,err=999,iomsg=message)
        elseif(filename_  /= &#146;&#146;)then
          write(*,*)&#146;*print_inquire* checking file:&#146;//filename_
-         inquire(file=filename_ ,recl=recl,nextrec=nextrec,pos=pos,         &
+         inquire(file=filename_,                                            &
+         & recl=recl,nextrec=nextrec,pos=pos,                               &
          & size=size,position=position,name=name,                           &
          & form=form,formatted=formatted,unformatted=unformatted,           &
          & access=access,sequential=sequential,direct=direct,stream=stream, &
@@ -967,13 +968,14 @@ Sample program:
          & number=number,pending=pending,asynchronous=asynchronous,         &
          & iostat=iostat,err=999,iomsg=message)
        else
-          write(*,*)&#146;*print_inquire* must specify either filename or unit number&#146;
+          write(*,*) &
+          & &#146;*print_inquire* must specify either filename or unit number&#146;
        endif
        write(*,nml=inquire,delim=&#146;none&#146;)
        return
     999   continue
        write(*,*)&#146;*print_inquire* bad inquire&#146;
-    !  If an error condition occurs during execution of an INQUIRE  statement,
+    !  If an error condition occurs during execution of an INQUIRE statement,
     !  all of the inquiry identifiers except iostat become undefined.
        write(*,*) &#146;*print_inquire* inquire call failed,iostat=&#146;,iostat, &
        & &#146;message=&#146;,message
@@ -993,7 +995,7 @@ BACKSPACE(7), CLOSE(7), ENDFILE(7), FLUSH(7), INQUIRE(7), OPEN(7),
 PRINT(7), READ(7), REWIND(7), WAIT(7), WRITE(7)
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>inquire (7)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e60c1933-cbd7-4152-a7ed-e6b5001fcb99 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>inquire (7)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f180e2ab-b674-4f3f-abc3-11c753d8abf5 using man macros.</FONT>
 <br><br><center><img src="images/inquire.7fortran.gif"></center>
 </div>
 </div>

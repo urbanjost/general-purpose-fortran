@@ -600,8 +600,8 @@ MODULE M_lua
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 subroutine test_suite_M_lua()
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use M_verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use M_verify, only : unit_test_level
 implicit none
 !! setup
    call test_config_close()
@@ -619,72 +619,72 @@ contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_config_close()
 implicit none
-   call unit_check_start('config_close',msg='')
-   !!call unit_check('config_close', 0.eq.0, 'checking',100)
-   call unit_check_done('config_close',msg='')
+   call unit_test_start('config_close',msg='')
+   !!call unit_test('config_close', 0.eq.0, 'checking',100)
+   call unit_test_done('config_close',msg='')
 end subroutine test_config_close
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_config_function()
 implicit none
-   call unit_check_start('config_function',msg='')
-   !!call unit_check('config_function', 0.eq.0, 'checking',100)
-   call unit_check_done('config_function',msg='')
+   call unit_test_start('config_function',msg='')
+   !!call unit_test('config_function', 0.eq.0, 'checking',100)
+   call unit_test_done('config_function',msg='')
 end subroutine test_config_function
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_config_integer()
 implicit none
-   call unit_check_start('config_integer',msg='')
-   !!call unit_check('config_integer', 0.eq.0, 'checking',100)
-   call unit_check_done('config_integer',msg='')
+   call unit_test_start('config_integer',msg='')
+   !!call unit_test('config_integer', 0.eq.0, 'checking',100)
+   call unit_test_done('config_integer',msg='')
 end subroutine test_config_integer
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_config_open()
 implicit none
-   call unit_check_start('config_open',msg='')
-   !!call unit_check('config_open', 0.eq.0, 'checking',100)
-   call unit_check_done('config_open',msg='')
+   call unit_test_start('config_open',msg='')
+   !!call unit_test('config_open', 0.eq.0, 'checking',100)
+   call unit_test_done('config_open',msg='')
 end subroutine test_config_open
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_config_real()
 implicit none
-   call unit_check_start('config_real',msg='')
-   !!call unit_check('config_real', 0.eq.0, 'checking',100)
-   call unit_check_done('config_real',msg='')
+   call unit_test_start('config_real',msg='')
+   !!call unit_test('config_real', 0.eq.0, 'checking',100)
+   call unit_test_done('config_real',msg='')
 end subroutine test_config_real
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_config_string()
 implicit none
-   call unit_check_start('config_string',msg='')
-   !!call unit_check('config_string', 0.eq.0, 'checking',100)
-   call unit_check_done('config_string',msg='')
+   call unit_test_start('config_string',msg='')
+   !!call unit_test('config_string', 0.eq.0, 'checking',100)
+   call unit_test_done('config_string',msg='')
 end subroutine test_config_string
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lua_pcall()
 implicit none
-   call unit_check_start('lua_pcall',msg='')
-   !!call unit_check('lua_pcall', 0.eq.0, 'checking',100)
-   call unit_check_done('lua_pcall',msg='')
+   call unit_test_start('lua_pcall',msg='')
+   !!call unit_test('lua_pcall', 0.eq.0, 'checking',100)
+   call unit_test_done('lua_pcall',msg='')
 end subroutine test_lua_pcall
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lua_tonumber()
 implicit none
-   call unit_check_start('lua_tonumber',msg='')
-   !!call unit_check('lua_tonumber', 0.eq.0, 'checking',100)
-   call unit_check_done('lua_tonumber',msg='')
+   call unit_test_start('lua_tonumber',msg='')
+   !!call unit_test('lua_tonumber', 0.eq.0, 'checking',100)
+   call unit_test_done('lua_tonumber',msg='')
 end subroutine test_lua_tonumber
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lua_tostring()
 implicit none
-   call unit_check_start('lua_tostring',msg='')
-   !!call unit_check('lua_tostring', 0.eq.0, 'checking',100)
-   call unit_check_done('lua_tostring',msg='')
+   call unit_test_start('lua_tostring',msg='')
+   !!call unit_test('lua_tostring', 0.eq.0, 'checking',100)
+   call unit_test_done('lua_tostring',msg='')
 end subroutine test_lua_tostring
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lual_loadfile()
 implicit none
-   call unit_check_start('lual_loadfile',msg='')
-   !!call unit_check('lual_loadfile', 0.eq.0, 'checking',100)
-   call unit_check_done('lual_loadfile',msg='')
+   call unit_test_start('lual_loadfile',msg='')
+   !!call unit_test('lual_loadfile', 0.eq.0, 'checking',100)
+   call unit_test_done('lual_loadfile',msg='')
 end subroutine test_lual_loadfile
 !===================================================================================================================================
 end subroutine test_suite_M_lua

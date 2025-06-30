@@ -1,0 +1,229 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bchfac (3)</NOBR><HR></H1>
+</CENTER>
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: <H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>bchfac (3)</NOBR><HR></H1>
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>from</B> </TD><TD valign=bottom>
+* a practical guide to splines *  by c. de boor
+constructs cholesky factorization
+<TABLE width=100% cellpadding=3><!-- tsb: * a practical guide to splines *  by c. de boor
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>c</B> </TD><TD valign=bottom>
+=  l * d * l-transpose
+with l unit lower triangular and d diagonal, for given matrix c of
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>order</B> </TD><TD valign=bottom>
+n r o w , in case  c  is (symmetric) positive semidefinite
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>and</B> </TD><TD valign=bottom>
+b a n d e d , having  n b a n d s  diagonals at and below the
+main diagonal.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+i n p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: i n p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>nrow&#46;&#46;&#46;..is the order of the matrix</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+c .
+nbands&#46;&#46;&#46;..indicates its bandwidth, i.e.,
+c(i,j) = 0 for i-j .ge. nbands .
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>w&#46;&#46;&#46;..workarray of size (nbands,nrow)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+containing the  nbands  diago-
+<TABLE width=100% cellpadding=3><!-- tsb: containing the  nbands  diago-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>nals in its rows, with the main diagonal in row</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+1 . precisely,
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>w(i,j)</B> </TD><TD valign=bottom>
+contains  c(i+j-1,j), i=1,&#46;&#46;&#46;,nbands, j=1,...,nrow.
+for example, the interesting entries of a seven diagonal sym-
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>metric matrix</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+c  of order  9  would be stored in  w  as
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>all other entries of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w  not identified in this way with an en-
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>try of</B> </TD><TD valign=bottom>
+c  are never referenced .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>diag&#46;&#46;&#46;..is a work array of length</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+nrow .
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+o u t p u t  ******
+<TABLE width=100% cellpadding=3><!-- tsb: o u t p u t  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>w&#46;&#46;&#46;..contains the cholesky factorization</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+c = l*d*l-transp, with
+<TABLE width=100% cellpadding=3><!-- tsb: c = l*d*l-transp, with
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>w(1,i) containing</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+1/d(i,i)
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>and</B> </TD><TD valign=bottom>
+w(i,j)  containing  l(i-1+j,j), i=2,&#46;&#46;&#46;,nbands.
+</TD></TR>
+<TR></TR></TABLE><!-- .RE -->
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>******</B> </TD><TD valign=bottom>
+m e t h o d  ******
+<TABLE width=100% cellpadding=3><!-- tsb: m e t h o d  ******
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>gauss elimination, adapted to the symmetry and bandedness of</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+c , is
+used .
+near zero pivots are handled in a special way. the diagonal ele-
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>ment c(n,n) = w(1,n) is saved initially in</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+diag(n), all n. at the n-
+<TABLE width=100% cellpadding=3><!-- tsb: diag(n), all n. at the n-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>th elimination step, the current pivot element, viz.</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w(1,n), is com-
+pared with its original value, diag(n). if, as the result of prior
+elimination steps, this element has been reduced by about a word
+length, (i.e., if w(1,n)+diag(n) .le. diag(n)), then the pivot is de-
+clared to be zero, and the entire n-th row is declared to be linearly
+dependent on the preceding rows. this has the effect of producing
+<TABLE width=100% cellpadding=3><!-- tsb: w(1,n), is com-
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>x(n) = 0</B> </TD><TD valign=bottom>
+when solving  c*x = b  for  x, regardless of  b. justific-
+ation for this is as follows. in contemplated applications of this
+program, the given equations are the normal equations for some least-
+squares approximation problem, diag(n) = c(n,n) gives the norm-square
+</TD></TR>
+<TR></TR></TABLE><!-- .TP -->
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>of the n-th basis function, and, at this point,</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+w(1,n)  contains the
+norm-square of the error in the least-squares approximation to the n-
+th basis function by linear combinations of the first n-1 . having
+w(1,n)+diag(n) .le. diag(n) signifies that the n-th function is lin-
+early dependent to machine accuracy on the first n-1 functions, there
+fore can safely be left out from the basis of approximating functions
+the solution of a linear system
+c*x = b
+<TABLE width=100% cellpadding=3><!-- tsb: w(1,n)  contains the
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>is effected by the succession of the following</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+t w o  calls:
+<TABLE width=100% cellpadding=3><!-- tsb: t w o  calls:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>call bchfac ( w, nbands, nrow, diag )</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+, to get factorization
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>call bchslv ( w, nbands, nrow, b )</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+, to solve for x.
+</TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE></TD></TR>
+<TR></TR></TABLE><P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>bchfac (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5ef2c15f-8bd5-4bc7-8eb6-30ce7675fc8d using man macros.</FONT>
+<br><br><center><img src="images/bchfac.3m_pppack.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,8 +1,8 @@
      program demo_expand
         ! demonstrate filter to expand C-like escape sequences in input lines
         use M_strings, only : expand
-        integer,parameter     :: iwidth=1024
-        integer               :: i
+        integer,parameter               :: iwidth=1024
+        integer                         :: i
         character(len=iwidth),parameter :: input(*)=[ character(len=iwidth) :: &
            '\e[H\e[2J',&   ! home cursor and clear screen on ANSI terminals
            '\tABC\tabc',&  ! write some tabs in the output

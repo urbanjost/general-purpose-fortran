@@ -56,7 +56,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-M_display(3f) - [M_display] module for pretty-printing matrices
+M_display(3f) - [M_display::INTRO] module for pretty-printing
+matrices
 <P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
@@ -73,39 +74,56 @@ M_display(3f) - [M_display] module for pretty-printing matrices
 </A>
 <BLOCKQUOTE>
 <P>
-M_display is a standard Fortran 95 module for quick and easy displaying of numbers, vectors or
-matrices using default or specified format. It can be useful for debugging purposes, for
-preliminary display of numerical results, and even for final display of such results in cases when
-carefully formatted tables are not needed. It is comparable to the automatic matrix printing of
-Matlab, S and R, but offers substantially more control over the format used.
+M_display is a standard Fortran 95 module for quick and easy displaying
+of numbers, vectors or matrices using default or specified format. It
+can be useful for debugging purposes, for preliminary display of
+numerical results, and even for final display of such results in cases
+when carefully formatted tables are not needed. It is comparable to the
+automatic matrix printing of Matlab, S and R, but offers substantially
+more control over the format used.
 <P>
-The module can handle the standard Fortran data types integer, single precision, double precision,
-complex, logical and character. Integer, real, complex and logical data of other than default kind
-are supported with add-on modules. The module contains the following public procedures:
+The module can handle the standard Fortran data types integer, single
+precision, double precision, complex, logical and character. Integer,
+real, complex and logical data of other than default kind are supported
+with add-on modules. The module contains the following public procedures:
 <P>
 <PRE>
-      Subroutine DISP                  The main procedure used for displaying items
-      Subroutine DISP_SET              Used to change default settings for DISP
-      Subroutine DISP_SET_FACTORY      Restores DISP-settings to original (factory) default
-      Function DISP_GET                Returns a structure with current DISP-settings
-      Function TOSTRING                Returns a string representation of a scalar or vector
-      Subroutine TOSTRING_SET          Used to change default settings for TOSTRING
-      Subroutine TOSTRING_SET_FACTORY  Restores TOSTRING-settings to original default
+    Subroutine DISP                  The main procedure used for
+                                     displaying items
+    Subroutine DISP_SET              Used to change default settings
+                                     for DISP
+    Subroutine DISP_SET_FACTORY      Restores DISP-settings to original
+                                     (factory) default
+    Function DISP_GET                Returns a structure with current
+                                     DISP-settings
+    Function TOSTRING                Returns a string representation of
+                                     a scalar or vector
+    Subroutine TOSTRING_SET          Used to change default settings
+                                     for TOSTRING
+    Subroutine TOSTRING_SET_FACTORY  Restores TOSTRING-settings to
+                                     original default
 <P>
 </PRE>
-In addition the module defines a public derived type, DISP_SETTINGS, used for saving and restoring
-settings for DISP. The procedures DISP and TOSTRING have a generic interface and optional
-arguments, so the same subroutine / function name, is used to display items of different data
-types and ranks, with or without labels, and using default or specified format. Similarly DISP_SET
-is generic and can be used both to change individual settings and to restore previously saved
-settings.
+In addition the module defines a public derived type, DISP_SETTINGS,
+used for saving and restoring settings for DISP. The procedures DISP and
+TOSTRING have a generic interface and optional arguments, so the same
+subroutine / function name, is used to display items of different data
+types and ranks, with or without labels, and using default or specified
+format. Similarly DISP_SET is generic and can be used both to change
+individual settings and to restore previously saved settings.
 <P>
-The most basic calling syntax for displaying is CALL DISP(expression) which will display the
-expression with default format. The format may be specified with CALL DISP(expression, edit-
-descriptor), and CALL DISP(title, expression) will label the displayed item with a title. Examples
-are CALL DISP(A), CALL DISP(A,&#146;F9.3&#146;), CALL DISP(&#146;A=&#146;,A) and CALL DISP(&#146;A=&#146;,A,&#146;F9.3&#146;), the last
-one specifying both title and format. If aij = exp(i + j - 1), i, j = 1,&#46;&#46;&#46;,4, then
-CALL DISP(&#146;A = &#146;, A) writes out:
+The most basic calling syntax for displaying is CALL DISP(expression)
+which will display the expression with default format. The format
+may be specified with CALL DISP(expression, edit- descriptor), and
+CALL DISP(title, expression) will label the displayed item with a
+title. Examples are CALL DISP(A), CALL DISP(A,&#146;F9.3&#146;), CALL DISP(&#146;A=&#146;,A)
+and CALL DISP(&#146;A=&#146;,A,&#146;F9.3&#146;), the last one specifying both title and
+format. If aij = exp(i + j - 1), i, j = 1,&#46;&#46;&#46;,4, then
+<P>
+<PRE>
+    CALL DISP(&#146;A = &#146;, A)
+</PRE>
+writes out:
 <P>
 <PRE>
      &gt; A =  2.72    7.39   20.09    54.60
@@ -123,7 +141,8 @@ and if bij = exp(i*j) the result of CALL DISP(B) is:
      &gt; 5.45981E+1  2.98096E+3  1.62755E+5  8.88611E+6.
 <P>
 </PRE>
-It is also possible to number the rows and columns: CALL DISP(A, STYLE=&#146;NUMBER&#146;) will give:
+It is also possible to number the rows and columns: CALL DISP(A,
+STYLE=&#146;NUMBER&#146;) will give:
 <P>
 <PRE>
      &gt;      1       2       3        4
@@ -133,10 +152,12 @@ It is also possible to number the rows and columns: CALL DISP(A, STYLE=&#146;NUM
      &gt; 4  54.60  148.41  403.43  1096.63.
 <P>
 </PRE>
-The selection between F and E editing depends on the size of the largest displayed element as
-discussed in section 3.2 below. Among the settings that may be controlled is the spacing between
-columns, the number of significant digits, the placement of the label, and the file unit where the
-output goes. Items can in addition be displayed side by side, for example:
+The selection between F and E editing depends on the size of the largest
+displayed element as discussed in section 3.2 below. Among the settings
+that may be controlled is the spacing between columns, the number
+of significant digits, the placement of the label, and the file unit
+where the output goes. Items can in addition be displayed side by side,
+for example:
 <P>
 <PRE>
      &gt; CALL DISP(&#146;X = &#146;, X, ADVANCE=&#146;NO&#146;)
@@ -167,15 +188,19 @@ which will display
      &gt;     1.099 + 3.142i   -6.659 + 11.258i   -54.449 + 14.495i
 <P>
 </PRE>
-infinite and not-a-number real values are supported and displayed as nan, +inf or <B>-inf</B>.
+infinite and not-a-number real values are supported and displayed as nan,
++inf or <B>-inf</B>.
 <P>
-the remaining sections in this user manual contain detailed information on using the module.
-section 2 discusses the basics of using the module, including use statements, compiling and
-linking, and add-on modules supporting non-default kinds of data. section 3 gives a detailed
-description of the generic subroutine disp. all the possible arguments are listed and the purpose
-of each one described. section 4 describes how to change various settings that control how items
-are displayed with disp. section 5 describes the function tostring which may be used to change
-numbers to strings. finally testing of the module is discussed in section 6.
+the remaining sections in this user manual contain detailed information
+on using the module. section 2 discusses the basics of using the
+module, including use statements, compiling and linking, and add-on
+modules supporting non-default kinds of data. section 3 gives a detailed
+description of the generic subroutine disp. all the possible arguments
+are listed and the purpose of each one described. section 4 describes
+how to change various settings that control how items are displayed with
+disp. section 5 describes the function tostring which may be used to
+change numbers to strings. finally testing of the module is discussed
+in section 6.
 </BLOCKQUOTE>
 <A name=2>
 
@@ -184,16 +209,18 @@ numbers to strings. finally testing of the module is discussed in section 6.
 </A>
 <BLOCKQUOTE>
 <P>
-The file M_display.f90 actually begins with two auxiliary
-modules, PUTSTRMODULE and M_display_UTIL. The first one contains two dummy subroutines, PUTSTR
-and PUTNL, which do nothing, but must be incorporated to avoid an "undefined symbol" link error.
-In addition it defines the named constant (parameter) DEFAULT_UNIT = <B>-3</B>, which makes the asterisk
+The file M_display.f90 actually begins with two auxiliary modules,
+M_display__PUTSTRMODULE and M_display__UTIL. The first one contains two dummy
+subroutines, PUTSTR and PUTNL, which do nothing, but must be incorporated
+to avoid an "undefined symbol" link error. In addition it defines the
+named constant (parameter) DEFAULT_UNIT = <B>-3</B>, which makes the asterisk
 unit (usually the screen) the default to display on.
 <P>
-Alternatively the user can write his own PUTSTRMODULE as described below. An
-example is near the beginning of M_display.f90 (commented out) and also in the file
-putstrmodule_mex.f90, enclosed with the package. It may be used (commented in instead of the
-default one) to allow Matlab mex files to display in the Matlab command window.
+Alternatively the user can write his own M_display__PUTSTRMODULE as described
+below. An example is near the beginning of M_display.f90 (commented out)
+and also in the file putstrmodule_mex.f90, enclosed with the package. It
+may be used (commented in instead of the default one) to allow Matlab
+mex files to display in the Matlab command window.
 </BLOCKQUOTE>
 <A name=3>
 
@@ -246,55 +273,34 @@ A longer example program:
 Expected results:
 <P>
 <PRE>
-   A =  2.718   7.389   20.086
-        7.389  20.086   54.598
-       20.086  54.598  148.413
-<P>
-   2.71828E+00  2.71828E+00  2.71828E+00
-   7.38906E+00  5.45982E+01  2.98096E+03
-   2.00855E+01  8.10308E+03  5.32048E+11
-<P>
-   2.71828   7.38906  20.08554
-   7.38906  20.08554  54.59815
+    &gt; A =  2.718   7.389   20.086
+    &gt;      7.389  20.086   54.598
+    &gt;     20.086  54.598  148.413
+    &gt;
+    &gt; 2.71828E+00  2.71828E+00  2.71828E+00
+    &gt; 7.38906E+00  5.45982E+01  2.98096E+03
+    &gt; 2.00855E+01  8.10308E+03  5.32048E+11
+    &gt;
+    &gt; 2.71828   7.38906  20.08554
+    &gt; 7.38906  20.08554  54.59815
+    &gt;
+    &gt;        MATRIX
+    &gt; --------------------
+    &gt;      1     2      3
+    &gt; 1   2.7   7.4   20.1
+    &gt; 2   7.4  20.1   54.6
+    &gt; 3  20.1  54.6  148.4
+    &gt;
+    &gt; ------K-----
+    &gt; -3 . 12 14 .
+    &gt;
+    &gt; The square of 1.5 is 2.25
+    &gt;
+    &gt; 11 | T | A
+    &gt; 12 | F | B
+    &gt; 13 | T | C
 <P>
 </PRE>
-</BLOCKQUOTE>
-<A name=>
-
-    <H4>&nbsp; &nbsp; MATRIX</H4>
-</A>
-<BLOCKQUOTE>
---------------------
-<BLOCKQUOTE>
-<TABLE cellpadding=3><!-- tsb: --------------------
- -->
-<TR></TR><TR></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>1</B> </TD><TD valign=bottom>
-2      3
-</TD></TR>
-<TR></TR></TABLE></BLOCKQUOTE>
-<TABLE cellpadding=3>
-<TR valign=top><TD width=6% nowrap>
-<B>1</B> </TD><TD valign=bottom>
-2.7   7.4   20.1
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>2</B> </TD><TD valign=bottom>
-7.4  20.1   54.6
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>3</B> </TD><TD valign=bottom>
-20.1  54.6  148.4
-</TD></TR>
-<TR></TR></TABLE><B>------K</B>-----
-<B>-3</B> . 12 14 .
-<P>
-The square of 1.5 is 2.25
-<P>
-11 | T | A
-12 | F | B
-13 | T | C
 </BLOCKQUOTE>
 <A name=4>
 
@@ -302,12 +308,15 @@ The square of 1.5 is 2.25
 
 </A>
 <BLOCKQUOTE>
-Based on dispmodule(3f), "A Fortran 95 module for pretty-printing matrices".
-Version number 1.02 6-Sept-2008, Kristjan Jonasson, Dept. of Computer Science, University of
-Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
+Based on dispmodule(3f),
+"A Fortran 95 module for pretty-printing matrices".
+Version number 1.02 6-Sept-2008,
+Kristjan Jonasson,
+Dept. of Computer Science,
+University of Iceland (<A HREF="mailto:jonasson@hi.is">jonasson@hi.is</A>).
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_display (3)</TD> <TD align=right width=33%><I>February 23, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4a2aaf9d-94ad-4725-a902-904fefac8b98 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_display (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 14f4b077-c330-45ba-a8b8-26221c139fc4 using man macros.</FONT>
 <br><br><center><img src="images/M_display.3m_display.gif"></center>
 </div>
 </div>

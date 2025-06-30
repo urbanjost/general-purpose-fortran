@@ -1,6 +1,6 @@
 # TOML file for fpm as described at https://fpm.fortran-lang.org/en/spec/manifest.html
 name = "GPF"
-version = "2025.02.23"
+version = "2025.29.29"
 license = "Primarily MIT and PD"
 author = "John S. Urban and GPF maintainers"
 maintainer = "urbanjost@comcast.net"

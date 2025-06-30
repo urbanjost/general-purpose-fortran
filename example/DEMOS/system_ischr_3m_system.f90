@@ -3,6 +3,12 @@
      implicit none
      integer                     :: i
      character(len=80),parameter :: names(*)=[ &
+     '/dev/tty        ', &
+     '/dev/null       ', &
+     '/dev/console    ', &
+     '/dev/random     ', &
+     '/dev/urandom    ', &
+     '/dev/zero       ', &
      '/tmp            ', &
      '/tmp/NOTTHERE   ', &
      '/usr/local      ', &

@@ -9,7 +9,7 @@
      character(len=*),parameter  :: gen='(*(g0,1x))'
 
         ! create an array in LALA so have something to get
-        call lala('A=rand(4,5)*10.5,long,A')
+        call lala('A=randu(4,5)*10.5,long,A')
 
         ! get the array as a REAL array
         call get_from_lala('A',rarr,ierr)

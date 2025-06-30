@@ -1,6 +1,6 @@
 program program_test_suite_M_math
-use M_framework__verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use :: M_framework__verify,   only : unit_check_stop
+use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
+use :: M_framework__verify,   only : unit_test_stop
 use M_math
    write(*,*)'STARTED M_math'
 !===================================================================================================================================
@@ -65,337 +65,337 @@ use M_math
 ! POLYNOMIAL
    call test_quadratic()      ! return roots of quadratic equation even if complex
 !*! teardown
-   call unit_check_stop()
+   call unit_test_stop()
    write(*,*)'COMPLETED M_math'
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_invert_2x2()
 
-   call unit_check_start('invert_2x2',msg='')
-   !*!call unit_check('invert_2x2', 0.eq.0, 'checking', 100)
-   call unit_check_done('invert_2x2',msg='')
+   call unit_test_start('invert_2x2',msg='')
+   !*!call unit_test('invert_2x2', 0.eq.0, 'checking', 100)
+   call unit_test_done('invert_2x2',msg='')
 end subroutine test_invert_2x2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_invert_3x3()
 
-   call unit_check_start('invert_3x3',msg='')
-   !*!call unit_check('invert_3x3', 0.eq.0, 'checking', 100)
-   call unit_check_done('invert_3x3',msg='')
+   call unit_test_start('invert_3x3',msg='')
+   !*!call unit_test('invert_3x3', 0.eq.0, 'checking', 100)
+   call unit_test_done('invert_3x3',msg='')
 end subroutine test_invert_3x3
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_invert_4x4()
 
-   call unit_check_start('invert_4x4',msg='')
-   !*!call unit_check('invert_4x4', 0.eq.0, 'checking', 100)
-   call unit_check_done('invert_4x4',msg='')
+   call unit_test_start('invert_4x4',msg='')
+   !*!call unit_test('invert_4x4', 0.eq.0, 'checking', 100)
+   call unit_test_done('invert_4x4',msg='')
 end subroutine test_invert_4x4
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_bds()
 
-   call unit_check_start('bds',msg='')
-   !*!call unit_check('bds', 0.eq.0, 'checking', 100)
-   call unit_check_done('bds',msg='')
+   call unit_test_start('bds',msg='')
+   !*!call unit_test('bds', 0.eq.0, 'checking', 100)
+   call unit_test_done('bds',msg='')
 end subroutine test_bds
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_citer()
 
-   call unit_check_start('citer',msg='')
-   !*!call unit_check('citer', 0.eq.0, 'checking', 100)
-   call unit_check_done('citer',msg='')
+   call unit_test_start('citer',msg='')
+   !*!call unit_test('citer', 0.eq.0, 'checking', 100)
+   call unit_test_done('citer',msg='')
 end subroutine test_citer
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_complex_invert_2x2()
 
-   call unit_check_start('complex_invert_2x2',msg='')
-   !*!call unit_check('complex_invert_2x2', 0.eq.0, 'checking', 100)
-   call unit_check_done('complex_invert_2x2',msg='')
+   call unit_test_start('complex_invert_2x2',msg='')
+   !*!call unit_test('complex_invert_2x2', 0.eq.0, 'checking', 100)
+   call unit_test_done('complex_invert_2x2',msg='')
 end subroutine test_complex_invert_2x2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_complex_invert_3x3()
 
-   call unit_check_start('complex_invert_3x3',msg='')
-   !*!call unit_check('complex_invert_3x3', 0.eq.0, 'checking', 100)
-   call unit_check_done('complex_invert_3x3',msg='')
+   call unit_test_start('complex_invert_3x3',msg='')
+   !*!call unit_test('complex_invert_3x3', 0.eq.0, 'checking', 100)
+   call unit_test_done('complex_invert_3x3',msg='')
 end subroutine test_complex_invert_3x3
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_complex_invert_4x4()
 
-   call unit_check_start('complex_invert_4x4',msg='')
-   !*!call unit_check('complex_invert_4x4', 0.eq.0, 'checking', 100)
-   call unit_check_done('complex_invert_4x4',msg='')
+   call unit_test_start('complex_invert_4x4',msg='')
+   !*!call unit_test('complex_invert_4x4', 0.eq.0, 'checking', 100)
+   call unit_test_done('complex_invert_4x4',msg='')
 end subroutine test_complex_invert_4x4
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_double_invert_2x2()
 
-   call unit_check_start('double_invert_2x2',msg='')
-   !*!call unit_check('double_invert_2x2', 0.eq.0, 'checking', 100)
-   call unit_check_done('double_invert_2x2',msg='')
+   call unit_test_start('double_invert_2x2',msg='')
+   !*!call unit_test('double_invert_2x2', 0.eq.0, 'checking', 100)
+   call unit_test_done('double_invert_2x2',msg='')
 end subroutine test_double_invert_2x2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_double_invert_3x3()
 
-   call unit_check_start('double_invert_3x3',msg='')
-   !*!call unit_check('double_invert_3x3', 0.eq.0, 'checking', 100)
-   call unit_check_done('double_invert_3x3',msg='')
+   call unit_test_start('double_invert_3x3',msg='')
+   !*!call unit_test('double_invert_3x3', 0.eq.0, 'checking', 100)
+   call unit_test_done('double_invert_3x3',msg='')
 end subroutine test_double_invert_3x3
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_double_invert_4x4()
 
-   call unit_check_start('double_invert_4x4',msg='')
-   !*!call unit_check('double_invert_4x4', 0.eq.0, 'checking', 100)
-   call unit_check_done('double_invert_4x4',msg='')
+   call unit_test_start('double_invert_4x4',msg='')
+   !*!call unit_test('double_invert_4x4', 0.eq.0, 'checking', 100)
+   call unit_test_done('double_invert_4x4',msg='')
 end subroutine test_double_invert_4x4
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_envelope()
 
-   call unit_check_start('envelope',msg='')
-   !*!call unit_check('envelope', 0.eq.0, 'checking', 100)
-   call unit_check_done('envelope',msg='')
+   call unit_test_start('envelope',msg='')
+   !*!call unit_test('envelope', 0.eq.0, 'checking', 100)
+   call unit_test_done('envelope',msg='')
 end subroutine test_envelope
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_extremum()
 
-   call unit_check_start('extremum',msg='')
-   !*!call unit_check('extremum', 0.eq.0, 'checking', 100)
-   call unit_check_done('extremum',msg='')
+   call unit_test_start('extremum',msg='')
+   !*!call unit_test('extremum', 0.eq.0, 'checking', 100)
+   call unit_test_done('extremum',msg='')
 end subroutine test_extremum
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_glstsq()
 
-   call unit_check_start('glstsq',msg='')
-   !*!call unit_check('glstsq', 0.eq.0, 'checking', 100)
-   call unit_check_done('glstsq',msg='')
+   call unit_test_start('glstsq',msg='')
+   !*!call unit_test('glstsq', 0.eq.0, 'checking', 100)
+   call unit_test_done('glstsq',msg='')
 end subroutine test_glstsq
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_inpolygon()
 
-   call unit_check_start('inpolygon',msg='')
-   !*!call unit_check('inpolygon', 0.eq.0, 'checking', 100)
-   call unit_check_done('inpolygon',msg='')
+   call unit_test_start('inpolygon',msg='')
+   !*!call unit_test('inpolygon', 0.eq.0, 'checking', 100)
+   call unit_test_done('inpolygon',msg='')
 end subroutine test_inpolygon
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_integer_invert_2x2()
 
-   call unit_check_start('integer_invert_2x2',msg='')
-   !*!call unit_check('integer_invert_2x2', 0.eq.0, 'checking', 100)
-   call unit_check_done('integer_invert_2x2',msg='')
+   call unit_test_start('integer_invert_2x2',msg='')
+   !*!call unit_test('integer_invert_2x2', 0.eq.0, 'checking', 100)
+   call unit_test_done('integer_invert_2x2',msg='')
 end subroutine test_integer_invert_2x2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_integer_invert_3x3()
 
-   call unit_check_start('integer_invert_3x3',msg='')
-   !*!call unit_check('integer_invert_3x3', 0.eq.0, 'checking', 100)
-   call unit_check_done('integer_invert_3x3',msg='')
+   call unit_test_start('integer_invert_3x3',msg='')
+   !*!call unit_test('integer_invert_3x3', 0.eq.0, 'checking', 100)
+   call unit_test_done('integer_invert_3x3',msg='')
 end subroutine test_integer_invert_3x3
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_integer_invert_4x4()
 
-   call unit_check_start('integer_invert_4x4',msg='')
-   !*!call unit_check('integer_invert_4x4', 0.eq.0, 'checking', 100)
-   call unit_check_done('integer_invert_4x4',msg='')
+   call unit_test_start('integer_invert_4x4',msg='')
+   !*!call unit_test('integer_invert_4x4', 0.eq.0, 'checking', 100)
+   call unit_test_done('integer_invert_4x4',msg='')
 end subroutine test_integer_invert_4x4
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_ju_polfit()
 
-   call unit_check_start('ju_polfit',msg='')
-   !*!call unit_check('ju_polfit', 0.eq.0, 'checking', 100)
-   call unit_check_done('ju_polfit',msg='')
+   call unit_test_start('ju_polfit',msg='')
+   !*!call unit_test('ju_polfit', 0.eq.0, 'checking', 100)
+   call unit_test_done('ju_polfit',msg='')
 end subroutine test_ju_polfit
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_ju_pvalue()
 
-   call unit_check_start('ju_pvalue',msg='')
-   !*!call unit_check('ju_pvalue', 0.eq.0, 'checking', 100)
-   call unit_check_done('ju_pvalue',msg='')
+   call unit_test_start('ju_pvalue',msg='')
+   !*!call unit_test('ju_pvalue', 0.eq.0, 'checking', 100)
+   call unit_test_done('ju_pvalue',msg='')
 end subroutine test_ju_pvalue
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_julfit()
 
-   call unit_check_start('julfit',msg='')
-   !*!call unit_check('julfit', 0.eq.0, 'checking', 100)
-   call unit_check_done('julfit',msg='')
+   call unit_test_start('julfit',msg='')
+   !*!call unit_test('julfit', 0.eq.0, 'checking', 100)
+   call unit_test_done('julfit',msg='')
 end subroutine test_julfit
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_julfit1()
 
-   call unit_check_start('julfit1',msg='')
-   !*!call unit_check('julfit1', 0.eq.0, 'checking', 100)
-   call unit_check_done('julfit1',msg='')
+   call unit_test_start('julfit1',msg='')
+   !*!call unit_test('julfit1', 0.eq.0, 'checking', 100)
+   call unit_test_done('julfit1',msg='')
 end subroutine test_julfit1
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_linearint()
 
-   call unit_check_start('linearint',msg='')
-   !*!call unit_check('linearint', 0.eq.0, 'checking', 100)
-   call unit_check_done('linearint',msg='')
+   call unit_test_start('linearint',msg='')
+   !*!call unit_test('linearint', 0.eq.0, 'checking', 100)
+   call unit_test_done('linearint',msg='')
 end subroutine test_linearint
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_locpt()
 
-   call unit_check_start('locpt',msg='')
-   !*!call unit_check('locpt', 0.eq.0, 'checking', 100)
-   call unit_check_done('locpt',msg='')
+   call unit_test_start('locpt',msg='')
+   !*!call unit_test('locpt', 0.eq.0, 'checking', 100)
+   call unit_test_done('locpt',msg='')
 end subroutine test_locpt
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lowess()
 
-   call unit_check_start('lowess',msg='')
-   !*!call unit_check('lowess', 0.eq.0, 'checking', 100)
-   call unit_check_done('lowess',msg='')
+   call unit_test_start('lowess',msg='')
+   !*!call unit_test('lowess', 0.eq.0, 'checking', 100)
+   call unit_test_done('lowess',msg='')
 end subroutine test_lowess
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_magic_square()
 
-   call unit_check_start('magic_square',msg='')
-   !*!call unit_check('magic_square', 0.eq.0, 'checking', 100)
-   call unit_check_done('magic_square',msg='')
+   call unit_test_start('magic_square',msg='')
+   !*!call unit_test('magic_square', 0.eq.0, 'checking', 100)
+   call unit_test_done('magic_square',msg='')
 end subroutine test_magic_square
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_ncr()
 
-   call unit_check_start('ncr',msg='')
-   !*!call unit_check('ncr', 0.eq.0, 'checking', 100)
-   call unit_check_done('ncr',msg='')
+   call unit_test_start('ncr',msg='')
+   !*!call unit_test('ncr', 0.eq.0, 'checking', 100)
+   call unit_test_done('ncr',msg='')
 end subroutine test_ncr
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_poly_intercept()
 
-   call unit_check_start('poly_intercept',msg='')
-   !*!call unit_check('poly_intercept', 0.eq.0, 'checking', 100)
-   call unit_check_done('poly_intercept',msg='')
+   call unit_test_start('poly_intercept',msg='')
+   !*!call unit_test('poly_intercept', 0.eq.0, 'checking', 100)
+   call unit_test_done('poly_intercept',msg='')
 end subroutine test_poly_intercept
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_polyarea()
 
-   call unit_check_start('polyarea',msg='')
-   !*!call unit_check('polyarea', 0.eq.0, 'checking', 100)
-   call unit_check_done('polyarea',msg='')
+   call unit_test_start('polyarea',msg='')
+   !*!call unit_test('polyarea', 0.eq.0, 'checking', 100)
+   call unit_test_done('polyarea',msg='')
 end subroutine test_polyarea
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_polyarea_mid_point()
 
-   call unit_check_start('polyarea_mid_point',msg='')
-   !*!call unit_check('polyarea_mid_point', 0.eq.0, 'checking', 100)
-   call unit_check_done('polyarea_mid_point',msg='')
+   call unit_test_start('polyarea_mid_point',msg='')
+   !*!call unit_test('polyarea_mid_point', 0.eq.0, 'checking', 100)
+   call unit_test_done('polyarea_mid_point',msg='')
 end subroutine test_polyarea_mid_point
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_polyarea_shoelace()
 
-   call unit_check_start('polyarea_shoelace',msg='')
-   !*!call unit_check('polyarea_shoelace', 0.eq.0, 'checking', 100)
-   call unit_check_done('polyarea_shoelace',msg='')
+   call unit_test_start('polyarea_shoelace',msg='')
+   !*!call unit_test('polyarea_shoelace', 0.eq.0, 'checking', 100)
+   call unit_test_done('polyarea_shoelace',msg='')
 end subroutine test_polyarea_shoelace
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_closest()
 
-   call unit_check_start('closest',msg='')
-   !*!call unit_check('closest', 0.eq.0, 'checking', 100)
-   call unit_check_done('closest',msg='')
+   call unit_test_start('closest',msg='')
+   !*!call unit_test('closest', 0.eq.0, 'checking', 100)
+   call unit_test_done('closest',msg='')
 end subroutine test_closest
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_qhfg()
 
-   call unit_check_start('qhfg',msg='')
-   !*!call unit_check('qhfg', 0.eq.0, 'checking', 100)
-   call unit_check_done('qhfg',msg='')
+   call unit_test_start('qhfg',msg='')
+   !*!call unit_test('qhfg', 0.eq.0, 'checking', 100)
+   call unit_test_done('qhfg',msg='')
 end subroutine test_qhfg
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_qhsg()
 
-   call unit_check_start('qhsg',msg='')
-   !*!call unit_check('qhsg', 0.eq.0, 'checking', 100)
-   call unit_check_done('qhsg',msg='')
+   call unit_test_start('qhsg',msg='')
+   !*!call unit_test('qhsg', 0.eq.0, 'checking', 100)
+   call unit_test_done('qhsg',msg='')
 end subroutine test_qhsg
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_qtfg()
 
-   call unit_check_start('qtfg',msg='')
-   !*!call unit_check('qtfg', 0.eq.0, 'checking', 100)
-   call unit_check_done('qtfg',msg='')
+   call unit_test_start('qtfg',msg='')
+   !*!call unit_test('qtfg', 0.eq.0, 'checking', 100)
+   call unit_test_done('qtfg',msg='')
 end subroutine test_qtfg
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_trapezoidal_integral()
 
-   call unit_check_start('trapezoidal_integral',msg='')
-   !*!call unit_check('trapezoidal_integral', 0.eq.0, 'checking', 100)
-   call unit_check_done('trapezoidal_integral',msg='')
+   call unit_test_start('trapezoidal_integral',msg='')
+   !*!call unit_test('trapezoidal_integral', 0.eq.0, 'checking', 100)
+   call unit_test_done('trapezoidal_integral',msg='')
 end subroutine test_trapezoidal_integral
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_quadratic()
 
-   call unit_check_start('quadratic',msg='')
-   !*!call unit_check('quadratic', 0.eq.0, 'checking', 100)
-   call unit_check_done('quadratic',msg='')
+   call unit_test_start('quadratic',msg='')
+   !*!call unit_test('quadratic', 0.eq.0, 'checking', 100)
+   call unit_test_done('quadratic',msg='')
 end subroutine test_quadratic
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_real_invert_2x2()
 
-   call unit_check_start('real_invert_2x2',msg='')
-   !*!call unit_check('real_invert_2x2', 0.eq.0, 'checking', 100)
-   call unit_check_done('real_invert_2x2',msg='')
+   call unit_test_start('real_invert_2x2',msg='')
+   !*!call unit_test('real_invert_2x2', 0.eq.0, 'checking', 100)
+   call unit_test_done('real_invert_2x2',msg='')
 end subroutine test_real_invert_2x2
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_real_invert_3x3()
 
-   call unit_check_start('real_invert_3x3',msg='')
-   !*!call unit_check('real_invert_3x3', 0.eq.0, 'checking', 100)
-   call unit_check_done('real_invert_3x3',msg='')
+   call unit_test_start('real_invert_3x3',msg='')
+   !*!call unit_test('real_invert_3x3', 0.eq.0, 'checking', 100)
+   call unit_test_done('real_invert_3x3',msg='')
 end subroutine test_real_invert_3x3
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_real_invert_4x4()
 
-   call unit_check_start('real_invert_4x4',msg='')
-   !*!call unit_check('real_invert_4x4', 0.eq.0, 'checking', 100)
-   call unit_check_done('real_invert_4x4',msg='')
+   call unit_test_start('real_invert_4x4',msg='')
+   !*!call unit_test('real_invert_4x4', 0.eq.0, 'checking', 100)
+   call unit_test_done('real_invert_4x4',msg='')
 end subroutine test_real_invert_4x4
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_scale1()
 
-   call unit_check_start('scale1',msg='')
-   !*!call unit_check('scale1', 0.eq.0, 'checking', 100)
-   call unit_check_done('scale1',msg='')
+   call unit_test_start('scale1',msg='')
+   !*!call unit_test('scale1', 0.eq.0, 'checking', 100)
+   call unit_test_done('scale1',msg='')
 end subroutine test_scale1
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_scale3()
 
-   call unit_check_start('scale3',msg='')
-   !*!call unit_check('scale3', 0.eq.0, 'checking', 100)
-   call unit_check_done('scale3',msg='')
+   call unit_test_start('scale3',msg='')
+   !*!call unit_test('scale3', 0.eq.0, 'checking', 100)
+   call unit_test_done('scale3',msg='')
 end subroutine test_scale3
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_skekur1()
 
-   call unit_check_start('skekur1',msg='')
-   !*!call unit_check('skekur1', 0.eq.0, 'checking', 100)
-   call unit_check_done('skekur1',msg='')
+   call unit_test_start('skekur1',msg='')
+   !*!call unit_test('skekur1', 0.eq.0, 'checking', 100)
+   call unit_test_done('skekur1',msg='')
 end subroutine test_skekur1
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_skekurx()
 
-   call unit_check_start('skekurx',msg='')
-   !*!call unit_check('skekurx', 0.eq.0, 'checking', 100)
-   call unit_check_done('skekurx',msg='')
+   call unit_test_start('skekurx',msg='')
+   !*!call unit_test('skekurx', 0.eq.0, 'checking', 100)
+   call unit_test_done('skekurx',msg='')
 end subroutine test_skekurx
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_splift()
 
-   call unit_check_start('splift',msg='')
-   !*!call unit_check('splift', 0.eq.0, 'checking', 100)
-   call unit_check_done('splift',msg='')
+   call unit_test_start('splift',msg='')
+   !*!call unit_test('splift', 0.eq.0, 'checking', 100)
+   call unit_test_done('splift',msg='')
 end subroutine test_splift
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_splint()
 
-   call unit_check_start('splint',msg='')
-   !*!call unit_check('splint', 0.eq.0, 'checking', 100)
-   call unit_check_done('splint',msg='')
+   call unit_test_start('splint',msg='')
+   !*!call unit_test('splint', 0.eq.0, 'checking', 100)
+   call unit_test_done('splint',msg='')
 end subroutine test_splint
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_stddev()
 
-   call unit_check_start('stddev',msg='')
-   !*!call unit_check('stddev', 0.eq.0, 'checking', 100)
-   call unit_check_done('stddev',msg='')
+   call unit_test_start('stddev',msg='')
+   !*!call unit_test('stddev', 0.eq.0, 'checking', 100)
+   call unit_test_done('stddev',msg='')
 end subroutine test_stddev
 !===================================================================================================================================
 end program program_test_suite_M_math

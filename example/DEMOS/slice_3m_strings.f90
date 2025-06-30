@@ -25,7 +25,7 @@
          call printme()
       contains
       subroutine printme()
-         write(*,'((*(:/,3x,"[",g0,"]")))')&
+         write(*,'(*(:/,3x,"[",g0,"]"))')&
                  & (line(ibegin(i):iend(i)),i=1,size(ibegin))
          write(*,'(*(g0,1x))')'SIZE:',size(ibegin)
       end subroutine printme

@@ -1,0 +1,144 @@
+# from https://github.com/gha3mi/setup-fortran-conda
+name: multi-platform fpm test using conda setup
+
+on:
+  push:
+    branches: [main, master, dev]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        compiler: [gfortran, ifx, lfortran, flang-new]
+        include:
+        - os: ubuntu-latest
+          extra-packages: ""
+        - os: windows-latest
+          extra-packages: ""
+        - os: macos-latest
+          extra-packages: ""
+        exclude:
+          - os: macos-latest
+            compiler: flang-new
+          - os: macos-latest
+            compiler: ifx
+          - os: windows-latest
+            compiler: lfortran
+          - os: windows-latest
+            compiler: flang-new
+    env:
+      TZ: UTC+04:00
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          activate-environment: fortran
+          channels: conda-forge, defaults
+
+      - name: Setup Fortran
+        uses: gha3mi/setup-fortran-conda@dev
+        with:
+          compiler: ${{ matrix.compiler }}
+          platform: ${{ matrix.os }}
+          extra-packages: ${{ matrix.extra-packages }}
+
+# ENVIRONMENT VARIABLES FOR COMPILERS
+#  FPM_FC            sets the path to the Fortran compiler used for the build, ==> --compiler
+#  FPM_FFLAGS        sets the arguments for the Fortran compiler               ==> --flag
+#  FPM_CC            sets the path to the C compiler used for the build        ==> --c-compiler
+#  FPM_CFLAGS        sets the arguments for the C compiler                     ==> --c-flag
+#  FPM_CXX           sets the path to the C++ compiler used for the build,     ==> --cxx-compiler
+#  FPM_CXXFLAGS      sets the arguments for the C++ compiler                   ==> --cxx-flag
+#  FPM_AR            sets the path to the archiver used for the build,         ==> --archiver
+#  FPM_LDFLAGS       sets additional link arguments for creating executables   ==> --link-flag
+#
+      - name: Set environment for lfortran
+        if: matrix.compiler == 'lfortran'
+        run: |
+          echo "FPM_FFLAGS='--no-style-warnings' --cpp" >> $GITHUB_ENV
+
+      - name: Set environment for gfortran and windows
+        if: matrix.compiler == 'gfortran' && matrix.os == 'windows-latest'
+        run: |
+          echo "end" >_empty.f90
+          gfortran -cpp -dM -E _empty.f90
+          gfortran --version
+          echo "FPM_FFLAGS=-D_WIN32" >> $env:GITHUB_ENV
+
+      - name: Set environment for gfortran and not windows
+        if: matrix.compiler == 'gfortran' && matrix.os != 'windows-latest'
+        run: |
+          echo "end" >_empty.f90
+          gfortran -cpp -dM -E _empty.f90
+          gfortran --version
+
+      - name: Set environment for flang-new
+        if: matrix.compiler == 'flang-new'
+        run: |
+          echo "end" >_empty.f90
+          flang-new -cpp -dM -E _empty.f90
+          flang-new --version
+          echo "FPM_FFLAGS='-cpp'" >> $GITHUB_ENV
+
+      - name: Set environment for ifx and windows
+        if: matrix.compiler == 'ifx' &&  matrix.os == 'windows-latest'
+        run: |
+          echo "end" >_empty.f90
+          ifx -E -fpp empty.f90 -dryrun 2>&1 | perl -lne 'print for /-D(\S+)/'
+          #ifx /logo
+          #ifx /help
+          echo "FPM_FFLAGS=/fpp" >> $env:GITHUB_ENV
+
+      - name: Set environment for ifx and not windows
+        if: matrix.compiler == 'ifx' &&  matrix.os != 'windows-latest'
+        run: |
+          echo "end" >_empty.f90
+          ifx -E -fpp empty.f90 -dryrun 2>&1 | perl -lne 'print for /-D(\S+)/'
+          ifx --version
+
+# OS
+      - name: Set environment for ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          ulimit -c unlimited -d unlimited -f unlimited -m unlimited -s unlimited -t unlimited -v unlimited -x unlimited
+
+# RUN TESTS
+
+      - name: fpm test (debug)
+        if: matrix.os != 'windows-latest'
+        run: |
+          fpm test --compiler ${{ matrix.compiler }} --profile debug --verbose
+
+      - name: fpm test (release)
+        if: matrix.os != 'windows-latest'
+        run: |
+          fpm test --compiler ${{ matrix.compiler }} --profile release -- --brief
+
+      - name: fpm test (debug)
+        if: matrix.os == 'windows-latest' && matrix.compiler != 'gfortran'
+        run: |
+          fpm test --compiler ${{ matrix.compiler }} --profile debug --verbose
+
+      - name: fpm test (release)
+        if: matrix.os == 'windows-latest' && matrix.compiler != 'gfortran'
+        run: |
+          fpm test --compiler ${{ matrix.compiler }} --profile release -- --brief
+
+      - name: fpm test (debug)
+        if: matrix.os == 'windows-latest' && matrix.compiler == 'gfortran'
+        run: |
+          fpm test --compiler ${{ matrix.compiler }} --verbose --fflags="-D_WIN32 -Wall -Wextra -fmax-errors=1 -g -fcheck=bounds -fcheck=array-temps -fbacktrace -fcoarray=single -fimplicit-none -Werror=implicit-interface" 
+
+      - name: fpm test (release)
+        if: matrix.os == 'windows-latest' && matrix.compiler == 'gfortran'
+        run: |
+          fpm test --compiler ${{ matrix.compiler }} --verbose --fflags="-D_WIN32 -O3 -funroll-loops -Wimplicit-interface -fmax-errors=1 -fcoarray=single -fimplicit-none -Werror=implicit-interface -ffree-form" -- --brief

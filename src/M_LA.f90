@@ -9,8 +9,8 @@
 
 
 
-module M_LA
-use,intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, stdout=>OUTPUT_UNIT
+module m_la
+use,intrinsic :: iso_fortran_env, only : stderr=>error_unit, stdin=>input_unit, stdout=>output_unit
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 implicit none
 private
@@ -35,6 +35,7 @@ public mat_wcopy
 public mat_wset
 public mat_wswap
 public mat_wsqrt
+public mat_wpow
 public mat_rswap
 public mat_wrscal
 public mat_wscal
@@ -70,7 +71,7 @@ public :: elementcopy
 
 integer,parameter,private:: sp=kind(1.0),dp=kind(1.0d0)
 
-integer,save             :: LA_FLOP_COUNTER(2)=[0,0]
+integer,save             :: la_flop_counter(2)=[0,0]
 
 interface linspace
    module procedure  &
@@ -84,220 +85,220 @@ interface elementcopy
    & elementcopy_int64,   elementcopy_int32,  elementcopy_int16,  elementcopy_int8
 end interface elementcopy
 
-INTERFACE
-   SUBROUTINE MATX_WAXPY(N, SR, SI, XR, XI, INCX, YR, YI, INCY)
+interface
+   subroutine matx_waxpy(n, sr, si, xr, xi, incx, yr, yi, incy)
       import  int32, real64
-      integer(kind=int32), INTENT(IN) :: N
-      real(kind=real64), INTENT(IN) :: SR
-      real(kind=real64), INTENT(IN) :: SI
-      real(kind=real64), INTENT(IN) :: XR(*)
-      real(kind=real64), INTENT(IN) :: XI(*)
-      integer(kind=int32), INTENT(IN) :: INCX
-      real(kind=real64) :: YR(*)
-      real(kind=real64) :: YI(*)
-      integer(kind=int32), INTENT(IN) :: INCY
-   END SUBROUTINE MATX_WAXPY
-END INTERFACE
+      integer(kind=int32), intent(in) :: n
+      real(kind=real64), intent(in) :: sr
+      real(kind=real64), intent(in) :: si
+      real(kind=real64), intent(in) :: xr(*)
+      real(kind=real64), intent(in) :: xi(*)
+      integer(kind=int32), intent(in) :: incx
+      real(kind=real64) :: yr(*)
+      real(kind=real64) :: yi(*)
+      integer(kind=int32), intent(in) :: incy
+   end subroutine matx_waxpy
+end interface
 
-INTERFACE
-   SUBROUTINE ML_COMQR3(NM, N, LOW, IGH, ORTR, ORTI, HR, HI, WR, WI, ZR, ZI, IERR, JOB)
+interface
+   subroutine ml_comqr3(nm, n, low, igh, ortr, orti, hr, hi, wr, wi, zr, zi, ierr, job)
       import  int32, real64
-      integer(kind=int32) :: IGH
-      integer(kind=int32) :: N
-      integer(kind=int32) :: NM
-      integer(kind=int32) :: LOW
-      real(kind=real64) :: ORTR(IGH)
-      real(kind=real64) :: ORTI(IGH)
-      real(kind=real64) :: HR(NM, N)
-      real(kind=real64) :: HI(NM, N)
-      real(kind=real64) :: WR(N)
-      real(kind=real64) :: WI(N)
-      real(kind=real64) :: ZR(NM, N)
-      real(kind=real64) :: ZI(NM, N)
-      integer(kind=int32) :: IERR
-      integer(kind=int32) :: JOB
-   END SUBROUTINE ML_COMQR3
-END INTERFACE
+      integer(kind=int32) :: igh
+      integer(kind=int32) :: n
+      integer(kind=int32) :: nm
+      integer(kind=int32) :: low
+      real(kind=real64) :: ortr(igh)
+      real(kind=real64) :: orti(igh)
+      real(kind=real64) :: hr(nm, n)
+      real(kind=real64) :: hi(nm, n)
+      real(kind=real64) :: wr(n)
+      real(kind=real64) :: wi(n)
+      real(kind=real64) :: zr(nm, n)
+      real(kind=real64) :: zi(nm, n)
+      integer(kind=int32) :: ierr
+      integer(kind=int32) :: job
+   end subroutine ml_comqr3
+end interface
 
-INTERFACE
-   SUBROUTINE ML_CORTH(NM, N, LOW, IGH, AR, AI, ORTR, ORTI)
+interface
+   subroutine ml_corth(nm, n, low, igh, ar, ai, ortr, orti)
       import  int32, real64
-      integer(kind=int32) :: IGH
-      integer(kind=int32) :: N
-      integer(kind=int32) :: NM
-      integer(kind=int32) :: LOW
-      real(kind=real64) :: AR(NM, N)
-      real(kind=real64) :: AI(NM, N)
-      real(kind=real64) :: ORTR(IGH)
-      real(kind=real64) :: ORTI(IGH)
-   END SUBROUTINE ML_CORTH
-END INTERFACE
+      integer(kind=int32) :: igh
+      integer(kind=int32) :: n
+      integer(kind=int32) :: nm
+      integer(kind=int32) :: low
+      real(kind=real64) :: ar(nm, n)
+      real(kind=real64) :: ai(nm, n)
+      real(kind=real64) :: ortr(igh)
+      real(kind=real64) :: orti(igh)
+   end subroutine ml_corth
+end interface
 
-INTERFACE
-   SUBROUTINE ML_HTRIBK(NM, N, AR, AI, TAU, M, ZR, ZI)
+interface
+   subroutine ml_htribk(nm, n, ar, ai, tau, m, zr, zi)
       import  int32, real64
-      integer(kind=int32) :: M
-      integer(kind=int32) :: N
-      integer(kind=int32) :: NM
-      real(kind=real64) :: AR(NM, N)
-      real(kind=real64) :: AI(NM, N)
-      real(kind=real64) :: TAU(2, N)
-      real(kind=real64) :: ZR(NM, M)
-      real(kind=real64) :: ZI(NM, M)
-   END SUBROUTINE ML_HTRIBK
-END INTERFACE
+      integer(kind=int32) :: m
+      integer(kind=int32) :: n
+      integer(kind=int32) :: nm
+      real(kind=real64) :: ar(nm, n)
+      real(kind=real64) :: ai(nm, n)
+      real(kind=real64) :: tau(2, n)
+      real(kind=real64) :: zr(nm, m)
+      real(kind=real64) :: zi(nm, m)
+   end subroutine ml_htribk
+end interface
 
-INTERFACE
-   SUBROUTINE ML_HTRIDI(NM, N, AR, AI, D, E, E2, TAU)
+interface
+   subroutine ml_htridi(nm, n, ar, ai, d, e, e2, tau)
       import  int32, real64
-      integer(kind=int32) :: N
-      integer(kind=int32) :: NM
-      real(kind=real64) :: AR(NM, N)
-      real(kind=real64) :: AI(NM, N)
-      real(kind=real64) :: D(N)
-      real(kind=real64) :: E(N)
-      real(kind=real64) :: E2(N)
-      real(kind=real64) :: TAU(2, N)
-   END SUBROUTINE ML_HTRIDI
-END INTERFACE
+      integer(kind=int32) :: n
+      integer(kind=int32) :: nm
+      real(kind=real64) :: ar(nm, n)
+      real(kind=real64) :: ai(nm, n)
+      real(kind=real64) :: d(n)
+      real(kind=real64) :: e(n)
+      real(kind=real64) :: e2(n)
+      real(kind=real64) :: tau(2, n)
+   end subroutine ml_htridi
+end interface
 
-INTERFACE
-   SUBROUTINE ML_IMTQL2(NM, N, D, E, Z, IERR, JOB)
+interface
+   subroutine ml_imtql2(nm, n, d, e, z, ierr, job)
       import  int32, real64
-      integer(kind=int32) :: N
-      integer(kind=int32) :: NM
-      real(kind=real64) :: D(N)
-      real(kind=real64) :: E(N)
-      real(kind=real64) :: Z(NM, N)
-      integer(kind=int32) :: IERR
-      integer(kind=int32) :: JOB
-   END SUBROUTINE ML_IMTQL2
-END INTERFACE
+      integer(kind=int32) :: n
+      integer(kind=int32) :: nm
+      real(kind=real64) :: d(n)
+      real(kind=real64) :: e(n)
+      real(kind=real64) :: z(nm, n)
+      integer(kind=int32) :: ierr
+      integer(kind=int32) :: job
+   end subroutine ml_imtql2
+end interface
 
-INTERFACE
-   SUBROUTINE ML_WGECO(AR, AI, LDA, N, IPVT, RCOND, ZR, ZI)
+interface
+   subroutine ml_wgeco(ar, ai, lda, n, ipvt, rcond, zr, zi)
       import  int32, real64
-      integer(kind=int32) :: LDA
-      real(kind=real64) :: AR(LDA, *)
-      real(kind=real64) :: AI(LDA, *)
-      integer(kind=int32) :: N
-      integer(kind=int32) :: IPVT(*)
-      real(kind=real64) :: RCOND
-      real(kind=real64) :: ZR(*)
-      real(kind=real64) :: ZI(*)
-   END SUBROUTINE ML_WGECO
-END INTERFACE
+      integer(kind=int32) :: lda
+      real(kind=real64) :: ar(lda, *)
+      real(kind=real64) :: ai(lda, *)
+      integer(kind=int32) :: n
+      integer(kind=int32) :: ipvt(*)
+      real(kind=real64) :: rcond
+      real(kind=real64) :: zr(*)
+      real(kind=real64) :: zi(*)
+   end subroutine ml_wgeco
+end interface
 
-INTERFACE
-   SUBROUTINE ML_WGEDI(AR, AI, LDA, N, IPVT, DETR, DETI, WORKR, WORKI, JOB)
+interface
+   subroutine ml_wgedi(ar, ai, lda, n, ipvt, detr, deti, workr, worki, job)
       import  int32, real64
-      integer(kind=int32) :: LDA
-      real(kind=real64) :: AR(LDA, *)
-      real(kind=real64) :: AI(LDA, *)
-      integer(kind=int32) :: N
-      integer(kind=int32) :: IPVT(*)
-      real(kind=real64) :: DETR(2)
-      real(kind=real64) :: DETI(2)
-      real(kind=real64) :: WORKR(*)
-      real(kind=real64) :: WORKI(*)
-      integer(kind=int32) :: JOB
-   END SUBROUTINE ML_WGEDI
-END INTERFACE
+      integer(kind=int32) :: lda
+      real(kind=real64) :: ar(lda, *)
+      real(kind=real64) :: ai(lda, *)
+      integer(kind=int32) :: n
+      integer(kind=int32) :: ipvt(*)
+      real(kind=real64) :: detr(2)
+      real(kind=real64) :: deti(2)
+      real(kind=real64) :: workr(*)
+      real(kind=real64) :: worki(*)
+      integer(kind=int32) :: job
+   end subroutine ml_wgedi
+end interface
 
-INTERFACE
-   SUBROUTINE ML_WGEFA(AR, AI, LDA, N, IPVT, INFO)
+interface
+   subroutine ml_wgefa(ar, ai, lda, n, ipvt, info)
       import  int32, real64
-      integer(kind=int32) :: LDA
-      real(kind=real64) :: AR(LDA, *)
-      real(kind=real64) :: AI(LDA, *)
-      integer(kind=int32) :: N
-      integer(kind=int32) :: IPVT(*)
-      integer(kind=int32) :: INFO
-   END SUBROUTINE ML_WGEFA
-END INTERFACE
+      integer(kind=int32) :: lda
+      real(kind=real64) :: ar(lda, *)
+      real(kind=real64) :: ai(lda, *)
+      integer(kind=int32) :: n
+      integer(kind=int32) :: ipvt(*)
+      integer(kind=int32) :: info
+   end subroutine ml_wgefa
+end interface
 
-INTERFACE
-   SUBROUTINE ML_WGESL(AR, AI, LDA, N, IPVT, BR, BI, JOB)
+interface
+   subroutine ml_wgesl(ar, ai, lda, n, ipvt, br, bi, job)
       import  int32, real64
-      integer(kind=int32) :: LDA
-      real(kind=real64) :: AR(LDA, *)
-      real(kind=real64) :: AI(LDA, *)
-      integer(kind=int32) :: N
-      integer(kind=int32) :: IPVT(*)
-      real(kind=real64) :: BR(*)
-      real(kind=real64) :: BI(*)
-      integer(kind=int32) :: JOB
-   END SUBROUTINE ML_WGESL
-END INTERFACE
+      integer(kind=int32) :: lda
+      real(kind=real64) :: ar(lda, *)
+      real(kind=real64) :: ai(lda, *)
+      integer(kind=int32) :: n
+      integer(kind=int32) :: ipvt(*)
+      real(kind=real64) :: br(*)
+      real(kind=real64) :: bi(*)
+      integer(kind=int32) :: job
+   end subroutine ml_wgesl
+end interface
 
-INTERFACE
-   SUBROUTINE ML_WQRDC(XR, XI, LDX, N, P, QRAUXR, QRAUXI, JPVT, WORKR, WORKI, JOB)
+interface
+   subroutine ml_wqrdc(xr, xi, ldx, n, p, qrauxr, qrauxi, jpvt, workr, worki, job)
       import  int32, real64
-      integer(kind=int32) :: LDX
-      real(kind=real64) :: XR(LDX, *)
-      real(kind=real64) :: XI(LDX, *)
-      integer(kind=int32) :: N
-      integer(kind=int32) :: P
-      real(kind=real64) :: QRAUXR(*)
-      real(kind=real64) :: QRAUXI(*)
-      integer(kind=int32) :: JPVT(*)
-      real(kind=real64) :: WORKR(*)
-      real(kind=real64) :: WORKI(*)
-      integer(kind=int32) :: JOB
-   END SUBROUTINE ML_WQRDC
-END INTERFACE
+      integer(kind=int32) :: ldx
+      real(kind=real64) :: xr(ldx, *)
+      real(kind=real64) :: xi(ldx, *)
+      integer(kind=int32) :: n
+      integer(kind=int32) :: p
+      real(kind=real64) :: qrauxr(*)
+      real(kind=real64) :: qrauxi(*)
+      integer(kind=int32) :: jpvt(*)
+      real(kind=real64) :: workr(*)
+      real(kind=real64) :: worki(*)
+      integer(kind=int32) :: job
+   end subroutine ml_wqrdc
+end interface
 
-INTERFACE
-   SUBROUTINE ML_WQRSL(XR, XI, LDX, N, K, QRAUXR, QRAUXI, YR, YI, QYR, QYI, QTYR, QTYI, BR, BI, RSDR, RSDI, XBR, XBI, JOB, INFO)
+interface
+   subroutine ml_wqrsl(xr, xi, ldx, n, k, qrauxr, qrauxi, yr, yi, qyr, qyi, qtyr, qtyi, br, bi, rsdr, rsdi, xbr, xbi, job, info)
       import  int32, real64
-      integer(kind=int32) :: LDX
-      real(kind=real64) :: XR(LDX, *)
-      real(kind=real64) :: XI(LDX, *)
-      integer(kind=int32) :: N
-      integer(kind=int32) :: K
-      real(kind=real64) :: QRAUXR(*)
-      real(kind=real64) :: QRAUXI(*)
-      real(kind=real64) :: YR(*)
-      real(kind=real64) :: YI(*)
-      real(kind=real64) :: QYR(*)
-      real(kind=real64) :: QYI(*)
-      real(kind=real64) :: QTYR(*)
-      real(kind=real64) :: QTYI(*)
-      real(kind=real64) :: BR(*)
-      real(kind=real64) :: BI(*)
-      real(kind=real64) :: RSDR(*)
-      real(kind=real64) :: RSDI(*)
-      real(kind=real64) :: XBR(*)
-      real(kind=real64) :: XBI(*)
-      integer(kind=int32) :: JOB
-      integer(kind=int32) :: INFO
-   END SUBROUTINE ML_WQRSL
-END INTERFACE
+      integer(kind=int32) :: ldx
+      real(kind=real64) :: xr(ldx, *)
+      real(kind=real64) :: xi(ldx, *)
+      integer(kind=int32) :: n
+      integer(kind=int32) :: k
+      real(kind=real64) :: qrauxr(*)
+      real(kind=real64) :: qrauxi(*)
+      real(kind=real64) :: yr(*)
+      real(kind=real64) :: yi(*)
+      real(kind=real64) :: qyr(*)
+      real(kind=real64) :: qyi(*)
+      real(kind=real64) :: qtyr(*)
+      real(kind=real64) :: qtyi(*)
+      real(kind=real64) :: br(*)
+      real(kind=real64) :: bi(*)
+      real(kind=real64) :: rsdr(*)
+      real(kind=real64) :: rsdi(*)
+      real(kind=real64) :: xbr(*)
+      real(kind=real64) :: xbi(*)
+      integer(kind=int32) :: job
+      integer(kind=int32) :: info
+   end subroutine ml_wqrsl
+end interface
 
-INTERFACE
-   SUBROUTINE ML_WSVDC(XR, XI, LDX, N, P, SR, SI, ER, EI, UR, UI, LDU, VR, VI, LDV, WORKR, WORKI, JOB, INFO)
+interface
+   subroutine ml_wsvdc(xr, xi, ldx, n, p, sr, si, er, ei, ur, ui, ldu, vr, vi, ldv, workr, worki, job, info)
       import  int32, real64
-      integer(kind=int32) :: LDV
-      integer(kind=int32) :: LDU
-      integer(kind=int32) :: LDX
-      real(kind=real64) :: XR(LDX, *)
-      real(kind=real64) :: XI(LDX, *)
-      integer(kind=int32) :: N
-      integer(kind=int32) :: P
-      real(kind=real64) :: SR(*)
-      real(kind=real64) :: SI(*)
-      real(kind=real64) :: ER(*)
-      real(kind=real64) :: EI(*)
-      real(kind=real64) :: UR(LDU, *)
-      real(kind=real64) :: UI(LDU, *)
-      real(kind=real64) :: VR(LDV, *)
-      real(kind=real64) :: VI(LDV, *)
-      real(kind=real64) :: WORKR(*)
-      real(kind=real64) :: WORKI(*)
-      integer(kind=int32) :: JOB
-      integer(kind=int32) :: INFO
-   END SUBROUTINE ML_WSVDC
-END INTERFACE
+      integer(kind=int32) :: ldv
+      integer(kind=int32) :: ldu
+      integer(kind=int32) :: ldx
+      real(kind=real64) :: xr(ldx, *)
+      real(kind=real64) :: xi(ldx, *)
+      integer(kind=int32) :: n
+      integer(kind=int32) :: p
+      real(kind=real64) :: sr(*)
+      real(kind=real64) :: si(*)
+      real(kind=real64) :: er(*)
+      real(kind=real64) :: ei(*)
+      real(kind=real64) :: ur(ldu, *)
+      real(kind=real64) :: ui(ldu, *)
+      real(kind=real64) :: vr(ldv, *)
+      real(kind=real64) :: vi(ldv, *)
+      real(kind=real64) :: workr(*)
+      real(kind=real64) :: worki(*)
+      integer(kind=int32) :: job
+      integer(kind=int32) :: info
+   end subroutine ml_wsvdc
+end interface
 
 contains
 !==================================================================================================================================!
@@ -1676,14 +1677,14 @@ integer            :: i, j, k, l
    tol = eps*dble(2*max0(m,n))*tol
    k = 1
    l = 1
-   INFINITE: do
-      IF (K.GT.M .OR. L.GT.N) RETURN
+   infinite: do
+      if (k.gt.m .or. l.gt.n) return
 
       i = mat_iwamax(m-k+1,ar(k,l),ai(k,l),1) + k-1
       if (dabs(ar(i,l))+dabs(ai(i,l)) .le. tol)then
          call mat_wset(m-k+1,0.0d0,0.0d0,ar(k,l),ai(k,l),1)
          l = l+1
-         cycle INFINITE
+         cycle infinite
       endif
 
       call mat_wswap(n-l+1,ar(i,l),ai(i,l),lda,ar(k,l),ai(k,l),lda)
@@ -1694,11 +1695,11 @@ integer            :: i, j, k, l
       do i = 1, m
          tr = -ar(i,l)
          ti = -ai(i,l)
-         if (i .ne. k) call matX_waxpy(n-l+1,tr,ti,ar(k,l),ai(k,l),lda,ar(i,l),ai(i,l),lda)
+         if (i .ne. k) call matx_waxpy(n-l+1,tr,ti,ar(k,l),ai(k,l),lda,ar(i,l),ai(i,l),lda)
       enddo
-      K = K+1
-      L = L+1
-   enddo INFINITE
+      k = k+1
+      l = l+1
+   enddo infinite
 end subroutine mat_rref
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -1718,14 +1719,14 @@ doubleprecision :: t
 
    if (q .ne. 0.0d0) then
 
-      INFINITE : do
+      infinite : do
          r = (q/p)**2
          t = 4.0d0 + r
-         if (t .eq. 4.0d0) exit INFINITE
+         if (t .eq. 4.0d0) exit infinite
          s = r/t
          p = p + 2.0d0*p*s
          q = q*s
-      enddo INFINITE
+      enddo infinite
 
    endif
 
@@ -1853,26 +1854,45 @@ end subroutine mat_wswap
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-subroutine mat_wsqrt(xr,xi,yr,yi)
+subroutine mat_wpow(in_real,in_imag,out_real,out_imag,power_real,power_imag)
 
-! ident_21="@(#)M_LA::mat_wsqrt(3fp): y = sqrt(x) with yr .ge. 0.0 and sign(yi) .eq. sign(xi)"
+! ident_21="@(#)M_LA::mat_wpow(3fp): y = x**p
 
-doubleprecision,intent(in)  :: xr
-doubleprecision,intent(in)  :: xi
-doubleprecision,intent(out) :: yr
-doubleprecision,intent(out) :: yi
+doubleprecision,intent(in)  :: in_real
+doubleprecision,intent(in)  :: in_imag
+doubleprecision,intent(in)  :: power_real
+doubleprecision,intent(in)  :: power_imag
+doubleprecision,intent(out) :: out_real
+doubleprecision,intent(out) :: out_imag
+complex(kind=real64)        :: t
+   ! placeholder method, just using Fortran
+   t=cmplx(in_real,in_imag,kind=real64)**cmplx(power_real,power_imag,kind=real64)
+   out_real=mat_flop(real(t,kind=real64))
+   out_imag=mat_flop(aimag(t))
+end subroutine mat_wpow
+!==================================================================================================================================!
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!==================================================================================================================================!
+subroutine mat_wsqrt(x_real,x_imag,y_real,y_imag)
+
+! ident_21="@(#)M_LA::mat_wsqrt(3fp): y = sqrt(x) with y_real .ge. 0.0 and sign(y_imag) .eq. sign(x_imag)"
+
+doubleprecision,intent(in)  :: x_real
+doubleprecision,intent(in)  :: x_imag
+doubleprecision,intent(out) :: y_real
+doubleprecision,intent(out) :: y_imag
 doubleprecision             :: s
 doubleprecision             :: tr
 doubleprecision             :: ti
 !
-   tr = xr
-   ti = xi
+   tr = x_real
+   ti = x_imag
    s = dsqrt(0.5d0*(mat_pythag(tr,ti) + dabs(tr)))
-   if (tr .ge. 0.0d0) yr = mat_flop(s)
+   if (tr .ge. 0.0d0) y_real = mat_flop(s)
    if (ti .lt. 0.0d0) s = -s
-   if (tr .le. 0.0d0) yi = mat_flop(s)
-   if (tr .lt. 0.0d0) yr = mat_flop(0.5d0*(ti/yi))
-   if (tr .gt. 0.0d0) yi = mat_flop(0.5d0*(ti/yr))
+   if (tr .le. 0.0d0) y_imag = mat_flop(s)
+   if (tr .lt. 0.0d0) y_real = mat_flop(0.5d0*(ti/y_imag))
+   if (tr .gt. 0.0d0) y_imag = mat_flop(0.5d0*(ti/y_real))
 end subroutine mat_wsqrt
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2102,11 +2122,11 @@ doubleprecision      :: dsqrt
 !-----------------------------------------------------------------------
    if (m2 .eq. 0) then                                ! if first entry, compute machine integer word length
       m = 1
-      INFINITE : do
+      infinite : do
          m2 = m
          m = itwo*m2
-         if (m .le. m2) exit INFINITE
-      enddo INFINITE
+         if (m .le. m2) exit infinite
+      enddo infinite
       halfm = m2
       ia = 8*int(halfm*datan(1.d0)/8.d0) + 5          ! compute multiplier and increment for linear congruential method
       ic = 2*int(halfm*(0.5d0-dsqrt(3.d0)/6.d0)) + 1
@@ -2371,8 +2391,8 @@ character(len=8),save      :: setmas(2,14)=reshape([ &
    endif
 !<<<<<<<<<<<<<<<<<<
 
-   LA_FLOP_COUNTER(1) = LA_FLOP_COUNTER(1) + 1
-   k = LA_FLOP_COUNTER(2)
+   la_flop_counter(1) = la_flop_counter(1) + 1
+   k = la_flop_counter(2)
 
    select case(k)
    case(:0)
@@ -2421,41 +2441,41 @@ end function mat_round
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !*==mat_wpofa.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024
-SUBROUTINE mat_wpofa(Ar,Ai,Lda,N,Info)
-IMPLICIT NONE
-INTEGER :: Lda
-DOUBLE PRECISION :: Ar(Lda,*)
-DOUBLE PRECISION :: Ai(Lda,*)
-INTEGER :: N
-INTEGER :: Info
+subroutine mat_wpofa(ar,ai,lda,n,info)
+implicit none
+integer          :: lda
+double precision :: ar(lda,*)
+double precision :: ai(lda,*)
+integer          :: n
+integer          :: info
 
-DOUBLE PRECISION :: s
-DOUBLE PRECISION :: tr
-DOUBLE PRECISION :: ti
-INTEGER :: j
-INTEGER :: jm1
-INTEGER :: k
+double precision :: s
+double precision :: tr
+double precision :: ti
+integer          :: j
+integer          :: jm1
+integer          :: k
 
-   DO j = 1 , N
-      Info = j
-      s = 0.0D0
+   do j = 1 , n
+      info = j
+      s = 0.0d0
       jm1 = j - 1
-      IF ( jm1>=1 ) THEN
-         DO k = 1 , jm1
-            tr = Ar(k,j) - mat_wdotcr(k-1,Ar(1,k),Ai(1,k),1,Ar(1,j),Ai(1,j),1)
-            ti = Ai(k,j) - mat_wdotci(k-1,Ar(1,k),Ai(1,k),1,Ar(1,j),Ai(1,j),1)
-            CALL mat_wdiv(tr,ti,Ar(k,k),Ai(k,k),tr,ti)
-            Ar(k,j) = tr
-            Ai(k,j) = ti
+      if ( jm1>=1 ) then
+         do k = 1 , jm1
+            tr = ar(k,j) - mat_wdotcr(k-1,ar(1,k),ai(1,k),1,ar(1,j),ai(1,j),1)
+            ti = ai(k,j) - mat_wdotci(k-1,ar(1,k),ai(1,k),1,ar(1,j),ai(1,j),1)
+            call mat_wdiv(tr,ti,ar(k,k),ai(k,k),tr,ti)
+            ar(k,j) = tr
+            ai(k,j) = ti
             s = s + tr*tr + ti*ti
-         ENDDO
-      ENDIF
-      s = Ar(j,j) - s
-      IF ( s<=0.0D0 .OR. Ai(j,j)/=0.0D0 ) RETURN
-      Ar(j,j) = dsqrt(s)
-   ENDDO
-   Info = 0
-END SUBROUTINE mat_wpofa
+         enddo
+      endif
+      s = ar(j,j) - s
+      if ( s<=0.0d0 .or. ai(j,j)/=0.0d0 ) return
+      ar(j,j) = dsqrt(s)
+   enddo
+   info = 0
+end subroutine mat_wpofa
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -2511,12 +2531,12 @@ subroutine mat_wdiv(ar,ai,br,bi,cr,ci)
 
 ! ident_17="@(#)M_LA::mat_wdiv(3fp): c = a/b"
 
-doubleprecision :: ar
-doubleprecision :: ai
-doubleprecision :: br
-doubleprecision :: bi
-doubleprecision :: cr
-doubleprecision :: ci
+doubleprecision,intent(in)  :: ar
+doubleprecision,intent(in)  :: ai
+doubleprecision,intent(in)  :: br
+doubleprecision,intent(in)  :: bi
+doubleprecision,intent(out) :: cr
+doubleprecision,intent(out) :: ci
 
 doubleprecision :: s
 doubleprecision :: d
@@ -2611,12 +2631,12 @@ end subroutine la_err
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-end module M_LA
+end module m_la
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-subroutine matX_waxpy(N,SR,SI,xr,xi,INCX,yr,yi,INCY)
-use M_LA
+subroutine matx_waxpy(n,sr,si,xr,xi,incx,yr,yi,incy)
+use m_la
 implicit none
 integer,intent(in)         :: n
 doubleprecision,intent(in) :: sr
@@ -2645,17 +2665,17 @@ integer                    :: i
       ix = ix + incx
       iy = iy + incy
    enddo
-end subroutine matX_waxpy
+end subroutine matx_waxpy
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !*==ml_wgeco.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024
-SUBROUTINE ml_wgeco(Ar,Ai,Lda,N,Ipvt,Rcond,Zr,Zi)
-   USE m_la
-   IMPLICIT NONE
-   INTEGER Lda , N , Ipvt(*)
-   DOUBLE PRECISION Ar(Lda,*) , Ai(Lda,*) , Zr(*) , Zi(*)
-   DOUBLE PRECISION Rcond
+subroutine ml_wgeco(ar,ai,lda,n,ipvt,rcond,zr,zi)
+use m_la
+implicit none
+integer          :: lda , n , ipvt(*)
+double precision :: ar(lda,*) , ai(lda,*) , zr(*) , zi(*)
+double precision :: rcond
 !
 !     WGECO FACTORS A DOUBLE-COMPLEX MATRIX BY GAUSSIAN ELIMINATION
 !     AND ESTIMATES THE CONDITION OF THE MATRIX.
@@ -2717,24 +2737,24 @@ SUBROUTINE ml_wgeco(Ar,Ai,Lda,N,Ipvt,Rcond,Zr,Zi)
 !
 !     INTERNAL VARIABLES
 !
-   DOUBLE PRECISION ekr , eki , tr , ti , wkr , wki , wkmr , wkmi
-   DOUBLE PRECISION anorm , s , sm , ynorm
-   INTEGER info , j , k , kb , kp1 , l
+double precision :: ekr , eki , tr , ti , wkr , wki , wkmr , wkmi
+double precision :: anorm , s , sm , ynorm
+integer          :: info , j , k , kb , kp1 , l
 !
-   DOUBLE PRECISION zdumr , zdumi
-   DOUBLE PRECISION cabs1
+double precision :: zdumr , zdumi
+double precision :: cabs1
    cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
 !
 !     COMPUTE 1-NORM OF A
 !
-   anorm = 0.0D0
-   DO j = 1 , N
-      anorm = dmax1(anorm,mat_wasum(N,Ar(1,j),Ai(1,j),1))
-   ENDDO
+   anorm = 0.0d0
+   do j = 1 , n
+      anorm = dmax1(anorm,mat_wasum(n,ar(1,j),ai(1,j),1))
+   enddo
 !
 !     FACTOR
 !
-   CALL ml_wgefa(Ar,Ai,Lda,N,Ipvt,info)
+   call ml_wgefa(ar,ai,lda,n,ipvt,info)
 !
 !     RCOND = 1/(NORM(A)*(ESTIMATE OF NORM(INVERSE(A)))) .
 !     ESTIMATE = NORM(Z)/NORM(Y) WHERE  A*Z = Y  AND  CTRANS(A)*Y = E .
@@ -2745,139 +2765,139 @@ SUBROUTINE ml_wgeco(Ar,Ai,Lda,N,Ipvt,Rcond,Zr,Zi)
 !
 !     SOLVE CTRANS(U)*W = E
 !
-   ekr = 1.0D0
-   eki = 0.0D0
-   DO j = 1 , N
-      Zr(j) = 0.0D0
-      Zi(j) = 0.0D0
-   ENDDO
-   DO k = 1 , N
-      CALL mat_wsign(ekr,eki,-Zr(k),-Zi(k),ekr,eki)
-      IF ( cabs1(ekr-Zr(k),eki-Zi(k))>cabs1(Ar(k,k),Ai(k,k)) ) THEN
-         s = cabs1(Ar(k,k),Ai(k,k))/cabs1(ekr-Zr(k),eki-Zi(k))
-         CALL mat_wrscal(N,s,Zr,Zi,1)
+   ekr = 1.0d0
+   eki = 0.0d0
+   do j = 1 , n
+      zr(j) = 0.0d0
+      zi(j) = 0.0d0
+   enddo
+   do k = 1 , n
+      call mat_wsign(ekr,eki,-zr(k),-zi(k),ekr,eki)
+      if ( cabs1(ekr-zr(k),eki-zi(k))>cabs1(ar(k,k),ai(k,k)) ) then
+         s = cabs1(ar(k,k),ai(k,k))/cabs1(ekr-zr(k),eki-zi(k))
+         call mat_wrscal(n,s,zr,zi,1)
          ekr = s*ekr
          eki = s*eki
-      ENDIF
-      wkr = ekr - Zr(k)
-      wki = eki - Zi(k)
-      wkmr = -ekr - Zr(k)
-      wkmi = -eki - Zi(k)
+      endif
+      wkr = ekr - zr(k)
+      wki = eki - zi(k)
+      wkmr = -ekr - zr(k)
+      wkmi = -eki - zi(k)
       s = cabs1(wkr,wki)
       sm = cabs1(wkmr,wkmi)
-      IF ( cabs1(Ar(k,k),Ai(k,k))==0.0D0 ) THEN
-         wkr = 1.0D0
-         wki = 0.0D0
-         wkmr = 1.0D0
-         wkmi = 0.0D0
-      ELSE
-         CALL mat_wdiv(wkr,wki,Ar(k,k),-Ai(k,k),wkr,wki)
-         CALL mat_wdiv(wkmr,wkmi,Ar(k,k),-Ai(k,k),wkmr,wkmi)
-      ENDIF
+      if ( cabs1(ar(k,k),ai(k,k))==0.0d0 ) then
+         wkr = 1.0d0
+         wki = 0.0d0
+         wkmr = 1.0d0
+         wkmi = 0.0d0
+      else
+         call mat_wdiv(wkr,wki,ar(k,k),-ai(k,k),wkr,wki)
+         call mat_wdiv(wkmr,wkmi,ar(k,k),-ai(k,k),wkmr,wkmi)
+      endif
       kp1 = k + 1
-      IF ( kp1<=N ) THEN
-         DO j = kp1 , N
-            CALL mat_wmul(wkmr,wkmi,Ar(k,j),-Ai(k,j),tr,ti)
-            sm = mat_flop(sm+cabs1(Zr(j)+tr,Zi(j)+ti))
-            CALL matx_waxpy(1,wkr,wki,[Ar(k,j)],[-Ai(k,j)],1,Zr(j),Zi(j),1)
-            s = mat_flop(s+cabs1(Zr(j),Zi(j)))
-         ENDDO
-         IF ( s<sm ) THEN
+      if ( kp1<=n ) then
+         do j = kp1 , n
+            call mat_wmul(wkmr,wkmi,ar(k,j),-ai(k,j),tr,ti)
+            sm = mat_flop(sm+cabs1(zr(j)+tr,zi(j)+ti))
+            call matx_waxpy(1,wkr,wki,[ar(k,j)],[-ai(k,j)],1,zr(j),zi(j),1)
+            s = mat_flop(s+cabs1(zr(j),zi(j)))
+         enddo
+         if ( s<sm ) then
             tr = wkmr - wkr
             ti = wkmi - wki
             wkr = wkmr
             wki = wkmi
-            DO j = kp1 , N
-               CALL matx_waxpy(1,tr,ti,[Ar(k,j)],[-Ai(k,j)],1,Zr(j),Zi(j),1)
-            ENDDO
-         ENDIF
-      ENDIF
-      Zr(k) = wkr
-      Zi(k) = wki
-   ENDDO
-   s = 1.0D0/mat_wasum(N,Zr,Zi,1)
-   CALL mat_wrscal(N,s,Zr,Zi,1)
+            do j = kp1 , n
+               call matx_waxpy(1,tr,ti,[ar(k,j)],[-ai(k,j)],1,zr(j),zi(j),1)
+            enddo
+         endif
+      endif
+      zr(k) = wkr
+      zi(k) = wki
+   enddo
+   s = 1.0d0/mat_wasum(n,zr,zi,1)
+   call mat_wrscal(n,s,zr,zi,1)
 !
 !     SOLVE CTRANS(L)*Y = W
 !
-   DO kb = 1 , N
-      k = N + 1 - kb
-      IF ( k<N ) THEN
-         Zr(k) = Zr(k) + mat_wdotcr(N-k,Ar(k+1,k),Ai(k+1,k),1,Zr(k+1),Zi(k+1),1)
-         Zi(k) = Zi(k) + mat_wdotci(N-k,Ar(k+1,k),Ai(k+1,k),1,Zr(k+1),Zi(k+1),1)
-      ENDIF
-      IF ( cabs1(Zr(k),Zi(k))>1.0D0 ) THEN
-         s = 1.0D0/cabs1(Zr(k),Zi(k))
-         CALL mat_wrscal(N,s,Zr,Zi,1)
-      ENDIF
-      l = Ipvt(k)
-      tr = Zr(l)
-      ti = Zi(l)
-      Zr(l) = Zr(k)
-      Zi(l) = Zi(k)
-      Zr(k) = tr
-      Zi(k) = ti
-   ENDDO
-   s = 1.0D0/mat_wasum(N,Zr,Zi,1)
-   CALL mat_wrscal(N,s,Zr,Zi,1)
+   do kb = 1 , n
+      k = n + 1 - kb
+      if ( k<n ) then
+         zr(k) = zr(k) + mat_wdotcr(n-k,ar(k+1,k),ai(k+1,k),1,zr(k+1),zi(k+1),1)
+         zi(k) = zi(k) + mat_wdotci(n-k,ar(k+1,k),ai(k+1,k),1,zr(k+1),zi(k+1),1)
+      endif
+      if ( cabs1(zr(k),zi(k))>1.0d0 ) then
+         s = 1.0d0/cabs1(zr(k),zi(k))
+         call mat_wrscal(n,s,zr,zi,1)
+      endif
+      l = ipvt(k)
+      tr = zr(l)
+      ti = zi(l)
+      zr(l) = zr(k)
+      zi(l) = zi(k)
+      zr(k) = tr
+      zi(k) = ti
+   enddo
+   s = 1.0d0/mat_wasum(n,zr,zi,1)
+   call mat_wrscal(n,s,zr,zi,1)
 !
-   ynorm = 1.0D0
+   ynorm = 1.0d0
 !
 !     SOLVE L*V = Y
 !
-   DO k = 1 , N
-      l = Ipvt(k)
-      tr = Zr(l)
-      ti = Zi(l)
-      Zr(l) = Zr(k)
-      Zi(l) = Zi(k)
-      Zr(k) = tr
-      Zi(k) = ti
-      IF ( k<N ) CALL matx_waxpy(N-k,tr,ti,Ar(k+1,k),Ai(k+1,k),1,Zr(k+1),Zi(k+1),1)
-      IF ( cabs1(Zr(k),Zi(k))<=1.0D0 ) CYCLE
-      s = 1.0D0/cabs1(Zr(k),Zi(k))
-      CALL mat_wrscal(N,s,Zr,Zi,1)
+   do k = 1 , n
+      l = ipvt(k)
+      tr = zr(l)
+      ti = zi(l)
+      zr(l) = zr(k)
+      zi(l) = zi(k)
+      zr(k) = tr
+      zi(k) = ti
+      if ( k<n ) call matx_waxpy(n-k,tr,ti,ar(k+1,k),ai(k+1,k),1,zr(k+1),zi(k+1),1)
+      if ( cabs1(zr(k),zi(k))<=1.0d0 ) cycle
+      s = 1.0d0/cabs1(zr(k),zi(k))
+      call mat_wrscal(n,s,zr,zi,1)
       ynorm = s*ynorm
-   ENDDO
-   s = 1.0D0/mat_wasum(N,Zr,Zi,1)
-   CALL mat_wrscal(N,s,Zr,Zi,1)
+   enddo
+   s = 1.0d0/mat_wasum(n,zr,zi,1)
+   call mat_wrscal(n,s,zr,zi,1)
    ynorm = s*ynorm
 !
 !     SOLVE  U*Z = V
 !
-   DO kb = 1 , N
-      k = N + 1 - kb
-      IF ( cabs1(Zr(k),Zi(k))>cabs1(Ar(k,k),Ai(k,k)) ) THEN
-         s = cabs1(Ar(k,k),Ai(k,k))/cabs1(Zr(k),Zi(k))
-         CALL mat_wrscal(N,s,Zr,Zi,1)
+   do kb = 1 , n
+      k = n + 1 - kb
+      if ( cabs1(zr(k),zi(k))>cabs1(ar(k,k),ai(k,k)) ) then
+         s = cabs1(ar(k,k),ai(k,k))/cabs1(zr(k),zi(k))
+         call mat_wrscal(n,s,zr,zi,1)
          ynorm = s*ynorm
-      ENDIF
-      IF ( cabs1(Ar(k,k),Ai(k,k))/=0.0D0 ) CALL mat_wdiv(Zr(k),Zi(k),Ar(k,k),Ai(k,k),Zr(k),Zi(k))
-      IF ( cabs1(Ar(k,k),Ai(k,k))==0.0D0 ) THEN
-         Zr(k) = 1.0D0
-         Zi(k) = 0.0D0
-      ENDIF
-      tr = -Zr(k)
-      ti = -Zi(k)
-      CALL matx_waxpy(k-1,tr,ti,Ar(1,k),Ai(1,k),1,Zr(1),Zi(1),1)
-   ENDDO
+      endif
+      if ( cabs1(ar(k,k),ai(k,k))/=0.0d0 ) call mat_wdiv(zr(k),zi(k),ar(k,k),ai(k,k),zr(k),zi(k))
+      if ( cabs1(ar(k,k),ai(k,k))==0.0d0 ) then
+         zr(k) = 1.0d0
+         zi(k) = 0.0d0
+      endif
+      tr = -zr(k)
+      ti = -zi(k)
+      call matx_waxpy(k-1,tr,ti,ar(1,k),ai(1,k),1,zr(1),zi(1),1)
+   enddo
 !     MAKE ZNORM = 1.0
-   s = 1.0D0/mat_wasum(N,Zr,Zi,1)
-   CALL mat_wrscal(N,s,Zr,Zi,1)
+   s = 1.0d0/mat_wasum(n,zr,zi,1)
+   call mat_wrscal(n,s,zr,zi,1)
    ynorm = s*ynorm
 !
-   IF ( anorm/=0.0D0 ) Rcond = ynorm/anorm
-   IF ( anorm==0.0D0 ) Rcond = 0.0D0
-END SUBROUTINE ml_wgeco
+   if ( anorm/=0.0d0 ) rcond = ynorm/anorm
+   if ( anorm==0.0d0 ) rcond = 0.0d0
+end subroutine ml_wgeco
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !*==ml_wgefa.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024
-SUBROUTINE ml_wgefa(Ar,Ai,Lda,N,Ipvt,Info)
-   USE m_la
-   IMPLICIT NONE
-   INTEGER Lda , N , Ipvt(*) , Info
-   DOUBLE PRECISION Ar(Lda,*) , Ai(Lda,*)
+subroutine ml_wgefa(ar,ai,lda,n,ipvt,info)
+use m_la
+implicit none
+integer          :: lda , n , ipvt(*) , info
+double precision :: ar(lda,*) , ai(lda,*)
 !
 !     WGEFA FACTORS A DOUBLE-COMPLEX MATRIX BY GAUSSIAN ELIMINATION.
 !
@@ -2925,76 +2945,76 @@ SUBROUTINE ml_wgefa(Ar,Ai,Lda,N,Ipvt,Info)
 !
 !     INTERNAL VARIABLES
 !
-   DOUBLE PRECISION tr , ti
-   INTEGER j , k , kp1 , l , nm1
+double precision :: tr , ti
+integer          :: j , k , kp1 , l , nm1
 !
-   DOUBLE PRECISION zdumr , zdumi
-   DOUBLE PRECISION cabs1
+double precision :: zdumr , zdumi
+double precision :: cabs1
    cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
 !
 !     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
 !
-   Info = 0
-   nm1 = N - 1
-   IF ( nm1>=1 ) THEN
-      DO k = 1 , nm1
+   info = 0
+   nm1 = n - 1
+   if ( nm1>=1 ) then
+      do k = 1 , nm1
          kp1 = k + 1
 !
 !        FIND L = PIVOT INDEX
 !
-         l = mat_iwamax(N-k+1,Ar(k,k),Ai(k,k),1) + k - 1
-         Ipvt(k) = l
+         l = mat_iwamax(n-k+1,ar(k,k),ai(k,k),1) + k - 1
+         ipvt(k) = l
 !
 !        ZERO PIVOT IMPLIES THIS COLUMN ALREADY TRIANGULARIZED
 !
-         IF ( cabs1(Ar(l,k),Ai(l,k))==0.0D0 ) THEN
-            Info = k
-         ELSE
+         if ( cabs1(ar(l,k),ai(l,k))==0.0d0 ) then
+            info = k
+         else
 !
 !           INTERCHANGE IF NECESSARY
 !
-            IF ( l/=k ) THEN
-               tr = Ar(l,k)
-               ti = Ai(l,k)
-               Ar(l,k) = Ar(k,k)
-               Ai(l,k) = Ai(k,k)
-               Ar(k,k) = tr
-               Ai(k,k) = ti
-            ENDIF
+            if ( l/=k ) then
+               tr = ar(l,k)
+               ti = ai(l,k)
+               ar(l,k) = ar(k,k)
+               ai(l,k) = ai(k,k)
+               ar(k,k) = tr
+               ai(k,k) = ti
+            endif
 !
 !           COMPUTE MULTIPLIERS
 !
-            CALL mat_wdiv(-1.0D0,0.0D0,Ar(k,k),Ai(k,k),tr,ti)
-            CALL mat_wscal(N-k,tr,ti,Ar(k+1,k),Ai(k+1,k),1)
+            call mat_wdiv(-1.0d0,0.0d0,ar(k,k),ai(k,k),tr,ti)
+            call mat_wscal(n-k,tr,ti,ar(k+1,k),ai(k+1,k),1)
 !
 !           ROW ELIMINATION WITH COLUMN INDEXING
 !
-            DO j = kp1 , N
-               tr = Ar(l,j)
-               ti = Ai(l,j)
-               IF ( l/=k ) THEN
-                  Ar(l,j) = Ar(k,j)
-                  Ai(l,j) = Ai(k,j)
-                  Ar(k,j) = tr
-                  Ai(k,j) = ti
-               ENDIF
-               CALL matx_waxpy(N-k,tr,ti,Ar(k+1,k),Ai(k+1,k),1,Ar(k+1,j),Ai(k+1,j),1)
-            ENDDO
-         ENDIF
-      ENDDO
-   ENDIF
-   Ipvt(N) = N
-   IF ( cabs1(Ar(N,N),Ai(N,N))==0.0D0 ) Info = N
-END SUBROUTINE ml_wgefa
+            do j = kp1 , n
+               tr = ar(l,j)
+               ti = ai(l,j)
+               if ( l/=k ) then
+                  ar(l,j) = ar(k,j)
+                  ai(l,j) = ai(k,j)
+                  ar(k,j) = tr
+                  ai(k,j) = ti
+               endif
+               call matx_waxpy(n-k,tr,ti,ar(k+1,k),ai(k+1,k),1,ar(k+1,j),ai(k+1,j),1)
+            enddo
+         endif
+      enddo
+   endif
+   ipvt(n) = n
+   if ( cabs1(ar(n,n),ai(n,n))==0.0d0 ) info = n
+end subroutine ml_wgefa
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !*==ml_wgesl.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024
-SUBROUTINE ml_wgesl(Ar,Ai,Lda,N,Ipvt,Br,Bi,Job)
-   USE m_la
-   IMPLICIT NONE
-   INTEGER Lda , N , Ipvt(*) , Job
-   DOUBLE PRECISION Ar(Lda,*) , Ai(Lda,*) , Br(*) , Bi(*)
+subroutine ml_wgesl(ar,ai,lda,n,ipvt,br,bi,job)
+use m_la
+implicit none
+integer          :: lda , n , ipvt(*) , job
+double precision :: ar(lda,*) , ai(lda,*) , br(*) , bi(*)
 !
 !     WGESL SOLVES THE DOUBLE-COMPLEX SYSTEM
 !     A * X = B  OR  CTRANS(A) * X = B
@@ -3052,248 +3072,247 @@ SUBROUTINE ml_wgesl(Ar,Ai,Lda,N,Ipvt,Br,Bi,Job)
 !
 !     INTERNAL VARIABLES
 !
-   DOUBLE PRECISION tr , ti
-   INTEGER k , kb , l , nm1
+double precision :: tr , ti
+integer          :: k , kb , l , nm1
 !
-   nm1 = N - 1
-   IF ( Job/=0 ) THEN
+   nm1 = n - 1
+   if ( job/=0 ) then
 !
 !  JOB = NONZERO, SOLVE  CTRANS(A) * X = B
 !  FIRST SOLVE  CTRANS(U)*Y = B
 !
-      DO k = 1 , N
-         tr = Br(k) - mat_wdotcr(k-1,Ar(1,k),Ai(1,k),1,Br(1),Bi(1),1)
-         ti = Bi(k) - mat_wdotci(k-1,Ar(1,k),Ai(1,k),1,Br(1),Bi(1),1)
-         CALL mat_wdiv(tr,ti,Ar(k,k),-Ai(k,k),Br(k),Bi(k))
-      ENDDO
+      do k = 1 , n
+         tr = br(k) - mat_wdotcr(k-1,ar(1,k),ai(1,k),1,br(1),bi(1),1)
+         ti = bi(k) - mat_wdotci(k-1,ar(1,k),ai(1,k),1,br(1),bi(1),1)
+         call mat_wdiv(tr,ti,ar(k,k),-ai(k,k),br(k),bi(k))
+      enddo
 !
 !        NOW SOLVE CTRANS(L)*X = Y
 !
-      IF ( nm1>=1 ) THEN
-         DO kb = 1 , nm1
-            k = N - kb
-            Br(k) = Br(k) + mat_wdotcr(N-k,Ar(k+1,k),Ai(k+1,k),1,Br(k+1),Bi(k+1),1)
-            Bi(k) = Bi(k) + mat_wdotci(N-k,Ar(k+1,k),Ai(k+1,k),1,Br(k+1),Bi(k+1),1)
-            l = Ipvt(k)
-            IF ( l==k ) CYCLE
-            tr = Br(l)
-            ti = Bi(l)
-            Br(l) = Br(k)
-            Bi(l) = Bi(k)
-            Br(k) = tr
-            Bi(k) = ti
-         ENDDO
-      ENDIF
-   ELSE
+      if ( nm1>=1 ) then
+         do kb = 1 , nm1
+            k = n - kb
+            br(k) = br(k) + mat_wdotcr(n-k,ar(k+1,k),ai(k+1,k),1,br(k+1),bi(k+1),1)
+            bi(k) = bi(k) + mat_wdotci(n-k,ar(k+1,k),ai(k+1,k),1,br(k+1),bi(k+1),1)
+            l = ipvt(k)
+            if ( l==k ) cycle
+            tr = br(l)
+            ti = bi(l)
+            br(l) = br(k)
+            bi(l) = bi(k)
+            br(k) = tr
+            bi(k) = ti
+         enddo
+      endif
+   else
 !
 !        JOB = 0 , SOLVE  A * X = B
 !        FIRST SOLVE  L*Y = B
 !
-      IF ( nm1>1 ) THEN
-         DO k = 1 , nm1
-            l = Ipvt(k)
-            tr = Br(l)
-            ti = Bi(l)
-            IF ( l/=k ) THEN
-               Br(l) = Br(k)
-               Bi(l) = Bi(k)
-               Br(k) = tr
-               Bi(k) = ti
-            ENDIF
-            CALL matx_waxpy(N-k,tr,ti,Ar(k+1,k),Ai(k+1,k),1,Br(k+1),Bi(k+1),1)
-         ENDDO
-      ENDIF
+      if ( nm1>1 ) then
+         do k = 1 , nm1
+            l = ipvt(k)
+            tr = br(l)
+            ti = bi(l)
+            if ( l/=k ) then
+               br(l) = br(k)
+               bi(l) = bi(k)
+               br(k) = tr
+               bi(k) = ti
+            endif
+            call matx_waxpy(n-k,tr,ti,ar(k+1,k),ai(k+1,k),1,br(k+1),bi(k+1),1)
+         enddo
+      endif
 !
 !        NOW SOLVE  U*X = Y
 !
-      DO kb = 1 , N
-         k = N + 1 - kb
-         CALL mat_wdiv(Br(k),Bi(k),Ar(k,k),Ai(k,k),Br(k),Bi(k))
-         tr = -Br(k)
-         ti = -Bi(k)
-         CALL matx_waxpy(k-1,tr,ti,Ar(1,k),Ai(1,k),1,Br(1),Bi(1),1)
-      ENDDO
-   ENDIF
-END SUBROUTINE ml_wgesl
+      do kb = 1 , n
+         k = n + 1 - kb
+         call mat_wdiv(br(k),bi(k),ar(k,k),ai(k,k),br(k),bi(k))
+         tr = -br(k)
+         ti = -bi(k)
+         call matx_waxpy(k-1,tr,ti,ar(1,k),ai(1,k),1,br(1),bi(1),1)
+      enddo
+   endif
+end subroutine ml_wgesl
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !>
-!!##NAME
-!!    WGEDI(3f) - [M_LA] computes the determinant and inverse of a matrix
-!!                using the factors computed by WGECO(3f) or WGEFA(3f).
-!!##SYNOPSIS
+!! name
+!!    wgedi(3f) - [m_la] computes the determinant and inverse of a matrix
+!!                using the factors computed by wgeco(3f) or wgefa(3f).
+!! synopsis
+!!    subroutine ml_wgedi(ar,ai,lda,n,ipvt,detr,deti,workr,worki,job)
 !!
-!!    SUBROUTINE ML_WGEDI(AR,AI,LDA,N,IPVT,DETR,DETI,WORKR,WORKI,JOB)
+!!      integer(kind=4) :: lda
+!!      real(kind=8) :: ar(lda,*)
+!!      real(kind=8) :: ai(lda,*)
+!!      integer(kind=4) :: n
+!!      integer(kind=4) :: ipvt(*)
+!!      real(kind=8) :: detr(2)
+!!      real(kind=8) :: deti(2)
+!!      real(kind=8) :: workr(*)
+!!      real(kind=8) :: worki(*)
+!!      integer(kind=4) :: job
 !!
-!!      INTEGER(KIND=4) :: LDA
-!!      REAL(KIND=8) :: AR(LDA,*)
-!!      REAL(KIND=8) :: AI(LDA,*)
-!!      INTEGER(KIND=4) :: N
-!!      INTEGER(KIND=4) :: IPVT(*)
-!!      REAL(KIND=8) :: DETR(2)
-!!      REAL(KIND=8) :: DETI(2)
-!!      REAL(KIND=8) :: WORKR(*)
-!!      REAL(KIND=8) :: WORKI(*)
-!!      INTEGER(KIND=4) :: JOB
+!! description
+!!    wgedi(3f) computes the determinant and inverse of a matrix
+!!    using the factors computed by wgeco(3f) or wgefa(3f).
 !!
-!!##DESCRIPTION
-!!    WGEDI(3f) computes the determinant and inverse of a matrix
-!!    using the factors computed by WGECO(3f) or WGEFA(3f).
+!! on entry
 !!
-!!##ON ENTRY
+!!     a       double-complex(lda, n)
+!!             the output from wgeco or wgefa.
 !!
-!!     A       Double-Complex(LDA, N)
-!!             The output from WGECO or WGEFA.
+!!     lda     integer
+!!             the leading dimension of the array a.
 !!
-!!     LDA     Integer
-!!             The leading dimension of the array A.
+!!     n       integer
+!!             the order of the matrix a.
 !!
-!!     N       Integer
-!!             The order of the matrix A.
+!!     ipvt    integer(n)
+!!             the pivot vector from wgeco(3f) or wgefa(3f).
 !!
-!!     IPVT    Integer(N)
-!!             The pivot vector from WGECO(3f) or WGEFA(3f).
+!!     work    double-complex(n)
+!!             work vector. contents destroyed.
 !!
-!!     WORK    Double-Complex(N)
-!!             Work vector. Contents destroyed.
+!!     job     integer
 !!
-!!     JOB     Integer
+!!              = 11   both determinant and inverse.
+!!              = 01   inverse only.
+!!              = 10   determinant only.
 !!
-!!              = 11   Both determinant and inverse.
-!!              = 01   Inverse only.
-!!              = 10   Determinant only.
+!! on return
 !!
-!!##ON RETURN
+!!     a       inverse of original matrix if requested.
+!!             otherwise unchanged.
 !!
-!!     A       Inverse of original matrix if requested.
-!!             Otherwise unchanged.
+!!     det     double-complex(2)
+!!             determinant of original matrix if requested.
+!!             otherwise not referenced.
 !!
-!!     DET     Double-complex(2)
-!!             Determinant of original matrix if requested.
-!!             Otherwise not referenced.
+!!              determinant = det(1) * 10.0**det(2)
+!!              with 1.0 .le. cabs1(det(1) .lt. 10.0
+!!              or det(1) .eq. 0.0 .
 !!
-!!              DETERMINANT = DET(1) * 10.0**DET(2)
-!!              with 1.0 .le. CABS1(DET(1) .lt. 10.0
-!!              or DET(1) .eq. 0.0 .
+!! error condition
 !!
-!!##ERROR CONDITION
+!!    a division by zero will occur if the input factor contains a zero
+!!    on the diagonal and the inverse is requested. it will not occur if
+!!    the subroutines are called correctly and if wgeco(3f) has set rcond
+!!    .gt. 0.0 or wgefa(3f) has set info .eq. 0 .
 !!
-!!    A division by zero will occur if the input factor contains a zero
-!!    on the diagonal and the inverse is requested. It will not occur if
-!!    the subroutines are called correctly and if WGECO(3f) has set RCOND
-!!    .gt. 0.0 or WGEFA(3f) has set INFO .eq. 0 .
+!!      linpack. this version dated 07/01/79 .
+!!      cleve moler, university of new mexico, argonne national lab.
 !!
-!!      LINPACK. THIS VERSION DATED 07/01/79 .
-!!      CLEVE MOLER, UNIVERSITY OF NEW MEXICO, ARGONNE NATIONAL LAB.
+!! subroutines and functions
 !!
-!!##SUBROUTINES AND FUNCTIONS
-!!
-!!      BLAS WAXPY,mat_wscal,mat_wswap
-!!      FORTRAN DABS,MOD
+!!      blas waxpy,mat_wscal,mat_wswap
+!!      fortran dabs,mod
 !*==ml_wgedi.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024
-SUBROUTINE ml_wgedi(Ar,Ai,Lda,N,Ipvt,Detr,Deti,Workr,Worki,Job)
-   USE m_la
-   IMPLICIT NONE
-   INTEGER Lda , N , Ipvt(*) , Job
-   DOUBLE PRECISION Ar(Lda,*) , Ai(Lda,*) , Detr(2) , Deti(2) , Workr(*) , Worki(*)
+subroutine ml_wgedi(ar,ai,lda,n,ipvt,detr,deti,workr,worki,job)
+use m_la
+implicit none
+integer          :: lda , n , ipvt(*) , job
+double precision :: ar(lda,*) , ai(lda,*) , detr(2) , deti(2) , workr(*) , worki(*)
 !     INTERNAL VARIABLES
 !
-   DOUBLE PRECISION tr , ti
-   DOUBLE PRECISION ten
-   INTEGER i , j , k , kb , kp1 , l , nm1
+double precision :: tr , ti
+double precision :: ten
+integer          :: i , j , k , kb , kp1 , l , nm1
 !
-   DOUBLE PRECISION zdumr , zdumi
-   DOUBLE PRECISION cabs1
+double precision :: zdumr , zdumi
+double precision :: cabs1
    cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
 !
 !     COMPUTE DETERMINANT
 !
-   IF ( Job/10/=0 ) THEN
-      Detr(1) = 1.0D0
-      Deti(1) = 0.0D0
-      Detr(2) = 0.0D0
-      Deti(2) = 0.0D0
-      ten = 10.0D0
-      SPAG_Loop_1_1: DO i = 1 , N
-         IF ( Ipvt(i)/=i ) THEN
-            Detr(1) = -Detr(1)
-            Deti(1) = -Deti(1)
-         ENDIF
-         CALL mat_wmul(Ar(i,i),Ai(i,i),Detr(1),Deti(1),Detr(1),Deti(1))
+   if ( job/10/=0 ) then
+      detr(1) = 1.0d0
+      deti(1) = 0.0d0
+      detr(2) = 0.0d0
+      deti(2) = 0.0d0
+      ten = 10.0d0
+      spag_loop_1_1: do i = 1 , n
+         if ( ipvt(i)/=i ) then
+            detr(1) = -detr(1)
+            deti(1) = -deti(1)
+         endif
+         call mat_wmul(ar(i,i),ai(i,i),detr(1),deti(1),detr(1),deti(1))
 !          ...EXIT
 !       ...EXIT
-         IF ( cabs1(Detr(1),Deti(1))==0.0D0 ) EXIT SPAG_Loop_1_1
-         DO WHILE ( cabs1(Detr(1),Deti(1))<1.0D0 )
-            Detr(1) = ten*Detr(1)
-            Deti(1) = ten*Deti(1)
-            Detr(2) = Detr(2) - 1.0D0
-            Deti(2) = Deti(2) - 0.0D0
-         ENDDO
-         DO WHILE ( cabs1(Detr(1),Deti(1))>=ten )
-            Detr(1) = Detr(1)/ten
-            Deti(1) = Deti(1)/ten
-            Detr(2) = Detr(2) + 1.0D0
-            Deti(2) = Deti(2) + 0.0D0
-         ENDDO
-      ENDDO SPAG_Loop_1_1
-   ENDIF
+         if ( cabs1(detr(1),deti(1))==0.0d0 ) exit spag_loop_1_1
+         do while ( cabs1(detr(1),deti(1))<1.0d0 )
+            detr(1) = ten*detr(1)
+            deti(1) = ten*deti(1)
+            detr(2) = detr(2) - 1.0d0
+            deti(2) = deti(2) - 0.0d0
+         enddo
+         do while ( cabs1(detr(1),deti(1))>=ten )
+            detr(1) = detr(1)/ten
+            deti(1) = deti(1)/ten
+            detr(2) = detr(2) + 1.0d0
+            deti(2) = deti(2) + 0.0d0
+         enddo
+      enddo spag_loop_1_1
+   endif
 !
 !     COMPUTE INVERSE(U)
 !
-   IF ( mod(Job,10)/=0 ) THEN
-      DO k = 1 , N
-         CALL mat_wdiv(1.0D0,0.0D0,Ar(k,k),Ai(k,k),Ar(k,k),Ai(k,k))
-         tr = -Ar(k,k)
-         ti = -Ai(k,k)
-         CALL mat_wscal(k-1,tr,ti,Ar(1,k),Ai(1,k),1)
+   if ( mod(job,10)/=0 ) then
+      do k = 1 , n
+         call mat_wdiv(1.0d0,0.0d0,ar(k,k),ai(k,k),ar(k,k),ai(k,k))
+         tr = -ar(k,k)
+         ti = -ai(k,k)
+         call mat_wscal(k-1,tr,ti,ar(1,k),ai(1,k),1)
          kp1 = k + 1
-         IF ( N<kp1 ) CYCLE
-         DO j = kp1 , N
-            tr = Ar(k,j)
-            ti = Ai(k,j)
-            Ar(k,j) = 0.0D0
-            Ai(k,j) = 0.0D0
-            CALL matx_waxpy(k,tr,ti,Ar(1,k),Ai(1,k),1,Ar(1,j),Ai(1,j),1)
-         ENDDO
-      ENDDO
+         if ( n<kp1 ) cycle
+         do j = kp1 , n
+            tr = ar(k,j)
+            ti = ai(k,j)
+            ar(k,j) = 0.0d0
+            ai(k,j) = 0.0d0
+            call matx_waxpy(k,tr,ti,ar(1,k),ai(1,k),1,ar(1,j),ai(1,j),1)
+         enddo
+      enddo
 !
 !        FORM INVERSE(U)*INVERSE(L)
 !
-      nm1 = N - 1
-      IF ( nm1>=1 ) THEN
-         DO kb = 1 , nm1
-            k = N - kb
+      nm1 = n - 1
+      if ( nm1>=1 ) then
+         do kb = 1 , nm1
+            k = n - kb
             kp1 = k + 1
-            DO i = kp1 , N
-               Workr(i) = Ar(i,k)
-               Worki(i) = Ai(i,k)
-               Ar(i,k) = 0.0D0
-               Ai(i,k) = 0.0D0
-            ENDDO
-            DO j = kp1 , N
-               tr = Workr(j)
-               ti = Worki(j)
-               CALL matx_waxpy(N,tr,ti,Ar(1,j),Ai(1,j),1,Ar(1,k),Ai(1,k),1)
-            ENDDO
-            l = Ipvt(k)
-            IF ( l/=k ) CALL mat_wswap(N,Ar(1,k),Ai(1,k),1,Ar(1,l),Ai(1,l),1)
-         ENDDO
-      ENDIF
-   ENDIF
-END SUBROUTINE ml_wgedi
+            do i = kp1 , n
+               workr(i) = ar(i,k)
+               worki(i) = ai(i,k)
+               ar(i,k) = 0.0d0
+               ai(i,k) = 0.0d0
+            enddo
+            do j = kp1 , n
+               tr = workr(j)
+               ti = worki(j)
+               call matx_waxpy(n,tr,ti,ar(1,j),ai(1,j),1,ar(1,k),ai(1,k),1)
+            enddo
+            l = ipvt(k)
+            if ( l/=k ) call mat_wswap(n,ar(1,k),ai(1,k),1,ar(1,l),ai(1,l),1)
+         enddo
+      endif
+   endif
+end subroutine ml_wgedi
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !*==ml_htridi.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024
-SUBROUTINE ml_htridi(Nm,N,Ar,Ai,D,E,E2,Tau)
-   USE m_la
-   IMPLICIT NONE
+subroutine ml_htridi(nm,n,ar,ai,d,e,e2,tau)
+use m_la
+implicit none
 !
-   INTEGER i , j , k , l , N , ii , Nm , jp1
-   DOUBLE PRECISION Ar(Nm,N) , Ai(Nm,N) , D(N) , E(N) , E2(N) , Tau(2,N)
-   DOUBLE PRECISION f , g , h , fi , gi , hh , si , scale
-   INTEGER :: spag_nextblock_1
+integer          :: i , j , k , l , n , ii , nm , jp1
+double precision :: ar(nm,n) , ai(nm,n) , d(n) , e(n) , e2(n) , tau(2,n)
+double precision :: f , g , h , fi , gi , hh , si , scale
+integer          :: spag_nextblock_1
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF
 !     THE ALGOL PROCEDURE TRED1, NUM. MATH. 11, 181-195(1968)
@@ -3340,143 +3359,143 @@ SUBROUTINE ml_htridi(Nm,N,Ar,Ai,D,E,E2,Tau)
 !
 !     ------------------------------------------------------------------
 !
-   Tau(1,N) = 1.0D0
-   Tau(2,N) = 0.0D0
+   tau(1,n) = 1.0d0
+   tau(2,n) = 0.0d0
 !
-   DO i = 1 , N
-      D(i) = Ar(i,i)
-   ENDDO
+   do i = 1 , n
+      d(i) = ar(i,i)
+   enddo
 !     .......... FOR I=N STEP -1 UNTIL 1 DO -- ..........
-   DO ii = 1 , N
+   do ii = 1 , n
       spag_nextblock_1 = 1
-      SPAG_DispatchLoop_1: DO
-         SELECT CASE (spag_nextblock_1)
-         CASE (1)
-            i = N + 1 - ii
+      spag_dispatchloop_1: do
+         select case (spag_nextblock_1)
+         case (1)
+            i = n + 1 - ii
             l = i - 1
-            h = 0.0D0
-            scale = 0.0D0
-            IF ( l>=1 ) THEN
+            h = 0.0d0
+            scale = 0.0d0
+            if ( l>=1 ) then
 !     .......... SCALE ROW (ALGOL TOL THEN NOT NEEDED) ..........
-               DO k = 1 , l
-                  scale = mat_flop(scale+dabs(Ar(i,k))+dabs(Ai(i,k)))
-               ENDDO
+               do k = 1 , l
+                  scale = mat_flop(scale+dabs(ar(i,k))+dabs(ai(i,k)))
+               enddo
 !
-               IF ( scale/=0.0D0 ) THEN
+               if ( scale/=0.0d0 ) then
 !
-                  DO k = 1 , l
-                     Ar(i,k) = mat_flop(Ar(i,k)/scale)
-                     Ai(i,k) = mat_flop(Ai(i,k)/scale)
-                     h = mat_flop(h+Ar(i,k)*Ar(i,k)+Ai(i,k)*Ai(i,k))
-                  ENDDO
+                  do k = 1 , l
+                     ar(i,k) = mat_flop(ar(i,k)/scale)
+                     ai(i,k) = mat_flop(ai(i,k)/scale)
+                     h = mat_flop(h+ar(i,k)*ar(i,k)+ai(i,k)*ai(i,k))
+                  enddo
 !
-                  E2(i) = mat_flop(scale*scale*h)
+                  e2(i) = mat_flop(scale*scale*h)
                   g = mat_flop(dsqrt(h))
-                  E(i) = mat_flop(scale*g)
-                  f = mat_pythag(Ar(i,l),Ai(i,l))
+                  e(i) = mat_flop(scale*g)
+                  f = mat_pythag(ar(i,l),ai(i,l))
 !     .......... FORM NEXT DIAGONAL ELEMENT OF MATRIX T ..........
-                  IF ( f==0.0D0 ) THEN
-                     Tau(1,l) = -Tau(1,i)
-                     si = Tau(2,i)
-                     Ar(i,l) = g
+                  if ( f==0.0d0 ) then
+                     tau(1,l) = -tau(1,i)
+                     si = tau(2,i)
+                     ar(i,l) = g
                      spag_nextblock_1 = 2
-                     CYCLE SPAG_DispatchLoop_1
-                  ELSE
-                     Tau(1,l) = mat_flop((Ai(i,l)*Tau(2,i)-Ar(i,l)*Tau(1,i))/f)
-                     si = mat_flop((Ar(i,l)*Tau(2,i)+Ai(i,l)*Tau(1,i))/f)
+                     cycle spag_dispatchloop_1
+                  else
+                     tau(1,l) = mat_flop((ai(i,l)*tau(2,i)-ar(i,l)*tau(1,i))/f)
+                     si = mat_flop((ar(i,l)*tau(2,i)+ai(i,l)*tau(1,i))/f)
                      h = mat_flop(h+f*g)
-                     g = mat_flop(1.0D0+g/f)
-                     Ar(i,l) = mat_flop(g*Ar(i,l))
-                     Ai(i,l) = mat_flop(g*Ai(i,l))
-                     IF ( l/=1 ) THEN
+                     g = mat_flop(1.0d0+g/f)
+                     ar(i,l) = mat_flop(g*ar(i,l))
+                     ai(i,l) = mat_flop(g*ai(i,l))
+                     if ( l/=1 ) then
                         spag_nextblock_1 = 2
-                        CYCLE SPAG_DispatchLoop_1
-                     ENDIF
+                        cycle spag_dispatchloop_1
+                     endif
                      spag_nextblock_1 = 3
-                     CYCLE SPAG_DispatchLoop_1
-                  ENDIF
-               ELSE
-                  Tau(1,l) = 1.0D0
-                  Tau(2,l) = 0.0D0
-               ENDIF
-            ENDIF
-            E(i) = 0.0D0
-            E2(i) = 0.0D0
+                     cycle spag_dispatchloop_1
+                  endif
+               else
+                  tau(1,l) = 1.0d0
+                  tau(2,l) = 0.0d0
+               endif
+            endif
+            e(i) = 0.0d0
+            e2(i) = 0.0d0
             spag_nextblock_1 = 4
-            CYCLE SPAG_DispatchLoop_1
-         CASE (2)
-            f = 0.0D0
+            cycle spag_dispatchloop_1
+         case (2)
+            f = 0.0d0
 !
-            DO j = 1 , l
-               g = 0.0D0
-               gi = 0.0D0
+            do j = 1 , l
+               g = 0.0d0
+               gi = 0.0d0
 !     .......... FORM ELEMENT OF A*U ..........
-               DO k = 1 , j
-                  g = mat_flop(g+Ar(j,k)*Ar(i,k)+Ai(j,k)*Ai(i,k))
-                  gi = mat_flop(gi-Ar(j,k)*Ai(i,k)+Ai(j,k)*Ar(i,k))
-               ENDDO
+               do k = 1 , j
+                  g = mat_flop(g+ar(j,k)*ar(i,k)+ai(j,k)*ai(i,k))
+                  gi = mat_flop(gi-ar(j,k)*ai(i,k)+ai(j,k)*ar(i,k))
+               enddo
 !
                jp1 = j + 1
-               IF ( l>=jp1 ) THEN
+               if ( l>=jp1 ) then
 !
-                  DO k = jp1 , l
-                     g = mat_flop(g+Ar(k,j)*Ar(i,k)-Ai(k,j)*Ai(i,k))
-                     gi = mat_flop(gi-Ar(k,j)*Ai(i,k)-Ai(k,j)*Ar(i,k))
-                  ENDDO
-               ENDIF
+                  do k = jp1 , l
+                     g = mat_flop(g+ar(k,j)*ar(i,k)-ai(k,j)*ai(i,k))
+                     gi = mat_flop(gi-ar(k,j)*ai(i,k)-ai(k,j)*ar(i,k))
+                  enddo
+               endif
 !     .......... FORM ELEMENT OF P ..........
-               E(j) = mat_flop(g/h)
-               Tau(2,j) = mat_flop(gi/h)
-               f = mat_flop(f+E(j)*Ar(i,j)-Tau(2,j)*Ai(i,j))
-            ENDDO
+               e(j) = mat_flop(g/h)
+               tau(2,j) = mat_flop(gi/h)
+               f = mat_flop(f+e(j)*ar(i,j)-tau(2,j)*ai(i,j))
+            enddo
 !
             hh = mat_flop(f/(h+h))
 !     .......... FORM REDUCED A ..........
-            DO j = 1 , l
-               f = Ar(i,j)
-               g = mat_flop(E(j)-hh*f)
-               E(j) = g
-               fi = -Ai(i,j)
-               gi = mat_flop(Tau(2,j)-hh*fi)
-               Tau(2,j) = -gi
+            do j = 1 , l
+               f = ar(i,j)
+               g = mat_flop(e(j)-hh*f)
+               e(j) = g
+               fi = -ai(i,j)
+               gi = mat_flop(tau(2,j)-hh*fi)
+               tau(2,j) = -gi
 !
-               DO k = 1 , j
-                  Ar(j,k) = mat_flop(Ar(j,k)-f*E(k)-g*Ar(i,k)+fi*Tau(2,k)+gi*Ai(i,k))
-                  Ai(j,k) = mat_flop(Ai(j,k)-f*Tau(2,k)-g*Ai(i,k)-fi*E(k)-gi*Ar(i,k))
-               ENDDO
-            ENDDO
+               do k = 1 , j
+                  ar(j,k) = mat_flop(ar(j,k)-f*e(k)-g*ar(i,k)+fi*tau(2,k)+gi*ai(i,k))
+                  ai(j,k) = mat_flop(ai(j,k)-f*tau(2,k)-g*ai(i,k)-fi*e(k)-gi*ar(i,k))
+               enddo
+            enddo
             spag_nextblock_1 = 3
-         CASE (3)
+         case (3)
 !
-            DO k = 1 , l
-               Ar(i,k) = mat_flop(scale*Ar(i,k))
-               Ai(i,k) = mat_flop(scale*Ai(i,k))
-            ENDDO
+            do k = 1 , l
+               ar(i,k) = mat_flop(scale*ar(i,k))
+               ai(i,k) = mat_flop(scale*ai(i,k))
+            enddo
 !
-            Tau(2,l) = -si
+            tau(2,l) = -si
             spag_nextblock_1 = 4
-         CASE (4)
-            hh = D(i)
-            D(i) = Ar(i,i)
-            Ar(i,i) = hh
-            Ai(i,i) = mat_flop(scale*dsqrt(h))
-            EXIT SPAG_DispatchLoop_1
-         END SELECT
-      ENDDO SPAG_DispatchLoop_1
-   ENDDO
+         case (4)
+            hh = d(i)
+            d(i) = ar(i,i)
+            ar(i,i) = hh
+            ai(i,i) = mat_flop(scale*dsqrt(h))
+            exit spag_dispatchloop_1
+         end select
+      enddo spag_dispatchloop_1
+   enddo
 !
-END SUBROUTINE ml_htridi
+end subroutine ml_htridi
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !*==ml_htribk.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024
-SUBROUTINE ml_htribk(Nm,N,Ar,Ai,Tau,M,Zr,Zi)
-   USE m_la
-   IMPLICIT NONE
+subroutine ml_htribk(nm,n,ar,ai,tau,m,zr,zi)
+use m_la
+implicit none
 !
-   INTEGER i , j , k , l , M , N , Nm
-   DOUBLE PRECISION Ar(Nm,N) , Ai(Nm,N) , Tau(2,N) , Zr(Nm,M) , Zi(Nm,M)
-   DOUBLE PRECISION h , s , si
+integer          :: i , j , k , l , m , n , nm
+double precision :: ar(nm,n) , ai(nm,n) , tau(2,n) , zr(nm,m) , zi(nm,m)
+double precision :: h , s , si
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF
 !     THE ALGOL PROCEDURE TRBAK1, NUM. MATH. 11, 181-195(1968)
@@ -3520,49 +3539,49 @@ SUBROUTINE ml_htribk(Nm,N,Ar,Ai,Tau,M,Zr,Zi)
 !
 !     ------------------------------------------------------------------
 !
-   IF ( M/=0 ) THEN
+   if ( m/=0 ) then
 !     .......... TRANSFORM THE EIGENVECTORS OF THE REAL SYMMETRIC
 !                TRIDIAGONAL MATRIX TO THOSE OF THE HERMITIAN
 !                TRIDIAGONAL MATRIX. ..........
-      DO k = 1 , N
-         DO j = 1 , M
-            Zi(k,j) = mat_flop(-(Zr(k,j)*Tau(2,k)))
-            Zr(k,j) = mat_flop(Zr(k,j)*Tau(1,k))
-         ENDDO
-      ENDDO
+      do k = 1 , n
+         do j = 1 , m
+            zi(k,j) = mat_flop(-(zr(k,j)*tau(2,k)))
+            zr(k,j) = mat_flop(zr(k,j)*tau(1,k))
+         enddo
+      enddo
 !
-      IF ( N/=1 ) THEN
+      if ( n/=1 ) then
 !     .......... RECOVER AND APPLY THE HOUSEHOLDER MATRICES ..........
-         SPAG_Loop_1_1: DO i = 2 , N
+         spag_loop_1_1: do i = 2 , n
             l = i - 1
-            h = Ai(i,i)
-            IF ( h==0.0D0 ) EXIT SPAG_Loop_1_1
-            DO j = 1 , M
-               s = 0.0D0
-               si = 0.0D0
-               DO k = 1 , l
-                  s = mat_flop(s+Ar(i,k)*Zr(k,j)-Ai(i,k)*Zi(k,j))
-                  si = mat_flop(si+Ar(i,k)*Zi(k,j)+Ai(i,k)*Zr(k,j))
-               ENDDO
+            h = ai(i,i)
+            if ( h==0.0d0 ) exit spag_loop_1_1
+            do j = 1 , m
+               s = 0.0d0
+               si = 0.0d0
+               do k = 1 , l
+                  s = mat_flop(s+ar(i,k)*zr(k,j)-ai(i,k)*zi(k,j))
+                  si = mat_flop(si+ar(i,k)*zi(k,j)+ai(i,k)*zr(k,j))
+               enddo
 !     .......... DOUBLE DIVISIONS AVOID POSSIBLE UNDERFLOW ..........
                s = mat_flop((s/h)/h)
                si = mat_flop((si/h)/h)
-               DO k = 1 , l
-                  Zr(k,j) = mat_flop(Zr(k,j)-s*Ar(i,k)-si*Ai(i,k))
-                  Zi(k,j) = mat_flop(Zi(k,j)-si*Ar(i,k)+s*Ai(i,k))
-               ENDDO
-            ENDDO
-         ENDDO SPAG_Loop_1_1
-      ENDIF
-   ENDIF
+               do k = 1 , l
+                  zr(k,j) = mat_flop(zr(k,j)-s*ar(i,k)-si*ai(i,k))
+                  zi(k,j) = mat_flop(zi(k,j)-si*ar(i,k)+s*ai(i,k))
+               enddo
+            enddo
+         enddo spag_loop_1_1
+      endif
+   endif
 !
-END SUBROUTINE ml_htribk
+end subroutine ml_htribk
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
 !*==ml_comqr3.f90 processed by SPAG 8.01RF 01:28 13 Dec 2024
 subroutine ml_comqr3(nm,n,low,igh,ortr,orti,hr,hi,wr,wi,zr,zi,ierr,job)
-use M_la
+use m_la
 implicit none
 !*****
 !     MODIFICATION OF EISPACK COMQR2 TO ADD JOB PARAMETER
@@ -3641,12 +3660,12 @@ implicit none
 !     APPLIED MATHEMATICS DIVISION, ARGONNE NATIONAL LABORATORY
 !
 !     ------------------------------------------------------------------
-   integer i, j, k, l, m, n, en, ii, ll, nm, nn, igh, ip1, itn, its, low, lp1, enm1, iend, ierr
-   double precision hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
-   double precision si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm
-   integer :: job
-   integer :: jj
-   integer :: spag_nextblock_1
+integer          :: i, j, k, l, m, n, en, ii, ll, nm, nn, igh, ip1, itn, its, low, lp1, enm1, iend, ierr
+double precision :: hr(nm,n), hi(nm,n), wr(n), wi(n), zr(nm,n), zi(nm,n), ortr(igh), orti(igh)
+double precision :: si, sr, ti, tr, xi, xr, yi, yr, zzi, zzr, norm
+integer          :: job
+integer          :: jj
+integer          :: spag_nextblock_1
    spag_nextblock_1 = 1
    spag_dispatchloop_1: do
       select case (spag_nextblock_1)
@@ -4029,12 +4048,12 @@ implicit none
 end subroutine ml_comqr3
 !*==ml_corth.f90 processed by SPAG 8.01RF 01:28 13 Dec 2024
 subroutine ml_corth(nm,n,low,igh,ar,ai,ortr,orti)
-use M_la
+use m_la
 implicit none
 !
-   integer i, j, m, n, ii, jj, la, mp, nm, igh, kp1, low
-   double precision ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
-   double precision f, g, h, fi, fr, scale
+integer          :: i, j, m, n, ii, jj, la, mp, nm, igh, kp1, low
+double precision :: ar(nm,n), ai(nm,n), ortr(igh), orti(igh)
+double precision :: f, g, h, fi, fr, scale
 !
 !     THIS SUBROUTINE IS A TRANSLATION OF A COMPLEX ANALOGUE OF
 !     THE ALGOL PROCEDURE ORTHES, NUM. MATH. 12, 349-368(1968)
@@ -4164,14 +4183,14 @@ implicit none
 end subroutine ml_corth
 !*==ml_imtql2.f90 processed by SPAG 8.01RF 01:28 13 Dec 2024
 subroutine ml_imtql2(nm,n,d,e,z,ierr,job)
-   use M_la
-   implicit none
-   integer i, j, k, l, m, n, ii, nm, mml, ierr
-   integer :: job
-   double precision d(n), e(n), z(nm,n)
-   double precision b, c, f, g, p, r, s
-   integer :: spag_nextblock_1
-   integer :: spag_nextblock_2
+use m_la
+implicit none
+integer          :: i, j, k, l, m, n, ii, nm, mml, ierr
+integer          :: job
+double precision :: d(n), e(n), z(nm,n)
+double precision :: b, c, f, g, p, r, s
+integer          :: spag_nextblock_1
+integer          :: spag_nextblock_2
    spag_nextblock_1 = 1
    spag_dispatchloop_1: do
       select case (spag_nextblock_1)
@@ -4356,11 +4375,11 @@ subroutine ml_imtql2(nm,n,d,e,z,ierr,job)
 end subroutine ml_imtql2
 !*==ml_wqrdc.f90 processed by SPAG 8.01RF 01:28 13 Dec 2024
 subroutine ml_wqrdc(xr,xi,ldx,n,p,qrauxr,qrauxi,jpvt,workr,worki,job)
-   use M_la
-   implicit none
-   integer ldx, n, p, job
-   integer jpvt(*)
-   double precision xr(ldx,*), xi(ldx,*), qrauxr(*), qrauxi(*), workr(*), worki(*)
+use m_la
+implicit none
+integer          :: ldx, n, p, job
+integer          :: jpvt(*)
+double precision :: xr(ldx,*), xi(ldx,*), qrauxr(*), qrauxi(*), workr(*), worki(*)
 !
 !     WQRDC uses Householder transformations to compute the QR
 !     factorization of an N by P matrix X. column pivoting
@@ -4444,15 +4463,15 @@ subroutine ml_wqrdc(xr,xi,ldx,n,p,qrauxr,qrauxi,jpvt,workr,worki,job)
 !
 !     INTERNAL VARIABLES
 !
-   integer :: jj
-   integer j, jp, l, lp1, lup, maxj, pl, pu
-   double precision maxnrm, tt
-   double precision nrmxlr, nrmxli, tr, ti
-   logical negj, swapj
+integer          :: jj
+integer          :: j, jp, l, lp1, lup, maxj, pl, pu
+double precision :: maxnrm, tt
+double precision :: nrmxlr, nrmxli, tr, ti
+logical          :: negj, swapj
 !
-   double precision zdumr, zdumi
-   double precision cabs1
-   cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
+double precision :: zdumr, zdumi
+double precision :: cabs1
+cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
 !
    pl = 1
    pu = 0
@@ -4583,10 +4602,10 @@ subroutine ml_wqrdc(xr,xi,ldx,n,p,qrauxr,qrauxi,jpvt,workr,worki,job)
 end subroutine ml_wqrdc
 !*==ml_wqrsl.f90 processed by SPAG 8.01RF 01:28 13 Dec 2024
 subroutine ml_wqrsl(xr,xi,ldx,n,k,qrauxr,qrauxi,yr,yi,qyr,qyi,qtyr,qtyi,br,bi,rsdr,rsdi,xbr,xbi,job,info)
-use M_la
+use m_la
 implicit none
-integer ldx, n, k, job, info
-double precision xr(ldx,*), xi(ldx,*), qrauxr(*), qrauxi(*), yr(*), yi(*), qyr(*), qyi(*), qtyr(*), qtyi(*), br(*),   &
+integer          :: ldx, n, k, job, info
+double precision :: xr(ldx,*), xi(ldx,*), qrauxr(*), qrauxi(*), yr(*), yi(*), qyr(*), qyi(*), qtyr(*), qtyi(*), br(*),   &
 & bi(*), rsdr(*), rsdi(*), xbr(*), xbi(*)
 !
 !     WQRSL APPLIES THE OUTPUT OF WQRDC TO COMPUTE COORDINATE
@@ -4729,12 +4748,12 @@ double precision xr(ldx,*), xi(ldx,*), qrauxr(*), qrauxi(*), yr(*), yi(*), qyr(*
 !
 !     INTERNAL VARIABLES
 !
-   integer i, j, jj, ju, kp1
-   double precision tr, ti, tempr, tempi
-   logical cb, cqy, cqty, cr, cxb
+integer          :: i, j, jj, ju, kp1
+double precision :: tr, ti, tempr, tempi
+logical          :: cb, cqy, cqty, cr, cxb
 !
-   double precision zdumr, zdumi
-   double precision cabs1
+double precision :: zdumr, zdumi
+double precision :: cabs1
    cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
 !
 !     SET INFO FLAG.
@@ -4893,10 +4912,10 @@ end subroutine ml_wqrsl
 !==================================================================================================================================!
 !*==ml_wsvdc.f90 processed by SPAG 8.01RF 01:28 13 Dec 2024
 subroutine ml_wsvdc(xr,xi,ldx,n,p,sr,si,er,ei,ur,ui,ldu,vr,vi,ldv,workr,worki,job,info)
-use M_la
+use m_la
 implicit none
-integer ldx, n, p, ldu, ldv, job, info
-double precision xr(ldx,*), xi(ldx,*), sr(*), si(*), er(*), ei(*), ur(ldu,*), ui(ldu,*), vr(ldv,*), vi(ldv,*), workr(*)&
+integer          :: ldx, n, p, ldu, ldv, job, info
+double precision :: xr(ldx,*), xi(ldx,*), sr(*), si(*), er(*), ei(*), ur(ldu,*), ui(ldu,*), vr(ldv,*), vi(ldv,*), workr(*)&
 &, worki(*)
 !
 !
@@ -4998,14 +5017,14 @@ double precision xr(ldx,*), xi(ldx,*), sr(*), si(*), er(*), ei(*), ur(ldu,*), ui
 !
 !     INTERNAL VARIABLES
 !
-integer i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1,    &
+integer :: i, iter, j, jobu, k, kase, kk, l, ll, lls, lm1, lp1, ls, lu, m, maxit, mm, mm1, mp1, nct, nctp1,    &
 & ncu, nrt, nrtp1
-double precision tr, ti, rr, ri
-double precision b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest, small
-logical wantu, wantv
+double precision :: tr, ti, rr, ri
+double precision :: b, c, cs, el, emm1, f, g, scale, shift, sl, sm, sn, smm1, t1, test, ztest, small
+logical :: wantu, wantv
 !
-double precision zdumr, zdumi
-double precision cabs1
+double precision :: zdumr, zdumi
+double precision :: cabs1
 cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
 integer :: spag_nextblock_1
 !
@@ -5440,15 +5459,6 @@ integer :: spag_nextblock_1
       enddo spag_dispatchloop_1
    enddo spag_loop_1_5
 end subroutine ml_wsvdc
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!

@@ -27,22 +27,6 @@ help_text=[ CHARACTER(LEN=128) :: &
    stop ! if --help was specified, stop
 endif
 end subroutine help_usage
-!>
-!!##NAME
-!!    model(1f) - [FORTRAN:iso_fortran_env] fortran numeric model information
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    model
-!!
-!!##DESCRIPTION
-!!    The following routines are called for various types:
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!##LICENSE
-!!    Public Domain
 program model
 !!use,intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, stdout=>OUTPUT_UNIT
 use,intrinsic :: iso_fortran_env, only : ERROR_UNIT, INPUT_UNIT, OUTPUT_UNIT

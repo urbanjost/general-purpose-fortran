@@ -68,8 +68,8 @@ and then enter ...
 
     bash hershey.sh
 
-if you do not have bash(1) or a Posix shell you will have to run
-the h2v program for each font, as illustrated by the simple
+if you do not have bash(1) or a Posix shell you will have to build and 
+run the h2v program for each font, as illustrated by the simple
 hershey.sh script.
 
 ## Dependencies

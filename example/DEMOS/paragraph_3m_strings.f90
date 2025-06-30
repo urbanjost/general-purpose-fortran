@@ -2,7 +2,7 @@
      use M_strings, only : paragraph
      implicit none
      character(len=:),allocatable :: paragrph(:)
-     character(len=*),parameter    :: string= '&
+     character(len=*),parameter   :: string= '&
       &one two three four five &
       &six seven eight &
       &nine ten eleven twelve &

@@ -38,7 +38,7 @@
           real             :: sorted(size(values))
              if (size(values) > 1) then
                 sorted = &
-            & [qsort(pack(values(2:),values(2:)<values(1))), values(1), &
+                & [qsort(pack(values(2:),values(2:)<values(1))), values(1), &
                 & qsort(pack(values(2:),values(2:)>=values(1)))]
              else
                 sorted = values

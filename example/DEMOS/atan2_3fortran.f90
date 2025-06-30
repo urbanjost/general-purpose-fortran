@@ -33,8 +33,8 @@
            call cartesian_to_polar(vals(i), radius,ang)
            write(*,101)vals(i),ang,r2d(ang),radius
         enddo
-        101 format( 'X= ',f5.2,' Y= ',f5.2,' ANGLE= ',g0, &
-        & T38,'DEGREES= ',g0.4, T54,'DISTANCE=',g0)
+        101 format( 'X=',f5.2,' Y=',f5.2,' ANGLE=',g0, &
+        & T38,'DEGREES=',g0.4, T54,'DISTANCE=',g0)
        endblock COMPLEX_VALS
       !
       contains
