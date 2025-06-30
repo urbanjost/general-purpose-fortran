@@ -27,6 +27,11 @@ jobs:
         sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${GCC_V} 100 \
         --slave /usr/bin/gfortran gfortran /usr/bin/gfortran-${GCC_V} \
         --slave /usr/bingcov gcov /usr/bin/gcov-${GCC_V}
+        #sudo apt-get install gfortran
+        sudo apt-get install libx11-dev
+        sudo apt-get install sqlite3 libsqlite3-dev
+        sudo apt-get install libcurl4-gnutls-dev 
+        sudo apt-get install libreadline libreadline-dev
 
     - name: Install fpm
       run: |
