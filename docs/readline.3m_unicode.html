@@ -1,0 +1,259 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>readline (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+READLINE(3f) - [M_unicode:IO] read a line from specified LUN into
+string up to line length limit
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Syntax</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Example</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SYNTAX</H3>
+
+</A>
+<BLOCKQUOTE>
+function readline(lun,iostat) result(line)
+<P>
+<PRE>
+    integer,intent(in),optional  :: lun
+    integer,intent(out),optional :: iostat
+    type(unicode_type)           :: line
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Read a line of any length up to programming environment maximum
+line length. Requires Fortran 2003+.
+<P>
+It is primarily expected to be used when reading input which will
+then be parsed.
+<P>
+The input file must have a PAD attribute of YES for the function
+to work properly, which is typically true.
+<P>
+The simple use of a loop that repeatedly re-allocates a character
+variable in addition to reading the input file one buffer at a
+time could (depending on the programming environment used) be
+inefficient, as it could reallocate and allocate memory used for
+the output string with each buffer read.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>LUN</B> </TD><TD valign=bottom>
+optional LUN (Fortran logical I/O unit) number. Defaults
+to stdin.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>IOSTAT</B> </TD><TD valign=bottom>
+status returned by READ(IOSTAT=IOS). If not zero, an error
+occurred or an end-of-file or end-of-record was encountered.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>LINE</B> </TD><TD valign=bottom>
+line read.
+if IOSTAT is not zero, LINE returns the I/O error message.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+   program demo_readline
+   use,intrinsic :: iso_fortran_env, only : stdin=&gt;input_unit
+   use,intrinsic :: iso_fortran_env, only : iostat_end
+   use M_unicode, only : readline, len, trim
+   use M_unicode, only : assignment(=), ch=&gt;character, ut=&gt;unicode_type
+   implicit none
+   type(ut)                     :: ln
+   character(len=:),allocatable :: aline
+   integer,allocatable          :: ints(:)
+   integer                      :: iostat, lun, i
+   character(len=*),parameter :: filedata(*)=[character(len=80) :: &
+      &#146;The famous Confucian expression:&#146;, &
+      &#146;&#146;, &
+      &#146; "己所不欲，勿施於人"&#146;, &
+      &#146; (jǐ suǒ bù yù, wù shī yú rén)&#146;, &
+      &#146;or&#146;, &
+      &#146; "What you do not want done to yourself,&#146;, &
+      &#146; do not do to others":&#146;]
+      ! create a scratch file to read
+      open(newunit=lun,status=&#146;scratch&#146;,pad=&#146;yes&#146;)
+      write(lun,&#146;(a)&#146;)(trim(filedata(i)),i=1,size(filedata))
+      !----------------------------------------------------------------
+      ! read back UTF-8 byte stream and show the lines read
+      rewind(unit=lun)
+      do
+         ln=readline(lun,iostat=iostat)
+         if(iostat.ne.0)exit
+         ! write the glyph length, byte length, line in brackets
+         write(*,&#146;(i4,1x,i4,1x,a)&#146;)len(ln),len(ch(ln)),&#146;[&#146;//ch(ln)//&#146;]&#146;
+      enddo
+      call checkit()
+      !----------------------------------------------------------------
+      ! the same thing except convert to default intrinsic types
+      rewind(unit=lun)
+      do
+         ln=readline(lun,iostat=iostat)
+         if(iostat.ne.0)exit
+         ! assign the string to an allocatable array of integers
+         ints=ln
+         ! and the string to a character variable
+         aline=ln
+         write(*,&#146;(i4,1x,i4,1x,a)&#146;)len(ln),len(aline),&#146;[&#146;//ch(ln)//&#146;]&#146;
+      enddo
+      call checkit()
+      !----------------------------------------------------------------
+      ! again but this time show the lines as Unicode codepoints
+      rewind(unit=lun)
+      do
+         ln=readline(lun,iostat=iostat)
+         if(iostat.ne.0)exit
+         if(len(ln).eq.0)then
+            write(*,&#146;(/,10(g0,1x)," &#46;&#46;&#46;")&#146;)[0,0]
+         else
+            write(*,&#146;(/,10(g0,1x)," &#46;&#46;&#46;")&#146;)ln%codepoint()
+         endif
+      enddo
+      call checkit()
+      !----------------------------------------------------------------
+      ! show the line as Unicode codepoints using default integer array
+      rewind(unit=lun)
+      do
+         ln=readline(lun,iostat=iostat)
+         if(iostat.ne.0)exit
+         ! assign the string to an allocatable array of integers
+         ints=ln
+         if(size(ints).eq.0)ints=[0,0]
+         write(*,&#146;(/,10(g0,1x)," &#46;&#46;&#46;")&#146;)ints
+      enddo
+      call checkit()
+      !----------------------------------------------------------------
+   contains
+   subroutine checkit()
+      if(iostat /= iostat_end)then
+         write(*,*)&#146;error reading input:&#146;,ch(trim(ln))
+      endif
+      write(*,*)
+   end subroutine checkit
+   end program demo_readline
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>readline (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b720ff92-d86e-41ef-9a54-92a2ab86954a using man macros.</FONT>
+<br><br><center><img src="images/readline.3m_unicode.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

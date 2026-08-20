@@ -1,0 +1,210 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>File Formats &nbsp;-&nbsp;</I><NOBR>enumeration (5)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Enumeration types
+<P>
+An enumeration type is a nonintrinsic type with no type parameter. It is
+not a derived type and is not inter- operable. An enumeration type
+deﬁnition deﬁnes the name of the type and lists all the possible values
+of the type.
+<P>
+<PRE>
+    R766  enumeration-type-def     is enumeration-type-stmt
+                                          enumeration-enumerator-stmt
+                                          [ enumeration-enumerator-stmt ]&#46;&#46;&#46;
+                                          end-enumeration-type-stmt
+    R767  enumeration-type-stmt    is ENUMERATIONTYPE[[,access-spec ] :: ]
+    enumeration-type-name
+<P>
+</PRE>
+C7114 An access-spec on an enumeration-type-stmt shall only appear in
+the speciﬁcation part of a module.
+<P>
+R768 enumeration-enumerator-stmt is ENUMERATOR[:: ] enumerator-name-list
+<P>
+R769 end-enumeration-type-stmt is
+ENDENUMERATIONTYPE[enumeration-type-name ]
+<P>
+C7115 If enumeration-type-name appears on an END ENUMERATION TYPE
+statement, it shall be the same as on the ENUMERATION TYPE statement.
+<P>
+The access-spec on an ENUMERATION TYPE statement speciﬁes the
+accessibility of the enumeration-type- name and the default
+accessibility of its enumerators. The accessibility of an enumerator may
+be conﬁrmed or overridden by an access-stmt.
+<P>
+Each enumerator in the defnition is a scalar named constant of the
+enumeration type. The order of thee numerator names in the definition
+defines the ordinal position of each enumerator.
+<P>
+R770 enumeration-type-spec is enumeration-type-name
+<P>
+C7116 The enumeration-type-name in an enumeration-type-spec shall be the
+name of a previously deﬁned enumeration type.
+<P>
+An enumeration type speciﬁer speciﬁers the type. Two data entities of
+enumeration type have the same type if they are declared with reference
+to the same enumeration type deﬁnition.
+<P>
+R771 enumeration-constructor is enumeration-type-spec ( scalar-int-expr
+)
+<P>
+An enumeration constructor produces the scalar value of the enumeration
+type whose ordinal position is the value of the scalar-int-expr. The
+scalar-int-expr shall have a value that is positive and less than or
+equal to the number of enumerators in the enumeration type’s deﬁnition.
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Note</A><BR>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>NOTE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Here is an example of a module deﬁning two enumeration types.
+<P>
+<PRE>
+    Module enumeration_mod
+       Enumeration Type :: v_value
+       Enumerator :: v_one, v_two, v_three
+       Enumerator v_four
+       End Enumeration Type
+       Enumeration Type :: w_value
+       Enumerator :: w1, w2, w3, w4, w5, wendsentinel
+       End Enumeration Type
+    Contains
+       Subroutine sub(a)
+          Type(v_value),Intent(In) :: a
+          Print 1,a ! Acts similarly to Print *,Int(a).
+    1     Format(’A has ordinal value ’,I0)
+       End Subroutine
+       Subroutine wcheck(w)
+          Type(w_value),Intent(In) :: w
+          Select Case(w)
+           Case(w1)
+             Print *,’w1 selected’
+           Case (w2:w4)
+             Print *,’One of w2&#46;&#46;&#46;w4 selected’
+           Case (wendsentinel)
+             Stop ’Invalid w selected’
+           Case Default
+             Stop ’Unrecognized w selected’
+          End Select
+       End Subroutine
+    End Module
+    Here is an example of a program using that module.
+    Program example
+       Use enumeration_mod
+       Type(v_value) :: x=v_one
+       Type(v_value) :: y=v_value(2) ! Explicit constructor producing v_two.
+       Type(v_value) :: z,nz         ! Initially undefined.
+       Call sub(x)
+       Call sub(v_three)
+       z = v_value(1)                ! First value.
+       Do
+          If (z==Huge(x)) Write (*,’(A)’,Advance=’No’) ’ Huge:’
+          Call sub(z)
+          nz = Next(z)
+          If (z==nz) Exit
+          z = nz
+       End Do
+    End Program
+<P>
+</PRE>
+Here is an example showing some invalid usages of enumerations.
+<P>
+<PRE>
+    Program invalid
+       Use enumeration_mod
+       Type(v_value) :: a, b
+       a = 1         ! INVALID - wrong type (INTEGER).
+       b = w1        ! INVALID - wrong enumeration type.
+       Print *,a     ! INVALID - list-directed i/o not available.
+    End Program
+<P>
+</PRE>
+An enumeration type can be used to declare components, for example:
+<P>
+<PRE>
+    Module example2
+       Use enumeration_mod
+       Type vw
+          Type(v_value) v
+          Type(w_value) w
+       End Type
+    Contains
+       Subroutine showme(ka)
+          Type(vw),Intent(In) :: ka
+          Print 1,ka
+    1     Format(1X,’v ordinal is ’,I0,’, w ordinal is ’,I0)
+       End Subroutine
+    End Module
+</PRE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>enumeration (5)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 8a19067d-67ec-41f3-a0b4-a543b76fd273 using man macros.</FONT>
+<br><br><center><img src="images/enumeration.5fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

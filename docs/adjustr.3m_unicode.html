@@ -1,0 +1,318 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>adjustr (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+ADJUSTR(3f) - [M_unicode:WHITESPACE] right-justify a string
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Characteristics</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Result</A><BR>
+<A HREF=#6>Examples</A><BR>
+<A HREF=#7>See Also</A><BR>
+<A HREF=#8>Author</A><BR>
+<A HREF=#9>License</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+result = adjustr(string,glyphs)
+<P>
+<PRE>
+   elemental function adjustr(string)
+<P>
+    type(unicode_type)            :: adjustr
+    type(unicode_type),intent(in) :: string
+    integer,intent(in),optional   :: glyphs
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING is a string variable
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+GLYPHS is a default integer
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the return value is a string variable
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+ADJUSTR(3) right-justifies a string by removing trailing spaces. Spaces
+are inserted at the start of the string as needed to retain the
+original length unless an explicit return length is specified by the
+GLYPHS parameter.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING : the string to right-justify
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+GLYPHS : length in glyphs to extend to or truncate to
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+trailing spaces are removed and the same number of spaces are then
+inserted at the start of string.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+sample program:
+<P>
+<PRE>
+  program demo_adjustr
+  use M_unicode, only : ut=&gt;unicode_type
+  use M_unicode, only : adjustr, len
+  use M_unicode, only : write(formatted)
+  use M_unicode, only : assignment(=)
+  implicit none
+  type(ut)                   :: str
+  type(ut),allocatable       :: array(:)
+  integer                    :: i
+  character(len=*),parameter :: bracket=&#146;("[",DT,"]")&#146;
+      !
+      call numberline(2)
+      !
+      ! basic usage
+      str = &#146;  sample string     &#146;
+      write(*,bracket) str
+      str = adjustr(str)
+      write(*,bracket) str
+      !
+      call numberline(5)
+      !
+      ! elemental
+      array=ut([character(len=50) :: &
+      &#146;    एक (ek) &#146;, &
+      &#146;       दो (do) &#146;, &
+      &#146;          तीन(teen) &#146; ])
+      !
+      ! print array unadjusted
+      write(*,bracket)array
+      !do i=1,size(array)
+      !   write(*,&#146;(*(g0,1x))&#146;)array(i)%codepoint()
+      !enddo
+      ! note 50 bytes is not necessarily 50 glyphs
+      write(*,&#146;(*(g0,1x))&#146;)&#146;length in glyphs=&#146;,len(array)
+      write(*,&#146;(*(g0,1x))&#146;)&#146;length in bytes=&#146;,(len(array(i)%character()),i=1,size(array))
+      !
+      call numberline(5)
+      !
+      ! print array right-justified
+      write(*,bracket)adjustr(array)
+      !
+      call numberline(5)
+      !
+      ! print array right-justified specifying number of glyphs
+      write(*,*)&#146;set to 50&#146;
+      write(*,bracket)adjustr(array,50)
+      !
+      write(*,*)&#146;set to 60&#146;
+      call numberline(6)
+      write(*,bracket)adjustr(array,60)
+      write(*,*)&#146;set to 40&#146;
+      call numberline(4)
+      write(*,bracket)adjustr(array,40)
+      write(*,*)&#146;set to 10&#146;
+      call numberline(1)
+      write(*,bracket)adjustr(array,10)
+      write(*,*)&#146;set to 5&#146;
+      write(*,bracket)adjustr(array,5)
+      write(*,*)&#146;set to 4&#146;
+      write(*,bracket)adjustr(array,4)
+      write(*,*)&#146;set to 1&#146;
+      write(*,bracket)adjustr(array,1)
+   contains
+      !
+      subroutine numberline(ireps)
+      integer,intent(in) :: ireps
+         write(*,&#146;(1x,a)&#146;)repeat(&#146;1234567890&#146;,ireps)
+      end subroutine numberline
+   end program demo_adjustr
+<P>
+  Results:
+<P>
+   &gt;  12345678901234567890
+   &gt; [  sample string     ]
+   &gt; [       sample string]
+   &gt;  12345678901234567890123456789012345678901234567890
+   &gt; [    एक (ek)                                   ]
+   &gt; [       दो (do)                                ]
+   &gt; [          तीन(teen)                         ]
+   &gt; length in glyphs= 46 46 44
+   &gt; length in bytes= 50 50 50
+   &gt;  12345678901234567890123456789012345678901234567890
+   &gt; [                                       एक (ek)]
+   &gt; [                                       दो (do)]
+   &gt; [                                   तीन(teen)]
+   &gt;  12345678901234567890123456789012345678901234567890
+   &gt;  set to 50
+   &gt; [                                           एक (ek)]
+   &gt; [                                           दो (do)]
+   &gt; [                                         तीन(teen)]
+   &gt;  set to 60
+   &gt;  123456789012345678901234567890123456789012345678901234567890
+   &gt; [                                                     एक (ek)]
+   &gt; [                                                     दो (do)]
+   &gt; [                                                   तीन(teen)]
+   &gt;  set to 40
+   &gt;  1234567890123456789012345678901234567890
+   &gt; [                                 एक (ek)]
+   &gt; [                                 दो (do)]
+   &gt; [                               तीन(teen)]
+   &gt;  set to 10
+   &gt;  1234567890
+   &gt; [   एक (ek)]
+   &gt; [   दो (do)]
+   &gt; [ तीन(teen)]
+   &gt;  set to 5
+   &gt; [ (ek)]
+   &gt; [ (do)]
+   &gt; [teen)]
+   &gt;  set to 4
+   &gt; [(ek)]
+   &gt; [(do)]
+   &gt; [een)]
+   &gt;  set to 1
+   &gt; [)]
+   &gt; [)]
+   &gt; [)]
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+ADJUSTL(3), TRIM(3)
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>adjustr (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4c36267c-18ff-4534-a618-26679d2617c2 using man macros.</FONT>
+<br><br><center><img src="images/adjustr.3m_unicode.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

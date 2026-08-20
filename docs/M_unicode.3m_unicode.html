@@ -1,0 +1,651 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>M_unicode (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+M_unicode(3f) - [M_unicode::INTRO] Unicode string module
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Synopsis</A><BR>
+<A HREF=#3>See Also</A><BR>
+<A HREF=#4>Examples</A><BR>
+<A HREF=#5>Author</A><BR>
+<A HREF=#6>License</A><BR>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+The M_unicode(3f) module is a collection of Fortran string
+methods that work with UTF-8 encoded text not just ASCII-7 data.
+<P>
+Strings are declared using the user-defined type "UNICODE_TYPE". The
+type supports allocatable ragged arrays where each element may be of
+differing length.
+<P>
+Compiler support of the optional Fortran ISO_10646 extension is
+not required.
+<P>
+The M_unicode(3) module overloads the Fortran built-in CHARACTER
+intrinsics and operators to allow TYPE(UNICODE_TYPE) to use the
+intrinsic procedure names in much the same manner the intrinsics are
+used with CHARACTER variables.
+<P>
+The intrinsic overloads include TOKENIZE(3) and SPLIT(3) even if the
+underlying compiler does not yet support those intrinsics.
+<P>
+Overloads of assignment, logical comparisons, and concatenation using
+the // operator with strings are included as well
+to make use of TYPE(UNICODE_TYPE) largely consistent with standard
+CHARACTER string manipulations.
+<P>
+Nearly all the methods are available using both OOP and procedural
+syntax.
+<P>
+In addition M_unicode(3) includes routines for parsing, tokenizing,
+changing case, substituting new strings for substrings, locating
+strings with simple wildcard expressions, removing tabs and
+line terminators and other advanced non-intrinsic string
+manipulations.
+<P>
+The **UPPER()** and **LOWER()** functions support the concept of
+case for the Unicode Latin characters not just the ASCII subset,
+and a basic SORT() function provides for ordering the data by Unicode
+codepoint values.
+<P>
+A PAD() function allows padding strings at least up to a specified
+glyph length with a repeating pattern.
+<P>
+**M_unicode** should be useful for anyone working with UTF-8 data,
+particularly if the compiler does not support the UCS-4 extensions
+of Fortran.
+<P>
+Until proven otherwise M_unicode(3) should work with any environment
+where UTF-8 files are supported.
+<P>
+The type components are not public to allow for use of the same user
+code when using other modules such as M_ucs4(3) which ultimately will
+provide the same user interface but internally using ISO_10646 internal
+encoding instead of an array of integers containing codepoints (which
+is what M_unicode(3) uses). This has the drawback of not permitting
+easy use of array syntax directly on the codepoint array. Perhaps
+this decision will change but in the meantime several methods such as
+REPLACE(3) and CHARACTER(3) and SUB(3) provide similar functionality.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+public methods:
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; TOKENS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>split</B> </TD><TD valign=bottom>
+subroutine parses string using specified delimiter
+characters into tokens
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>tokenize</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Parse a string into tokens.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; EDITING</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>replace</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+function non-recursively globally replaces old
+substring with new substring
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>transliterate</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+replace characters from old set with new set
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>pound_to_box</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+create simple boxes using pound character
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>add_border</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+add border to an array of strings
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>reverse</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+reverse order of glyphs on a line
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CASE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>upper</B> </TD><TD valign=bottom>
+function converts string to uppercase
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lower</B> </TD><TD valign=bottom>
+function converts string to miniscule
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; STRING LENGTH</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>len</B> </TD><TD valign=bottom>
+return the length of a string in glyphs
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>len_trim</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+find location of last non-whitespace glyph
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; PADDING</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>pad</B> </TD><TD valign=bottom>
+pad string to at least specified length with pattern string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>repeat</B> </TD><TD valign=bottom>
+Repeated string concatenation
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; WHITE SPACE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>trim</B> </TD><TD valign=bottom>
+Remove trailing blank characters of a string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>expandtabs</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+expand tab characters
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>adjustl</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Left adjust a string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>adjustr</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Right adjust a string
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ENCODING</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>character(STRING,start,end,inc)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+converts a string to type CHARACTER.
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>escape</B> </TD><TD valign=bottom>
+expand C-like escape strings
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>add_backslash</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+replace other than printable ASCII-7
+characters with C-like escape strings
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>expand_html</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+expand html "&NAME;" escape strings
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>codepoints_to_utf8(codepoints,utf8,nerr)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+subroutine to convert
+codepoints to UTF-8 bytes
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>utf8_to_codepoints(utf8,codepoints,nerr)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+subroutine to convert
+UTF-8 bytes to codepoints
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>STRING%character(start,end,inc)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+OOP syntax for converting a string to
+type CHARACTER.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>STRING%byte(start,end,inc)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Convert to an array of
+CHARACTER(len=1) bytes.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>STRING%codepoint(start,end,inc)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+converts a string to an INTEGER
+array of Unicode codepoints
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>char</B> </TD><TD valign=bottom>
+converts an integer codepoint into a string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>ichar</B> </TD><TD valign=bottom>
+converts a type(unicode_type) glyph into an integer
+codepoint
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NUMERIC STRINGS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>fmt</B> </TD><TD valign=bottom>
+convert intrinsic numeric value to string using optional
+format
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CHARACTER TESTS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>glob</B> </TD><TD valign=bottom>
+compares given string for match to pattern which may
+contain wildcard characters
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+! the following are based on Unicode codepoint, not dictionary order
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: ! the following are based on Unicode codepoint, not dictionary order
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lgt</B> </TD><TD valign=bottom>
+Lexical greater than
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lge</B> </TD><TD valign=bottom>
+Lexical greater than or equal
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>leq</B> </TD><TD valign=bottom>
+Lexical equal
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lne</B> </TD><TD valign=bottom>
+Lexical not equal
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>lle</B> </TD><TD valign=bottom>
+Lexical less than or equal
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>llt</B> </TD><TD valign=bottom>
+Lexical less than
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; QUERY</H4>
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>isascii</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+checks whether string is composed of all
+character values that fit into the ASCII-7 character set.
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>isblank</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+returns .true. if string is composed of all blanks
+(spaces or from the set of Unicode blanks or a horizontal
+tab).
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>isspace</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+returns .true. if string is composed of all spaces
+(ASCII-7 spaces or from the set of Unicode blanks).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; IO</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>readline</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+read a text line from a file
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>slurp</B> </TD><TD valign=bottom>
+read formatted UTF-8 encoded file into TYPE(UNICODE_TYPE)
+array
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; LOCATION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>index</B> </TD><TD valign=bottom>
+glyph position of a substring within a string
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>scan</B> </TD><TD valign=bottom>
+Scan a string for the presence of a set
+of characters
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>verify</B> </TD><TD valign=bottom>
+Scan a string for the absence of a set of characters
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CONCATENATION</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>join</B> </TD><TD valign=bottom>
+join elements of an array into a single string
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>operator(.cat.)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+concatenate strings and/or convert intrinsics to
+strings and concatenate
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>operator(//)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+concatenate strings and character variables
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SYSTEM</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD colspan=2>
+<B>get_env</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Get environment variable
+</TD></TR>
+<TR valign=top><TD colspan=2>
+<B>get_arg</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+Get command line argument
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; SORT</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>sort</B> </TD><TD valign=bottom>
+Sort by Unicode codepoint value (not dictionary order)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; BASE CONVERSION</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; QUOTES</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; NONALPHA</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; OOPS INTERFACE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+An OOP (Object-Oriented Programming) interface to the M_unicode(3fm)
+module provides an alternative interface to all the same procedures
+except for SORT(3f) and CHAR(3f).
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+All the procedure descriptions are conglomerated into the single file
+"manual.txt" for simple access not requiring access to man-pages or
+browsers.
+<P>
+There are additional routines in other GPF modules for working with
+expressions (M_calculator), time strings (M_time), random strings
+(M_random, M_uuid), lists (M_list), and interfacing with the C regular
+expression library (M_regex).
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Each of the procedures includes an example program in the example/
+directory as well as a corresponding man(1) page for the procedure.
+</BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+   program demo_M_unicode
+   use,intrinsic :: iso_fortran_env, only : stdout=&gt;output_unit
+   use M_unicode,only : tokenize, replace, character, upper, lower, len
+   use M_unicode,only : unicode_type, assignment(=)
+   use M_unicode,only : ut =&gt; unicode_type, ch =&gt; character
+   type(unicode_type)             :: string
+   type(unicode_type)             :: numeric, uppercase, lowercase
+   type(unicode_type),allocatable :: array(:)
+   character(len=*),parameter     :: all=&#146;(g0)&#146;
+   !character(len=*),parameter     :: uni=&#146;(DT)&#146;
+   uppercase=&#146;АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ&#146;
+   lowercase=&#146;абвгґдеєжзиіїйклмнопрстуфхцчшщьюя&#146;
+   numeric=&#146;0123456789&#146;
+    !
+    string=uppercase // numeric // lowercase
+    !
+    print all, &#146;Original string:&#146;
+    print all, ch(string)
+    print all, &#146;length in bytes :&#146;,len(string%character())
+    print all, &#146;length in glyphs:&#146;,len(string)
+    print all
+    !
+    print all, &#146;convert to all uppercase:&#146;
+    print all, ch( UPPER(string) )
+    print all
+    !
+    print all, &#146;convert to all lowercase:&#146;
+    print all, ch( string%LOWER() )
+    print all
+    !
+    print all, &#146;tokenize on spaces &#46;&#46;&#46; &#146;
+    call TOKENIZE(string,ut(&#146; &#146;),array)
+    print all, &#146;&#46;&#46;&#46; writing with A or G format:&#146;,character(array)
+    !print uni, ut(&#146;&#46;&#46;&#46; writing with DT format&#146;),array
+    print all
+    !
+    print all, &#146;case-insensitive replace:&#146;
+    print all, ch( &
+    & REPLACE(string, &
+    & ut(&#146;клмнопрс&#146;), &
+    & ut(&#146;--------&#146;), &
+    & ignorecase=.true.) )
+    !
+    print all
+    !
+   end program demo_M_unicode
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   &gt; Original string:
+   &gt; АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ0123456789 &#46;&#46;&#46;
+   &gt; абвгґдеєжзиіїйклмнопрстуфхцчшщьюя
+   &gt; length in bytes :
+   &gt; 144
+   &gt; length in glyphs:
+   &gt; 78
+   &gt;
+   &gt; convert to all uppercase:
+   &gt; АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ0123456789 &#46;&#46;&#46;
+   &gt; АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ
+   &gt;
+   &gt;
+   &gt; tokenize on spaces &#46;&#46;&#46;
+   &gt; &#46;&#46;&#46; writing with A or G format:
+   &gt; АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ
+   &gt; 0123456789
+   &gt; абвгґдеєжзиіїйклмнопрстуфхцчшщьюя
+   &gt; &#46;&#46;&#46; writing with DT format
+   &gt; АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ
+   &gt; 0123456789
+   &gt; абвгґдеєжзиіїйклмнопрстуфхцчшщьюя
+   &gt;
+   &gt; case-insensitive replace:
+   &gt; АБВГҐДЕЄЖЗИІЇЙ--------ТУФХЦЧШЩЬЮЯ0123456789 &#46;&#46;&#46;
+   &gt; абвгґдеєжзиіїй--------туфхцчшщьюя
+<P>
+</PRE>
+<A name=5>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_unicode (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 44b26a44-a693-4b7e-a423-3c324f4fbf33 using man macros.</FONT>
+<br><br><center><img src="images/M_unicode.3m_unicode.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

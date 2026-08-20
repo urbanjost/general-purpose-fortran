@@ -1,0 +1,607 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>verify (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+VERIFY(3f) - [M_unicode:SEARCH] Position of a character in a string of
+characters that does not appear in a given set of characters.
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Characteristics</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Result</A><BR>
+<A HREF=#6>Examples</A><BR>
+<A HREF=#7>See Also</A><BR>
+<A HREF=#8>Author</A><BR>
+<A HREF=#9>License</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+result = verify(string, set [,back] [,kind] )
+<P>
+<PRE>
+           elemental integer function verify(string,set,back,KIND)
+<P>
+            type(unicode_type),intent(in) :: string
+<P>
+            type(unicode_type),intent(in) :: set
+               or
+            character(len=*),intent(in)   :: set
+<P>
+            logical,intent(in),optional   :: back
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING must be of type string
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SET must be of type string or character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BACK shall be of type logical.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A default integer kind is returned.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+VERIFY(3) verifies that all the characters in STRING belong to the set of
+characters in SET by identifying the position of the first character in the
+string that is not in the set.
+<P>
+This makes it easy to verify strings are all uppercase or lowercase, follow a
+basic syntax, only contain printable characters, and many of the conditions
+tested for with the C routines ISALNUM(3c), ISALPHA(3c), ISASCII(3c),
+ISBLANK(3c), ISCNTRL(3c), ISDIGIT(3c), ISGRAPH(3c), ISLOWER(3c), ISPRINT(3c),
+ISPUNCT(3c), ISSPACE(3c), ISUPPER(3c), and ISXDIGIT(3c); but for a string as
+well as an array of strings.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING : The string to search in for an unmatched character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SET : The set of characters that must be matched.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+BACK : The direction to look for an unmatched character. The left‐most
+unmatched character position isreturned unless BACK is present and
+[char46]false., which causes the position of the right‐most unmatched character
+to be returned instead of the left‐most unmatched character.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+If all characters of STRING are found in SET, the result is zero.
+<P>
+If STRING is of zero length a zero (0) is always returned.
+<P>
+Otherwise, if an unmatched character is found The position of the first or
+last (if BACK is .false.) unmatched character in STRING is returned, starting
+with position one on the left end of the string.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program I:
+<P>
+<PRE>
+   program demo_verify
+   ! general examples
+   use M_unicode, only : assignment(=)
+   use M_unicode, only : ut=&gt;unicode_type, ch=&gt;character
+   use M_unicode, only : write(formatted)
+   use M_unicode, only : operator(==)
+   use M_unicode, only : verify, replace
+   use M_unicode, only : operator(//)
+   implicit none
+   ! some useful character sets
+   character,parameter          :: &
+    & int*(*)   = "1234567890", &
+    & low*(*)   = "abcdefghijklmnopqrstuvwxyz", &
+    & upp*(*)   = "ABCDEFGHIJKLMNOPQRSTUVWXYZ", &
+    & punc*(*)  = "!""#$%&&#146;()*+,‐./:;&lt;=&gt;?@[\]&#146;_‘{|}˜", &
+    & blank*(*) = " ", &
+    & tab       = char(11), &
+    & prnt*(*) = int//low//upp//blank//punc
+   !
+   type(ut)                     :: stru
+   integer                      :: i
+       print *, "basics:"
+       print *, VERIFY ("ABBA", "A")                ! has the value 2.
+       print *, VERIFY ("ABBA", "A", BACK = .TRUE.) ! has the value 3.
+       print *, VERIFY ("ABBA", "AB")               ! has the value 0.
+      !
+      print *,"find first non‐uppercase letter"
+      ! will produce the location of "d", because there is no match in UPP
+      write(*,*) "something unmatched",verify(ut("ABCdEFG"), upp)
+      !
+      print *,"if everything is matched return zero"
+      ! will produce 0 as all letters have a match
+      write(*,*) &
+      & "everything matched",verify(ut("ffoorrttrraann"), "nartrof")
+      !
+      print *,"easily categorize strings as uppercase, lowercase, &#46;&#46;&#46;"
+      ! C-like functionality but does entire strings not just characters
+      write(*,*)"isdigit 123?",verify(ut("123"), int) == 0
+      write(*,*)"islower abc?",verify(ut("abc"), low) == 0
+      write(*,*)"isalpha aBc?",verify(ut("aBc"), low//upp) == 0
+      write(*,*)"isblank aBc dEf?",verify(ut("aBc dEf"), blank//tab ) /= 0
+      ! check if all printable characters
+      stru="aB;cde,fgHI!Jklmno PQRSTU vwxyz"
+      write(*,*)"isprint?",verify(stru,prnt) == 0
+      !
+      ! this now has a nonprintable tab character in it
+      stru=replace(stru,10,10,ut(char(11)))
+      write(*,*)"isprint?",verify(stru,prnt) == 0
+      !
+      print *,"VERIFY(3) is very powerful using expressions as masks"
+      ! verify(3) is often used in a logical expression
+      stru=" This is NOT all UPPERCASE "
+      write(*,*)"all uppercase/spaces?",verify(stru, blank//upp) == 0
+      stru=" This IS all uppercase "
+      write(*,*) "stru=["//stru//"]"
+      write(*,*)"all uppercase/spaces?",verify(stru, blank//upp) == 0
+      !
+      ! set and show complex stru to be tested
+      stru="  Check this out. Let me know  "
+      ! show the stru being examined
+      write(*,*) "stru=["//stru//"]"
+      write(*,*) "        "//repeat(int,4) ! number line
+      !
+      ! function returns a position just not a logical like C
+      print *, "returning a position not just a logical is useful"
+      ! which can be very useful for parsing strings
+      write(*,*)"first non‐blank character",verify(stru, blank)
+      write(*,*)"last non‐blank character",verify(stru, blank,back=.true.)
+      write(*,*)"first non‐letter non‐blank",verify(stru,low//upp//blank)
+      !
+     !VERIFY(3) is elemental (can check an array of strings in one call)
+      print *, "elemental"
+      ! are strings all letters (or blanks)?
+      write(*,*) "array of strings",verify( &
+      ! strings must all be same length, so force to length 10
+      & [character(len=10) :: "YES","ok","000","good one","Nope!"], &
+      & low//upp//blank) == 0
+      !
+      ! rarer, but the set can be an array, not just the strings to test
+      ! you could do ISPRINT() this (harder) way :&gt;
+      write(*,*)"isprint?", &
+      & .not.all(verify(ut("aBc"), [(char(i),i=32,126)])==1)
+      ! instead of this way
+      write(*,*)"isprint?",verify(ut("aBc"),prnt) == 0
+      !
+   end program demo_verify
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+       &gt;  basics:
+       &gt;            2
+       &gt;            3
+       &gt;            0
+       &gt;  find first non‐uppercase letter
+       &gt;  something unmatched           4
+       &gt;  if everything is matched return zero
+       &gt;  everything matched           0
+       &gt;  easily categorize strings as uppercase, lowercase, &#46;&#46;&#46;
+       &gt;  isdigit 123? T
+       &gt;  islower abc? T
+       &gt;  isalpha aBc? T
+       &gt;  isblank aBc dEf? T
+       &gt;  isprint? T
+       &gt;  isprint? F
+       &gt;  VERIFY(3) is very powerful using expressions as masks
+       &gt;  all uppercase/spaces? F
+       &gt;  string=[ This IS all uppercase ]
+       &gt;  all uppercase/spaces? F
+       &gt;  string=[  Check this out. Let me know  ]
+       &gt;          1234567890123456789012345678901234567890
+       &gt;  returning a position not just a logical is useful
+       &gt;  first non‐blank character           3
+       &gt;  last non‐blank character          29
+       &gt;  first non‐letter non‐blank          17
+       &gt;  elemental
+       &gt;  array of strings T T F T F
+       &gt;  isprint? T
+       &gt;  isprint? T
+<P>
+</PRE>
+Sample program II:
+<P>
+Determine if strings are valid integer representations
+<P>
+<PRE>
+   program fortran_ints
+   use M_unicode, only : ut=&gt;unicode_type,assignment(=)
+   use M_unicode, only : adjustr, verify, trim, len
+   use M_unicode, only : write(formatted)
+   use M_unicode, only : operator(.cat.)
+   use M_unicode, only : operator(==)
+   implicit none
+   integer :: i
+   character(len=*),parameter :: asciiints(*)=[character(len=10) :: &
+    "+1 ", &
+    "3044848 ", &
+    "30.40 ", &
+    "September ", &
+    "1 2 3", &
+    "  -3000 ", &
+    " "]
+    type(ut),allocatable :: ints(:)
+    if(allocated(ints))deallocate(ints)
+    allocate(ints(size(asciiints))) ! gfortran bug
+    ints=asciiints
+    ints=trim(ints)
+    ! show if strings pass or fail the test done by isint(3)
+    write(*,"(&#146;is integer?&#146;)")
+    do i=1,size(ints)
+      write(*,&#146;("|",DT,T14,"|",l1,"|")&#146;) ints(i), isint(ints(i))
+    enddo
+    ! elemental
+    write(*,"(*(g0,1x))") isint(ints)
+<P>
+   contains
+<P>
+   impure elemental function isint(line) result (lout)
+   use M_unicode, only : adjustl, verify, trim
+   !
+   ! determine if string is a valid integer representation
+   ! ignoring trailing spaces and leading spaces
+   !
+   character(len=*),parameter :: digits="0123456789"
+   type(ut),intent(in)        :: line
+   type(ut)                   :: name
+   logical                    :: lout
+      lout=.false.
+      ! make sure at least two characters long to simplify tests
+      name=adjustl(line).cat.&#146;  &#146;
+      ! blank string
+      if( name == &#146;&#146; )return
+      ! allow one leading sign
+      if( verify(name%sub(1,1),ut(&#146;+‐-&#146;)) == 0 ) name=name%sub(2,len(name))
+      ! was just a sign
+      if( name == &#146;&#146; )return
+      lout=verify(trim(name), digits)  == 0
+   end function isint
+<P>
+   end program fortran_ints
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &gt; is integer?
+    &gt; |+1          |T|
+    &gt; |3044848     |T|
+    &gt; |30.40       |F|
+    &gt; |September   |F|
+    &gt; |1 2 3       |F|
+    &gt; |  ‐3000     |T|
+    &gt; |            |F|
+    &gt; T T F F F T F
+<P>
+</PRE>
+Sample program III:
+<P>
+Determine if strings represent valid Fortran symbol names
+<P>
+<PRE>
+   program fortran_symbol_name
+   use M_unicode, only : ut=&gt;unicode_type, trim, verify, len
+   use M_unicode, only : ch=&gt;character
+   use M_unicode, only : write(formatted)
+   implicit none
+   integer :: i
+   type(ut),allocatable :: symbols(:)
+      symbols=[ &
+       ut(&#146;A_&#146;), ut(&#146;10&#146;), ut(&#146;a10&#146;), ut(&#146;September&#146;), ut(&#146;A B&#146;), &
+       ut(&#146;_A&#146;), ut(&#146; &#146;)]
+<P>
+      do i=1,size(symbols)
+         write(*,&#146;(1x,DT,T11,"|",l2)&#146;)symbols(i),fortran_name(symbols(i))
+      enddo
+<P>
+   contains
+<P>
+   impure elemental function fortran_name(line) result (lout)
+   !
+   ! determine if a string is a valid Fortran name
+   ! ignoring trailing spaces (but not leading spaces)
+   !
+   character(len=*),parameter :: ints="0123456789"
+   character(len=*),parameter :: lower="abcdefghijklmnopqrstuvwxyz"
+   character(len=*),parameter :: upper="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+   character(len=*),parameter :: allowed=upper//lower//ints//"_"
+<P>
+   type(ut),intent(in)        :: line
+   type(ut)                   :: name
+   logical                    :: lout
+      name=trim(line)
+      if(len(name).ne.0)then
+         ! first character is alphameric
+         lout = verify(name%sub(1,1), lower//upper) == 0  &
+          ! other characters are allowed in a symbol name
+          & .and. verify(name,allowed) == 0           &
+          ! allowable length
+          & .and. len(name) &lt;= 63
+      else
+         lout = .false.
+      endif
+   end function fortran_name
+<P>
+   end program fortran_symbol_name
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   &gt;  A_       | T
+   &gt;  10       | F
+   &gt;  a10      | T
+   &gt;  September| T
+   &gt;  A B      | F
+   &gt;  _A       | F
+   &gt;           | F
+<P>
+</PRE>
+Sample program IV:
+<P>
+check if string is of form NN‐HHHHH
+<P>
+<PRE>
+   program form
+   !
+   ! check if string is of form NN‐HHHHH
+   !
+   use iso_fortran_env, only : stdout =&gt; output_unit
+   use M_unicode,       only : verify, unicode_type, assignment(=)
+   use M_unicode,       only : ut=&gt;unicode_type
+   implicit none
+   character(len=*),parameter :: g=&#146;(*(g0,1x))&#146;
+   !
+   character(len=*),parameter :: ints=&#146;1234567890&#146;
+   character(len=*),parameter :: hex=&#146;abcdefABCDEF0123456789&#146;
+   logical                    :: lout
+   type(unicode_type)         :: chars
+   type(unicode_type)         :: str
+      !
+      chars=&#146;32‐af43d&#146;
+      lout=.true.
+      !
+      ! are the first two characters integer characters?
+      str = chars%character(1,2)
+      lout = (verify( str, ut(ints) ) == 0) .and.lout
+      !
+      ! is the third character a dash?
+      str = chars%character(3,3)
+      lout = (verify( str, ut(&#146;‐-&#146;) ) == 0) .and.lout
+      !
+      ! is remaining string a valid representation of a hex value?
+      str = chars%character(4,8)
+      lout = (verify( str, ut(hex) ) == 0) .and.lout
+      !
+      if(lout)then
+         write(stdout,g)trim(chars%character()),&#146; passed&#146;
+      else
+         write(stdout,g)trim(chars%character()),&#146; failed&#146;
+      endif
+   end program form
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &gt; 32‐af43d passed
+<P>
+</PRE>
+Sample program V:
+<P>
+exploring uses of elemental functionality and dusty corners
+<P>
+<PRE>
+   program more_verify
+   use M_unicode, only : ut=&gt;unicode_type, verify
+   use M_unicode, only : assignment(=)
+   use M_unicode, only : ch=&gt;character
+   implicit none
+   character(len=*),parameter :: &
+     & low="abcdefghijklmnopqrstuvwxyz", &
+     & upp="ABCDEFGHIJKLMNOPQRSTUVWXYZ", &
+     & blank=" "
+   ! note character variables in an array have to be of the same length
+   type(ut),allocatable :: strings(:)
+   type(ut),allocatable :: sets(:)
+<P>
+      strings=[ut("Go"),ut("right"),ut("home!")]
+      sets=[ut("do"),ut("re"),ut("me")]
+<P>
+     ! elemental ‐‐ you can use arrays for both strings and for sets
+<P>
+      ! check each string from right to left for non‐letter/non‐blank
+      write(*,*)"last non‐letter",verify(strings,upp//low//blank,back=.true.)
+<P>
+      ! even BACK can be an array
+      ! find last non‐uppercase character in "Go"
+      ! and first non‐lowercase in "right"
+      write(*,*) verify(strings(1:2),[upp,low],back=[.true.,.false.])
+<P>
+      ! using a null string for a set is not well defined. Avoid it
+      write(*,*) "null",verify("for tran ", "", .true.) ! 8,length of string?
+      ! probably what you expected
+      write(*,*) "blank",verify("for tran ", " ", .true.) ! 7,found ’n’
+<P>
+      ! first character in  "Go    " not in "do",
+      ! and first letter in "right " not in "ri"
+      ! and first letter in "home! " not in "me"
+      write(*,*) verify(strings,sets)
+<P>
+   end program more_verify
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   &gt;  last non‐letter 0 0 5
+   &gt;  2 0
+   &gt;  null 9
+   &gt;  blank 8
+   &gt;  1 2 1
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+Functions that perform operations on character strings, return
+lengths of arguments, and search for certain arguments:
+<TABLE cellpadding=3><!-- tsb: Functions that perform operations on character strings, return
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ELEMENTAL: ADJUSTL(3), ADJUSTR(3), INDEX(3), SCAN(3),
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+NONELEMENTAL: LEN_TRIM(3), LEN(3), REPEAT(3), TRIM(3)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=8>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>verify (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 36246ad4-a847-45f5-b57d-0f5a4bb18422 using man macros.</FONT>
+<br><br><center><img src="images/verify.3m_unicode.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

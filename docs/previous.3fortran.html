@@ -1,0 +1,238 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>previous (3)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+PREVIOUS(3) - [ENUMERATION] Previous enumeration value
+<P>
+</BLOCKQUOTE>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+result = previous (a [, stat])
+<P>
+<PRE>
+         elemental enumerator function previous(a,stat) result(answer)
+<P>
+          enumerator,intent(in) :: a
+          integer(kind=**),intent(out),optional :: stat
+          enumerator :: answer
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A shall be of enumeration type.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STAT is an integer with a decimal exponent range of at least four.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+The returned value will be of the same type and kind as the
+argument. If A is equal to the first enumerator of its type, it is
+assigned
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Previous enumeration value
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+A : the starting value to locate the previous value relative to
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STAT : If A is equal to the last enumerator of its type, it is
+assigned a processor-dependent positive value; otherwise, it is
+assigned the value zero. If STAT would have been assigned a nonzero
+value but is not present, error termination is initiated.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+If A is equal to the first enumerator of its type, the value of the
+result is that of A. Otherwise, the value of the result is the
+enumerator preceding the value of A.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Example. If the enumerators of an enumeration type are EN1, EN2, EN3,
+and EN4, PREVIOUS (EN3) is equal to EN2, and PREVIOUS (EN1, ISTAT) is
+equal to EN1 and a positive value is assigned to ISTAT.
+<P>
+Sample program:
+<P>
+<PRE>
+    program demo_previous
+    implicit none
+<P>
+    ! Fortran 2023 strongly-typed enumeration
+    enum, bind(c) :: color
+       enumerator :: red, green, blue
+    end enum
+<P>
+    type(color) :: current_color
+<P>
+      ! Initialize to the first item
+      current_color = red
+      print *, "Initial position: ", int(current_color)
+<P>
+      ! Advance using the new NEXT intrinsic
+      current_color = next(current_color)
+      print *, "Next position (green): ", int(current_color)
+<P>
+      ! Advance again
+      current_color = next(current_color)
+      print *, "Next position (blue): ", int(current_color)
+<P>
+      ! Move backward using the new PREVIOUS intrinsic
+      current_color = previous(current_color)
+      print *, "Previous position (green): ", int(current_color)
+<P>
+    end program demo_previous
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+     &gt;
+     &gt;
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>STANDARD</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Fortran 2023
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Next enumeration value: NEXT(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Conversion of position to INTEGER: INT(3)
+</TD></TR>
+<TR></TR></TABLE>Fortran intrinsic descriptions
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>previous (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from ef2a07b2-29d7-4fb9-a382-1650fb477a6a using man macros.</FONT>
+<br><br><center><img src="images/previous.3fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

@@ -1,0 +1,338 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>trim_quoted (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+trim_quoted(3f) - [M_strings:WHITESPACE] converts regions of whitespace
+characters to a specified string (or nothing)
+(LICENSE:PD)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Description</A><BR>
+<A HREF=#3>Options</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>References</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>License</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function trim_quoted(STR,K) result (OUTSTR)
+<P>
+<PRE>
+    character(len=*),intent(in)          :: STR
+    character(len=*),intent(in),optional :: REP
+    character(len=len(str))              :: OUTSTR
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Whitespace is trimmed from both ends of the input string.
+<P>
+Text found between single and/or double quotes is not altered.
+A single quote is only considered a delimiter if preceded by
+a space or as the first non-blank character to allow for the use
+of a single quote in contractions.
+<P>
+Otherwise, trim_quoted(3) changes ranges of whitespace of various
+length found between words to a specified replacment string.
+<P>
+This would be similar to the sed(1) Basic Regular Expression
+<P>
+<PRE>
+       sed -i -e &#146;s/  */REP/g&#146;
+<P>
+</PRE>
+if no quoted regions were present.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>STR</B> </TD><TD valign=bottom>
+input string whose whitespace regions are to be replaced
+</TD></TR>
+<TR valign=top><TD width=6% nowrap>
+<B>REP</B> </TD><TD valign=bottom>
+string used to replace each region of whitespace. Defaults
+to a single blank.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=6% nowrap>
+<B>OUTSTR</B> </TD><TD valign=bottom>
+Ouput string with all internal whitespace sections replaced
+by the replacement string removed
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample Program:
+<P>
+<PRE>
+   program demo_trim_quoted
+   use M_strings, only: trim_quoted
+   implicit none
+   character(len=*),parameter   :: bracket=&#146;(*("[",g0,"]":,","))&#146;
+   character(len=*),parameter   :: uno=&#146;(/,*(g0:,/))&#146;
+   character(len=:),allocatable :: a,b
+<P>
+   a = &#146;Esto es    una   prueba a ver como sale y determinar si  &
+   & realmente   funciona bien la ruutina para eliminar blancos  &
+   & "intermedios  de  una    hola      cadena  de  caracteres"  &
+   &  y ver ademas si "(respetamos     las       comillas) "     &
+   &   realmente respeta las cadenas encerradas entre comillas.  &
+   &vamos a ver como sale este negocio. que mas puedo decir.     &
+   &probemos y veamos que pasa&#146;
+<P>
+   print uno, &#146;Original tal y como se escribio (sin trim_quoted)&#146;,a
+   print uno, &#146;reducir espacios a uno 1&#146;, trim_quoted (a, &#146; &#146;)
+   print uno, &#146;reducir espacios a dos 2&#146;, trim_quoted (a, &#146;  &#146;)
+   print uno, &#146;reducir espacios a cero 0&#146;, trim_quoted (a, &#146;&#146;)
+<P>
+   a = "This is a    test to see how it turns out and to determine if the&
+   & routine to eliminate &#146;intermediate    spaces   from a text string&#146;  &
+   & really works well, and also to see if &#146;(we respect       quotation  &
+   & marks)&#146;   really respects strings enclosed   in quotes. Let&#146;s see   &
+   & how this business turns out. What else can I say. Let&#146;s test and see&
+   & what       happens."
+<P>
+   print uno, "Original exactly as it was written (without trim_quoted)",a
+   print uno, &#146;reduce spaces to one 1&#146;, trim_quoted (a, &#146; &#146;)
+   print uno, &#146;reduce spaces to two 2&#146;, trim_quoted (a, &#146;  &#146;)
+   print uno, &#146;reduce spaces to zero 0&#146;, trim_quoted (a, &#146;&#146;)
+<P>
+   b = trim_quoted(a, &#146;&#146;)
+   print *, b
+<P>
+   write(*,bracket)trim_quoted(&#146;this and    that&#146;,&#146;&#146;)
+<P>
+   write(*,bracket)trim_quoted(&#146; a b  c  &#146;),&#146;a b c&#146;
+   write(*,bracket)trim_quoted(&#146;a&#146;,&#146;xxxxx&#146;),&#146;a&#146;
+   write(*,bracket)trim_quoted(&#146;&#146;,&#146;xxxxx&#146;),&#146;&#146;
+   write(*,bracket)trim_quoted(&#146; a b   c " don&#146;&#146;t  touch " d   e&#146;,&#146;:&#146;),&
+   & &#146;a:b:c:" don&#146;&#146;t  touch ":d:e&#146;
+   write(*,bracket)trim_quoted(&#146;  a &#146;,&#146;xxxxx&#146;),&#146;a&#146;
+   write(*,bracket)trim_quoted("  a &#146;  quoted   text &#146;",&#146;--&#146;),&
+   & "a--&#146;  quoted  text &#146;"
+   write(*,bracket)trim_quoted("  a &#146;  quoted   text &#146; abcd efg",&#146;--&#146;),&
+   & "a--&#146;  quoted  text &#146;--abcd--efg"
+   end program demo_trim_quoted
+<P>
+   Expected output
+<P>
+    &gt; Original tal y como se escribio (sin trim_quoted)
+    &gt; Esto es    una   prueba a ver como sale y determinar si
+    &gt; realmente   funciona bien la ruutina para eliminar blanco
+    &gt; s   "intermedios  de  una    hola      cadena  de  caract
+    &gt; eres"    y ver ademas si "(respetamos     las       comil
+    &gt; las) "        realmente respeta las cadenas encerradas en
+    &gt; tre comillas.  vamos a ver como sale este negocio. que ma
+    &gt; s puedo decir.     probemos y veamos que pasa
+    &gt;
+    &gt; reducir espacios a uno 1
+    &gt; Esto es una prueba a ver como sale y determinar si realme
+    &gt; nte funciona bien la ruutina para eliminar blancos "inter
+    &gt; medios  de  una    hola      cadena  de  caracteres" y ve
+    &gt; r ademas si "(respetamos     las       comillas) " realme
+    &gt; nte respeta las cadenas encerradas entre comillas. vamos
+    &gt; a ver como sale este negocio. que mas puedo decir. probem
+    &gt; os y veamos que pasa
+    &gt;
+    &gt; reducir espacios a dos 2
+    &gt; Esto  es  una  prueba  a  ver  como  sale  y  determinar
+    &gt; si  realmente  funciona  bien  la  ruutina  para  elimin
+    &gt; ar  blancos  "intermedios  de  una    hola      cadena
+    &gt; de  caracteres"  y  ver  ademas  si  "(respetamos     la
+    &gt; s       comillas) "  realmente  respeta  las  cadenas  e
+    &gt; ncerradas  entre  comillas.  vamos  a  ver  como  sale
+    &gt; este  negocio.  que  mas  puedo  decir.  probemos  y  ve
+    &gt; amos  que  pasa
+    &gt;
+    &gt; reducir espacios a cero 0
+    &gt; Estoesunapruebaavercomosaleydeterminarsirealmentefunciona
+    &gt; bienlaruutinaparaeliminarblancos"intermedios  de  una
+    &gt; hola      cadena  de  caracteres"yverademassi"(respetamos
+    &gt; las       comillas) "realmenterespetalascadenasencerradas
+    &gt; entrecomillas.vamosavercomosaleestenegocio.quemaspuedodec
+    &gt; ir.probemosyveamosquepasa
+    &gt;
+    &gt; Original tal y como se escribio (sin trim_quoted)
+    &gt; This is a    test to see how it turns out and to determin
+    &gt; e if the routine to eliminate &#146;intermediate    spaces   f
+    &gt; rom a text string&#146;   really works well, and also to see i
+    &gt; f &#146;(we respect       quotation   marks)&#146;   really respect
+    &gt; s strings enclosed   in quotes. Let&#146;s see    how this bus
+    &gt; iness turns out. What else can I say. Let&#146;s test and see
+    &gt; what happens.
+    &gt;
+    &gt; reduce spaces to one 1
+    &gt; This is a test to see how it turns out and to determine i
+    &gt; f the routine to eliminate &#146;intermediate    spaces   from
+    &gt; a text string&#146; really works well, and also to see if &#146;(we
+    &gt; respect       quotation   marks)&#146; really respects strings
+    &gt; enclosed in quotes. Let&#146;s see how this business turns out
+    &gt; . What else can I say. Let&#146;s test and see what happens.
+    &gt;
+    &gt; reduce spaces to two 2
+    &gt; This  is  a  test  to  see  how  it  turns  out  and  to
+    &gt;  determine  if  the  routine  to  eliminate  &#146;intermedia
+    &gt; te    spaces   from a text string&#146;  really  works  well,
+    &gt;   and  also  to  see  if  &#146;(we respect       quotation
+    &gt;  marks)&#146;  really  respects  strings  enclosed  in  quote
+    &gt; s.  Let&#146;s  see  how  this  business  turns  out.  What
+    &gt; else  can  I  say.  Let&#146;s  test  and  see  what  happens.
+    &gt;
+    &gt; reduce spaces to zero 0
+    &gt; Thisisatesttoseehowitturnsoutandtodetermineiftheroutineto
+    &gt; eliminate&#146;intermediate    spaces   from a text string&#146;rea
+    &gt; llyworkswell,andalsotoseeif&#146;(we respect       quotation
+    &gt;  marks)&#146;reallyrespectsstringsenclosedinquotes.Let&#146;sseehow
+    &gt; thisbusinessturnsout.WhatelsecanIsay.Let&#146;stestandseewhath
+    &gt; appens.
+    &gt; Thisisatesttoseehowitturnsoutandtodetermineiftheroutineto
+    &gt; eliminate&#146;intermediate    spaces   from a text string&#146;rea
+    &gt; llyworkswell,andalsotoseeif&#146;(we respect       quotation
+    &gt;  marks)&#146;reallyrespectsstringsenclosedinquotes.Let&#146;sseehow
+    &gt; thisbusinessturnsout.WhatelsecanIsay.Let&#146;stestandseewhath
+    &gt; appens.
+    &gt; [thisandthat]
+    &gt; [a b c],[a b c]
+    &gt; [a],[a]
+    &gt; [],[]
+    &gt; [a:b:c:" don&#146;t  touch ":d:e],[a:b:c:" don&#146;t  touch ":d:e]
+    &gt; [a],[a]
+    &gt; [a--&#146;  quoted   text &#146;],[a--&#146;  quoted  text &#146;]
+    &gt; [a--&#146;  quoted   text &#146;--abcd--efg],[a--&#146;  quoted  text &#146;--abcd--efg]
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>REFERENCES</H3>
+
+</A>
+<BLOCKQUOTE>
+Based on a contribution by Francisco Iglesias:
+<P>
+https://fortran-lang.discourse.group/t/
+sharing-a-classic-fortran-77
+<B>-utility-a-robust-string-trimming-function</B>
+<B>-with-quotes-protection-itrim</B>/1097
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Francisco Iglesias (October-2024)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+modified by John S. Urban for inclusion in M_strings(3) (June 2026),
+changed to use a replacement string instead of a specified number
+of blanks.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+Public Domain
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>trim_quoted (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 3ba47a33-f859-4f10-8eb1-828b69a91531 using man macros.</FONT>
+<br><br><center><img src="images/trim_quoted.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

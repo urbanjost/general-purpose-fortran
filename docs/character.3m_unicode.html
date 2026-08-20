@@ -1,0 +1,332 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>character (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+CHARACTER(3f) - [M_unicode:CONVERSION] convert type(unicode_type)
+string to a CHARACTER variable
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Characteristics</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Result</A><BR>
+<A HREF=#6>Examples</A><BR>
+<A HREF=#7>See Also</A><BR>
+<A HREF=#8>Author</A><BR>
+<A HREF=#9>License</A><BR>
+</BLOCKQUOTE>
+<A name=10>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+result = character(STRING,start,end,inc)
+or
+result = STRING%character(start,end,inc)
+<P>
+<PRE>
+     elemental function character(string,start,end,inc)
+<P>
+      type(unicode_type),intent(in) :: string
+      integer,intent(in)            :: start
+      integer,intent(in)            :: end
+      integer,intent(in)            :: inc
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING is a scalar or array string variable
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the returned value is a CHARACTER scalar or array
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+CHARACTER(3f) returns a CHARACTER variable given a string variable
+of type type(unicode_type).
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+STRING : A scalar or array string to convert to intrinsic CHARACTER
+type.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RESULT</H3>
+
+</A>
+<BLOCKQUOTE>
+The result converts each string to bytes stored in CHARACTER variables.
+All elements will be padded to the same length of the longest element;
+as all elements of a CHARACTER array are required to be of the same length.
+<P>
+Commonly used to pass data to procedures requiring CHARACTER variables
+or for printing when the DT format is not used..
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+   program demo_character
+   use M_unicode, only : ut=&gt;unicode_type, ch=&gt;character, trim, len, pad
+   use M_unicode, only : write(formatted), assignment(=)
+   type(ut)             :: ustr
+   type(ut),allocatable :: array(:)
+   integer              :: i
+   character(len=*),parameter :: all=&#146;(*(g0))&#146;
+<P>
+      ustr=[949, 8021, 961, 951, 954, 945, 33] ! eureka in codepoints
+      ! when doing I/O using DT might be the most intuitive
+      ! but sometimes converting to intrinsic character variables
+      ! is preferred
+      write (*,all)  ch(ustr)      ! convert to CHARACTER variable
+      write (*,all)  ustr%character()      ! convert to CHARACTER variable
+      ! you can select a range of glyphs
+      write (*,all)  ustr%character(3,4) ! similar to LINE(3:4) for
+                                         ! CHARACTER variables
+      ! and even reverse a string
+      write (*,all)  ustr%character(len(ustr),1,-1) ! reverse string
+      ! note that OOP syntax provides a few other options
+      write (*,all)  ustr%byte() ! convert to CHARACTER(LEN=1) type
+<P>
+      ! arrays
+      !
+      ! using this syntax make sure to make the LEN value large enough
+      ! that glyphs can take up to four bytes
+      array= ut([ character(len=60) :: &
+      &#146;Confucius never claimed to be a prophet, &#146;       ,&
+      &#146;but I think he foresaw AI! He said &#146;             ,&
+      &#146;&#146;                                                ,&
+      &#146; "学而不思则罔，思而不学则殆"&#146;                   ,&
+      &#146;or&#146;                                              ,&
+      &#146; (xué ér bù sī zé wǎng, sī ér bù xué zé dài),&#146;   ,&
+      &#146;which is also&#146;                                   ,&
+      &#146; "To learn without thinking is to be lost, &#146;     ,&
+      &#146; to think without learning is to be in danger".&#146;])
+      !
+      write(*,&#146;(*(:,"[",g0,"]",/))&#146;)ch(array)
+      ! all elements will be the same length in bytes but not necessarily
+      !in glyphs
+      write(*,&#146;(a,*(i0,1x))&#146;)&#146;all elements the same length in BYTES:&#146;, &
+              & len(ch(array))
+      write(*,&#146;(a,*(i0,1x))&#146;)&#146;lengths (in glyphs):&#146;,len(array)
+      array=trim(array)
+      write(*,&#146;(a,*(i0,1x))&#146;)&#146;lengths after trimming (in glyphs):&#146;, &
+              & len(array)
+      write(*,&#146;(:*(:,"[",g0,"]",/))&#146;)ch(array)
+      write(*,*)
+      !
+      ! using this syntax the elements will be of different lengths
+      array= [ &
+      ut(&#146;Confucius never claimed to be a prophet,&#146;)      ,&
+      ut(&#146;but I think he foresaw AI! He said&#146;)            ,&
+      ut(&#146;&#146;)                                              ,&
+      ut(&#146; "学而不思则罔，思而不学则殆"&#146;)                    ,&
+      ut(&#146;or&#146;)                                            ,&
+      ut(&#146; (xué ér bù sī zé wǎng, sī ér bù xué zé dài),&#146;) ,&
+      ut(&#146;which is also&#146;)                                 ,&
+      ut(&#146; "To learn without thinking is to be lost,&#146;)    ,&
+      ut(&#146; to think without learning is to be in danger".&#146;)]
+      ! but using the CHARACTER function will still make them the same
+      ! length in bytes so you might want to print them individually
+      ! for certain effects, subject to font properties such as varying
+      ! glyph widths.
+      write(*,&#146;(*("[",g0,"]",/))&#146;)(ch(array(i)),i=1,size(array))
+      write(*,&#146;(*("[",g0,"]",/))&#146;)(ch(pad(array(i),60)),i=1,size(array))
+      !
+   end program demo_character
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &gt; εὕρηκα!
+    &gt; εὕρηκα!
+    &gt; ρη
+    &gt; !ακηρὕε
+    &gt; εὕρηκα!
+    &gt; [Confucius never claimed to be a prophet,                    ]
+    &gt; [but I think he foresaw AI! He said                          ]
+    &gt; [                                                            ]
+    &gt; [ "学而不思则罔，思而不学则殆"                  ]
+    &gt; [or                                                          ]
+    &gt; [ (xué ér bù sī zé wǎng, sī ér bù xué zé dài),   ]
+    &gt; [which is also                                               ]
+    &gt; [ "To learn without thinking is to be lost,                  ]
+    &gt; [ to think without learning is to be in danger".             ]
+    &gt;
+    &gt; all elements the same length in BYTES:60
+    &gt; lengths (in glyphs):60 60 60 34 60 48 60 60 60
+    &gt; lengths after trimming (in glyphs):40 34 0 16 2 45 13 42 47
+    &gt; [Confucius never claimed to be a prophet,                 ]
+    &gt; [but I think he foresaw AI! He said                       ]
+    &gt; [                                                         ]
+    &gt; [ "学而不思则罔，思而不学则殆"               ]
+    &gt; [or                                                       ]
+    &gt; [ (xué ér bù sī zé wǎng, sī ér bù xué zé dài),]
+    &gt; [which is also                                            ]
+    &gt; [ "To learn without thinking is to be lost,               ]
+    &gt; [ to think without learning is to be in danger".          ]
+    &gt;
+    &gt;
+    &gt; [Confucius never claimed to be a prophet,]
+    &gt; [but I think he foresaw AI! He said]
+    &gt; []
+    &gt; [ "学而不思则罔，思而不学则殆"]
+    &gt; [or]
+    &gt; [ (xué ér bù sī zé wǎng, sī ér bù xué zé dài),]
+    &gt; [which is also]
+    &gt; [ "To learn without thinking is to be lost,]
+    &gt; [ to think without learning is to be in danger".]
+    &gt; [
+    &gt; [Confucius never claimed to be a prophet,                    ]
+    &gt; [but I think he foresaw AI! He said                          ]
+    &gt; [                                                            ]
+    &gt; ["学而不思则罔，思而不学则殆"                                      ]
+    &gt; [or                                                          ]
+    &gt; [(xué ér bù sī zé wǎng, sī ér bù xué zé dài),                ]
+    &gt; [which is also                                               ]
+    &gt; ["To learn without thinking is to be lost,                   ]
+    &gt; [to think without learning is to be in danger".              ]
+    &gt; [
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+functions that perform operations on character strings:
+<TABLE cellpadding=3><!-- tsb: functions that perform operations on character strings:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental: adjustl(3), adjustr(3), index(3), scan(3), verify(3)
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+non-elemental: len_trim(3), len(3), repeat(3), trim(3)
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=8>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>character (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 4a073821-f8dc-4b67-ad91-720c86d5db52 using man macros.</FONT>
+<br><br><center><img src="images/character.3m_unicode.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

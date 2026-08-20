@@ -1,0 +1,776 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>M_flatten (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+M_flatten(3f) - [M_flatten::INTRO] Module for dealing with argument
+rank mismatch
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Description</A><BR>
+<A HREF=#2>Synopsis</A><BR>
+<A HREF=#3>Examples</A><BR>
+<A HREF=#4>Details</A><BR>
+<A HREF=#5>Something As General As Flatten May Not Be Required</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#6>Elemental Procedures</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#7>Generic Interface</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#8>Assumed Rank And Select Rank</A><BR>
+<A HREF=#9>Alternative I</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#10>Argument Mismatch</A><BR>
+<A HREF=#11>Alternative Ii</A><BR>
+&nbsp; &nbsp; &nbsp;<A HREF=#12>Using Experimental Proposed Method</A><BR>
+<A HREF=#13>Summary</A><BR>
+<A HREF=#14>Author</A><BR>
+<A HREF=#15>License</A><BR>
+</BLOCKQUOTE>
+<A name=16>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Standard methods for passing arguments of different rank are suitable for
+many cases but when procedures have many arguments with independently
+variable ranks techniques such as generic procedures can require
+excessive duplication.
+<P>
+The FLATTEN(3) procedure provided here can simply such interfaces
+particularly when contiguous data is being passed.
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+public methods:
+<P>
+<PRE>
+   flatten    returns a rank one array pointer to a scalar or multi-dimensional array
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Sample program:
+<P>
+<PRE>
+   program demo_M_flatten
+   use M_flatten, only : flatten
+   implicit none
+   integer :: a
+   integer :: b0, b1(-1:1), b2(2,2), b3(2,2,1)
+<P>
+      write(*,*)&#146;WANTED:&#146;
+      a=0
+      call wanted ( a, b0 )
+      print *, &#146;a=&#146;, a, &#146;b0=&#146;, b0
+      call wanted ( a, b1 )
+      print *, &#146;a=&#146;, a, &#146;b1=&#146;, b1
+      call wanted ( a, b2 )
+      print *, &#146;a=&#146;, a, &#146;b2=&#146;, b2
+      call wanted ( a, b3 )
+      print *, &#146;a=&#146;, a, &#146;b3=&#146;, b3
+<P>
+      write(*,*)&#146;WANTED1:&#146;
+      ! Alternatively, to avoid using pointers directly
+      ! write the called routine to expect a flattened
+      ! array and call the argument with flatten().
+<P>
+      a=0
+      call wanted1 ( a, flatten(b0) )
+      print *, &#146;a=&#146;, a, &#146;b0=&#146;, b0
+      call wanted1 ( a, flatten(b1) )
+      print *, &#146;a=&#146;, a, &#146;b1=&#146;, b1
+      call wanted1 ( a, flatten(b2) )
+      print *, &#146;a=&#146;, a, &#146;b2=&#146;, b2
+      call wanted1 ( a, flatten(b3) )
+      print *, &#146;a=&#146;, a, &#146;b3=&#146;, b3
+<P>
+   contains
+<P>
+   subroutine wanted1( a, b)
+   integer, intent(inout) :: a
+   integer, intent(out)   :: b(:)
+   integer                :: i
+      do i=1,size(b)
+         a = a + 1
+         b(i) = a
+      enddo
+   end subroutine wanted1
+<P>
+   subroutine wanted( a, b)
+   ! This technique is known as pointer rank remapping (introduced in
+   ! Fortran 2003 and expanded in Fortran 2008).
+   ! requires the multi-dimensional target array is simply contiguous.
+   integer, intent(inout)                  :: a
+   integer,target, contiguous, intent(out) :: b(..)
+   integer                                 :: i
+   integer,pointer                         :: p_b(:)
+      p_b=&gt;flatten(b)
+      do i=1,size(b)
+         a = a + 1
+         p_b(i) = a
+      enddo
+   end subroutine wanted
+<P>
+   end program demo_M_flatten
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+   &gt;  WANTED:
+   &gt;  a=           1 b0=  1
+   &gt;  a=           4 b1=  2    3       4
+   &gt;  a=           8 b2=  5    6       7       8
+   &gt;  a=          12 b3=  9   10      11      12
+   &gt;  WANTED1:
+   &gt;  a=           1 b0=  1
+   &gt;  a=           4 b1=  2    3       4
+   &gt;  a=           8 b2=  5    6       7       8
+   &gt;  a=          12 b3=  9   10      11      12
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>DETAILS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The M_flatten module provides the procedure FLATTEN(3) which
+provides a function that returns a rank one array pointer which
+points to a scalar or an array of any shape.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CALLING FLATTEN IN THE CALL TO THE USER PROCEDURE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+To avoid using pointers directly write the called routine to expect a
+flattened array and pass the arguments with varying rank in a call to
+FLATTEN(3).
+<P>
+Note that the called procedure WANTED(3) will not know the original rank
+or shape unless it is passed, but will know the size of the input array.
+<P>
+The argument to FLATTEN(3) should be a whole contiguous array. A
+slice or subsection would almost certainly just create and alter a
+temporary.
+<P>
+<PRE>
+      program arg
+      use M_flatten, only : flatten
+      implicit none
+      integer :: a
+      integer :: b0, b1(-1:1), b2(2,2), b3(2,2,1)
+<P>
+         a=0
+         call wanted ( a, flatten(b0) )
+         print *, &#146;a=&#146;, a, &#146;b0=&#146;, b0
+         call wanted ( a, flatten(b1) )
+         print *, &#146;a=&#146;, a, &#146;b1=&#146;, b1
+         call wanted ( a, flatten(b2) )
+         print *, &#146;a=&#146;, a, &#146;b2=&#146;, b2
+         call wanted ( a, flatten(b3) )
+         print *, &#146;a=&#146;, a, &#146;b3=&#146;, b3
+<P>
+      contains
+<P>
+      subroutine wanted( a, b)
+      integer, intent(inout) :: a
+      integer, intent(out)   :: b(:)
+      integer                :: i
+         do i=1,size(b)
+            a = a + 1
+            b(i) = a
+         enddo
+      end subroutine wanted
+      end program arg
+<P>
+</PRE>
+Result
+<P>
+<PRE>
+    a=      1 b0=      1
+    a=      4 b1=      2      3      4
+    a=      8 b2=      5      6      7      8
+    a=     12 b3=      9     10     11     12
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; CALLING FLATTEN IN THE USER PROCEDURE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+A minor use of pointers is required in this alternate use of
+FLATTEN(3) but the called routine can query the original input
+argument with RANK(3) and SHAPE(3) not just SIZE(3).
+<P>
+<PRE>
+      program elem
+      implicit none
+      integer :: a
+      integer :: b0, b1(-1:1), b2(2,2), b3(2,2,1), b4(2,2,2)
+<P>
+         a=0
+         call wanted ( a, b0 )
+         print *, &#146;a=&#146;, a, &#146;b0=&#146;, b0
+         call wanted ( a, b1 )
+         print *, &#146;a=&#146;, a, &#146;b1=&#146;, b1
+         call wanted ( a, b2 )
+         print *, &#146;a=&#146;, a, &#146;b2=&#146;, b2
+         call wanted ( a, b3 )
+         print *, &#146;a=&#146;, a, &#146;b3=&#146;, b3
+<P>
+         a=0
+         b4=-99
+         call wanted ( a, b4(2,:,:) )
+         print *, &#146;a=&#146;, a, &#146;b4=&#146;, b4
+<P>
+         a=0
+         b4=-99
+         call wanted ( a, b4(:,2,:) )
+         print *, &#146;a=&#146;, a, &#146;b4=&#146;, b4
+<P>
+      contains
+<P>
+      subroutine wanted( a, b)
+      ! This technique is known as pointer rank remapping (introduced in
+      ! Fortran 2003 and expanded in Fortran 2008). See below for details
+      use M_flatten, only : flatten
+      integer, intent(inout)                  :: a
+      integer,target, contiguous, intent(out) :: b(..)
+      integer                                 :: i
+      integer,pointer                         :: p_b(:)
+         p_b=&gt;flatten(b)
+         do i=1,size(b)
+            a = a + 1
+            p_b(i) = a
+         enddo
+      end subroutine wanted
+<P>
+      end program elem
+<P>
+</PRE>
+Result
+<P>
+<PRE>
+   a=  1   b0=    1
+   a=  4   b1=    2    3    4
+   a=  8   b2=    5    6    7    8
+   a=  12  b3=    9   10   11   12
+   a=  4   b4=  -99    1  -99    2   -99    3  -99  4
+   a=  4   b4=  -99  -99    1    2   -99  -99    3  4
+<P>
+</PRE>
+A single-dimension array pointer can point to a multi-dimensional array?
+<P>
+Yes, a single-dimension (rank-1) array pointer can point to a
+multi-dimensional array in Fortran, provided that the multi-dimensional
+target array is simply contiguous.
+<P>
+This technique is known as pointer rank remapping (introduced in Fortran
+2003 and expanded in Fortran 2008).
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; RULES AND REQUIREMENTS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Explicit Bounds: You must specify the explicit upper and lower
+bounds on the left-hand side of the pointer assignment. You cannot
+use a deferred colon (:).
+<P>
+Contiguity: The multi-dimensional target array must occupy
+a continuous block of memory. Regular allocated or static arrays
+are automatically contiguous, but array slices with strides (e.g.,
+matrix(::2, :)) are not.
+<P>
+Array Size: The size of the pointer must exactly match or
+be less than the total number of elements in the target array.
+Target Attribute: The multi-dimensional array must be declared with
+the target attribute.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>SOMETHING AS GENERAL AS FLATTEN MAY NOT BE REQUIRED</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=6>
+
+    <H4>&nbsp; &nbsp; ELEMENTAL PROCEDURES</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+If you wish to make a procedure that can be called with a specific
+argument having different ranks you can use elemental procedures if
+all the arrays passed are of the same size and all the scalar arguments
+are INTENT(IN).
+<P>
+Since the scalars are not able to be changed this allows for pure procedures
+to be called in parallel where each call to the scalar routine can be made
+in any order.
+</BLOCKQUOTE>
+<A name=7>
+
+    <H4>&nbsp; &nbsp; GENERIC INTERFACE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+One could also write separate subroutines for each rank, and then make a
+_generic interface_ for all of them. If there are only a few combinations
+of arguments with varying rank it has the advantage that there are not
+restrictions on the arrays all having the same rank or scalars being
+only INTENT(IN) and unsupported ranks are detected at compile time rather
+than run time. If there are multiple values that can be of different ranks
+independent of each other the number of permutations and thus the number
+of interface routines can get excessive. A preprocessor might help generate
+a large number of interfaces but FLATTEN(3) provides a simple alternative
+for such cases.
+</BLOCKQUOTE>
+<A name=8>
+
+    <H4>&nbsp; &nbsp; ASSUMED RANK AND SELECT RANK</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Another approach is to define a dummy argument to be assumed rank.
+The programmer must then account for each rank manually. It is possible
+to catch the assumed size case and treat it specially; in the following
+code it just writes a message saying it is unsupported.
+<P>
+<PRE>
+   program elem
+      implicit none
+      integer :: a
+      integer :: b0, b1(-1:1), b2(2,2), b3(2,2,1)
+<P>
+      a=0
+      call wanted( a, b0 )
+      print *, &#146;a=&#146;, a, &#146;b0=&#146;, b0
+      call wanted( a, b1 )
+      print *, &#146;a=&#146;, a, &#146;b1=&#146;, b1
+      call wanted( a, b2 )
+      print *, &#146;a=&#146;, a, &#146;b2=&#146;, b2
+      call wanted( a, b3 )
+      print *, &#146;a=&#146;, a, &#146;b3=&#146;, b3
+<P>
+   contains
+<P>
+      subroutine wanted( a, b )
+         integer, intent(inout)           :: a
+         integer, contiguous, intent(out) :: b(..)
+<P>
+         integer :: i, j, k
+<P>
+         select rank (b)
+         rank (0)
+         a = a + 1
+         b = a
+<P>
+         rank (1)
+         do i = 1, size(b)
+            a = a + 1
+            b(i) = a
+         enddo
+<P>
+         rank (2)
+         do j = 1, size(b,dim=2)
+            do i = 1, size(b,dim=1)
+               a = a + 1
+               b(i,j) = a
+            enddo
+         enddo
+<P>
+         rank (3)
+         do k = 1, size(b,dim=3)
+            do j = 1, size(b,dim=2)
+               do i = 1, size(b,dim=1)
+                  a = a + 1
+                  b(i,j,k) = a
+               enddo
+            enddo
+         enddo
+<P>
+         rank (*)
+         print *, &#146;assumed size is unsupported&#146;
+         stop 1
+<P>
+         rank default
+         print *,  &#146;unsupported rank&#146;
+         stop 2
+<P>
+      end select
+<P>
+    end subroutine wanted
+    end program elem
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>ALTERNATIVE I</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=10>
+
+    <H4>&nbsp; &nbsp; ARGUMENT MISMATCH</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+This alternative method allows
+argument mismatch and using assumed-size arrays (Fortran 77 Style)
+<P>
+Modern compilers frequently treat rank mismatches as a fatal error
+by default, which frequently impacts legacy Fortran 77 code. It was
+extremely common for pre-f90 compilers to allow argument rank mismatch
+and the extension was heavily used in many codes.
+<P>
+So to allow a rank mismatch between an actual argument and a dummy
+argument in Fortran, you can generally apply a compiler-specific flag to
+bypass the error during compilation or (with most compilers) build the
+routine with no explicit interface in a separate file from the calls to
+the procedure.
+<P>
+Explicit interfaces prevent a number of common errors and are a strongly
+desirable feature, so allowing rank mismatches is not recommended in
+general, but if you are compiling older code and cannot modify the source
+to use a modern method, here are examples of appropriate flags to your
+compiler to downgrade the error to a warning:
+<P>
+<PRE>
+    gfortran (GCC 10+): Add the flag -fallow-argument-mismatch. You
+    can also use -std=legacy, though it may introduce other unintended
+    behaviors.
+<P>
+    Intel Fortran (ifort / ifx): Add the flag -warn noargument-mismatch
+    or use directives like !DIR$ ATTRIBUTES NO_ARG_CHECK specifically
+    before the dummy argument declaration to bypass checking on an
+    individual routine.
+<P>
+</PRE>
+Now if you want to pass a multi-dimensional array or a specific element of
+an array to a flat 1D sequence, you can use an _assumed-size array_.
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Now if you want to pass a multi-dimensional array or a specific element of
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Declare the final dimension of the dummy argument with an asterisk (\*).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Pass the first element of the array or array section explicitly
+(known as _sequence association_).
+</TD></TR>
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+      program arbitrary
+      implicit none
+      integer :: a
+      integer :: b0, b1(-1:1), b2(2,2), b3(2,2,1)
+      external wanted
+<P>
+         a=0
+         call wanted ( a, b0 ,1)
+         print *, &#146;a=&#146;, a, &#146;b0=&#146;, b0
+         call wanted ( a, b1 ,size(b1))
+         print *, &#146;a=&#146;, a, &#146;b0=&#146;, b1
+         call wanted ( a, b2 ,size(b2))
+         print *, &#146;a=&#146;, a, &#146;b0=&#146;, b2
+         call wanted ( a, b3 ,size(b3))
+         print *, &#146;a=&#146;, a, &#146;b0=&#146;, b3
+      contains
+<P>
+      end program arbitrary
+<P>
+      subroutine wanted( a, b, n )
+      integer, intent(inout) :: a
+      integer, intent(out)   :: b(*)
+      integer, intent(in)    :: n
+      integer                :: i
+         do i=1,n
+            a = a + 1
+            b(i) = a
+         enddo
+      end subroutine wanted
+<P>
+      $ gfortran arbitrary.f90 -fallow-argument-mismatch -o arbitrary
+      arbitrary.f90:8:20:
+<P>
+      8 |    call wanted ( a, b0 ,1)
+        |                    1
+      Warning: Rank mismatch in argument ‘b’ at (1) (rank-1 and scalar)
+<P>
+      ./arbitrary
+       a=       1 b0=       1
+       a=       4 b1=       2       3       4
+       a=       8 b2=       5       6       7       8
+       a=      12 b3=       9      10      11      12
+<P>
+</PRE>
+Generally when using sequence association and rank mismatch:
+<P>
+<PRE>
+ + Place the "wanted" procedure in a separate file without an
+   interface, like you often would with F77 code.
+<P>
+ + Declare the dummy argument dimension with an asterisk (*).
+<P>
+ + Pass the number of elements as a new argument.
+<P>
+ + Pass the first element of the array or array section explicitly
+   (this is the part known as sequence association).
+<P>
+</PRE>
+You might have to add a compiler-specific option depending on how much the
+compiler wants to prevent you from using sequence association.
+</BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>ALTERNATIVE II</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=12>
+
+    <H4>&nbsp; &nbsp; USING EXPERIMENTAL PROPOSED METHOD</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Using GNU Fortran (GCC) 16.0.0 20250727 (experimental) and a compiler
+switch to allow using proposed features lets you try a proposed
+feature now that simplifies using assumed rank targets, eliminating
+the SELECT RANK requirement.
+<P>
+By definition it is not certain this is how it will work in the next
+Fortran standard release.
+<P>
+If you have a recent gfortran release compile the following program
+with
+<P>
+<PRE>
+    gfortran -std=f202y  point.f90
+<P>
+</PRE>
+Sample using proposed F202y feature
+<P>
+<PRE>
+      program proposed
+      implicit none
+      integer :: a
+      integer :: b0, b1(-1:1), b2(2,2), b3(2,2,1)
+<P>
+         a=0
+         call wanted ( a, b0 )
+         print *, &#146;a=&#146;, a, &#146;b0=&#146;, b0
+         call wanted ( a, b1 )
+         print *, &#146;a=&#146;, a, &#146;b1=&#146;, b1
+         call wanted ( a, b2 )
+         print *, &#146;a=&#146;, a, &#146;b2=&#146;, b2
+         call wanted ( a, b3 )
+         print *, &#146;a=&#146;, a, &#146;b3=&#146;, b3
+<P>
+      contains
+<P>
+      subroutine wanted( a, b)
+      ! NOTE: This technique uses pointer rank remapping (introduced in
+      ! Fortran 2003 and expanded in Fortran 2008), which requires the
+      ! multi-dimensional target array be simply contiguous.
+      integer, intent(inout)                  :: a
+      integer,target, contiguous, intent(out) :: b(..)
+      integer                                 :: n
+      integer,pointer                         :: p_b(:)
+         ! NOTE: The assumed rank target is an experimental F202y feature.
+         p_b(1:n)=&gt;b  ! will this be allowed outside of SELECT RANK
+                      ! and work with a scalar?
+         ! NOTE: Explicit bounds are required. That is, you must
+         ! specify the explicit upper and lower bounds
+         ! on the left-hand side of the pointer assignment.
+         do n=1,size(b)
+            a = a + 1
+            p_b(n) = a
+         enddo
+      end subroutine wanted
+<P>
+      end program proposed
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=13>
+
+     <H3>SUMMARY</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The FLATTEN(3) procedure generically allows for multi-dimensional
+arrays to be accessed as flattened arrays efficiently without having
+to copy the data to and from other shapes.
+<P>
+Consider other methods carefully to decide on whether an alternative to
+FLATTEN(3) is more appropriate:
+<BLOCKQUOTE>
+<TABLE cellpadding=3><!-- tsb: Consider other methods carefully to decide on whether an alternative to
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+elemental procedures
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+generic procedures
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+assumed rank arrays and SELECT CASE.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+You can create a flattened copy of the arrays and pass the temporary
+and then store it back into the original, which can be lot of overhead.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+use of intrinsics such as TRANSFER(3), RESHAPE(3), PACK(3), UNPACK(3)
+are often useful when transferring data to variables with a different shape.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+(legacy) sequence association.
+Allowing argument rank mismatch was a de-facto standard behavior but never part of the standard
+so you generally need a compiler option to allow legacy behavior even if using an assumed size
+array. Probably should be avoided in new code.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+(proposed) pointer rank remapping to an assumed rank target
+available on some compilers as an experimental F202Y feature
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<P>
+For most cases you do not have to do handle very many ranks or types and kinds, so
+generally the standard elemental, generic, and assume rank arrays are more reasonable
+as long as you do not fall into the trap of making an interface for every type and
+rank possible when there are only a few arguments. Where FLATTEN(3) is particularly
+useful is when there are many arguments on a procedure, with multiple arguments needing
+to support independent ranks.
+</BLOCKQUOTE>
+<A name=14>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+John S. Urban
+</BLOCKQUOTE>
+<A name=15>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>M_flatten (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from c94b69b1-22ce-4abf-92d6-ed77d3c84a83 using man macros.</FONT>
+<br><br><center><img src="images/M_flatten.3m_flatten.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

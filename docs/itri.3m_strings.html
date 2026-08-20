@@ -1,0 +1,299 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>C Library Functions &nbsp;-&nbsp;</I><NOBR>itri (3)</NOBR><HR></H1>
+</CENTER>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+itri(3f) - [M_strings:CONVERSION] convert INTEGER to CHARACTER with
+value grouped into periods of three digits
+(LICENSE:MIT)
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Characteristics</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Returns</A><BR>
+<A HREF=#6>Examples</A><BR>
+<A HREF=#7>Author</A><BR>
+<A HREF=#8>License</A><BR>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+function itri(in,separator) return(out)
+<P>
+<PRE>
+    integer(kind=**),intent(in)          :: in
+    character(len=*),intent(in),optional :: separator
+    character(len=:),allocatable         :: out
+    ! or
+    integer,(kind=**)intent(in)          :: in(:)
+    character(len=1),intent(in),optional :: separator
+    character(len=:),allocatable         :: out(:)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>CHARACTERISTICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+IN is a scalar or array INTEGER variable
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SEPARATOR is a character string
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+OUT is a character scalar or array, but the same as IN
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+Separating large numbers into groups of three digits is called "using
+periods". Each three-digit group is known as a period (e.g., ones,
+thousands, millions). The symbol used to separate these groups is
+typically called a thousands separator or digit group separator (commonly
+a comma or space). This is sometimes referred to as periodicity.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; KEY DETAILS</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Periods: The groups themselves, separated by commas in this case(e.g.,
+123,456,789).
+<P>
+Purpose: To make large numbers easier to read and understand based
+on place value.
+<P>
+Other Methods: The International System of Units (SI) recommends
+using a small space to separate groups of three instead of commas.
+<P>
+Formatting: While English-speaking countries use commas (100,000),
+<TABLE cellpadding=3><!-- tsb: Formatting: While English-speaking countries use commas (100,000),
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>many other countries use periods (ie. decimal points)</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+or spaces
+(100.000 or 100 000).
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=4>
+
+     <H3>OPTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+IN : An INTEGER to convert to a string representing the value
+grouped into periods.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+SEPARATOR : Character to use to separate period groups. Defaults to
+comma (","). Multibyte characters are only supported
+if IN is scalar.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=5>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+OUT : If IN is a scalar a trimmed string is returned. If IN is an
+array, strings are right-justified in a string long enough
+to hold all values of the kind of the input.
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=6>
+
+     <H3>EXAMPLES</H3>
+
+</A>
+<BLOCKQUOTE>
+Sample program
+<P>
+<PRE>
+    program demo_itri
+    use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64
+    use M_strings, only : itri
+    implicit none
+    integer                      :: i
+    integer(kind=int64)          :: ival64
+    character(len=*),parameter   :: braces=&#146;(*(:"[",g0,"]",1x))&#146;
+    character(len=*),parameter   :: brace=&#146;(:"[",g0,"]")&#146;
+       ival64=1
+       ! scalars are returned trimmed of spaces
+       do i=1,19
+          write(*,braces)itri(ival64),itri(-ival64)
+          ival64=ival64*10+mod(i+1,10)
+       enddo
+       ! arrays are all returned right-justified
+       ! and long enough to fit values of that kind
+       write(*,brace) itri([10_int64, 123456890_int64, -huge(0_int64)])
+       write(*,brace) itri([10, 123456890, -huge(0)])
+       write(*,brace) itri([10_int16, 12345_int16, -huge(0_int16)])
+       write(*,brace) itri([10_int8, 123_int8, -huge(0_int8)])
+<P>
+       ival64=-huge(0_int64)
+       write(*,brace) &
+       & itri(ival64,separator=&#146; &#146;),  &
+       & itri(ival64,separator=char(int(z&#146;B7&#146;))) !  CenterDot 183  U+B7
+    end program demo_itri
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &gt; [1] [-1]
+    &gt; [12] [-12]
+    &gt; [123] [-123]
+    &gt; [1,234] [-1,234]
+    &gt; [12,345] [-12,345]
+    &gt; [123,456] [-123,456]
+    &gt; [1,234,567] [-1,234,567]
+    &gt; [12,345,678] [-12,345,678]
+    &gt; [123,456,789] [-123,456,789]
+    &gt; [1,234,567,890] [-1,234,567,890]
+    &gt; [12,345,678,901] [-12,345,678,901]
+    &gt; [123,456,789,012] [-123,456,789,012]
+    &gt; [1,234,567,890,123] [-1,234,567,890,123]
+    &gt; [12,345,678,901,234] [-12,345,678,901,234]
+    &gt; [123,456,789,012,345] [-123,456,789,012,345]
+    &gt; [1,234,567,890,123,456] [-1,234,567,890,123,456]
+    &gt; [12,345,678,901,234,567] [-12,345,678,901,234,567]
+    &gt; [123,456,789,012,345,678] [-123,456,789,012,345,678]
+    &gt; [1,234,567,890,123,456,789] [-1,234,567,890,123,456,789]
+    &gt; [                        10]
+    &gt; [               123,456,890]
+    &gt; [-9,223,372,036,854,775,807]
+    &gt; [            10]
+    &gt; [   123,456,890]
+    &gt; [-2,147,483,647]
+    &gt; [     10]
+    &gt; [ 12,345]
+    &gt; [-32,767]
+    &gt; [  10]
+    &gt; [ 123]
+    &gt; [-127]
+    &gt; [-9 223 372 036 854 775 807]
+    &gt; [-9·223·372·036·854·775·807]
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=7>
+
+     <H3>AUTHOR</H3>
+
+</A>
+<BLOCKQUOTE>
+<TABLE cellpadding=3>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+John S. Urban
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=8>
+
+     <H3>LICENSE</H3>
+
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; MIT</H4>
+</A>
+<BLOCKQUOTE>
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>itri (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from aa243081-43cf-4bdc-b772-8a3dae9c3852 using man macros.</FONT>
+<br><br><center><img src="images/itri.3m_strings.gif"></center>
+</div>
+</div>
+</body>
+</HTML>
