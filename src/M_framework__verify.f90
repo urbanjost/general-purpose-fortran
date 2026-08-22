@@ -316,7 +316,8 @@ end type prefix
 !   CHECK_END    =  'check_end:   '  &
 !&)
 
-type(prefix),save :: CHECK_PREFIX=prefix( null(),null(),null(),null(),null())
+!type(prefix),save :: CHECK_PREFIX=prefix( null(),null(),null(),null(),null())
+type(prefix),save :: CHECK_PREFIX
 
 public :: CHECK_PREFIX
 
