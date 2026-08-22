@@ -5,6 +5,9 @@
       real,parameter :: PI=acos(-1.0)
          do i=0,8
             x=i*0.25
-            write(*,*)'x=',x,' sinpi(x)=',sinpi(x)
+            write(*,*)'x=',x,' sinpi(x)=',
+            & sinpi(x),
+            & sin(PI*x),
+            & sinpi(x) - sin(PI*x)
          enddo
       end program demo_sinpi

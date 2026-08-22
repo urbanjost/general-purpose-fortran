@@ -115,16 +115,20 @@ character(len=:),save,allocatable,public :: M_time_month_names(:)
 character(len=:),save,allocatable,public :: M_time_weekday_names_abbr(:)
 character(len=:),save,allocatable,public :: M_time_month_names_abbr(:)
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=*),parameter   :: G_month_names(12)=[                               &
+character(len=*),parameter   :: G_month_names(12)=[ &
    &'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', &
    &'July     ', 'August   ', 'September', 'October  ', 'November ', 'December ']
 
-character(len=3),parameter   :: G_month_names_abbr(12)=G_month_names(:)(1:3)
+!bug!character(len=3),parameter   :: G_month_names_abbr(12)=G_month_names(:)(1:3)
+character(len=3),parameter   :: G_month_names_abbr(12)=[ &
+   &'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 character(len=*),parameter   :: G_weekday_names(7)=[character(len=9) :: &
    & 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ]
 
-character(len=3),parameter   :: G_weekday_names_abbr(7)=G_weekday_names(:)(1:3)
+!bug!character(len=3),parameter   :: G_weekday_names_abbr(7)=G_weekday_names(:)(1:3)
+character(len=3),parameter   :: G_weekday_names_abbr(7)=[character(len=3) :: &
+   & 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
 !-----------------------------------------------------------------------------------------------------------------------------------
 interface w2d
    module procedure w2d_numeric
@@ -389,7 +393,7 @@ integer                        :: jalpha,ja,jb,jc,jd,je,ijul
    tz=get_timezone()
 
    ijul=int(julian)                             ! Integral Julian Date
-   second=sngl((julian-real(ijul,kind=real64))*secday)      ! Seconds from beginning of Jul. Day
+   second=real((julian-real(ijul,kind=dp))*secday)      ! Seconds from beginning of Jul. Day
    second=second+(tz*60)
 
    if(second>=(secday/2.0_dp)) then           ! In next calendar day
@@ -405,20 +409,20 @@ integer                        :: jalpha,ja,jb,jc,jd,je,ijul
    endif
 
    minute=int(second/60.0_dp)                   ! Integral minutes from beginning of day
-   second=second-real(minute*60,kind=real64)                ! Seconds from beginning of minute
+   second=second-real(minute*60,kind=dp)                ! Seconds from beginning of minute
    hour=minute/60                               ! Integral hours from beginning of day
    minute=minute-hour*60                        ! Integral minutes from beginning of hour
 
    !---------------------------------------------
-   jalpha=int((real(ijul-1867216,kind=real64)-0.25_dp)/36524.25_dp) ! Correction for Gregorian Calendar
-   ja=ijul+1+jalpha-int(0.25_dp*real(jalpha,kind=real64))
+   jalpha=int((real(ijul-1867216,kind=dp)-0.25_dp)/36524.25_dp) ! Correction for Gregorian Calendar
+   ja=ijul+1+jalpha-int(0.25_dp*real(jalpha,kind=dp))
    !---------------------------------------------
 
    jb=ja+1524
-   jc=int(6680.0_dp+(real(jb-2439870,kind=real64)-122.1_dp)/365.25_dp)
-   jd=365*jc+int(0.25_dp*real(jc,kind=real64))
-   je=int(real(jb-jd,kind=real64)/30.6001_dp)
-   day=jb-jd-int(30.6001_dp*real(je,kind=real64))
+   jc=int(6680.0_dp+(real(jb-2439870,kind=dp)-122.1_dp)/365.25_dp)
+   jd=365*jc+int(0.25_dp*real(jc,kind=dp))
+   je=int(real(jb-jd,kind=dp)/30.6001_dp)
+   day=jb-jd-int(30.6001_dp*real(je,kind=dp))
    month=je-1
 
    if(month>12)then

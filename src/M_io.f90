@@ -1072,9 +1072,9 @@ class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
 integer,intent(out),optional             :: length      ! length of longest line
 integer,intent(out),optional             :: lines       ! number of lines
-integer :: nchars=0             ! holds size of file
+integer :: nchars               ! holds size of file
 integer :: igetunit             ! use newunit=igetunit in f08
-integer :: ios=0                ! used for I/O error status
+integer :: ios                  ! used for I/O error status
 integer :: length_local
 integer :: lines_local
 integer :: i
@@ -1082,6 +1082,8 @@ integer :: icount
 character(len=256)  :: message
 character(len=4096) :: label
 character(len=:),allocatable :: line
+   nchars=0
+   ios=0
    length_local=0
    lines_local=0
    label=''

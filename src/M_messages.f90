@@ -37,6 +37,7 @@ private
 
    ! PROGRESS AND STATUS
    public percent_done  ! <a href=percent_done.3m_messages.html"> place a non-advancing status counter on terminal display </a>
+   public percent_bar   ! <a href=percent_bar.3m_messages.html"> place a non-advancing status bar on terminal display </a>
 contains
 
 !>
@@ -156,7 +157,8 @@ end subroutine junbad
 !!   >          ./'.|'.'||||\\|..    )o o(    ..|//||||`.`|.`\.
 !!   >       ./'..|'.|| |||||\`````` '`"'` ''''''/||||| ||.`|..`\.
 !!   >     ./'.||'.|||| ||||||||||||.     .|||||||||||| ||||.`||.`\.
-!!   >    /'|||'.|||||| ||||||||||||{     }|||||||||||| ||||||.`|||`  >   '.|||'.||||||| ||||||||||||{     }|||||||||||| |||||||.`|||.`
+!!   >    /'|||'.|||||| ||||||||||||{     }|||||||||||| ||||||.`|||`
+!!   >   '.|||'.||||||| ||||||||||||{     }|||||||||||| |||||||.`|||.`
 !!   >  '.||| ||||||||| |/'   ``\||``     ''||/''   `\| ||||||||| |||.`
 !!   >  |/' \./'     `\./         \!|\   /|!/         \./'     `\./ `\|
 !!   >  V    V         V          }' `\ /' `{          V         V    V
@@ -1723,8 +1725,8 @@ end subroutine signs
 !!   Sample program:
 !!
 !!    program demo_percent_done
-!!    use m_time, only : system_sleep
-!!    use m_messages, only : percent_done
+!!    use M_time, only : system_sleep
+!!    use M_messages, only : percent_done
 !!    implicit none
 !!    integer :: i, nr=10
 !!
@@ -1757,6 +1759,72 @@ real                 :: whole_local
 end subroutine percent_done
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
+!===================================================================================================================================
+!>
+!!##NAME
+!!      percent_bar(3f) - [M_messages] print a simple progress bar repainting entire line
+!!      (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    SUBROUTINE percent_bar(progress)
+!!
+!!     real,intent(in) :: progress
+!!
+!!##DESCRIPTION
+!!
+!!    Writes a simple progress bar from 0 to 100 percent.
+!!
+!!##OPTIONS
+!!    progress  Value from 0.0 to 1.0 representing part of whole done.
+!!
+!!##EXAMPLES
+!!
+!!    Example program:
+!!
+!!       program demo_percent_bar
+!!       use M_messages, only : percent_bar
+!!       implicit none
+!!       integer :: arbitrary_max
+!!       integer :: arbitrary_count
+!!       real    :: percent
+!!       real    :: old_percent
+!!       arbitrary_max = 333
+!!       percent = 0.00
+!!       old_percent = -1.00
+!!       do arbitrary_count = 1, arbitrary_max
+!!           percent = real(arbitrary_count) / real(arbitrary_max - 1)
+!!           if(old_percent /= percent) call percent_bar(percent)
+!!           old_percent=percent
+!!           call execute_command_line('sleep 0.0')
+!!       enddo
+!!       end program demo_percent_bar
+!!
+!!    Expected output:
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public License
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+subroutine percent_bar(progress)
+use,intrinsic :: iso_fortran_env, only : stdout=>output_unit
+implicit none
+real, intent(in)           :: progress
+integer,parameter          :: PB_WIDTH = 60
+integer                    :: sofar
+    sofar = nint(progress * (PB_WIDTH + 1))
+    write(stdout,'(A, " progress: ", F5.1,A)',advance="no") char(13), progress*100, '% '
+    write(stdout, "('[',A60,']',A)",advance="no") repeat("|",sofar)//repeat(' ',PB_WIDTH-sofar+1),''
+    flush(stdout)
+end subroutine percent_bar
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

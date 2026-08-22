@@ -1,36 +1,37 @@
       program demo_open
-      integer :: ios
-      character(len=256) :: message
-      integer :: lun
+      integer            :: iostat
+      character(len=256) :: iomsg
+      integer            :: lun
          open  (                  &
          & newunit=lun,           &
          & file='employee.names', &
-         & action='read',         &
-         & iostat=ios,            &
-         & iomsg=message)
-         if (ios < 0) then
-            ! Perform end-of-file processing on the file connected to unit
+         & action='readwrite',    & ! read write readwrite
+         & iostat=iostat,         &
+         & status='unknown',      & ! old new replace unknown
+         & iomsg=iomsg)
+         if (iostat < 0) then
+            ! Perform end-of-file processing
             call end_processing()
-         elseif (ios > 0) then
+         elseif (iostat > 0) then
             ! Perform error processing
-            write(*,'(a)')trim(message)
+            write(*,'(a)')trim(iomsg)
             call error_processing()
             stop
          else
             write(*,*)'OPENED FILE'
          endif
       contains
-      !
-      subroutine end_processing()
-         write(*,*)'END OF FILE:',ios,'MESSAGE=',trim(message)
-         close(unit=lun,iostat=ios)
-         stop
-      end subroutine end_processing
-      !
-      subroutine error_processing()
-         write(*,*)'ERROR:',ios,'MESSAGE=',trim(message)
-         close(unit=lun,iostat=ios)
-         stop
-      end subroutine error_processing
-      !
+         !
+         subroutine end_processing()
+            write(*,*)'<END OF FILE>:',iostat,'iomsg=',trim(iomsg)
+            close(unit=lun,iostat=iostat)
+            stop
+         end subroutine end_processing
+         !
+         subroutine error_processing()
+            write(*,*)'<ERROR>:',iostat,'iomsg=',trim(iomsg)
+            close(unit=lun,iostat=iostat)
+            stop
+         end subroutine error_processing
+         !
       end program demo_open

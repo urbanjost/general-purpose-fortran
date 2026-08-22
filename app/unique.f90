@@ -1,10 +1,10 @@
 program unique ! this is a utility program. It is typically built using ccall(1).
-use M_CLI2,                       only : set_args, lget, sgets, iget, unnamed
+use M_CLI2,                       only : set_args, lget, sgets, iget, specified
 use M_uuid,                       only : generate_uuid
 use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
 integer                       :: version
-integer                       :: repeat
+integer                       :: repeat_arg
 integer                       :: i,j
 character(len=10),allocatable :: methods(:)
 character(len=:),allocatable  :: prefix
@@ -13,10 +13,17 @@ character(len=:),allocatable  :: version_text(:)
 
    ! define arguments, default values and crack command line
    call setup()
-   call set_args('--method:m "4" --urn:U F --repeat:r 1',help_text,version_text)
-   methods=[character(len=10) :: sgets('method'),unnamed]        ! get value of command line argument -method or unnamed strings
+   call set_args('--method:m " " --urn:U F --repeat:r 1',help_text,version_text)
+
+   if(specified('method'))then
+      methods=sgets('method')
+      methods=[character(len=10) :: sgets('method'),sgets()]
+   else
+      methods=sgets() ! set to unnamed values
+   endif
    if(size(methods).eq.0)methods=["4"]
-   repeat=iget('repeat')                                         ! get value of command line argument -repeat
+
+   repeat_arg=iget('repeat')                                     ! get value of command line argument -repeat
    prefix=merge('urn:uuid:','         ',lget('urn'))             ! get value of command line argument -urn
    prefix=trim(prefix)
 
@@ -29,7 +36,7 @@ character(len=:),allocatable  :: version_text(:)
          write(stderr,'(*(g0,1x))')'*unique* unknown method',methods
          stop 1
       endselect
-      do j=1,repeat
+      do j=1,repeat_arg
          write(*,'(2a)')prefix,generate_uuid(version)
       enddo
    enddo
@@ -55,7 +62,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '    (LICENSE:PD)                                                       ',&
 '                                                                       ',&
 'SYNOPSIS                                                               ',&
-'    unique [[ --method] NAME][ -urn][ -repeat N]]|[ --help|--version]  ',&
+'    unique [[ --method] NAME][ --urn][ --repeat N]]|[ --help|--version]',&
 '                                                                       ',&
 'DESCRIPTION                                                            ',&
 '   unique(3f) generates UUID strings according to the RFC 4122 standard.',&

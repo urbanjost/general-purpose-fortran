@@ -1,4 +1,4 @@
-      program demo_compiler_version
+      program demo_compiler_options
       use, intrinsic :: iso_fortran_env, only : compiler_version
       use, intrinsic :: iso_fortran_env, only : compiler_options
       implicit none
@@ -7,4 +7,4 @@
             compiler_version(),           &
             ' using the options ',        &
             compiler_options()
-      end program demo_compiler_version
+      end program demo_compiler_options

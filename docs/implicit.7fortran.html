@@ -58,7 +58,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-IMPLICIT(7f) - [STATEMENT] specify default type associated to a starting
+IMPLICIT(7) - [STATEMENT] specify default type associated to a starting
 letter or disallow implicit typing
 <P>
 </BLOCKQUOTE>
@@ -80,81 +80,72 @@ implicit [NONE]|[declaration-type-spec (letter-spec-list)]
 </A>
 <BLOCKQUOTE>
 <P>
-Determine default mapping between the first letter of a data entity and
-a type. The default is the equivalent of the statement
+Determine default mapping between the first letter of a data entity name
+and a type. The standard default is equivalent to the statement
 <P>
 <PRE>
           implicit real(a-h,o-z),integer(i-n)
 <P>
 </PRE>
-Compiler switches often allow the default to be the commonly recommended
+Note compiler switches often allow the default to be (the commonly
+recommended) equivalent of
+&#145;&#145;&#145;fortran
+implicit none
+<P>
+The IMPLICIT statement allows the default rule to be changed including
+requiring "strong typing".
+<P>
+Every data entity has a type (INTEGER, REAL, CHARACTER, &#46;&#46;&#46;). The
+default is that types be assigned according to the following rule:
 <P>
 <PRE>
-          implicit none ! require all variables to have type statements
+     + if a variable or function appears in a variable declaration the
+       type is that which was explicitly specified
+     + otherwise the type is **integer** if the name starts with the
+       letters from I to N (the first two letters of the word "integer")
+     + else it defaults to **real**.
 <P>
+       "NONE" requires that the procedures be written using "strong typing";
+       where every variable subsequently has to be defined in a type
+       declaration statement.
+<P>
+       If implicit typing is turned off you do not need to know all the
+       scoping rules for implicit typing, which by itself is a significant
+       reason for turning it off.
+<P>
+       When a large number of variable names are used with strong typing
+       a significant number of lines of code need added to declare the
+       variables; but strong typing is still almost universally recommended
+       where terseness is not critical (as is sometimes the case in
+       interactive usage or quick prototyping).
+<P>
+       To turn off implicit typing enter one and only one **implicit**
+       statement in the scoping unit
+<P>
+          implicit none ! Disable all implicit typing
+<P>
+       Each data entity will now require having a type declared explicitly
+       (**integer**, **real**, **double**, **complex**, &#46;&#46;&#46;).
+<P>
+       The **implicit** statement must appear after any USE statements and
+       before any type declarations, including PARAMETER statements (which
+       must know the rules to determine what type names are that have not
+       been explicitly declared).
+<P>
+       The majority of pre-fortran90 code depends on implicit defaults.
+<P>
+       Each prefix letter may have the type assigned to it declared only
+       once in a unit.
+<P>
+       To make the default for all names be a **doubleprecision** type one
+       could enter
 </PRE>
-This requires that the procedures be written using "strong typing";
-where every variable subsequently has to be defined in a type
-declaration statement.
+&#145;&#145;&#145;fortran
+implicit doubleprecision (a-z)
 <P>
-If implicit typing is turned off you do not need to know all the scoping
-rules for implicit typing, which by itself is a significant reason for
-turning it off.
-<P>
-When a large number of variable names are used with strong typing a
-significant number of lines of code need added to declare the variables;
-but strong typing is still almost universally recommended where
-terseness is not critical (as is sometimes the case in interactive usage
-or quick prototyping).
-<P>
-Every data entity has a type (INTEGER, REAL, CHARACTER, &#46;&#46;&#46;). If a type
-is not explicitly assigned to a variable or function it will (by
-default) be assigned one according to the following rule -- the type is
-INTEGER if the name starts with the letters from I to N (the first two
-letters of the word "integer"); otherwise it defaults to REAL.
-<P>
-The IMPLICIT statement allows the default rule to be changed or set to
-null.
-<P>
-To turn off implicit typing enter one and only one IMPLICIT statement in
-the scoping unit
-<P>
-<PRE>
-      implicit none ! Disable all implicit typing
-<P>
-</PRE>
-Each data entity will now require having a type declared explicitly
-(INTEGER, REAL, DOUBLE, COMPLEX, &#46;&#46;&#46;).
-<P>
-The statement must appear after any USE statements and before any type
-declarations, including PARAMETER statements (which must know the rules
-to determine what type names are that have not been explicitly
-declared).
-<P>
-In most new code implicit typing is turned off either with an "IMPLICIT
-NONE" or sometimes by a compiler switch. On the other hand, the majority
-of pre-fortran90 code depends on implicit defaults.
-<P>
-Each prefix letter may have the type assigned to it declared only once
-in a unit.
-<P>
-As previously stated, the default rule, expressed as an IMPLICIT
-statement is
-<P>
-<PRE>
-          implicit real(a-h,o-z),integer(i-n)
-<P>
-</PRE>
-To make the default for all names be a DOUBLEPRECISION type one could
-enter
-<P>
-<PRE>
-          implicit doubleprecision (a-z)
-<P>
-</PRE>
-NOTE: The standard does not require constants to be affected, so a type
-suffix is required for most constants. That is, even if A is implicitly
-double-precision
+NOTE: The standard does not require constants to be affected. That is,
+even if A is implicitly double-precision the LHS (Left Hand Side) does
+not effect the type of the constant.
 <P>
 <PRE>
          A=123456789.01234 ! only retains the precision of a default REAL
@@ -354,8 +345,8 @@ so AA is of type BLOB.
        implicit none
        ! it is still a convention used by many programmers to reserve
        ! starting letters of I to N for integers.
-       integer    :: i, j, k
-       type(real) :: x,y,z
+       !   integer    :: i, j, k
+       !   type(real) :: x,y,z
        intrinsic sin,cos ! intrinsic types are already specified
        integer,external :: zzz ! but external functions need declared
                                ! if they do not have an interface
@@ -394,7 +385,7 @@ Results:
 Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>implicit (7)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e739c3eb-0187-4e0e-a97f-2abbca2c5d89 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>implicit (7)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e804172a-b08f-4e60-9043-9513b647822f using man macros.</FONT>
 <br><br><center><img src="images/implicit.7fortran.gif"></center>
 </div>
 </div>

@@ -305,6 +305,12 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	M_DRAW:author - John S. Urban<br/>
 	M_DRAW:version - 3.0, Mar 1995,2004<br/>
 </td>
+<tr><td><a href="../src/C-pcl5.c">../src/C-pcl5.c</a></td>
+<td>
+	M_DRAW:driver/pcl5.c - M_DRAW driver for PCL5 and HPGL2<br/>
+	M_DRAW:author - John S. Urban<br/>
+	M_DRAW:version - 1.0, Dec 1996<br/>
+</td>
 <tr><td><a href="../src/C-pdf.c">../src/C-pdf.c</a></td>
 <td>
 	M_DRAW:source - driver/pdf.c - M_DRAW driver for Adobe Illustrator PDF <br/>
@@ -369,6 +375,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <tr><td><a href="../src/C-read_line.c">../src/C-read_line.c</a></td>
 <td>
 	read_line(3c):Paranoid function to read a line of text from a text file or terminal<br/>
+</td>
+<tr><td><a href="../src/C-rect.c">../src/C-rect.c</a></td>
+<td>
+	M_DRAW:rect - draw a rectangle given two opposite corners<br/>
+	M_DRAW:srect - draw a rectangle given two opposite corners in screen coords.<br/>
 </td>
 <tr><td><a href="../src/C-rgbhls.c">../src/C-rgbhls.c</a></td>
 <td>
@@ -543,30 +554,30 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <td>
 	<br/>
 	'|tr '<br/>
-	 M_CLI2 set_args(3f) parse prototype string<br/>
+	 M_CLI2 set_args(3) parse prototype string<br/>
 	PROGRAM:     demo_get_subcommand            <br/>
 	DESCRIPTION: My demo program  <br/>
 	VERSION:     1.0 20200715     <br/>
 	AUTHOR:      me, myself, and I<br/>
 	LICENSE:     Public Domain    <br/>
-	 M_CLI2 get_subcommand(3f) parse prototype string to get subcommand allowing for response files<br/>
-	 M_CLI2 prototype_to_dictionary(3f) parse user command and store tokens into dictionary<br/>
+	 M_CLI2 get_subcommand(3) parse prototype string to get subcommand allowing for response files<br/>
+	 M_CLI2 prototype_to_dictionary(3) parse user command and store tokens into dictionary<br/>
 	 M_CLI2 prototype_and_cmd_args_to_nlist create dictionary from prototype if not null and update from command line<br/>
-	 M_CLI2 get_anyarray_l(3f) given keyword fetch logical array from string in dictionary(F on err)<br/>
-	 M_CLI2 get_anyarray_d(3f) given keyword fetch dble value array from Language Dictionary (0 on err)<br/>
-	 M_CLI2 get_anyarray_c(3f) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
-	 M_CLI2 get_args_fixed_length_a_array(3f) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
-	 M_CLI2 get_fixedarray_fixed_length_c(3f) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
-	 M_CLI2 get_scalar_anylength_c(3f) Fetch string value for specified KEYWORD from the lang. dictionary<br/>
-	 M_CLI2 get_args_fixed_length_scalar_c(3f) Fetch string value for specified KEYWORD from the lang. dictionary<br/>
-	 M_CLI2 upper(3f) Changes a string to uppercase<br/>
-	 M_CLI2 lower(3f) Changes a string to lowercase over specified range<br/>
-	 M_CLI2 split(3f) parse string on delimiter characters and store tokens into an allocatable array<br/>
-	 M_CLI2 replace_str(3f) Globally replace one substring for another in string<br/>
-	 M_CLI2 decodebase(3f) convert whole number string in base [2-36] to base 10 number<br/>
-	 M_CLI2 locate_c(3f) find PLACE in sorted character array LIST where VALUE can be found or should be placed<br/>
-	 M_strings atleast(3f) return string padded to at least specified length<br/>
-	 M_CLI2 locate_key(3f) find PLACE in sorted character array where KEYNAME can be found or should be placed<br/>
+	 M_CLI2 get_anyarray_l(3) given keyword fetch logical array from string in dictionary(F on err)<br/>
+	 M_CLI2 get_anyarray_d(3) given keyword fetch dble value array from Language Dictionary (0 on err)<br/>
+	 M_CLI2 get_anyarray_c(3) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
+	 M_CLI2 get_args_fixed_length_a_array(3) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
+	 M_CLI2 get_fixedarray_fixed_length_c(3) Fetch strings value for specified KEYWORD from the lang. dictionary<br/>
+	 M_CLI2 get_scalar_anylength_c(3) Fetch string value for specified KEYWORD from the lang. dictionary<br/>
+	 M_CLI2 get_args_fixed_length_scalar_c(3) Fetch string value for specified KEYWORD from the lang. dictionary<br/>
+	 M_CLI2 upper(3) Changes a string to uppercase<br/>
+	 M_CLI2 lower(3) Changes a string to lowercase over specified range<br/>
+	 M_CLI2 split(3) parse string on delimiter characters and store tokens into an allocatable array<br/>
+	 M_CLI2 replace_str(3) Globally replace one substring for another in string<br/>
+	 M_CLI2 decodebase(3) convert whole number string in base [2-36] to base 10 number<br/>
+	 M_CLI2 locate_c(3) find PLACE in sorted character array LIST where VALUE can be found or should be placed<br/>
+	 M_strings atleast(3) return string padded to at least specified length<br/>
+	 M_CLI2 locate_key(3) find PLACE in sorted character array where KEYNAME can be found or should be placed<br/>
 </td>
 <tr><td><a href="../src/M_LA.f90">../src/M_LA.f90</a></td>
 <td>
@@ -576,6 +587,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </td>
 <tr><td><a href="../src/M_anything.f90">../src/M_anything.f90</a></td>
 <td>
+	 M_anything anyscalar_to_real128(3f) convert integer or real parameter of any kind to real128<br/>
 	 M_anything anyscalar_to_double(3f) convert integer or real parameter of any kind to doubleprecision<br/>
 	 M_anything anyscalar_to_real(3f) convert integer or real parameter of any kind to real<br/>
 	 M_anything anyscalar_to_int64(3f) convert parameter of any intrinsic kind to 64-bit integer<br/>
@@ -666,7 +678,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_color rgbmono(3f) convert RGB colors to a reasonable grayscale<br/>
 	 M_color closest_color_name(3f) given RGB values try to find closest named color<br/>
 	 M_color color_name2rgb(3f) given a color name return rgb color values in range 0 to 100<br/>
-	 M_strings lower(3f) Changes a string to lowercase over specified range<br/>
+	 M_strings lower(3f) Changes a string to lowercase<br/>
 </td>
 <tr><td><a href="../src/M_compiler.f90">../src/M_compiler.f90</a></td>
 <td>
@@ -829,6 +841,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 convert tabs in input to spaces in output while maintaining columns, assuming a tab is set every 8 characters<br/>
 	 append a number to the end of the filename that makes it relatively unique<br/>
 </td>
+<tr><td><a href="../src/M_flatten.f90">../src/M_flatten.f90</a></td>
+<td>
+</td>
 <tr><td><a href="../src/M_framework.f90">../src/M_framework.f90</a></td>
 <td>
 </td>
@@ -952,7 +967,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d logical scalar, vector, matrix in row-column format', &<br/>
 	 print small 2d integer scalar, vector, matrix in row-column format', &<br/>
-	 print_inquire(3f) print INQUIRE of file by name/number', &<br/>
+	 print_inquire(3) print INQUIRE of file by name/number', &<br/>
 	 showme(3f) - display type and kind of intrinsic value', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
 	 print small 2d integer arrays in row-column format', &<br/>
@@ -978,6 +993,9 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_io read_line(3f) read a line from specified LUN into allocatable string up to line length limit<br/>
 	 M_io get_tmp(3f) Return the name of the scratch directory<br/>
 	 M_io scratch(3f) Return the name of a scratch file<br/>
+</td>
+<tr><td><a href="../src/M_isolatin.f90">../src/M_isolatin.f90</a></td>
+<td>
 </td>
 <tr><td><a href="../src/M_journal.f90">../src/M_journal.f90</a></td>
 <td>
@@ -1418,8 +1436,10 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_sort sort_quick_compact_integer_int64(3f) recursive quicksort of a integer(kind=int64) array<br/>
 	 M_sort sort_quick_compact_real_real32(3f) recursive quicksort of a real(kind=real32) array<br/>
 	 M_sort sort_quick_compact_real_real64(3f) recursive quicksort of a real(kind=real64) array<br/>
+	 M_sort sort_quick_compact_real_real128(3f) recursive quicksort of a real(kind=real128) array<br/>
 	 M_sort sort_quick_compact_complex_real32(3f) recursive quicksort of a complex(kind=real32) array<br/>
 	 M_sort sort_quick_compact_complex_real64(3f) recursive quicksort of a complex(kind=real64) array<br/>
+	 M_sort sort_quick_compact_complex_real128(3f) recursive quicksort of a complex(kind=real128) array<br/>
 	 M_sort sort_quick_compact_character_ascii(3f) recursive quicksort of a character(kind=ascii) array<br/>
 	 M_sort tree_insert(3f) sort a number of integers by building a tree sorted in infix order<br/>
 	 M_sort tree_print(3f)<br/>
@@ -1515,7 +1535,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings::pad(3f): return string padded to at least specified length<br/>
 	 M_strings lenset(3f) return string trimmed or padded to specified length<br/>
 	 M_strings merge_str(3f) pads first and second arguments to MERGE(3f) to same length<br/>
-	 M_strings compact(3f) Converts white-space to single spaces; removes leading spaces<br/>
+	 M_strings compact(3f) Converts stretches of white-space with new separator; removes leading spaces<br/>
 	 M_strings noesc(3f) convert non-printable characters to a space<br/>
 	 M_strings s2v(3f) returns doubleprecision number from string;zero if error occurs<br/>
 	 M_strings isnumber(3f) Determines if a string is a number of not.<br/>
@@ -1528,16 +1548,16 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_strings isgraph(3f) indicates if character is printable ASCII character excluding space<br/>
 	 M_strings isalpha(3f) Return .true. if character is a letter and .false. otherwise<br/>
 	 M_strings isxdigit(3f) returns .true. if c is a hexadecimal digit (0-9 a-f or A-F)<br/>
-	 M_strings isdigit(3f) Returns .true. if ch is a digit (0-9) and .false. otherwise<br/>
+	 M_strings isdigit(3f) Returns .true. if onechar is a digit (0-9) and .false. otherwise<br/>
 	 M_strings isblank(3f) returns .true. if character is a blank (space or horizontal tab)<br/>
 	 M_strings isascii(3f) returns .true. if character is in the range char(0) to char(127)<br/>
 	 M_strings isspace(3f) true if null space tab return new line vertical tab or formfeed<br/>
 	 M_strings iscntrl(3f) true if a delete or ordinary control character(0x7F or 0x00-0x1F)<br/>
 	 M_strings ispunct(3f) true if a printable punctuation character (isgraph(c)&&!isalnum(c))<br/>
-	 M_strings fortran_name(3f) Return .true. if name is a valid Fortran name<br/>
 	 M_strings isupper(3f) returns true if character is an uppercase letter (A-Z)<br/>
 	 M_strings islower(3f) returns true if character is a miniscule letter (a-z)<br/>
 	 M_strings isalnum(3f) returns true if character is a letter (a-z A-Z) or digit(0-9)<br/>
+	 M_strings fortran_name(3f) Return .true. if name is a valid Fortran name<br/>
 	 M_strings base(3f) convert whole number string in base [2-36] to string in alternate base [2-36]<br/>
 	 M_strings decodebase(3f) convert whole number string in base [2-36] to base 10 number<br/>
 	 M_strings codebase(3f) convert whole number in base 10 to string in base [2-36]<br/>
@@ -1710,6 +1730,44 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 	 M_time minus_seconds(3f) subtract seconds from derived type date_time object<br/>
 	 M_time minus_date_time(3f) add derived type date_time object and seconds<br/>
 	 M_time eq(3f) compare derived type date_time objects (eq lt gt le ge ne)<br/>
+</td>
+<tr><td><a href="../src/M_ucs4.f90">../src/M_ucs4.f90</a></td>
+<td>
+	 make the same conversion as an assignment statement from ASCII to UCS4<br/>
+	 make the same conversion as an assignment statement from UCS4 to ASCII<br/>
+	 make the conversion extended_ascii to UCS4<br/>
+	 make the conversion from UCS4 to extended_ascii<br/>
+</td>
+<tr><td><a href="../src/M_unicode.f90">../src/M_unicode.f90</a></td>
+<td>
+	 M_unicode adjustr(3f) adjust string to right<br/>
+	 M_unicode isascii_u(3f) returns .true. if all characters are in the range char(0) to char(127)<br/>
+	 M_unicode isascii(3f) returns .true. if all characters are in the range char(0) to char(127)<br/>
+	 M_unicode isblank(3f) returns .true. if character is a blank (space or horizontal tab)<br/>
+	 M_unicode isspace(3f) true if all null space tab return new line vertical tab or formfeed<br/>
+	 M_unicode sort_quick_rx(3f) indexed hybrid quicksort of a type(unicode_type) array<br/>
+	 M_unicode reverse(3f) Return a string reversed<br/>
+	 M_unicode replace(3f) replace one substring for another in string<br/>
+	 M_unicode join(3f) merge string array into a single string value adding specified separator<br/>
+	 M_unicode upper(3f) returns an uppercase string<br/>
+	 M_unicode lower(3f) returns a lowercase string<br/>
+	 M_unicode pad(3f) return string padded to at least specified length<br/>
+	 M_unicode scan(3f) Scan a string for the presence of a set of characters<br/>
+	 M_unicode verify(3f) determine position of a character in a string that does not appear in a given set of characters.<br/>
+	 M_unicode expandtabs(3f) convert tabs to spaces and trim line removing CRLF chars<br/>
+	 M_unicode expand_html_uu(3f) expand <br/>
+	 M_unicode escape(3f) return string with escape sequences expanded<br/>
+	 M_unicode::add_backslash(3f): return string with non-printable ASCII-8 and non-ASCII-7 characters encoded as escape sequences<br/>
+	 M_unicode transliterate(3f) replace characters from old set with new set<br/>
+	 M_unicode oop_join(3f) merge string array into a single string value adding specified separator<br/>
+	 M_unicode pad(3f) pad string with repeating pattern to at least specified length<br/>
+	 M_unicode readline(3f) read a line from specified LUN into string up to line length limit<br/>
+	 M_unicode slurp(3f) read file into TYPE(UNICODE_TYPE) array<br/>
+	 M_unicode afmt(3f) convert any intrinsic to a CHARACTER variable using specified format<br/>
+	 M_unicode afmt(3f) convert any intrinsic to a CHARACTER variable using specified format<br/>
+	 M_unicode afmt(3f) convert any intrinsic to a CHARACTER variable using specified format<br/>
+	 M_overload g_g(3f) convert two single intrinsic values or strings to a string<br/>
+	 M_unicode glob(3f) function compares text strings one of which can have wildcards ('*' or '?').<br/>
 </td>
 <tr><td><a href="../src/M_units.f90">../src/M_units.f90</a></td>
 <td>

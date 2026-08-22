@@ -51,21 +51,25 @@ private :: anyscalar_to_double_
 interface compare_float
    module procedure compare_float_real32
    module procedure compare_float_real64
+   module procedure compare_float_real128
 end interface compare_float
 
 interface operator (.equalto.)
    module procedure is_equal_to_real32
    module procedure is_equal_to_real64
+   module procedure is_equal_to_real128
 end interface operator (.equalto.)
 
 interface operator (.greaterthan.)
    module procedure is_greater_than_real32
    module procedure is_greater_than_real64
+   module procedure is_greater_than_real128
 end interface operator (.greaterthan.)
 
 interface operator (.lessthan.)
    module procedure is_less_than_real32
    module procedure is_less_than_real64
+   module procedure is_less_than_real128
 end interface operator (.lessthan.)
 
 real(kind=real64),save,private :: default_ulp=1.0_real64
@@ -533,7 +537,7 @@ END SUBROUTINE sp_accdig
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental impure SUBROUTINE accdig(x,y,digi0,ACURCY,IND)
-use,intrinsic :: iso_fortran_env, only : wp=>real64
+use,intrinsic :: iso_fortran_env, only : wp=>real128
 use M_framework__journal,  only : journal
 implicit none
 
@@ -772,8 +776,6 @@ end function round
 !!    program demo_significant
 !!    use M_framework__approx, only : significant
 !!    implicit none
-!!    integer :: i
-!!    real :: r, v
 !!    character(len=*),parameter :: g='(*(g0.7,1x))'
 !!
 !!       write(*,g)significant([8765.43210,0.1234567890],5)
@@ -848,7 +850,7 @@ end function significant_real64
 !===================================================================================================================================
 pure elemental function anyscalar_to_realbig_(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-use,intrinsic :: iso_fortran_env, only : wp=>real64
+use,intrinsic :: iso_fortran_env, only : wp=>real128
 implicit none
 
 ! ident_9="@(#) M_framework__approx anyscalar_to_realbig_(3f) convert integer or real parameter of any kind to real128 or biggest available"
@@ -863,6 +865,7 @@ character(len=3)             :: readable
    type is (integer(kind=int64));  d_out=real(valuein,kind=wp)
    type is (real(kind=real32));    d_out=real(valuein,kind=wp)
    type is (real(kind=real64));    d_out=real(valuein,kind=wp)
+   Type is (real(kind=real128));   d_out=valuein
    type is (logical);              d_out=merge(0.0_wp,1.0_wp,valuein)
    type is (character(len=*));     read(valuein,*) d_out
    class default
@@ -883,7 +886,6 @@ implicit none
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out
-doubleprecision,parameter :: big=huge(0.0d0)
    select type(valuein)
    type is (integer(kind=int8));   d_out=dble(valuein)
    type is (integer(kind=int16));  d_out=dble(valuein)
@@ -891,20 +893,16 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
-      !!if(valuein > big)then
-      !!   write(error_unit,*)'*anyscalar_to_double_* value too large ',valuein
-      !!endif
-      d_out=dble(valuein)
+   type is (real(kind=real128))
+     !x!if(valuein > huge(0.0d0))then
+     !x!   write(error_unit,*)'*anyscalar_to_double_* value too large ',valuein
+     !x!endif
+     d_out=dble(valuein)
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
-   !type is (real(kind=real128))
-   !   if(valuein > big)then
-   !      write(error_unit,*)'*anyscalar_to_double_* value too large ',valuein
-   !   endif
-   !   d_out=dble(valuein)
    class default
      d_out=0.0d0
-     !!stop '*M_framework__approx::anyscalar_to_double_: unknown type'
+     !x!stop '*M_framework__approx::anyscalar_to_double_: unknown type'
    end select
 end function anyscalar_to_double_
 !===================================================================================================================================
@@ -1214,6 +1212,46 @@ logical                   ::  equal_to
     equal_to = abs( x - y ) < spacing( max(abs(x),abs(y)) )
 end function is_equal_to_real64
 
+elemental function compare_float_real128( x, y, ulp ) result( compare )
+integer,parameter            ::  wp=real128
+real(kind=wp),intent(in)     ::  x
+real(kind=wp),intent(in)     ::  y
+class(*),optional,intent(in) ::  ulp
+logical                      ::  compare
+real(kind=wp)                ::  rel
+   if ( present( ulp ) ) then
+     rel = abs(anyscalar_to_double_(ulp))
+   else
+     rel = default_ulp
+   endif
+   compare = abs( x - y ) < ( rel * spacing( max(abs(x),abs(y)) ) )
+end function compare_float_real128
+elemental function is_less_than_real128( x, y ) result ( less_than )
+integer,parameter         ::  wp=real128
+real(kind=wp),intent(in)  ::  x, y
+logical :: less_than
+    if ( (y - x) >= spacing( max( abs(x), abs(y) ) ) ) then
+      less_than = .true.
+    else
+      less_than = .false.
+    endif
+  end function is_less_than_real128
+elemental function is_greater_than_real128( x, y ) result ( greater_than )
+integer,parameter         ::  wp=real128
+real(kind=wp),intent(in)  ::  x, y
+logical                   ::  greater_than
+   if ( (x - y) >= spacing( max( abs(x), abs(y) ) ) ) then
+     greater_than = .true.
+   else
+     greater_than = .false.
+   endif
+end function is_greater_than_real128
+elemental function is_equal_to_real128( x, y ) result( equal_to )
+integer,parameter         ::  wp=real128
+real(kind=wp),intent(in)  ::  x, y
+logical                   ::  equal_to
+    equal_to = abs( x - y ) < spacing( max(abs(x),abs(y)) )
+end function is_equal_to_real128
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

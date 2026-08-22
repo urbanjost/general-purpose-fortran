@@ -5,7 +5,7 @@
       character(len=*),parameter :: bits= '(g0,t30,b32.32)'
       character(len=*),parameter :: fmt= '(g0,t30,a,t40,b32.32)'
 
-          intfrom=huge(0)  ! all bits are 1 accept the sign bit
+          intfrom=huge(0)  ! all bits are 1 except the sign bit
           intto=0          ! all bits are 0
 
           !! CHANGE BIT 0

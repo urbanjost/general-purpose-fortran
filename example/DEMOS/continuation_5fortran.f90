@@ -31,7 +31,7 @@
       !   & This&      ! first word
       !   & is&        ! second word
       !   & sentence&  ! third word
-      !   & a'         ! forth word (a comment here is OK)
+      !   & a'         ! fourth word (a comment here is OK)
       !Because when continuing a string you cannot have a comment after the "&".
       !
       ! This is OK:
@@ -43,7 +43,7 @@
          ! second word
          & sentence&
          ! third word
-         & a'        ! forth word (a comment here is OK)
+         & a'        ! fourth word (a comment here is OK)
       ! because comment LINES can go anywhere in Fortran source files
 
       ! Dusty corners
@@ -65,7 +65,7 @@
       write(*,*)napier_&
       &constant
 
-      ! the left-hand ampersand is required when splitting constants to,
+      ! the left-hand ampersand is required when splitting constants too,
       ! including characters strings
       write(*,*)'Expecting &
                 &the value',2.71828182&

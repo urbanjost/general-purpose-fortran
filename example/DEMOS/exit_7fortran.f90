@@ -1,16 +1,11 @@
          program demo_exit
          implicit none
-         integer,parameter :: arbitrary_size=10
-         integer :: i, j, k, iarr(arbitrary_size)
-         integer :: iostat, lun
-         logical :: ok
-         character(len=80) :: line
+         integer,parameter          :: arbitrary_size=10
+         integer                    :: i, j, iarr(arbitrary_size)
+         integer,volatile           :: k ! decrease odds loop is optimized away
          character(len=*),parameter :: gen='(*(g0:,1x))'
          !
          ! the basics
-         !
-         ! Note we will use the function irand(3f) contained in
-         ! the end of the code below to generate random whole numbers
          !
          !----------------------
          ! EXIT an infinite loop
@@ -27,10 +22,14 @@
            ! a related common use is to read a file of unknown size
            ! till an error or end-of-file, although READ does have
            ! the options ERR=numeric-label and EOF=numeric-label.
-           ! INFINITE: do
-           !    read(*,'(a)',iostat=iostat) line
-           !    if(iostat.ne.0)exit INFINITE
-           ! enddo INFINITE
+            CRASH: block
+            integer :: iostat, lun=10
+            character(len=80) :: line
+            INFINITE: do
+               read(lun,'(a)',iostat=iostat) line
+               if(iostat.ne.0)exit INFINITE
+            enddo INFINITE
+            endblock CRASH
 
          ! Some argue that an infinite loop is never a good idea.
          ! A common practice is to avoid even the possibility of an
@@ -41,7 +40,7 @@
          ! problems bigger than it was intended for, or not loop infinitely
          ! if some unexpected or incorrect input or condition is encountered.
          ! It might make it stop unintentionally as well.
-           !
+            !
             ! run a loop but quit as soon as 200 random integers are odd
             j=0
             ! fun facts: What are the odds of not getting 200 in 10000?
@@ -57,26 +56,31 @@
             else
                print gen,'only did I=',i,'passes to get 200 odd samples'
             endif
-         ! ---------------------------
-         ! how to EXIT nested do-loops
-         ! ---------------------------
+         ! ---------------------
+         ! EXIT nested do-loops:
+         ! ---------------------
            ! EXIT with no name only exits an innermost loop
-           ! so in the following k will be 3, as all passes of the
-           ! outer loop still occur
-            k=0
-            do i=1,3
-               do j=1,5
+           ! so in the following k will be three, as all passes of the
+           ! outer loop still occur but i will be four and j one.
+            k=0          ! regular variable
+            do i=1,3     ! loop control variable
+               do j=1,5  ! loop control variable
                   exit
                enddo
                k=k+1
             enddo
+         ! -----------------------
+         ! loop control variables:
+         ! -----------------------
             ! at the end of a completed loop the counter is end_limit+step so
             ! you can tell if you exhausted the do loop or exited early:
-            print gen,'I=',i,'so ',&
-            & merge('completed','exited   ',i.gt.3),' outer loop'
-            print gen,'J=',j,'so ',&
-            & merge('completed','exited   ',j.gt.5),' inner loop'
+            print gen,'I=',i,'so ', &
+            & merge('completed','exited   ',i-1.eq.3),' outer loop'
+            print gen,'J=',j,'so ', &
+            & merge('completed','exited   ',j-1.eq.5),' inner loop'
             print gen,'K=',k
+            print gen,'nested loop test', &
+            & merge('PASSED','FAILED',all([i,j,k]==[4,1,3]))
 
             ! COMMENTARY:
             ! A labeled exit is less prone to error so generally worth the
@@ -116,7 +120,7 @@
                do i=1,size(iarr)
                  ! when you find what you are looking for use an EXIT instead
                  ! of a GOTO , which follows much more restricted rules on
-                 ! on where you can land, preventing the threat of spaghetti code
+                 ! where you can land, preventing the threat of spaghetti code
                  if(iarr(i).eq.5) exit LOOKFOR
                enddo
                write(*,*)'should not get here. iarr=',iarr
@@ -170,7 +174,6 @@
          contains
          ! choose a value from range of integers inclusive randomly
          function irand(first,last)
-         integer, allocatable :: seed(:)
          integer,intent(in)   :: first,last
          real                 :: rand_val
          integer              :: irand

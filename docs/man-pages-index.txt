@@ -1,13 +1,25 @@
 color_name2rgb (3m_color) - [M_color] returns the RGB values in the range 0 to 100 for a given known color name. (LICENSE:PD)
 color_name2rgb (3m_pixel) - [M_pixel:COLOR] returns the RGB values in the range 0 to 100 for a given known color name. (LICENSE:PD)
+fmt (3m_unicode)     - [M_unicode:CONVERSION] convert any intrinsic to a string using specified format (LICENSE:MIT)
 hue (3m_color)	     - [M_color] converts a color's components from one color model to another. (LICENSE:PD)
 hue (3m_pixel)	     - [M_pixel] converts a color's components from one color model to another. (LICENSE:PD)
 intro_blas1 (3)      - Introduction to vector-vector linear algebra (matrix) (LICENSE:PD) subprograms
+join (3m_unicode)    - [M_unicode:EDITING] append CHARACTER variable array into a single CHARACTER variable with specified separator (LICENSE:MIT)
+logicals (7fortran)  - [SUMMARY] logical expressions and variables
+lower (3m_unicode)   - [M_unicode:CASE] changes a string to lowercase over specified range (LICENSE:MIT)
 M_strings__oop (3m_strings) - [M_strings::INTRO::OOPS] OOP Fortran string module
 M_strings__oop (3m_strings__oop) - [M_strings::INTRO::OOPS] OOP Fortran string module
+pad (3m_unicode)     - [M_unicode:PAD] return string padded to at least specified length (LICENSE:MIT)
+repeat (3fortran)    - [CHARACTER:PAD] Repeated string concatenation
+repeat (3m_unicode)  - [M_unicode:PAD] Repeated string concatenation (LICENSE:MIT)
+replace (3m_unicode) - [M_unicode:EDITING] function replaces one substring for another in string (LICENSE:MIT)
 rgbmono (3m_color)   - [M_color] converts RGB colors to a reasonable grayscale intensity (LICENSE:PD)
 rgbmono (3m_pixel)   - [M_pixel] converts RGB colors to a reasonable grayscale intensity (LICENSE:PD)
+sort (3m_unicode)    - [M_unicode:SORT] indexed hybrid quicksort of an array (LICENSE:MIT)
+split (3m_unicode)   - [M_unicode:PARSE] parse a string into tokens, one at a time. (LICENSE:MIT)
 system_stat (3m_system) - [M_system:QUERY_FILE] Get file status information (LICENSE:PD)
+trim (3m_unicode)    - [M_unicode:WHITESPACE] remove trailing blank characters from a string (LICENSE:MIT)
+upper (3m_unicode)   - [M_unicode:CASE] changes a string to uppercase (LICENSE:MIT)
 abs (3fortran)	     - [NUMERIC] Absolute value
 accdig (3m_framework__approx) - [M_framework__approx] compare two numbers only up to a specified number of digits (LICENSE:PD)
 accdig (3m_verify)   - [M_verify] compare two real numbers only up to a specified number of digits (LICENSE:PD)
@@ -17,9 +29,13 @@ acosd (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Arccosine (inverse cosine) fu
 acosd (3m_units)     - [M_units:TRIGONOMETRY] calculate arccosine of value in degrees (LICENSE:PD)
 acosh (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Inverse hyperbolic cosine function
 acospi (3fortran)    - [MATHEMATICS:TRIGONOMETRIC] Circular Arccosine (inverse circular cosine) function
+add_backslash (3m_unicode) - [M_unicode:CONVERSION] Convert UTF-8 encoded data to ASCII-7 C-style backslash escape sequences (LICENSE:MIT)
+add_border (3m_unicode) - [M_unicode:EDITING] add border of UTF8-encoded box characters (LICENSE:MIT)
 adjustc (3m_strings) - [M_strings:WHITESPACE] center text (LICENSE:PD)
 adjustl (3fortran)   - [CHARACTER:WHITESPACE] Left-justify a string
+adjustl (3m_unicode) - [M_unicode:WHITESPACE] Left-justified a string (LICENSE:MIT)
 adjustr (3fortran)   - [CHARACTER:WHITESPACE] Right-justify a string
+adjustr (3m_unicode) - [M_unicode:WHITESPACE] right-justify a string (LICENSE:MIT)
 aimag (3fortran)     - [TYPE:CONVERSION] Imaginary part of complex number
 aint (3fortran)      - [NUMERIC] Truncate toward zero to a whole number
 alert (3m_attr)      - [M_attr] print messages using a standard format including time and program name (LICENSE:MIT)
@@ -174,6 +190,7 @@ change (1)	     - [FILE EDIT] replace fixed strings in files (LICENSE:MIT)
 change (3m_strings)  - [M_strings:EDITING] change old string to new string with a directive like a line editor (LICENSE:PD)
 changen (1)	     - [FILE EDIT] replace old fixed string with new fixed string in names of files (LICENSE:PD)
 char (3fortran)      - [CHARACTER:CONVERSION] Generate a character from a code value
+character (3m_unicode) - [M_unicode:CONVERSION] convert type(unicode_type) string to a CHARACTER variable (LICENSE:MIT)
 chbmv (3m_blas)      - [BLAS:COMPLEX_BLAS_LEVEL2] CY := alpha*A*CX + beta*CY; ==> A a (square) hermitian band matrix.
 check_commandline (3m_cli) - [ARGUMENTS:M_CLI] check status from READ of NAMELIST group and process pre-defined options
 checkkey (3m_draw)   - [M_draw:INTERACTIVE] Returns zero if no key is pressed or ASCII ordinal (LICENSE:PD)
@@ -226,6 +243,7 @@ co_sum (3fortran)    - [COLLECTIVE] Sum of values on the current set of images
 co_ubound (3fortran) - [COLLECTIVE] Upper codimension bounds of an array
 code (3m_datapac)    - [M_datapac:VECTOR_OPERATIONS] code the elements of a vector (1 for the minimum, 2 for the next larger value, and so on)
 codebase (3m_strings) - [M_strings:BASE] convert whole number in base 10 to string in base [2-36] (LICENSE:PD)
+codepoints_to_utf8 (3m_unicode) - [M_unicode:CONVERSION] convert codepoints to CHARACTER (LICENSE:MIT)
 color (3m_draw)      - [M_draw:COLOR] Set current color (LICENSE:PD)
 color (3m_pixel)     - [M_pixel:COLOR] set current color index (LICENSE:PD)
 color_wheel (1)      - [M_draw] generate HLS color wheels (LICENSE:PD)
@@ -256,6 +274,7 @@ cosh (3fortran)      - [MATHEMATICS:TRIGONOMETRIC] Hyperbolic cosine function
 cospi (3fortran)     - [MATHEMATICS:TRIGONOMETRIC] Circular Cosine function
 count (3fortran)     - [ARRAY:REDUCTION] Count true values in an array
 count (3m_datapac)   - [M_datapac:STATISTICS] compute the number of observations between a minimum and a maximum value
+couple (3m_strings)  - [M_strings:ARRAY] converts between CHARACTER scalar and array of single characters (LICENSE:PD)
 cpad (3m_strings)    - [M_strings:LENGTH] convert to a cropped string and then centers the string to specified length (LICENSE:PD)
 cpl67 (3m_steam67)   - [M_steam67] CPL67 calculates specific isobaric head capacity of water at pressure P and temperature T
 cprint (1)	     - [FILE FILTER] filter prints specified columns (LICENSE:PD)
@@ -311,9 +330,9 @@ dasum (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] takes the sum of the absolute v
 data (7fortran)      - [FORTRAN] DATA statement
 date_and_time (3fortran) - [SYSTEM:TIME] Gets current date and time
 date_to_bas (3m_time) - [M_time:BAS] converts DAT date-time array to Baseday and Seconds (LICENSE:MIT)
-date_to_julian (3m_time) - [M_time:JULIAN] converts DAT date-time array to Julian Date (LICENSE:PD)
+date_to_julian (3m_time) - [M_time:JULIAN] converts DAT date-time array to Julian Date (LICENSE:MIT)
 date_to_modified_julian (3m_time) - [M_time:MODIFIED_JULIAN] converts DAT date-time array to Modified Julian Date (LICENSE:MIT)
-date_to_unix (3m_time) - [M_time:UNIX_EPOCH] converts DAT date-time array to Unix Epoch Time (LICENSE:PD)
+date_to_unix (3m_time) - [M_time:UNIX_EPOCH] converts DAT date-time array to Unix Epoch Time (LICENSE:MIT)
 daxpy (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] constant times a vector plus a vector.
 days2sec (1)	     - [TIME] Convert [[-]dd-][[hh:]mm:]ss to seconds (LICENSE:PD)
 days2sec (3m_time)   - [M_time:DURATION] convert string of form [[-]dd-]hh:mm:ss.nn or dNNhNNmNNsNN to seconds (LICENSE:MIT)
@@ -325,6 +344,9 @@ dcopy (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] copies elements of a vector, x,
 ddot (3m_blas)	     - [BLAS:DOUBLE_BLAS_LEVEL1] forms the dot product of two vectors.
 deallocate (7fortran) - [FORTRAN:STATEMENT] causes allocated variables and targets to be deallocated
 decode_base64 (3m_strings) - [M_strings:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
+decode_base64 (3m_unicode) - [M_unicode:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
+decode_base64_bytes (3m_strings) - [M_strings:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
+decode_base64_bytes (3m_unicode) - [M_unicode:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
 decodebase (3m_strings) - [M_strings:BASE] convert whole number string in base [2-36] to base 10 number (LICENSE:PD)
 define (3m_datapac)  - [M_datapac:VECTOR_OPERATION] set all elements of a vector equal to a specified constant
 degrees (1)	     - [CONVERT] Convert between Fahrenheit and Celsius temperature values (LICENSE:PD)
@@ -426,6 +448,8 @@ elips (3m_calcomp)   - [M_calcomp:general] draw an elliptical arc (LICENSE:PD)
 ellipse (3m_drawplus) - [M_drawplus] draws an ellipse or elliptical arc. (LICENSE:MIT)
 empty (3m_anything)  - [M_anything] set an allocatable array to zero (LICENSE:MIT)
 encode_base64 (3m_strings) - [M_strings:ENCODE] encode data using base64 encoding as defined in RFC-4648 (LICENSE:MIT)
+encode_base64 (3m_unicode) - [M_unicode:ENCODE] encode data using base64 encoding as defined in RFC-4648 (LICENSE:MIT)
+encode_base64_bytes (3m_unicode) - [M_unicode:ENCODE] encode data using base64 encoding as defined in RFC-4648 (LICENSE:MIT)
 end_pause_watch (3m_stopwatch) - [M_stopwatch] resumes a paused M_StopWatch watch (LICENSE:PD)
 endfile (7fortran)   - [NUMERIC] Absolute value
 ends_with (3m_strings) - [M_strings:COMPARE] test if string ends with specified suffix(es) (LICENSE:PD)
@@ -439,6 +463,7 @@ erfc (3fortran)      - [MATHEMATICS] Complementary error function
 erfc_scaled (3fortran) - [MATHEMATICS] Scaled complementary error function
 error (3m_match)     - [M_MATCH] print message and stop program execution (LICENSE:PD)
 esc (1) 	     - [NCURSES] set xterm(1) attributes using a screen or line mode (LICENSE:PD)
+escape (3m_unicode)  - [M_unicode:CONVERSION] expand C++ escape sequences (LICENSE:MIT)
 ev1cdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the extreme value type 1 (Gumbel) cumulative distribution function
 ev1plt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a extreme value type 1 (Gumbel) probability plot
 ev1ppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the extreme value type 1 (Gumbel) percent point function
@@ -455,6 +480,8 @@ exit (7fortran)      - [EXECUTION CONTROL] terminate do-loops and block construc
 exp (3fortran)	     - [MATHEMATICS] Base-e exponential function
 expand (3m_strings)  - [M_strings:NONALPHA] expand C-like escape sequences (LICENSE:PD)
 expand- (1)	     - [FUNIX] convert tabs to spaces (LICENSE:PD)
+expand_html (3m_unicode) - [M_unicode:ENCODE] expand HTML character entities ("&NAME;" strings) (LICENSE:MIT)
+expandtabs (3m_unicode) - [M_unicode:WHITESPACE] function to expand tab characters (LICENSE:MIT)
 expandviewport (3m_draw) - [M_draw:VIEWPORT] use the entire device viewport (LICENSE:PD)
 expcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the exponential cumulative distribution function
 explain (1)	     - [HELP] reads and navigates a VMS-style help file. (LICENSE:GNU LGPL)
@@ -491,6 +518,7 @@ findloc (3fortran)   - [ARRAY:LOCATION] Location of first element of ARRAY ident
 fit (3m_calcomp)     - [M_calcomp:general] draws a semi-hyperbolic curve through three points (LICENSE:PD)
 fixedform (1)	     - [FUNIX] read in a TUI definition and return values from screen panel (LICENSE:PD)
 fixedwidth (3m_draw) - [M_draw:TEXT] Turns fixedwidth mode on or off for SOFTWARE fonts. (LICENSE:PD)
+flatten (3m_flatten) - [M_flatten::array] Module for dealing with argument rank mismatch (LICENSE:MIT)
 fline (3m_calcomp)   - [M_calcomp:scientific] plot a polyline with optional fit (LICENSE:PD)
 float (3fortran)     - [FORTRAN:INTRINSIC:NUMERIC:TYPE] Convert integer to default real
 floor (3fortran)     - [NUMERIC] Function to return largest integral value not greater than argument
@@ -541,6 +569,7 @@ geoppf (3m_datapac)  - [M_datapac:PERCENT_POINT] compute the geometric percent p
 georan (3m_datapac)  - [M_datapac:RANDOM] generate geometric random numbers
 get (3m_list)	     - [M_list::dictionary::OOPS] get value of key-value pair in a dictionary given key (LICENSE:PD)
 get_arg (3m_args)    - [ARGUMENTS:M_args] get value of command line argument by number (LICENSE:PD)
+get_arg (3m_unicode) - [M_unicode:SYSTEM] get command line argument (LICENSE:MIT)
 get_args (3m_cli2)   - [ARGUMENTS:M_CLI2] return keyword values when parsing command line arguments (LICENSE:PD)
 get_args_fixed_length (3m_cli2) - [ARGUMENTS:M_CLI2] return keyword values for fixed-length string when parsing command line (LICENSE:PD)
 get_args_fixed_size (3m_cli2) - [ARGUMENTS:M_CLI2] return keyword values for fixed-size array when parsing command line arguments (LICENSE:PD)
@@ -549,6 +578,7 @@ get_command_argument (3fortran) - [SYSTEM:COMMAND LINE] Get command line argumen
 get_command_arguments_stack (3m_args) - [ARGUMENTS:M_args] return a character array containing all the command line arguments (LICENSE:PD)
 get_command_arguments_string (3m_args) - [ARGUMENTS:M_args] return all command arguments as an allocated string (LICENSE:PD)
 get_env (3m_io)      - [M_io:QUERY] a function returning the value of an environment variable (LICENSE:PD)
+get_env (3m_unicode) - [M_unicode:SYSTEM] return value of environment variable (LICENSE:MIT)
 get_environment_variable (3fortran) - [SYSTEM:ENVIRONMENT] Retrieve the value of an environment variable
 get_from_lala (3m_matrix) - [M_matrix] return data from lala(3f) to calling program LICENSE(MIT)
 get_namelist (3m_args) - [ARGUMENTS:M_args] NAMELIST-based command line argument parsing (LICENSE:PD)
@@ -580,6 +610,7 @@ getvalue (3m_calculator) - [M_calculator] given numeric variable name return dou
 getviewport (3m_draw) - [M_draw:VIEWPORT] Returns limits of current viewport in screen coordinates (LICENSE:PD)
 getviewport (3m_pixel) - [M_pixel] return viewport in screen pixel coordinates (LICENSE:PD)
 glob (3m_strings)    - [M_strings:COMPARE] compare given string for match to a pattern which may contain globbing wildcard characters (LICENSE:PD)
+glob (3m_unicode)    - [M_unicode:COMPARE] compare given string for match to a pattern which may contain globbing wildcard characters (LICENSE:MIT)
 glstsq (3m_math)     - [M_math] least squares fit to a polynomial expression (LICENSE:PD)
 graph (3m_graph)     - [M_graph::INTRO] Draw an XY graph
 graph_init (3m_graph) - [M_graph] initialize the longlib graphics plot routine graph(3f)
@@ -629,6 +660,7 @@ ibits (3fortran)     - [BIT:COPY] Extraction of a subset of bits
 ibset (3fortran)     - [BIT:SET] Set a bit to one in an integer value
 icamax (3m_blas)     - [BLAS:AUX_BLAS] Return index of maximum "absolute value" in CX.
 ichar (3fortran)     - [CHARACTER:CONVERSION] Character-to-integer code conversion function
+ichar (3m_unicode)   - [M_unicode:CONVERSION] character-to-integer code conversion function (LICENSE:MIT)
 idamax (3m_blas)     - [BLAS:AUX_BLAS]
 ieor (3fortran)      - [BIT:LOGICAL] Bitwise exclusive OR
 if (7fortran)	     - [EXECUTION CONTROL] selects a block based on a sequence of logical expressions.
@@ -647,13 +679,14 @@ in_margin (3m_verify) - [M_verify] check if two reals are approximately equal us
 include (7fortran)   - [PREPROCESS] blending source text
 indent (3m_strings)  - [M_strings:WHITESPACE] count number of leading spaces in a string (LICENSE:PD)
 index (3fortran)     - [CHARACTER:SEARCH] Position of a substring within a string
+index (3m_unicode)   - [M_unicode:SEARCH] Position of a substring within a string (LICENSE:MIT)
 inf (3m_units)	     - [M_units] return an inf (Infinity) (LICENSE:PD)
 init_random_seed (3m_random) - [M_random] seed random_number(3f) with single value like srand(3c) usage (LICENSE:MIT)
 init_random_seed_by_dat (3m_random) - [M_random] seed random_number(3f) with values from date_and_time(3f) (LICENSE:MIT)
 init_random_seed_by_system_clock (3m_random) - [M_random] seed random_number(3f) with system clock value (LICENSE:MIT)
 initialize_arrays (7fortran) - [FORTRAN:FAQ] Initializing small 2D numeric arrays with array constructors
 inpolygon (3m_math)  - [M_math:geometry] determine whether or not an integer point is in an integer polygon
-inquire (7fortran)   - [FILE_INQUIRE] File inquiry statement
+inquire (7fortran)   - [FILE:INQUIRE] File inquiry statement
 inquiry_stopwatch (3m_stopwatch) - [M_stopwatch] returns M_StopWatch options and system dependent values (LICENSE:PD)
 insert (3m_list)     - [M_list] insert entry into a string array at specified position (LICENSE:PD)
 int (3fortran)	     - [TYPE:CONVERSION] Truncate towards zero and convert to integer
@@ -679,7 +712,9 @@ isalnum (3m_strings) - [M_strings:COMPARE] test membership in subsets of ASCII s
 isalpha (3m_strings) - [M_strings:COMPARE] returns .true. if character is a letter and .false. otherwise (LICENSE:PD)
 isamax (3m_blas)     - [BLAS:AUX_BLAS] Return index of maximum absolute value in SX.
 isascii (3m_strings) - [M_strings:COMPARE] returns .true. if the character is in the range char(0) to char(256) (LICENSE:PD)
+isascii (3m_unicode) - [M_unicode:QUERY] returns .true. if all the characters of a string are in the set from CHAR(0) to CHAR(127). (LICENSE:MIT)
 isblank (3m_strings) - [M_strings:COMPARE] returns .true. if character is a blank character (space or horizontal tab). (LICENSE:PD)
+isblank (3m_unicode) - [M_unicode:COMPARE] returns .true. if character is a Unicode or ASCII-7 blank character (space or horizontal tab) . (LICENSE:MIT)
 iscntrl (3m_strings) - [M_strings:COMPARE] returns .true. if character is a delete character or ordinary control character (LICENSE:PD)
 isdigit (3m_strings) - [M_strings:COMPARE] returns .true. if character is a digit (0, 1, ..., 9) and .false. otherwise (LICENSE:PD)
 isequal (3m_sets)    - [M_sets] Report if vector A is equal to vector B
@@ -696,8 +731,10 @@ isprint (3m_strings) - [M_strings:COMPARE] returns .true. if character is an ASC
 ispunct (3m_strings) - [M_strings:COMPARE] returns .true. if character is a printable punctuation character (LICENSE:PD)
 issorted (3m_sets)   - [M_sets] Report if A is sorted in ascending order or not.
 isspace (3m_strings) - [M_strings:COMPARE] returns .true. if character is a null, space, tab, carriage return, new line, vertical tab, or formfeed (LICENSE:PD)
+isspace (3m_unicode) - [M_unicode:COMPARE] returns .true. if character is a null, space, tab, carriage return, new line, vertical tab, or formfeed (LICENSE:MIT)
 isupper (3m_strings) - [M_strings:COMPARE] returns .true. if character is an uppercase letter (A-Z) (LICENSE:PD)
 isxdigit (3m_strings) - [M_strings:COMPARE] returns .true. if character is a hexadecimal digit (0-9, a-f, or A-F). (LICENSE:PD)
+itri (3m_strings)    - [M_strings:CONVERSION] convert INTEGER to CHARACTER with value grouped into periods of three digits (LICENSE:MIT)
 izamax (3m_blas)     - [BLAS:AUX_BLAS]
 j2d (3m_time)	     - [M_time:JULIAN] given a JD (Julian Date) returns a date-time array DAT. (LICENSE:MIT)
 join (3m_strings)    - [M_strings:EDITING] append CHARACTER variable array into a single CHARACTER variable with specified separator (LICENSE:PD)
@@ -738,7 +775,9 @@ least_common_multiple (3m_factor) - [M_factor] Least common multiple of two inte
 leave_watchgroup (3m_stopwatch) - [M_stopwatch] removes a M_StopWatch watch from a watch group (LICENSE:PD)
 leftjustify (3m_draw) - [M_draw:TEXT] left justify text (LICENSE:PD)
 len (3fortran)	     - [CHARACTER:INQUIRY] Length of a character entity
+len (3m_unicode)     - [M_unicode:WHITESPACE] Length of a string (LICENSE:MIT)
 len_trim (3fortran)  - [CHARACTER:INQUIRY] Character length without trailing blank characters
+len_trim (3m_unicode) - [M_unicode:WHITESPACE] string length without trailing blank characters (LICENSE:MIT)
 len_white (3m_strings) - [M_strings:LENGTH] get length of string trimmed of whitespace. (LICENSE:PD)
 lenset (3m_strings)  - [M_strings:LENGTH] return string trimmed or padded to specified length (LICENSE:PD)
 lgaxs (3m_calcomp)   - [M_calcomp:scientific] draw logarithmic axis (LICENSE:PD)
@@ -780,6 +819,7 @@ log10 (3fortran)     - [MATHEMATICS] Base 10 or common logarithm
 log_gamma (3fortran) - [MATHEMATICS] Logarithm of the absolute value of the Gamma function
 logcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the logistic cumulative distribution function
 logical (3fortran)   - [TYPE:CONVERSION] Conversion between kinds of logical values
+logicals (5fortran)  - [SUMMARY] logical expressions and variables
 logname- (1)	     - [FUNIX] display login name (LICENSE:PD)
 logpdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] compute the logistic probability density function
 logplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a logistic probability plot
@@ -817,6 +857,7 @@ M_draw (3m_draw)     - [M_draw::INTRO] The M_draw graphics library (LICENSE:PD)
 M_drawplus (3m_drawplus) - [M_drawplus] Additional routines using the M_DRAW graphics library (LICENSE:MIT)
 M_factor (3m_factor) - [M_factor::INTRO] module for least common multiple, greatest common divisor, and prime factors
 M_fixedform (3m_fixedform) - [NCURSES] convert a text block into a TUI (screen interface) (LICENSE:PD)
+M_flatten (3m_flatten) - [M_flatten::INTRO] Module for dealing with argument rank mismatch (LICENSE:MIT)
 M_framework (3m_framework) - [M_framework::INTRO] unit test framework (LICENSE:PD)
 M_framework__attr (3m_framework__attr) - [M_framework__attr::INTRO] control text attributes on terminals (LICENSE:MIT)
 M_framework__journal (3m_framework__journal) - [M_framework__journal::INTRO] write program messages to stdout and/or a log file (LICENSE:PD)
@@ -853,6 +894,7 @@ M_strings__chars (3m_strings__chars) - [M_strings__chars::INTRO] Fortran charact
 M_system (3m_system) - [M_system::INTRO] Fortran interface to C system interface (LICENSE:PD)
 M_time (3m_time)     - [M_time::INTRO] Fortran module for manipulating and presenting time and date values as defined in ISO 8601:1988 (LICENSE:MIT)
 M_time__oop (3m_time) - [M_time::INTRO::OOPS] OOP interface for M_time(3fm) (LICENSE:MIT)
+M_unicode (3m_unicode) - [M_unicode::INTRO] Unicode string module (LICENSE:MIT)
 M_units (3m_units)   - [M_units::INTRO] convert between various physical units (LICENSE:MIT)
 M_uuid (3m_uuid)     - [M_uuid::INTRO] a module of UUID (Universally Unique IDentifier) procedures (LICENSE:BSD-4-Clause)
 M_verify (3m_verify) - [M_verify::INTRO] a collection of Fortran routines for supporting code development by providing error processing, debugging procedures and unit testing. (LICENSE:PD)
@@ -933,8 +975,9 @@ ncr (3m_math)	     - [M_math] Calculate the number of unique combinations of r o
 nd (1)		     - [DEVELOPER] Compare numeric differences between two files (LICENSE:PD)
 nearest (3fortran)   - [MODEL:COMPONENTS] Nearest representable number
 needs (7fortran)     - rough notes on what is missing from standard Fortran
-new_line (3fortran)  - [CHARACTER:INQUIRY] Newline character
+new_line (3fortran)  - [CHARACTER:WHITESPACE] Newline character
 newpen (3m_calcomp)  - [M_calcomp:basic] select new pen color and move to origin (LICENSE:PD)
+next (3fortran)      - [ENUMERATION] Next enumeration value
 nextp (3m_math)      - [M_math] next permutation of a previously sorted integer array (LICENSE:PD)
 nframe (3m_calcomp)  - [M_calcomp:basic] start new frame (LICENSE:PD)
 nint (3fortran)      - [TYPE:CONVERSION] Nearest whole number
@@ -1002,6 +1045,7 @@ pdec (3m_framework__msg) - [M_framework__msg] write out string with ASCII decima
 pdec (3m_verify)     - [M_verify] write out string with ASCII decimal equivalent vertically under it (LICENSE:PD)
 pendulum (1)	     - [PHYSICS] calculate pendulum period (LICENSE:PD)
 penv (1)	     - [M_system:ENVIRONMENT] print all or part of environment in formats readable by various shells (LICENSE:PD)
+percent_bar (3m_messages) - [M_messages] print a simple progress bar repainting entire line (LICENSE:PD)
 percent_decode (3m_strings) - [M_strings:ENCODE] percent-decode strings and character arrays (LICENSE:ISC)
 percent_done (3m_messages) - [M_messages] non-advancing status counter displays percentage done on terminal displays (LICENSE:PD)
 percent_encode (3m_strings) - [M_strings:ENCODE] percent-encode strings and character arrays (LICENSE:PD)
@@ -1093,6 +1137,7 @@ popdev (3m_draw)     - [M_draw:DEVICE] pop device from stack created by pushdev.
 popmatrix (3m_draw)  - [M_draw:MATRIX_STACK] Reinstall the last matrix pushed (LICENSE:PD)
 poppar (3fortran)    - [BIT:COUNT] Parity of the number of bits set
 popviewport (3m_draw) - [M_draw:VIEWPORT] Retrieve last viewport (LICENSE:PD)
+pound_to_box (3m_unicode) - [M_unicode:EDITING] convert pound character to box characters (LICENSE:MIT)
 pounds_to_kilograms (3m_units) - [M_units:MASS] - converts a measurement in pounds-mass to kilograms. (LICENSE:PD)
 ppm (5) 	     - portable pixmap file format
 prank (3m_orderpack) - [M_orderpack:RANK:PARTIAL] partially ranks an array (Quick-Sort-like)
@@ -1106,6 +1151,7 @@ prefsize (3m_draw)   - [M_draw:WINDOW_SETUP] Specify preferred width and height 
 prefsize (3m_pixel)  - [M_pixel] specify size of pixel array (LICENSE:PD)
 prep (1)	     - [DEVELOPER] pre-process FORTRAN source files (LICENSE:MIT)
 present (3fortran)   - [STATE:INQUIRY] Determine whether an optional dummy argument is specified
+previous (3fortran)  - [ENUMERATION] Previous enumeration value
 prime_factors (3m_factor) - [M_factor] decompose a number into its prime factors
 print (3m_draw)      - [M_draw] call DRAWSTR(3f) with up to nine arbitrary intrinsic scalar values
 print (7fortran)     - [IO] write formatted sequential I/O to stdout
@@ -1188,6 +1234,7 @@ read_line (3m_io)    - [M_io:READ] read a line from specified LUN into allocatab
 read_table (3m_io)   - [M_io:READ] read file containing a table of numeric values (LICENSE:PD)
 read_watch (3m_stopwatch) - [M_stopwatch] reads the values from a M_StopWatch watch (LICENSE:PD)
 readgif (3m_pixel__readgif) - [M_pixel__readgif] read a GIF file (LICENSE:PD)
+readline (3m_unicode) - [M_unicode:IO] read a line from specified LUN into string up to line length limit (LICENSE:MIT)
 real (3fortran)      - [TYPE:CONVERSION] Convert to real type
 real (3m_strings)    - [M_strings:TYPE] overloads REAL(3f) so it can handle character arguments (LICENSE:PD)
 realpath- (1)	     - [FUNIX] print the resolved path (LICENSE:PD)
@@ -1206,8 +1253,8 @@ regmatch (3m_regex)  - [M_regex] return selected substring defined by the MATCHE
 regsub (3m_regex)    - [M_regex] perform regex substitutions
 relsd (3m_datapac)   - [M_datapac:STATISTICS] compute the relative standard deviation of a vector of observations
 remove (3m_list)     - [M_list] remove entry from an allocatable array at specified position (LICENSE:PD)
+remove_backslash (3m_unicode) - [M_unicode:CONVERSION] expand C-like escape sequences (LICENSE:MIT)
 rename- (1)	     - [FUNIX:FILESYSTEM] rename files by replacing first occurrence of a string in a filename with new string (LICENSE:PD)
-repeat (3fortran)    - [CHARACTER:PAD] Repeated string concatenation
 replac (3m_datapac)  - [M_datapac:VECTOR_OPERATION] replace all observations in a vector within a given interval with a user-specified constant
 replace (3m_list)    - [M_list] replace entry in a string array at specified position (LICENSE:PD)
 replace (3m_strings) - [M_strings:EDITING] function replaces one substring for another in string (LICENSE:PD)
@@ -1220,7 +1267,8 @@ return (7fortran)    - [STATEMENT] completes execution of the instance of the su
 rev- (1)	     - [FUNIX] reverse lines in a file (LICENSE:PD)
 reverse (1)	     - [FUNIX] print file in reverse (LICENSE:PD)
 reverse (3m_strings) - [M_strings:EDITING] Return a string reversed (LICENSE:PD)
-rewind (7fortran)    - [FILE_POSITIONING] rewind specified sequential access I/O unit
+reverse (3m_unicode) - [M_unicode:CASE] reverse order of glyphs on a line (LICENSE:MIT)
+rewind (7fortran)    - [FILE:POSITIONING] rewind specified sequential access I/O unit
 rget (3m_kracken)    - [ARGUMENTS:M_kracken] given keyword fetch real value from command argument (LICENSE:PD)
 rgets (3m_kracken)   - [ARGUMENTS:M_kracken] given keyword fetch real array from command arguments (LICENSE:PD)
 rgetvalue (3m_calculator) - [M_calculator] given numeric variable name return real value directly from calculator dictionary for efficiency (LICENSE:PD)
@@ -1258,6 +1306,7 @@ scale1 (3m_math)     - [M_math] find new range xMINP XMAXP divisible into approx
 scale3 (3m_math)     - [M_math] find nice log range
 scalg (3m_calcomp)   - [M_calcomp:scientific] determine scale factors for a logarithmic scale (LICENSE:PD)
 scan (3fortran)      - [CHARACTER:SEARCH] Scan a string for the presence of a set of characters
+scan (3m_unicode)    - [M_unicode:SEARCH] Scan a string for the presence of a set of characters (LICENSE:MIT)
 scasum (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL1] SCASUM:=SUM(I=1 to N) ABS(REAL(CX(I)))+ABS(AIMAG(CX(I))).
 scnrm2 (3m_blas)     - [BLAS:SINGLE_BLAS_LEVEL1] SCNRM2:= square root of sum of magnitudes of entries of CX.
 scopy (3m_blas)      - [BLAS:SINGLE_BLAS_LEVEL1] SY:=SX
@@ -1333,6 +1382,7 @@ slice (1m_draw)      - [M_slices] display a grid of Z values with a 3D view (LIC
 slice (1m_slices)    - [M_slices] display a grid of Z values with a 3D view (LICENSE:PD)
 slice (3m_strings)   - [M_strings:TOKENS] parse string into an array using specified delimiters (LICENSE:PD)
 slocator (3m_draw)   - [M_draw:INTERACTIVE] Find out where cursor is in screen coordinates (LICENSE:PD)
+slurp (3m_unicode)   - [M_unicode:READ] read formatted UTF-8 file into a TYPE(UNICODE_TYPE) string array (LICENSE:MIT)
 smoot (3m_calcomp)   - [M_calcomp:scientific] draw a polyline using modified spline-fitting technique (LICENSE:PD)
 smove2 (3m_draw)     - [M_draw:MOVE] Move current graphics position in screen coordinates (-1.0 to 1.0). (LICENSE:PD)
 sngl (3fortran)      - [FORTRAN:INTRINSIC:NUMERIC:TYPE] Convert double precision real to default real
@@ -1447,6 +1497,7 @@ strtok (3m_strings)  - [M_strings:TOKENS] Tokenize a string (LICENSE:PD)
 stuff (3m_calculator) - [M_calculator] directly store value into calculator dictionary for efficiency (LICENSE:PD)
 stuffa (3m_calculator) - [M_calculator] directly store a string into calculator variable name table (LICENSE:PD)
 sub (1) 	     - [FILE EDIT] substitute new fixed strings for old fixed strings in files (LICENSE:MIT)
+sub (3m_unicode)     - [M_unicode:EDITING] Return substring (LICENSE:MIT)
 subse1 (3m_datapac)  - [M_datapac:VECTOR_OPERATION] extract the elements of a vector which fall into a user-specified subset (one subset variable)
 subse2 (3m_datapac)  - [M_datapac:VECTOR_OPERATION] extract the elements of a vector which fall into a user-specified subset (two subset variables)
 subset (3m_datapac)  - [M_datapac:VECTOR_OPERATION] extract the elements of a vector which fall into a user-specified subset (one subset variable)
@@ -1549,6 +1600,7 @@ tiny (3fortran)      - [MODEL:NUMERIC] Smallest positive number of a real kind
 to (3m_overload)     - [M_overload::LOGICAL] return array of adjacent integers over specified range, inclusive (LICENSE:PD)
 today (1)	     - [TIME] output current time for uses such as file suffixes. (LICENSE:PD)
 tokenize (3fortran)  - [CHARACTER:PARSE] Parse a string into tokens
+tokenize (3m_unicode) - [M_unicode:PARSE] Parse a string into tokens. (LICENSE:MIT)
 tol (3m_datapac)     - [M_datapac:STATISTICS] compute normal and distribution-free tolerance limits
 tolower (3m_strings__chars) - [M_strings__chars:CASE] changes a string to lowercase over specified range (LICENSE:MIT)
 topic (1)	     - [HELP] Display specially formatted help text files.
@@ -1570,6 +1622,7 @@ tran (3m_datapac)    - [M_datapac:RANDOM] a random sample of size n from the Stu
 transfer (3fortran)  - [TYPE:CONVERSION] Transfer data as bit patterns using mold
 translate (3m_draw)  - [M_draw:TRANSFORMATION] Set up a translation. (LICENSE:PD)
 transliterate (3m_strings) - [M_strings:EDITING] replace characters from old set with new set (LICENSE:PD)
+transliterate (3m_unicode) - [M_unicode:EDITING] replace characters from old set with new set (LICENSE:MIT)
 transpose (3fortran) - [ARRAY:MANIPULATION] Transpose an array of rank two
 trapezoidal_integral (3m_math) - [M_math] trapezoidal integration
 tree_insert (3m_sort) - [M_sort:sort:treesort] sort a number of integers by building a tree, sorted in infix order (LICENSE:MIT)
@@ -1577,6 +1630,8 @@ tree_print (3m_sort) - [M_sort] print a sorted integer tree generated by tree_in
 triangle (1)	     - resolution of a triangle (LICENSE:PD)
 trim (3fortran)      - [CHARACTER:WHITESPACE] Remove trailing blank characters from a string
 trim (3m_datapac)    - [M_datapac:STATISTICS] computes the sample trimmed mean of the data in the input vector X.
+trim_quoted (3m_strings) - [M_strings:WHITESPACE] converts regions of whitespace characters to a specified string (or nothing) (LICENSE:PD)
+trimzeros_ (3m_unicode) - [M_unicode:TYPE] Delete trailing zeros from numeric decimal string (LICENSE:MIT)
 true- (1)	     - [FUNIX] do nothing, successfully (LICENSE:PD)
 tsl167 (3m_steam67)  - [M_steam67]
 tsl67 (3m_steam67)   - [M_steam67]
@@ -1591,6 +1646,7 @@ ucobound (3fortran)  - [COLLECTIVE] Upper codimension bounds of an array
 uconic (3m_drawplus) - [M_drawplus] general conic sections (LICENSE:MIT)
 ufpp (1)	     - [DEVELOPER] pre-process FORTRAN source files (LICENSE:PD)
 uname- (1)	     - [FUNIX] print system information (LICENSE:PD)
+uncouple (3m_strings) - [M_strings:ARRAY] converts between CHARACTER scalar and array of single characters (LICENSE:PD)
 unexpandviewport (3m_draw) - [M_draw:VIEWPORT] undo expandviewport(3f) (LICENSE:PD)
 unicdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] trivially compute the Uniform cumulative distribution function
 unicode_example1 (1) - [FORTRAN] UNICODE example
@@ -1629,12 +1685,14 @@ up (3m_draw)	     - [M_draw:VIEWPORT] Specify the world up. (LICENSE:PD)
 upper (3m_strings)   - [M_strings:CASE] changes a string to uppercase (LICENSE:PD)
 upper_quoted (3m_strings) - [M_strings:CASE] elemental function converts string to uppercase skipping strings quoted per Fortran syntax rules (LICENSE:PD)
 use (7fortran)	     - [FORTRAN] gives a program unit access to public entities in a module.
+utf8_to_codepoints (3m_unicode) - [M_unicode:CONVERSION] Convert UTF-8-encoded data to Unicode codepoints (LICENSE:MIT)
 v2mo (3m_time)	     - [M_time:MONTH_NAME] returns the month name of a Common month number (LICENSE:MIT)
 v2s (3m_strings)     - [M_strings:TYPE] return numeric string from a numeric value (LICENSE:PD)
 value_to_string (3m_strings) - [M_strings:TYPE] return numeric string from a numeric value (LICENSE:PD)
 var (3m_datapac)     - [M_datapac:STATISTICS] compute the sample variance of a vector of observations
 vcl67 (3m_steam67)   - [M_steam67] compute the specific volume of the liquid at pressure P and temperature T
 verify (3fortran)    - [CHARACTER:SEARCH] Position of a character in a string of characters that does not appear in a given set of characters
+verify (3m_unicode)  - [M_unicode:SEARCH] Position of a character in a string of characters that does not appear in a given set of characters. (LICENSE:MIT)
 vexit (3m_draw)      - [M_draw:DEVICE] Reset window/terminal and exit graphics mode. Must be last routine called. (LICENSE:PD)
 vexit (3m_pixel)     - [M_pixel] exit pixel graphics mode (LICENSE:PD)
 vflush (3m_draw)     - [M_draw:FLUSHING] Call device flush or syncronisation routine (LICENSE:PD)

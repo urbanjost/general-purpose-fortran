@@ -71,13 +71,13 @@ function
 </A>
 <BLOCKQUOTE>
 <P>
-result = atan([x) | atan(y, x)
+result = atan(x) | atan(y, x)
 <P>
 <PRE>
          elemental TYPE(kind=KIND) function atan(y,x)
 <P>
           TYPE(kind=KIND),intent(in) :: x
-          TYPE(kind=**),intent(in),optional :: y
+          TYPE(kind=KIND),intent(in),optional :: y
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -114,9 +114,10 @@ The returned value is of the same type and kind as X.
 <BLOCKQUOTE>
 <P>
 ATAN(X)(3) returns the inverse tangent (ie. arctangent) of the elements
-of X in radians. The function accepts both real and complex inputs,
-specified as a scalar, vector, matrix. The atan operation is
-element-wise when X is nonscalar.
+of X in radians. The function accepts both real and complex inputs, and
+is elemental (therefore allowing arguments to be scalar, vector, or
+matrix). The atan operation is performed element-wise when X is
+nonscalar.
 <TABLE cellpadding=3><!-- tsb: ATAN(X)(3) returns the inverse tangent (ie. arctangent) of the elements
  -->
 <TR></TR><TR></TR>
@@ -131,7 +132,22 @@ o
 </TD><TD>
 For complex values of X, atan(X) returns complex values.
 </TD></TR>
-<TR></TR></TABLE>When Y is not supplied the inverse tangent is defined as
+<TR></TR></TABLE><!-- .nf -->
+<PRE>
+    When x is complex, Fortran’s intrinsic ATAN(x) computes the
+    principal value of the complex arctangent function and returns a
+    complex number in radians. The Imaginary part is an unbounded real
+    value representing the hyperbolic growth of the inverse function.
+<P>
+    -   Converts complex coordinates using the natural logarithm and
+        imaginary unit.
+    -   Reduces to the standard real arctangent when the input has a
+        zero imaginary component.
+    -   Undefined at the exact poles.
+    -   Branch cuts lie along the outer imaginary axis
+<P>
+</PRE>
+When Y is not supplied the inverse tangent is defined as
 <P>
 <PRE>
     i=sqrt(-1)
@@ -140,7 +156,8 @@ For complex values of X, atan(X) returns complex values.
 </PRE>
 This definition of the atan function returns angles in radians within
 the interval [-PI/2, PI/2]. To find the four-quadrant inverse tangent,
-where the returned angles are in the interval [-PI, PI], use atan2.
+where the returned angles are in the interval [-PI, PI], supply the Y
+value or equivalently, use atan2(3).
 </BLOCKQUOTE>
 <A name=4>
 
@@ -188,17 +205,43 @@ Sample program:
     program demo_atan
     use, intrinsic :: iso_fortran_env, only : real32, real64, real128
     implicit none
-    character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+    character(len=*),parameter  :: g=&#146;(*(g0,1x))&#146;
     real(kind=real64),parameter :: &
      Deg_Per_Rad = 57.2957795130823208767981548_real64
-    real(kind=real64) :: x
-        x=2.866_real64
-        print all, atan(x)
+    real(kind=real64)           :: x
+    real(kind=real64),parameter              :: &
 <P>
-        print all, atan( 2.0d0, 2.0d0),atan( 2.0d0, 2.0d0)*Deg_Per_Rad
-        print all, atan( 2.0d0,-2.0d0),atan( 2.0d0,-2.0d0)*Deg_Per_Rad
-        print all, atan(-2.0d0, 2.0d0),atan(-2.0d0, 2.0d0)*Deg_Per_Rad
-        print all, atan(-2.0d0,-2.0d0),atan(-2.0d0,-2.0d0)*Deg_Per_Rad
+     xvals(*)=[2.0d0, 2.0d0, 2.0d0,  2.0d0,  -2.0d0, -2.0d0, -2.0d0, -2.0d0 ]
+    real(kind=real64),parameter              :: &
+     yvals(*)=[2.0d0, 2.0d0, -2.0d0, -2.0d0, 2.0d0,  2.0d0,  -2.0d0, -2.0d0 ]
+       !
+       ! basics
+       !
+       ! with just a real X returns angles in radians
+       ! in the interval [-PI/2, PI/2].
+        x=2.866_real64
+        print g, atan(x)
+       !
+       ! all the quadrants using two arguments
+       !
+        print g, atan( 2.0d0, 2.0d0),atan( 2.0d0, 2.0d0)*Deg_Per_Rad
+        print g, atan( 2.0d0,-2.0d0),atan( 2.0d0,-2.0d0)*Deg_Per_Rad
+        print g, atan(-2.0d0, 2.0d0),atan(-2.0d0, 2.0d0)*Deg_Per_Rad
+        print g, atan(-2.0d0,-2.0d0),atan(-2.0d0,-2.0d0)*Deg_Per_Rad
+       !
+       ! elemental
+       !
+        print g, &#146;elemental:&#146;
+        print g, atan(xvals,yvals)*Deg_Per_Rad
+        print g, &#146;elemental:&#146;
+       !
+       ! when x and y are present, atan(3) is an alias for atan2(2)
+       !
+        print g, &#146;For comparison to atan2(3):&#146;
+        print g, atan2(xvals,yvals)*Deg_Per_Rad
+        print g, &#146;test1 &#146;,merge(&#146;PASSED&#146;,&#146;FAILED&#146;,     &
+        & all(atan(xvals,yvals)==atan2(xvals,yvals))), &
+        & atan(xvals,yvals)==atan2(xvals,yvals)
 <P>
     end program demo_atan
 <P>
@@ -211,6 +254,13 @@ Results:
      &gt; 2.356194490192345 135.0000000000000
      &gt; -.7853981633974483 -45.00000000000000
      &gt; -2.356194490192345 -135.0000000000000
+     &gt; elemental:
+     &gt; 45.0000000000000 45.0000000000000 135.000000000000 135.000000000000
+     &gt; -45.0000000000000 -45.0000000000000 -135.000000000000 -135.000000000000
+     &gt; For comparison to atan2(3):
+     &gt; 45.0000000000000 45.0000000000000 135.000000000000 135.000000000000
+     &gt; -45.0000000000000 -45.0000000000000 -135.000000000000 -135.000000000000
+     &gt; test1 PASSED T T T T T T T T
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -248,7 +298,7 @@ wikipedia: inverse trigonometric functions
 <TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 68590982-4951-46d5-89f0-f86f1f6e8bc5 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>atan (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from d5eff9f0-da4e-4331-87a8-1aced77b94b7 using man macros.</FONT>
 <br><br><center><img src="images/atan.3fortran.gif"></center>
 </div>
 </div>

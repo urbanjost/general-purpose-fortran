@@ -106,7 +106,10 @@ argument.
 </A>
 <BLOCKQUOTE>
 <P>
-ASIND(3) computes the arc sine of its argument X in degrees
+ASIND(3) computes the arcsine of its argument X in degrees.
+<P>
+The arcsine will allow you to find the measure of a right angle when you
+know the ratio of the side opposite the angle to the hypotenuse.
 <P>
 The arcsine is the inverse function of the sine function. It is commonly
 used in trigonometry when trying to find the angle when the lengths of
@@ -125,9 +128,9 @@ Example: ASIND(1.0) has the value 90.0 (approximately).
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-X : The value to compute the arc sine of The type shall be real and
+X : The value to compute the arc sine of. The type shall be real and
 a magnitude that is less than or equal to one |X| &lt;= 1. It is
-expressed in degrees and lies in the range 90 &lt;= asind(x) &lt;= 90.
+expressed in degrees and lies in the range <B>-90</B> &lt;= asind(x) &lt;= 90.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=5>
@@ -140,18 +143,10 @@ expressed in degrees and lies in the range 90 &lt;= asind(x) &lt;= 90.
 The result has a value equal to a processor-dependent approximation to
 arcsin(x).
 <P>
-If X is real the result is real and it is expressed in radians and lies
-in the range
+The result is expressed in degrees and lies in the range
 <P>
 <PRE>
-            PI/2 &lt;= asind (X) &lt;= PI/2.
-<P>
-</PRE>
-If the argument (and therefore the result) is imaginary the real part of
-the result is in radians and lies in the range
-<P>
-<PRE>
-        -PI/2 &lt;= real(asind(x)) &lt;= PI/2
+            -90 &lt;= asind (X) &lt;= 90.
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -162,17 +157,19 @@ the result is in radians and lies in the range
 </A>
 <BLOCKQUOTE>
 <P>
-The arcsine will allow you to find the measure of a right angle when you
-know the ratio of the side opposite the angle to the hypotenuse.
-<P>
 So if you knew that a train track rose 1.25 vertical miles on a track
-that was 50 miles long, you could determine the average angle of incline
-of the track using the arcsine. Given
+that was 50 miles long, what is the angle of incline of the track?
 <P>
-<PRE>
-     sin(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
+The percentage grade is the slope, written as a percent. To calculate
+the slope you divide the rise by the run. so the slope is 1.25/50 =
+0.025. Written as a percent this is 2.5 %.
 <P>
-</PRE>
+For the US, 2 1/2 percent, or a rise of 2.5 feet when going 100 feet
+forward, is generally thought of as the upper limit of the grade on
+straight track. This was the maximum grade on the first major US
+railroad, the Baltimore and Ohio. Note curves in the track increase the
+frictional drag on a train reducing the allowable grade.
+<P>
 Sample program:
 <P>
 <PRE>
@@ -180,9 +177,10 @@ Sample program:
     use, intrinsic :: iso_fortran_env, only : dp=&gt;real64
     implicit none
     ! value to convert degrees to radians
-    real(kind=dp),parameter :: R2D=180.0_dp/acos(-1.0_dp)
-    real(kind=dp)           :: angle, rise, run
+    real(kind=dp),parameter    :: R2D=180.0_dp/acos(-1.0_dp)
+    real(kind=dp)              :: angle, grade, rise, run
     character(len=*),parameter :: all=&#146;(*(g0,1x))&#146;
+    integer                    :: i
       ! given sine(theta) = 1.25 miles/50 miles (opposite/hypotenuse)
       ! then taking the arcsine of both sides of the equality yields
       ! theta = arcsine(1.25 miles/50 miles) ie. arcsine(opposite/hypotenuse)
@@ -192,38 +190,44 @@ Sample program:
       print all, &#146;angle of incline(degrees) = &#146;, angle
       angle = angle/R2D
       print all, &#146;angle of incline(radians) = &#146;, angle
+      print all, &#146;angle of incline(radians) = &#146;, asin(rise/run)
 <P>
       print all, &#146;percent grade=&#146;,rise/run*100.0_dp
-    contains
-    subroutine sub1()
-    ! notice the (incidentally empty) type is defined below
-    ! the implicit statement
-    implicit type(nil) (a)
-    type nil
-    end type nil
-    type(nil) :: anull
-    end subroutine sub1
+      print all
+      do i=-360,360,45
+         grade=i/360.0d0
+         print *, grade, asind(grade), sind(asind(grade))
+      enddo
     end program demo_asind
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-     &gt; angle of incline(degrees) =  1.4325437375665075
-     &gt; angle of incline(radians) =  0.25002604899361135E-1
-     &gt; percent grade= 2.5000000000000000
+        &gt; angle of incline(degrees) =  1.4325437375665075
+        &gt; angle of incline(radians) =  0.25002604899361135E-1
+        &gt; angle of incline(radians) =  0.25002604899361139E-1
+        &gt; percent grade= 2.5000000000000000
+        &gt;
+        &gt;   -1.0000000000000000  -90.000000000000000   -1.0000000000000000
+        &gt;  -0.87500000000000000  -61.044975628140158  -0.87500000000000000
+        &gt;  -0.75000000000000000  -48.590377890729144  -0.75000000000000000
+        &gt;  -0.62500000000000000  -38.682187453489441  -0.62500000000000000
+        &gt;  -0.50000000000000000  -30.000000000000004  -0.50000000000000011
+        &gt;  -0.37500000000000000  -22.024312837042164  -0.37500000000000006
+        &gt;  -0.25000000000000000  -14.477512185929925  -0.25000000000000006
+        &gt;  -0.12500000000000000  -7.1807557814582816  -0.12500000000000000
+        &gt;    0.0000000000000000   0.0000000000000000   0.0000000000000000
+        &gt;   0.12500000000000000   7.1807557814582816   0.12500000000000000
+        &gt;   0.25000000000000000   14.477512185929925   0.25000000000000006
+        &gt;   0.37500000000000000   22.024312837042164   0.37500000000000006
+        &gt;   0.50000000000000000   30.000000000000004   0.50000000000000011
+        &gt;   0.62500000000000000   38.682187453489441   0.62500000000000000
+        &gt;   0.75000000000000000   48.590377890729144   0.75000000000000000
+        &gt;   0.87500000000000000   61.044975628140158   0.87500000000000000
+        &gt;    1.0000000000000000   90.000000000000000    1.0000000000000000
 <P>
 </PRE>
-The percentage grade is the slope, written as a percent. To calculate
-the slope you divide the rise by the run. In the example the rise is
-1.25 mile over a run of 50 miles so the slope is 1.25/50 = 0.025.
-Written as a percent this is 2.5 %.
-<P>
-For the US, two and 1/2 percent is generally thought of as the upper
-limit. This means a rise of 2.5 feet when going 100 feet forward. In the
-US this was the maximum grade on the first major US railroad, the
-Baltimore and Ohio. Note curves increase the frictional drag on a train
-reducing the allowable grade.
 </BLOCKQUOTE>
 <A name=7>
 
@@ -259,7 +263,7 @@ wikipedia: inverse trigonometric functions
 <TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>asind (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 00067736-d963-4556-8182-930d07429f51 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>asind (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 078e42ee-831a-4283-b385-159cce102b3f using man macros.</FONT>
 <br><br><center><img src="images/asind.3fortran.gif"></center>
 </div>
 </div>

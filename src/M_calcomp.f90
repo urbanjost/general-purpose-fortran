@@ -899,7 +899,7 @@ logical, save                     :: alt_q, edge_q, oddpas_q
 character(4), save                :: cttyp_q
 real, save                        :: cvv_q, ratio_q
 integer, save                     :: c_q, direc_q, ii_q, ix_q, iy_q, ktsize_q, nxm1_q, nx_q, nym1_q, ny_q
-integer                           :: hxsz_q = 255, hysz_q = 255, limit_q = 2048
+integer, parameter                :: hxsz_q = 255, hysz_q = 255, limit_q = 2048
 real, dimension(255), save        :: hx_q, hy_q
 integer                           :: idata
 integer, dimension(4)             :: ixd_q = [0, -1, 0, 1], iyd_q = [1, 0, -1, 0]
@@ -3656,12 +3656,13 @@ end subroutine lglin
 !!                  be plotted at the data point. (Refer to the description
 !!                  of SYMBOL for possible values of INTEQ).
 !!
-!!     RMAX         is the maximum radius for the plotting area, in page
-!!                  inches. If RMAX<=(0), DR is used as scale factor.
+!!     RMAX         Is the maximum radius for the plotting area. If RMAX is
+!!                  positive, POLAR performs the scaling, and returns the
+!!                  scale factor in DR. If RMAX is negative, DR is used as
+!!                  the scale factor.
 !!
-!!     DR           is the scale factor. If RMAX>0, DR is computed by the
-!!                  POLAR subroutine; if RMAX<=(0), DR must contain the scale
-!!                  factor. DR is expressed in units of data per page inch.
+!!         DR       Is the scale factor when RMAX is negative.
+!!                  DR returns the scale factor when RMAX is positive.
 !!
 !!  COMMENTS
 !!
@@ -5378,14 +5379,14 @@ end subroutine width
 !!
 !!##EXAMPLES
 !!
-!!   Sample program:
+!!   Smple program:
 !!
 !!    program demo_newpen
 !!    use M_calcomp
 !!    implicit none
-!!    character(len= 4)  :: ICHR3='ANG='
-!!    character(len= 4)  :: ICHR4=', H='
-!!    character(len= 19) :: ICHR5='ANGULAR LETTER TEST'
+!!    character(len=*),parameter :: ICHR3='ANG='
+!!    character(len=*),parameter :: ICHR4=', H='
+!!    character(len=*),parameter :: ICHR5='ANGULAR LETTER TEST'
 !!    real :: angle, height, xx, yy, rad
 !!    integer :: i, inteq
 !!    call plots(0.0,10.0,0.0,10.0)
@@ -6725,7 +6726,7 @@ subroutine symbol(xpage,ypage,height,string,inteq,angle,nchar)
       real :: angl1, angl2, centrx, centry, rad, theta, x1, x2, xfac, xorg, y1, y2, yfac, yorg
       integer :: i, icnt, ii, iseg, isym, j, numchr, numseg
       character(:), allocatable :: ibcd
-      real :: xrlorg = 0.0, yrlorg = 0.0
+      real,save :: xrlorg = 0.0, yrlorg = 0.0
 !
 ! End of declarations rewritten by SPAG
 !

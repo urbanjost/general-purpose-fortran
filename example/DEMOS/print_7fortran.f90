@@ -7,7 +7,7 @@
        ! List-directed output is frequently specified
         PRINT *, A, S
 
-       ! a format may be placed on the print(7f) statement
+       ! a format may be placed on the print(7) statement
         PRINT '(*(g0,1x))', A, S, J
 
        ! the format may be in a character variable

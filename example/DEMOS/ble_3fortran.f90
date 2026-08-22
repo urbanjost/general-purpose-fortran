@@ -8,8 +8,8 @@
          ! so sign bits in the integer are treated just like any other
          do i=-128,127,32
             byte=i
-            write(*,'(sp,i0.4,*(1x,1l,1x,b0.8))')i,ble(byte,64_int8),byte
-            write(*,'(sp,i0.4,*(4x,b0.8))')64_int8,64_int8
+            write(*,'(sp,i0.4,1x,l1,1x,b8.8)')i,ble(byte,64_int8),byte
+            write(*,'(sp,i0.4,3x,b8.8)')64_int8,64_int8
          enddo
 
          ! see the BGE() description for an extended description

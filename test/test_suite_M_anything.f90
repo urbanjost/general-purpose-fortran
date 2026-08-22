@@ -18,6 +18,7 @@ use, intrinsic :: ISO_FORTRAN_ENV, only : INT8, INT16, INT32, INT64       !  1  
 use, intrinsic :: ISO_FORTRAN_ENV, only : REAL32, REAL64, REAL128         !  4           8          10
 use M_anything, only : anyinteger_to_string, anyscalar_to_int64
 use M_anything, only : anyscalar_to_real, anyscalar_to_double
+use M_anything, only : anyscalar_to_real128
 use M_anything, only : anything_to_bytes, bytes_to_anything
 use M_anything, only : empty, assignment(=)
 use M_framework__msg
@@ -72,6 +73,8 @@ call unit_test('anyscalar_to_double',anyscalar_to_double(huge(0_int64))    .eq. 
 call unit_test('anyscalar_to_double',anyscalar_to_double(huge(0.0_real32)) .eq. huge(0.0_real32), huge(0.0_real32))
 call unit_test('anyscalar_to_double',anyscalar_to_double(huge(0.0_real64)) .eq. huge(0.0_real64), huge(0.0_real64))
 
+call unit_test('anyscalar_to_double',anyscalar_to_double(huge(0.0_real128)) .eq. infinity,       huge(0.0_real128))
+call unit_test('anyscalar_to_double',anyscalar_to_double(1234.0_real128)    .eq. 1234.0_real128, 1234.0_real128)
 call unit_test_done('anyscalar_to_double',msg='')
 end subroutine test_anyscalar_to_double
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -90,6 +93,8 @@ call unit_test('anyscalar_to_real',anyscalar_to_real(huge(0.0_real32)) .eq. real
 
 call unit_test('anyscalar_to_real',anyscalar_to_real(huge(0.0_real64)) .eq. infinity,               huge(0.0_real64))
 call unit_test('anyscalar_to_real',anyscalar_to_real(1234.0_real64)   .eq. 1234.0_real64,   1234.0_real64)
+call unit_test('anyscalar_to_real',anyscalar_to_real(huge(0.0_real128)).eq. infinity,               huge(0.0_real128))
+call unit_test('anyscalar_to_real',anyscalar_to_real(1234.0_real128)  .eq. 1234.0_real128,  1234.0_real128)
 call unit_test_done('anyscalar_to_real',msg='')
 end subroutine test_anyscalar_to_real
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -102,6 +107,7 @@ call unit_test('anything_to_bytes',any(anything_to_bytes(huge(0_int32))     .eq.
 call unit_test('anything_to_bytes',any(anything_to_bytes(huge(0_int64))     .eq. transfer(huge(0_int64),'A')) )
 call unit_test('anything_to_bytes',any(anything_to_bytes(huge(0.0_real32))  .eq. transfer(huge(0.0_real32),'A')) )
 call unit_test('anything_to_bytes',any(anything_to_bytes(huge(0.0_real64))  .eq. transfer(huge(0.0_real64),'A')) )
+call unit_test('anything_to_bytes',any(anything_to_bytes(huge(0.0_real128)) .eq. transfer(huge(0.0_real128),'A')) )
 call unit_test('anything_to_bytes',any(anything_to_bytes('this is a string') .eq. transfer('this is a string','A')) )
 
 call unit_test('anything_to_bytes',any(&

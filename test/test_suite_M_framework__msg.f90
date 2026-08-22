@@ -5,7 +5,7 @@ use, intrinsic :: iso_fortran_env, only: &
 & stderr => error_unit
 use M_framework, only : unit_test_start, unit_test, unit_test_msg
 use M_framework, only : unit_test_end, unit_test_stop, unit_test_mode
-use M_framework, only : unit_test_level, unit_test_flags
+use M_framework, only : unit_test_level ! unit_test_flags
 use M_framework, only: str
 !use M_xxxx
 implicit none
@@ -37,7 +37,6 @@ logical            :: matched
 contains
 
 subroutine test_suite_str   ()
-logical             :: allpassed=.true.
 logical,allocatable :: tests(:)
 
   call unit_test_start('str','test building message strings',matched=matched)

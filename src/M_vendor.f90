@@ -20,6 +20,6 @@ contains
     function system_isatty(lun)
     integer,intent(in) :: lun
     logical :: system_isatty
-       system_isatty=.false.
+       system_isatty=isatty(lun)
     end function system_isatty
 end module M_vendor

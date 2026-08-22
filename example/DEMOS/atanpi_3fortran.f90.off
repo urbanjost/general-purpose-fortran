@@ -2,7 +2,7 @@
       use, intrinsic :: iso_fortran_env, only : real32, real64
       implicit none
       character(len=*),parameter :: all='(*(g0,1x))'
-      real(kind=real64) :: x, y
+      real(kind=real64) :: x
           x=2.866_real64
           print all, atanpi(x)
 

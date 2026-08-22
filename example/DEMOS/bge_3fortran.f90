@@ -36,7 +36,7 @@
          write(*,*)'so the results are as if values are unsigned integers.'
          do i=-128,127,32
             byte=i
-            write(*,'(sp,i0.4,*(1x,1l,1x,b0.8))')i,bge(byte,64_int8),byte
+            write(*,'(sp,i0.4,1x,l1,1x,b8.8)')i,bge(byte,64_int8),byte
          enddo
 
         ! SIGNED ZERO

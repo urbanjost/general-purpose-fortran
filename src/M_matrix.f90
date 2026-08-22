@@ -1458,7 +1458,7 @@ integer                     :: i
    G_PTZ = 0
    G_PT = G_PTZ
 
-   G_FORTRAN_TEXT=help_intrinsics('manual',m_help=.true.)  ! load Fortran documentation
+   G_FORTRAN_TEXT=help_intrinsics('manual')  ! load Fortran documentation
 
 end subroutine LALA_init
 !==================================================================================================================================
@@ -12190,7 +12190,6 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '       same size as the over argument with all values set to the constant.      ',&
 '                                                                                ',&
 '       Otherwise, both arguments must conform in size.                          ',&
-'                                                                                ',&
 '                                                                                ',&
 'date_and_time  date_and_time(IDS)" where an array of IDs indicate               ',&
 '               which values to return:                                          ',&

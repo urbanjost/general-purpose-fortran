@@ -34,7 +34,7 @@
       write(*,*)specified(['floats','ints  '])
 
       ! If you want to know if groups of parameters were specified use
-      ! ANY(3f) and ALL(3f)
+      ! ANY(3) and ALL(3)
       write(*,*)'ANY:',any(specified(['floats','ints  ']))
       write(*,*)'ALL:',all(specified(['floats','ints  ']))
 

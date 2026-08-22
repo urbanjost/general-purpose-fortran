@@ -60,15 +60,15 @@
      integer,intent(in)              :: length
      character(len=:),allocatable    :: out
         real                         :: x
-        integer                      :: ilen   ! length of list of characters
+        integer                      :: iilen   ! length of list of characters
         integer                      :: which
         integer                      :: i
-        ilen=len(chars)
+        iilen=len(chars)
         out=''
-        if(ilen.gt.0)then
+        if(iilen.gt.0)then
            do i=1,length
               call random_number(x)
-              which=nint(real(ilen-1)*x)+1
+              which=nint(real(iilen-1)*x)+1
               out=out//chars(which:which)
            enddo
         endif

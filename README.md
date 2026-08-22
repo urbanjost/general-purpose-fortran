@@ -68,8 +68,8 @@ and then enter ...
 
     bash hershey.sh
 
-if you do not have bash(1) or a Posix shell you will have to build and 
-run the h2v program for each font, as illustrated by the simple
+if you do not have bash(1) or a Posix shell you will have to run
+the h2v program for each font, as illustrated by the simple
 hershey.sh script.
 
 ## Dependencies
@@ -273,7 +273,7 @@ Call the POSIX regular expression library.
 [M\_SQLITE(3fm)](https://urbanjost.github.io/general-purpose-fortran/docs/M_sqlite.3.html)
 
 A basic interface to the SQLite3 library using the ISO_C_BINDING module and C/Fortran interoperability
-modeled iniitially on the FLIB interface.
+modeled initially on the FLIB interface.
 
 #### Fortran(2003) interface to the ncurses(3c) library
 
@@ -406,7 +406,9 @@ fpm ( as described at [Fortran Package Manager](https://github.com/fortran-lang/
 ```bash
      git clone https://github.com/urbanjost/general-purpose-fortran.git
      cd general-purpose-fortran
-     fpm test  # build and then run unit tests
+     fpm test  --flag=-fcoarray=single --compiler gfortran --profile release 
+
+     fpm test  --flag=-coarray         --compiler ifx      --profile release  
 ```
 
 or just list it as a dependency in your fpm.toml project file.
@@ -429,7 +431,7 @@ per-platform basis) it became something primarily available in these
 somewhat elite environments.
 
 Then came the open-source compilers G95 and subsequently gfortran, and
-more recently several previously commerical-only compilers from Intel,
+more recently several previously commercial-only compilers from Intel,
 NAG, Nvidia and new open-source projects. And newer standards standardized
 C interfaces and added back a few of the common features once found in
 almost all compilers via extensions.

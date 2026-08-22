@@ -100,8 +100,18 @@ static int X11_RESIZE(void) { /* Adjust to new window size if it has changed */
    return(UNUSED);
 }
 /******************************************************************************/
+int X11_driver_handler( Display *display ) { /* X11_driver_handler */
+   char msg[80];
+   XErrorEvent *myerr;
+   XGetErrorText(display,myerr->error_code,msg,80);
+   fprintf(stderr,"*draw* STOPPED code %s\n",msg);
+   exit(1);
+
+   return(UNUSED);
+}
+/******************************************************************************/
 static int X11_init(void) { /* X11_init -- initialises X11 display.  */
-   extern int X11_driver_handler();
+   //extern int X11_driver_handler( Display *display );
    int             i;
    int             x, y, prefx, prefy, prefxs, prefys;
    unsigned int    bw, depth, mask;
@@ -759,15 +769,6 @@ int _X11_draw_devcpy(void) { /* copy the X11 device into vdevice.dev.  */
 int _x11_draw_devcpy(void) { /* copy the x11 device into vdevice.dev.  */
    vdevice.dev = x11dev;
    GLOBAL_device = x11DEV;
-   return(UNUSED);
-}
-/******************************************************************************/
-int X11_driver_handler(Display *display,XErrorEvent *myerr) { /* X11_driver_handler */
-   char msg[80];
-   XGetErrorText(display,myerr->error_code,msg,80);
-   fprintf(stderr,"*draw* STOPPED code %s\n",msg);
-   exit(1);
-
    return(UNUSED);
 }
 /******************************************************************************/

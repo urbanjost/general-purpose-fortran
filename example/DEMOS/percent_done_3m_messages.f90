@@ -1,6 +1,6 @@
      program demo_percent_done
-     use m_time, only : system_sleep
-     use m_messages, only : percent_done
+     use M_time, only : system_sleep
+     use M_messages, only : percent_done
      implicit none
      integer :: i, nr=10
 

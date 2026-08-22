@@ -1,9 +1,9 @@
      program demo_newpen
      use M_calcomp
      implicit none
-     character(len= 4)  :: ICHR3='ANG='
-     character(len= 4)  :: ICHR4=', H='
-     character(len= 19) :: ICHR5='ANGULAR LETTER TEST'
+     character(len=*),parameter :: ICHR3='ANG='
+     character(len=*),parameter :: ICHR4=', H='
+     character(len=*),parameter :: ICHR5='ANGULAR LETTER TEST'
      real :: angle, height, xx, yy, rad
      integer :: i, inteq
      call plots(0.0,10.0,0.0,10.0)

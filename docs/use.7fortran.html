@@ -58,7 +58,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </A>
 <BLOCKQUOTE>
 <P>
-use(7f) - [FORTRAN] gives a program unit access to public entities in a
+USE(7) - [FORTRAN] gives a program unit access to public entities in a
 module.
 <P>
 </BLOCKQUOTE>
@@ -115,7 +115,7 @@ A module shall not reference itself, either directly or indirectly.
 A USE statement without ONLY provides access to all PUBLIC entities in
 the specified namespace. This is true even if renamed entities are
 specified, but the renamed entities will only be available with the
-specified local name unless also explicitity requested with the original
+specified local name unless also explicitly requested with the original
 name. This is particularly useful behavior when there would otherwise be
 name conflicts.
 <P>
@@ -282,67 +282,75 @@ DEFINED-OPERATOR is one of the intrinsic operators or .OP-NAME.
 Samples:
 <P>
 <PRE>
-       ! program demo_use and module examples
-       module example ! example is the namespace name
-       use,intrinsic :: iso_fortran_env , only : real64
+          ! program demo_use and module examples
+          module example ! example is the namespace name
+          use,intrinsic :: iso_fortran_env , only : real64
+          implicit none
+          private
+          public :: type1, type2
+          public :: pi, napier_constant
 <P>
-          type type1 ! type1 is the class prototype name
+             type type1 ! type1 is the class prototype name
+             contains
+                procedure, nopass :: static_method1
+             end type type1
+<P>
+             type type2 ! type1 is the class prototype name
+             contains
+                procedure, nopass :: static_method2
+             end type type2
+<P>
+             real(kind=real64),parameter :: &
+             pi  = 3.1415926535897932_real64
+             ! Napier&#146;s constant is the base of the natural logarithm
+             ! system. It is often denoted by "e" in honor of Euler.
+             real(kind=real64),parameter :: &
+             Napier_constant = 2.71828182845904523_real64
+<P>
           contains
-             procedure, nopass :: static_method1
-          end type type1
 <P>
-          type type2 ! type1 is the class prototype name
-          contains
-             procedure, nopass :: static_method2
-          end type type2
+             subroutine static_method1(arg)
+                integer :: arg
+                ! code to implement method goes here
+            arg=arg+1
+             end subroutine static_method1
 <P>
-          real(kind=real64),parameter :: &
-          pi  = 3.1415926535897932_real64
-          ! Napier&#146;s constant is the base of the natural logarithm
-          ! system. It is often denoted by "e" in honor of Euler.
-          real(kind=real64),parameter :: &
-          Napier_constant = 2.71828182845904523_real64
+             subroutine static_method2(arg)
+                integer :: arg
+                ! code to implement method goes here
+            arg=arg+2
+             end subroutine static_method2
 <P>
-       contains
+          end module example
 <P>
-          subroutine static_method1(arg)
-             integer :: arg
-             ! code to implement method goes here
-          end subroutine static_method1
-<P>
-          subroutine static_method2(arg)
-             integer :: arg
-             ! code to implement method goes here
-          end subroutine static_method2
-<P>
-       end module example
-       program demo_use
-       use example, only: type1 ! class prototype type1 available,
-                                ! but nothing else is made available by this
-                                !
-       ! (additionally) within this scoping unit, type1 is referred to
-       ! as "mytype"
-       use example, mytype =&gt; type1
-       !
-       ! only: is recommended but for long lists importing everything
-       !       without listing it is supported:
-       use example ! all public objects in namespace example available
-       !
-       ! some popular intrinsic entities
-       !
-       use,intrinsic :: iso_fortran_env, only : &
-       stderr=&gt;ERROR_UNIT, stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
-       ! specifying INTRINSIC or NON_INTRINSIC is typically optional but
-       ! indicating INTRINSIC when it is so is the norm.
-       use :: iso_fortran_env, only : integer_kinds,int8,int16,int32,int64
-       use iso_fortran_env, only : real_kinds,real32,real64,real128
-       ! duplicates are OK
-       use,intrinsic :: iso_fortran_env, only : sp=&gt;real32,dp=&gt;real64
-       use,intrinsic :: iso_fortran_env, only : integer_kinds
-       use,intrinsic :: iso_fortran_env, only : compiler_version
-       use,intrinsic :: iso_fortran_env, only : compiler_options
-       use,intrinsic :: iso_fortran_env, only : iostat_eor, iostat_end
-       end program demo_use
+          program demo_use
+          use example, only: type1 ! class prototype type1 available,
+                                   ! but nothing else is made available by this
+                                   !
+          ! (additionally) within this scoping unit, type1 is referred to
+          ! as "mytype"
+          use example, mytype =&gt; type1
+          !
+          ! only: is recommended but for long lists importing everything
+          !       without listing it is supported:
+          use example ! all public objects in namespace example available
+          !
+          ! some popular intrinsic entities
+          !
+          use,intrinsic :: iso_fortran_env, only : &
+          stderr=&gt;ERROR_UNIT, stdin=&gt;INPUT_UNIT, stdout=&gt;OUTPUT_UNIT
+          ! specifying INTRINSIC or NON_INTRINSIC is typically optional but
+          ! indicating INTRINSIC when it is so is the norm.
+          use :: iso_fortran_env, only : integer_kinds,int8,int16,int32,int64
+          use iso_fortran_env, only : real_kinds,real32,real64,real128
+          ! duplicates are OK
+          use,intrinsic :: iso_fortran_env, only : sp=&gt;real32,dp=&gt;real64
+          use,intrinsic :: iso_fortran_env, only : integer_kinds
+          ! additional frequently used
+          use,intrinsic :: iso_fortran_env, only : compiler_version
+          use,intrinsic :: iso_fortran_env, only : compiler_options
+          use,intrinsic :: iso_fortran_env, only : iostat_eor, iostat_end
+          end program demo_use
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -379,13 +387,13 @@ so the names REAL32 and REAL64 are not available. If you wanted both
 names you would have to add
 <P>
 <PRE>
-       use,intrinsic :: iso use,intrinsic , real32=&gt;real32, real64=&gt;real64
+       use,intrinsic :: iso_fortran_env, real32=&gt;real32, real64=&gt;real64
 <P>
 </PRE>
 or
 <P>
 <PRE>
-       use,intrinsic :: iso use,intrinsic , only: real32, real64
+       use,intrinsic :: iso_fortran_env, real32, real64
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -401,7 +409,7 @@ PRIVATE(3), PUBLIC(3), MODULE(3)
 Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from efc70a04-47d9-4ab1-a386-efb992ecdab4 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>use (7)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from a1becbf6-b2e7-49d4-ad58-b422f4380d17 using man macros.</FONT>
 <br><br><center><img src="images/use.7fortran.gif"></center>
 </div>
 </div>

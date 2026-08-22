@@ -306,8 +306,8 @@ extern Device vdevice;          /* device structure */
 /*
  * function definitions
  */
-extern void *draw_vallocate(); /* malloc with error checking */
-extern void draw_vfree(); /* realloc with error checking */
+extern void *draw_vallocate(size_t num_bytes,char* from); /* malloc with error checking */
+extern void draw_vfree( void *APRT,char* from ); /* realloc with error checking */
 
 /*
  * arc routines

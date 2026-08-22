@@ -781,7 +781,7 @@ integer(kind=int64)                  :: clicks_now
       msg_local=''
    endif
    call system_clock(clicks_now)
-   milliseconds=(julian()-duration_all)*1000
+   milliseconds=int( (julian()-duration_all)*1000, kind=int64)
    milliseconds=clicks_now-clicks_all
    PF=merge('PASSED  :','FAILED  :',ifailed_all_G == 0)
    if(PF == 'PASSED  :'.and.ipassed_all_G == 0)then
@@ -904,7 +904,7 @@ integer(kind=int64)                  :: clicks_now
    endif
    if(duration /= 0.0d0)then
       call system_clock(clicks_now)
-      milliseconds=(julian()-duration)*1000
+      milliseconds=int( (julian()-duration)*1000,kind=int64)
       milliseconds=clicks_now-clicks
       write(out,'("'//CHECK_PREFIX%check_end//'",a,  &
        & 1x,a,                            &
@@ -1210,10 +1210,9 @@ character(len=:),allocatable :: arg0
 end subroutine preset_globals
 !===================================================================================================================================
 subroutine cmdline_()
-use, intrinsic :: iso_fortran_env, only: compiler_version, compiler_options
 ! define arguments and their default values
 ! use naming convention of global variables to make parsing easier
-logical             :: G_help = .false.
+logical             :: G_help
 integer,allocatable :: G_flags(:)
 integer             :: G_level
 integer,allocatable :: G_luns_hold(:)
@@ -1239,6 +1238,8 @@ namelist /args/ G_silent
 character(len=4096), save :: input(3) = [character(len=4096) :: '&args', '', ' /'], arg
 character(len=256) :: message1, message2
 integer :: i, j, k, iostat, equal_pos, iend
+
+   G_help = .false.
 
    if (G_virgin%preset_globals) then
       call preset_globals()
@@ -1330,11 +1331,13 @@ integer :: i, j, k, iostat, equal_pos, iend
 
       ! some pre-defined level numbers
       if (any(unit_test_flags  ==  9997)) then
-         call wrt(G_luns, 'This file was compiled by ', compiler_version())
+         call wrt(G_luns, 'This file was compiled by ', platform(ver=.true.))
+         ! print '(a,/,3x,*(a))', 'This file was compiled by :', inset(version)
       endif
 
       if (any(unit_test_flags  ==  9998)) then
-         call wrt(G_luns, ' using the options ', compiler_options())
+         call wrt(G_luns, ' using the options ', platform())
+         ! print '(*(a))', 'using the options :', inset(options)
       endif
 
       if (any(unit_test_flags  ==  9999)) then
@@ -1402,6 +1405,76 @@ integer :: i, j, k, iostat, equal_pos, iend
    endif
 
 end subroutine cmdline_
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function platform(ver) result(string)
+use, intrinsic :: iso_fortran_env, only : compiler_version
+use, intrinsic :: iso_fortran_env, only : compiler_options
+implicit none
+logical,intent(in),optional  :: ver
+logical                      :: ver_
+character(len=:),allocatable :: version, options
+character(len=*),parameter   :: nl=new_line('a')
+character(len=:),allocatable :: string
+integer                      :: where, start, break, i, last, col
+   ver_=.true.
+   if(present(ver))ver_=ver
+   version=compiler_version()//' '
+   options=' '//compiler_options()
+   start=1
+   do
+      where=index(options(start:),' -')
+      if(where.eq.0)exit
+      break=where+start-1
+      options(break:break)=nl
+      start=where
+   enddo
+   if(start.eq.1)then
+      do
+         where=index(options(start:),' /')
+         if(where.eq.0)exit
+         break=where+start-1
+         options(break:break)=nl
+         start=where
+      enddo
+   endif
+   last=len_trim(version)+1
+   col=0
+   do i=1,len_trim(version)
+    col=col+1
+    if(version(i:i).eq.' ')last=i
+    if(col.gt.76)then
+       version(last:last)=nl
+       col=0
+    endif
+   enddo
+   if(ver_)then
+      string=version
+   else
+      string=options
+   endif
+!   print '(a,/,3x,*(a))', 'This file was compiled by :', inset(version)
+!   if(options.ne.'')then
+!      print '(*(a))', 'using the options :', inset(options)
+!   endif
+contains
+
+function inset(string) result(longer)
+character(len=*),intent(in)  :: string
+character(len=:),allocatable :: longer
+character(len=*),parameter   :: nl=new_line('a')
+integer                      :: i
+   longer=''
+   do i=1,len(string)
+      longer=longer//string(i:i)
+      if(string(i:i).eq.nl)then
+         longer=longer//'   '
+      endif
+   enddo
+end function inset
+
+end function platform
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -1834,17 +1907,17 @@ character(len=*)           :: tame       ! A string without wildcards
 character(len=*)           :: wild       ! A (potentially) corresponding string with wildcards
 character(len=len(tame)+1) :: tametext
 character(len=len(wild)+1) :: wildtext
-character(len=1),parameter :: NULL=char(0)
+character(len=1),parameter :: NIL=char(0)  ! use NIL instead of NULL to avoid nvfortran bug where nvfortran reserves the name
 integer                    :: wlen
 integer                    :: ti, wi
 integer                    :: i
 character(len=:),allocatable :: tbookmark, wbookmark
 ! These two values are set when we observe a wildcard character. They
 ! represent the locations, in the two strings, from which we start once we have observed it.
-   tametext=tame//NULL
-   wildtext=wild//NULL
-   tbookmark = NULL
-   wbookmark = NULL
+   tametext=tame//NIL
+   wildtext=wild//NIL
+   tbookmark = NIL
+   wbookmark = NIL
    wlen=len(wild)
    wi=1
    ti=1
@@ -1857,7 +1930,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
                exit
             endif
          enddo
-         if(wildtext(wi:wi) == NULL) then        ! "x" matches "*"
+         if(wildtext(wi:wi) == NIL) then        ! "x" matches "*"
             glob_=.true.
             return
          endif
@@ -1865,7 +1938,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
             ! Fast-forward to next possible match.
             do while (tametext(ti:ti)  /=  wildtext(wi:wi))
                ti=ti+1
-               if (tametext(ti:ti) == NULL)then
+               if (tametext(ti:ti) == NIL)then
                   glob_=.false.
                   return                         ! "x" doesn't match "*y*"
                endif
@@ -1875,7 +1948,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
          tbookmark = tametext(ti:)
       elseif(tametext(ti:ti)  /=  wildtext(wi:wi) .and. wildtext(wi:wi)  /=  '?') then
          ! Got a non-match. If we've set our bookmarks, back up to one or both of them and retry.
-         if(wbookmark /= NULL) then
+         if(wbookmark /= NIL) then
             if(wildtext(wi:) /=  wbookmark) then
                wildtext = wbookmark
                wlen=len_trim(wbookmark)
@@ -1890,7 +1963,7 @@ character(len=:),allocatable :: tbookmark, wbookmark
                   wi=wi+1
                endif
             endif
-            if (tametext(ti:ti) /= NULL) then
+            if (tametext(ti:ti) /= NIL) then
                ti=ti+1
                cycle                             ! "mississippi" matches "*sip*"
             endif
@@ -1903,14 +1976,14 @@ character(len=:),allocatable :: tbookmark, wbookmark
       if (ti > len(tametext)) then
          glob_=.false.
          return
-      elseif (tametext(ti:ti) == NULL) then          ! How do you match a tame text string?
-         if(wildtext(wi:wi) /= NULL)then
+      elseif (tametext(ti:ti) == NIL) then          ! How do you match a tame text string?
+         if(wildtext(wi:wi) /= NIL)then
             do while (wildtext(wi:wi) == '*')    ! The tame way: unique up on it!
                wi=wi+1                           ! "x" matches "x*"
-               if(wildtext(wi:wi) == NULL)exit
+               if(wildtext(wi:wi) == NIL)exit
             enddo
          endif
-         if (wildtext(wi:wi) == NULL)then
+         if (wildtext(wi:wi) == NIL)then
             glob_=.true.
             return                               ! "x" matches "x"
          endif
@@ -1986,7 +2059,7 @@ end function paws
 !!       &  start     =>  unit_test_start,     &
 !!       &  expected  =>  unit_test_expected,  &
 !!       &  stop      =>  unit_test_stop,      &
-!!       & unit_test_level, unit_test_flags
+!!       & unit_test_level ! , unit_test_flags
 !!       implicit none
 !!       logical, parameter :: T=.true., F=.false.
 !!       ! optional call to change default modes

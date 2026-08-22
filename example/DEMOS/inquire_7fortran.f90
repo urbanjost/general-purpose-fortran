@@ -11,7 +11,7 @@
       contains
       subroutine print_inquire(lun_in,filename)
 
-      ! @(#) print_inquire(3f) print INQUIRE of file by name/number
+      ! @(#) print_inquire(3) print INQUIRE of file by name/number
 
       integer,intent(in),optional           ::  lun_in
       character(len=*),intent(in),optional  ::  filename
@@ -61,7 +61,11 @@
          else
             filename_ =''
          endif
-         lun=merge(lun_in,-1,present(lun_in))
+         if(present(lun_in))then
+            lun=lun_in
+         else
+            lun=-1
+         endif
          ! exist, opened, and named always become defined
          ! unless an error condition occurs.
          if(filename_  == ''.and.lun /= -1)then

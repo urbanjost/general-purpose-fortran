@@ -52,14 +52,16 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    </dd>
    <dt> SYNOPSIS </dt><dd>
       <pre>
-      use M_io, only : notopen, print_inquire, read_table, filename_generator
-      use M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, basename
-      use M_io, only : separator, getname, which, lookfor
-      use M_io, only : read_line, getline, rd, get_next_char
-      use M_io, only : fileopen, fileclose, filedelete, filewrite, fileread, filebyte
-      use M_io, only : number_of_lines
-      use M_io, only : get_env, is_hidden_file
-      use M_io, only : putchar, getchar
+      public entities:
+
+       use M_io, only : notopen, print_inquire, read_table, filename_generator
+       use M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, basename
+       use M_io, only : separator, getname, which, lookfor
+       use M_io, only : read_line, getline, rd, get_next_char
+       use M_io, only : fileopen, fileclose, filedelete, filewrite, fileread, filebyte
+       use M_io, only : number_of_lines
+       use M_io, only : get_env, is_hidden_file
+       use M_io, only : putchar, getchar
       </pre>
    </dd>
    <dt> DESCRIPTION </dt><dd>

@@ -610,11 +610,11 @@ end subroutine read_buf
 !==================================================================================================================================!
 subroutine read_colormap (colormap, iostat )
 ! read the colormap.
-real, dimension(:), intent(out) :: colormap(:,:)  ! 1st dimension: red/green/blue
+real,intent(out)     :: colormap(:,:)  ! 1st dimension: red/green/blue
 integer, intent(out) :: iostat
 !
-integer :: j
-character :: triplet*3
+integer              :: j
+character            :: triplet*3
 !
 do j = 1, size(colormap,2)
     call read_buf(triplet, iostat )

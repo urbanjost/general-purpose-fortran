@@ -1,8 +1,8 @@
       program demo_selected_char_kind
-      use iso_fortran_env
+      use iso_fortran_env, only: output_unit, CHARACTER_KINDS
       implicit none
 
-      intrinsic date_and_time,selected_char_kind
+      intrinsic date_and_time, selected_char_kind
 
       ! set some aliases for common character kinds
       ! as the numbers can vary from platform to platform
@@ -17,6 +17,8 @@
       character(len=26, kind=ascii ) :: alphabet
       character(len=30, kind=ucs4  ) :: hello_world
       character(len=30, kind=ucs4  ) :: string
+
+         write(*,'(*(g0,1x))')'Available CHARACTER kind values:',CHARACTER_KINDS
 
          write(*,*)'ASCII     ',&
           & merge('Supported    ','Not Supported',ascii /= -1)

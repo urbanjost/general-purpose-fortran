@@ -34,14 +34,16 @@
          r_array = [0.0, 1.0, -1.0]
          r_array_result = exp(r_array)
          do i = 1, size(r_array)
-           write(*, '(A, I0, A, F15.10)') "exp(r_array(", i, ")) = ", r_array_result(i)
+           write(*,'(A, I0, A, F15.10)')"exp(r_array(", i, ")) = ",&
+           & r_array_result(i)
          enddo
 
          ! Complex array example
          c_array = [cmplx(0.0, 0.0, kind=dp), cmplx(1.0, 1.0, kind=dp)]
          c_array_result = exp(c_array)
          do i = 1, size(c_array)
-           write(*, '(A, I0, A, F15.10, A, F15.10, A)') "exp(c_array(", i, ")) = (", &
+           write(*, '(A, I0, A, F15.10, A, F15.10, A)') &
+           & "exp(c_array(", i, ")) = (", &
            real(c_array_result(i)), ", ", aimag(c_array_result(i)), ")"
          enddo
       end program demo_exp

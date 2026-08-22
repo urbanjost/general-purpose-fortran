@@ -6,7 +6,7 @@
         &  start     =>  unit_test_start,     &
         &  expected  =>  unit_test_expected,  &
         &  stop      =>  unit_test_stop,      &
-        & unit_test_level, unit_test_flags
+        & unit_test_level ! , unit_test_flags
         implicit none
         logical, parameter :: T=.true., F=.false.
         ! optional call to change default modes

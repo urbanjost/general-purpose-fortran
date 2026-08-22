@@ -34,18 +34,18 @@
               & --label " " &
               ! note space between quotes is required
               & ')
-       ! Assign values to elements using G_ARGS(3f).
+       ! Assign values to elements using G_ARGS(3).
        ! non-allocatable scalars can be done up to twenty per call
       call get_args('x',x, 'y',y, 'z',z, 'l',l, 'L',lbig)
        ! As a convenience multiple pairs of keywords and variables may be
        ! specified if and only if all the values are scalars and the CHARACTER
        ! variables are fixed-length or pre-allocated.
        !
-       ! After SET_ARGS(3f) has parsed the command line
-       ! GET_ARGS(3f) retrieves the value of keywords accept for
+       ! After SET_ARGS(3) has parsed the command line
+       ! GET_ARGS(3) retrieves the value of keywords except for
        ! two special cases. For fixed-length CHARACTER variables
-       ! see GET_ARGS_FIXED_LENGTH(3f). For fixed-size arrays see
-       ! GET_ARGS_FIXED_SIZE(3f).
+       ! see GET_ARGS_FIXED_LENGTH(3). For fixed-size arrays see
+       ! GET_ARGS_FIXED_SIZE(3).
        !
        ! allocatables should be done one at a time
       call get_args('title',title) ! allocatable string

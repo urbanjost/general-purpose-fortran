@@ -30,6 +30,10 @@
            !
            ! if-elseif-endif
            !
+           a=1234
+           c=4568
+           b=-huge(0)-1
+           d=-huge(0)-1
            if (a > 0) then
               b = c/a
               if (b > 0) then

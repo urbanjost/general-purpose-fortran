@@ -5,12 +5,24 @@
       integer :: i
       integer :: k
       logical :: chooseleft
+      logical :: maybe
 
          ! Works with scalars
          k=5
          write(*,*)merge (1.0, 0.0, k > 0)
          k=-2
          write(*,*)merge (1.0, 0.0, k > 0)
+
+         ! note for scalar logicals calls such as
+         maybe = merge (.true.,.false., k > 0)
+         ! are simply the same as
+         if (k > 0)then
+            maybe=.true.
+         else
+            maybe=.false.
+         endif
+         ! but even more succinctly, and array-compatible, is
+         maybe = k > 0
 
          ! set up some simple arrays that all conform to the
          ! same shape

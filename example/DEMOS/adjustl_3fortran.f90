@@ -1,28 +1,31 @@
       program demo_adjustl
       implicit none
-      character(len=20) :: str = '   sample string'
+      character(len=20)            :: str
       character(len=:),allocatable :: astr
-      integer :: length
+      character(len=*),parameter   :: au= '(a,"[",a,"]")'
+      integer :: istart, iend
 
-         ! basic use
-          write(*,'(a,"[",a,"]")') 'original: ',str
-          str=adjustl(str)
-          write(*,'(a,"[",a,"]")') 'adjusted: ',str
+        ! basic use
+          str='   sample string  '
+          write(*,au) 'original: ',str
 
-          ! a fixed-length string can be printed
-          ! trimmed using trim(3) or len_trim(3)
-          write(*,'(a,"[",a,"]")') 'trimmed:  ',trim(str)
-          length=len_trim(str)
-          write(*,'(a,"[",a,"]")') 'substring:',str(:length)
+        ! note the allocated string stays the same length
+        ! and is not trimmed by just an adjustl(3) call.
+          astr=adjustl(str)
+          write(*,au) 'adjusted: ',astr
 
-          ! note an allocatable string stays the same length too
-          ! and is not trimmed by just an adjustl(3) call.
-          astr='    allocatable string   '
-          write(*,'(a,"[",a,"]")') 'original:',astr
-          astr = adjustl(astr)
-          write(*,'(a,"[",a,"]")') 'adjusted:',astr
-          ! trim(3) can be used to change the length
-          astr = trim(astr)
-          write(*,'(a,"[",a,"]")') 'trimmed: ',astr
+        ! a fixed-length string can be printed cropped
+        ! combining adjustl(3) with trim(3)
+          write(*,au) 'trimmed:  ',trim(adjustl(str))
+
+        ! or even printed without adjusting the string a
+        ! cropped substring can be printed
+          iend=len_trim(str)
+          istart= verify(str, ' ') ! first non-blank character
+          write(*,au) 'substring:',str(istart:iend)
+
+        ! to generate an actually trimmed allocated variable
+          astr = trim(adjustl(str))
+          write(*,au) 'trimmed:  ',astr
 
       end program demo_adjustl

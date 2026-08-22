@@ -15,6 +15,6 @@
         ! elemental
          print *,'elemental '
          print *,'(array argument accepted like called with each element)'
-         write(*,'(*(i11,1x,b0.32,1x,/))') maskr([(i,i,i=0,bit_size(0),4)])
+         write(*,'(*(i11,1x,b0.32,1x,/))') maskr([(i,i,i=0,bit_size(0),1)])
 
       end program demo_maskr

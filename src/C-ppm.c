@@ -183,7 +183,7 @@ typedef struct {
 /* NB: to fit in a byte CMAPSIZE HAS to be 255 MAX */
 #define    CMAPSIZE        256
 #define    CMAPDEPTH       8
-byte *graphics_rgb; /* the graphics data */
+static byte *graphics_rgb; /* the graphics data */
 #else
 /*
         WITHOUT BOUNDS CHECK FOR CLARITY
@@ -208,9 +208,9 @@ byte *graphics_rgb; /* the graphics data */
 #define    SET_PIXEL(x,y) (SET_BYTE_R((x),(y),(cur_r)),SET_BYTE_G((x),(y),(cur_g)),SET_BYTE_B((x),(y),(cur_b)))
 #define    CMAPSIZE        8192
 #define    CMAPDEPTH       13
-byte *graphics_r; /* the big graphics data */
-byte *graphics_g; /* the big graphics data */
-byte *graphics_b; /* the big graphics data */
+static byte *graphics_r; /* the big graphics data */
+static byte *graphics_g; /* the big graphics data */
+static byte *graphics_b; /* the big graphics data */
 #endif
 /******************************************************************************/
 static ColorTable coltab[CMAPSIZE];

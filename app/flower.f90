@@ -34,6 +34,7 @@ integer                         :: atleast
 integer                         :: i
 integer                         :: io
 logical                         :: incomment
+logical                         :: incopyit
 logical                         :: insingle
 logical                         :: indouble
 logical                         :: tolower
@@ -102,6 +103,7 @@ FILES: do i=1,size(filenames)
    !
    iposition=0
    previous=achar(0)
+   incopyit=.false.
    incomment=.false.
    insingle=.false.
    indouble=.false.
@@ -148,10 +150,18 @@ FILES: do i=1,size(filenames)
       endif
       iposition=iposition+1
       icount=icount+1                                                    ! increment count of characters read
+      if(incopyit)then
+         if(c1.eq.nl)then
+            incopyit=.false.
+            ilines=ilines+1
+         endif
+         outline=outline//c1
+         cycle ONE_CHAR_AT_A_TIME
+      endif
       select case(c1)
       case('#','$')
-         if(iposition.eq.1)then  ! will still not save macros, but as a kluge treat these lines as comments (?)
-            incomment=.true.
+         if(iposition.eq.1)then  ! will still not save macros, but as a kluge treat these lines by just copying it (?)
+            incopyit=.true.
          endif
       case('!')
          if(any([insingle,indouble]))then

@@ -36,18 +36,18 @@ CONTAINS
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-  subroutine putstr(s)
-    character(*), intent(in) :: s
-    integer ldummy, ldummy1  ! these variables exist to avoid unused variable warnings
-    ldummy = len(s)
-    ldummy1 = ldummy
-    ldummy = ldummy1
-  end subroutine putstr
+subroutine putstr(s)
+character(len=*), intent(in) :: s
+integer                      :: ldummy, ldummy1  ! these variables exist to avoid unused variable warnings
+   ldummy = len(s)
+   ldummy1 = ldummy
+   ldummy = ldummy1
+end subroutine putstr
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-  subroutine putnl()
-  end subroutine putnl
+subroutine putnl()
+end subroutine putnl
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -229,8 +229,9 @@ END MODULE M_display__PUTSTRMODULE
 !! Following is a short example program that uses the package:
 !!
 !!       program example
-!!         use M_display
-!!         real :: a(3) = [ 1.2345, 2.3456, 3.4567 ]
+!!       use M_display
+!!       real :: a(3)
+!!         a = [ 1.2345, 2.3456, 3.4567 ]
 !!         call disp('A = ', A, SEP=', ', ORIENT = 'ROW')
 !!       end program example
 !!
@@ -2098,8 +2099,9 @@ end function disp_get
 !! to strings. It is possible to achieve a similar effect in Fortran
 !! using internal files and list-directed output:
 !!
-!!       character(100) s
-!!       real :: x = 1.5
+!!       character(len=100) :: s
+!!       real               :: x
+!!       x = 1.5
 !!       write(s, *) 'The square of', x, 'is', x*x
 !!       print *, trim(s)
 !!
@@ -3440,7 +3442,8 @@ end subroutine getwid_int32
     integer expmax, expmin, w
     logical xfinite(size(x))
     real(kind=real32) xmax, xmin, h
-    character(12) :: f1, s(2)
+    character(12) :: s(2)
+    character(len=*),parameter :: f1 = '(SS,ES9.0E4)'
     character(len=:),allocatable :: temp(:)
     xmin = 0; xmax = 0; h = huge(h)
     xfinite = x == x .and. x >= -h .and. x <= h ! neither NaN, Inf nor -Inf
@@ -3449,7 +3452,6 @@ end subroutine getwid_int32
     else
       xmax = maxval(x, mask=xfinite)
       xmin = minval(x, mask=xfinite)
-      f1 = '(SS,ES9.0E4)'
       write(s,f1) xmax, xmin
       temp=s(:)(5:9)
       read(temp,'(I5)') expmax, expmin
@@ -3463,15 +3465,15 @@ end subroutine getwid_int32
     ! The if-block (*) is for safety: make f wider in case xm is written ok with the
     ! ES format in fmt but overflows with F format (the feature has been tested through
     ! manual changes to the program).
-    real(kind=real32),     intent(in)    :: x(:,:)         ! Item to be written
-    type(settings), intent(inout) :: SE             ! Settings
-    integer,        intent(out)   :: wid(size(x,2)) ! Widths of individual columns
-    integer,        intent(out)   :: nbl(size(x,2)) ! Blanks to trim from left of individual columns
-    integer :: expmax, expmin, ww, dd, dmx
-    real(kind=real32) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
-    character(14) :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
-    character(99) s
-    logical xzero(size(x,2)), xallz(size(x,2)), xfinite(size(x,1),size(x,2)), xnonn(size(x,2)), xalln(size(x,2))
+    real(kind=real32),     intent(in) :: x(:,:)         ! Item to be written
+    type(settings), intent(inout)      :: SE             ! Settings
+    integer,        intent(out)        :: wid(size(x,2)) ! Widths of individual columns
+    integer,        intent(out)        :: nbl(size(x,2)) ! Blanks to trim from left of individual columns
+    integer             :: expmax, expmin, ww, dd, dmx
+    real(kind=real32)  :: xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
+    character(14),save  :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
+    character(99)       :: s
+    logical             :: xzero(size(x,2)), xallz(size(x,2)), xfinite(size(x,1),size(x,2)), xnonn(size(x,2)), xalln(size(x,2))
     !
     dmx = SE % dmx
     h = huge(h)
@@ -3636,7 +3638,6 @@ end subroutine getwid_int32
     call trim_real(sa, gedit, w)
     call tostring_get(sa, st)
   end function tostring_f_real32
-
 ! *************************************** end of real32 precision procedures ***************************************
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3731,11 +3732,11 @@ end subroutine getwid_int32
 
   subroutine disp_cpl_real32(title, x, SE, SEim, n)
     ! real32 precision item
-    character(*),   intent(in)    :: title
-    complex(kind=real32),  intent(in)    :: x(:,:)
-    type(settings), intent(inout) :: SE, SEim
-    integer,        intent(in)    :: n
-    integer, dimension(n) :: widre(n), widim(n), nblre(n), nblim(n)
+    character(*),intent(in)          :: title
+    complex(kind=real32),intent(in) :: x(:,:)
+    type(settings),intent(inout)     :: SE, SEim
+    integer,intent(in)               :: n
+    integer                          :: widre(n), widim(n), nblre(n), nblim(n)
     call find_editdesc_real32(real(x), SE, widre, nblre)         ! determine also SE % w
     call find_editdesc_real32(abs(aimag(x)), SEim, widim, nblim) ! determine also SEim % w
     call tobox_cpl_real32(title, x, SE, SEim, widre, widim, nblre, nblim, m = size(x,1), n = size(x,2))
@@ -3966,7 +3967,8 @@ end subroutine getwid_int32
     integer expmax, expmin, w
     logical xfinite(size(x))
     real(kind=real64) xmax, xmin, h
-    character(12) :: f1, s(2)
+    character(12) :: s(2)
+    character(len=*),parameter :: f1 = '(SS,ES9.0E4)'
     character(len=:),allocatable :: temp(:)
     xmin = 0; xmax = 0; h = huge(h)
     xfinite = x == x .and. x >= -h .and. x <= h ! neither NaN, Inf nor -Inf
@@ -3975,7 +3977,6 @@ end subroutine getwid_int32
     else
       xmax = maxval(x, mask=xfinite)
       xmin = minval(x, mask=xfinite)
-      f1 = '(SS,ES9.0E4)'
       write(s,f1) xmax, xmin
       temp=s(:)(5:9)
       read(temp,'(I5)') expmax, expmin
@@ -3989,15 +3990,15 @@ end subroutine getwid_int32
     ! The if-block (*) is for safety: make f wider in case xm is written ok with the
     ! ES format in fmt but overflows with F format (the feature has been tested through
     ! manual changes to the program).
-    real(kind=real64),     intent(in)    :: x(:,:)         ! Item to be written
-    type(settings), intent(inout) :: SE             ! Settings
-    integer,        intent(out)   :: wid(size(x,2)) ! Widths of individual columns
-    integer,        intent(out)   :: nbl(size(x,2)) ! Blanks to trim from left of individual columns
-    integer :: expmax, expmin, ww, dd, dmx
-    real(kind=real64) xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
-    character(14) :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
-    character(99) s
-    logical xzero(size(x,2)), xallz(size(x,2)), xfinite(size(x,1),size(x,2)), xnonn(size(x,2)), xalln(size(x,2))
+    real(kind=real64),     intent(in) :: x(:,:)         ! Item to be written
+    type(settings), intent(inout)      :: SE             ! Settings
+    integer,        intent(out)        :: wid(size(x,2)) ! Widths of individual columns
+    integer,        intent(out)        :: nbl(size(x,2)) ! Blanks to trim from left of individual columns
+    integer             :: expmax, expmin, ww, dd, dmx
+    real(kind=real64)  :: xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
+    character(14),save  :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
+    character(99)       :: s
+    logical             :: xzero(size(x,2)), xallz(size(x,2)), xfinite(size(x,1),size(x,2)), xnonn(size(x,2)), xalln(size(x,2))
     !
     dmx = SE % dmx
     h = huge(h)
@@ -4162,7 +4163,6 @@ end subroutine getwid_int32
     call trim_real(sa, gedit, w)
     call tostring_get(sa, st)
   end function tostring_f_real64
-
 ! *************************************** end of real64 precision procedures ***************************************
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -4257,11 +4257,11 @@ end subroutine getwid_int32
 
   subroutine disp_cpl_real64(title, x, SE, SEim, n)
     ! real64 precision item
-    character(*),   intent(in)    :: title
-    complex(kind=real64),  intent(in)    :: x(:,:)
-    type(settings), intent(inout) :: SE, SEim
-    integer,        intent(in)    :: n
-    integer, dimension(n) :: widre(n), widim(n), nblre(n), nblim(n)
+    character(*),intent(in)          :: title
+    complex(kind=real64),intent(in) :: x(:,:)
+    type(settings),intent(inout)     :: SE, SEim
+    integer,intent(in)               :: n
+    integer                          :: widre(n), widim(n), nblre(n), nblim(n)
     call find_editdesc_real64(real(x), SE, widre, nblre)         ! determine also SE % w
     call find_editdesc_real64(abs(aimag(x)), SEim, widim, nblim) ! determine also SEim % w
     call tobox_cpl_real64(title, x, SE, SEim, widre, widim, nblre, nblim, m = size(x,1), n = size(x,2))

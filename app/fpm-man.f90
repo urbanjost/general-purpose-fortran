@@ -1,8 +1,8 @@
 program fman
 use, intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdout=>OUTPUT_UNIT, stdin=>INPUT_UNIT
 use M_intrinsics, only : help_intrinsics
-use M_CLI2,       only : set_args, sget, iget, lget, specified, topics=>unnamed
-use M_CLI2,       only : set_mode
+use M_CLI2,       only : set_args, sget, iget, lget, specified
+use M_CLI2,       only : set_mode, topics=>unnamed
 use M_match,      only : getpat, match, regex_pattern
 use M_match,      only : YES, ERR
 use M_strings,    only : lower, indent, atleast, str, replace
@@ -43,12 +43,12 @@ logical                        :: prefix, ignorecase, demo, color
 character(len=512)             :: paws, remember
 character(len=20) ::  &
 &  bg=       '<E>                ',  &  ! initial background color
-&  fg=       '<w><bo>            ',  &  ! text color
-&  prg=      '<c><bo>            ',  &  ! demo program text color
-&  head=     '<y><bo>            ',  &  ! header line
+&  fg=       '<bo><w>            ',  &  ! text color
+&  prg=      '<bo><c>            ',  &  ! demo program text color
+&  head=     '<bo><r>            ',  &  ! header line
 &  head_=    '</bo>              ',  &
 &  fixed=    '<w>                ',  &  ! color of leading > in demo program output
-&  output=   '<y><bo>            ',  &  ! demo program output
+&  output=   '<bo><y>            ',  &  ! demo program output
 &  output_=  '</bo>              '
 namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
    ! process command line
@@ -291,11 +291,15 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                              regex=''
                              iinf=0
                              remember=paws
-                  case('r'); i=i-1                         ! refresh
+                  case('r'); i=i-1                          ! refresh
                              !lines=get_env('LINES',lines)  ! adjust for screen size change if set
                              i=max(0,i-1*lines+2)
                              iinf=0
-                             remember=paws
+                             if(paws(1:1).eq.'r')then
+                                remember='f'
+                             else
+                                remember=paws
+                             endif
                   case('L')
                              topics=['']
                              filename=adjustl(trim(paws(2:)))
@@ -335,14 +339,14 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                              i=i-1
                              iinf=0
                              remember='f'
-                  case('y','j','v'); i=max(0,i-1*lines+2) ! down one line
+                  case('e','j','v'); i=max(0,i-1*lines+2) ! down one line
                              i=i+len_trim(paws)-1
                              iinf=0
-                              remember=paws
-                  case('e','k','^'); i=max(0,i-1*lines-0) ! up one line
+                             remember=paws
+                  case('y','k','^'); i=max(0,i-1*lines-0) ! up one line
                              i=max(0,i-len_trim(paws)+1)
                              iinf=0
-                              remember=paws
+                             remember=paws
                   case('s','w'); paws=adjustl(paws(2:)) ! save to file
                              if(paws.eq.'')paws='fman.txt'
                              iostat=filewrite(paws,clone_no_color)
@@ -477,10 +481,15 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                      i=max(0,i-2*lines+2) ! back
                      remember='f'
 !+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                  case('t','T','m')
+                  case('t','T','m','A')
                      i=0  ! developer: load a topic
-                     if(paws.eq.'T')paws(2:)='toc'
-                     if(paws(1:4).eq.'man')paws(2:)=paws(5:)
+                     if(paws.eq.'T')then
+                        paws(2:)='toc3'
+                     elseif(paws.eq.'A')then
+                        paws(2:)='toc'
+                     elseif(paws(1:4).eq.'man')then
+                        paws(2:)=paws(5:)
+                     endif
                      topics=[adjustl(paws(2:))]
                      if(paws.eq.'t')then
                         call shorttopics()
@@ -492,7 +501,7 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                      endif
                      remember='f'
                   case('h','?')
-                     if(paws.eq.'h')then
+                     if(paws.eq.'h'.or.paws.eq.'?')then
                         call cribsheet()
                         if(paws.ne.'')then ! entered value at continue ...
                            topics=[adjustl(paws)]
@@ -504,7 +513,7 @@ namelist/fman_colors/bg,fg,prg,head,head_,fixed,output,output_
                         ! characters after h assume could
                         ! be h topic or help topic so
                         ! treat it like t command
-                        if(paws.eq.'help')paws='help manual'
+                        if(paws.eq.'help')paws='help help'
                         m=index(paws(:len_trim(paws)),' ')
                         if(m.eq.0)m=2
                         topics=[adjustl(paws(m:))]
@@ -562,8 +571,9 @@ subroutine cribsheet()
    & ' +---------+--------+----------------------+------+---------------------------+ ', &
    & ' |SYSTEM:  | s file | save to filename     | !cmd | execute system_command    | ', &
    & ' +---------+--------+----------------------+------+---------------------------+ ', &
-   & ' |OPTIONS: | #      | toggle line numbers  | lNNN | change lines per page     | ', &
-   & ' |         | i      | toggle search by case| c    | toggle color mode         | ', &
+   & ' |DISPLAY  | #      | toggle line numbers  | lNNN | change lines per page     | ', &
+   & ' |OPTIONS  | i      | toggle search by case| c    | toggle color mode         | ', &
+   & ' |& MODES: | D      | toggle demo only mode| P    | toggle prefix mode        | ', &
    & ' +---------+--------+----------------------+------+---------------------------+ ', &
    & ' |GENERAL: | q      | quit                 | r    | refresh                   | ', &
    & ' |         | h      | display this help    | T    | reload Table Of Contents  | ', &
@@ -572,13 +582,11 @@ subroutine cribsheet()
    & ' | An empty string repeats the last positioning or toggle command. So if you  | ', &
    & ' | searched for a string or did an "e" or "y" and then just hit return the    | ', &
    & ' | previous command is repeated until a non-blank command like "r" is entered.| ', &
-   & ' |                                                                            | ', &
    & ' +----------------------------------------------------------------------------+ ']
    if(paws(1:1).eq.'X')then
    write(stdout,'(a)')[character(len=80) :: &
    & ' +------------+-----+----------------------+------+---------------------------+ ', &
-   & ' |DEVELOPER:  | C   | toggle color mode    | D    | toggle demo program mode  | ', &
-   & ' |            | Cstr| change colors        | P    | toggle prefix mode        | ', &
+   & ' |DEVELOPER:  | C   | toggle color mode    | Cstr | change colors             | ', &
    & ' |            | C?  | show current colors  | X    | show developer help       | ', &
    & ' |            | H   | command help         | L    | load file                 | ', &
    & ' |            | V   | version information  | B    | toggle showblanks         | ', &
@@ -695,7 +703,7 @@ integer                        :: start_keep, end_keep
        if(size(topics).lt.1.or.i.lt.1)then
           write(stdout,*)'!<ERROR> *fman* missing topics. standard demo code format not found.'
        else
-          write(stdout,*)'!<ERROR> *fman* standard demo code format not found for ',trim(topics(i))
+          write(stdout,*)'!<ERROR> *fman* standard demo code format not found'
        endif
        section=['']
     else
@@ -966,7 +974,7 @@ version_text=[ CHARACTER(LEN=128) :: &
 '@(#) PRODUCT:         GPF (General Purpose Fortran) utilities and examples     >',&
 '@(#) PROGRAM:         fman(1)                                                  >',&
 '@(#) DESCRIPTION:     output Fortran intrinsic descriptions                    >',&
-'@(#) VERSION:         3.0.0, 2025-03-14                                        >',&
+'@(#) VERSION:         3.0.1, 2025-08-08                                        >',&
 '@(#) AUTHOR:          John S. Urban                                            >',&
 '@(#) HOME PAGE:       http://www.urbanjost.altervista.org/index.html           >',&
 '@(#) LICENSE:         MIT License                                              >',&

@@ -142,10 +142,14 @@ integer                      :: lun, ierr, stat, icount
       last=line
       if(unit_test_level.gt.0.or..true.) write (*, '(*(g0))') 'getline>>>>',icount,' [',line,']'
    enddo INFINITE
+   if(icount.eq.0)then
+      call unit_test_bad('getline','failed to load file','_scratch_getline.txt')
+   else
    expected='wxyz'
-   call unit_test('getline',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
-   call unit_test('getline',icount.eq.4,'expected ',4,'lines got',icount)
-   call unit_test('getline',last.eq.expected,'expected',expected,'got',last)
+      call unit_test('getline',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
+      call unit_test('getline',icount.eq.4,'expected ',4,'lines got',icount)
+      call unit_test('getline',last.eq.expected,'expected',expected,'got',last)
+   endif
    ierr=filedelete('_scratch_getline.txt')
    call unit_test_done('getline',msg='')
 
@@ -168,10 +172,14 @@ integer                      :: lun, ierr, stat, icount
       last=line
       if(unit_test_level.gt.0) write (*, '(*(g0))') 'read_line>>>>',icount,' [',line,']'
    enddo INFINITE
-   expected='        abcdefghijklmnop qrstuvwxyz'
-   call unit_test('read_line',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
-   call unit_test('read_line',icount.eq.1,'expected ',1,'lines got',icount)
-   call unit_test('read_line',last.eq.expected,'expected',expected,'got',last)
+   if(icount.eq.0)then
+      call unit_test_bad('read_line','failed to load file','_scratch_read_line.txt')
+   else
+      expected='        abcdefghijklmnop qrstuvwxyz'
+      call unit_test('read_line',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
+      call unit_test('read_line',icount.eq.1,'expected ',1,'lines got',icount)
+      call unit_test('read_line',last.eq.expected,'expected',expected,'got',last)
+   endif
    ierr=filedelete('_scratch_read_line.txt')
    call unit_test_done('read_line',msg='')
 

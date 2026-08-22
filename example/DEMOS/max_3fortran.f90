@@ -3,6 +3,7 @@
       real :: arr1(4)= [10.0,11.0,30.0,-100.0]
       real :: arr2(5)= [20.0,21.0,32.0,-200.0,2200.0]
       integer :: box(3,4)= reshape([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6],shape(box))
+      character(len=:),allocatable :: answer(:)
 
         ! basic usage
          ! this is simple enough when all arguments are scalar
@@ -27,6 +28,13 @@
          ! strings in a single array do need to be of the same length
          ! but the different objects can still be of different lengths.
          write(*,"(*('""',a,'""':,1x))")MAX(['A','Z'],['BB','Y '])
+         answer=MAX(['A', 'Z'], ['BB', 'Y '])
+         !
+         if(all(answer .eq. ['BB', 'Z ']) .and. len(answer).eq.2 )then
+            write(*,*)'previous line passed'
+         else
+            write(*,*)'<ERROR> previous line should be "BB","Z "'
+         endif
          ! note the result is now an array with the max of every element
          ! position, as can be illustrated numerically as well:
          write(*,'(a,*(i3,1x))')'box=   ',box

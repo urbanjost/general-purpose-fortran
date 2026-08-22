@@ -16,7 +16,7 @@
              endfile lun ! will truncate line at current position
              !
              ! NOTE: backspace before writing any addition lines
-             !       once an ENDFILE(7f) statement is executed
+             !       once an ENDFILE(7) statement is executed
              ! backspace(lun)
              !
              ! rewind and echo remaining file

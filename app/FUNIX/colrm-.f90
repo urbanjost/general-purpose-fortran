@@ -2,14 +2,22 @@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 program colrm
+use,intrinsic :: iso_fortran_env, only : stdout=>output_unit
 use M_CLI2,  only : set_args, igets
 use M_io,    only : getline
 use M_framework, only : stderr
+use M_unicode,only : tokenize, replace, character, len
+use M_unicode,only : unicode_type, assignment(=), operator(//)
+use M_unicode,only : ut => unicode_type, ch => character
+use M_unicode,only : write(formatted)
 implicit none
+type(ut)             :: string
+character(len=*),parameter     :: all='(g0)'
+!character(len=*),parameter     :: uni='(DT)'
 integer,allocatable          :: columns(:)
 character(len=:),allocatable :: line
 integer                      :: right
-integer                      :: lower
+integer                      :: little
 integer                      :: higher
 integer                      :: ilen
 character(len=:),allocatable :: help_text(:)
@@ -18,19 +26,19 @@ character(len=:),allocatable :: version_text(:)
    call set_args(' ',help_text, version_text)               ! define command arguments,default values and crack command line
    columns=igets()                                          ! get numbers from command line
    select case(size(columns))
-   case(0) ; ALL: do while (getline(line)==0)               ! if no numbers just copy text
+   case(0) ; ALLOFEM: do while (getline(line)==0)           ! if no numbers just copy text
                 write(*,'(a)')trim(line)
-             enddo ALL
+             enddo ALLOFEM
    case(1) ; right=max(1, columns(1))                       ! if one number print up to that column
              LEFT: do while (getline(line)==0)
                 write(*,'(a)')line(:min(len(line), right-1) )
              enddo LEFT
-   case(2) ; lower=max(1, min(columns(1), columns(2) ))     ! if two numbers cut out that range of character columns
+   case(2) ; little=max(1, min(columns(1), columns(2) ))    ! if two numbers cut out that range of character columns
              higher=max(1, max(columns(1), columns(2) ))
              INFINITE: do while (getline(line)==0)
                 ilen=len_trim(line)
-                if(lower.gt.1)then
-                   write(*,'(a)',advance='no')line(:min(lower-1, ilen) )
+                if(little.gt.1)then
+                   write(*,'(a)',advance='no')line(:min(little-1, ilen) )
                 endif
                 if(higher.gt.1)then
                    if(higher+1.le.ilen)then
@@ -81,11 +89,17 @@ help_text=[ CHARACTER(LEN=128) :: &
 '       # remove first three characters in each line                ',&
 '       cat FILENAME|colrm- 1 3                                     ',&
 '                                                                   ',&
-'AUTHOR                                                             ',&
-'   John S. Urban                                                   ',&
+'SEE ALSO                                                           ',&
+'   column(1), cut(1), head(1), tail(1), sed(1)                     ',&
 '                                                                   ',&
-'LICENSE                                                            ',&
-'   Public Domain                                                   ',&
+'   See expand(1) and col(1) for methods of expanding tab and backspace',&
+'   characters.                                                        ',&
+'                                                                      ',&
+'AUTHOR                                                                ',&
+'   John S. Urban                                                      ',&
+'                                                                      ',&
+'LICENSE                                                               ',&
+'   Public Domain                                                      ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&

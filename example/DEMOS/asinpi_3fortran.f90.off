@@ -20,11 +20,4 @@
         angle = angle/D2HR
         print all, 'angle of incline(degrees) = ', angle
         print all, 'percent grade=',rise/run*100.0_dp
-      contains
-      elemental function asinpi(x)
-      real(kind=dp),parameter  :: PI=acos(-1.0_dp)
-      real(kind=dp),intent(in) :: x
-      real(kind=dp)            :: asinpi
-         asinpi=asin(x)/PI
-      end function asinpi
       end program demo_asinpi

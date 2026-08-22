@@ -8,6 +8,7 @@ append("jundragon.3m_messages.html");
 append("junroach.3m_messages.html");
 append("junsun.3m_messages.html");
 append("juntrolls.3m_messages.html");
+append("percent_bar.3m_messages.html");
 append("percent_done.3m_messages.html");
 append("signs.3m_messages.html");
 append("tabgraph.3m_messages.html");

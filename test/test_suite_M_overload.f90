@@ -122,8 +122,8 @@ subroutine test_sign()
    & 'sign(+-10_real32)',0+sign(10.0_real32),0+sign(-10.0_real32))
    call unit_test('sign',0+sign(10.0_real64).eq.1.and.sign(-10.0_real64).eq.-1,&
    & 'sign(+-10_real64)',0+sign(10.0_real64),0+sign(-10.0_real64))
-   !call unit_test('sign',0+sign(10.0_real128).eq.1.and.0+sign(-10.0_real128).eq.-1,&
-   !& 'sign(+-10_real128)',0+sign(10.0_real128),0+sign(-10.0_real128))
+   call unit_test('sign',0+sign(10.0_real128).eq.1.and.0+sign(-10.0_real128).eq.-1,&
+   & 'sign(+-10_real128)',0+sign(10.0_real128),0+sign(-10.0_real128))
    call unit_test_done('sign',msg='')
 end subroutine test_sign
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT

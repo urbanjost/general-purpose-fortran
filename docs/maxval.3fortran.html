@@ -74,9 +74,9 @@ or row
 result = maxval(array [,mask]) | maxval(array [,dim] [,mask])
 <P>
 <PRE>
-         NUMERIC function maxval(array ,dim, mask)
+         type(TYPE(kind=**)) function maxval(array, dim, mask)
 <P>
-          NUMERIC,intent(in) :: array(..)
+          type(TYPE(kind=**)),intent(in) :: array(..)
           integer(kind=**),intent(in),optional :: dim
           logical(kind=**),intent(in),optional :: mask(..)
 <P>
@@ -93,12 +93,28 @@ result = maxval(array [,mask]) | maxval(array [,dim] [,mask])
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
+TYPE may be real, integer, or character.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
 a kind designated as ** may be any supported kind for the type
 </TD></TR>
 <TR valign=top><TD width=3%>
 o
 </TD><TD>
-NUMERIC designates any numeric type and kind.
+DIM is an integer scalar indicating a dimension of the array. It may
+not be an optional dummy argument.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+MASK is an array of type logical, and conformable with ARRAY.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+the result is of the same type and kind as ARRAY.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=3>
@@ -170,15 +186,16 @@ sample program:
 <PRE>
     program demo_maxval
     implicit none
-    integer,save :: ints(3,5)= reshape([&
-       1,  2,  3,  4,  5, &
-      10, 20, 30, 40, 50, &
-      11, 22, 33, 44, 55  &
+    integer,save                 :: ints(3,5)= reshape([&
+       1,  2,  3, -4,  5, &
+      10, 20,-30, 40, 50, &
+      11,-22, 33, 44, 55  &
     ],shape(ints),order=[2,1])
     character(len=:),allocatable :: strs(:)
-    integer :: i
-    character(len=*),parameter :: gen=&#146;(*(g0,1x))&#146;
-    character(len=*),parameter :: ind=&#146;(3x,*(g0,1x))&#146;
+    character(len=:),allocatable :: answer
+    integer                      :: i
+    character(len=*),parameter   :: gen=&#146;(*(g0,1x))&#146;
+    character(len=*),parameter   :: ind=&#146;(3x,*(g0,1x))&#146;
 <P>
        print gen,&#146;Given the array&#146;
        write(*,&#146;(1x,*(g4.4,1x))&#146;) &
@@ -190,20 +207,41 @@ sample program:
        print ind, maxval(ints,dim=1)
        print ind, &#146;biggest value in each row&#146;
        print ind,  maxval(ints,dim=2)
-<P>
-       print gen,&#146;With a mask:&#146;
-       print ind, &#146; find biggest number less than 30 with mask&#146;
-       print ind, maxval(ints,mask=ints.lt.30)
-<P>
-       print gen,&#146;If zero size considered:&#146;
-       print ind, &#146;if zero size numeric array&#146;
+       print ind
+       print ind, &#146;find biggest number less than 30 with mask&#146;
+       print ind
+       print ind, &#146;find biggest negative value&#146;
+       print ind, &#146;(closest to zero, not biggest magnitude)&#146;
+       print ind, maxval(ints,mask=ints.lt.0)
+       print ind
+       print ind, &#146;DEALING WITH ZERO-LENGTH STRINGS AND ZERO-SIZE ARRAYS&#146;
+       print ind
+       print ind, &#146;if zero size numeric array:&#146;
        print ind, maxval([integer :: ]),&#146;and -huge(0) is&#146;,-huge(0),&
        & &#146;(often not the same!)&#146;
+       print ind
+       print ind, maxval([real :: ]),&#146;and -huge(0.0) is&#146;,-huge(0.0)
+       print ind
        print ind, &#146;if zero-size character array all nulls&#146;
-       strs=[character(len=5)::]
-       strs=maxval(strs)
-       print ind, ichar([(strs(i),i=1,len(strs))])
-       print ind, &#146;if everything is false,&#146;
+       if(allocated(strs))deallocate(strs)
+       allocate(character(len=0) :: strs(5))
+       print ind, &#146;STRS() has a length of:&#146;, len(strs), &
+        & &#146;a SHAPE of:&#146;,shape(strs), &
+        & &#146;:a SIZE of:&#146;,size(strs)
+       print ind, &
+        & &#146;is maxval of null length strings a null character? &#146;,&
+        & ichar(maxval(strs))==0
+       print ind
+       if(allocated(strs))deallocate(strs)
+       allocate(character(len=5) :: strs(0))
+       print ind, &#146;STRS() has a length of:&#146;, len(strs), &
+        & &#146;a SHAPE of:&#146;,shape(strs), &
+        & &#146;:a SIZE of:&#146;,size(strs)
+        answer=maxval(strs)
+       print ind, &#146;is maxval of strings all null characters? &#146;, &
+        & [(answer(i:i),i=1,len(answer))].eq.char(0)
+       print ind
+       print ind, &#146;if everything in mask is false,&#146;
        print ind, &#146;same as zero-size array for each subarray&#146;
        print ind, maxval(ints,mask=.false.)
        print ind, maxval(ints,mask=.false.,dim=1)
@@ -214,24 +252,43 @@ Results:
 <P>
 <PRE>
      &gt; Given the array:
-     &gt;    1,  2,  3,  4,  5, &
-     &gt;   10, 20, 30, 40, 50, &
-     &gt;   11, 22, 33, 44, 55  &
-     &gt; biggest value in array
-     &gt; 55
-     &gt; biggest value in each column
-     &gt; 11 22 33 44 55
-     &gt; biggest value in each row
-     &gt; 5 50 55
-     &gt; find biggest number less than 30 with mask
-     &gt; 22
-     &gt; if zero size numeric array
-     &gt; -2147483648 and -huge(0) is -2147483647 (often not the same!)
-     &gt; if zero-size character array all nulls
-     &gt; 0 0 0 0 0
-     &gt; if everything is false, same as zero-size array
-     &gt; -2147483648
-     &gt; -2147483648 -2147483648 -2147483648 -2147483648 -2147483648
+     &gt; Given the array
+     &gt;     1    2    3   -4    5
+     &gt;    10   20  -30   40   50
+     &gt;    11  -22   33   44   55
+     &gt;
+     &gt; Basics:
+     &gt;    biggest value in array
+     &gt;    55
+     &gt;    biggest value in each column
+     &gt;    11 20 33 44 55
+     &gt;    biggest value in each row
+     &gt;    5 50 55
+     &gt;
+     &gt;    find biggest number less than 30 with mask
+     &gt;
+     &gt;    find biggest negative value
+     &gt;    (closest to zero, not biggest magnitude)
+     &gt;    -4
+     &gt;
+     &gt;    DEALING WITH ZERO-LENGTH STRINGS AND ZERO-SIZE ARRAYS
+     &gt;
+     &gt;    if zero size numeric array:
+     &gt;    -2147483648 and -huge(0) is -2147483647 (often not the same!)
+     &gt;
+     &gt;    -0.340282347E+39 and -huge(0.0) is -0.340282347E+39
+     &gt;
+     &gt;    if zero-size character array all nulls
+     &gt;    STRS() has a length of: 0 a SHAPE of: 5 :a SIZE of: 5
+     &gt;    is maxval of null length strings a null character?  T
+     &gt;
+     &gt;    STRS() has a length of: 5 a SHAPE of: 0 :a SIZE of: 0
+     &gt;    is maxval of strings all null characters?  T T T T T
+     &gt;
+     &gt;    if everything in mask is false,
+     &gt;    same as zero-size array for each subarray
+     &gt;    -2147483648
+     &gt;    -2147483648 -2147483648 -2147483648 -2147483648 -2147483648
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -256,7 +313,7 @@ MINVAL(3), MINLOC(3), MAXLOC(3), MIN(3) MAX(3),
 Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maxval (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 19af52ff-df2a-411b-a4b9-fd556aed0bc2 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>maxval (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 1dafb27e-9a4a-41eb-ac39-48a8f063e645 using man macros.</FONT>
 <br><br><center><img src="images/maxval.3fortran.gif"></center>
 </div>
 </div>

@@ -67,7 +67,6 @@
            VFE: block
               integer,allocatable :: vector(:)
               integer :: neg, zero, pos
-              integer :: left
                  vector=[-1,-22,-300,0,0,0,0,8,9,10,11,12]
                  neg=3
                  zero=4

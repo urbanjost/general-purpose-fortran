@@ -37,6 +37,12 @@
          write(*,'(*(g0,1x))') &
            & "kind=",kind(shiftl(arr,3)), "shape=",shape(shiftl(arr,3)), &
            & "size=",size(shiftl(arr,3)) !, "rank=",rank(shiftl(arr,3))
+
+           !NOTE: "rank=",rank(shifta(arr,3)) will often work but if so
+           !      is non-standard as the argument of RANK(3) is supposed
+           !      to be a data object (ie., a constant, variable, or
+           !      subobject of a constant, not an expression or function
+           !      call)
          endblock ELEM
 
       end program demo_shiftl

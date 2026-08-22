@@ -13,6 +13,8 @@
          else
             print *, 'this processor does not distinguish +0 from -0'
          endif
+         print *,'either way, 0==-0 is true!',0==-0
+         print *,'either way, 0=/-0 is false!',0/=-0
 
          print *,  'elemental', sign( -12.0, [1.0, 0.0, -1.0] )
 

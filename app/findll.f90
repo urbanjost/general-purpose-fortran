@@ -1,8 +1,8 @@
 program findll
-use  M_CLI2,          only: set_args, sgets, lget, iget, filenames=>unnamed
-use  M_io,            only: read_line
-use  M_strings,       only: v2s, switch
-use  ISO_FORTRAN_ENV, only: error_unit  ! compiler_options,compiler_version,input_unit,output_unit
+use M_CLI2,          only: set_args, sgets, lget, iget, filenames=>unnamed
+use M_io,            only: read_line
+use M_strings,       only: v2s, switch
+use ISO_FORTRAN_ENV, only: error_unit ! compiler_options,compiler_version,input_unit,output_unit
 implicit none
 
 ! ident_1="@(#) findll(1f) find long lines"
@@ -14,9 +14,9 @@ integer                      :: ilen
 integer                      :: ilines
 integer                      :: ios
 integer                      :: ilength
-integer                      :: longest
 integer                      :: isize
 logical                      :: wrap
+integer                      :: longest
 logical                      :: verbose
 character(len=:),allocatable :: fmt
 character(len=:),allocatable :: help_text(:)
@@ -25,8 +25,8 @@ character(len=:),allocatable :: version_text(:)
    longest=0
    call setup()
    call set_args(' -l 132 -wrap F',help_text,version_text) ! define and crack command line arguments
-   wrap=lget('wrap')                                       ! test if -wrap    switch is present on command line
    verbose=lget('verbose')
+   wrap=lget('wrap')                                       ! test if -wrap    switch is present on command line
    ilength=max(0,iget('l'))
    isize=size(filenames)                                   ! number of words in default list
 
@@ -35,6 +35,7 @@ character(len=:),allocatable :: version_text(:)
    SELECT_DATA: select case(isize)
    case(0)                                                 ! no filenames, read data from stdin
       ilines=0
+      longest=0
       STDIN: do while (read_line(line)==0)                 ! read lines of arbitrary length
          ilines=ilines+1
          ilen=len_trim(line)
@@ -55,6 +56,7 @@ character(len=:),allocatable :: version_text(:)
    case default                                            ! a list of filenames is present
       FILES: do i=1,isize                                  ! step through files
          ilines=0                                          ! number of lines successfully read from this file
+         longest=0
          open(unit=10,file=filenames(i),status='old',&
          & action='read',access='sequential',&
          & iostat=ios,iomsg=msg)
@@ -63,7 +65,6 @@ character(len=:),allocatable :: version_text(:)
             cycle FILES
          endif
 
-         longest=0
          FILE: do while (read_line(line,lun=10)==0)
             ilines=ilines+1
             ilen=len_trim(line)
@@ -109,9 +110,10 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   --wrap     instead of locating and displaying long           ',&
 '              lines, fold the lines at the specified            ',&
 '              line length                                       ',&
-'   --verbose  output additional descriptive information         ',&
 '                                                                ',&
 '   --help     display this help and exit                        ',&
+'   --usage    display short usage information                   ',&
+'   --verbose  output additional descriptive information         ',&
 '   --version  output version information and exit               ',&
 'EXAMPLES                                                        ',&
 '  Sample commands:                                              ',&

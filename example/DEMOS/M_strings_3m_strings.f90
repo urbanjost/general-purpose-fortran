@@ -2,16 +2,18 @@
        use M_strings,only : SPLIT, slice, sep, delim, chomp, strtok
        use M_strings,only : split2020, find_field
        use M_strings,only : substitute, change, modif, transliterate, &
-               & reverse, squeeze
+                          & reverse, squeeze
        use M_strings,only : REPLACE, join
-       use M_strings,only : UPPER, LOWER, upper_quoted, lower_quoted
+       use M_strings,only : UPPER, LOWER
+       use M_strings,only : upper_quoted, lower_quoted, unquote, quote, &
+                          & trim_quoted
        use M_strings,only : rotate13, percent_encode, percent_decode
        use M_strings,only : encode_base64, decode_base64
        use M_strings,only : adjustc, compact, nospace, indent
-       use M_strings,only : crop, clip, unquote, quote, matching_delimiter
+       use M_strings,only : crop, clip, matching_delimiter
        use M_strings,only : len_white, pad, lpad, cpad, rpad, zpad, &
-               & stretch, lenset, merge_str
-       use M_strings,only : switch, s2c, c2s
+                          & stretch, lenset, merge_str
+       use M_strings,only : switch, couple, uncouple, s2c, c2s
        use M_strings,only : noesc, notabs, dilate, expand, visible
        use M_strings,only : longest_common_substring
        use M_strings,only : string_to_value, string_to_values, s2v, s2vs

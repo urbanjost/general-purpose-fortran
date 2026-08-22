@@ -39,6 +39,6 @@
         out=decode_base64(out)
         ! store the bytes back into arr1
         arr2=transfer(source=out,mold=[0.0])
-        write(*,'(*(g0,1x))') 'are arr1 and arr2 the same?',all(arr1.eq.arr2)
+        write(*,'(*(g0,1x))') 'are arr1 and arr2 the same?',all(arr1 == arr2)
      end subroutine other
      end program demo_encode_base64

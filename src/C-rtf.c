@@ -73,7 +73,7 @@ extern FILE     *_draw_outfile();
 
 static int      RTF_first_time = 1, drawn = 0, pslstx = -1, pslsty = -1;/* last (x, y) drawn */
 static int      MIN_LINE_X= 0, MAX_LINE_X= 0 ,MIN_LINE_Y= 0, MAX_LINE_Y = 0;
-extern  FILE    *draw_fp;
+extern FILE     *draw_fp;
 
 static int OLDX;
 static int OLDY;

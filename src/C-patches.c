@@ -1,4 +1,5 @@
 /* this code is licensed as public domain */
+#include <stddef.h>
 #include "draw.h"
 
 static int	ntsegs, tsegs = 10, nusegs, usegs = 10, 

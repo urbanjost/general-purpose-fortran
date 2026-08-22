@@ -1,4 +1,5 @@
 /* this code is licensed as public domain */
+#include <stddef.h>
 #include "draw.h"
 
 static int      nsegs = 15;             /* number of segs in a curve */

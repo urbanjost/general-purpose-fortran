@@ -1,8 +1,6 @@
      program demo_significant
      use M_framework__approx, only : significant
      implicit none
-     integer :: i
-     real :: r, v
      character(len=*),parameter :: g='(*(g0.7,1x))'
 
         write(*,g)significant([8765.43210,0.1234567890],5)

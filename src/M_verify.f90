@@ -9,6 +9,10 @@
 
 
 
+!-----------------------------------------------------------------------------------------------------------------------------------
+
+
+!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    M_verify(3fm) - [M_verify::INTRO] a collection of Fortran routines for
@@ -1820,7 +1824,7 @@ END SUBROUTINE accdig
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
 SUBROUTINE dp_accdig(x,y,digi0,ACURCY,IND)
-use,intrinsic :: iso_fortran_env, only : wp=>real128
+use,intrinsic :: iso_fortran_env, only : wp=>real64
 use M_journal,  only : journal
 implicit none
 
@@ -2103,7 +2107,7 @@ end function significant
 !===================================================================================================================================
 pure elemental function anyscalar_to_realbig(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
-use,intrinsic :: iso_fortran_env, only : wp=>real128
+use,intrinsic :: iso_fortran_env, only : wp=>real64
 implicit none
 
 ! ident_21="@(#) M_verify anyscalar_to_realbig(3f) convert integer or real parameter of any kind to real128 or biggest available"
@@ -2118,7 +2122,6 @@ character(len=3)             :: readable
    type is (integer(kind=int64));  d_out=real(valuein,kind=wp)
    type is (real(kind=real32));    d_out=real(valuein,kind=wp)
    type is (real(kind=real64));    d_out=real(valuein,kind=wp)
-   Type is (real(kind=real128));   d_out=valuein
    type is (logical);              d_out=merge(0.0_wp,1.0_wp,valuein)
    type is (character(len=*));     read(valuein,*) d_out
    class default

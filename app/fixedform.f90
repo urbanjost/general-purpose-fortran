@@ -298,7 +298,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    display a TUI definition and return values>',&
 '@(#)VERSION:        1.0, 20150508>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2025-06-29 08:19:22 UTC-240>',&
+'@(#)COMPILED:       2026-08-19 15:08:46 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

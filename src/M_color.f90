@@ -525,8 +525,8 @@ integer :: status
    r=r0/100.0
    g=g0/100.0
    b=b0/100.0
-   clrmax=amax1(r,g,b)
-   clrmin=amin1(r,g,b)
+   clrmax=max(r,g,b)
+   clrmin=min(r,g,b)
    clrdel=clrmax-clrmin
    clrsum=clrmax+clrmin
    l=clrsum/2.0
@@ -644,8 +644,8 @@ real             :: clrmax,clrmin,clrdel,rr,gg,bb
    r=r/100.0
    g=g/100.0
    b=b/100.0
-   clrmax=amax1(r,g,b)
-   clrmin=amin1(r,g,b)
+   clrmax=max(r,g,b)
+   clrmin=min(r,g,b)
    clrdel=clrmax-clrmin
    v=clrmax
    if(clrmax /= 0.0 )then
@@ -1146,7 +1146,7 @@ real,intent(out) :: r,g,b
 integer          :: status
 !
 !----    i don't believe that this is an exhaustive test of value ranges
-!        for yiq.  for example yiq=(100.0,60.0,52.0) when converted to
+!        for yiq. For example yiq=(100.0,60.0,52.0) when converted to
 !        rgb produces values greater than 100!?
 !
       if(i  <  -60.0 .or. i  >   60.0) status = 1
@@ -1957,7 +1957,7 @@ end subroutine color_name2rgb
 !===================================================================================================================================
 elemental pure function lower(str) result (string)
 
-! ident_15="@(#) M_strings lower(3f) Changes a string to lowercase over specified range"
+! ident_15="@(#) M_strings lower(3f) Changes a string to lowercase"
 
 character(*), intent(In) :: str
 character(len(str))      :: string
@@ -1969,7 +1969,7 @@ integer                  :: i
          string(i:i) = char(iachar(str(i:i))+32) ! change letter to miniscule
       case default
       end select
-   end do
+   enddo
 end function lower
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

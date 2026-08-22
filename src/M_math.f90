@@ -2030,70 +2030,68 @@ END SUBROUTINE gcsgau2
 !!    SLA-74-0270, Sandia Laboratories, June 1974.
 subroutine ju_polfit(n,x,y,w,maxdeg,ndeg,eps,r,ierr,a)
 implicit none
-integer :: i100
-integer :: i20
-integer :: i200
-integer :: i30
-integer :: i300
-integer :: i40
-integer :: i400
-integer :: i50
-integer :: i500
-integer :: i60
-integer :: i70
-integer :: i80
-integer :: i88
-integer :: i90
-integer :: idegf
-integer :: ierr
-integer :: iii
-integer :: j
-integer :: jp1
-integer :: jpas
-integer :: k1
-integer :: k1pj
-integer :: k2
-integer :: k2pj
-integer :: k3
-integer :: k3pi
-integer :: k4
-integer :: k4pi
-integer :: k5
-integer :: k5pi
-integer :: ksig
-integer :: m
-integer :: maxdeg
-integer :: mop1
-integer :: n
-integer :: ndeg
-integer :: nder
-integer :: nfail
-real :: a
-real :: co
-real :: degf
-real :: den
-real :: eps
-real :: etst
-real :: f
-real :: fcrit
-real :: r
-real :: sig
-real :: sigj
-real :: sigjm1
-real :: sigpas
-real :: temp
-real :: w
-real :: w1
-real :: w11
-real :: x
-real :: xm
-real :: y
-real :: yp(0)
-double precision temd1, temd2
-dimension x(*), y(*), w(*), r(*), a(*)
-dimension co(4,3)
-save co
-integer :: nextblock_1
+integer          :: n
+real             :: x(*)
+real             :: y(*)
+real             :: w(*)
+integer          :: maxdeg
+integer          :: ndeg
+real             :: eps
+real             :: r(*)
+real             :: a(*)
+
+integer          :: i100
+integer          :: i20
+integer          :: i200
+integer          :: i30
+integer          :: i300
+integer          :: i40
+integer          :: i400
+integer          :: i50
+integer          :: i500
+integer          :: i60
+integer          :: i70
+integer          :: i80
+integer          :: i88
+integer          :: i90
+integer          :: idegf
+integer          :: ierr
+integer          :: iii
+integer          :: j
+integer          :: jp1
+integer          :: jpas
+integer          :: k1
+integer          :: k1pj
+integer          :: k2
+integer          :: k2pj
+integer          :: k3
+integer          :: k3pi
+integer          :: k4
+integer          :: k4pi
+integer          :: k5
+integer          :: k5pi
+integer          :: ksig
+integer          :: m
+integer          :: mop1
+integer          :: nder
+integer          :: nfail
+real,save        :: co(4,3)
+real             :: degf
+real             :: den
+real             :: etst
+real             :: f
+real             :: fcrit
+real             :: sig
+real             :: sigj
+real             :: sigjm1
+real             :: sigpas
+real             :: temp
+real             :: w1
+real             :: w11
+real             :: xm
+real             :: yp(0)
+double precision :: temd1, temd2
+integer          :: nextblock_1
 data co(1,1), co(2,1), co(3,1), co(4,1), co(1,2), co(2,2), co(3,2), co(4,2), co(1,3), co(2,3), co(3,3), co(4,3)  &
 & / - 13.086850, -2.4648165, -3.3846535, -1.2973162, -3.3381146, -1.7812271, -3.2578406, -1.6589279, -1.6282703, &
 & -1.3152745, -3.2640179, -1.9829776/
@@ -2528,7 +2526,7 @@ character(len=*),intent(in)  :: messg
 integer,intent(in)           :: nerr
 integer,intent(in)           :: level
 character(len=255)           :: line
-character(len=255)           :: lineold=''
+character(len=255),save      :: lineold=''
    write(line,101)librar,subrou,messg,nerr,level
    101 format('*',a,'*::routine:',a,':',a,' errno:',i3,' level:',i1)
    select case(level)
@@ -2536,6 +2534,7 @@ character(len=255)           :: lineold=''
       if(line.ne.lineold)then
          call journal(line)
          call journal('warning error')
+         !lineold=line ! do not repeat same warning twice in a row
       endif
    case(0)
       call journal(line)
@@ -2616,43 +2615,43 @@ subroutine ju_pvalue(l,nder,x,yfit,yp,a)
 !   900510  Convert XERRWV calls to XERMSG calls.  (RWC)
 !   920501  Reformatted the REFERENCES section.  (WRB)
 !***END PROLOGUE  JU_PVALUE
-   dimension yp(*), a(*)
-   character*8 xern1, xern2
-   integer :: i10
-   integer :: i20
-   integer :: i30
-   integer :: i40
-   integer :: i50
-   integer :: ic
-   integer :: ilo
-   integer :: in
-   integer :: inp1
-   integer :: iup
-   integer :: k1
-   integer :: k1i
-   integer :: k2
-   integer :: k3
-   integer :: k3p1
-   integer :: k3pn
-   integer :: k4
-   integer :: k4p1
-   integer :: k4pn
-   integer :: kc
-   integer :: l
-   integer :: lm1
-   integer :: lp1
-   integer :: maxord
-   integer :: nder
-   integer :: ndo
-   integer :: ndp1
-   integer :: nord
-   real :: a
-   real :: cc
-   real :: dif
-   real :: val
-   real :: x
-   real :: yfit
-   real :: yp
+   integer          :: l
+   integer          :: nder
+   real             :: x
+   real             :: yfit
+   real             :: yp(*)
+   real             :: a(*)
+
+   character(len=8) :: xern1, xern2
+   integer          :: i10
+   integer          :: i20
+   integer          :: i30
+   integer          :: i40
+   integer          :: i50
+   integer          :: ic
+   integer          :: ilo
+   integer          :: in
+   integer          :: inp1
+   integer          :: iup
+   integer          :: k1
+   integer          :: k1i
+   integer          :: k2
+   integer          :: k3
+   integer          :: k3p1
+   integer          :: k3pn
+   integer          :: k4
+   integer          :: k4p1
+   integer          :: k4pn
+   integer          :: kc
+   integer          :: lm1
+   integer          :: lp1
+   integer          :: maxord
+   integer          :: ndo
+   integer          :: ndp1
+   integer          :: nord
+   real             :: cc
+   real             :: dif
+   real             :: val
 !***FIRST EXECUTABLE STATEMENT  JU_PVALUE
    if ( l<0 ) then
 !=======================================================================
@@ -3324,7 +3323,8 @@ integer :: iwk(n)                  ! iwk() is an integer work array which must h
 !       Local variables
 
 integer :: next(n), i, i1, i2, j, jp1, jp2, i2save, i3, i2next
-real    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, dx1, dx2, dmax1, dmax2, dy1, dy2, temp, zero = 0.0
+real    :: xmax, xmin, ymax, ymin, dist, dmax, dmin, x1, y1, dx, dy, x2, y2, dx1, dx2, dmax1, dmax2, dy1, dy2, temp
+real,parameter    :: zero = 0.0
 
    if (n < 2) return
 
@@ -3521,11 +3521,12 @@ end subroutine envelope
 !!
 !!##SYNOPSIS
 !!
-!!     logical function inpolygon(xin, yin, xconv, yconv, nconv)
+!!     logical function inpolygon(xin, yin, xconv, yconv, nconv, first)
 !!
-!!      integer,intent(in)  xin, yin
-!!      integer,intent(in)  nconv
-!!      integer,intent(in)  xconv(nconv), yconv(nconv)
+!!      integer,intent(in)          :: xin, yin
+!!      integer,intent(in)          :: nconv
+!!      integer,intent(in)          :: xconv(nconv), yconv(nconv)
+!!      logical,intent(in),optional :: first
 !!
 !!##DESCRIPTION
 !!   Given a closed polygon find if a point lies inside the polygon.
@@ -3537,6 +3538,9 @@ end subroutine envelope
 !!    xconv   contains the X coords of the polygon
 !!    yconv   contains the Y coords of the polygon
 !!    nconv   the number of points in the polygon
+!!    first   if not present or .TRUE. calculate max and min values in
+!!            xconv() and yconv(), else assume working on a previous polygon and
+!!            do not recalculate bounds.
 !!
 !!##RESULT
 !!    INPOLYGON returns .true if the point lies inside the polygon, otherwise
@@ -3617,21 +3621,30 @@ end subroutine envelope
 !!       call circle(pointx,pointy,0.2)
 !!    end subroutine pickrandom
 !!    end program demo_inpolygon
-logical function inpolygon(xin, yin, xconv, yconv, nconv)
+logical function inpolygon(xin, yin, xconv, yconv, nconv,first)
 
 ! ident_10="@(#) M_math inpolygon(3f) Subroutine to determine whether or not an integer point is in a polygon of integer points"
 
-integer,intent(in)  :: xin,yin                       ! coordinates of the point to be checked
-integer,intent(in)  :: nconv                         !
-integer             :: xconv(nconv), yconv(nconv)
-real                :: x,y                           ! real copy of input point
-real                :: temp                          ! real copy of input point
-integer             :: z(4)= [-32701,-32701,32701,32701]
-integer             :: i, j, m
+integer,intent(in)          :: xin,yin                       ! coordinates of the point to be checked
+integer,intent(in)          :: nconv                         !
+integer                     :: xconv(nconv)
+integer                     :: yconv(nconv)
+logical,intent(in),optional :: first
+logical                     :: first_
+real                        :: x,y                           ! real copy of input point
+real                        :: temp
+integer,parameter           :: big=huge(0)
+integer,save                :: z(4) = [ -big, -big, big, big]           ! 32701
+integer                     :: i, j, m
 
    x=xin
    y=yin
-   if (z(1).eq.-32701) then
+   if(present(first))then
+      first_=first
+   else
+      first_=.true.
+   endif
+   if (first_) then
       do i = 1,nconv
          z(1)=max(z(1),xconv(i))
          z(2)=max(z(2),yconv(i))
@@ -3676,7 +3689,6 @@ integer             :: i, j, m
 
    inpolygon=.false.
    if(j/4*4 .ne. j) inpolygon=.true.
-100 continue
 end function inpolygon
 ! ident_11="@(#) M_math inpolygon(3f) Subroutine to determine whether or not an integer point is in a polygon of integer points"
 !>
@@ -5027,14 +5039,17 @@ function lngamma(z) result(lanczos)
 
 ! Local variables
 
-real(dp)  :: a(9) = (/ 0.9999999999995183d0, 676.5203681218835d0, &
-   -1259.139216722289d0, 771.3234287757674d0, &
-   -176.6150291498386d0, 12.50734324009056d0, &
-   -0.1385710331296526d0, 0.9934937113930748d-05, &
-   0.1659470187408462d-06 /), zero = 0.d0,   &
+real(dp),parameter :: a(9) = [ &
+   0.9999999999995183d0,   676.5203681218835d0,     &
+   -1259.139216722289d0,   771.3234287757674d0,     &
+   -176.6150291498386d0,   12.50734324009056d0,     &
+   -0.1385710331296526d0,  0.9934937113930748d-05,  &
+   0.1659470187408462d-06 ],                        &
+   zero = 0.d0,   &
    one = 1.d0, lnsqrt2pi = 0.9189385332046727d0, &
-   half = 0.5d0, sixpt5 = 6.5d0, seven = 7.d0, tmp
-integer          :: j
+   half = 0.5d0, sixpt5 = 6.5d0, seven = 7.d0
+real               :: tmp
+integer            :: j
 
    if (z <= zero) then
       write(*, *) 'Error: zero or -ve argument for lngamma'

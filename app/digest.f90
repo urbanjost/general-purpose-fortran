@@ -3,7 +3,7 @@ program demo_sha256
 ! ident_1="@(#) sha256(1f) read file into memory and generate SHA-256 digest value"
 
 use,intrinsic :: iso_fortran_env, only : ERROR_UNIT
-use M_hashkeys,                   only : sha256, test_suite_sha256
+use M_hashkeys,                   only : sha256
 use M_io,                         only : slurp
 use M_strings,                    only : switch
 use M_system,                     only : system_isreg
@@ -15,10 +15,7 @@ character(len=:),allocatable :: string
 integer                      :: i=0
 character(len=:),allocatable :: filename
    call setup()
-   call set_args(' --auto_test:a F',help_text,version_text)
-   if (lget('auto_test'))then
-      call test_suite_sha256()
-   endif
+   call set_args(' ',help_text,version_text)
    do i=1,size(files)                                        ! step through filenames on command line
       filename=files(i)
       if(.not.system_isreg(filename))cycle                   ! ignore anything except regular files
@@ -51,7 +48,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   one at a time into dynamically allocated memory.                      ',&
 '                                                                         ',&
 'OPTIONS                                                                  ',&
-'    --auto_test,a    run internal tests of routines in M_sha3(3fm) module',&
+'    --help  Display this help text and exit                              ',&
 '                                                                         ',&
 'EXAMPLES                                                                 ',&
 '   Sample commands                                                       ',&

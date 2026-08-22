@@ -20,7 +20,7 @@
                write(*,'(i3,1x,a)')i,c
             case(0:31,127)
                ! print hexadecimal value for unprintable characters
-               write(*,'(i3,1x,z2.2)')i,c
+               write(*,'(i3,1x,z2.2)')i,ichar(c)
             case default
                write(*,'(i3,1x,a,1x,a)')i,c,'non-standard ASCII'
             end select

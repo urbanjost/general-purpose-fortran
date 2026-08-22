@@ -17,7 +17,6 @@ integer                            :: i
 integer                            :: inums                    ! size of icols on input, number of icols_expanded numbers on output
 integer                            :: ierr
 logical                            :: verbose
-logical                            :: null
 !-----------------------------------------------------------------------------------------------------------------------------------
    call kracken('cprint',      &              ! define command options and default values and then process command-line arguments
    & ' -delimiters  -help .F. -version .F. -verbose .F. --separator "#N#" --null .F. ')
@@ -106,6 +105,8 @@ help_text=[ CHARACTER(LEN=128) :: &
 '    COLUMNS=[3],[2],[4],[4],[5],[7],[5],[6],[4],[1] DELIMITERS=[ ] SEPARATOR=[___]',&
 '    H___E___L___L___O___W___O___R___L___D___                                      ',&
 '                                                                                  ',&
+'SEE ALSO                                                                          ',&
+'   cut(1), column(1), colrm(1)                                                    ',&
 'AUTHOR                                                                            ',&
 '   John S. Urban                                                                  ',&
 'LICENSE                                                                           ',&

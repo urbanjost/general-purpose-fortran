@@ -6034,16 +6034,17 @@ end interface
    endif
 end subroutine call_sleep
 !-----------------------------------------------------------------------------------------------------------------------------------
+!-----------------------------------------------------------------------------------------------------------------------------------
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !-----------------------------------------------------------------------------------------------------------------------------------
-subroutine call_usleep(milliseconds)
+subroutine call_usleep(microseconds)
 
 ! ident_38="@(#) M_system call_usleep(3fp) call usleep(3c)"
 
 use,intrinsic                   :: iso_c_binding, only: c_int
-integer(kind=c_int),intent(in)  :: milliseconds
+integer(kind=c_int),intent(in)  :: microseconds
 integer(kind=c_int)             :: status
 interface
    function c_usleep(mseconds) bind (C,name="usleep")
@@ -6052,8 +6053,8 @@ interface
       integer(c_int), intent(in), VALUE :: mseconds
    end function c_usleep
 end interface
-   if(milliseconds>0)then
-      status=c_usleep(milliseconds)
+   if(microseconds>0)then
+      status=c_usleep(microseconds)
    endif
 end subroutine call_usleep
 !-----------------------------------------------------------------------------------------------------------------------------------

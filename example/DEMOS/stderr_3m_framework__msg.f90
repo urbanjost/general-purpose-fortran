@@ -22,8 +22,8 @@
              & 12345.6789_real64,tiny(0.0_real64))
      !#ifdef __NVCOMPILER
      !#else
-     call stderr('real128 :',huge(0.0_real128),0.0_real128, &
-             & 12345.6789_real128,tiny(0.0_real128))
+     !call stderr('real128 :',huge(0.0_real128),0.0_real128, &
+     !        & 12345.6789_real128,tiny(0.0_real128))
      !#endif
      call stderr('complex :',cmplx(huge(0.0_real),tiny(0.0_real)))
 

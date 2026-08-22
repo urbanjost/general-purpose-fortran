@@ -153,52 +153,158 @@ from the origin &lt;0.0,0.0&gt; .
 Sample program:
 <P>
 <PRE>
-    program demo_hypot
-    use, intrinsic :: iso_fortran_env, only : real32, real64, real128
-    implicit none
-    real(kind=real32) :: x, y
-    real(kind=real32),allocatable :: xs(:), ys(:)
-    integer :: i
-    character(len=*),parameter :: f=&#146;(a,/,SP,*(3x,g0,1x,g0:,/))&#146;
+       program demo_hypot
+       use, intrinsic :: iso_fortran_env, only : real32, real64, real128
+       implicit none
+       real(kind=real32)             :: x, y
+       real(kind=real32),allocatable :: xs(:), ys(:)
+       integer                       :: i
+       character(len=*),parameter    :: f=&#146;(a,/,SP,*(3x,g0,1x,g0:,/))&#146;
 <P>
-       x = 1.e0_real32
-       y = 0.5e0_real32
+         ! basics
+          write(*,*)hypot(3.0,4.0)
+          write(*,*)hypot(1.0,0.25)
+          write(*,*)hypot(1.0,0.5)
 <P>
-       write(*,*)
-       write(*,&#146;(*(g0))&#146;)&#146;point &lt;&#146;,x,&#146;,&#146;,y,&#146;&gt; is &#146;,hypot(x,y)
-       write(*,&#146;(*(g0))&#146;)&#146;units away from the origin&#146;
-       write(*,*)
+          x=3.0
+          y=4.0
+          ! all equivalent
+          write(*,*)sqrt(x**2+y**2), hypot(x,y), abs(cmplx(x,y))
 <P>
-       ! elemental
-       xs=[  x,  x**2,  x*10.0,  x*15.0, -x**2  ]
-       ys=[  y,  y**2, -y*20.0,  y**2,   -y**2  ]
+          ! a common use is to determine the distance of a point
+          ! from the origin
+          x = 1.e0_real32
+          y = 0.5e0_real32
 <P>
-       write(*,f)"the points",(xs(i),ys(i),i=1,size(xs))
-       write(*,f)"have distances from the origin of ",hypot(xs,ys)
-       write(*,f)"the closest is",minval(hypot(xs,ys))
+          write(*,*)
+          write(*,&#146;(*(g0))&#146;)&#146;point &lt;&#146;,x,&#146;,&#146;,y,&#146;&gt; is &#146;,hypot(x,y)
+          write(*,&#146;(*(g0))&#146;)&#146;units away from the origin&#146;
+          write(*,*)
 <P>
-    end program demo_hypot
+         ! elemental
+          xs=[  x,  x**2,  x*10.0,  x*15.0, -x**2  ]
+          ys=[  y,  y**2, -y*20.0,  y**2,   -y**2  ]
+<P>
+          write(*,f)"the points",(xs(i),ys(i),i=1,size(xs))
+          write(*,f)"have distances from the origin of ",hypot(xs,ys)
+          write(*,f)"the closest is",minval(hypot(xs,ys))
+<P>
+       ! Finding primitive Euclidean triple sets, which are pairs of whole
+       ! numbers that form the sides of a right triangle with a hypotenuse
+       ! whose length is also a whole number (like [3,4,5]).
+       !
+       EUCLIDEAN: block
+       ! Euclid&#146;s formula is a fundamental formula for generating Pythagorean
+       ! triples given an arbitrary pair of integers m and n with m &gt; n &gt; 0.
+       ! The formula states that the integers
+       !
+       !    a = m**2 − n**2
+       !    b = 2*m*n
+       !    c = m**2 + n**2
+       !
+       ! form a Pythagorean triple.
+          integer :: i,j
+          real    :: m,n, a,b,c
+          integer,parameter :: maxside=100
+          ! find all primitive Euclidean triplets with sides a and b &lt;= maxside
+          do i=1,maxside
+             do j=1,maxside
+                m=i
+                n=j
+                ! skip values unless m &gt; 2
+                if(m.le.n)cycle
+                a=m**2-n**2
+                b=2*m*n
+                c=m**2+n**2
+                ! skip writing it if it is not a primitive Euclidean triplet
+                if (gcd_vector(nint([a,b,c])) &gt; 1)cycle
+                if(a&gt;maxside.or.b&gt;maxside)cycle
+                ! c should be hypot(a,b) or equivalently abs(cmplx(a,b))
+                write(*,*) a, b, c, hypot(a,b), c==hypot(a,b)
+             enddo
+          enddo
+       endblock EUCLIDEAN
+       contains
+       function gcd(m,n) result(answer) ! greatest common denominator
+       integer,intent(in) :: m, n
+       integer            :: answer
+       integer            :: irest
+       intrinsic          :: mod,abs
+       integer            :: ifirst
+          ifirst=abs(m)
+          answer=abs(n)
+          if(answer.eq.0)then
+             answer=ifirst
+          else
+             do
+                irest = mod(ifirst,answer)
+                if(irest == 0)  exit
+                ifirst = answer
+                answer = irest
+             enddo
+             answer= iabs(answer)
+          endif
+       end function gcd
+       integer function gcd_vector(m)
+       integer,intent(in) :: m(:)
+       integer            :: vsize
+       integer            :: i
+          vsize=size(m)
+          if(vsize.gt.0)then
+             gcd_vector = m(1)
+             TILLONE: do i=1,vsize
+                gcd_vector = gcd(gcd_vector,iabs(m(i)))
+                if (gcd_vector.eq.1) exit TILLONE
+             enddo TILLONE
+          else
+             gcd_vector=0
+          endif
+       end function gcd_vector
+<P>
+       end program demo_hypot
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
-     &gt;
-     &gt; point &lt;1.00000000,0.500000000&gt; is 1.11803401
-     &gt; units away from the origin
-     &gt;
-     &gt; the points
-     &gt;    +1.00000000 +0.500000000
-     &gt;    +1.00000000 +0.250000000
-     &gt;    +10.0000000 -10.0000000
-     &gt;    +15.0000000 +0.250000000
-     &gt;    -1.00000000 -0.250000000
-     &gt; have distances from the origin of
-     &gt;    +1.11803401 +1.03077638
-     &gt;    +14.1421356 +15.0020828
-     &gt;    +1.03077638
-     &gt; the closest is
-     &gt;    +1.03077638
+        &gt;    5.00000000
+        &gt;    1.03077638
+        &gt;    1.11803401
+        &gt;    5.00000000       5.00000000       5.00000000
+        &gt;
+        &gt; point &lt;1.00000000,0.500000000&gt; is 1.11803401
+        &gt; units away from the origin
+        &gt;
+        &gt; the points
+        &gt;    +1.00000000 +0.500000000
+        &gt;    +1.00000000 +0.250000000
+        &gt;    +10.0000000 -10.0000000
+        &gt;    +15.0000000 +0.250000000
+        &gt;    -1.00000000 -0.250000000
+        &gt; have distances from the origin of
+        &gt;    +1.11803401 +1.03077638
+        &gt;    +14.1421356 +15.0020828
+        &gt;    +1.03077638
+        &gt; the closest is
+        &gt;    +1.03077638
+        &gt;    3.00000000     4.00000000     5.00000000     5.00000000 T
+        &gt;    5.00000000     12.0000000     13.0000000     13.0000000 T
+        &gt;    15.0000000     8.00000000     17.0000000     17.0000000 T
+        &gt;    7.00000000     24.0000000     25.0000000     25.0000000 T
+        &gt;    21.0000000     20.0000000     29.0000000     29.0000000 T
+        &gt;    9.00000000     40.0000000     41.0000000     41.0000000 T
+        &gt;    35.0000000     12.0000000     37.0000000     37.0000000 T
+        &gt;    11.0000000     60.0000000     61.0000000     61.0000000 T
+        &gt;    45.0000000     28.0000000     53.0000000     53.0000000 T
+        &gt;    33.0000000     56.0000000     65.0000000     65.0000000 T
+        &gt;    13.0000000     84.0000000     85.0000000     85.0000000 T
+        &gt;    63.0000000     16.0000000     65.0000000     65.0000000 T
+        &gt;    55.0000000     48.0000000     73.0000000     73.0000000 T
+        &gt;    39.0000000     80.0000000     89.0000000     89.0000000 T
+        &gt;    77.0000000     36.0000000     85.0000000     85.0000000 T
+        &gt;    65.0000000     72.0000000     97.0000000     97.0000000 T
+        &gt;    99.0000000     20.0000000     101.000000     101.000000 T
+        &gt;    91.0000000     60.0000000     109.000000     109.000000 T
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -248,7 +354,7 @@ log_gamma(3) - Logarithm of the absolute value of the Gamma function
 <TR></TR></TABLE>Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>hypot (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from e23f1e5d-475c-48f8-aa57-591588b5b801 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>hypot (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 34574f1a-277e-4af6-a1e7-a63c4ef9229a using man macros.</FONT>
 <br><br><center><img src="images/hypot.3fortran.gif"></center>
 </div>
 </div>

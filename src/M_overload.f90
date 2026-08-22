@@ -256,8 +256,17 @@ interface operator ( /= )
    module procedure boolean_notequal
 end interface operator ( /= )
 
-interface operator ( // )
+interface operator ( .cat. )
    module procedure g_g
+end interface operator ( .cat. )
+
+interface operator ( // )
+   module procedure  concat_i_g, concat_g_i
+   module procedure  concat_r_g, concat_g_r
+   module procedure  concat_d_g, concat_g_d
+   module procedure  concat_c_g, concat_g_c
+   module procedure  concat_l_g, concat_g_l
+   module procedure  concat_s_g, concat_g_s
 end interface operator ( // )
 
 ! already made all intrinsic names public,
@@ -281,6 +290,7 @@ interface sign;    module procedure sign_int32;           end interface
 interface sign;    module procedure sign_int64;           end interface
 interface sign;    module procedure sign_real32;          end interface
 interface sign;    module procedure sign_real64;          end interface
+interface sign;    module procedure sign_real128;         end interface
 ! allow for minimum length option on adjustl and adjustr
 interface adjustl; module procedure adjustl_atleast;      end interface
 interface adjustr; module procedure adjustr_atleast;      end interface
@@ -430,6 +440,12 @@ public    :: trim,                  ubound,                    unpack,          
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
 !-----------------------------------------------------------------------------------------------------------------------------------
+!===================================================================================================================================
+! worked fine with gfortran, ifx produced an error
+! ././src/M_unicode.F90(5530): error #9186: The dummy arguments of the
+! specific procedure defining a defined assignment or defined operator
+! cannot both be unlimited polymorphic. [G_G]
+!
 function g_g(value1,value2) result (string)
 
 ! ident_2="@(#) M_overload g_g(3f) convert two single intrinsic values to a string"
@@ -450,6 +466,140 @@ character(len=:),allocatable :: string
    string(1:len(string1))=string1
    string(len(string1)+1:)=string2
 end function g_g
+!===================================================================================================================================
+! maybe concat_g_g is non-standard, but intel compiler requires naming everything
+
+function concat_i_g(lhs,rhs) result (string)
+integer,intent(in)          :: lhs
+class(*),intent(in)         :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_i_g
+
+function concat_g_i(lhs,rhs) result (string)
+class(*),intent(in)         :: lhs
+integer,intent(in)          :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_g_i
+
+function concat_r_g(lhs,rhs) result (string)
+real,intent(in)             :: lhs
+class(*),intent(in)         :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_r_g
+
+function concat_g_r(lhs,rhs) result (string)
+class(*),intent(in)         :: lhs
+real,intent(in)             :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_g_r
+
+function concat_d_g(lhs,rhs) result (string)
+doubleprecision,intent(in)  :: lhs
+class(*),intent(in)         :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_d_g
+
+function concat_g_d(lhs,rhs) result (string)
+class(*),intent(in)         :: lhs
+doubleprecision,intent(in)  :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_g_d
+
+function concat_c_g(lhs,rhs) result (string)
+complex,intent(in)          :: lhs
+class(*),intent(in)         :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_c_g
+
+function concat_g_c(lhs,rhs) result (string)
+class(*),intent(in)         :: lhs
+complex,intent(in)          :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_g_c
+
+function concat_s_g(lhs,rhs) result (string)
+character(len=*),intent(in) :: lhs
+class(*),intent(in)         :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_s_g
+
+function concat_g_s(lhs,rhs) result (string)
+class(*),intent(in)         :: lhs
+character(len=*),intent(in) :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_g_s
+
+function concat_l_g(lhs,rhs) result (string)
+logical,intent(in)          :: lhs
+class(*),intent(in)         :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_l_g
+
+function concat_g_l(lhs,rhs) result (string)
+class(*),intent(in)         :: lhs
+logical,intent(in)          :: rhs
+character(len=:),allocatable          :: string1, string2, string
+   string1 = fmt(lhs)
+   string2 = fmt(rhs)
+   allocate(character(len=len(string1)+len(string2)) :: string)
+   string(1:len(string1))=string1
+   string(len(string1)+1:)=string2
+end function concat_g_l
 !>
 !!##NAME
 !!    merge(3f) - [M_overload:INTRINSIC] allow MERGE(3f) intrinsic to take
@@ -543,9 +693,10 @@ end function adjustr_atleast
 !!    This is an overload of the SIGN(3f) intrinsic which assumes the
 !!    magnitude is 1 if only one argument is supplied.
 !!
-!!    SIGN(3f) returns a value with the magnitude of MAGNITUDE but with the
-!!    sign of COPYSIGN. All three must be of the same type, which may be
-!!    INTEGER or REAL.
+!!    SIGN(MAGNITUDE,COPYSIGN) returns a value with the magnitude of
+!!    MAGNITUDE but with the sign of COPYSIGN. All three must be of the
+!!    same type, which may be INTEGER or REAL.
+!!
 !!
 !!##OPTIONS
 !!    magnitude  the return value will have the same magnitude as this value
@@ -611,6 +762,12 @@ end function adjustr_atleast
 !!##LICENSE
 !!    Public Domain
 
+elemental function sign_real128(value)
+real(kind=real128),intent(in) :: value
+real(kind=real128)            :: sign_real128
+intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
+   sign_real128=sign(1.0_real128,value)
+end function sign_real128
 elemental function sign_real64(value)
 real(kind=real64),intent(in) :: value
 real(kind=real64)            :: sign_real64
@@ -1053,7 +1210,6 @@ end function charray_vector_vector
 !!          VFE: block
 !!             integer,allocatable :: vector(:)
 !!             integer :: neg, zero, pos
-!!             integer :: left
 !!                vector=[-1,-22,-300,0,0,0,0,8,9,10,11,12]
 !!                neg=3
 !!                zero=4
@@ -1136,6 +1292,9 @@ logical                      :: trimit
          if(fmt_local == '') fmt_local='(1pg0,a)'
          write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
       type is (real(kind=real64))
+         if(fmt_local == '') fmt_local='(1pg0,a)'
+         write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+      type is (real(kind=real128))
          if(fmt_local == '') fmt_local='(1pg0,a)'
          write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
       type is (logical)
@@ -1360,6 +1519,11 @@ doubleprecision           :: d_out
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
+   type is (real(kind=real128))
+      !x!if(valuein.gt.big)then
+      !x!   write(stderr,*)'*anyscalar_to_double* value too large ',valuein
+      !x!endif
+      d_out=dble(valuein)
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
    class default
@@ -1385,6 +1549,7 @@ class(*),intent(in)    :: valuein
    type is (integer(kind=int64));  ii38=valuein
    type is (real(kind=real32));    ii38=int(valuein,kind=int64)
    type is (real(kind=real64));    ii38=int(valuein,kind=int64)
+   Type is (real(kind=real128));   ii38=int(valuein,kind=int64)
    type is (logical);              ii38=merge(0_int64,1_int64,valuein)
    type is (character(len=*))   ;
       read(valuein,*,iostat=ios,iomsg=message)ii38
@@ -1414,6 +1579,11 @@ real                :: r_out
    type is (integer(kind=int64));  r_out=real(valuein)
    type is (real(kind=real32));    r_out=real(valuein)
    type is (real(kind=real64))
+      !x!if(valuein.gt.big)then
+      !x!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
+      !x!endif
+      r_out=real(valuein)
+   type is (real(kind=real128))
       !x!if(valuein.gt.big)then
       !x!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
       !x!endif

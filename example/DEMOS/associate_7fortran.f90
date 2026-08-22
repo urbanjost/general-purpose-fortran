@@ -7,8 +7,8 @@
                                      'ubound=',ubound(array)
            write(*,g)'array(:,:): ', 'lbound=',lbound(array(:,:)), &
                                      'ubound=',ubound(array(:,:))
-         ! the bounds assigned to the identifiers are what UBOUND(3f)
-         ! and LBOUND(3f) return given the selector as an argument
+         ! the bounds assigned to the identifiers are what UBOUND(3)
+         ! and LBOUND(3) return given the selector as an argument
            associate ( &
             alias=>   array,              & ! keeps the custom bounds
             normal=>  array(:,:),         & ! gets normal bounds

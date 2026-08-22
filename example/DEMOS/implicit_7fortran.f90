@@ -11,8 +11,8 @@
          implicit none
          ! it is still a convention used by many programmers to reserve
          ! starting letters of I to N for integers.
-         integer    :: i, j, k
-         type(real) :: x,y,z
+         !   integer    :: i, j, k
+         !   type(real) :: x,y,z
          intrinsic sin,cos ! intrinsic types are already specified
          integer,external :: zzz ! but external functions need declared
                                  ! if they do not have an interface

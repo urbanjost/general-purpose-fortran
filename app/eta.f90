@@ -1,4 +1,4 @@
-program character_frequency    ! count frequency of occurrence of characters in an ASCII file
+program character_frequency       ! count frequency of occurrence of characters in an ASCII file
 use :: M_io,      only : filebyte ! note the file could be read sequentially as far less cost in memory.
 use :: M_CLI2,    only : set_args, lget, filenames=>unnamed
 use :: M_sort,    only : sort_quick_rx

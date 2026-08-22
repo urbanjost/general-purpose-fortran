@@ -118,8 +118,8 @@ None
 </A>
 <BLOCKQUOTE>
 <P>
-The return value is of type default integer. It is the number of
-arguments passed on the command line when the program was invoked.
+The returned value is the number of arguments passed on the command line
+when the program was invoked.
 <P>
 If there are no command arguments available or if the processor does not
 support command arguments, then the result has the value zero.
@@ -140,22 +140,139 @@ Sample program:
     program demo_command_argument_count
     implicit none
     integer :: count
+    integer :: i
+<P>
+    ! basics:
        count = command_argument_count()
-       print *, count
+       print *
+       print &#146;(*(g0))&#146;, &#146;argument count=&#146;,count
+       ! usually used in conjunction with get_command_argument()
+       do i=1,command_argument_count()
+          ! call function wrapper around get_command_argument()
+          write(*,*)i,get_arg(i)
+       enddo
+<P>
+    ! more:
+       ! test the function extensively
+       call testit()
+<P>
+    contains
+    ! a test done by recursively calling the program
+    ! NO PLACE FOR BEGINNERS!
+    subroutine testit()
+    integer,parameter             :: sz=10
+    character(len=:),allocatable  :: self
+    character(len=:),allocatable  :: cmd
+    character(len=sz),allocatable :: first
+    type test
+       character(len=sz)            :: testname
+       character(len=:),allocatable :: cmd
+       integer                      :: answer
+    end type
+    type(test),allocatable        :: tests(:)
+    integer                       :: i
+    integer                       :: indx
+       ! a set of tests (note a test cannot be null):
+       tests=[ &
+        & test(&#146;singular&#146;,&#146;&#146;,0), &
+        & test(&#146;multiple&#146;,&#146;orange wolf C&#146;,3), &
+        & test(&#146;quotes&#146;,&#146;a "Quoted String"&#146;,2), &
+        & test(&#146;spaces&#146;,&#146; one two three four    five  six  &#146;,6), &
+       ! note many characters might be special to a shell
+        & test(&#146;special&#146;,&#146;"&lt;&gt;$@# " "$%&*()_-"&#146;,2), &
+        & test(&#146;many&#146;,&
+        & &#146;a b c d e f g h i j k l m n o p q r s t u v w x y z&#146;,26)]
+       ! get name of program
+       self=get_arg(0)
+       ! if no options call all the test cases
+       if(count.eq.0)then
+          do i=1,size(tests)
+             call execute_command_line&
+              & (self//&#146; &#146;//tests(i)%testname//&#146; &#146;//tests(i)%cmd)
+          enddo
+        else
+          ! assumed to be a test call of the program so compare
+          ! test and results and report
+          cmd=get_cmd()
+          first=get_arg(1)
+          indx=findloc(tests%testname,first,dim=1)
+          if(indx.gt.0)then
+             write(*,&#146;(*(g0,1x))&#146;)&#146;testing &#146;,first,tests(indx)%cmd
+             write(*,&#146;(*(g0,1x))&#146;)&#146;got     &#146;,cmd
+             write(*,&#146;(a,a,tl20,a,t26,a)&#146;)&#146;case &#146;,repeat(&#146;.&#146;,20), &
+              & trim(first),merge(&#146; PASSED&#146;,&#146; FAILED&#146;,&
+              & count.eq.tests(indx)%answer+1)
+          else
+             write(*,*)&#146;&lt;ERROR&gt;Unexpected command line &#146;,cmd
+          endif
+       endif
+    end subroutine testit
+<P>
+    function get_cmd() result(command_line)
+    ! return entire command line
+    integer                      :: command_line_length
+    character(len=:),allocatable :: command_line
+       ! get command line length
+       call get_command(length=command_line_length)
+       ! allocate string big enough to hold command line
+       allocate(character(len=command_line_length) :: command_line)
+       ! get command line as a string
+       call get_command(command=command_line)
+       ! trim leading spaces just in case
+       command_line=adjustl(command_line)
+    end function get_cmd
+<P>
+    function get_arg(n,status) result(arg)
+    ! get nth argument from command line
+    integer,intent(in)           :: n
+    integer,intent(out),optional :: status
+    integer                      :: argument_length, istat
+    character(len=:),allocatable :: arg
+       call get_command_argument( number=n, length=argument_length )
+       if(allocated(arg))deallocate( arg )
+       allocate(character(len=argument_length) :: arg )
+       call get_command_argument(n, arg, status=istat )
+       if(present(status)) status=istat
+    end function get_arg
+<P>
     end program demo_command_argument_count
 <P>
 </PRE>
-Sample output:
+Results:
 <P>
 <PRE>
-       # the command verb does not count
-       ./test_command_argument_count
-           0
-       # quoted strings may count as one argument
-       ./test_command_argument_count count arguments
-           2
-       ./test_command_argument_count &#146;count arguments&#146;
-           1
+     &gt;
+     &gt; argument count=0
+     &gt;
+     &gt; argument count=1
+     &gt; testing  singular
+     &gt; got      tst singular
+     &gt; case singular&#46;&#46;&#46;......... PASSED
+     &gt;
+     &gt; argument count=4
+     &gt; testing  multiple   orange wolf C
+     &gt; got      tst multiple orange wolf C
+     &gt; case multiple&#46;&#46;&#46;......... PASSED
+     &gt;
+     &gt; argument count=3
+     &gt; testing  quotes     a "Quoted String"
+     &gt; got      tst quotes a Quoted String
+     &gt; case quotes&#46;&#46;&#46;........... PASSED
+     &gt;
+     &gt; argument count=7
+     &gt; testing  spaces      one two three four    five  six
+     &gt; got      tst spaces one two three four five six
+     &gt; case spaces&#46;&#46;&#46;........... PASSED
+     &gt;
+     &gt; argument count=3
+     &gt; testing  special    "&lt;&gt;$@# " "$%&*()_-"
+     &gt; got      tst special &lt;&gt;#  $%&*()_-
+     &gt; case special&#46;&#46;&#46;.......... PASSED
+     &gt;
+     &gt; argument count=27
+     &gt; testing  many       a b c d e f g h i j k l m n o p q r s t u v w x y z
+     &gt; got      tst many a b c d e f g h i j k l m n o p q r s t u v w x y z
+     &gt; case many&#46;&#46;&#46;............. PASSED
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -180,7 +297,7 @@ GET_COMMAND(3), GET_COMMAND_ARGUMENT(3)
 Fortran intrinsic descriptions (license: MIT) @urbanjost
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>command_argument_count (3)</TD> <TD align=right width=33%><I>June 29, 2025</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from b6cbc49a-2883-4766-8d75-4b3a39c1c1a0 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>command_argument_count (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 404f87b4-374d-4227-88e5-466ced4419e7 using man macros.</FONT>
 <br><br><center><img src="images/command_argument_count.3fortran.gif"></center>
 </div>
 </div>

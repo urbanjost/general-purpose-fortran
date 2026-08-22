@@ -322,7 +322,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
         write(out,2921) numtry
 2921    format(/' Does multiplication commute?', ' Testing if  x*y = y*x  for', i4,' random pairs:')
-        r9 = dsqrt(fp3)
+        r9 = sqrt(fp3)
         i = numtry + 1
         x9 = fp0 / fp3
 2960    continue
@@ -363,7 +363,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         y=x*x
         y=y*y
         x=x*y
-        y=x-dint(x)
+        y=x-int(x)
         x9=y+x*.000005
         return
         end subroutine random
@@ -376,12 +376,12 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         write(out,1681)
 1681    format (' Test for extra-precise subexpressions:')
 !
-        x = dabs( ((fp4 / fp3 - fp1) - fp1 / fp4) * fp3 - fp1 / fp4)
+        x = abs( ((fp4 / fp3 - fp1) - fp1 / fp4) * fp3 - fp1 / fp4)
 1700    continue
         z2 = x
         x = (fp1 + (half * z2 + fp32 * z2 * z2)) - fp1
         if (z2 .gt. x .and. x .gt. fp0) goto 1700
-        y = dabs( (fp3/fp4 - fp2/fp3) * fp3 - fp1/fp4)
+        y = abs( (fp3/fp4 - fp2/fp3) * fp3 - fp1/fp4)
         z=y
         x=y
 1720    continue
@@ -446,11 +446,11 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         x = z1/ulpmin
         y = z2/ulppls
         if (y .gt. x) x=y
-        q = -dlog(x)
+        q = -log(x)
         write(out, 1841)
-        xx=q/dlog(radix)
+        xx=q/log(radix)
         write(out, 1842) xx
-        xx=q/dlog(fp8+fp2)
+        xx=q/log(fp8+fp2)
         write(out, 1843) xx
 1841    format(' Some subexpressions appear to be calculated extra-precisely')
 1842    format(' with about   ',e15.7,' extra base b digits, i.e.')
@@ -514,9 +514,9 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 1980    continue
         z = radix * ulppls
         x=fp1+z
-        y=dabs((x+z)-x*x)-ulppls
+        y=abs((x+z)-x*x)-ulppls
         x=fp1-ulppls
-        z=dabs((x-ulppls)-x*x)-ulpmin
+        z=abs((x-ulppls)-x*x)-ulpmin
         if (y .le. fp0 .and. z .le. fp0) goto 2000
         fails=fails+1
         write(out, 1991)
@@ -1028,7 +1028,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 5700    continue
         i = i + 1
         if (z .eq. fp0) go to 5770
-        v9=dsqrt(z)
+        v9=sqrt(z)
         y=v9*v9
         if (.not. (y/(fp1-radix * nulps) .lt. z .or. y .gt. (fp1+radix*nulps)*z))goto 5770
         if (v9 .gt. ulpmin) goto 5750
@@ -1062,7 +1062,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         goto 5920
 !
 5850    continue
-        v9 = dsqrt(z)
+        v9 = sqrt(z)
         x = (fp1 - radix * nulps) * v9
         v9 = v9 * x
         if (.not. (v9 .lt. (fp1-fp2*radix*nulps)*z .or. v9 .gt. z)) goto 5900
@@ -1202,7 +1202,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         dummy = (z + z) / z
         write(out, 4665) zname, zname, zname, dummy
 4665    format(' what the machine gets for  (',a8,' + ',a8,') / ',a8,'  is'/10x, e15.7)
-        if (dabs(dummy-fp2) .lt. radix*ulppls) go to 4750
+        if (abs(dummy-fp2) .lt. radix*ulppls) go to 4750
         if (dummy .lt. fp1 .or. dummy .gt. fp2) goto 4740
         partu=1
         defect=defect+1
@@ -1297,7 +1297,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         n1 = n
         n = 0
         z = a1
-        m = idint(fp2 * dlog(w) / dlog(a1) )
+        m = idint(fp2 * log(w) / log(a1) )
 !
 !                       LOOP
 !
@@ -1321,7 +1321,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         call pwrcmp (x, z, i, m, n)
 4240    continue
         z = z + fp2
-        if (fp3 * dint (z / fp3) .eq. z) goto 4240
+        if (fp3 * int (z / fp3) .eq. z) goto 4240
         if (z .lt. fp8 * fp3) goto 4230
         if (n .gt. 0) write(out,4261)
 4261    format(' Error like this may invalidate financial calculations involving interest rates.')
@@ -1359,7 +1359,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         y=w+fp1
         z=y-w
         y=z-fp1
-        if ((-fp1+dabs(y)) .lt. fp0) goto 1180
+        if ((-fp1+abs(y)) .lt. fp0) goto 1180
 !       ... NOW  W  IS JUST BIG ENOUGH THAT  |((W+1)-W)-1| >= 1 ...
 !        I.E. 1 IS INSIGNIFICANT RELATIVE TO W.
         precis=fp0
@@ -1406,7 +1406,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         third=x-fp1
         sixth=(fp1/fp2)-third
         x=sixth+sixth
-        x=dabs(x-third)
+        x=abs(x-third)
         if (x .lt. ulppls) x=ulppls
 !       ... NOW  X = (UNKNOWN NO.) ULPS OF  1 + ...
 1320    continue
@@ -1423,7 +1423,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         sixth=x-(fp1/fp2)
         third=sixth+sixth
         x=third-(fp1/fp2)
-        x=dabs(x+sixth)
+        x=abs(x+sixth)
         if (x .lt. ulpmin) x=ulpmin
 !       ... NOW  X = (UNKNOWN NO.) ULPS OF  1 - ...
 1360    continue
@@ -1446,7 +1446,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         w=fp1/ulpmin
         onemin = (half - ulpmin) + half
 !       ... = 1 - ULPMIN = NEXTAFTER(1.0, 0)
-        radix=dint(.01 + ulppls/ulpmin)
+        radix=int(.01 + ulppls/ulpmin)
         if (radix .eq. radsav) write(out,1411)
 1411    format(' Radix confirmed.')
         if (radix .ne. radsav) write(out,1421) radix
@@ -1495,14 +1495,14 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         b9=(b9-ulppls)+fp1
         if (radix .eq. fp1) go to 1610
 !       ... B9 = NEXTAFTER(RADIX, 0)
-        x=-t8*dlog(ulpmin)/dlog(radix)
-        y=dint(half+x)
-        if ( dabs(x-y)*fp4 .lt. fp1 ) x=y
+        x=-t8*log(ulpmin)/log(radix)
+        y=int(half+x)
+        if ( abs(x-y)*fp4 .lt. fp1 ) x=y
         precis = x/t8
-        y=dint(half + precis)
-        if ( dabs(precis-y)*t8 .lt. half ) precis=y
+        y=int(half + precis)
+        if ( abs(precis-y)*t8 .lt. half ) precis=y
 !       PURIFY INTEGERS.
-        if (precis .eq. dint(precis)) goto 1640
+        if (precis .eq. int(precis)) goto 1640
 1610    continue
         write(out,1611)
 1611    format(' Precision cannot be characterized by an integer number of sig. digits;')
@@ -1550,7 +1550,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 2290    continue
         x = a
         a = a / a1
-        if (dint(a) .eq. a) goto 2290
+        if (int(a) .eq. a) goto 2290
         if (x .eq. fp1) goto 2340
 !               RADIX  IS A POWER OF  A1; IF RADIX=1 THEN  A1=2.
         if (a1 .gt. fp3) goto 2330
@@ -1716,7 +1716,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !       ================================================================
 2770    continue
         sticky = fp0
-        if (mulgrd*divgrd*subgrd .lt. fp1 .or.r1 .lt. fp1.or.r2 .lt. fp1.or.r3 .lt. fp1.or.dint(b2) .ne. b2) goto 2890
+        if (mulgrd*divgrd*subgrd .lt. fp1 .or.r1 .lt. fp1.or.r2 .lt. fp1.or.r3 .lt. fp1.or.int(b2) .ne. b2) goto 2890
         write(out,2780)
 2780    format(' checking for sticky bit:')
         x=(half+ulpmin)*ulppls
@@ -1834,7 +1834,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
 980     continue
         minone=-1.0e0
-        if(minone+1.0e0.eq.0.0e0.and.1.0e0+minone.eq.0.0e0.and.minone+dabs(minone).eq.0.0e0.and.minone+minone*minone.eq.0.0e0) &
+        if(minone+1.0e0.eq.0.0e0.and.1.0e0+minone.eq.0.0e0.and.minone+abs(minone).eq.0.0e0.and.minone+minone*minone.eq.0.0e0) &
        & goto 1000
         fails=fails+1
         write(out,991)
@@ -1908,7 +1908,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         x = fp0
         i = 0
 3030    continue
-        y = dsqrt(x)
+        y = sqrt(x)
         if (y .eq. x .and. y - half .eq. x - half) goto 3050
         fails = fails + 1
         write(out,3041) x, y
@@ -1930,7 +1930,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !       ... RECORD MIN AND MAX ERRORS.
         e5 = fp0
         e7 = fp0
-!       ... TEST WHETHER DSQRT(X*X)  =  X
+!       ... TEST WHETHER SQRT(X*X)  =  X
         j = 0
         x = radix
         u = ulppls
@@ -1989,16 +1989,16 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
 3310    continue
         i = i + 1
-        x = dsqrt(x)
-        q = dsqrt(y)
-        z = dsqrt(z)
+        x = sqrt(x)
+        q = sqrt(y)
+        z = sqrt(z)
         if (.not. (x .gt. q .or. q .gt. z)) goto 3330
         defect = defect + 1
         write(out,3321) y
 3321    format(' DEFECT:  sqrt(x) is non - monotonic for  x  near ',e15.7)
         goto 3390
 3330    continue
-        q = dint(q + half)
+        q = int(q + half)
         if (.not. (i .gt. 0 .or. q*q .eq. radix)) goto 3380
         if (i .gt. 0) goto 3360
         y = q
@@ -2024,12 +2024,12 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
         e5 = e5 + half
         e7 = e7 - half
-        y = (dsqrt(fp1 + ulppls) - fp1)/ulppls
+        y = (sqrt(fp1 + ulppls) - fp1)/ulppls
         e6 = (y - fp1) + ulppls/fp8
         if (e6 .gt. e7) e7 = e6
         e6 = y + ulppls/fp8
         if (e6 .lt. e5) e5 = e6
-        y = ((dsqrt(onemin) - ulppls) - (fp1 - ulppls))/ulpmin
+        y = ((sqrt(onemin) - ulppls) - (fp1 - ulppls))/ulpmin
         e6 = y + ulpmin/fp8
         if (e6 .gt. e7) e7 = e6
         e6 = (y + fp1) + ulpmin/fp8
@@ -2042,7 +2042,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
         do
            i = i + 1
-           y = dsqrt((x + ulpmin + x) + onemin)
+           y = sqrt((x + ulpmin + x) + onemin)
            y = ((y - ulppls) - ((fp1 - ulppls) + x))/u
            z = ((ulpmin - x) + onemin)*half*x*x/u
            e6 = (y + half) + z
@@ -2051,7 +2051,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
            if (e6 .gt. e7) e7 = e6
            if (i .eq. 4) goto 3530
            if (i .eq. 2) goto 3520
-           x = u * dsign(fp1,x) * dint( fp8 / (fp9 * dsqrt(u)) )
+           x = u * sign(fp1,x) * int( fp8 / (fp9 * sqrt(u)) )
         cycle
 !
 3520       continue
@@ -2065,13 +2065,13 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         if (radix .eq. fp1) goto 3900
         write(out,3551)
 3551    format(' Testing whether  sqrt  is rounded or chopped:')
-        d = dint(half + radix ** (fp1 + precis - dint(precis)))
+        d = int(half + radix ** (fp1 + precis - int(precis)))
 !
 !       ...  =  B^(1 + FRACT)  IF  P  =  INTEGER  +  FRACT.
 !
         x = d / radix
         y = d / a1
-        if (x .ne. dint(x) .or. y .ne. dint(y)) goto 3700
+        if (x .ne. int(x) .or. y .ne. int(y)) goto 3700
         x = fp0
         z2 = x
         y = fp1
@@ -2088,9 +2088,9 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !                       IF NEW Y2 > OLD, CHECK THAT  GCD(Y,B)  =  1
 3620    continue
         temp = half - q / y1
-        temp1 = dint(temp)
+        temp1 = int(temp)
         if (temp1 .gt. temp) temp1 = temp1 - fp1
-        x1 = dabs(q + temp1 * y1)
+        x1 = abs(q + temp1 * y1)
         q = y1
         y1 = x1
         if (x1 .gt. fp0) goto 3620
@@ -2111,10 +2111,10 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         x8 = d4 - z2
         q = (x8 + z * z) / d4
         x8 = x8 / fp8
-        if (q .ne. dint(q)) goto 3700
+        if (q .ne. int(q)) goto 3700
 3680    continue
         x = z1 * z
-        x = x - dint(x / radix) * radix
+        x = x - int(x / radix) * radix
         if (x .eq. fp1) goto 3800
 !                       WITH  1  =  Z*Z1 MOD B
         z1 = z1 - fp1
@@ -2142,7 +2142,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         if (d * radix - d .ne. w - d) goto 3700
         z2 = d
         i = 0
-!               COUNT HOW MANY TESTS OF DSQRT(D*X) = Y YIELD RESULTS.
+!               COUNT HOW MANY TESTS OF SQRT(D*X) = Y YIELD RESULTS.
         y = d + (fp1 + z) * half
         x = d + z + q
         call sqrtdx (x, z2, i, d, y2, y, x8, e5, e7)
@@ -2186,7 +2186,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         return
         end subroutine square
 !-------------------------------------------------------------------------------
-!       ____ SUBROUTINE TO ASSESS ERROR  DSQRT(X*X) - X  IN ULPS. ____
+!       ____ SUBROUTINE TO ASSESS ERROR  SQRT(X*X) - X  IN ULPS. ____
 !
         subroutine sqrerr (x, u, j, e5, e7, serous)
       implicit none
@@ -2196,7 +2196,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         logical serous
         double precision e6, b1
         b1 = 1.0 / radix
-        e6 = ((dsqrt(x * x) - x * b1) - (x - x * b1)) / u
+        e6 = ((sqrt(x * x) - x * b1) - (x - x * b1)) / u
         if (e6 .eq. 0.0) return
         if (e6 .lt. e5) e5 = e6
         if (e6 .gt. e7) e7 = e6
@@ -2221,7 +2221,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
         x = z1 * q
         temp = half - x / radix
-        temp1 = dint(temp)
+        temp1 = int(temp)
         if (temp1 .gt. temp) temp1 = temp1 - fp1
         x = temp1 * radix + x
         q = (q - x*z) / radix + x * x * (d / radix)
@@ -2235,7 +2235,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         end subroutine newd
 !-------------------------------------------------------------------------------
 !       THIS SUBROUTINE TESTS IF
-!               DSQRT(D*X) = DSQRT((Y - 1/2)^2 + X8/2) ROUNDS TO  Y
+!               SQRT(D*X) = SQRT((Y - 1/2)^2 + X8/2) ROUNDS TO  Y
 !
         subroutine sqrtdx (x, z2, i, d, y2, y, x8, e5, e7)
       implicit none
@@ -2248,7 +2248,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 !
         if (x - radix .lt. z2 - radix .or. x - z2 .gt. w - z2) return
         i = i + 1
-        x2 = dsqrt(x * d)
+        x2 = sqrt(x * d)
         y2 = (x2 - z2) - (y - z2)
         x2 = x8/(y - half)
         x2 = x2 - half * x2 * x2
@@ -2316,7 +2316,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         miles = 105
         call logit(miles)
         d = ulpmin
-        if (precis .eq. dint(precis)) goto 4370
+        if (precis .eq. int(precis)) goto 4370
         d = fp1 / radix
         x = precis
 4360    continue
@@ -2408,7 +2408,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         t0=phony0
         if (mindif+mindif .gt. mindif) go to 4520
         y2 = t0 * h1
-        mindif=dabs(y1-y2)
+        mindif=abs(y1-y2)
         q=y1
         if (uflthr .eq. fp0 .and. y1 .ne. y2) uflthr=y1
         write(3) accur, c, epsp1, error, exp2, h, i, iq, mindif, partu
@@ -2529,7 +2529,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         write(3) d, q, r, t0, v9, x, y, y1, y2, z, z9
         rewind 3
         call logit(miles)
-        r = dsqrt(t0 / uflthr)
+        r = sqrt(t0 / uflthr)
         go to 5012
 5011    continue
         r = fp1
@@ -2570,7 +2570,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 5102    format(' FAILURE: underflow confuses comparison, which alleges that  q = y ')
         write(out,5104)
 5104    format('         while denying that  |q-y| = 0 ; these values print out as')
-        temp=dabs(q-y2)
+        temp=abs(q-y2)
         write(out,5106)q,y2,temp
 5106    format(' q =',e16.8,',  y =',e16.8,',  |q-y| =',e16.8,' ,')
         temp = q/y2 - half
@@ -2580,7 +2580,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         goto 5010
 !        CASE I=4 ;  UFLTHR > 0  &  MINDIF > 0
 5130    continue
-        if (.not. (q .eq. uflthr .and. mindif .eq. minpos .and. dabs(uflthr-mindif/nulps) .le. mindif)) go to 5010
+        if (.not. (q .eq. uflthr .and. mindif .eq. minpos .and. abs(uflthr-mindif/nulps) .le. mindif)) go to 5010
         write(out,5150)
         write(out,5155)
 5150    format(' Underflow is gradual; it incurs  absolute error = ')
@@ -2629,7 +2629,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         miles=130
         call page(miles)
 !       ---- PAUSE ---- ==================================
-        y = -dint(half - 240.0 * dlog(uflthr) / dlog(h1)) / 240
+        y = -int(half - 240.0 * log(uflthr) / log(h1)) / 240
         y2=y+y
         write(out,5240)h1,y
 5240    format(' since underflow occurs below the threshold  ='/10x,'(',1pe16.8,')^(',1pe16.8,') ,')
@@ -2691,7 +2691,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
         z=x-(1/radix)
         z=(x+fp1)/(z-(fp1-(1/radix)))
         q=x**z-exp2
-        if (dabs(q) .gt. 240. * ulppls) go to 5420
+        if (abs(q) .gt. 240. * ulppls) go to 5420
         z=(y-x)*fp2+y
         x=y
         y=z
@@ -2724,7 +2724,7 @@ character(len=*),parameter :: ident="@(#)dparanoia(3f): test doubleprecisions op
 5460    format(' Testing powers  z^q  at four nearly extreme values:')
         error=0
         z=a1
-        iq =idint(half-dlog(c) / dlog(a1))
+        iq =idint(half-log(c) / log(a1))
 5470    continue
         x=c1
         call cmpxy(x,y,z,iq,error)

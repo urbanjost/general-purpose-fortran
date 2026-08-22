@@ -1,5 +1,7 @@
       program demo_get_args
       use M_CLI2,  only : filenames=>unnamed, set_args, get_args
+      use M_CLI2,  only : dget, iget, lget, rget, sget, cget
+      use M_CLI2,  only : dgets, igets, lgets, rgets, sgets, cgets
       implicit none
       integer                      :: i
        ! Define ARGS
@@ -33,4 +35,10 @@
       if(size(filenames) > 0)then
          write(*,'(i6.6,3a)')(i,'[',filenames(i),']',i=1,size(filenames))
       endif
+      ! or the equivalent using functions instead of get_args(3)
+      write(*,'(1x,g0,"=",g0)')'x',rget('x'), 'y',rget('y'), 'z',rget('z')
+      write(*,*)'p=',rgets('p')
+      write(*,*)'title=',sget('title')
+      write(*,*)'l=',lget('l')
+      write(*,*)'L=',lget('L')
       end program demo_get_args

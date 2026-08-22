@@ -27,6 +27,7 @@ viewing environment properly if want to even minimally support xyz.
 determining  whether to clip or not is  estimated  in  drawstr  assuming
 hardware text is fixed-space unless clipping is off
 */
+#include <stddef.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
