@@ -8,7 +8,6 @@ MODULE M_contourplot__Smooth
    public  :: Polyx2
    private :: Hypot_
    private :: SolveSVD,SVD,SVDbackSubstitution
-   public  :: test_suite_M_smooth
 
 CONTAINS
 !===================================================================================================================================
@@ -776,29 +775,6 @@ end function hypot_
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine test_suite_M_smooth
-use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
-use M_framework__verify, only : unit_test_level
-   call test_polyx2()
-   call test_smoothsurface()
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_polyx2()
-
-   call unit_test_start('polyx2',msg='')
-   !!call unit_test('polyx2', 0.eq.0, 'checking', 100)
-   call unit_test_done('polyx2',msg='')
-end subroutine test_polyx2
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_smoothsurface()
-
-   call unit_test_start('smoothsurface',msg='')
-   !!call unit_test('smoothsurface', 0.eq.0, 'checking', 100)
-   call unit_test_done('smoothsurface',msg='')
-end subroutine test_smoothsurface
-!===================================================================================================================================
-end subroutine test_suite_M_smooth
-!===================================================================================================================================
 END MODULE M_contourplot__Smooth
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -823,8 +799,6 @@ MODULE M_ContourPlot
          real,intent(in):: zcon
       end subroutine cntcrv
    end interface
-
-   public  :: test_suite_M_contourplot
 
 CONTAINS
 !===================================================================================================================================
@@ -2017,25 +1991,6 @@ INTEGER                            :: spag_nextblock_1
       END SELECT
    ENDDO SPAG_DispatchLoop_1
 END SUBROUTINE cntour
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
-subroutine test_suite_M_contourplot()
-use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
-use M_framework__verify, only : unit_test_level
-!! setup
-   call test_contourlines()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_contourlines()
-
-   call unit_test_start('contourlines',msg='')
-   !!call unit_test('contourlines', 0.eq.0, 'checking', 100)
-   call unit_test_done('contourlines',msg='')
-end subroutine test_contourlines
-!===================================================================================================================================
-end subroutine test_suite_M_contourplot
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================

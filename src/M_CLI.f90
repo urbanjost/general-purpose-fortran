@@ -874,10 +874,10 @@ character(len=:),allocatable          :: val_local
       ilen=len_trim(val_local)
       call locate(keywords,key,place)                   ! find where string is or should be
       if(place.lt.1)then                                ! if string was not found insert it
-         call insert(keywords,key,iabs(place))
-         call insert(values,val_local,iabs(place))
-         call insert(counts,ilen,iabs(place))
-         call insert(present_in,.true.,iabs(place))
+         call insert(keywords,key,abs(place))
+         call insert(values,val_local,abs(place))
+         call insert(counts,ilen,abs(place))
+         call insert(present_in,.true.,abs(place))
       else
          call replace(values,val_local,place)
          call replace(counts,ilen,place)
@@ -1563,7 +1563,7 @@ integer                                 :: error
 
       if(imin.gt.imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -1644,7 +1644,7 @@ integer                                :: error
 
       if(imin.gt.imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -1725,7 +1725,7 @@ integer                                :: error
 
       if(imin.gt.imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP

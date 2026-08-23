@@ -231,7 +231,6 @@ FTAB fonts[] = {
     }}
 };
 
-
 /*
  * Read the raw hersh font data and write the binary font files
  * as specified above or as specified in an index file.
@@ -246,9 +245,7 @@ HTAB hersh[MAX_CHARS];
  *
  * read in a character line from a hershey font file
  */
-int
-getcharacter (FILE * fp, int *no, int *pairs, char *buf)
-{
+int getcharacter (FILE * fp, int *no, int *pairs, char *buf) {
    int i;
    char *p, tmp[10];
 
@@ -272,7 +269,6 @@ getcharacter (FILE * fp, int *no, int *pairs, char *buf)
    tmp[3] = 0;
    sscanf (tmp, "%d", pairs);
 
-
    /*
     * read in the pairs
     */
@@ -288,50 +284,11 @@ getcharacter (FILE * fp, int *no, int *pairs, char *buf)
 }
 
 /*
- * main driver - if argc > 2 we are creating a file from an
- * index, otherwise use the table in h2v.h
- */
-int
-main (argc, argv)
-     int argc;
-     char **argv;
-{
-   void readdata (), readindex (), writefont ();
-
-   FILE *fp;
-   FTAB table;
-   int i;
-
-   if (argc != 2 && argc != 4) {
-      fprintf (stderr, "Usage: h2v datafile [indexfile fontfile]\n");
-      exit (1);
-   }
-   if ((fp = fopen (argv[1], "r")) == NULL) {
-      fprintf (stderr, "h2v: can't open hersh data file %s\n", argv[1]);
-      exit (1);
-   }
-
-   readdata (fp);
-
-   if (argc == 4) {
-      readindex (argv[2], argv[3], &table);
-      writefont (&table);
-   } else
-      for (i = 0; i < (int) (sizeof (fonts) / sizeof (FTAB)); i++)
-         writefont (&fonts[i]);
-
-   exit (0);
-}
-
-/*
  *  readdata
  *
  *  Reads the raw hersh data
  */
-void
-readdata (fp)
-     FILE *fp;
-{
+void readdata (FILE *fp) {
    int charno, pairs;
    char buf[MAX_BUF];
 
@@ -349,11 +306,7 @@ readdata (fp)
  *
  *  Read an index file into index tab.
  */
-void
-readindex (name, fname, tab)
-     char *name, *fname;
-     FTAB *tab;
-{
+void readindex (char *name, char *fname, FTAB *tab) {
 
    FILE *fp;
    int i;
@@ -382,10 +335,7 @@ readindex (name, fname, tab)
  *
  * output a font to file name based on font table tab
  */
-void
-writefont (tab)
-     FTAB *tab;
-{
+void writefont (FTAB *tab) {
    int i, nchars, asdecw[3];
    int start, end, nvects, fd;
 #ifdef DEBUG
@@ -483,4 +433,35 @@ writefont (tab)
    }
 
    close (fd);
+}
+
+/*
+ * main driver - if argc > 2 we are creating a file from an
+ * index, otherwise use the table in h2v.h
+ */
+int main (int argc, char**argv) {
+
+   FILE *fp;
+   FTAB table;
+   int i;
+
+   if (argc != 2 && argc != 4) {
+      fprintf (stderr, "Usage: h2v datafile [indexfile fontfile]\n");
+      exit (1);
+   }
+   if ((fp = fopen (argv[1], "r")) == NULL) {
+      fprintf (stderr, "h2v: can't open hersh data file %s\n", argv[1]);
+      exit (1);
+   }
+
+   readdata (fp);
+
+   if (argc == 4) {
+      readindex (argv[2], argv[3], &table);
+      writefont (&table);
+   } else
+      for (i = 0; i < (int) (sizeof (fonts) / sizeof (FTAB)); i++)
+         writefont (&fonts[i]);
+
+   exit (0);
 }

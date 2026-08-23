@@ -194,7 +194,6 @@ MODULE M_lua
                            C_FUNPTR, C_DOUBLE
   IMPLICIT NONE
   PRIVATE mluastate !< This is an opaque pointer to the Lua interpreter.
-  public :: test_suite_M_lua
 
   ! Module scope variables
   ! The lua_State pointer is stored opaquely in Fortran in this
@@ -599,98 +598,6 @@ MODULE M_lua
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
-subroutine test_suite_M_lua()
-use M_verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
-use M_verify, only : unit_test_level
-implicit none
-!! setup
-   call test_config_close()
-   call test_config_function()
-   call test_config_integer()
-   call test_config_open()
-   call test_config_real()
-   call test_config_string()
-   call test_lua_pcall()
-   call test_lua_tonumber()
-   call test_lua_tostring()
-   call test_lual_loadfile()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_config_close()
-implicit none
-   call unit_test_start('config_close',msg='')
-   !!call unit_test('config_close', 0.eq.0, 'checking',100)
-   call unit_test_done('config_close',msg='')
-end subroutine test_config_close
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_config_function()
-implicit none
-   call unit_test_start('config_function',msg='')
-   !!call unit_test('config_function', 0.eq.0, 'checking',100)
-   call unit_test_done('config_function',msg='')
-end subroutine test_config_function
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_config_integer()
-implicit none
-   call unit_test_start('config_integer',msg='')
-   !!call unit_test('config_integer', 0.eq.0, 'checking',100)
-   call unit_test_done('config_integer',msg='')
-end subroutine test_config_integer
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_config_open()
-implicit none
-   call unit_test_start('config_open',msg='')
-   !!call unit_test('config_open', 0.eq.0, 'checking',100)
-   call unit_test_done('config_open',msg='')
-end subroutine test_config_open
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_config_real()
-implicit none
-   call unit_test_start('config_real',msg='')
-   !!call unit_test('config_real', 0.eq.0, 'checking',100)
-   call unit_test_done('config_real',msg='')
-end subroutine test_config_real
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_config_string()
-implicit none
-   call unit_test_start('config_string',msg='')
-   !!call unit_test('config_string', 0.eq.0, 'checking',100)
-   call unit_test_done('config_string',msg='')
-end subroutine test_config_string
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_lua_pcall()
-implicit none
-   call unit_test_start('lua_pcall',msg='')
-   !!call unit_test('lua_pcall', 0.eq.0, 'checking',100)
-   call unit_test_done('lua_pcall',msg='')
-end subroutine test_lua_pcall
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_lua_tonumber()
-implicit none
-   call unit_test_start('lua_tonumber',msg='')
-   !!call unit_test('lua_tonumber', 0.eq.0, 'checking',100)
-   call unit_test_done('lua_tonumber',msg='')
-end subroutine test_lua_tonumber
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_lua_tostring()
-implicit none
-   call unit_test_start('lua_tostring',msg='')
-   !!call unit_test('lua_tostring', 0.eq.0, 'checking',100)
-   call unit_test_done('lua_tostring',msg='')
-end subroutine test_lua_tostring
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_lual_loadfile()
-implicit none
-   call unit_test_start('lual_loadfile',msg='')
-   !!call unit_test('lual_loadfile', 0.eq.0, 'checking',100)
-   call unit_test_done('lual_loadfile',msg='')
-end subroutine test_lual_loadfile
-!===================================================================================================================================
-end subroutine test_suite_M_lua
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
-!===================================================================================================================================
 END MODULE M_lua
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

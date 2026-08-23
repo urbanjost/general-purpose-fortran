@@ -102,9 +102,9 @@
 !!        call locate(keywords,key,place)
 !!        ! if string was not found insert it
 !!        if(place.lt.1)then
-!!           call insert(keywords,key,iabs(place))
-!!           call insert(values,val,iabs(place))
-!!           call insert(counts,ilen,iabs(place))
+!!           call insert(keywords,key,abs(place))
+!!           call insert(values,val,abs(place))
+!!           call insert(counts,ilen,abs(place))
 !!        else
 !!           call replace(values,val,place)
 !!           call replace(counts,ilen,place)
@@ -453,7 +453,7 @@ integer                                 :: error
       maxtry=0
       place=-1
    else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(real(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -473,7 +473,7 @@ integer                                 :: error
 
       if(imin.gt.imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -534,7 +534,7 @@ integer                                :: error
       maxtry=0
       place=-1
    else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(real(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -554,7 +554,7 @@ integer                                :: error
 
       if(imin.gt.imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -614,7 +614,7 @@ integer                                :: error
       maxtry=0
       place=-1
    else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(real(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -634,7 +634,7 @@ integer                                :: error
 
       if(imin.gt.imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -694,7 +694,7 @@ integer                                :: error
       maxtry=0
       place=-1
    else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(real(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -714,7 +714,7 @@ integer                                :: error
 
       if(imin.gt.imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -1629,7 +1629,7 @@ integer                         :: place
 integer                         :: place2
    call locate(self%key,key,place)
    if(place.le.0)then
-      place2=iabs(place)
+      place2=abs(place)
       call insert( self%key,   key,             place2 )
       call insert( self%value, value,           place2 )
       call insert( self%count, len_trim(value), place2 )

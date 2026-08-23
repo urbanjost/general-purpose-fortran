@@ -3,7 +3,6 @@ private
 public fetch             ! ftch2
 public strgar3
 public errc
-public :: test_suite_M_hybrid
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -386,42 +385,6 @@ end function fetch
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine test_suite_M_hybrid()
-use M_framework__verify, only : unit_test_start,unit_test,unit_test_done,unit_test_good,unit_test_bad,unit_test_msg
-use M_framework__verify, only : unit_test_level
-implicit none
-!! setup
-   call test_errc()
-   call test_fetch()
-   call test_strgar3()
-!! teardown
-contains
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_errc()
-implicit none
-   call unit_test_start('errc',msg='')
-   !!call unit_test('errc', 0.eq.0, 'checking',100)
-   call unit_test_done('errc',msg='')
-end subroutine test_errc
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_fetch()
-implicit none
-   call unit_test_start('fetch',msg='')
-   !!call unit_test('fetch', 0.eq.0, 'checking',100)
-   call unit_test_done('fetch',msg='')
-end subroutine test_fetch
-!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_strgar3()
-implicit none
-   call unit_test_start('strgar3',msg='')
-   !!call unit_test('strgar3', 0.eq.0, 'checking',100)
-   call unit_test_done('strgar3',msg='')
-end subroutine test_strgar3
-!===================================================================================================================================
-end subroutine test_suite_M_hybrid
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
 end module M_hybrid
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

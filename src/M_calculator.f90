@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!   calculator - [M_calculator] parse calculator expression and return numeric or string values
