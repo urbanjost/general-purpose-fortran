@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_getopt_long(3fm) - [ARGUMENTS:M_getopt_long::INTRO] parse command line

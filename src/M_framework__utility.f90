@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 module M_framework__utility
 use, intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64
 use, intrinsic :: iso_fortran_env,  only : real32, real64, real128

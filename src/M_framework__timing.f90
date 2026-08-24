@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 module M_framework__timing
 use,intrinsic :: iso_fortran_env, only : int8,int16,int32,int64,real32,real64,real128
 use,intrinsic :: iso_fortran_env, only : stderr=>ERROR_UNIT, stdin=>INPUT_UNIT, stdout=>OUTPUT_UNIT

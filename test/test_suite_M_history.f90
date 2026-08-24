@@ -1,9 +1,8 @@
 program test_suite_M_history
 use, intrinsic :: iso_fortran_env, only : ERROR_UNIT
-use :: M_framework__verify, only : unit_test, unit_test_good, unit_test_bad, unit_test_done, unit_test_start, unit_test_level
+use :: M_framework__verify, only : unit_test, unit_test_good, unit_test_bad, unit_test_done, unit_test_start
 use :: M_framework__verify, only : unit_test_level
 use :: M_framework__verify, only : unit_test_stop
-use :: M_framework__verify, only : unit_check_level
 use M_history,     only : redo
 implicit none
 unit_test_level=0
@@ -18,7 +17,7 @@ character(len=256)           :: read_from_file
 character(len=256)           :: inl
 integer                      :: ios
 integer                      :: io
-   write(*,*)'UNIT_CHECK_LEVEL=',UNIT_CHECK_LEVEL
+   write(*,*)'UNIT_TEST_LEVEL=',UNIT_TEST_LEVEL
    call unit_test_start('redo',msg='')
    open(newunit=io,file='r_directives.tmp')
    write(io,'(a)')'echo first line'

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_strings__chars(3f) - [M_strings__chars::INTRO] Fortran character module

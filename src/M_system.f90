@@ -1,17 +1,28 @@
-
-
-
-
-
-
-
-
-
-
-
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#   define __ADD_IFPORT USE IFPORT
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   define __COMPILER__ __NVIDIA_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
@@ -220,7 +231,7 @@ public :: system_clearenv
 
 public :: system_stat                    ! call stat(3c) to determine system information of file by name
 public :: system_stat_print              ! call stat(3f) and print principal pathname information
-public :: epoch_to_calendar              ! convert integer 1 epoch time to calendar string
+public :: epoch_to_calendar              ! convert integer unix epoch time to calendar string
 public :: system_perm                    ! create string representing file permission and type
 public :: system_access                  ! determine filename access or existence
 public :: system_isdir                   ! determine if filename is a directory
@@ -6014,6 +6025,14 @@ end SUBROUTINE system_sleep
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 !-----------------------------------------------------------------------------------------------------------------------------------
+#if __COMPILER__ == __INTEL_COMP
+subroutine call_sleep(wait_seconds)
+__ADD_IFPORT
+integer(kind=c_int),intent(in)  :: wait_seconds
+   CALL SLEEP(int(wait_seconds))
+end subroutine call_sleep
+!-----------------------------------------------------------------------------------------------------------------------------------
+#else
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine call_sleep(wait_seconds)
 use,intrinsic                   :: iso_c_binding, only: c_int
@@ -6034,10 +6053,20 @@ end interface
    endif
 end subroutine call_sleep
 !-----------------------------------------------------------------------------------------------------------------------------------
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+#if __COMPILER__ == __INTEL_COMP
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine call_usleep(microseconds)
+__ADD_IFPORT
+integer(kind=c_int),intent(in)  :: microseconds
+   CALL SLEEPQQ(int(microseconds))
+end subroutine call_usleep
+!-----------------------------------------------------------------------------------------------------------------------------------
+#else
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine call_usleep(microseconds)
 
@@ -6058,6 +6087,7 @@ end interface
    endif
 end subroutine call_usleep
 !-----------------------------------------------------------------------------------------------------------------------------------
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -6094,7 +6124,7 @@ subroutine unix_to_date(unixtime,dat,ierr)
 
 ! @(#) M_time julian_to_date(3f) Converts Julian Date to DAT date-time array
 
-integer,parameter                :: realtime=kind(0.0d0)    ! type for 1 epoch time and julian days
+integer,parameter                :: realtime=kind(0.0d0)    ! type for unix epoch time and julian days
 real(kind=realtime),intent(in)   :: unixtime                ! Unix time (seconds)
 integer,intent(out)              :: dat(8)
 integer,intent(out)              :: ierr                    ! 0 for successful execution, otherwise 1

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 module M_xyplot
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -4524,7 +4513,7 @@ end subroutine xy_jumapc
 !!
 !!##DESCRIPTION
 !!    would prefer to use errin but not all FORTRAN implementations
-!!    support it; even in 1 environments.
+!!    support it; even in unix environments.
 !!
 !!    if a null line is entered, set calculator value PAUSE to 1,
 !!    else set PAUSE to 0. This can be handy for creating break points
@@ -4577,7 +4566,7 @@ integer                :: ivalue
 !       if standard  input is not coming from a terminal then you may want to do
 !       a pause  from the  graphic  display  so that the  user can  still  pause
 !       interactively  this would typically  occur if commands are coming from a
-!       1 here document
+!       unix here document
         do i10=1,1000 ! flush key buffer
            if(checkkey().eq.0)exit
         enddo
@@ -7871,7 +7860,7 @@ implicit none
 integer,intent(in)  :: n0
 character(len=80)   :: eunit
 integer             :: n
-   n=max0(0,min0(n0,NUNITSQ))
+   n=max(0,min(n0,NUNITSQ))
    eunit=uq(n)
    if(LLQ(luppq))then
       eunit=upper(eunit)
@@ -12237,7 +12226,7 @@ real            :: top
 
       elseif(ifill.eq.5)then  ! line from points down every istep points
          if(istep.ne.0)then
-            ! Compaq Tru64 1 F77 cannot handle istep=0 with certain options Wed Jan  5 09:55:26 EST 2000
+            ! Compaq Tru64 unix F77 cannot handle istep=0 with certain options Wed Jan  5 09:55:26 EST 2000
             do i50=1,n,istep
                call move2(x(i50),y(i50))
                call draw2(x(i50),BOTTOM)
@@ -12245,7 +12234,7 @@ real            :: top
          endif
       elseif(ifill.eq.6)then  ! line from points up every istep points
          if(istep.ne.0)then
-            ! Compaq Tru64 1 F77 cannot handle istep=0 with certain options Wed Jan  5 09:55:26 EST 2000
+            ! Compaq Tru64 unix F77 cannot handle istep=0 with certain options Wed Jan  5 09:55:26 EST 2000
             do i60=1,n,istep
                call move2(x(i60),y(i60))
                call draw2(x(i60),TOP)

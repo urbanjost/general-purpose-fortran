@@ -11,7 +11,7 @@
       call unit_test_start('myroutine_long',' &
         & -section        3                    &
         & -library        libGPF               &
-        & -filename       `pwd`/M_verify.FF     &
+        & --filename       `pwd`/M_verify.FF     &
         & -documentation  y                    &
         & -prep           y                    &
         & -ccall          n                    &

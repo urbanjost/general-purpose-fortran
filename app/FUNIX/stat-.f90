@@ -152,7 +152,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    list pathname properties>',&
 '@(#)VERSION:        1.0, 2017-10-00>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2026-08-19 15:07:21 UTC-240>',&
+'@(#)COMPILED:       2026-08-24 00:03:04 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

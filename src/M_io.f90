@@ -1,17 +1,27 @@
-
-
-
-
-
-
-
-
-
-
-
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   define __COMPILER__ __NVIDIA_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !===================================================================================================================================
 MODULE M_io
@@ -219,7 +229,7 @@ character(len=4096),save    :: lastname=' '       ! name called with last time t
 integer                     :: ilen
 integer                     :: itimes
 integer                     :: iscr
-integer                     :: ios
+integer                     :: iostat
 logical                     :: verbose_local
 logical                     :: create_local
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -254,8 +264,8 @@ logical                     :: create_local
          if(.not.around)then                         ! file name does not exist, can use it as-is
             uniq=trim(name)
             if(create_local)then
-               open(newunit=iscr,file=uniq,iostat=ios,status='new')
-               close(unit=iscr,iostat=ios)
+               open(newunit=iscr,file=uniq,iostat=iostat,status='new')
+               close(unit=iscr,iostat=iostat)
             endif
             return
          endif
@@ -285,8 +295,8 @@ logical                     :: create_local
             call journal('c','*uniq* name='//trim(uniq)) ! write out message reporting name used
          endif
          if(create_local)then
-            open(newunit=iscr,file=uniq,iostat=ios,status='new')
-            close(unit=iscr,iostat=ios)
+            open(newunit=iscr,file=uniq,iostat=iostat,status='new')
+            close(unit=iscr,iostat=iostat)
          endif
          uniq=trim(uniq)
          return                                       ! return successfully
@@ -332,26 +342,26 @@ end function uniq
 !!    implicit none
 !!    character(len=4096)  :: filename
 !!    character(len=20)    :: mode
-!!    integer              :: ios
+!!    integer              :: iostat
 !!    character(len=256)   :: message
 !!    integer              :: lun
 !!       do
 !!          write(*,'(a)',advance='no')'enter filename>'
-!!          read(*,'(a)',iostat=ios)filename
-!!          if(ios /= 0)exit
+!!          read(*,'(a)',iostat=iostat)filename
+!!          if(iostat /= 0)exit
 !!          write(*,'(a)',advance='no')'enter mode ([rwa][bt][+]>'
-!!          read(*,'(a)',iostat=ios)mode
-!!          if(ios /= 0)exit
-!!          lun=fileopen(filename,mode,ios)
-!!          if(ios == 0)then
+!!          read(*,'(a)',iostat=iostat)mode
+!!          if(iostat /= 0)exit
+!!          lun=fileopen(filename,mode,iostat)
+!!          if(iostat == 0)then
 !!             write(*,*)'OPENED'
 !!          else
-!!             write(*,*)'ERROR: IOS=',ios
+!!             write(*,*)'ERROR: iostat=',iostat
 !!          endif
 !!          if(lun /= -1)then
 !!             call print_inquire(lun,'')
-!!             close(lun,iostat=ios,iomsg=message)
-!!             if(ios /= 0)then
+!!             close(lun,iostat=iostat,iomsg=message)
+!!             if(iostat /= 0)then
 !!                write(*,'(a)')trim(message)
 !!             endif
 !!          endif
@@ -368,7 +378,7 @@ subroutine print_inquire(lun_in,namein_in) ! Version: JSU-1997-12-31, 2020-01-11
 
 integer,intent(in),optional             :: lun_in        ! if unit >= 0 then query by unit number, else by name
 character(len=*),intent(in),optional    :: namein_in
-integer                        :: ios
+integer                        :: iostat
 character(len=256)             :: message
 character(len=:),allocatable   :: namein
 integer                        :: lun
@@ -441,7 +451,7 @@ character(len=20)             :: stream         ; namelist/inquire/stream
      &   round=round,                                                                                    &
      &   blank=blank,decimal=decimal,delim=delim,encoding=encoding,pad=pad,                              &
      &   named=named,opened=opened,exist=exist,number=number,pending=pending,asynchronous=asynchronous,  &
-     &   iostat=ios,err=999,iomsg=message)
+     &   iostat=iostat,err=999,iomsg=message)
     elseif(namein /= '')then
          call journal('sc','*print_inquire* checking file:'//namein)
          inquire(file=namein,                                                                            &
@@ -455,7 +465,7 @@ character(len=20)             :: stream         ; namelist/inquire/stream
      &   round=round,                                                                                    &
      &   blank=blank,decimal=decimal,delim=delim,encoding=encoding,pad=pad,                              &
      &   named=named,opened=opened,exist=exist,number=number,pending=pending,asynchronous=asynchronous,  &
-     &   iostat=ios,err=999,iomsg=message)
+     &   iostat=iostat,err=999,iomsg=message)
      if(name == '')name=namein
     else
        call journal('sc','*print_inquire* must specify either filename or unit number')
@@ -467,8 +477,8 @@ character(len=20)             :: stream         ; namelist/inquire/stream
 999   continue
    call journal('sc','*print_inquire* bad inquire')
 !  If an error condition occurs during execution of an INQUIRE  statement,
-!  all of the inquiry identifiers except ios become undefined.
-   call journal('sc','*print_inquire* inquire call failed,iostat=',ios,'message=',message)
+!  all of the inquiry identifiers except iostat become undefined.
+   call journal('sc','*print_inquire* inquire call failed,iostat=',iostat,'message=',message)
 end subroutine print_inquire
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -519,15 +529,16 @@ function separator() result(sep)
 
 ! use the pathname returned as arg0 to determine pathname separator
 implicit none
-integer                      :: ios
+integer                      :: iostat
 integer                      :: i
-logical                      :: existing=.false.
+logical                      :: existing
 character(len=1)             :: sep
 !*!IFORT BUG:character(len=1),save        :: sep_cache=' '
 integer,save                 :: isep=-1
 character(len=4096)          :: name
 character(len=:),allocatable :: envnames(:)
 
+    existing=.false. ! prevent erroneous messages about using existing without initializing it
     ! NOTE:  A parallel code might theoretically use multiple OS
     !*!FORT BUG:if(sep_cache /= ' ')then  ! use cached value.
     !*!FORT BUG:    sep=sep_cache
@@ -541,8 +552,8 @@ character(len=:),allocatable :: envnames(:)
     ! simple, but does not work with ifort
     ! most MSWindows environments see to work with backslash even when
     ! using POSIX filenames to do not rely on '\.'.
-    inquire(file='/.',exist=existing,iostat=ios,name=name)
-    if(existing.and.ios == 0)then
+    inquire(file='/.',exist=existing,iostat=iostat,name=name)
+    if(existing.and.iostat == 0)then
         sep='/'
         exit FOUND
     endif
@@ -739,7 +750,7 @@ doubleprecision,allocatable  :: dline(:)
 contains
     subroutine cleanse()
     integer :: i,j,k
-    integer :: ios
+    integer :: iostat
     integer :: ikeep
     character(len=:),allocatable :: words(:), line
     doubleprecision :: value
@@ -766,8 +777,8 @@ contains
        enddo
        call split(page(i),words)
        do k=1,size(words)
-          read(words(k),*,iostat=ios)value
-          if(ios == 0)then
+          read(words(k),*,iostat=iostat)value
+          if(iostat == 0)then
              line=line//crop(words(k))//' '
           endif
        enddo
@@ -839,7 +850,7 @@ end subroutine read_table_r
 !!                 open(unit=igetunit, file=filename,     &
 !!                 & action="read", iomsg=message,        &
 !!                 & form="unformatted", access="stream", &
-!!                 & status='old',iostat=ios)
+!!                 & status='old',iostat=iostat)
 !!
 !!               An exception is that although stdin cannot currently
 !!               generally be treated as a stream file the data
@@ -1008,7 +1019,7 @@ end subroutine fileread
 !!                    open(unit=igetunit, file=filename,     &
 !!                    & action="read", iomsg=message,        &
 !!                    & form="unformatted", access="stream", &
-!!                    & status='old',iostat=ios)
+!!                    & status='old',iostat=iostat)
 !!
 !!                  An exception is that although stdin cannot currently
 !!                  generally be treated as a stream file the data
@@ -1072,18 +1083,18 @@ class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
 integer,intent(out),optional             :: length      ! length of longest line
 integer,intent(out),optional             :: lines       ! number of lines
-integer :: nchars               ! holds size of file
-integer :: igetunit             ! use newunit=igetunit in f08
-integer :: ios                  ! used for I/O error status
-integer :: length_local
-integer :: lines_local
-integer :: i
-integer :: icount
-character(len=256)  :: message
-character(len=4096) :: label
+integer                      :: nchars               ! holds size of file
+integer                      :: igetunit             ! use newunit=igetunit in f08
+integer                      :: iostat               ! used for I/O error status
+integer                      :: length_local
+integer                      :: lines_local
+integer                      :: i
+integer                      :: icount
+character(len=256)           :: message
+character(len=4096)          :: label
 character(len=:),allocatable :: line
-   nchars=0
-   ios=0
+   nchars=0     ! stop erroneous compiler warning about not being initialized
+   iostat=0     ! stop erroneous compiler warning about not being initialized
    length_local=0
    lines_local=0
    label=''
@@ -1092,21 +1103,21 @@ character(len=:),allocatable :: line
     type is (character(len=*))
        if(filename /= '-'.and.filename /= '' ) then
           open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
-           &form="unformatted", access="stream",status='old',iostat=ios)
+           &form="unformatted", access="stream",status='old',iostat=iostat)
           label=filename
        else ! copy stdin to a scratch file
           call copystdin_C()
        endif
     type is (integer)
        if(filename /= stdin) then
-          rewind(unit=filename,iostat=ios,iomsg=message)
+          rewind(unit=filename,iostat=iostat,iomsg=message)
           igetunit=filename
        else ! copy stdin to a scratch file
           call copystdin_C()
        endif
        write(label,'("unit ",i0)')filename
    end select
-   if(ios == 0)then  ! if file was successfully opened
+   if(iostat == 0)then  ! if file was successfully opened
       inquire(unit=igetunit, size=nchars)
       if(nchars <= 0)then
          call stderr_local( '*filebyte* empty file '//trim(label) )
@@ -1115,8 +1126,8 @@ character(len=:),allocatable :: line
       ! read file into text array
       if(allocated(text))deallocate(text) ! make sure text array not allocated
       allocate ( text(nchars) )           ! make enough storage to hold file
-      read(igetunit,iostat=ios,iomsg=message) text      ! load input file -> text array
-      if(ios /= 0)then
+      read(igetunit,iostat=iostat,iomsg=message) text      ! load input file -> text array
+      if(iostat /= 0)then
          call stderr_local( '*filebyte* bad read of '//trim(label)//':'//trim(message) )
       endif
    else
@@ -1124,7 +1135,7 @@ character(len=:),allocatable :: line
       allocate ( text(0) )           ! make enough storage to hold file
    endif
 
-   close(iostat=ios,unit=igetunit)            ! close if opened successfully or not
+   close(iostat=iostat,unit=igetunit)            ! close if opened successfully or not
 
    if(present(lines).or.present(length))then  ! get length of longest line and number of lines
       icount=0
@@ -1249,13 +1260,13 @@ end subroutine filebyte
 !!    program demo_number_of_lines
 !!    use M_io,      only : number_of_lines, fileopen
 !!    implicit none
-!!    integer :: ios
+!!    integer :: iostat
 !!    integer :: lun
-!!       lun=fileopen('test.txt','r',ios)
-!!       if(ios == 0)then
+!!       lun=fileopen('test.txt','r',iostat)
+!!       if(iostat == 0)then
 !!          write(*,*) number_of_lines(lun)
 !!       else
-!!          write(*,*)'ERROR: IOS=',ios
+!!          write(*,*)'ERROR: iostat=',iostat
 !!       endif
 !!    end program demo_number_of_lines
 !!
@@ -1268,16 +1279,16 @@ function number_of_lines(lun) result(nlines)
 !@(#) determine number or lines in file given a LUN to the open file
 integer,intent(in) :: lun
 
-integer            :: ios
+integer            :: iostat
 integer            :: nlines
 character(len=256) :: iomsg
 
-   if(lun /= stdin)rewind(lun,iostat=ios,iomsg=iomsg)
+   if(lun /= stdin)rewind(lun,iostat=iostat,iomsg=iomsg)
    nlines = 0
 
    do
-   read(lun, '(A)', end=99, iostat=ios,iomsg=iomsg)
-      if (ios /= 0) then
+   read(lun, '(A)', end=99, iostat=iostat,iomsg=iomsg)
+      if (iostat /= 0) then
          write(stderr,gen)'*number_of_lines*:',trim(iomsg)
          nlines=-1
          exit
@@ -1287,7 +1298,7 @@ character(len=256) :: iomsg
 
 99 continue
 
-   if(lun /= stdin)rewind(lun,iostat=ios,iomsg=iomsg)
+   if(lun /= stdin)rewind(lun,iostat=iostat,iomsg=iomsg)
 
 end function number_of_lines
 !===================================================================================================================================
@@ -1434,7 +1445,7 @@ integer                        :: iend
 integer                        :: ierr
 
 integer         :: i10                                            ! counter from start to end
-integer         :: ios                                            ! iostatus from INQUIRE
+integer         :: iostat                                         ! iostatus from INQUIRE
 logical         :: lopen                                          ! returned from INQUIRE
 logical         :: lexist                                         ! returned from INQUIRE
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1449,14 +1460,14 @@ logical         :: lexist                                         ! returned fro
       case(stderr,stdin,stdout)
           cycle
       end select
-      inquire( unit=i10, opened=lopen, exist=lexist, iostat=ios )
-      if( ios == 0 )then                                          ! no error on inquire
+      inquire( unit=i10, opened=lopen, exist=lexist, iostat=iostat )
+      if( iostat == 0 )then                                          ! no error on inquire
          if(.not. lopen .and. lexist)then                         ! if unit number not in use, return it
             notopen = i10
             exit                                                  ! only need to find one, so return
          endif
       else
-         write(stderr,*)'*notopen*:error on unit ',i10,'=',ios
+         write(stderr,*)'*notopen*:error on unit ',i10,'=',iostat
       endif
    enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -1703,11 +1714,11 @@ end function basename
 !!
 !!##SYNOPSIS
 !!
-!!   function fileopen(filename,mode,ios) result(lun)
+!!   function fileopen(filename,mode,iostat) result(lun)
 !!
 !!    character(len=*),intent(in)           :: filename
 !!    character(len=*),intent(in),optional  :: mode
-!!    integer,intent(out),optional          :: ios
+!!    integer,intent(out),optional          :: iostat
 !!    integer                               :: lun
 !!
 !!##DESCRIPTION
@@ -1792,15 +1803,15 @@ end function basename
 !!            either order: for example, "rb+" means the same thing as
 !!            "r+b" when used as a mode string.)
 !!
-!!    IOS    The error code returned by the OPEN(3f) statement ultimately
-!!           executed by this function. If not present the program stops on
-!!           an error.
+!!    IOSTAT  The error code returned by the OPEN(3f) statement ultimately
+!!            executed by this function. If not present the program stops on
+!!            an error.
 !!##RETURNS
 !!        FILEOPEN(3f) returns a Fortran unit number which you can use
 !!        for other file operations, unless the file you requested could
 !!        not be opened; in that situation, the result is -1 (a reserved
 !!        value that cannot be returned as a NEWUNIT value on an OPEN(3f))
-!!        and IOS will be non-zero.
+!!        and IOSTAT will be non-zero.
 !!
 !!##EXAMPLES
 !!
@@ -1838,11 +1849,11 @@ end function basename
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-function fileopen(filename,mode,ios) result(lun)
+function fileopen(filename,mode,iostat) result(lun)
 character(len=*),intent(in)           :: filename
 character(len=*),intent(in),optional  :: mode
-integer,intent(out),optional          :: ios
-integer                               :: lun, i, ios_local,ifound,gts
+integer,intent(out),optional          :: iostat
+integer                               :: lun, i, iostat_local,ifound,gts
 character(len=:),allocatable          :: local_mode
 character(len=256)                    :: message
 character(len=:),allocatable          :: action, position, access, form, status, file
@@ -1924,22 +1935,23 @@ logical                               :: verbose
          & 'STATUS=',trim(status)
    endif
    if(file /= ' ')then
-    open(file=file,newunit=lun,form=form,access=access,action=action,position=position,status=status,iostat=ios_local,iomsg=message)
+    open(file=file,newunit=lun,form=form,access=access,action=action,position=position,&
+            & status=status,iostat=iostat_local,iomsg=message)
    else
-    open(newunit=lun,form=form,access=access,action=action,status='scratch',iostat=ios_local,iomsg=message)
+    open(newunit=lun,form=form,access=access,action=action,status='scratch',iostat=iostat_local,iomsg=message)
    endif
    !  ACCESS    =  SEQUENTIAL  |  DIRECT       |  STREAM
    !  ACTION    =  READ|WRITE  |  READWRITE
    !  FORM      =  FORMATTED   |  UNFORMATTED
    !  POSITION  =  ASIS        |  REWIND       |  APPEND
    !  STATUS    =  NEW         |  REPLACE      |  OLD     |  SCRATCH   | UNKNOWN
-   if(ios_local /= 0)then
+   if(iostat_local /= 0)then
       call journal('sc','*fileopen* ',message)
       lun=-1
    endif
-   if(present(ios))then        ! caller has asked for status so let caller process any error
-      ios=ios_local
-   elseif(ios_local /= 0)then  ! caller did not ask for status so stop program on error
+   if(present(iostat))then        ! caller has asked for status so let caller process any error
+      iostat=iostat_local
+   elseif(iostat_local /= 0)then  ! caller did not ask for status so stop program on error
       stop 1
    endif
 end function fileopen
@@ -1953,17 +1965,17 @@ end function fileopen
 !!
 !!##SYNOPSIS
 !!
-!!     function fileclose(lun) result(ios)
+!!     function fileclose(lun) result(iostat)
 !!
 !!      integer,intent(in)       :: lun
-!!      integer                  :: ios
+!!      integer                  :: iostat
 !!##DESCRIPTION
 !!   A convenience command for closing a file that leaves an
 !!   error message in the current journal file if active.
 !!##OPTION
-!!   LUN unit number to close
+!!   LUN  unit number to close
 !!##RETURNS
-!!   IOS status value from CLOSE
+!!   IOSTAT  status value from CLOSE
 !!##EXAMPLES
 !!
 !!  Sample program:
@@ -1972,24 +1984,24 @@ end function fileopen
 !!     use M_io, only : fileclose, fileopen
 !!     implicit none
 !!     integer :: lun
-!!     integer :: ios, ierr
-!!        lun=fileopen('<input.txt',ios=ierr)
+!!     integer :: iostat, ierr
+!!        lun=fileopen('<input.txt',iostat=ierr)
 !!        if(ierr /= 0)then
 !!           write(*,*)'<ERROR> opening file'
 !!        endif
-!!        ios=fileclose(lun)
+!!        iostat=fileclose(lun)
 !!     end program demo_fileclose
 !!
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-function fileclose(lun) result(ios)
+function fileclose(lun) result(iostat)
 integer,intent(in)       :: lun
-integer                  :: ios
+integer                  :: iostat
 character(len=256)       :: message
-   close(unit=lun,iostat=ios,iomsg=message)
-   if(ios /= 0)then
+   close(unit=lun,iostat=iostat,iomsg=message)
+   if(iostat /= 0)then
       call journal('sc','*fileclose* ',message)
       stop
    endif
@@ -2056,7 +2068,7 @@ character(len=*),intent(in)           :: filedata(:)
 character(len=*),intent(in),optional  :: status
 character(len=*),intent(in),optional  :: position
 integer                               :: ierr
-integer                               :: lun, i, ios, ilen
+integer                               :: lun, i, iostat, ilen
 character(len=256)                    :: message
 character(len=:),allocatable          :: file
 character(len=:),allocatable          :: local_status
@@ -2090,29 +2102,29 @@ character(len=:),allocatable          :: default_position
       & action='write', &           !  ACTION    =  READ|WRITE  |  READWRITE
       & position=local_position, &  !  POSITION  =  ASIS        |  REWIND       |  APPEND
       & status=local_status, &      !  STATUS    =  NEW         |  REPLACE      |  OLD     |  SCRATCH   | UNKNOWN
-      & iostat=ios, &
+      & iostat=iostat, &
       & iomsg=message)
    else
       lun=stdout
-      ios=0
+      iostat=0
    endif
-   if(ios /= 0)then
+   if(iostat /= 0)then
       write(stderr,'(*(a,1x))')'*filewrite* error:',file,trim(message)
-      ierr=ios
+      ierr=iostat
    else
       do i=1,size(filedata)                                                    ! write file
-         write(lun,'(a)',iostat=ios,iomsg=message)trim(filedata(i))
-         if(ios /= 0)then
+         write(lun,'(a)',iostat=iostat,iomsg=message)trim(filedata(i))
+         if(iostat /= 0)then
             write(stderr,'(*(a,1x))')'*filewrite* error:',file,trim(message)
-            ierr=ios
+            ierr=iostat
             exit
          endif
       enddo
    endif
-   close(unit=lun,iostat=ios,iomsg=message)                                 ! close file
-   if(ios /= 0)then
+   close(unit=lun,iostat=iostat,iomsg=message)                                 ! close file
+   if(iostat /= 0)then
       write(stderr,'(*(a,1x))')'*filewrite* error:',trim(message)
-      ierr=ios
+      ierr=iostat
    endif
 end function filewrite
 !===================================================================================================================================
@@ -2125,12 +2137,12 @@ end function filewrite
 !!
 !!##SYNOPSIS
 !!
-!!    function filedelete(lun) result(ios)
+!!    function filedelete(lun) result(iostat)
 !!
 !!     integer,intent(in)          :: lun
 !!       or
 !!     character(len=*),intent(in) :: filename
-!!     integer                     :: ios
+!!     integer                     :: iostat
 !!
 !!##DESCRIPTION
 !!   A convenience command for deleting an OPEN(3f) file that leaves an
@@ -2138,7 +2150,7 @@ end function filewrite
 !!##OPTION
 !!   LUN  unit number of open file to delete or filename.
 !!##RETURNS
-!!   IOS  status returned by CLOSE().
+!!   IOSTAT  status returned by CLOSE().
 !!##EXAMPLES
 !!
 !!  Sample program:
@@ -2147,9 +2159,9 @@ end function filewrite
 !!     use M_io, only : filedelete, fileopen
 !!     implicit none
 !!     integer :: lun
-!!     integer :: ios
+!!     integer :: iostat
 !!        lun=fileopen('<input.txt')
-!!        ios=filedelete(lun)
+!!        iostat=filedelete(lun)
 !!     end program demo_filedelete
 !!##AUTHOR
 !!    John S. Urban
@@ -2522,7 +2534,7 @@ end subroutine splitpath
 !!    LINE    line read
 !!    LUN     optional LUN (Fortran logical I/O unit) number. Defaults
 !!            to stdin.
-!!    IOSTAT  status returned by READ(IOSTAT=IOS). If not zero, an error
+!!    IOSTAT  status returned by READ(IOSTAT=IOSTAT). If not zero, an error
 !!            occurred or an end-of-file or end-of-record was encountered.
 !!            This is the same value as returned by the function. See the
 !!            example program for a usage case.
@@ -2607,11 +2619,11 @@ end function getline
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
-!!   function read_line(line,lun,ios) result(ier)
+!!   function read_line(line,lun,iostat) result(ier)
 !!
 !!    character(len=:),allocatable,intent(out) :: line
 !!    integer,intent(in),optional              :: lun
-!!    integer,optional                         :: ios
+!!    integer,optional                         :: iostat
 !!    integer                                  :: ier
 !!
 !!##DESCRIPTION
@@ -2637,15 +2649,15 @@ end function getline
 !!    with each buffer read.
 !!
 !!##OPTIONS
-!!    LINE   the line read from the file.
-!!    LUN    The LUN (logical unit) to read from. Defaults to stdin.
-!!    IOS    status returned by READ(IOSTAT=IOS). If not zero, an error
-!!           occurred or an end-of-file or end-of-record was encountered.
-!!           This is the same value as returned by the function. See the
-!!           example program for a usage case.
+!!    LINE    The line read from the file.
+!!    LUN     The LUN (logical unit) to read from. Defaults to stdin.
+!!    IOSTAT  status returned by READ(IOSTAT=IOSTAT). If not zero, an error
+!!            occurred or an end-of-file or end-of-record was encountered.
+!!            This is the same value as returned by the function. See the
+!!            example program for a usage case.
 !!##RETURNS
-!!    IER    status returned by READ(IOSTAT=IER). If not zero, an error
-!!           occurred or an end-of-file or end-of-record was encountered.
+!!    IER     status returned by READ(IOSTAT=IER). If not zero, an error
+!!            occurred or an end-of-file or end-of-record was encountered.
 !!
 !!##EXAMPLES
 !!
@@ -2663,7 +2675,7 @@ end function getline
 !!     integer                          :: stat
 !!     integer                          :: icount=0
 !!        open(unit=stdin,pad='yes')
-!!        INFINITE: do while (read_line(line,ios=stat) == 0)
+!!        INFINITE: do while (read_line(line,iostat=stat) == 0)
 !!           icount=icount
 !!           write (*, '(*(g0))') icount,' [',line,']'
 !!        enddo INFINITE
@@ -2677,14 +2689,14 @@ end function getline
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-function read_line(line,lun,ios) result(ier)
+function read_line(line,lun,iostat) result(ier)
 implicit none
 
 ! ident_12="@(#) M_io read_line(3f) read a line from specified LUN into allocatable string up to line length limit"
 
 character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
-integer,optional                         :: ios
+integer,optional                         :: iostat
 integer                                  :: ier
 
 integer,parameter                        :: buflen=1024
@@ -2729,8 +2741,8 @@ integer                                  :: lun_local
    call notabs(line_local,line,last)                        ! expand tabs, trim carriage returns, remove unprintable characters
    line=noesc(line)
    line=trim(line(:last))                                   ! trim line
-   if(present(ios))then
-      ios=ier
+   if(present(iostat))then
+      iostat=ier
    endif
 end function read_line
 !===================================================================================================================================
@@ -3035,7 +3047,7 @@ integer                      :: prompt_len
 integer                      :: igot
 integer                      :: ierr
 integer                      :: icount
-integer                      :: ios
+integer                      :: iostat
 character(:),allocatable     :: response
 character(len=256)           :: iomsg
    out=.false.
@@ -3061,8 +3073,8 @@ character(len=256)           :: iomsg
          case('n','N')
             out=.false.
          case default
-            read(response,*,iostat=ios,iomsg=iomsg)out
-            if(ios /= 0)then
+            read(response,*,iostat=iostat,iomsg=iomsg)out
+            if(iostat /= 0)then
                write(*,*)trim(iomsg)
                cycle
             endif
@@ -3239,20 +3251,20 @@ function getname() result(name)
 implicit none
 character(len=:),allocatable :: arg0
 integer                      :: arg0_length
-integer                      :: ios
+integer                      :: iostat
 character(len=4096)          :: long_name
 character(len=:),allocatable :: name
    arg0_length=0
    name=''
    long_name=''
-   call get_command_argument(0,length=arg0_length,status=ios)
-   if(ios == 0)then
+   call get_command_argument(0,length=arg0_length,status=iostat)
+   if(iostat == 0)then
       if(allocated(arg0))deallocate(arg0)
       allocate(character(len=arg0_length) :: arg0)
-      call get_command_argument(0,arg0,status=ios)
-      if(ios == 0)then
-         inquire(file=arg0,iostat=ios,name=long_name)
-         if(ios == 0)then
+      call get_command_argument(0,arg0,status=iostat)
+      if(iostat == 0)then
+         inquire(file=arg0,iostat=iostat,name=long_name)
+         if(iostat == 0)then
             name=trim(long_name)
          else
             name=arg0
@@ -3808,16 +3820,16 @@ end function is_hidden_file
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
-!!    subroutine get_next_char(fd,c,ios)
+!!    subroutine get_next_char(fd,c,iostat)
 !!
 !!     integer,intent(in)    :: fd
 !!     character,intent(out) :: c
-!!     integer,intent(out)   :: ios
+!!     integer,intent(out)   :: iostat
 !!
 !!
 !!##DESCRIPTION
 !!    This reads a file opened with stream access one character at a
-!!    time, much like ""read(fd,iostat=ios) c" but with buffering, which
+!!    time, much like ""read(fd,iostat=iostat) c" but with buffering, which
 !!    I have found to be up to sixty times faster than such a plain read,
 !!    although this varies depending on how or if the programming environment
 !!    implements I/O buffering itself.
@@ -3828,8 +3840,8 @@ end function is_hidden_file
 !!
 !!##OPTIONS
 !!    FD    A Fortran unit number of a file opened for stream access
-!!    C     The next returned character if IOS=0
-!!    IOS   The error status returned by the last read. It is zero (0) if
+!!    C     The next returned character if IOSTAT=0
+!!    IOSTAT   The error status returned by the last read. It is zero (0) if
 !!          no error occurred
 !!
 !!##EXAMPLES
@@ -3843,12 +3855,12 @@ end function is_hidden_file
 !!    character(len=4096) :: filename ! filename to read
 !!    character(len=256)  :: message  ! returned error messages
 !!    integer             :: fd       ! file descriptor for input file
-!!    integer             :: ios,ios1 ! hold I/O error flag
+!!    integer             :: iostat,iostat1 ! hold I/O error flag
 !!    character           :: c1       ! current character read
 !!       filename='test.in'
 !!       open(unit=fd,file=trim(filename),access='stream',status='old',&
-!!       & iostat=ios,action='read',form='unformatted',iomsg=message)
-!!       if(ios /= 0)then
+!!       & iostat=iostat,action='read',form='unformatted',iomsg=message)
+!!       if(iostat /= 0)then
 !!          write(*,*)&
 !!          '*demo_get_next_char* ERROR: could not open '//&
 !!          trim(filename)
@@ -3859,11 +3871,11 @@ end function is_hidden_file
 !!       ! loop through read of file one character at a time
 !!       ONE_CHAR_AT_A_TIME: do
 !!          ! get next character from buffered read from file
-!!          call get_next_char(fd,c1,ios1)
-!!          if(ios1 == iostat_end)then
+!!          call get_next_char(fd,c1,iostat1)
+!!          if(iostat1 == iostat_end)then
 !!             ! reached end of file so stop
 !!             stop
-!!          elseif(ios1 /= 0 )then
+!!          elseif(iostat1 /= 0 )then
 !!             ! error on file read
 !!             write(*,*)&
 !!          '*demo_get_next_char* ERROR: before end of '//&
@@ -3879,32 +3891,32 @@ end function is_hidden_file
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine get_next_char(fd,c,ios)
-! replace "read(fd,iostat=ios) c" because gfortran on CygWin sixty times slower with plain read (no system buffering?)
+subroutine get_next_char(fd,c,iostat)
+! replace "read(fd,iostat=iostat) c" because gfortran on CygWin sixty times slower with plain read (no system buffering?)
 ! quick buffering read
 implicit none
 integer,intent(in)          :: fd
 character,intent(out)       :: c
-integer,intent(out)         :: ios
+integer,intent(out)         :: iostat
 integer,parameter           :: bufsize=1048576
 character(len=1),save       :: buff(bufsize)
 integer,save                :: point=0
 integer,save                :: filepoint=1
 integer,save                :: sz=bufsize
 
-ios=0
+iostat=0
 
 do
 select case(point)
 case(0)                                            ! read a buffer
-   read(fd,iostat=ios,pos=filepoint) buff(1:sz)
-   if(is_iostat_end(ios))then                      ! this is the last buffer
+   read(fd,iostat=iostat,pos=filepoint) buff(1:sz)
+   if(is_iostat_end(iostat))then                      ! this is the last buffer
       if(sz /= 1)then                              ! try again with a smaller buffer
          sz=sz/2
          sz=max(1,sz)
          cycle
       endif
-   elseif(ios == 0)then                            ! no error occurred so successfully read a buffer
+   elseif(iostat == 0)then                            ! no error occurred so successfully read a buffer
       c=buff(1)
       filepoint=filepoint+sz
       point=sz-1
@@ -3914,10 +3926,10 @@ case(1:)                                           ! getting a character from a 
    c=buff(sz-point)
 case default
    write(*,*)'*get_next_char* internal error '
-   read(fd,iostat=ios) c
+   read(fd,iostat=iostat) c
 end select
-! assume if IOS is not zero, not called again until new file is started
-   if(ios /= 0)then
+! assume if iostat is not zero, not called again until new file is started
+   if(iostat /= 0)then
       filepoint=1
       point=0
       sz=bufsize

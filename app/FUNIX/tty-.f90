@@ -179,7 +179,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20170202>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
-'@(#)COMPILED:       2026-08-19 15:07:40 UTC-240>',&
+'@(#)COMPILED:       2026-08-24 00:03:10 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

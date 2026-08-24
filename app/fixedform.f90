@@ -135,14 +135,9 @@ write(io,'(a)')'   ~######################~\  `QQ``RR``SS``TT``UU``VV``WW``XX`'
 write(io,'(a)')'   ~#Su#Mo#Tu#We#Th#Fr#Sa#~\  `YY``ZZ`'
 write(io,'(a)')'   ~######################~\   grave pairs -- Letter after first grave sets'
 write(io,'(a)')'   ~#  #  #  #  # 1# 2# 3#~\                  color pair'
-write(io,'(a)')'   ~# 4# 5# 6# 7# 8# 9#10#~\'
-write(io,'(a)')'   ~#11#12#13#14#15#16#17#~\'
-write(io,'(a)')'   ~#18#19#20#21#22#23#24#~\'
-write(io,'(a)')'   ~#25#26#27#28#29#30#31#~\   back-slash -- colored character cell for'
+write(io,'(a)')'   ~# 4# 5# 6# 7# 8# 9#10#~   ~#11#12#13#14#15#16#17#~   ~#18#19#20#21#22#23#24#~   ~#25#26#27#28#29#30#31#~\   bac'
 write(io,'(a)')'   ~######################~\                 shading'
-write(io,'(a)')'    \\\\\\\\\\\\\\\\\\\\\\\\'
-write(io,'(a)')''
-write(io,'(a)')'################################################################################'
+write(io,'(a)')'    \\\\\\\\\\\\\\\\\\\\\\################################################################################'
 write(io,'(a)')'# @LIMITATIONS ON USING POUND CHARACTERS:@                                     #'
 write(io,'(a)')'# Note that the lines defined by pound characters need separated by non-pounds #'
 write(io,'(a)')'# to behave as described, and that only a single row or column should be used  #'
@@ -298,7 +293,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    display a TUI definition and return values>',&
 '@(#)VERSION:        1.0, 20150508>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2026-08-19 15:08:46 UTC-240>',&
+'@(#)COMPILED:       2026-08-24 00:03:30 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

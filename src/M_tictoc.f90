@@ -28,7 +28,7 @@ end interface timer
 integer,parameter,public   :: realtime=real64        ! type for unix epoch time and julian days
 
 public :: timer
-public :: irand
+public :: irandom
 public :: catstat
 
 character(len=*),parameter :: gen='(*(g0))'
@@ -162,15 +162,15 @@ associate&
 end associate
 end subroutine date_to_julian
 
-impure elemental function irand(first,last)
+impure elemental function irandom(first,last)
 !@(#) a random whole number from FIRST to LAST inclusive
 use, intrinsic :: iso_fortran_env, only : dp=>real64
 integer,intent(in)   :: first,last
 real(kind=dp)        :: rand_val
-integer              :: irand
+integer              :: irandom
    call random_number(rand_val)
-   irand=first+floor((last+1-first)*rand_val)
-end function irand
+   irandom=first+floor((last+1-first)*rand_val)
+end function irandom
 
 function scramble( number_of_values ) result(array)
 !$@(#) M_random::scramble(3f): return integer array of random values 1 to N.

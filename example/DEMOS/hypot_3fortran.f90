@@ -87,7 +87,7 @@
                   ifirst = answer
                   answer = irest
                enddo
-               answer= iabs(answer)
+               answer= abs(answer)
             endif
          end function gcd
          integer function gcd_vector(m)
@@ -98,7 +98,7 @@
             if(vsize.gt.0)then
                gcd_vector = m(1)
                TILLONE: do i=1,vsize
-                  gcd_vector = gcd(gcd_vector,iabs(m(i)))
+                  gcd_vector = gcd(gcd_vector,abs(m(i)))
                   if (gcd_vector.eq.1) exit TILLONE
                enddo TILLONE
             else

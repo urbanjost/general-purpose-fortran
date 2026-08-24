@@ -21,7 +21,7 @@
              &(trim(keywords(i)),trim(values(i)),i=1,size(keywords))
 
       call locate(keywords,'a',place)
-      if(place.gt.0)then
+      if(place > 0)then
          write(*,*)'The value of "a" is ',trim(values(place))
       else
          write(*,*)'"a" not found'
@@ -36,7 +36,7 @@
       ! find where string is or should be
       call locate(keywords,key,place)
       ! if string was not found insert it
-      if(place.lt.1)then
+      if(place < 1)then
          call insert(keywords,key,abs(place))
          call insert(values,val,abs(place))
       else ! replace

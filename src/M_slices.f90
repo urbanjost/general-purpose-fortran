@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 ! ==================================================================================================================================
 module M_slices
 !
@@ -271,8 +260,8 @@ real :: zlen
             do iz = 1 , nz
                       ! DETERMINE MAX,MIN ARRAY VALUES
                do ix = 1 , nx
-                  amax = amax1(amax,a(ix,iz))
-                  aminq = amin1(aminq,a(ix,iz))
+                  amax = max(amax,a(ix,iz))
+                  aminq = min(aminq,a(ix,iz))
                enddo
             enddo
          endif
@@ -289,11 +278,11 @@ real :: zlen
          endif
 !
          xlen = abs(xh)
-         xscaleq = xlen/float(nx-1)
+         xscaleq = xlen/real(nx-1)
          zlen = abs(zh)
-         zscaleq = zlen/float(nz-1)
+         zscaleq = zlen/real(nz-1)
          ylen = abs(yh)
-         if ( mod(iabs(iaxis),10)==2 ) then
+         if ( mod(abs(iaxis),10)==2 ) then
                                       ! SMOOTH SCALE FACTORS
             as(1) = amax
             as(2) = aminq
@@ -305,9 +294,9 @@ real :: zlen
 !
 !     INITIALIZE PLOT PACKAGE
 !
-         iaf = iabs(iaxis)/10
+         iaf = abs(iaxis)/10
 
-         iflag1 = iabs(iflag)
+         iflag1 = abs(iflag)
          iflag10 = mod(iflag1,100)/10
          iflag1 = mod(iflag1,10)
 
@@ -328,7 +317,7 @@ real :: zlen
             if ( nyt>0 ) then
                           ! PLOT Y AXIS
                if ( iaf==1 ) then
-                  call axisb_(xp,yp,yt,nyt+11000+nadd,ylen,90.,aminq,dy,nmy,nny,-iabs(mly),tsy,ndy,smy,ic)
+                  call axisb_(xp,yp,yt,nyt+11000+nadd,ylen,90.,aminq,dy,nmy,nny,-abs(mly),tsy,ndy,smy,ic)
                else
                   call axisa_(xp,yp,yt,nyt+1000+nadd,ylen,90.,aminq,dy,n1,n2,ic)
                endif
@@ -339,7 +328,7 @@ real :: zlen
             ang = atan2(yp1-yp,xp1-xp)*180./tpi
             if ( nxt>0 ) then
                if ( iaf==1 ) then
-                  call axisb_(xp,yp,xt,-nxt-nadd-10000,xlen,ang,xastart,dx,nmx,nnx,-iabs(mlx),tsx,ndx,smx,ic)
+                  call axisb_(xp,yp,xt,-nxt-nadd-10000,xlen,ang,xastart,dx,nmx,nnx,-abs(mlx),tsx,ndx,smx,ic)
                else
                   call axisa_(xp,yp,xt,-nxt-nadd,xlen,ang,xastart,dx,n1,n2,ic)
                endif
@@ -347,7 +336,7 @@ real :: zlen
             dz = (zaend-zastart)/zlen
             if ( nzt>0 ) then
                if ( iaf==1 ) then
-                  call axisb_(xp1,yp1,zt,-nzt-nadd-10000,zlen,beta,zastart,dz,nmz,nnz,-iabs(mlz),tsz,ndz,smz,ic)
+                  call axisb_(xp1,yp1,zt,-nzt-nadd-10000,zlen,beta,zastart,dz,nmz,nnz,-abs(mlz),tsz,ndz,smz,ic)
                else
                   call axisa_(xp1,yp1,zt,-nzt-nadd,zlen,beta,zastart,dz,n1,n2,ic)
                endif
@@ -726,8 +715,8 @@ real,intent(in)     :: aval
 integer,intent(in)  :: ix
 integer,intent(in)  :: iz
 integer,intent(in)  :: nx
-   x=xscaleq*float(ix-1)*cos(alphq)+float(iz-1)*cos(betq)*zscaleq
-   y=yscaleq*(aval-aminq)+float(nx-ix+1)*sin(alphq)*xscaleq+float(iz-1)*sin(betq)*zscaleq
+   x=xscaleq*real(ix-1)*cos(alphq)+real(iz-1)*cos(betq)*zscaleq
+   y=yscaleq*(aval-aminq)+real(nx-ix+1)*sin(alphq)*xscaleq+real(iz-1)*sin(betq)*zscaleq
 end subroutine vxpt3_
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -1290,7 +1279,7 @@ data ipt002/668 , 676 , 683 , 689 , 693 , 695 , 699 , 704 , 709 , 711 , 721 , 73
          i = 0    ! CHARACTER COUNTER
          spag_loop_1_1: do
             i = i + 1
-            if ( i>iabs(n) ) exit spag_loop_1_1
+            if ( i>abs(n) ) exit spag_loop_1_1
             ! END OF STRING COUNT
             icc = ichar(t(i:i))
             ! GET ITH ASCII CHARACTER
@@ -1519,9 +1508,9 @@ logical vert , ticks , color
       b8 = 0.0
       nm1 = 0        ! NUMBER MINOR TICKS
       n2 = (abs(s0)+0.5) ! NUMBER OF MAJOR TICKS
-      s1 = float(n2)
+      s1 = real(n2)
       xl = 1.0       ! INCREMENT BETWEEN MAJOR TICKS
-      n1 = iabs(n0)
+      n1 = abs(n0)
       color = .false.
       if ( n1>=100000 ) then
          n1 = mod(n1,100000)
@@ -1530,12 +1519,12 @@ logical vert , ticks , color
       endif
       if ( n1>=10000 ) then
          n1 = mod(n1,10000)
-         n2 = iabs(ml)  ! NUMBER MAJOR TICKS
+         n2 = abs(ml)  ! NUMBER MAJOR TICKS
          if ( n2==0 ) n2 = 1
          s1 = abs(s0)
-         xl = abs(s0)/float(n2)
+         xl = abs(s0)/real(n2)
                               ! SPACING MAJOR TICKS
-         nm1 = iabs(nm) + 1
+         nm1 = abs(nm) + 1
                          ! NUMBER MINOR TICKS
       endif
       if ( n0<0 ) then
@@ -1555,7 +1544,7 @@ logical vert , ticks , color
                           ! VERTICAL NUMBERS ON HORIZONTAL AXIS
          vert = .true.
          hor = 0.0
-         b4 = (abs(t5)*(1.+sign(1.,s0))/2.+.1)*sign(1.,float(n0))
+         b4 = (abs(t5)*(1.+sign(1.,s0))/2.+.1)*sign(1.,real(n0))
          b6 = .49*cs
       endif
       if ( n1>=100 ) then
@@ -1576,12 +1565,12 @@ logical vert , ticks , color
                                       ! COLOR
       do i = 1 , n2   ! MAJOR TICKS
          if ( nm1/=0 ) then
-            xm = xl/float(nm1)
+            xm = xl/real(nm1)
                           ! SPACING MINOR TICKS
             do k = 1 , nm1
                       ! DO MINOR TICKS
-               x2 = x1 + t3*float(k-1)*xm
-               y2 = y1 + t4*float(k-1)*xm
+               x2 = x1 + t3*real(k-1)*xm
+               y2 = y1 + t4*real(k-1)*xm
                x3 = x2 - t5*.5
                y3 = y2 + t6*.5
                call move_(x2,y2)
@@ -1625,14 +1614,14 @@ logical vert , ticks , color
          c2 = c1 - n2*d1
                         ! MAKE SPACE FOR VERTICAL NUMBERS
          ic = 1      ! ON HORIZONTAL AXIS
-         if ( abs(c2)>=1.0 ) ic = ifix(alog10(abs(c2)))
+         if ( abs(c2)>=1.0 ) ic = int(log10(abs(c2)))
          ic2 = 1
-         if ( abs(c1)>=1.0 ) ic2 = ifix(alog10(abs(c1)))
+         if ( abs(c1)>=1.0 ) ic2 = int(log10(abs(c1)))
          nc1 = max(ic,ic2) + 2
          if ( c2<0.0 .or. c0<0.0 ) nc1 = nc1 + 1
-         if ( n0>0.0 ) b4 = b4 + float(nc1)*cs
+         if ( n0>0.0 ) b4 = b4 + real(nc1)*cs
          b3 = 0.0
-         b8 = (.25+abs(t5)*(sign(1.,s0)+1.)/2.+float(nc1)*cs)*sign(1.,float(n0))
+         b8 = (.25+abs(t5)*(sign(1.,s0)+1.)/2.+real(nc1)*cs)*sign(1.,real(n0))
       endif
       x2 = x1 - b4*t4 - b7*t3
                          ! LOCATE CENTER NUMBER LABELS
@@ -1642,7 +1631,7 @@ logical vert , ticks , color
                                       ! COLOR
       do i = 1 , n2  ! LABEL MAJOR TICKS
          call number_(x2,y2,cs,c1,hor,0.01,-1)
-         c1 = c1 - d1*s1/float(n2-1)
+         c1 = c1 - d1*s1/real(n2-1)
          x2 = x2 - t3*xl
          y2 = y2 - t4*xl
       enddo
@@ -1675,7 +1664,7 @@ logical vert , ticks , color
          x2 = x2 + cs*3.75*t3 - cs*t4*0.4
          y2 = y2 + cs*3.75*t4 + cs*t3*0.4
          call number_(x2,y2,cs,e1,t2,0.0,-1)
-         b2 = 0.8 + aint(alog10(abs(e1)))
+         b2 = 0.8 + aint(log10(abs(e1)))
          if ( e1<0.0 ) b2 = b2 + 1
          x2 = x2 + b2*cs*t3 + cs*t4*0.4
          y2 = y2 + b2*cs*t4 - cs*t3*0.4
@@ -1804,7 +1793,7 @@ logical vert , ticks , color , scale
       n2 = (abs(s0)+0.5) ! NUMBER OF MAJOR TICKS
       s1 = n2
       xl = 1.        ! INCREMENT BETWEEN MAJOR TICKS
-      n1 = iabs(n0)
+      n1 = abs(n0)
       color = .false.
       if ( n1>100000 ) then
          n1 = mod(n1,100000)
@@ -1813,18 +1802,18 @@ logical vert , ticks , color , scale
       endif
       if ( n1>10000 ) then
          n1 = mod(n1,10000)
-         n2 = iabs(ml)  ! NUMBER MAJOR TICKS
+         n2 = abs(ml)  ! NUMBER MAJOR TICKS
          s1 = abs(s0)
          if ( n2==0 ) n2 = 1
-         xl = abs(s0)/float(n2)
+         xl = abs(s0)/real(n2)
                               ! SPACING MAJOR TICKS
-         nm1 = iabs(nm) + 1
+         nm1 = abs(nm) + 1
                          ! NUMBER MINOR TICKS
          if ( ml<0 ) then
             cs = abs(ts)
                         ! DIFFERENT TITLE SIZE
             if ( cs==0. ) cs = .15
-            ndd = iabs(nd)
+            ndd = abs(nd)
             if ( ts<0 ) scale = .false.
                                        ! DO NOT SCALE
             t5 = abs(sm)  ! NEW TICK LENGTH
@@ -1836,7 +1825,7 @@ logical vert , ticks , color , scale
                           ! VERTICAL NUMBERS ON HORIZONTAL AXIS
          vert = .true.
          hor = 0.0
-         b4 = (abs(t5)*(1.+sign(1.,s0))/2.+.1)*sign(1.,float(n0))
+         b4 = (abs(t5)*(1.+sign(1.,s0))/2.+.1)*sign(1.,real(n0))
          b6 = .49*cs
       endif
       if ( n1>100 ) then
@@ -1869,12 +1858,12 @@ logical vert , ticks , color , scale
                                       ! COLOR
       do i = 1 , n2   ! MAJOR TICKS
          if ( nm1/=0 ) then
-            xm = xl/float(nm1)
+            xm = xl/real(nm1)
                           ! SPACING MINOR TICKS
             do k = 1 , nm1
                       ! DO MINOR TICKS
-               x2 = x1 + t3*float(k-1)*xm
-               y2 = y1 + t4*float(k-1)*xm
+               x2 = x1 + t3*real(k-1)*xm
+               y2 = y1 + t4*real(k-1)*xm
                if ( k-1==nn .and. nn/=0 ) then
                   hmt = 0.8
                else
@@ -1925,14 +1914,14 @@ logical vert , ticks , color , scale
          c2 = c1 - n2*d1
                         ! MAKE SPACE FOR VERTICAL NUMBERS
          ic = 1      ! ON HORIZONTAL AXIS
-         if ( abs(c2)>=1.0 ) ic = ifix(alog10(abs(c2)))
+         if ( abs(c2)>=1.0 ) ic = int(log10(abs(c2)))
          ic2 = 1
-         if ( abs(c1)>=1.0 ) ic2 = ifix(alog10(abs(c1)))
+         if ( abs(c1)>=1.0 ) ic2 = int(log10(abs(c1)))
          nc1 = max(ic,ic2) + 2
          if ( c2<0.0 .or. c0<0.0 ) nc1 = nc1 + 1
-         if ( n0>0.0 ) b4 = b4 + float(nc1+ndd)*cs
+         if ( n0>0.0 ) b4 = b4 + real(nc1+ndd)*cs
          b3 = 0.0
-         b8 = (.25+abs(t5)*(sign(1.,s0)+1.)/2.+float(nc1+ndd)*cs)*sign(1.,float(n0))
+         b8 = (.25+abs(t5)*(sign(1.,s0)+1.)/2.+real(nc1+ndd)*cs)*sign(1.,real(n0))
       endif
       x2 = x1 - b4*t4 - b7*t3
                          ! LOCATE CENTER NUMBER LABELS
@@ -1943,8 +1932,8 @@ logical vert , ticks , color , scale
       nddd = ndd
       if ( ndd==0 ) nddd = -1
       do i = 1 , n2  ! LABEL MAJOR TICKS
-         call number_(x2,y2,cs,c1,hor,float(nddd)/100.,-1)
-         c1 = c1 - d1*s1/float(n2-1)
+         call number_(x2,y2,cs,c1,hor,real(nddd)/100.,-1)
+         c1 = c1 - d1*s1/real(n2-1)
          x2 = x2 - t3*xl
          y2 = y2 - t4*xl
       enddo
@@ -1977,7 +1966,7 @@ logical vert , ticks , color , scale
          x2 = x2 + 3.75*cs*t3 - cs*t4*0.4
          y2 = y2 + 3.75*cs*t4 + cs*t3*0.4
          call number_(x2,y2,cs,e1,t2,0.0,-1)
-         b2 = 0.8 + aint(alog10(abs(e1)))
+         b2 = 0.8 + aint(log10(abs(e1)))
          if ( e1<0.0 ) b2 = b2 + 1
          x2 = x2 + b2*cs*t3 + cs*t4*0.4
          y2 = y2 + b2*cs*t4 - cs*t3*0.4
@@ -2072,7 +2061,7 @@ character(len=8)  :: fb1 ! WORKING BUFFERS
       nn = nd + 2
       if ( z==0 .and. fa==0.0 ) nn = 1
       if ( z/=0.0 ) then
-         alg = alog10(abs(z))
+         alg = log10(abs(z))
          if ( alg<0.0 ) alg = 0.0
          nn = nd + 2 + alg
          if ( fa==0.0 ) nn = 1 + alg
@@ -2279,8 +2268,8 @@ data q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
    xmin = xmax
    do i = ix , np , k
       xi = x(i)
-      xmax = amax1(xmax,xi)
-      xmin = amin1(xmin,xi)
+      xmax = max(xmax,xi)
+      xmin = min(xmin,xi)
    enddo
    xmm = xmin
    if ( s>0.0 ) then
@@ -2288,7 +2277,7 @@ data q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
       if ( dx>0.0 ) then
          sj = 0.0
          if ( dx<1.0 ) sj = -1.0
-         idx = alog10(dx) + sj
+         idx = log10(dx) + sj
          dx = dx/(10.0**idx)
          spag_loop_1_1: do i = 1 , 6
             xi = q(i)
@@ -2305,10 +2294,10 @@ data q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
             call spag_block_1
             return
          endif
-         idx = alog10(xmin) + sj
+         idx = log10(xmin) + sj
          xmin = xmin/(10.0**idx)
          xmin = xmin - sj
-         xmin = ifix(xmin)*si*(10.0**idx)
+         xmin = int(xmin)*si*(10.0**idx)
          call spag_block_1
          return
       endif

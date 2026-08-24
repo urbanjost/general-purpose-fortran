@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_list(3f) - [M_list::INTRO] maintain simple lists
@@ -101,7 +90,7 @@
 !!        ! find where string is or should be
 !!        call locate(keywords,key,place)
 !!        ! if string was not found insert it
-!!        if(place.lt.1)then
+!!        if(place < 1)then
 !!           call insert(keywords,key,abs(place))
 !!           call insert(values,val,abs(place))
 !!           call insert(counts,ilen,abs(place))
@@ -111,7 +100,7 @@
 !!        endif
 !!     else
 !!        call locate(keywords,key,place)
-!!        if(place.gt.0)then
+!!        if(place > 0)then
 !!           call remove(keywords,place)
 !!           call remove(values,place)
 !!           call remove(counts,place)
@@ -124,7 +113,7 @@
 !!     integer                       :: place
 !!        ! find where string is or should be
 !!        call locate(keywords,key,place)
-!!        if(place.lt.1)then
+!!        if(place < 1)then
 !!           valout=''
 !!        else
 !!           valout=values(place)(:counts(place))
@@ -386,18 +375,18 @@ contains
 !!     call locate(arr,string,place)
 !!     write(*,*)'for "'//string//'" index is ',place, size(arr)
 !!     ! if string was not found insert it
-!!     if(place.lt.1)then
+!!     if(place < 1)then
 !!        plus=abs(place)
 !!        ii=len(arr)
 !!        end=size(arr)
 !!        ! empty array
-!!        if(end.eq.0)then
+!!        if(end == 0)then
 !!           arr=[character(len=ii) :: string ]
 !!        ! put in front of array
-!!        elseif(plus.eq.1)then
+!!        elseif(plus == 1)then
 !!           arr=[character(len=ii) :: string, arr]
 !!        ! put at end of array
-!!        elseif(plus.eq.end)then
+!!        elseif(plus == end)then
 !!           arr=[character(len=ii) :: arr, string ]
 !!        ! put in middle of array
 !!        else
@@ -449,7 +438,7 @@ integer                                 :: error
    if(debug)write(stderr,*)'*locate_c* START ARRAYSIZE=',size(list)
 
    error=0
-   if(arraysize.eq.0)then
+   if(arraysize == 0)then
       maxtry=0
       place=-1
    else
@@ -463,17 +452,17 @@ integer                                 :: error
    LOOP: block
    do i=1,maxtry
 
-      if(value.eq.list(PLACE))then
+      if(value == list(PLACE))then
          exit LOOP
-      else if(value.gt.list(place))then
+      else if(value > list(place))then
          imax=place-1
       else
          imin=place+1
       endif
 
-      if(imin.gt.imax)then
+      if(imin > imax)then
          place=-imin
-         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place) > arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -481,7 +470,7 @@ integer                                 :: error
 
       place=(imax+imin)/2
 
-      if(place.gt.arraysize.or.place.le.0)then
+      if(place > arraysize.or.place <= 0)then
          message='*locate* error: search is out of bounds of list. Probably an unsorted input array'
          error=-1
          exit LOOP
@@ -492,7 +481,7 @@ integer                                 :: error
    endblock LOOP
    if(present(ier))then
       ier=error
-   else if(error.ne.0)then
+   else if(error /= 0)then
       write(stderr,*)message//' VALUE=',trim(value)//' PLACE=',place
       stop 1
    endif
@@ -530,7 +519,7 @@ integer                                :: error
    if(debug)write(stderr,*)'*locate_d* START ARRAYSIZE=',size(list)
 
    error=0
-   if(arraysize.eq.0)then
+   if(arraysize == 0)then
       maxtry=0
       place=-1
    else
@@ -544,17 +533,17 @@ integer                                :: error
    LOOP: block
    do i=1,maxtry
 
-      if(value.eq.list(PLACE))then
+      if(value == list(PLACE))then
          exit LOOP
-      else if(value.gt.list(place))then
+      else if(value > list(place))then
          imax=place-1
       else
          imin=place+1
       endif
 
-      if(imin.gt.imax)then
+      if(imin > imax)then
          place=-imin
-         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place) > arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -562,7 +551,7 @@ integer                                :: error
 
       place=(imax+imin)/2
 
-      if(place.gt.arraysize.or.place.le.0)then
+      if(place > arraysize.or.place <= 0)then
          message='*locate* error: search is out of bounds of list. Probably an unsorted input array'
          error=-1
          exit LOOP
@@ -573,7 +562,7 @@ integer                                :: error
    endblock LOOP
    if(present(ier))then
       ier=error
-   else if(error.ne.0)then
+   else if(error /= 0)then
       write(stderr,*)message//' VALUE=',value,' PLACE=',place
       stop 1
    endif
@@ -610,7 +599,7 @@ integer                                :: error
    if(debug)write(stderr,*)'*locate_r* START ARRAYSIZE=',size(list)
 
    error=0
-   if(arraysize.eq.0)then
+   if(arraysize == 0)then
       maxtry=0
       place=-1
    else
@@ -624,17 +613,17 @@ integer                                :: error
    LOOP: block
    do i=1,maxtry
 
-      if(value.eq.list(PLACE))then
+      if(value == list(PLACE))then
          exit LOOP
-      else if(value.gt.list(place))then
+      else if(value > list(place))then
          imax=place-1
       else
          imin=place+1
       endif
 
-      if(imin.gt.imax)then
+      if(imin > imax)then
          place=-imin
-         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place) > arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -642,7 +631,7 @@ integer                                :: error
 
       place=(imax+imin)/2
 
-      if(place.gt.arraysize.or.place.le.0)then
+      if(place > arraysize.or.place <= 0)then
          message='*locate* error: search is out of bounds of list. Probably an unsorted input array'
          error=-1
          exit LOOP
@@ -653,7 +642,7 @@ integer                                :: error
    endblock LOOP
    if(present(ier))then
       ier=error
-   else if(error.ne.0)then
+   else if(error /= 0)then
       write(stderr,*)message//' VALUE=',value,' PLACE=',place
       stop 1
    endif
@@ -690,7 +679,7 @@ integer                                :: error
    if(debug)write(stderr,*)'*locate_i* START ARRAYSIZE=',size(list)
 
    error=0
-   if(arraysize.eq.0)then
+   if(arraysize == 0)then
       maxtry=0
       place=-1
    else
@@ -704,17 +693,17 @@ integer                                :: error
    LOOP: block
    do i=1,maxtry
 
-      if(value.eq.list(PLACE))then
+      if(value == list(PLACE))then
          exit LOOP
-      else if(value.gt.list(place))then
+      else if(value > list(place))then
          imax=place-1
       else
          imin=place+1
       endif
 
-      if(imin.gt.imax)then
+      if(imin > imax)then
          place=-imin
-         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place) > arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP
@@ -722,7 +711,7 @@ integer                                :: error
 
       place=(imax+imin)/2
 
-      if(place.gt.arraysize.or.place.le.0)then
+      if(place > arraysize.or.place <= 0)then
          message='*locate* error: search is out of bounds of list. Probably an unsorted input array'
          error=-1
          exit LOOP
@@ -733,7 +722,7 @@ integer                                :: error
    endblock LOOP
    if(present(ier))then
       ier=error
-   else if(error.ne.0)then
+   else if(error /= 0)then
       write(stderr,*)message//' VALUE=',value,' PLACE=',place
       stop 1
    endif
@@ -819,8 +808,8 @@ integer                      :: ii, end
    endif
    ii=len(list)
    end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
+   if(place <= 0.or.place > end)then                       ! index out of bounds of array
+   elseif(place == end)then                                 ! remove from array
       list=[character(len=ii) :: list(:place-1) ]
    else
       list=[character(len=ii) :: list(:place-1), list(place+1:) ]
@@ -839,8 +828,8 @@ integer                      :: end
            list=[doubleprecision :: ]
    endif
    end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
+   if(place <= 0.or.place > end)then                       ! index out of bounds of array
+   elseif(place == end)then                                 ! remove from array
       list=[ list(:place-1)]
    else
       list=[ list(:place-1), list(place+1:) ]
@@ -860,8 +849,8 @@ integer             :: end
       list=[real :: ]
    endif
    end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
+   if(place <= 0.or.place > end)then                       ! index out of bounds of array
+   elseif(place == end)then                                 ! remove from array
       list=[ list(:place-1)]
    else
       list=[ list(:place-1), list(place+1:) ]
@@ -882,8 +871,8 @@ integer                :: end
       list=[logical :: ]
    endif
    end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
+   if(place <= 0.or.place > end)then                       ! index out of bounds of array
+   elseif(place == end)then                                 ! remove from array
       list=[ list(:place-1)]
    else
       list=[ list(:place-1), list(place+1:) ]
@@ -903,8 +892,8 @@ integer                :: end
       list=[integer :: ]
    endif
    end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
+   if(place <= 0.or.place > end)then                       ! index out of bounds of array
+   elseif(place == end)then                                 ! remove from array
       list=[ list(:place-1)]
    else
       list=[ list(:place-1), list(place+1:) ]
@@ -973,7 +962,7 @@ end subroutine remove_i
 !!            &(trim(keywords(i)),trim(values(i)),i=1,size(keywords))
 !!
 !!     call locate(keywords,'a',place)
-!!     if(place.gt.0)then
+!!     if(place > 0)then
 !!        write(*,*)'The value of "a" is ',trim(values(place))
 !!     else
 !!        write(*,*)'"a" not found'
@@ -988,7 +977,7 @@ end subroutine remove_i
 !!     ! find where string is or should be
 !!     call locate(keywords,key,place)
 !!     ! if string was not found insert it
-!!     if(place.lt.1)then
+!!     if(place < 1)then
 !!        call insert(keywords,key,abs(place))
 !!        call insert(values,val,abs(place))
 !!     else ! replace
@@ -1026,9 +1015,9 @@ integer                      :: end
    endif
    tlen=len_trim(value)
    end=size(list)
-   if(place.lt.0.or.place.gt.end)then
+   if(place < 0.or.place > end)then
            write(stderr,*)'*replace_c* error: index out of range. end=',end,' index=',place
-   elseif(len_trim(value).le.len(list))then
+   elseif(len_trim(value) <= len(list))then
       list(place)=value
    else  ! increase length of variable
       ii=max(tlen,len(list))
@@ -1051,9 +1040,9 @@ integer                      :: end
            list=[doubleprecision :: ]
    endif
    end=size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.gt.0.and.place.le.end)then
+   elseif(place > 0.and.place <= end)then
       list(place)=value
    else                                                      ! put in middle of array
       write(stderr,*)'*replace_d* error: index out of range. end=',end,' index=',place
@@ -1073,9 +1062,9 @@ integer               :: end
       list=[real :: ]
    endif
    end=size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.gt.0.and.place.le.end)then
+   elseif(place > 0.and.place <= end)then
       list(place)=value
    else                                                      ! put in middle of array
       write(stderr,*)'*replace_r* error: index out of range. end=',end,' index=',place
@@ -1095,9 +1084,9 @@ integer               :: end
    endif
    end=size(list)
    if(debug)write(stderr,*)'*replace_l* START REPLACE_L VALUE=',value,' PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.gt.0.and.place.le.end)then
+   elseif(place > 0.and.place <= end)then
       list(place)=value
    else                                                      ! put in middle of array
       write(stderr,*)'*replace_l* error: index out of range. end=',end,' index=',place
@@ -1117,9 +1106,9 @@ integer               :: end
    endif
    end=size(list)
    if(debug)write(stderr,*)'*replace_i* START VALUE=',value,' PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.gt.0.and.place.le.end)then
+   elseif(place > 0.and.place <= end)then
       list(place)=value
    else                                                      ! put in middle of array
       write(stderr,*)'*replace_i* error: index out of range. end=',end,' index=',place
@@ -1189,7 +1178,7 @@ end subroutine replace_i
 !!     ! find where string is or should be
 !!     call locate(arr,string,place)
 !!     ! if string was not found insert it
-!!     if(place.lt.1)then
+!!     if(place < 1)then
 !!        call insert(arr,string,abs(place))
 !!     endif
 !!     ! show array
@@ -1229,42 +1218,23 @@ integer                      :: end
 
    ii=max(len_trim(value),len(list),2)
    end=size(list)
-   !call slower()
    call faster(ii)
    if(debug)write(stderr,*)'*insert_c* END VALUE=',trim(value),' PLACE=',place,' NEWSIZE=',size(list)
 contains
-
-subroutine slower()
-character(len=:),allocatable :: kludge(:)
-   if(end.eq.0)then                                          ! empty array
-      list=[character(len=ii) :: value ]
-   elseif(place.eq.1)then                                    ! put in front of array
-      kludge=[character(len=ii) :: value, list]
-      list=kludge
-   elseif(place.gt.end)then                                  ! put at end of array
-      kludge=[character(len=ii) :: list, value ]
-      list=kludge
-   elseif(place.ge.2.and.place.le.end)then                   ! put in middle of array
-      kludge=[character(len=ii) :: list(:place-1), value,list(place:) ]
-      list=kludge
-   else                                                      ! index out of range
-      write(stderr,*)'*insert_c* error: index out of range. end=',end,' index=',place,' value=',value
-   endif
-end subroutine slower
 
 subroutine faster(ilen)
 integer,intent(in) :: ilen
 character(len=:),allocatable :: temp(:)
    allocate(character(len=ilen) :: temp(size(list)+1))
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       temp(:)=[character(len=ii) :: value ]
-   elseif(place.eq.1)then                                    ! put in front of array
+   elseif(place == 1)then                                    ! put in front of array
       temp(1)=value
       temp(2:)=list
-   elseif(place.gt.end)then                                  ! put at end of array
+   elseif(place > end)then                                  ! put at end of array
       temp(1:end)=list
       temp(end+1)=value
-   elseif(place.ge.2.and.place.le.end)then                   ! put in middle of array
+   elseif(place >= 2.and.place <= end)then                   ! put in middle of array
       temp(:place-1)=list(:place-1)
       temp(place)=value
       temp(place+1:)=list(place:)
@@ -1290,13 +1260,13 @@ integer               :: end
    endif
 
    end=size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.eq.1)then                                    ! put in front of array
+   elseif(place == 1)then                                    ! put in front of array
       list=[value, list]
-   elseif(place.gt.end)then                                  ! put at end of array
+   elseif(place > end)then                                  ! put at end of array
       list=[list, value ]
-   elseif(place.ge.2.and.place.le.end)then                   ! put in middle of array
+   elseif(place >= 2.and.place <= end)then                   ! put in middle of array
       list=[list(:place-1), value,list(place:) ]
    else                                                      ! index out of range
       write(stderr,*)'*insert_r* error: index out of range. end=',end,' index=',place,' value=',value
@@ -1317,13 +1287,13 @@ integer                          :: end
       list=[doubleprecision :: ]
    endif
    end=size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.eq.1)then                                    ! put in front of array
+   elseif(place == 1)then                                    ! put in front of array
       list=[value, list]
-   elseif(place.gt.end)then                                  ! put at end of array
+   elseif(place > end)then                                  ! put at end of array
       list=[list, value ]
-   elseif(place.ge.2.and.place.le.end)then                 ! put in middle of array
+   elseif(place >= 2.and.place <= end)then                 ! put in middle of array
       list=[list(:place-1), value,list(place:) ]
    else                                                      ! index out of range
       write(stderr,*)'*insert_d* error: index out of range. end=',end,' index=',place,' value=',value
@@ -1343,13 +1313,13 @@ integer               :: end
    endif
    end=size(list)
    if(debug)write(stderr,*)'*insert_l* START VALUE=',value,' PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.eq.1)then                                    ! put in front of array
+   elseif(place == 1)then                                    ! put in front of array
       list=[value, list]
-   elseif(place.gt.end)then                                  ! put at end of array
+   elseif(place > end)then                                  ! put at end of array
       list=[list, value ]
-   elseif(place.ge.2.and.place.le.end)then                 ! put in middle of array
+   elseif(place >= 2.and.place <= end)then                 ! put in middle of array
       list=[list(:place-1), value,list(place:) ]
    else                                                      ! index out of range
       write(stderr,*)'*insert_l* error: index out of range. end=',end,' index=',place,' value=',value
@@ -1370,13 +1340,13 @@ integer               :: end
    endif
    end=size(list)
    if(debug)write(stderr,*)'*insert_i* START VALUE=',value,' PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(end.eq.0)then                                          ! empty array
+   if(end == 0)then                                          ! empty array
       list=[value]
-   elseif(place.eq.1)then                                    ! put in front of array
+   elseif(place == 1)then                                    ! put in front of array
       list=[value, list]
-   elseif(place.gt.end)then                                  ! put at end of array
+   elseif(place > end)then                                  ! put at end of array
       list=[list, value ]
-   elseif(place.ge.2.and.place.le.end)then                 ! put in middle of array
+   elseif(place >= 2.and.place <= end)then                 ! put in middle of array
       list=[list(:place-1), value,list(place:) ]
    else                                                      ! index out of range
       write(stderr,*)'*insert_i* error: index out of range. end=',end,' index=',place,' value=',value
@@ -1454,7 +1424,7 @@ character(len=*),intent(in)  :: key
 integer                      :: place
 
    call locate(self%key,key,place)
-   if(place.ge.1)then
+   if(place >= 1)then
       call remove(self%key,place)
       call remove(self%value,place)
       call remove(self%count,place)
@@ -1546,7 +1516,7 @@ character(len=*),intent(in)     :: key
 character(len=:),allocatable    :: value
 integer                         :: place
    call locate(self%key,key,place)
-   if(place.lt.1)then
+   if(place < 1)then
       value=''
    else
       value=self%value(place)(:self%count(place))
@@ -1628,12 +1598,12 @@ character(len=*),intent(in)     :: value
 integer                         :: place
 integer                         :: place2
    call locate(self%key,key,place)
-   if(place.le.0)then
+   if(place <= 0)then
       place2=abs(place)
       call insert( self%key,   key,             place2 )
       call insert( self%value, value,           place2 )
       call insert( self%count, len_trim(value), place2 )
-   elseif(place.gt.0)then  ! replace instead of insert
+   elseif(place > 0)then  ! replace instead of insert
       call replace( self%value, value,           place )
       call replace( self%count, len_trim(value), place )
    endif
@@ -1794,7 +1764,7 @@ character(len=*),intent(in)     :: key
 logical                         :: value
 integer                         :: place
    call locate(self%key,key,place)
-   if(place.lt.1)then
+   if(place < 1)then
       value=.false.
    else
       value=.true.

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_framework__attr(3f) - [M_framework__attr::INTRO] control text attributes on terminals
@@ -83,7 +72,7 @@
 !!     ISATTY() to set the default to "plain" instead of "color"
 !!     when the output file is not a conforming terminal. On basic
 !!     MSWindows console windows, it is best to use Windows 10+ and/or
-!!     the 1 mode; you may have to enable ANSI escape sequence
+!!     the Linux mode; you may have to enable ANSI escape sequence
 !!     mode on MSWindows. It does work as-is with CygWin and MinGW and
 !!     Putty windows and mintty(1) as tested.
 !!
@@ -383,7 +372,7 @@ contains
 !!##LIMITATIONS
 !!    o colors are not nestable, keywords are case-sensitive,
 !!    o not all terminals obey the sequences. On Windows, it is best if
-!!      you use Windows 10+ and/or the 1 mode; although it has worked
+!!      you use Windows 10+ and/or the Linux mode; although it has worked
 !!      with all CygWin and MinGW and Putty windows and mintty.
 !!    o you should use "<gt>" and "<lt>" instead of ">" and "<" in a string
 !!      processed by attr(3f) instead of in any plain text output so that
@@ -965,9 +954,9 @@ if(present(valin))then
    call locate(keywords,key,place)
    ! if string was not found insert it
    if(place.lt.1)then
-      call insert(keywords,key,iabs(place))
-      call insert(values,val,iabs(place))
-      call insert(mono_values,mono_val,iabs(place))
+      call insert(keywords,key,abs(place))
+      call insert(values,val,abs(place))
+      call insert(mono_values,mono_val,abs(place))
    else
       call replace(values,val,place)
       call replace(mono_values,mono_val,place)
@@ -1039,7 +1028,7 @@ integer                                 :: error
       endif
       if(imin.gt.imax)then
          place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP

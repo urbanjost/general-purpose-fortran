@@ -229,43 +229,29 @@ type dictionary
 end type dictionary
 !===================================================================================================================================
 private locate        ! [M_list] find PLACE in sorted character array where value can be found or should be placed
-   private locate_c
-   private locate_d
-   private locate_r
-   private locate_i
 private insert        ! [M_list] insert entry into a sorted allocatable array at specified position
    private insert_c
-   private insert_d
-   private insert_r
    private insert_i
    private insert_l
 private replace       ! [M_list] replace entry by index from a sorted allocatable array if it is present
    private replace_c
-   private replace_d
-   private replace_r
    private replace_i
    private replace_l
 private remove        ! [M_list] delete entry by index from a sorted allocatable array if it is present
    private remove_c
-   private remove_d
-   private remove_r
    private remove_i
    private remove_l
 
-interface locate
-   module procedure locate_c, locate_d, locate_r, locate_i
-end interface
-
 interface insert
-   module procedure insert_c, insert_d, insert_r, insert_i, insert_l
+   module procedure insert_c, insert_i, insert_l
 end interface
 
 interface replace
-   module procedure replace_c, replace_d, replace_r, replace_i, replace_l
+   module procedure replace_c, replace_i, replace_l
 end interface
 
 interface remove
-   module procedure remove_c, remove_d, remove_r, remove_i, remove_l
+   module procedure remove_c, remove_i, remove_l
 end interface
 !===================================================================================================================================
 contains
@@ -1517,9 +1503,9 @@ end function specified
 !===================================================================================================================================
 ! COPY OF M_LIST
 !===================================================================================================================================
-subroutine locate_c(list,value,place,ier,errmsg)
+subroutine locate(list,value,place,ier,errmsg)
 
-! ident_4="@(#) M_list locate_c(3f) find PLACE in sorted character array where VALUE can be found or should be placed"
+! ident_4="@(#) M_list locate(3f) find PLACE in sorted character array where VALUE can be found or should be placed"
 
 character(len=*),intent(in)             :: value
 integer,intent(out)                     :: place
@@ -1536,14 +1522,14 @@ integer                                 :: error
       list=[character(len=max(len_trim(value),2)) :: ]
    endif
    arraysize=size(list)
-   if(debug)write(stderr,*)'*locate_c* START ARRAYSIZE=',size(list)
+   if(debug)write(stderr,*)'*locate* START ARRAYSIZE=',size(list)
 
    error=0
    if(arraysize.eq.0)then
       maxtry=0
       place=-1
    else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(real(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1
@@ -1589,257 +1575,14 @@ integer                                 :: error
    if(present(errmsg))then
       errmsg=message
    endif
-   if(debug)write(stderr,*)'*locate_c* END PLACE=',place,' ARRAYSIZE=',size(list),' LENGTH=',len(list)
-end subroutine locate_c
-!===================================================================================================================================
-subroutine locate_d(list,value,place,ier,errmsg)
-
-! ident_5="@(#) M_list locate_d(3f) find PLACE in sorted doubleprecision array where VALUE can be found or should be placed"
-
-! Assuming an array sorted in descending order
-!
-!  1. If it is not found report where it should be placed as a NEGATIVE index number.
-
-doubleprecision,allocatable            :: list(:)
-doubleprecision,intent(in)             :: value
-integer,intent(out)                    :: place
-integer,intent(out),optional           :: ier
-character(len=*),intent(out),optional  :: errmsg
-
-integer                                :: i
-character(len=:),allocatable           :: message
-integer                                :: arraysize
-integer                                :: maxtry
-integer                                :: imin, imax
-integer                                :: error
-
-   if(.not.allocated(list))then
-      list=[doubleprecision :: ]
-   endif
-   arraysize=size(list)
-   if(debug)write(stderr,*)'*locate_d* START ARRAYSIZE=',size(list)
-
-   error=0
-   if(arraysize.eq.0)then
-      maxtry=0
-      place=-1
-   else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
-      place=(arraysize+1)/2
-   endif
-   imin=1
-   imax=arraysize
-   message=''
-
-   LOOP: block
-   do i=1,maxtry
-
-      if(value.eq.list(PLACE))then
-         exit LOOP
-      else if(value.gt.list(place))then
-         imax=place-1
-      else
-         imin=place+1
-      endif
-
-      if(imin.gt.imax)then
-         place=-imin
-         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
-            exit LOOP
-         endif
-         exit LOOP
-      endif
-
-      place=(imax+imin)/2
-
-      if(place.gt.arraysize.or.place.le.0)then
-         message='*locate* error: search is out of bounds of list. Probably an unsorted input array'
-         error=-1
-         exit LOOP
-      endif
-
-   enddo
-   message='*locate* exceeded allowed tries. Probably an unsorted input array'
-   endblock LOOP
-   if(present(ier))then
-      ier=error
-   else if(error.ne.0)then
-      write(stderr,*)message//' VALUE=',value,' PLACE=',place
-      stop 1
-   endif
-   if(present(errmsg))then
-      errmsg=message
-   endif
-   if(debug)write(stderr,*)'*locate_d* END PLACE=',place,' ARRAYSIZE=',size(list)
-end subroutine locate_d
-!===================================================================================================================================
-subroutine locate_r(list,value,place,ier,errmsg)
-
-! ident_6="@(#) M_list locate_r(3f) find PLACE in sorted real array where VALUE can be found or should be placed"
-
-! Assuming an array sorted in descending order
-!
-!  1. If it is not found report where it should be placed as a NEGATIVE index number.
-
-real,allocatable                       :: list(:)
-real,intent(in)                        :: value
-integer,intent(out)                    :: place
-integer,intent(out),optional           :: ier
-character(len=*),intent(out),optional  :: errmsg
-
-integer                                :: i
-character(len=:),allocatable           :: message
-integer                                :: arraysize
-integer                                :: maxtry
-integer                                :: imin, imax
-integer                                :: error
-
-   if(.not.allocated(list))then
-      list=[real :: ]
-   endif
-   arraysize=size(list)
-   if(debug)write(stderr,*)'*locate_r* START ARRAYSIZE=',size(list)
-
-   error=0
-   if(arraysize.eq.0)then
-      maxtry=0
-      place=-1
-   else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
-      place=(arraysize+1)/2
-   endif
-   imin=1
-   imax=arraysize
-   message=''
-
-   LOOP: block
-   do i=1,maxtry
-
-      if(value.eq.list(PLACE))then
-         exit LOOP
-      else if(value.gt.list(place))then
-         imax=place-1
-      else
-         imin=place+1
-      endif
-
-      if(imin.gt.imax)then
-         place=-imin
-         if(abs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
-            exit LOOP
-         endif
-         exit LOOP
-      endif
-
-      place=(imax+imin)/2
-
-      if(place.gt.arraysize.or.place.le.0)then
-         message='*locate* error: search is out of bounds of list. Probably an unsorted input array'
-         error=-1
-         exit LOOP
-      endif
-
-   enddo
-   message='*locate* exceeded allowed tries. Probably an unsorted input array'
-   endblock LOOP
-   if(present(ier))then
-      ier=error
-   else if(error.ne.0)then
-      write(stderr,*)message//' VALUE=',value,' PLACE=',place
-      stop 1
-   endif
-   if(present(errmsg))then
-      errmsg=message
-   endif
-   if(debug)write(stderr,*)'*locate_r* END PLACE=',place,' ARRAYSIZE=',size(list)
-end subroutine locate_r
-!===================================================================================================================================
-subroutine locate_i(list,value,place,ier,errmsg)
-
-! ident_7="@(#) M_list locate_i(3f) find PLACE in sorted integer array where VALUE can be found or should be placed"
-
-! Assuming an array sorted in descending order
-!
-!  1. If it is not found report where it should be placed as a NEGATIVE index number.
-
-integer,allocatable                    :: list(:)
-integer,intent(in)                     :: value
-integer,intent(out)                    :: place
-integer,intent(out),optional           :: ier
-character(len=*),intent(out),optional  :: errmsg
-
-integer                                :: i
-character(len=:),allocatable           :: message
-integer                                :: arraysize
-integer                                :: maxtry
-integer                                :: imin, imax
-integer                                :: error
-
-   if(.not.allocated(list))then
-      list=[integer :: ]
-   endif
-   arraysize=size(list)
-   if(debug)write(stderr,*)'*locate_i* START ARRAYSIZE=',size(list)
-
-   error=0
-   if(arraysize.eq.0)then
-      maxtry=0
-      place=-1
-   else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
-      place=(arraysize+1)/2
-   endif
-   imin=1
-   imax=arraysize
-   message=''
-
-   LOOP: block
-   do i=1,maxtry
-
-      if(value.eq.list(PLACE))then
-         exit LOOP
-      else if(value.gt.list(place))then
-         imax=place-1
-      else
-         imin=place+1
-      endif
-
-      if(imin.gt.imax)then
-         place=-imin
-         if(iabs(place).gt.arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
-            exit LOOP
-         endif
-         exit LOOP
-      endif
-
-      place=(imax+imin)/2
-
-      if(place.gt.arraysize.or.place.le.0)then
-         message='*locate* error: search is out of bounds of list. Probably an unsorted input array'
-         error=-1
-         exit LOOP
-      endif
-
-   enddo
-   message='*locate* exceeded allowed tries. Probably an unsorted input array'
-   endblock LOOP
-   if(present(ier))then
-      ier=error
-   else if(error.ne.0)then
-      write(stderr,*)message//' VALUE=',value,' PLACE=',place
-      stop 1
-   endif
-   if(present(errmsg))then
-      errmsg=message
-   endif
-   if(debug)write(stderr,*)'*locate_i* END PLACE=',place,' ARRAYSIZE=',size(list)
-end subroutine locate_i
+   if(debug)write(stderr,*)'*locate* END PLACE=',place,' ARRAYSIZE=',size(list),' LENGTH=',len(list)
+end subroutine locate
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 subroutine remove_c(list,place)
 
-! ident_8="@(#) M_list remove_c(3fp) remove string from allocatable string array at specified position"
+! ident_5="@(#) M_list remove_c(3fp) remove string from allocatable string array at specified position"
 
 character(len=:),allocatable :: list(:)
 integer,intent(in)           :: place
@@ -1859,53 +1602,9 @@ integer                      :: ii, end
    if(debug)write(stderr,*)'*remove_c* END PLACE=',place,' NEWSIZE=',size(list),' LENGTH=',len(list)
 end subroutine remove_c
 !===================================================================================================================================
-subroutine remove_d(list,place)
-
-! ident_9="@(#) M_list remove_d(3fp) remove doubleprecision value from allocatable array at specified position"
-
-doubleprecision,allocatable  :: list(:)
-integer,intent(in)           :: place
-integer                      :: end
-   if(debug) write(stderr,*)'*remove_d* START PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(.not.allocated(list))then
-           list=[doubleprecision :: ]
-   endif
-   end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
-      list=[ list(:place-1)]
-   else
-      list=[ list(:place-1), list(place+1:) ]
-   endif
-   if(debug)write(stderr,*)'*remove_d* END PLACE=',place,' NEWSIZE=',size(list)
-
-end subroutine remove_d
-!===================================================================================================================================
-subroutine remove_r(list,place)
-
-! ident_10="@(#) M_list remove_r(3fp) remove value from allocatable array at specified position"
-
-real,allocatable    :: list(:)
-integer,intent(in)  :: place
-integer             :: end
-   if(debug) write(stderr,*)'*remove_r* START PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(.not.allocated(list))then
-      list=[real :: ]
-   endif
-   end=size(list)
-   if(place.le.0.or.place.gt.end)then                       ! index out of bounds of array
-   elseif(place.eq.end)then                                 ! remove from array
-      list=[ list(:place-1)]
-   else
-      list=[ list(:place-1), list(place+1:) ]
-   endif
-   if(debug)write(stderr,*)'*remove_r* END PLACE=',place,' NEWSIZE=',size(list)
-
-end subroutine remove_r
-!===================================================================================================================================
 subroutine remove_l(list,place)
 
-! ident_11="@(#) M_list remove_l(3fp) remove value from allocatable array at specified position"
+! ident_6="@(#) M_list remove_l(3fp) remove value from allocatable array at specified position"
 
 logical,allocatable    :: list(:)
 integer,intent(in)     :: place
@@ -1928,7 +1627,7 @@ end subroutine remove_l
 !===================================================================================================================================
 subroutine remove_i(list,place)
 
-! ident_12="@(#) M_list remove_i(3fp) remove value from allocatable array at specified position"
+! ident_7="@(#) M_list remove_i(3fp) remove value from allocatable array at specified position"
 
 integer,allocatable    :: list(:)
 integer,intent(in)     :: place
@@ -1953,7 +1652,7 @@ end subroutine remove_i
 !===================================================================================================================================
 subroutine replace_c(list,value,place)
 
-! ident_13="@(#) M_list replace_c(3fp) replace string in allocatable string array at specified position"
+! ident_8="@(#) M_list replace_c(3fp) replace string in allocatable string array at specified position"
 
 character(len=*),intent(in)  :: value
 character(len=:),allocatable :: list(:)
@@ -1981,55 +1680,9 @@ integer                      :: end
    if(debug)write(stderr,*)'*replace_c* END VALUE=',trim(value),' PLACE=',place,' NEWSIZE=',size(list),' LENGTH=',len(list)
 end subroutine replace_c
 !===================================================================================================================================
-subroutine replace_d(list,value,place)
-
-! ident_14="@(#) M_list replace_d(3fp) place doubleprecision value into allocatable array at specified position"
-
-doubleprecision,intent(in)   :: value
-doubleprecision,allocatable  :: list(:)
-integer,intent(in)           :: place
-integer                      :: end
-   if(debug) write(stderr,*)'*replace_d* START VALUE=',value,' PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(.not.allocated(list))then
-           list=[doubleprecision :: ]
-   endif
-   end=size(list)
-   if(end.eq.0)then                                          ! empty array
-      list=[value]
-   elseif(place.gt.0.and.place.le.end)then
-      list(place)=value
-   else                                                      ! put in middle of array
-      write(stderr,*)'*replace_d* error: index out of range. end=',end,' index=',place
-   endif
-   if(debug)write(stderr,*)'*replace_d* END VALUE=',value,' PLACE=',place,' NEWSIZE=',size(list)
-end subroutine replace_d
-!===================================================================================================================================
-subroutine replace_r(list,value,place)
-
-! ident_15="@(#) M_list replace_r(3fp) place value into allocatable array at specified position"
-
-real,intent(in)       :: value
-real,allocatable      :: list(:)
-integer,intent(in)    :: place
-integer               :: end
-   if(debug) write(stderr,*)'*replace_r* START REPLACE_R VALUE=',value,' PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(.not.allocated(list))then
-      list=[real :: ]
-   endif
-   end=size(list)
-   if(end.eq.0)then                                          ! empty array
-      list=[value]
-   elseif(place.gt.0.and.place.le.end)then
-      list(place)=value
-   else                                                      ! put in middle of array
-      write(stderr,*)'*replace_r* error: index out of range. end=',end,' index=',place
-   endif
-   if(debug)write(stderr,*)'*replace_r* END REPLACE_R VALUE=',value,' PLACE=',place,' NEWSIZE=',size(list)
-end subroutine replace_r
-!===================================================================================================================================
 subroutine replace_l(list,value,place)
 
-! ident_16="@(#) M_list replace_l(3fp) place value into allocatable array at specified position"
+! ident_9="@(#) M_list replace_l(3fp) place value into allocatable array at specified position"
 
 logical,allocatable   :: list(:)
 logical,intent(in)    :: value
@@ -2052,7 +1705,7 @@ end subroutine replace_l
 !===================================================================================================================================
 subroutine replace_i(list,value,place)
 
-! ident_17="@(#) M_list replace_i(3fp) place value into allocatable array at specified position"
+! ident_10="@(#) M_list replace_i(3fp) place value into allocatable array at specified position"
 
 integer,intent(in)    :: value
 integer,allocatable   :: list(:)
@@ -2077,7 +1730,7 @@ end subroutine replace_i
 !===================================================================================================================================
 subroutine insert_c(list,value,place)
 
-! ident_18="@(#) M_list insert_c(3fp) place string into allocatable string array at specified position"
+! ident_11="@(#) M_list insert_c(3fp) place string into allocatable string array at specified position"
 
 character(len=*),intent(in)  :: value
 character(len=:),allocatable :: list(:)
@@ -2112,66 +1765,9 @@ integer                      :: end
    if(debug)write(stderr,*)'*insert_c* END VALUE=',trim(value),' PLACE=',place,' NEWSIZE=',size(list)
 end subroutine insert_c
 !===================================================================================================================================
-subroutine insert_r(list,value,place)
-
-! ident_19="@(#) M_list insert_r(3fp) place real value into allocatable array at specified position"
-
-real,intent(in)       :: value
-real,allocatable      :: list(:)
-integer,intent(in)    :: place
-integer               :: end
-
-   if(debug) write(stderr,*)'*insert_r* START VALUE=',value,' PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(.not.allocated(list))then
-      list=[real :: ]
-   endif
-
-   end=size(list)
-   if(end.eq.0)then                                          ! empty array
-      list=[value]
-   elseif(place.eq.1)then                                    ! put in front of array
-      list=[value, list]
-   elseif(place.gt.end)then                                  ! put at end of array
-      list=[list, value ]
-   elseif(place.ge.2.and.place.le.end)then                   ! put in middle of array
-      list=[list(:place-1), value,list(place:) ]
-   else                                                      ! index out of range
-      write(stderr,*)'*insert_r* error: index out of range. end=',end,' index=',place,' value=',value
-   endif
-
-   if(debug)write(stderr,*)'*insert_r* END VALUE=',value,' PLACE=',place,' NEWSIZE=',size(list)
-end subroutine insert_r
-!===================================================================================================================================
-subroutine insert_d(list,value,place)
-
-! ident_20="@(#) M_list insert_d(3fp) place doubleprecision value into allocatable array at specified position"
-
-doubleprecision,intent(in)       :: value
-doubleprecision,allocatable      :: list(:)
-integer,intent(in)               :: place
-integer                          :: end
-   if(debug) write(stderr,*)'*insert_d* START VALUE=',value,' PLACE=',place,' ORIGINALSIZE=',size(list)
-   if(.not.allocated(list))then
-      list=[doubleprecision :: ]
-   endif
-   end=size(list)
-   if(end.eq.0)then                                          ! empty array
-      list=[value]
-   elseif(place.eq.1)then                                    ! put in front of array
-      list=[value, list]
-   elseif(place.gt.end)then                                  ! put at end of array
-      list=[list, value ]
-   elseif(place.ge.2.and.place.le.end)then                 ! put in middle of array
-      list=[list(:place-1), value,list(place:) ]
-   else                                                      ! index out of range
-      write(stderr,*)'*insert_d* error: index out of range. end=',end,' index=',place,' value=',value
-   endif
-   if(debug)write(stderr,*)'*insert_d* END VALUE=',value,' PLACE=',place,' NEWSIZE=',size(list)
-end subroutine insert_d
-!===================================================================================================================================
 subroutine insert_l(list,value,place)
 
-! ident_21="@(#) M_list insert_l(3fp) place value into allocatable array at specified position"
+! ident_12="@(#) M_list insert_l(3fp) place value into allocatable array at specified position"
 
 logical,allocatable   :: list(:)
 logical,intent(in)    :: value
@@ -2199,7 +1795,7 @@ end subroutine insert_l
 !===================================================================================================================================
 subroutine insert_i(list,value,place)
 
-! ident_22="@(#) M_list insert_i(3fp) place value into allocatable array at specified position"
+! ident_13="@(#) M_list insert_i(3fp) place value into allocatable array at specified position"
 
 integer,allocatable   :: list(:)
 integer,intent(in)    :: value
@@ -2229,7 +1825,7 @@ end subroutine insert_i
 !===================================================================================================================================
 subroutine dict_delete(self,key)
 
-! ident_23="@(#) M_list dict_delete(3f) remove string from sorted allocatable string array if present"
+! ident_14="@(#) M_list dict_delete(3f) remove string from sorted allocatable string array if present"
 
 class(dictionary),intent(inout) :: self
 character(len=*),intent(in)     :: key
@@ -2248,7 +1844,7 @@ end subroutine dict_delete
 !===================================================================================================================================
 function dict_get(self,key) result(value)
 
-! ident_24="@(#) M_list dict_get(3f) get value of key-value pair in dictionary given key"
+! ident_15="@(#) M_list dict_get(3f) get value of key-value pair in dictionary given key"
 
 class(dictionary)               :: self
 character(len=*),intent(in)     :: key
@@ -2266,7 +1862,7 @@ end function dict_get
 !===================================================================================================================================
 subroutine dict_add(self,key,value)
 
-! ident_25="@(#) M_list dict_add(3f) place key-value pair into dictionary adding the key if required"
+! ident_16="@(#) M_list dict_add(3f) place key-value pair into dictionary adding the key if required"
 
 class(dictionary),intent(inout) :: self
 character(len=*),intent(in)     :: key
@@ -2275,7 +1871,7 @@ integer                         :: place
 integer                         :: place2
    call locate(self%key,key,place)
    if(place.lt.1)then
-      place2=iabs(place)
+      place2=abs(place)
       call insert( self%key,   key,             place2 )
       call insert( self%value, value,           place2 )
       call insert( self%count, len_trim(value), place2 )
@@ -2293,7 +1889,7 @@ end subroutine dict_add
 !===================================================================================================================================
 pure elemental function isupper(ch) result(res)
 
-! ident_26="@(#) M_strings isupper(3f) returns true if character is an uppercase letter (A-Z)"
+! ident_17="@(#) M_strings isupper(3f) returns true if character is an uppercase letter (A-Z)"
 
 character,intent(in) :: ch
 logical              :: res
@@ -2309,7 +1905,7 @@ end function isupper
 !===================================================================================================================================
 elemental pure function upper(str,begin,end) result (string)
 
-! ident_27="@(#) M_strings upper(3f) Changes a string to uppercase"
+! ident_18="@(#) M_strings upper(3f) Changes a string to uppercase"
 
 character(*), intent(In)      :: str                 ! inpout string to convert to all uppercase
 integer, intent(in), optional :: begin,end
@@ -2341,7 +1937,7 @@ end function upper
 !===================================================================================================================================
 elemental pure function lower(str,begin,end) result (string)
 
-! ident_28="@(#) M_strings lower(3f) Changes a string to lowercase over specified range"
+! ident_19="@(#) M_strings lower(3f) Changes a string to lowercase over specified range"
 
 character(*), intent(In)     :: str
 character(len(str))          :: string
@@ -2402,7 +1998,7 @@ end function quote
 !===================================================================================================================================
 function replace_str(targetline,old,new,ierr,cmd,range) result (newline)
 
-! ident_29="@(#) M_strings replace(3f) Globally replace one substring for another in string"
+! ident_20="@(#) M_strings replace(3f) Globally replace one substring for another in string"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! parameters
@@ -2562,7 +2158,7 @@ end subroutine crack_cmd
 FUNCTION strtok(source_string,itoken,token_start,token_end,delimiters) result(strtok_status)
 ! JSU- 20151030
 
-! ident_30="@(#) M_strings strtok(3f) Tokenize a string"
+! ident_21="@(#) M_strings strtok(3f) Tokenize a string"
 
 character(len=*),intent(in)  :: source_string    ! Source string to tokenize.
 character(len=*),intent(in)  :: delimiters       ! list of separator characters. May change between calls
@@ -2686,7 +2282,7 @@ end function strtok
 !!    Public Domain
 subroutine substitute(targetline,old,new,ierr,start,end)
 
-! ident_31="@(#) M_strings substitute(3f) Globally substitute one substring for another in string"
+! ident_22="@(#) M_strings substitute(3f) Globally substitute one substring for another in string"
 
 !-----------------------------------------------------------------------------------------------------------------------------------
 character(len=*)               :: targetline         ! input line to be changed
@@ -2734,7 +2330,7 @@ integer                        :: ichar
       dum1(:)=' '                                      ! begin with a blank line
    else                                                ! if window is set
       il=ml                                            ! use left margin
-      ir=min0(mr,maxlengthout)                         ! use right margin or rightmost
+      ir=min(mr,maxlengthout)                          ! use right margin or rightmost
       dum1=targetline(:il-1)                           ! begin with what's below margin
    endif                                               ! end of window settings
 !-----------------------------------------------------------------------------------------------------------------------------------

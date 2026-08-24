@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!      M_factor(3fm) - [M_factor::INTRO] module for least common multiple, greatest common divisor, and prime factors
@@ -500,11 +489,11 @@ integer,intent(in)  :: m, n
 integer             :: answer
 !-----------------------------------------------------------------------------------------------------------------------------------
    integer          :: irest
-   intrinsic        :: mod,iabs
+   intrinsic        :: mod,abs
    integer          :: ifirst
 !-----------------------------------------------------------------------------------------------------------------------------------
-   ifirst=iabs(m)
-   answer=iabs(n)
+   ifirst=abs(m)
+   answer=abs(n)
    if(answer.eq.0)then
       answer=ifirst
    else
@@ -514,7 +503,7 @@ integer             :: answer
          ifirst = answer
          answer = irest
       enddo
-      answer= iabs(answer)
+      answer= abs(answer)
    endif
 end function gcd
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -532,7 +521,7 @@ integer :: answer,ifirst,itemp
       answer = ifirst
       ifirst = mod(itemp, ifirst)
    enddo
-   gcd_2 = iabs(answer)
+   gcd_2 = abs(answer)
 end function gcd_2
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()-
@@ -549,7 +538,7 @@ integer            :: i
    if(vsize.gt.0)then
       gcd_vector = m(1)
       TILLONE: do i=1,vsize
-         gcd_vector = gcd(gcd_vector,iabs(m(i)))
+         gcd_vector = gcd(gcd_vector,abs(m(i)))
          if (gcd_vector.eq.1) exit TILLONE
       enddo TILLONE
    else
@@ -570,7 +559,7 @@ integer :: i,j
       gcd_matrix = m(1,1)
       OUTER: do j = 1, size(m,dim=2)
          INNER: do i = 1, size(m,dim=1)
-            gcd_matrix = gcd(gcd_matrix,iabs(m(i,j)))
+            gcd_matrix = gcd(gcd_matrix,abs(m(i,j)))
             if (gcd_matrix.eq.1) exit OUTER
          enddo INNER
       enddo OUTER

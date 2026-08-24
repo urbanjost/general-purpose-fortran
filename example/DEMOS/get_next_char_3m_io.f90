@@ -5,12 +5,12 @@
      character(len=4096) :: filename ! filename to read
      character(len=256)  :: message  ! returned error messages
      integer             :: fd       ! file descriptor for input file
-     integer             :: ios,ios1 ! hold I/O error flag
+     integer             :: iostat,iostat1 ! hold I/O error flag
      character           :: c1       ! current character read
         filename='test.in'
         open(unit=fd,file=trim(filename),access='stream',status='old',&
-        & iostat=ios,action='read',form='unformatted',iomsg=message)
-        if(ios /= 0)then
+        & iostat=iostat,action='read',form='unformatted',iomsg=message)
+        if(iostat /= 0)then
            write(*,*)&
            '*demo_get_next_char* ERROR: could not open '//&
            trim(filename)
@@ -21,11 +21,11 @@
         ! loop through read of file one character at a time
         ONE_CHAR_AT_A_TIME: do
            ! get next character from buffered read from file
-           call get_next_char(fd,c1,ios1)
-           if(ios1 == iostat_end)then
+           call get_next_char(fd,c1,iostat1)
+           if(iostat1 == iostat_end)then
               ! reached end of file so stop
               stop
-           elseif(ios1 /= 0 )then
+           elseif(iostat1 /= 0 )then
               ! error on file read
               write(*,*)&
            '*demo_get_next_char* ERROR: before end of '//&

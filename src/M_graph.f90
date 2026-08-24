@@ -808,7 +808,7 @@ real     :: zval
 !
 !        NOTE: IF JBAR < 0 AN X (SIZE EBAR) IS USED TO MARK 1ST LINE
 !
-   kebar=iabs(jebar)
+   kebar=abs(jebar)
    nbar=1
    if (jebar.ne.0) nbar=3
    if (f(16).gt.0.0) ebar=f(16)  ! ERROR BAR SIZE
@@ -902,8 +902,8 @@ real     :: zval
          enddo
       enddo
       if (jxlog.ne.0) then
-         xm=alog10(x1+1.e-34)
-         xx=alog10(x2+1.e-34)
+         xm=log10(x1+1.e-34)
+         xx=log10(x2+1.e-34)
       endif
       if (jxauto.gt.0.and.jxlgax.eq.0) then ! SMOOTH SCALING
          smo(1)=xm
@@ -944,8 +944,8 @@ real     :: zval
          enddo
       enddo
       if (jylog.ne.0) then
-         ym=alog10(y1+1.e-34)
-         yx=alog10(y2+1.e-34)
+         ym=log10(y1+1.e-34)
+         yx=log10(y2+1.e-34)
       endif
       if (jyauto.gt.0.and.jylgax.eq.0) then ! SMOOTH SCALING
          smo(1)=ym
@@ -1138,17 +1138,17 @@ real     :: zval
       ng=jgrid-1
       i=int(xtick)-1
       if (i.lt.1) i=1
-      x1=xlen/float(i)
+      x1=xlen/real(i)
       if (jxlgax.gt.0) then
          i=1-int(xlen*dx-xm+0.001)
-         x1=(-xlen)/float(i)
+         x1=(-xlen)/real(i)
       endif
       j=int(ytick)-1
       if (j.lt.1) j=1
-      y1=ylen/float(j)
+      y1=ylen/real(j)
       if (jylgax.gt.0) then
          j=1-int(ylen*dy-ym+0.001)
-         y1=(-ylen)/float(j)
+         y1=(-ylen)/real(j)
       endif
       if(debug)write(*,*)'17) gridll_'
       call gridll_(0.,0.,x1,y1,i,j,ng)
@@ -1219,10 +1219,10 @@ real     :: zval
             else
                x1=x(j,1)
             endif
-            if (jxlog.ne.0) x1=alog10(abs(x1)+1.e-34)
+            if (jxlog.ne.0) x1=log10(abs(x1)+1.e-34)
             x1=(x1-xm)*dx
             y1=y(j,i)
-            if (jylog.ne.0) y1=alog10(abs(y1)+1.e-34)
+            if (jylog.ne.0) y1=log10(abs(y1)+1.e-34)
             y1=(y1-ym)*dy
             call plot_(x1,y1,ipen)
             ipen=2
@@ -1239,10 +1239,10 @@ real     :: zval
          else
             x1=x(j,1)
          endif
-         if (jxlog.ne.0) x1=alog10(abs(x1)+1.e-34)
+         if (jxlog.ne.0) x1=log10(abs(x1)+1.e-34)
          x1=(x1-xm)*dx
          y1=y(j,i)
-         if (jylog.ne.0) y1=alog10(abs(y1)+1.e-34)
+         if (jylog.ne.0) y1=log10(abs(y1)+1.e-34)
          y1=(y1-ym)*dy
          if (jsym.ne.0) then  ! SYMBOLS
             if (mod(isym,jsym).eq.0) call symbol_(x1,y1,symsiz,char(ksym),0.,-1,-1)
@@ -1257,8 +1257,8 @@ real     :: zval
                x2=x(j,i+1)+x(j,i)
                x3=x(j,i+2)+x(j,i)
                if (jxlog.ne.0) then
-                  x2=alog10(abs(x2)+1.e-34)
-                  x3=alog10(abs(x3)+1.e-34)
+                  x2=log10(abs(x2)+1.e-34)
+                  x3=log10(abs(x3)+1.e-34)
                endif
                x2=(x2-xm)*dx
                x3=(x3-xm)*dx
@@ -1269,8 +1269,8 @@ real     :: zval
             y2=y(j,i+1)+y(j,i)
             y3=y(j,i+2)+y(j,i)
             if (jylog.ne.0) then
-               y2=alog10(abs(y2)+1.e-34)
-               y3=alog10(abs(y3)+1.e-34)
+               y2=log10(abs(y2)+1.e-34)
+               y3=log10(abs(y3)+1.e-34)
             endif
             y2=(y2-ym)*dy
             y3=(y3-ym)*dy
@@ -1685,7 +1685,7 @@ real               :: ytemp1
       CALL trs_(XPLOT0,YPLOT0,XCON,YCON) ! convert call numbers to current plot coordinate system
       TRANSLATEXQ=XCON    ! make scaled rotated input coordinates the new origin
       TRANSLATEYQ=YCON
-      ISELECT=IABS(ISELECT0)
+      ISELECT=ABS(ISELECT0)
       goto 222
 !#######################################################################
 !     DRAW LINE SEGMENT  ISELECT=2,3 (and -2,-3)
@@ -1829,8 +1829,8 @@ DATA q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
    Xmin = xmax
    DO i = Ix , np , K
       xi = X(i)
-      xmax = amax1(xmax,xi)
-      Xmin = amin1(Xmin,xi)
+      xmax = max(xmax,xi)
+      Xmin = min(Xmin,xi)
    ENDDO
    xmm = Xmin
    IF ( S>0.0 ) THEN
@@ -1838,7 +1838,7 @@ DATA q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
       IF ( Dx>0.0 ) THEN
          sj = 0.0
          IF ( Dx<1.0 ) sj = -1.0
-         idx = alog10(Dx) + sj
+         idx = log10(Dx) + sj
          Dx = Dx/(10.0**idx)
          SPAG_Loop_1_1: DO i = 1 , 6
             xi = q(i)
@@ -1855,10 +1855,10 @@ DATA q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
             CALL spag_block_1
             RETURN
          ENDIF
-         idx = alog10(Xmin) + sj
+         idx = log10(Xmin) + sj
          Xmin = Xmin/(10.0**idx)
          Xmin = Xmin - sj
-         Xmin = ifix(Xmin)*si*(10.0**idx)
+         Xmin = int(Xmin)*si*(10.0**idx)
          CALL spag_block_1
          RETURN
       ENDIF
@@ -2143,7 +2143,7 @@ DATA ipt002/668 , 676 , 683 , 689 , 693 , 695 , 699 , 704 , 709 , 711 , 721 , 73
          i = 0    ! CHARACTER COUNTER
          SPAG_Loop_1_1: DO
             i = i + 1
-            IF ( i>iabs(n) ) EXIT SPAG_Loop_1_1
+            IF ( i>abs(n) ) EXIT SPAG_Loop_1_1
                                    ! END OF STRING COUNT
             icc = ichar(T(i:i))
                             ! GET ITH ASCII CHARACTER
@@ -2312,17 +2312,17 @@ real     :: x1,   y1
 real     :: xm,   ym
    IF (NX.EQ.0.OR.NY.EQ.0) RETURN
    IF (IF.EQ.1) CALL newpen_(2)  ! DOTTED LINES
-   XM=IABS(NX)*DX+X
-   YM=IABS(NY)*DY+Y
-   INX1=IABS(NX)+1
-   INY1=IABS(NY)+1
+   XM=ABS(NX)*DX+X
+   YM=ABS(NY)*DY+Y
+   INX1=ABS(NX)+1
+   INY1=ABS(NY)+1
    CALL move_(X,Y)
    CALL draw_(X,YM)
-   DO IX=1,IABS(NX)
+   DO IX=1,ABS(NX)
       IF (NX.LT.0) THEN
          X0=(IX-1)*DX+X
          DO IXM=2,9
-            X1=ALOG10(FLOAT(IXM))*DX+X0
+            X1=LOG10(real(IXM))*DX+X0
             IF (IF.GE.2) THEN
                DO IY=1,INY1
                   Y0=(IY-1)*DY+Y-.08
@@ -2346,11 +2346,11 @@ real     :: xm,   ym
    enddo
    CALL move_(X,Y)
    CALL draw_(XM,Y)
-   DO IY=1,IABS(NY)
+   DO IY=1,ABS(NY)
       IF (NY.LT.0) THEN
          Y0=(IY-1)*DY+Y
          DO IYM=2,9
-            Y1=ALOG10(FLOAT(IYM))*DY+Y0
+            Y1=LOG10(real(IYM))*DY+Y0
             IF (IF.GE.2) THEN
                DO IX=1,INX1
                   X0=(IX-1)*DX+X-.08
@@ -2540,13 +2540,13 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
                                ! INCREMENT BETWEEN MINOR TICKS
       xs = xn/(nst+1) ! INCREMENT BETWEEN SUB-MINOR TICKS
       n1 = mod(N0,100000)
-      IF ( iabs(n1)/1000/=0 ) hor = 90.0
+      IF ( abs(n1)/1000/=0 ) hor = 90.0
                                     ! ROTATION ANGLE
       co = cos(ang*0.017453294)
                             ! AXIS ANGLE ROTATION
       si = sin(ang*0.017453294)
       hor = ang      ! ANGLE OF NUMBER LABELS
-      nc = mod(iabs(n1),100)
+      nc = mod(abs(n1),100)
                          ! NUMBER OF CHARACTERS IN TITLE
 !
 !     DECODE NUMBER FORMAT
@@ -2558,20 +2558,20 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
          IF ( e1<0.0 ) THEN
                           ! NO AUTO SCALING SO MAKE
             ng = 1    ! FORMAT TO FIT
-            IF ( B0/=0.0 ) ng = max(ng,int(alog10(abs(B0))+0.001))
-            IF ( C0/=0.0 ) ng = max(ng,int(alog10(abs(C0))+0.001))
+            IF ( B0/=0.0 ) ng = max(ng,int(log10(abs(B0))+0.001))
+            IF ( C0/=0.0 ) ng = max(ng,int(log10(abs(C0))+0.001))
             IF ( B0<0.0 .OR. C0<0 ) ng = ng + 1
-            fa = 1000.0 + float(ng)
+            fa = 1000.0 + real(ng)
          ENDIF
       ENDIF
                                ! OUTPUT DESIRED IS INTEGER
-!        FA=3.+FLOAT(ND)*(1.01) ! DEFAULT FORMAT FOR NOT AUTOSCALE
+!        FA=3.+real(ND)*(1.01) ! DEFAULT FORMAT FOR NOT AUTOSCALE
 !        IF (E1.LT.0.0) THEN ! NO AUTO SCALING TO MAKE FORMAT
 !          NG=2         ! WHICH FITS
-!          IF (B0.NE.0.0) NG=MAX(NG,INT(ALOG10( ABS(B0))+0.001)+1)
-!          IF (C0.NE.0.0) NG=MAX(NG,INT(ALOG10( ABS(C0))+0.001)+1)
+!          IF (B0.NE.0.0) NG=MAX(NG,INT(LOG10( ABS(B0))+0.001)+1)
+!          IF (C0.NE.0.0) NG=MAX(NG,INT(LOG10( ABS(C0))+0.001)+1)
 !          IF (B0.LT.0.0.OR.C0.LT.0) NG=NG+1
-!          FA=FLOAT(NG)+FLOAT(ND)*1.01
+!          FA=real(NG)+real(ND)*1.01
 !        ENDIF
       IF ( abs(fa)>1000.0 ) nd = abs(fa) - 1000.0
                         ! INPUT INTEGER VALUE
@@ -2595,7 +2595,7 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
                            ! REVERSE SIDE OF TICKS
       IF ( S0<0.0 ) tl = 0.0
                           ! REVERSE SIDE OF TICKS
-      IF ( iabs(n1)/1000/=0 ) THEN
+      IF ( abs(n1)/1000/=0 ) THEN
          dnx = (-cs)/2.0
                     ! NUMBER LABEL DISTANCE FROM AXIS
          dny = (-tl) - space
@@ -2617,7 +2617,7 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
          dty = -dty - cs
          tl1 = -tl1
                ! CHANGE SIDES OF TICKS
-         IF ( iabs(n1)>=1000 ) THEN
+         IF ( abs(n1)>=1000 ) THEN
             dny = dny + cs*ndd
             dty = dny + space
          ENDIF
@@ -2625,7 +2625,7 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
       x1 = 0.0       ! FIRST MAJOR TICK
       y1 = 0.0
       y2 = -tl1
-      IF ( iabs(N0)>=100000 ) CALL color_(Icol(1))
+      IF ( abs(N0)>=100000 ) CALL color_(Icol(1))
       CALL move_(rotx(x1,y1),roty(x1,y1))
       CALL draw_(rotx(x1,y2),roty(x1,y2))
       DO i = 1 , njt - 1
@@ -2650,7 +2650,7 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
             ENDDO
          ENDDO
       ENDDO
-      IF ( mod(iabs(n1),1000)<=100 ) THEN   ! NO LABELING
+      IF ( mod(abs(n1),1000)<=100 ) THEN   ! NO LABELING
          xs = 0.0     ! EXPONENT
          IF ( e1>=0. ) THEN ! NO AUTO SCALING
 !
@@ -2660,7 +2660,7 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
             i = nd - ng - 1
             IF ( B0<0.0 .OR. C0<0.0 ) i = i - 1
             IF ( B0/=0.0 ) THEN
-               x1 = alog10(abs(B0)+1.E-30)
+               x1 = log10(abs(B0)+1.E-30)
                IF ( x1<0.0 .AND. abs(aint(x1-0.001)-x1)>0.001 ) x1 = x1 - 1.0
                IF ( x1>=0.0 ) x1 = x1 + 1.0
                x1 = aint(x1)
@@ -2668,7 +2668,7 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
                x1 = 0.0
             ENDIF
             IF ( C0/=0.0 ) THEN
-               y1 = alog10(abs(C0)+1.E-30)
+               y1 = log10(abs(C0)+1.E-30)
                IF ( y1<0.0 .AND. abs(aint(y1-0.001)-y1)>0.001 ) y1 = y1 - 1.0
                IF ( y1>=0.0 ) y1 = y1 + 1.0
                y1 = aint(y1)
@@ -2683,7 +2683,7 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
          ENDIF
          y1 = dny
          y2 = (C0-B0)/(njt-1)
-         IF ( iabs(N0)>=100000 ) CALL color_(Icol(2))
+         IF ( abs(N0)>=100000 ) CALL color_(Icol(2))
          e1 = xs     ! EXPONENT VALUE
          DO i = 1 , njt
                        ! LABEL MAJOR TICKS
@@ -2703,7 +2703,7 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
                             ! CENTER TITLE
             IF ( e1/=0.0 ) dtx = dtx - cs*3.0
                                     ! ADD EXPONENT SPACE
-            IF ( iabs(N0)>=100000 ) CALL color_(Icol(3))
+            IF ( abs(N0)>=100000 ) CALL color_(Icol(3))
             CALL symbol_(rotx(dtx,dty),roty(dtx,dty),cs,T,ang,nc,-1)
             dtx = dtx + x1
          ELSE
@@ -2714,13 +2714,13 @@ SUBROUTINE axisc_(X0,Y0,T,N0,S0,A0,B0,C0,D0,E0,F0,Icol)
          x1 = dtx + cs/2.0
          y1 = dty
          IF ( e1/=0.0 ) THEN ! NO EXPONENT
-            IF ( iabs(N0)>=100000 ) CALL color_(Icol(4))
+            IF ( abs(N0)>=100000 ) CALL color_(Icol(4))
             e1 = -e1
             CALL symbol_(rotx(x1,y1),roty(x1,y1),cs,'(X10',ang,4,-1)
             x1 = x1 + 3.75*cs
             y1 = y1 + cs*0.4
             CALL number_(rotx(x1,y1),roty(x1,y1),cs,e1,ang,0.0,-1)
-            x2 = aint(alog10(abs(e1))) + 0.75
+            x2 = aint(log10(abs(e1))) + 0.75
             IF ( e1<0.0 ) x2 = x2 + 1.0
             x1 = x1 + x2*cs
             y1 = y1 - cs*0.4
@@ -3017,11 +3017,11 @@ SUBROUTINE axislg_(X0,Y0,A0,N0,S0,T0,C0,D0,Icol)
    REAL :: X0 , x1 , x2
    REAL :: xl
    REAL :: Y0 , y1 , y2
-   CHARACTER*(*) A0
-   INTEGER Icol(3)
-   LOGICAL labels , color
+   CHARACTER(len=*) :: A0
+   INTEGER :: Icol(3)
+   LOGICAL :: labels , color
    DATA cs/.15/      ! CHARACTER SIZE
-   n1 = iabs(N0)
+   n1 = abs(N0)
    labels = .TRUE.
    hor = T0
    IF ( S0==0.0 ) RETURN
@@ -3048,10 +3048,10 @@ SUBROUTINE axislg_(X0,Y0,A0,N0,S0,T0,C0,D0,Icol)
    IF ( n1>=1000 ) THEN
       n1 = mod(n1,1000)
       hor = 0.0
-      b4 = (abs(t5)+.05)*sign(1.,float(N0))
+      b4 = (abs(t5)+.05)*sign(1.,real(N0))
       IF ( N0>0 ) b4 = b4 + 3.5*cs
       b6 = .5*cs
-      b8 = (.5*cs+abs(t5))*sign(1.,float(N0))
+      b8 = (.5*cs+abs(t5))*sign(1.,real(N0))
       IF ( N0<0 ) b8 = b8 - cs*1.6
    ENDIF
    IF ( n1>=100 ) THEN
@@ -3059,7 +3059,7 @@ SUBROUTINE axislg_(X0,Y0,A0,N0,S0,T0,C0,D0,Icol)
       labels = .FALSE.
    ENDIF
    n2 = abs(S0*D0) + 0.5 ! NUMBER OF TICKS
-   xl = abs(S0)/float(n2)  ! DISTANCE BETWEEN TICKS
+   xl = abs(S0)/real(n2)  ! DISTANCE BETWEEN TICKS
    t1 = T0*0.017453294
    t3 = cos(t1)
    t4 = sin(t1)
@@ -3083,7 +3083,7 @@ SUBROUTINE axislg_(X0,Y0,A0,N0,S0,T0,C0,D0,Icol)
          y2 = y1 + s6*at
          CALL move_(x2,y2)
          CALL draw_(x1,y1)
-         aj = alog10(float(j)) - alog10(float(j-1))
+         aj = log10(real(j)) - log10(real(j-1))
          x1 = x1 + t3*xl*aj
          y1 = y1 + t4*xl*aj
          IF ( T0==90.0 ) x1 = X0
@@ -3416,7 +3416,7 @@ SUBROUTINE number_(X,Y,Hght,Z,T,F0,Ipf)
       nn = nd + 2
       IF ( Z==0 .AND. fa==0.0 ) nn = 1
       IF ( Z/=0.0 ) THEN
-         alg = alog10(abs(Z))
+         alg = log10(abs(Z))
          IF ( alg<0.0 ) alg = 0.0
          nn = nd + 2 + alg
          IF ( fa==0.0 ) nn = 1 + alg

@@ -166,10 +166,10 @@ character(len=:),allocatable          :: val_local
       ilen=len_trim(val_local)
       call locate(keywords,key,place)                   ! find where string is or should be
       if(place.lt.1)then                                ! if string was not found insert it
-         call insert(keywords,key,iabs(place))
-         call insert(values,val_local,iabs(place))
-         call insert(counts,ilen,iabs(place))
-         call insert(present_in,.true.,iabs(place))
+         call insert(keywords,key,abs(place))
+         call insert(values,val_local,abs(place))
+         call insert(counts,ilen,abs(place))
+         call insert(present_in,.true.,abs(place))
       else
          call replace(values,val_local,place)
          call replace(counts,ilen,place)

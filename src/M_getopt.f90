@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!   M_getopt(3fm) - [ARGUMENTS:M_getopt::INTRO] parse command line

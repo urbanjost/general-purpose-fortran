@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_drawplus(3f) - [M_drawplus] Additional routines using the M_DRAW graphics library
@@ -1010,7 +999,7 @@ real :: yy
 
 !     branch if fine tuning not required
       if(abs(r).gt.finer)then           ! set loop for fine tuning
-         itune=min1(10.,abs(r)/finer+1.)
+         itune=min(10.,abs(r)/finer+1.)
          angdel=anginc/float(itune)
       endif
 
@@ -2261,7 +2250,7 @@ SUBROUTINE smoot(Xn,Yn,Ic)
          kc = 1
          spag_nextblock_1 = 5
       CASE (5)
-         IF ( iabs(jsw)/=1 ) THEN
+         IF ( abs(jsw)/=1 ) THEN
             spag_nextblock_1 = 3
             CYCLE SPAG_DispatchLoop_1
          ENDIF
@@ -2878,7 +2867,7 @@ real                          :: ymin
       call journal('sc',line(:len_trim(line)),i80)
    enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
-     icount=0  ! clear X11 key buffer on X11 on 1 (anybody else need this?)
+     icount=0  ! clear X11 key buffer on X11 on Linux (anybody else need this?)
 100  continue  ! flush key presses in case someone has been clicking around
      idum=checkkey()
      icount=icount+1

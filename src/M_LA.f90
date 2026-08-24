@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 module m_la
 use,intrinsic :: iso_fortran_env, only : stderr=>error_unit, stdin=>input_unit, stdout=>output_unit
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
@@ -1672,16 +1661,16 @@ integer            :: i, j, k, l
 
    tol = 0.0d0
    do j = 1, n
-      tol = dmax1(tol,mat_wasum(m,ar(1,j),ai(1,j),1))
+      tol = max(tol,mat_wasum(m,ar(1,j),ai(1,j),1))
    enddo
-   tol = eps*dble(2*max0(m,n))*tol
+   tol = eps*dble(2*max(m,n))*tol
    k = 1
    l = 1
    infinite: do
       if (k.gt.m .or. l.gt.n) return
 
       i = mat_iwamax(m-k+1,ar(k,l),ai(k,l),1) + k-1
-      if (dabs(ar(i,l))+dabs(ai(i,l)) .le. tol)then
+      if (abs(ar(i,l))+abs(ai(i,l)) .le. tol)then
          call mat_wset(m-k+1,0.0d0,0.0d0,ar(k,l),ai(k,l),1)
          l = l+1
          cycle infinite
@@ -1714,8 +1703,8 @@ doubleprecision :: r
 doubleprecision :: s
 doubleprecision :: t
 
-   p = dmax1(dabs(a),dabs(b))
-   q = dmin1(dabs(a),dabs(b))
+   p = max(abs(a),abs(b))
+   q = min(abs(a),abs(b))
 
    if (q .ne. 0.0d0) then
 
@@ -1887,7 +1876,7 @@ doubleprecision             :: ti
 !
    tr = x_real
    ti = x_imag
-   s = dsqrt(0.5d0*(mat_pythag(tr,ti) + dabs(tr)))
+   s = sqrt(0.5d0*(mat_pythag(tr,ti) + abs(tr)))
    if (tr .ge. 0.0d0) y_real = mat_flop(s)
    if (ti .lt. 0.0d0) s = -s
    if (tr .le. 0.0d0) y_imag = mat_flop(s)
@@ -2061,7 +2050,7 @@ integer         :: k
       k = i
       d(k) = mat_round(z)
       z = z - d(k)
-      if (dabs(z)*dble(maxd) .le. 1.0d0) exit
+      if (abs(z)*dble(maxd) .le. 1.0d0) exit
       z = 1.0d0/z
    enddo
    t = d(k)
@@ -2117,8 +2106,6 @@ integer              :: m
 integer,save         :: mic
 doubleprecision      :: halfm
 doubleprecision,save :: s
-doubleprecision      :: datan
-doubleprecision      :: dsqrt
 !-----------------------------------------------------------------------
    if (m2 .eq. 0) then                                ! if first entry, compute machine integer word length
       m = 1
@@ -2128,8 +2115,8 @@ doubleprecision      :: dsqrt
          if (m .le. m2) exit infinite
       enddo infinite
       halfm = m2
-      ia = 8*int(halfm*datan(1.d0)/8.d0) + 5          ! compute multiplier and increment for linear congruential method
-      ic = 2*int(halfm*(0.5d0-dsqrt(3.d0)/6.d0)) + 1
+      ia = 8*int(halfm*atan(1.d0)/8.d0) + 5          ! compute multiplier and increment for linear congruential method
+      ic = 2*int(halfm*(0.5d0-sqrt(3.d0)/6.d0)) + 1
       mic = (m2 - ic) + m2
       s = 0.5d0/halfm                                 ! s is the scale factor for converting to floating point
    endif
@@ -2186,7 +2173,7 @@ integer         :: i
    if (n .gt. 0) then
       ix = 1
       do i = 1, n
-         s = mat_flop(s + dabs(xr(ix)) + dabs(xi(ix)))
+         s = mat_flop(s + abs(xr(ix)) + abs(xi(ix)))
          ix = ix + incx
       enddo
    endif
@@ -2311,7 +2298,7 @@ integer         :: ix
       s = 0.0d0
       ix = 1
       do i = 1, n
-         p = dabs(xr(ix)) + dabs(xi(ix))
+         p = abs(xr(ix)) + abs(xi(ix))
          if (p .gt. s) k = i
          if (p .gt. s) s = p
          ix = ix + incx
@@ -2414,7 +2401,7 @@ end function mat_flop
 doubleprecision function mat_round(x)
 doubleprecision           :: x,y,z,e
 doubleprecision,parameter :: h=1.0d9
-   z = dabs(x)
+   z = abs(x)
    y = z + 1.0d0
    if (y .ne. z)then
       y = 0.0d0
@@ -2472,7 +2459,7 @@ integer          :: k
       endif
       s = ar(j,j) - s
       if ( s<=0.0d0 .or. ai(j,j)/=0.0d0 ) return
-      ar(j,j) = dsqrt(s)
+      ar(j,j) = sqrt(s)
    enddo
    info = 0
 end subroutine mat_wpofa
@@ -2493,15 +2480,15 @@ doubleprecision :: r
 doubleprecision :: z
 
    rho = db
-   if ( dabs(da) .gt. dabs(db) ) rho = da
+   if ( abs(da) .gt. abs(db) ) rho = da
    c = 1.0d0
    s = 0.0d0
    z = 1.0d0
    r = mat_flop(dsign(mat_pythag(da,db),rho))
    if (r .ne. 0.0d0) c = mat_flop(da/r)
    if (r .ne. 0.0d0) s = mat_flop(db/r)
-   if ( dabs(da) .gt. dabs(db) ) z = s
-   if (dabs(db) .ge. dabs(da) .and. c .ne. 0.0d0)z = mat_flop(1.0d0/c)
+   if ( abs(da) .gt. abs(db) ) z = s
+   if (abs(db) .ge. abs(da) .and. c .ne. 0.0d0)z = mat_flop(1.0d0/c)
    da = r
    db = z
 end subroutine mat_rrotg
@@ -2545,7 +2532,7 @@ doubleprecision :: ais
 doubleprecision :: brs
 doubleprecision :: bis
 
-   s = dabs(br) + dabs(bi)
+   s = abs(br) + abs(bi)
    if (s .eq. 0.0d0) then
       call la_err(27)
       return
@@ -2575,8 +2562,8 @@ doubleprecision :: r
    if (r .eq. 0.0d0) then
       call la_err(32) !  Singularity of LOG or ATAN
    else
-      t = datan2(in_imag,in_real)
-      if (in_imag.eq.0.0d0 .and. in_real.lt.0.0d0) t = dabs(t)
+      t = atan2(in_imag,in_real)
+      if (in_imag.eq.0.0d0 .and. in_real.lt.0.0d0) t = abs(t)
       out_real = dlog(r)
       out_imag = t
    endif
@@ -2597,9 +2584,9 @@ doubleprecision :: tr
 doubleprecision :: ti
 
    if (xi .eq. 0.0d0) then
-      yr = datan2(xr,1.0d0)
+      yr = atan2(xr,1.0d0)
       yi = 0.0d0
-   elseif (xr.ne.0.0d0 .or. dabs(xi).ne.1.0d0) then
+   elseif (xr.ne.0.0d0 .or. abs(xi).ne.1.0d0) then
       call mat_wdiv(xr,1.0d0+xi,-xr,1.0d0-xi,tr,ti)
       call mat_wlog(tr,ti,tr,ti)
       yr = -(ti/2.0d0)
@@ -2733,7 +2720,7 @@ double precision :: rcond
 !
 !     LINPACK WGEFA
 !     BLAS WAXPY,WDOTC,mat_wasum
-!     FORTRAN DABS,DMAX1
+!     FORTRAN ABS,MAX
 !
 !     INTERNAL VARIABLES
 !
@@ -2743,13 +2730,13 @@ integer          :: info , j , k , kb , kp1 , l
 !
 double precision :: zdumr , zdumi
 double precision :: cabs1
-   cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
+   cabs1(zdumr,zdumi) = abs(zdumr) + abs(zdumi)
 !
 !     COMPUTE 1-NORM OF A
 !
    anorm = 0.0d0
    do j = 1 , n
-      anorm = dmax1(anorm,mat_wasum(n,ar(1,j),ai(1,j),1))
+      anorm = max(anorm,mat_wasum(n,ar(1,j),ai(1,j),1))
    enddo
 !
 !     FACTOR
@@ -2941,7 +2928,7 @@ double precision :: ar(lda,*) , ai(lda,*)
 !     SUBROUTINES AND FUNCTIONS
 !
 !     BLAS WAXPY,mat_wscal,mat_iwamax
-!     FORTRAN DABS
+!     FORTRAN ABS
 !
 !     INTERNAL VARIABLES
 !
@@ -2950,7 +2937,7 @@ integer          :: j , k , kp1 , l , nm1
 !
 double precision :: zdumr , zdumi
 double precision :: cabs1
-   cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
+   cabs1(zdumr,zdumi) = abs(zdumr) + abs(zdumi)
 !
 !     GAUSSIAN ELIMINATION WITH PARTIAL PIVOTING
 !
@@ -3209,7 +3196,7 @@ end subroutine ml_wgesl
 !! subroutines and functions
 !!
 !!      blas waxpy,mat_wscal,mat_wswap
-!!      fortran dabs,mod
+!!      fortran abs,mod
 !*==ml_wgedi.f90 processed by SPAG 8.01RF 01:46 13 Dec 2024
 subroutine ml_wgedi(ar,ai,lda,n,ipvt,detr,deti,workr,worki,job)
 use m_la
@@ -3224,7 +3211,7 @@ integer          :: i , j , k , kb , kp1 , l , nm1
 !
 double precision :: zdumr , zdumi
 double precision :: cabs1
-   cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
+   cabs1(zdumr,zdumi) = abs(zdumr) + abs(zdumi)
 !
 !     COMPUTE DETERMINANT
 !
@@ -3378,7 +3365,7 @@ integer          :: spag_nextblock_1
             if ( l>=1 ) then
 !     .......... SCALE ROW (ALGOL TOL THEN NOT NEEDED) ..........
                do k = 1 , l
-                  scale = mat_flop(scale+dabs(ar(i,k))+dabs(ai(i,k)))
+                  scale = mat_flop(scale+abs(ar(i,k))+abs(ai(i,k)))
                enddo
 !
                if ( scale/=0.0d0 ) then
@@ -3390,7 +3377,7 @@ integer          :: spag_nextblock_1
                   enddo
 !
                   e2(i) = mat_flop(scale*scale*h)
-                  g = mat_flop(dsqrt(h))
+                  g = mat_flop(sqrt(h))
                   e(i) = mat_flop(scale*g)
                   f = mat_pythag(ar(i,l),ai(i,l))
 !     .......... FORM NEXT DIAGONAL ELEMENT OF MATRIX T ..........
@@ -3478,7 +3465,7 @@ integer          :: spag_nextblock_1
             hh = d(i)
             d(i) = ar(i,i)
             ar(i,i) = hh
-            ai(i,i) = mat_flop(scale*dsqrt(h))
+            ai(i,i) = mat_flop(scale*sqrt(h))
             exit spag_dispatchloop_1
          end select
       enddo spag_dispatchloop_1
@@ -3733,7 +3720,7 @@ integer          :: spag_nextblock_1
          l = low + 1
 
          do i = l, igh
-            ll = min0(i+1,igh)
+            ll = min(i+1,igh)
             if ( hi(i,i-1)==0.0d0 ) cycle
             norm = mat_pythag(hr(i,i-1),hi(i,i-1))
             yr = mat_flop(hr(i,i-1)/norm)
@@ -3790,7 +3777,7 @@ integer          :: spag_nextblock_1
                norm = 0.0d0
                do i = 1, n
                   do j = i, n
-                     tr = mat_flop(dabs(hr(i,j))) + mat_flop(dabs(hi(i,j)))
+                     tr = mat_flop(abs(hr(i,j))) + mat_flop(abs(hi(i,j)))
                      if ( tr>norm ) norm = tr
                   enddo
                enddo
@@ -3827,7 +3814,7 @@ integer          :: spag_nextblock_1
                            enddo spag_loop_3_1
                         endif
                         call mat_wdiv(zzr,zzi,yr,yi,hr(i,en),hi(i,en))
-                        tr = mat_flop(dabs(hr(i,en))) + mat_flop(dabs(hi(i,en)))
+                        tr = mat_flop(abs(hr(i,en))) + mat_flop(abs(hi(i,en)))
                         if ( tr==0.0d0 ) cycle
                         if ( tr+1.0d0/tr>tr ) cycle
                         do j = i, en
@@ -3855,7 +3842,7 @@ integer          :: spag_nextblock_1
 !                FOR J=N STEP -1 UNTIL LOW+1 DO -- ..........
                   do jj = low, enm1
                      j = n + low - jj
-                     m = min0(j,igh)
+                     m = min(j,igh)
 
                      do i = low, igh
                         zzr = 0.0d0
@@ -3886,8 +3873,8 @@ integer          :: spag_nextblock_1
             l = en + low - ll
             if ( l==low ) exit spag_loop_1_2
             !*****
-            xr = mat_flop(dabs(hr(l-1,l-1))+dabs(hi(l-1,l-1))+dabs(hr(l,l))+dabs(hi(l,l)))
-            yr = mat_flop(xr+dabs(hr(l,l-1)))
+            xr = mat_flop(abs(hr(l-1,l-1))+abs(hi(l-1,l-1))+abs(hr(l,l))+abs(hi(l,l)))
+            yr = mat_flop(xr+abs(hr(l,l-1)))
             if ( xr==yr ) exit spag_loop_1_2
             !*****
          enddo spag_loop_1_2
@@ -3908,7 +3895,7 @@ integer          :: spag_nextblock_1
          else
             if ( its==10 .or. its==20 ) then
 !     .......... FORM EXCEPTIONAL SHIFT ..........
-               sr = mat_flop(dabs(hr(en,enm1))+dabs(hr(enm1,en-2)))
+               sr = mat_flop(abs(hr(en,enm1))+abs(hr(enm1,en-2)))
                si = 0.0d0
             else
                sr = hr(en,en)
@@ -3944,8 +3931,8 @@ integer          :: spag_nextblock_1
             do i = lp1, en
                sr = hr(i,i-1)
                hr(i,i-1) = 0.0d0
-               norm = mat_flop(dabs(hr(i-1,i-1))+dabs(hi(i-1,i-1))+dabs(sr))
-               norm = mat_flop(norm*dsqrt((hr(i-1,i-1)/norm)**2+(hi(i-1,i-1)/norm)**2+(sr/norm)**2))
+               norm = mat_flop(abs(hr(i-1,i-1))+abs(hi(i-1,i-1))+abs(sr))
+               norm = mat_flop(norm*sqrt((hr(i-1,i-1)/norm)**2+(hi(i-1,i-1)/norm)**2+(sr/norm)**2))
                xr = mat_flop(hr(i-1,i-1)/norm)
                wr(i-1) = xr
                xi = mat_flop(hi(i-1,i-1)/norm)
@@ -4107,7 +4094,7 @@ double precision :: f, g, h, fi, fr, scale
          scale = 0.0d0
 !     .......... SCALE COLUMN (ALGOL TOL THEN NOT NEEDED) ..........
          do i = m, igh
-            scale = mat_flop(scale+dabs(ar(i,m-1))+dabs(ai(i,m-1)))
+            scale = mat_flop(scale+abs(ar(i,m-1))+abs(ai(i,m-1)))
          enddo
 !
          if ( scale==0.0d0 ) cycle
@@ -4120,7 +4107,7 @@ double precision :: f, g, h, fi, fr, scale
             h = mat_flop(h+ortr(i)*ortr(i)+orti(i)*orti(i))
          enddo
 !
-         g = mat_flop(dsqrt(h))
+         g = mat_flop(sqrt(h))
          f = mat_pythag(ortr(m),orti(m))
          if ( f==0.0d0 ) then
 !
@@ -4274,8 +4261,8 @@ integer          :: spag_nextblock_2
                      spag_loop_2_1: do m = l, n
                         if ( m==n ) exit spag_loop_2_1
 !*****
-                        p = mat_flop(dabs(d(m))+dabs(d(m+1)))
-                        s = mat_flop(p+dabs(e(m)))
+                        p = mat_flop(abs(d(m))+abs(d(m+1)))
+                        s = mat_flop(p+abs(e(m)))
                         if ( p==s ) exit spag_loop_2_1
 !*****
                      enddo spag_loop_2_1
@@ -4289,7 +4276,7 @@ integer          :: spag_nextblock_2
                         j = j + 1
 !     .......... FORM SHIFT ..........
                         g = mat_flop((d(l+1)-p)/(2.0d0*e(l)))
-                        r = mat_flop(dsqrt(g*g+1.0d0))
+                        r = mat_flop(sqrt(g*g+1.0d0))
                         g = mat_flop(d(m)-p+e(l)/(g+dsign(r,g)))
                         s = 1.0d0
                         c = 1.0d0
@@ -4300,15 +4287,15 @@ integer          :: spag_nextblock_2
                            i = m - ii
                            f = mat_flop(s*e(i))
                            b = mat_flop(c*e(i))
-                           if ( dabs(f)<dabs(g) ) then
+                           if ( abs(f)<abs(g) ) then
                               s = mat_flop(f/g)
-                              r = mat_flop(dsqrt(s*s+1.0d0))
+                              r = mat_flop(sqrt(s*s+1.0d0))
                               e(i+1) = mat_flop(g*r)
                               c = mat_flop(1.0d0/r)
                               s = mat_flop(s*c)
                            else
                               c = mat_flop(g/f)
-                              r = mat_flop(dsqrt(c*c+1.0d0))
+                              r = mat_flop(sqrt(c*c+1.0d0))
                               e(i+1) = mat_flop(f*r)
                               s = mat_flop(1.0d0/r)
                               c = mat_flop(c*s)
@@ -4459,7 +4446,7 @@ double precision :: xr(ldx,*), xi(ldx,*), qrauxr(*), qrauxi(*), workr(*), worki(
 !
 !     BLAS matX_waxpy,mat_pythag,mat_wdotcr,mat_wdotci,mat_wscal
 !     blas mat_wswap ,mat_wnrm2
-!     FORTRAN DABS,DIMAG,DMAX1,MIN0
+!     FORTRAN ABS,AIMAG,MAX,MIN
 !
 !     INTERNAL VARIABLES
 !
@@ -4471,7 +4458,7 @@ logical          :: negj, swapj
 !
 double precision :: zdumr, zdumi
 double precision :: cabs1
-cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
+cabs1(zdumr,zdumi) = abs(zdumr) + abs(zdumi)
 !
    pl = 1
    pu = 0
@@ -4521,7 +4508,7 @@ cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
 !
 !     PERFORM THE HOUSEHOLDER REDUCTION OF X.
 !
-   lup = min0(n,p)
+   lup = min(n,p)
    do l = 1, lup
       if ( l>=pl .and. l<pu ) then
 !
@@ -4573,7 +4560,7 @@ cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
                   if ( j>=pl .and. j<=pu ) then
                      if ( cabs1(qrauxr(j),qrauxi(j))/=0.0d0 ) then
                         tt = 1.0d0 - (mat_pythag(xr(l,j),xi(l,j))/qrauxr(j))**2
-                        tt = dmax1(tt,0.0d0)
+                        tt = max(tt,0.0d0)
                         tr = mat_flop(tt)
                         tt = mat_flop(1.0d0+0.05d0*tt*(qrauxr(j)/workr(j))**2)
                         if ( tt==1.0d0 ) then
@@ -4582,8 +4569,8 @@ cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
                            workr(j) = qrauxr(j)
                            worki(j) = qrauxi(j)
                         else
-                           qrauxr(j) = qrauxr(j)*dsqrt(tr)
-                           qrauxi(j) = qrauxi(j)*dsqrt(tr)
+                           qrauxr(j) = qrauxr(j)*sqrt(tr)
+                           qrauxi(j) = qrauxi(j)*sqrt(tr)
                         endif
                      endif
                   endif
@@ -4744,7 +4731,7 @@ double precision :: xr(ldx,*), xi(ldx,*), qrauxr(*), qrauxi(*), yr(*), yi(*), qy
 !     ML_WQRSL USES THE FOLLOWING FUNCTIONS AND SUBPROGRAMS.
 !
 !     BLAS matX_waxpy,mat_wcopy,mat_wdotcr,mat_wdotci
-!     FORTRAN DABS,DIMAG,MIN0,MOD
+!     FORTRAN ABS,AIMAG,MIN,MOD
 !
 !     INTERNAL VARIABLES
 !
@@ -4754,7 +4741,7 @@ logical          :: cb, cqy, cqty, cr, cxb
 !
 double precision :: zdumr, zdumi
 double precision :: cabs1
-   cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
+   cabs1(zdumr,zdumi) = abs(zdumr) + abs(zdumi)
 !
 !     SET INFO FLAG.
 !
@@ -4767,7 +4754,7 @@ double precision :: cabs1
    cb = mod(job,1000)/100/=0
    cr = mod(job,100)/10/=0
    cxb = mod(job,10)/=0
-   ju = min0(k,n-1)
+   ju = min(k,n-1)
 !
 !     SPECIAL ACTION WHEN N=1.
 !
@@ -5012,8 +4999,8 @@ double precision :: xr(ldx,*), xi(ldx,*), sr(*), si(*), er(*), ei(*), ur(ldu,*),
 !
 !     BLAS    matX_waxpy,mat_pythag,mat_wdotcr,mat_wdotci,mat_wscal,mat_wswap,
 !             mat_rrotg,mat_wnrm2
-!     FORTRAN DABS,DIMAG,DMAX1
-!     FORTRAN MAX0,MIN0,MOD,DSQRT
+!     FORTRAN ABS,AIMAG,MAX
+!     FORTRAN MAX,MIN,MOD,SQRT
 !
 !     INTERNAL VARIABLES
 !
@@ -5025,7 +5012,7 @@ logical :: wantu, wantv
 !
 double precision :: zdumr, zdumi
 double precision :: cabs1
-cabs1(zdumr,zdumi) = dabs(zdumr) + dabs(zdumi)
+cabs1(zdumr,zdumi) = abs(zdumr) + abs(zdumi)
 integer :: spag_nextblock_1
 !
 !     SET THE MAXIMUM NUMBER OF ITERATIONS.
@@ -5042,7 +5029,7 @@ integer :: spag_nextblock_1
    wantv = .false.
    jobu = mod(job,100)/10
    ncu = n
-   if ( jobu>1 ) ncu = min0(n,p)
+   if ( jobu>1 ) ncu = min(n,p)
    if ( jobu/=0 ) wantu = .true.
    if ( mod(job,10)/=0 ) wantv = .true.
 !
@@ -5050,9 +5037,9 @@ integer :: spag_nextblock_1
 !     IN S AND THE SUPER-DIAGONAL ELEMENTS IN E.
 !
    info = 0
-   nct = min0(n-1,p)
-   nrt = max0(0,min0(p-2,n))
-   lu = max0(nct,nrt)
+   nct = min(n-1,p)
+   nrt = max(0,min(p-2,n))
+   lu = max(nct,nrt)
    if ( lu>=1 ) then
       do l = 1, lu
          lp1 = l + 1
@@ -5150,7 +5137,7 @@ integer :: spag_nextblock_1
 !
 !     SET UP THE FINAL BIDIAGONAL MATRIX OR ORDER M.
 !
-   m = min0(p,n+1)
+   m = min(p,n+1)
    nctp1 = nct + 1
    nrtp1 = nrt + 1
    if ( nct<p ) then
@@ -5297,8 +5284,8 @@ integer :: spag_nextblock_1
                   l = m - ll
 !        ...EXIT
                   if ( l==0 ) exit spag_loop_2_2
-                  test = mat_flop(dabs(sr(l))+dabs(sr(l+1)))
-                  ztest = mat_flop(test+dabs(er(l))/2.0d0)
+                  test = mat_flop(abs(sr(l))+abs(sr(l+1)))
+                  ztest = mat_flop(test+abs(er(l))/2.0d0)
                   if ( small*ztest==small*test ) then
                      er(l) = 0.0d0
 !        ......EXIT
@@ -5313,9 +5300,9 @@ integer :: spag_nextblock_1
 !           ...EXIT
                      if ( ls==l ) exit spag_loop_2_3
                      test = 0.0d0
-                     if ( ls/=m ) test = mat_flop(test+dabs(er(ls)))
-                     if ( ls/=l+1 ) test = mat_flop(test+dabs(er(ls-1)))
-                     ztest = mat_flop(test+dabs(sr(ls))/2.0d0)
+                     if ( ls/=m ) test = mat_flop(test+abs(er(ls)))
+                     if ( ls/=l+1 ) test = mat_flop(test+abs(er(ls-1)))
+                     ztest = mat_flop(test+abs(sr(ls))/2.0d0)
                      if ( small*ztest==small*test ) then
                         sr(ls) = 0.0d0
 !           ......EXIT
@@ -5359,7 +5346,7 @@ integer :: spag_nextblock_1
 !
 !           CALCULATE THE SHIFT.
 !
-                  scale = dmax1(dabs(sr(m)),dabs(sr(m-1)),dabs(er(m-1)),dabs(sr(l)),dabs(er(l)))
+                  scale = max(abs(sr(m)),abs(sr(m-1)),abs(er(m-1)),abs(sr(l)),abs(er(l)))
                   sm = sr(m)/scale
                   smm1 = sr(m-1)/scale
                   emm1 = er(m-1)/scale
@@ -5369,7 +5356,7 @@ integer :: spag_nextblock_1
                   c = mat_flop((sm*emm1)**2)
                   shift = 0.0d0
                   if ( b/=0.0d0 .or. c/=0.0d0 ) then
-                     shift = mat_flop(dsqrt(b**2+c))
+                     shift = mat_flop(sqrt(b**2+c))
                      if ( b<0.0d0 ) shift = -shift
                      shift = mat_flop(c/(b+shift))
                   endif

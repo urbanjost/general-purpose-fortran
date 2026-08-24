@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_matrix(3f) - [M_matrix::INTRO] The Los Alamos-inspired Linear Algebra Fortran Facility (LALA)
@@ -873,7 +862,7 @@ end subroutine usersub_placeholder
 !!       ! the return, A is stored in Y. The dimensions M and
 !!       ! N may be reset within the subroutine. The statement Y =
 !!       ! USER(K) results in a call with M = 1, N = 1 and A(1,1) =
-!!       ! FLOAT(K). After the subroutine has been written, it must
+!!       ! real(K). After the subroutine has been written, it must
 !!       ! be compiled and linked to the LALA object code within the
 !!       ! local programming environment.
 !!       !
@@ -2071,7 +2060,7 @@ character(len=80) :: message
       ! s and t stored in S and T. If s and t are omitted, they are set
       ! to 0.0. After the return, A is stored in Y. The dimensions M and
       ! N may be reset within the subroutine. The statement A = user(K)"
-      ! results in a call with M = 1, N = 1 and A(1,1) = "float(K)".
+      ! results in a call with M = 1, N = 1 and A(1,1) = "real(K)".
 
       ! all of the arguments are in a vector that is part of the stack.
       ! the location points to the last value and M and N are set to the
@@ -2152,7 +2141,7 @@ character(len=80) :: message
                if (ll .gt. 0) call mat_wset(ll, 0.0d0, 0.0d0, GM_REALS(ls), GM_IMAGS(ls), 1)
             enddo
       elseif (m .eq. 1 .or. n .eq. 1) then
-         n = max(m,n)+iabs(k)
+         n = max(m,n)+abs(k)
 
          if(too_much_memory( location+n*n - G_VAR_DATALOC(G_TOP_OF_SAVED)) )return
 
@@ -2533,7 +2522,7 @@ character(len=80) :: message
                  t = sr*sr + si*si
                  if (t .le. 1.0d0) exit
               enddo
-              GM_REALS(ll) = mat_flop(sr*dsqrt((-(2.0d0*dlog(t)))/t))
+              GM_REALS(ll) = mat_flop(sr*sqrt((-(2.0d0*log(t)))/t))
            end select
            GM_IMAGS(ll) = 0.0d0          ! all of these functions set imaginary values to zero
          enddo
@@ -3667,7 +3656,7 @@ integer      :: m
    endif
    s(l+1) = zero
    s(l+2) = dot
-   x = dabs(x)
+   x = abs(x)
    if (x .ne. 0.0d0) then
       k = dlog(x)/dlog(base)
    else
@@ -3692,12 +3681,12 @@ integer      :: m
    s(m+1) = comma
    if (k .ge. 0) s(m+2) = plus
    if (k .lt. 0) s(m+2) = minus
-   t = dabs(dble(k))
+   t = abs(dble(k))
    n = m + 3
-   if (t .ge. base) n = n + int(dlog(t)/dlog(base))
+   if (t .ge. base) n = n + int(log(t)/log(base))
    l = n
    INFINITE: do
-      j = int(dmod(t,base))
+      j = int(mod(t,base))
       s(l) = dble(j+48)
       l = l - 1
       t = t/base
@@ -3761,7 +3750,7 @@ integer           :: itype
       ls = location+i-1
       tr = GM_REALS(ls)
       ti = GM_IMAGS(ls)
-      s = dmax1(s,dabs(tr),dabs(ti))
+      s = dmax1(s,abs(tr),abs(ti))
       if (mat_round(tr) .ne. tr) typ = max(2,typ)
       if (ti .ne. 0.0d0) typ = 3
    enddo
@@ -3836,7 +3825,7 @@ integer           :: itype
          do j = 1, jm
             ls = location+i-1+(j+j1-2)*m
             pr(j) = GM_REALS(ls)/s
-            pi(j) = dabs(GM_IMAGS(ls)/s)
+            pi(j) = abs(GM_IMAGS(ls)/s)
             sig(j) = plus
             if (GM_IMAGS(ls) .lt. 0.0d0) sig(j) = minus
          enddo
@@ -4016,7 +4005,7 @@ character(len=(8*GG_MAX_NAME_LENGTH+2*8+1)) :: mline           ! scratch space f
    INFINITE : do
       linebuf(1)=blank                                    ! put a space at beginning of line
       line_position = 2
-      do j = id_counter,min(id_counter+7,iabs(argcnt))    ! copy up to eight names into buffer
+      do j = id_counter,min(id_counter+7,abs(argcnt))    ! copy up to eight names into buffer
          do i = 1, GG_MAX_NAME_LENGTH                     ! copy one name into buffer
             k = id(i,j)                                   ! this is the kth letter of the set
             linebuf(line_position) = k
@@ -4036,7 +4025,7 @@ character(len=(8*GG_MAX_NAME_LENGTH+2*8+1)) :: mline           ! scratch space f
       call journal(mline)                                 ! print the line to stdout
 
       id_counter = id_counter+8                           ! prepare to get up to eight more IDs
-      if (id_counter .gt. iabs(argcnt)) exit INFINITE     ! if not done do another line
+      if (id_counter .gt. abs(argcnt)) exit INFINITE     ! if not done do another line
    enddo INFINITE
 end subroutine mat_print_id
 !==================================================================================================================================!
@@ -5279,7 +5268,7 @@ integer           :: nn
       !SUBROUTINE ML_WGEDI(ar,ai,LDA,N,ipvt,detr,deti,workr,worki,JOB)
       call ml_wgedi(GM_REALS(location),GM_IMAGS(location),m,n,G_BUF,dtr,dti,sr(1),si(1),10)
       k = int(dtr(2))
-      ka = iabs(k)+2
+      ka = abs(k)+2
       t = 1.0d0
       do i = 1, ka
          t = t/10.0d0
@@ -5677,7 +5666,7 @@ integer          :: nn
    61 continue
       K = K+1
       L1 = location+K
-      IF (DABS(GM_REALS(L1))+DABS(GM_IMAGS(L1)) .EQ. 0.0D0) goto 61
+      IF (ABS(GM_REALS(L1))+ABS(GM_IMAGS(L1)) .EQ. 0.0D0) goto 61
       N = MAX(M*N - K-1, 0)
       IF (N .LE. 0) goto 65
       L2 = L1+N+1
@@ -5852,7 +5841,7 @@ doubleprecision :: p,s,t(1,1),tol,eps
          s = mat_wnrm2(MN,GM_REALS(location),GM_IMAGS(location),1)
       else
          i = mat_iwamax(mn,GM_REALS(location),GM_IMAGS(location),1) + location - 1
-         s = dabs(GM_REALS(i)) + dabs(GM_IMAGS(i))
+         s = abs(GM_REALS(i)) + abs(GM_IMAGS(i))
 
          if (.not.(inf .or. s .eq. 0.0d0))then
             t(1,1) = 0.0d0
@@ -6421,12 +6410,12 @@ DOUBLEPRECISION   :: T(1),TOL,EPS
                   & 1)
       K = 0
       EPS = GM_REALS(GM_BIGMEM-4)
-      T(1) = DABS(GM_REALS(location))+DABS(GM_IMAGS(location))
+      T(1) = ABS(GM_REALS(location))+ABS(GM_IMAGS(location))
       TOL = mat_flop(dble(MAX(M,N))*EPS*T(1))
       MN = MIN(M,N)
       DO J = 1, MN
         LS = location+J-1+(J-1)*M
-        T(1) = DABS(GM_REALS(LS)) + DABS(GM_IMAGS(LS))
+        T(1) = ABS(GM_REALS(LS)) + ABS(GM_IMAGS(LS))
         IF (T(1) .GT. TOL) K = J
       enddo
       IF (K .LT. MN) then
@@ -6844,7 +6833,7 @@ integer                   :: mn
 !===================================================================================================================================
       !!! BROKEN BY GOING TO ASCII. ELIMINATE OR CORRECT
       case(9) !     COMMAND::CHAR                   ! does currently not do anything
-      K = IABS(int(GM_REALS(location)))
+      K = ABS(int(GM_REALS(location)))
       IF (M*N.NE.1 .OR. K.GT.G_CHARSET_SIZE-1) then
          call mat_err(36) ! Argument out of range
          exit FUN5
@@ -9559,10 +9548,10 @@ integer                          :: place
       call locate(keywords,key,place)
       ! if string was not found insert it
       if(place.lt.1)then
-         call insert(keywords,key,iabs(place))
-         call insert(rows,valin1,iabs(place))
-         call insert(cols,valin2,iabs(place))
-         call insert(locs,valin3,iabs(place))
+         call insert(keywords,key,abs(place))
+         call insert(rows,valin1,abs(place))
+         call insert(cols,valin2,abs(place))
+         call insert(locs,valin3,abs(place))
       else
          call replace(rows,valin1,place)
          call replace(cols,valin2,place)
@@ -11336,7 +11325,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '            do j = 1, n                                                         ',&
 '               do i = 1, n                                                      ',&
 '                  k = i + (j-1)*m                                               ',&
-'                  a(k) = iabs(i-j)                                              ',&
+'                  a(k) = abs(i-j)                                               ',&
 '               enddo                                                            ',&
 '            enddo                                                               ',&
 '            end subroutine lala_user                                            ',&
@@ -11381,7 +11370,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '            n = 6                                                               ',&
 '            do j = 1, n                                                         ',&
 '               do i = 1, n                                                      ',&
-'                  a(i,j) = iabs(i-j)                                            ',&
+'                  a(i,j) = abs(i-j)                                             ',&
 '               enddo                                                            ',&
 '            enddo                                                               ',&
 '            OPEN(UNIT=1,FILE=''A'')                                             ',&
@@ -11457,7 +11446,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '            N = 6                                                               ',&
 '            DO J = 1, N                                                         ',&
 '               DO I = 1, N                                                      ',&
-'                  A(I,J) = IABS(I-J)                                            ',&
+'                  A(I,J) = ABS(I-J)                                             ',&
 '               enddo                                                            ',&
 '            enddo                                                               ',&
 '            call MATZ(A,LDA,N,N,''A'',1,IERR)                                   ',&
@@ -12631,7 +12620,7 @@ G_HELP_TEXT=[ CHARACTER(LEN=128) :: &
 '      s and t stored in S and T. If s and t are omitted, they are set                 ',&
 '      to 0.0. After the return, A is stored in Y. The dimensions M and                ',&
 '      N may be reset within the subroutine. The statement Y = "user(K)"               ',&
-'      results in a call with M = 1, N = 1 and A(1,1) = "float(K)". After              ',&
+'      results in a call with M = 1, N = 1 and A(1,1) = "real(K)". After               ',&
 '      the subroutine has been written, it must be compiled and linked                 ',&
 '      to the LALA object code within the local operating system.                      ',&
 '                                                                                      ',&
@@ -13490,7 +13479,7 @@ doubleprecision :: ais
 doubleprecision :: brs
 doubleprecision :: bis
 
-   s = dabs(br) + dabs(bi)
+   s = abs(br) + abs(bi)
    if (s .eq. 0.0d0) then
       call mat_err(27)
       return
@@ -13521,7 +13510,7 @@ doubleprecision :: r
       call mat_err(32) !  Singularity of la%LOG or la%ATAN
    else
       t = datan2(in_imag,in_real)
-      if (in_imag.eq.0.0d0 .and. in_real.lt.0.0d0) t = dabs(t)
+      if (in_imag.eq.0.0d0 .and. in_real.lt.0.0d0) t = abs(t)
       out_real = dlog(r)
       out_imag = t
    endif
@@ -13541,7 +13530,7 @@ doubleprecision             :: tr, ti
    if (xi .eq. 0.0d0) then
       yr = datan2(xr,1.0d0)
       yi = 0.0d0
-   elseif (xr.ne.0.0d0 .or. dabs(xi).ne.1.0d0) then
+   elseif (xr.ne.0.0d0 .or. abs(xi).ne.1.0d0) then
       call mat_wdiv(xr,1.0d0+xi,-xr,1.0d0-xi,tr,ti)
       call mat_wlog(tr,ti,tr,ti)
       yr = -(ti/2.0d0)

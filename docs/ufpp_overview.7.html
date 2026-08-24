@@ -185,11 +185,11 @@
       o The VARIABLE option is used to rewrite the text as a string declaration
    <blockquote>
    <xmp>
-   $BLOCK NULL -file notes.txt !@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   $BLOCK NULL --file notes.txt !@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
       This section uses $BLOCK NULL to let a block of text be included
       in the source that is essentially ignored. The difference between
       this and a $IFDEF .FALSE. ... $ENDIF or $OUTPUT /dev/null .. $OUTPUT
-      END section is that the -file switch lets this section get written to a
+      END section is that the --file switch lets this section get written to a
       file optionally when the $UFPP_DOCUMENT_DIR variable is set. This text
       could be markdown text, HTML, RTF, LaTex or some other format to be
       post-processed independently.
@@ -206,7 +206,7 @@
       create a man(1) page.
    $BLOCK END !@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
    $IFDEF F90
-   $BLOCK HELP -file cf.1.man
+   $BLOCK HELP --file cf.1.man
    NAME
       cf - Convert between Fahrenheit and Celsius temperature values
 

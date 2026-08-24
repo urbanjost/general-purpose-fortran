@@ -1,17 +1,29 @@
-
-
-
-
-
-
-
-
-
-
-
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   warning  NOTE: REAL128 not supported
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   warning  NOTE: REAL128 not supported
+#   define __COMPILER__ __NVIDIA_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
@@ -5366,7 +5378,8 @@ end function visible
 !!     > ONE
 !!     > TWO
 !!     > THREE
-!!     > !!
+!!     > \
+!!
 !!##AUTHOR
 !!    John S. Urban
 !!
@@ -11877,7 +11890,9 @@ class(*),intent(in) :: generic
       type is (integer(kind=int64));    write(line(ibegin:),'(i0)') generic
       type is (real(kind=real32));      write(line(ibegin:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(ibegin:),'(1pg0)') generic
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line(ibegin:),'(1pg0)') generic
+#endif
       !x!type is (real(kind=real256));     write(line(ibegin:),'(1pg0)') generic
       type is (logical);                write(line(ibegin:),'(l1)') generic
       type is (character(len=*))
@@ -11969,7 +11984,9 @@ integer                      :: i
          type is (integer(kind=int64));    write(line(ibegin:),'(*(i0:,","))') generic
          type is (real(kind=real32));      write(line(ibegin:),'(*(1pg0:,","))') generic
          type is (real(kind=real64));      write(line(ibegin:),'(*(1pg0:,","))') generic
+#ifdef FLOAT128
          type is (real(kind=real128));     write(line(ibegin:),'(*(1pg0:,","))') generic
+#endif
          !x!type is (real(kind=real256));     write(line(ibegin:),'(*(1pg0:,","))') generic
          type is (logical);                write(line(ibegin:),'(*(l1:,","))') generic
          type is (character(len=*));       write(line(ibegin:),'(:*(a:,","))') (quote(trim(generic(i))),i=1,size(generic))
@@ -11985,7 +12002,9 @@ integer                      :: i
          type is (integer(kind=int64));    write(line(ibegin:),'("[",*(i0:,","))') generic
          type is (real(kind=real32));      write(line(ibegin:),'("[",*(1pg0:,","))') generic
          type is (real(kind=real64));      write(line(ibegin:),'("[",*(1pg0:,","))') generic
+#ifdef FLOAT128
          type is (real(kind=real128));     write(line(ibegin:),'("[",*(1pg0:,","))') generic
+#endif
          !x!type is (real(kind=real256));     write(line(ibegin:),'("[",*(1pg0:,","))') generic
          type is (logical);                write(line(ibegin:),'("[",*(l1:,","))') generic
          type is (character(len=*));       write(line(ibegin:),'("[",:*(:"""",a,"""":,","))') (trim(generic(i)),i=1,size(generic))
@@ -12088,7 +12107,9 @@ logical                              :: trimit
          type is (integer(kind=int64));    fmt_local='(i0,a)'
          type is (real(kind=real32));      fmt_local='(1pg0,a)'
          type is (real(kind=real64));      fmt_local='(1pg0,a)'
+#ifdef FLOAT128
          type is (real(kind=real128));     fmt_local='(1pg0,a)'
+#endif
          type is (logical);                fmt_local='(l1,a)'
          type is (character(len=*));       fmt_local='(a,a)'
          type is (complex);                fmt_local='("(",1pg0,",",1pg0,")",a)'
@@ -12113,7 +12134,9 @@ logical                              :: trimit
       type is (integer(kind=int64));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
       type is (real(kind=real32));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
       type is (real(kind=real64));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+#endif
       type is (logical);                write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
       type is (character(len=*));       write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
                                         trimit=.false.

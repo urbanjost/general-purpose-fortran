@@ -186,11 +186,11 @@
 !!       o The VARIABLE option is used to rewrite the text as a string declaration
 !!    <blockquote>
 !!    <xmp>
-!!    $BLOCK NULL -file notes.txt !@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+!!    $BLOCK NULL --file notes.txt !@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !!       This section uses $BLOCK NULL to let a block of text be included
 !!       in the source that is essentially ignored. The difference between
 !!       this and a $IFDEF .FALSE. ... $ENDIF or $OUTPUT /dev/null .. $OUTPUT
-!!       END section is that the -file switch lets this section get written to a
+!!       END section is that the --file switch lets this section get written to a
 !!       file optionally when the $UFPP_DOCUMENT_DIR variable is set. This text
 !!       could be markdown text, HTML, RTF, LaTex or some other format to be
 !!       post-processed independently.
@@ -207,7 +207,7 @@
 !!       create a man(1) page.
 !!    $BLOCK END !@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 !!    $IFDEF F90
-!!    $BLOCK HELP -file cf.1.man
+!!    $BLOCK HELP --file cf.1.man
 !!    NAME
 !!       cf - Convert between Fahrenheit and Celsius temperature values
 !!
@@ -2154,10 +2154,10 @@ character(len=1),allocatable   :: text(:) ! array to hold file in memory
       write(G_iout,'("!",a)')repeat('-',131)
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   call dissect('filter','-oo -file -varname textblock -cmd bash -append .false.',opts) ! parse options and inline comment on input line
+   call dissect('filter','-oo --file -varname textblock -cmd bash -append .false.',opts) ! parse options and inline comment on input line
 
-   ! if a previous command has opened a -file FILENAME flush it, because a new one is being opened or this is an END command
-   ! and if a -file FILENAME has been selected open it
+   ! if a previous command has opened a --file FILENAME flush it, because a new one is being opened or this is an END command
+   ! and if a --file FILENAME has been selected open it
    call print_comment_block()
 !-----------------------------------------------------------------------------------------------------------------------------------
    ! now can start new section
@@ -2302,7 +2302,7 @@ subroutine print_comment_block() !@(#)print_comment_block(3f): format comment bl
    case default; call stop_ufpp('ERROR(ufpp:print_comment_block) - UNEXPECTED STATUS VALUE '//v2s(istatus)//':'//trim(varname))
    endselect
 
-   if(ilength.ne.0.and.G_MAN.ne.''.and.G_MAN_FILE.ne.' ')then ! if $FILTER ... -file FILE is present generate file in directory/doc
+   if(ilength.ne.0.and.G_MAN.ne.''.and.G_MAN_FILE.ne.' ')then ! if $FILTER ... --file FILE is present generate file in directory/doc
       filename=trim(varvalue)//'/doc/'
 
       if(.not.G_allow_links)then
@@ -2783,7 +2783,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                Use this flag to prevent this processing from                   ',&
 '                occurring.                                                      ',&
 '   -header      text_for_first_line                                             ',&
-'   -allow_links     If $UFPP_DOCUMENT_DIR is set the $FILTER -file option       ',&
+'   -allow_links     If $UFPP_DOCUMENT_DIR is set the $FILTER --file option      ',&
 '                    will write input to a file under the specified directory    ',&
 '                    in a subdirectory called doc/ that by default is not        ',&
 '                    permitted to have a link. To allow it to have a link        ',&
@@ -3110,7 +3110,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '                                                                                ',&
 '   So the text can easily be processed by other utilities such as markdown(1)   ',&
 '   or txt2man(1) to produce man(1) pages and HTML documents the file can be     ',&
-'   written as-is to $UFPP_DOCUMENT_DIR/doc/NAME with the -file parameter. If the',&
+'   written as-is to $UFPP_DOCUMENT_DIR/doc/NAME with the --file parameter. If the',&
 '   environment variable $UFPP_DOCUMENT_DIR is not set the option is ignored.    ',&
 '                                                                                ',&
 '                                                                                ',&
@@ -3234,7 +3234,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   $IF constructs can be nested up to 20 levels deep. Note that using           ',&
 '   more than two levels typically makes input files less readable.              ',&
 '                                                                                ',&
-'   $FILTER END is required after a $FILTER or -file FILENAME is not written     ',&
+'   $FILTER END is required after a $FILTER or --file FILENAME is not written    ',&
 '   and output of a shell is not read.                                           ',&
 '                                                                                ',&
 '   Nesting of $FILTER sections not allowed.                                     ',&
@@ -3319,7 +3319,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   >$! generate help_usage() procedure (and file to run thru txt2man(1) or other',&
 '   >$! filters to make man(1) page if $UFPP_DOCUMENT_DIR is set).               ',&
 '   >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',&
-'   >$FILTER HELP -file conditional_compile.man                                  ',&
+'   >$FILTER HELP --file conditional_compile.man                                 ',&
 '   >NAME                                                                        ',&
 '   >    conditional_compile - basic example for ufpp(1) pre-processor.          ',&
 '   >SYNOPSIS                                                                    ',&
@@ -3519,7 +3519,7 @@ end subroutine help_usage
 !!                 Use this flag to prevent this processing from
 !!                 occurring.
 !!    -header      text_for_first_line
-!!    -allow_links     If $UFPP_DOCUMENT_DIR is set the $FILTER -file option
+!!    -allow_links     If $UFPP_DOCUMENT_DIR is set the $FILTER --file option
 !!                     will write input to a file under the specified directory
 !!                     in a subdirectory called doc/ that by default is not
 !!                     permitted to have a link. To allow it to have a link
@@ -3846,7 +3846,7 @@ end subroutine help_usage
 !!
 !!    So the text can easily be processed by other utilities such as markdown(1)
 !!    or txt2man(1) to produce man(1) pages and HTML documents the file can be
-!!    written as-is to $UFPP_DOCUMENT_DIR/doc/NAME with the -file parameter. If the
+!!    written as-is to $UFPP_DOCUMENT_DIR/doc/NAME with the --file parameter. If the
 !!    environment variable $UFPP_DOCUMENT_DIR is not set the option is ignored.
 !!
 !!
@@ -3970,7 +3970,7 @@ end subroutine help_usage
 !!    $IF constructs can be nested up to 20 levels deep. Note that using
 !!    more than two levels typically makes input files less readable.
 !!
-!!    $FILTER END is required after a $FILTER or -file FILENAME is not written
+!!    $FILTER END is required after a $FILTER or --file FILENAME is not written
 !!    and output of a shell is not read.
 !!
 !!    Nesting of $FILTER sections not allowed.
@@ -4056,7 +4056,7 @@ end subroutine help_usage
 !!    >$! generate help_usage() procedure (and file to run thru txt2man(1) or other
 !!    >$! filters to make man(1) page if $UFPP_DOCUMENT_DIR is set).
 !!    >$!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-!!    >$FILTER HELP -file conditional_compile.man
+!!    >$FILTER HELP --file conditional_compile.man
 !!    >NAME
 !!    >    conditional_compile - basic example for ufpp(1) pre-processor.
 !!    >SYNOPSIS
@@ -4182,7 +4182,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        4.0: 20170502>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)REPORTING BUGS: http://www.urbanjost.altervista.org/>',&
-'@(#)COMPILED:       2026-08-19 15:12:11 UTC-240>',&
+'@(#)COMPILED:       2026-08-24 00:04:33 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 module M_framework__msg
 use,intrinsic :: iso_fortran_env, only : ERROR_UNIT,OUTPUT_UNIT    ! access computing environment
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
@@ -214,6 +203,9 @@ character(len=*),intent(in) :: sep
       type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
+#ifdef FLOAT128
+      type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+#endif
       type is (logical);                write(line(istart:),'(l1)') generic
       type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
@@ -303,6 +295,10 @@ integer :: i
       type is (integer(kind=int64));    write(line(istart:),'("[",*(i0,1x))') generic
       type is (real(kind=real32));      write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (real(kind=real64));      write(line(istart:),'("[",*(1pg0,1x))') generic
+#ifdef FLOAT128
+      type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
+      !type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
+#endif
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
       type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",:,1x))') (trim(generic(i)),i=1,size(generic))
       type is (complex);                write(line(istart:),'("[",*("(",1pg0,",",1pg0,")",1x))') generic
@@ -405,6 +401,9 @@ logical                               :: trimit
          type is (integer(kind=int64));    fmt_local='(i0,a)'
          type is (real(kind=real32));      fmt_local='(1pg0,a)'
          type is (real(kind=real64));      fmt_local='(1pg0,a)'
+#ifdef FLOAT128
+         type is (real(kind=real128));     fmt_local='(1pg0,a)'
+#endif
          type is (logical);                fmt_local='(l1,a)'
          type is (character(len=*));       fmt_local='(a,a)'
          type is (complex);                fmt_local='("(",1pg0,",",1pg0,")",a)'
@@ -425,6 +424,9 @@ logical                               :: trimit
       type is (integer(kind=int64));    write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
       type is (real(kind=real32));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
       type is (real(kind=real64));      write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+#ifdef FLOAT128
+      type is (real(kind=real128));     write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
+#endif
       type is (logical);                write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
       type is (character(len=*));       write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,nil
       type is (complex);
@@ -854,6 +856,9 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=int(generic0,kind=int64)
          type is (real(kind=real32));      gen=real(generic0,kind=real32)
          type is (real(kind=real64));      gen=real(generic0,kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0,kind=real128)
+#endif
       end select
    type is(integer(kind=int16))
       select type(gen)
@@ -863,6 +868,9 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=int(generic0,kind=int64)
          type is (real(kind=real32));      gen=real(generic0,kind=real32)
          type is (real(kind=real64));      gen=real(generic0,kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0,kind=real128)
+#endif
       end select
    type is(integer(kind=int32))
       select type(gen)
@@ -872,6 +880,9 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=int(generic0,kind=int64)
          type is (real(kind=real32));      gen=real(generic0,kind=real32)
          type is (real(kind=real64));      gen=real(generic0,kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0,kind=real128)
+#endif
       end select
    type is(integer(kind=int64))
       select type(gen)
@@ -881,6 +892,9 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=int(generic0,kind=int64)
          type is (real(kind=real32));      gen=real(generic0,kind=real32)
          type is (real(kind=real64));      gen=real(generic0,kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0,kind=real128)
+#endif
       end select
    type is(real(kind=real32))
       select type(gen)
@@ -890,6 +904,9 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=int(generic0,kind=int64)
          type is (real(kind=real32));      gen=real(generic0,kind=real32)
          type is (real(kind=real64));      gen=real(generic0,kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0,kind=real128)
+#endif
       end select
    type is(real(kind=real64))
       select type(gen)
@@ -899,7 +916,24 @@ class(*),intent(out) :: gen
          type is (integer(kind=int64));    gen=int(generic0,kind=int64)
          type is (real(kind=real32));      gen=real(generic0,kind=real32)
          type is (real(kind=real64));      gen=real(generic0,kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0,kind=real128)
+#endif
       end select
+#ifdef FLOAT128
+   type is(real(kind=real128))
+      select type(gen)
+         type is (integer(kind=int8));     gen=int(generic0,kind=int8)
+         type is (integer(kind=int16));    gen=int(generic0,kind=int16)
+         type is (integer(kind=int32));    gen=int(generic0,kind=int32)
+         type is (integer(kind=int64));    gen=int(generic0,kind=int64)
+         type is (real(kind=real32));      gen=real(generic0,kind=real32)
+         type is (real(kind=real64));      gen=real(generic0,kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0,kind=real128)
+#endif
+      end select
+#endif
    end select
 end subroutine set_generic
 end subroutine set_single
@@ -954,6 +988,9 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=int(generic0(i),kind=int64)
          type is (real(kind=real32));      gen=real(generic0(i),kind=real32)
          type is (real(kind=real64));      gen=real(generic0(i),kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0(i),kind=real128)
+#endif
       end select
    type is(integer(kind=int16))
       select type(gen)
@@ -963,6 +1000,9 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=int(generic0(i),kind=int64)
          type is (real(kind=real32));      gen=real(generic0(i),kind=real32)
          type is (real(kind=real64));      gen=real(generic0(i),kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0(i),kind=real128)
+#endif
       end select
    type is(integer(kind=int32))
       select type(gen)
@@ -972,6 +1012,9 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=int(generic0(i),kind=int64)
          type is (real(kind=real32));      gen=real(generic0(i),kind=real32)
          type is (real(kind=real64));      gen=real(generic0(i),kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0(i),kind=real128)
+#endif
       end select
    type is(integer(kind=int64))
       select type(gen)
@@ -981,6 +1024,9 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=int(generic0(i),kind=int64)
          type is (real(kind=real32));      gen=real(generic0(i),kind=real32)
          type is (real(kind=real64));      gen=real(generic0(i),kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0(i),kind=real128)
+#endif
       end select
    type is(real(kind=real32))
       select type(gen)
@@ -990,6 +1036,9 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=int(generic0(i),kind=int64)
          type is (real(kind=real32));      gen=real(generic0(i),kind=real32)
          type is (real(kind=real64));      gen=real(generic0(i),kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0(i),kind=real128)
+#endif
       end select
    type is(real(kind=real64))
       select type(gen)
@@ -999,7 +1048,24 @@ integer,intent(in)   :: i
          type is (integer(kind=int64));    gen=int(generic0(i),kind=int64)
          type is (real(kind=real32));      gen=real(generic0(i),kind=real32)
          type is (real(kind=real64));      gen=real(generic0(i),kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0(i),kind=real128)
+#endif
       end select
+#ifdef FLOAT128
+   type is(real(kind=real128))
+      select type(gen)
+         type is (integer(kind=int8));     gen=int(generic0(i),kind=int8)
+         type is (integer(kind=int16));    gen=int(generic0(i),kind=int16)
+         type is (integer(kind=int32));    gen=int(generic0(i),kind=int32)
+         type is (integer(kind=int64));    gen=int(generic0(i),kind=int64)
+         type is (real(kind=real32));      gen=real(generic0(i),kind=real32)
+         type is (real(kind=real64));      gen=real(generic0(i),kind=real64)
+#ifdef FLOAT128
+         type is (real(kind=real128));     gen=real(generic0(i),kind=real128)
+#endif
+      end select
+#endif
    end select
 end subroutine set_generic
 !===================================================================================================================================

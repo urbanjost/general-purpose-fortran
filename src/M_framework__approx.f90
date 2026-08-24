@@ -1,17 +1,29 @@
-
-
-
-
-
-
-
-
-
-
-
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   warning  NOTE: REAL128 NOT SUPPORTED
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   warning  NOTE: REAL128 NOT SUPPORTED
+#   define __COMPILER__ __NVIDIA_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 module M_framework__approx
 use, intrinsic :: iso_fortran_env,  only : int8, int16, int32, int64 !  1           2           4           8
@@ -51,25 +63,33 @@ private :: anyscalar_to_double_
 interface compare_float
    module procedure compare_float_real32
    module procedure compare_float_real64
+#ifdef FLOAT128
    module procedure compare_float_real128
+#endif
 end interface compare_float
 
 interface operator (.equalto.)
    module procedure is_equal_to_real32
    module procedure is_equal_to_real64
+#ifdef FLOAT128
    module procedure is_equal_to_real128
+#endif
 end interface operator (.equalto.)
 
 interface operator (.greaterthan.)
    module procedure is_greater_than_real32
    module procedure is_greater_than_real64
+#ifdef FLOAT128
    module procedure is_greater_than_real128
+#endif
 end interface operator (.greaterthan.)
 
 interface operator (.lessthan.)
    module procedure is_less_than_real32
    module procedure is_less_than_real64
+#ifdef FLOAT128
    module procedure is_less_than_real128
+#endif
 end interface operator (.lessthan.)
 
 real(kind=real64),save,private :: default_ulp=1.0_real64
@@ -537,7 +557,11 @@ END SUBROUTINE sp_accdig
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental impure SUBROUTINE accdig(x,y,digi0,ACURCY,IND)
+#ifdef FLOAT128
 use,intrinsic :: iso_fortran_env, only : wp=>real128
+#else
+use,intrinsic :: iso_fortran_env, only : wp=>real64
+#endif
 use M_framework__journal,  only : journal
 implicit none
 
@@ -850,7 +874,11 @@ end function significant_real64
 !===================================================================================================================================
 pure elemental function anyscalar_to_realbig_(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
+#ifdef FLOAT128
 use,intrinsic :: iso_fortran_env, only : wp=>real128
+#else
+use,intrinsic :: iso_fortran_env, only : wp=>real64
+#endif
 implicit none
 
 ! ident_9="@(#) M_framework__approx anyscalar_to_realbig_(3f) convert integer or real parameter of any kind to real128 or biggest available"
@@ -865,7 +893,9 @@ character(len=3)             :: readable
    type is (integer(kind=int64));  d_out=real(valuein,kind=wp)
    type is (real(kind=real32));    d_out=real(valuein,kind=wp)
    type is (real(kind=real64));    d_out=real(valuein,kind=wp)
+#ifdef FLOAT128
    Type is (real(kind=real128));   d_out=valuein
+#endif
    type is (logical);              d_out=merge(0.0_wp,1.0_wp,valuein)
    type is (character(len=*));     read(valuein,*) d_out
    class default
@@ -893,11 +923,13 @@ doubleprecision           :: d_out
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
+#ifdef FLOAT128
    type is (real(kind=real128))
      !x!if(valuein > huge(0.0d0))then
      !x!   write(error_unit,*)'*anyscalar_to_double_* value too large ',valuein
      !x!endif
      d_out=dble(valuein)
+#endif
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
    class default
@@ -1212,6 +1244,7 @@ logical                   ::  equal_to
     equal_to = abs( x - y ) < spacing( max(abs(x),abs(y)) )
 end function is_equal_to_real64
 
+#ifdef FLOAT128
 elemental function compare_float_real128( x, y, ulp ) result( compare )
 integer,parameter            ::  wp=real128
 real(kind=wp),intent(in)     ::  x
@@ -1252,6 +1285,7 @@ real(kind=wp),intent(in)  ::  x, y
 logical                   ::  equal_to
     equal_to = abs( x - y ) < spacing( max(abs(x),abs(y)) )
 end function is_equal_to_real128
+#endif
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

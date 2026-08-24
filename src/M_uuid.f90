@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !! generate_uuid(3f) was originally derived from the xmlf90 codebase, (c)
 !! Alberto Garcia & Jon Wakelin, 2003-2004. It also calls RNG routines from

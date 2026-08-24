@@ -1,17 +1,30 @@
-
-
-
-
-
-
-
-
-
-
-
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __LFORTRAN_COMP     6
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   define __COMPILER__ __NVIDIA_COMP
+#elif __LFORTRAN__
+#   define __COMPILER__ __LFORTRAN_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
@@ -290,7 +303,9 @@ interface sign;    module procedure sign_int32;           end interface
 interface sign;    module procedure sign_int64;           end interface
 interface sign;    module procedure sign_real32;          end interface
 interface sign;    module procedure sign_real64;          end interface
+#ifdef FLOAT128
 interface sign;    module procedure sign_real128;         end interface
+#endif
 ! allow for minimum length option on adjustl and adjustr
 interface adjustl; module procedure adjustl_atleast;      end interface
 interface adjustr; module procedure adjustr_atleast;      end interface
@@ -762,12 +777,14 @@ end function adjustr_atleast
 !!##LICENSE
 !!    Public Domain
 
+#ifdef FLOAT128
 elemental function sign_real128(value)
 real(kind=real128),intent(in) :: value
 real(kind=real128)            :: sign_real128
 intrinsic :: sign ! make it clear just need to call the intrinsic, not the overloaded function
    sign_real128=sign(1.0_real128,value)
 end function sign_real128
+#endif
 elemental function sign_real64(value)
 real(kind=real64),intent(in) :: value
 real(kind=real64)            :: sign_real64
@@ -1294,9 +1311,11 @@ logical                      :: trimit
       type is (real(kind=real64))
          if(fmt_local == '') fmt_local='(1pg0,a)'
          write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+#ifdef FLOAT128
       type is (real(kind=real128))
          if(fmt_local == '') fmt_local='(1pg0,a)'
          write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
+#endif
       type is (logical)
          if(fmt_local == '') fmt_local='(l1,a)'
          write(line,fmt_local,iostat=iostat,iomsg=iomsg) generic,null
@@ -1519,11 +1538,13 @@ doubleprecision           :: d_out
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
+#ifdef FLOAT128
    type is (real(kind=real128))
       !x!if(valuein.gt.big)then
       !x!   write(stderr,*)'*anyscalar_to_double* value too large ',valuein
       !x!endif
       d_out=dble(valuein)
+#endif
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
    class default
@@ -1549,7 +1570,9 @@ class(*),intent(in)    :: valuein
    type is (integer(kind=int64));  ii38=valuein
    type is (real(kind=real32));    ii38=int(valuein,kind=int64)
    type is (real(kind=real64));    ii38=int(valuein,kind=int64)
+#ifdef FLOAT128
    Type is (real(kind=real128));   ii38=int(valuein,kind=int64)
+#endif
    type is (logical);              ii38=merge(0_int64,1_int64,valuein)
    type is (character(len=*))   ;
       read(valuein,*,iostat=ios,iomsg=message)ii38
@@ -1583,11 +1606,13 @@ real                :: r_out
       !x!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
       !x!endif
       r_out=real(valuein)
+#ifdef FLOAT128
    type is (real(kind=real128))
       !x!if(valuein.gt.big)then
       !x!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
       !x!endif
       r_out=real(valuein)
+#endif
    type is (logical);              r_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));     read(valuein,*) r_out
    end select

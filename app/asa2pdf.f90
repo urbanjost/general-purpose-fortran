@@ -213,20 +213,16 @@ help_text=[ CHARACTER(LEN=128) :: &
 '      asa2pdf -s LANDSCAPE -o paper.pdf <asa2pdf.c                              ',&
 '                                                                                ',&
 '     # 132-column landscape with line numbers with dashed lines                 ',&
-'      asa2pdf -s ''LANDSCAPE LINE NUMBERS'' -d ''3 1 2'' \                      ',&
-'      -N -T .9 -o paper.pdf <asa2pdf.c                                          ',&
+'      asa2pdf -s ''LANDSCAPE LINE NUMBERS'' -d ''3 1 2''       -N -T .9 -o paper.pdf <asa2pdf.c',&
 '                                                                                ',&
 '     # portrait 80-column non-ASA file with dashed lines                        ',&
-'      asa2pdf -s PORTRAIT -S 1 -W 8.5 -H 11 -b 1 -d ''2 4 1'' \                 ',&
-'      -T 1 -B .75 -o paper.pdf < asa2pdf.c                                      ',&
+'      asa2pdf -s PORTRAIT -S 1 -W 8.5 -H 11 -b 1 -d ''2 4 1''       -T 1 -B .75 -o paper.pdf < asa2pdf.c',&
 '                                                                                ',&
 '     # portrait 80-column with line numbers , non-ASA                           ',&
-'      asa2pdf -s ''PORTRAIT LINE NUMBERS'' -l 66 -S 1 -W 8.5 -H 11 \            ',&
-'      -b 1 -T 1 -B .75 -N -o paper.pdf < asa2pdf.c                              ',&
+'      asa2pdf -s ''PORTRAIT LINE NUMBERS'' -l 66 -S 1 -W 8.5 -H 11       -b 1 -T 1 -B .75 -N -o paper.pdf < asa2pdf.c',&
 '                                                                                ',&
 '     # titling                                                                  ',&
-'      asa2pdf -d ''1 0 1'' -t "$USER" -b 1 -P -N -T 1 \                         ',&
-'      -s "asa2pdf.c" -o paper.pdf <asa2pdf.c                                    ',&
+'      asa2pdf -d ''1 0 1'' -t "$USER" -b 1 -P -N -T 1       -s "asa2pdf.c" -o paper.pdf <asa2pdf.c',&
 '                                                                                ',&
 'SEE ALSO                                                                        ',&
 '                                                                                ',&
@@ -496,20 +492,16 @@ end subroutine help_usage
 !!       asa2pdf -s LANDSCAPE -o paper.pdf <asa2pdf.c
 !!
 !!      # 132-column landscape with line numbers with dashed lines
-!!       asa2pdf -s 'LANDSCAPE LINE NUMBERS' -d '3 1 2' \
-!!       -N -T .9 -o paper.pdf <asa2pdf.c
+!!       asa2pdf -s 'LANDSCAPE LINE NUMBERS' -d '3 1 2'       -N -T .9 -o paper.pdf <asa2pdf.c
 !!
 !!      # portrait 80-column non-ASA file with dashed lines
-!!       asa2pdf -s PORTRAIT -S 1 -W 8.5 -H 11 -b 1 -d '2 4 1' \
-!!       -T 1 -B .75 -o paper.pdf < asa2pdf.c
+!!       asa2pdf -s PORTRAIT -S 1 -W 8.5 -H 11 -b 1 -d '2 4 1'       -T 1 -B .75 -o paper.pdf < asa2pdf.c
 !!
 !!      # portrait 80-column with line numbers , non-ASA
-!!       asa2pdf -s 'PORTRAIT LINE NUMBERS' -l 66 -S 1 -W 8.5 -H 11 \
-!!       -b 1 -T 1 -B .75 -N -o paper.pdf < asa2pdf.c
+!!       asa2pdf -s 'PORTRAIT LINE NUMBERS' -l 66 -S 1 -W 8.5 -H 11       -b 1 -T 1 -B .75 -N -o paper.pdf < asa2pdf.c
 !!
 !!      # titling
-!!       asa2pdf -d '1 0 1' -t "$USER" -b 1 -P -N -T 1 \
-!!       -s "asa2pdf.c" -o paper.pdf <asa2pdf.c
+!!       asa2pdf -d '1 0 1' -t "$USER" -b 1 -P -N -T 1       -s "asa2pdf.c" -o paper.pdf <asa2pdf.c
 !!
 !!##SEE ALSO
 !!
@@ -580,7 +572,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    convert text files with ASA carriage return to Adobe PDF files>',&
 '@(#)VERSION:        2.0, 20170210>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2026-08-19 15:12:34 UTC-240>',&
+'@(#)COMPILED:       2026-08-24 00:04:43 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

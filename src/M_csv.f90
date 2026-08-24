@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 module M_csv
 implicit none
 private
@@ -216,13 +205,19 @@ contains
 !!    character(len=:),allocatable :: pr
 !!
 !!       write(*,*)'LIST-DIRECTED:'
-!!       write(*,*,DELIM='QUOTE')'string',.true.,.false.,111,23.45,10.20e15,3456.78901234d0,cmplx(huge(0.0),tiny(0.0))
+!!       write(*,*,DELIM='QUOTE')'string',.true.,.false.,&
+!!               & 111,23.45,10.20e15,3456.78901234d0,&
+!!               & cmplx(huge(0.0),tiny(0.0))
 !!
 !!       write(*,*)'G0:'
-!!       write(*,'(*(g0:","))')'string',.true.,.false.,111,23.45,10.20e15,3456.78901234d0,cmplx(huge(0.0),tiny(0.0))
+!!       write(*,'(*(g0:","))')'string',.true.,.false.,&
+!!               & 111,23.45,10.20e15,3456.78901234d0,&
+!!               & cmplx(huge(0.0),tiny(0.0))
 !!
 !!       write(*,*)'CSV:'
-!!       pr=csv('string',.true.,.false.,111,23.45,10.20e15,3456.78901234d0,cmplx(huge(0.0),tiny(0.0)) )
+!!       pr=csv('string',.true.,.false.,&
+!!               & 111,23.45,10.20e15,3456.78901234d0,&
+!!               & cmplx(huge(0.0),tiny(0.0)) )
 !!       write(*,'(a)')pr
 !!
 !!    end program demo_csv
@@ -230,11 +225,14 @@ contains
 !!   Results:
 !!
 !!     LIST-DIRECTED:
-!!     "string" T F         111   23.4500008       1.01999997E+16   3456.7890123400002        (3.402823466E+38,1.175494351E-38)
+!!     "string" T F 111 23.4500008 1.01999997E+16
+!!     3456.7890123400002 (3.402823466E+38,1.175494351E-38)
 !!     G0:
-!!    string,T,F,111,23.4500008,0.101999997E+17,3456.7890123400002,0.340282347E+39,0.117549435E-37
+!!    string,T,F,111,23.4500008,0.101999997E+17,3456.7890123400002,
+!!    0.340282347E+39,0.117549435E-37
 !!     CSV:
-!!    "string",TRUE,FALSE,111,23.4500008,1.01999997E+16,3456.7890123400002,3.40282347E+38,1.17549435E-38
+!!    "string",TRUE,FALSE,111,23.4500008,1.01999997E+16,
+!!    3456.7890123400002,3.40282347E+38,1.17549435E-38
 !!
 !!##AUTHOR
 !!    John S. Urban

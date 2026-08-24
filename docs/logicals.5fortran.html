@@ -1,0 +1,919 @@
+<html> 
+<head> 
+<title> </title>
+<style> 
+px {font-family: "Lucida Console", Monaco, monospace }
+p { font-size:100%; line-height:1.1em; }
+body {xfont-style: sans-serif}
+body {
+color:#333; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:1em; line-height:1.3em; }
+a:visited { color:#666; }
+h1,h2,h3,h4,h5,h6 { color:#333; font-family:georgia, verdana, sans-serif; }
+h1 { font-size:150%; page-break-before:auto;background-color: #aaaaff}
+h2 { font-size:143%;color:teal; }
+h3 { font-size:134%;color:blue; }
+h4 { font-size:120%;color:gray; }
+img { max-width: 55em}
+p{ padding: 0;margin:0; }
+p{ padding-right:1.4em; }
+p{ padding-bottom:0.1em; }
+p{ padding-top:1em; }
+p{ whitespace: pre-wrap; }
+h5,h6 { font-size:100% }
+a.nav,a:link.nav, a:visited.nav { background-color:#FFF; color:#000; }
+XXtable { border:double #000; border-collapse:collapse; }
+XXtable { border-collapse:collapse; }
+XXtd { border:thin solid #888; }
+XXtd { border:none; }
+li { margin-bottom:0.5em; }
+blockquote { display:block; font-size:100%; line-height:1.1em; margin:0 0 0.5em; padding:0 2.5em; }
+pre { background-color:#DDD; font-size:100%; overflow:auto; padding:1em; }
+a,li span { color:#000; }
+a:hover, a.nav:hover, a:hover math { background-color:#000; color:#FFF; }
+#Container { margin:0 10px; text-align:center; background-color: #BBB}
+#Content { border-top:none; margin:auto; padding:0.3em; text-align:left; width:100%; max-width:55em; background:#FFF}
+span.webName { font-size:.5em; }
+textarea#content { font-size: 1em; line-height: 1.125; }
+h1#pageName { line-height:1em; margin:0.2em 0 0.2em 0; padding:0; }
+.property { color:#666; font-size:100%; }
+a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
+.byline { color:#666; font-size:1.0em; font-style:italic; margin-bottom:1em; padding-top:1px; } 
+</style> 
+</head>
+<BODY bgcolor=#F0F0F0 text=#000000 link=#0000ff vlink=#C000C0 alink=#ff0000><A NAME=top></A>
+<!--
+<h5><a href="index.html">[UP]</a></h5>
+<button type="button" onclick="javascript:history.back()">Back</button>
+-->
+<div id="Container">
+<div id="Content">
+<CENTER>
+<H1><HR><I>File Formats &nbsp;-&nbsp;</I><NOBR>logicals (5)</NOBR><HR></H1>
+</CENTER>
+<P>
+<A name=0>
+
+     <H3>NAME</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+LOGICALS(5) - [SUMMARY] logical expressions and variables
+<P>
+</BLOCKQUOTE>
+<A name=contents></A><H3>CONTENTS</H3></A>
+<BLOCKQUOTE>
+<A HREF=#1>Synopsis</A><BR>
+<A HREF=#2>Summary</A><BR>
+<A HREF=#3>Description</A><BR>
+<A HREF=#4>Logical Operators</A><BR>
+<A HREF=#5>Operator Precedence</A><BR>
+<A HREF=#6>Declaring Logical Variables</A><BR>
+<A HREF=#7>Example</A><BR>
+<A HREF=#8>Masking In Intrinsics</A><BR>
+<A HREF=#9>Uses</A><BR>
+<A HREF=#10>Array Masking</A><BR>
+<A HREF=#11>Logical Operations</A><BR>
+<A HREF=#12>Array Reduction Functions</A><BR>
+<A HREF=#13>Bitwise Logical Operations</A><BR>
+<A HREF=#14>Conditional Expressions</A><BR>
+<A HREF=#15>Logicals Cannot Be Used As Integers</A><BR>
+<A HREF=#16>Logical Editing</A><BR>
+<A HREF=#17>See Also</A><BR>
+</BLOCKQUOTE>
+<A name=18>
+
+     <H3>SYNOPSIS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Logical expressions and operators:
+<P>
+<PRE>
+           ! comparisons
+           .LT., .LE., .EQ., .GE., .GT., .NE.
+           &lt;, &lt;=, ==, &gt;=, &gt;, /=
+           ! operators
+           .AND., .OR., .NOT., .EQV., .NEQV.
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=2>
+
+     <H3>SUMMARY</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Information regarding Boolean variables, operators and expressions tends
+to be dispersed partly because it impinges on so many aspects of Fortran
+programming -- e.g., flow control, masking, comparison, and selection.
+This summary provides an abridged version of those many uses.
+</BLOCKQUOTE>
+<A name=3>
+
+     <H3>DESCRIPTION</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+In Fortran, logicals are an intrinsic data type used to represent
+Boolean values - which can only be either the value .TRUE. or .FALSE..
+Logical values (expressions or variables) are primarily used to control
+program flow through conditional statements like IF and DO WHILE loops,
+but have other valuable uses such as masking.
+</BLOCKQUOTE>
+<A name=4>
+
+     <H3>LOGICAL OPERATORS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Logical expressions can be formed using relational operators (for
+comparisons) and logical operators (for combining logical values in
+complex expressions).
+<P>
+RELATIONAL OPERATORS (FOR COMPARISONS)
+<P>
+These relational operators compare arithmetic or character expressions
+and return a logical value (.TRUE. or .FALSE.).
+<P>
+<PRE>
+          Meaning                   Syntax        Example
+          Equal to                 .EQ. or  ==   x .EQ. y
+          Not equal to             .NE. or  /=   x .NE. y
+          Less than                .LT. or  &lt;    x .LT. y
+          Less than or equal to    .LE. or  &lt;=   x .LE. y
+          Greater than             .GT. or  &gt;    x .GT. y
+          Greater than or equal to .GE. or  &gt;=   x .GE. y
+<P>
+</PRE>
+Note that for string comparisons trailing spaces are not significant but
+leading blanks are, and that comparing floating point values should
+often be done within a tolerance as rounding can easily cause values
+intended to be equal to test as not equal, for example.
+<P>
+BOOLEAN OPERATORS (FOR LOGICAL DATA)
+<P>
+These operators combine one or more logical expressions.
+<P>
+<PRE>
+        Operator Description                                  Example
+        .AND.    True if both operands are true.              P .AND. Q
+        .OR.     True if either or both operands are true.    P .OR. Q
+        .NOT.    Reverses the logical state of the operand.   .NOT. P
+        .EQV.    True if both operands are the same
+                 (both true or both false).                   P .EQV. Q
+        .NEQV.   True if operands are different
+                 (one true, one false).                       P .NEQV. Q
+<P>
+</PRE>
+It is a common extension to allow the expressions P==Q and P/=Q where P
+and Q are logical, but the standard requires P.EQV.Q AND P.NEQV.Q. It is
+possible to overload == and /= to work with logicals instead of changing
+the statements if porting from a compiler supporting the extension to
+one that does not, but changing the statements to conform to the
+standard is preferred.
+</BLOCKQUOTE>
+<A name=5>
+
+     <H3>OPERATOR PRECEDENCE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The order of operations is important in complex expressions:
+<TABLE cellpadding=3><!-- tsb: The order of operations is important in complex expressions:
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Arithmetic expressions are evaluated first.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Relational operators are applied next.
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+Logical operators are applied last, in the order: .NOT., then .AND.,
+then .OR., and finally .EQV. and .NEQV..
+</TD></TR>
+<TR></TR></TABLE>Parentheses () can be used to explicitly control the order of
+evaluation.
+</BLOCKQUOTE>
+<A name=6>
+
+     <H3>DECLARING LOGICAL VARIABLES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Variables are declared using the LOGICAL keyword:
+<P>
+<PRE>
+        LOGICAL             :: is_active
+        LOGICAL             :: file_exists, data_valid(100)
+        LOGICAL,parameter   :: T=.TRUE., F=.FALSE.
+        LOGICAL,allocatable :: mask(:,:)
+<P>
+</PRE>
+You can assign the "truth" literals to these variables:
+<P>
+<PRE>
+          is_active = .TRUE.
+          file_exists = .FALSE.
+<P>
+</PRE>
+Note: The periods (.) surrounding the truth values are mandatory in
+standard Fortran.
+<P>
+DIFFERENT KINDS (SIZES)
+<P>
+Many programs use nothing but the default logical kind. Many make
+extensive use of logical expressions but use no LOGICAL variables
+explicitly at all!
+<P>
+Most platforms however support multiple LOGICAL kinds that typically
+vary only in storage size.
+<P>
+The standard requires one default logical kind to be supported of the
+same storage size as a default INTEGER and REAL and one of kind C_BOOL
+compatible with the C compiler partner to the Fortran compiler (if that
+size is different from the default); but the following kind names are
+standard:
+<P>
+<PRE>
+        use,intrinsic :: iso_fortran_env, only : &
+        LOGICAL8, LOGICAL16, LOGICAL32, LOGICAL64
+<P>
+</PRE>
+and if supported will be the kind value with the indicated size in bits.
+<P>
+These named constant kinds may not be supported by a particular platform
+(in which case the value of the kind name will be a negative integer
+value) and additional kinds may be available as well.
+<P>
+The most common reason for using non-default kinds is when large logical
+arrays are being declared. Using the smallest available kind is
+warranted when large masks or arrays are required and can improve
+performance as well as decrease memory requirements.
+<P>
+The next most common reason to not use default logicals is when the
+values are being passed to and from C. In this case KIND=C_BOOL is
+almost always the kind to choose. Conveniently C_BOOL is often also the
+smallest kind available.
+<P>
+It might be surprising, but the smallest available storage size of a
+LOGICAL variable is almost always one byte, not one bit. Fortran does
+include bit-level procedures, but they are not typically used in regard
+to LOGICAL values, but to manipulate data at the bit level. This is done
+much more rarely than is using logicals for conditionally selecting code
+or conditionally selecting values via masking which is the primary
+interest here.
+<P>
+The following example program illustrates Fortran features related to
+the kind and size of LOGICAL variables. It demonstrates &#46;&#46;&#46;
+<TABLE cellpadding=3><!-- tsb: The following example program illustrates Fortran features related to
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+selected_logical_kind() ! return a kind value based on a minimum
+size
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+logical(val,kind) ! return different logical kinds
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+logical_kinds() ! list of supported kinds
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+kind(val) ! return integer value of kind of a value
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=7>
+
+     <H3>EXAMPLE</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+sample program:
+<P>
+<PRE>
+       program demo_different_logical_kinds
+       use iso_fortran_env, only : logical_kinds
+       use,intrinsic :: iso_fortran_env, only : &
+        & LOGICAL8, LOGICAL16, LOGICAL32, LOGICAL64
+       use,intrinsic :: iso_c_binding,   only : C_BOOL
+       implicit none
+       character(len=*),parameter             :: all=&#146;(*(g0))&#146;
+       ! potentially save space and improve performance by using the
+       ! smallest available kind
+       integer,parameter                      :: lk=selected_logical_kind(1)
+       logical(lk)                            :: smallest_storage(10,20)
+<P>
+       ! C_BOOL is a kind compatible with C interfaces
+       logical(kind=c_bool)                   :: boolean=.TRUE.
+<P>
+       integer                                :: i
+         ! The integer array constant LOGICAL_KINDS() contains the kind
+         ! values for supported logical kinds for the current processor
+         print all, &#146;list LOGICAL kind values available on this platform&#146;
+          do i =1, size(logical_kinds)
+             print all, &#146;   integer,parameter :: boolean&#146;, &
+             & logical_kinds(i),&#146;=&#146;, logical_kinds(i)
+          enddo
+<P>
+         print all, &#146;   LOGICAL8  ==&gt; KIND=&#146;,LOGICAL8
+         print all, &#146;   LOGICAL16 ==&gt; KIND=&#146;,LOGICAL16
+         print all, &#146;   LOGICAL32 ==&gt; KIND=&#146;,LOGICAL32
+         print all, &#146;   LOGICAL64 ==&gt; KIND=&#146;,LOGICAL64
+         print all, &#146;   C_BOOL    ==&gt; KIND=&#146;,C_BOOL
+<P>
+         print all, &#146;storage size of default logical = &#146;, storage_size(.true.)
+         print all, &#146;storage size of smallest logical kind = &#146;, &
+          storage_size(smallest_storage)
+         print all, &#146;storage size of C_BOOL= &#146;, storage_size(boolean)
+<P>
+         print all, &#146;kind of default logical = &#146;, kind(.true.)
+         print all, &#146;kind of smallest logical kind = &#146;, kind(smallest_storage)
+         print all, &#146;kind of C_BOOL= &#146;, kind(.true._c_bool)
+<P>
+       end program demo_different_logical_kinds
+<P>
+</PRE>
+Typical (platform-specific) output:
+<P>
+<PRE>
+     &gt; list LOGICAL kind values available on this platform
+     &gt;    integer,parameter :: boolean1=1
+     &gt;    integer,parameter :: boolean2=2
+     &gt;    integer,parameter :: boolean4=4
+     &gt;    integer,parameter :: boolean8=8
+     &gt;    integer,parameter :: boolean16=16
+     &gt;    LOGICAL8  ==&gt; KIND=1
+     &gt;    LOGICAL16 ==&gt; KIND=2
+     &gt;    LOGICAL32 ==&gt; KIND=4
+     &gt;    LOGICAL64 ==&gt; KIND=8
+     &gt;    C_BOOL    ==&gt; KIND=1
+     &gt; storage size of default logical = 32
+     &gt; storage size of smallest logical kind = 8
+     &gt; storage size of C_BOOL= 8
+     &gt; kind of default logical = 4
+     &gt; kind of smallest logical kind = 1
+     &gt; kind of C_BOOL= 1
+<P>
+</PRE>
+In summary generally using KIND=C_BOOL is a good choice as it is
+compatible with the C interface bindings, and is typically the smallest
+at one byte per value; but this requires verification on any given
+platform.
+</BLOCKQUOTE>
+<A name=8>
+
+     <H3>MASKING IN INTRINSICS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Fortran&#146;s logical intrinsic operators are primarily used for evaluating
+and manipulating Boolean (true/false) values and conditions, but in
+addition masks are used in many intrinsics &#46;&#46;&#46;
+<P>
+<PRE>
+      result = all(mask [,dim])
+      result = any(mask [,dim])
+      result = count(mask [,dim] [,kind] )
+      result = findloc (array, value, dim [,mask] [,kind] [,back])
+      result = findloc (array, value [,mask] [,kind] [,back])
+      result = maxloc(array [,mask]) | maxloc(array [,dim] [,mask])
+      result = maxval(array [,mask]) | maxval(array [,dim] [,mask])
+      result = merge(tsource, fsource, mask)
+      result = minloc(array [,mask]) | minloc(array [,dim] [,mask])
+      result = minval(array [,mask])
+      result = minval(array ,dim [,mask])
+      result = pack( array, mask [,vector] )
+      result = parity( mask [,dim] )
+      result = product(array [,dim] [,mask])
+      result = reduce(array, operation [,mask]  [,identity]  [,ordered] )
+      result = sum(array [,dim[,mask]] | [mask] )
+      result = unpack(vector, mask, field)
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=9>
+
+     <H3>USES</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Here are the main uses of Fortran logical intrinsic procedures:
+<P>
+CONDITIONAL EXECUTION: The most common use is in IF statements and DO
+WHILE loops to control which blocks of code are executed based on
+whether a condition is true or false.
+<P>
+<PRE>
+           ! Example using a logical expression directly in an IF statement
+           IF (x &gt; 0 .AND. y &lt; 10) THEN
+               PRINT *, "Condition met"
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ENDIF</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+USAGE IN CONTROL FLOW: Logicals are essential for decision-making
+structures:
+<P>
+<PRE>
+          LOGICAL :: condition
+          INTEGER :: x
+<P>
+          x = 10
+          condition = (x .GT. 5) .AND. (x .LT. 15)
+<P>
+          IF (condition) THEN
+              PRINT *, "x is between 5 and 15"
+          ELSEIF(x &lt; 0)then
+              PRINT *, "x is negative"
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ELSE</H4>
+</A>
+<BLOCKQUOTE>
+PRINT *, "x is outside the range"
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ENDIF</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+program example_random_number
+use, intrinsic :: iso_fortran_env, only : dp=&gt;real64
+implicit none
+<TABLE cellpadding=3><!-- tsb: program example_random_number
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD colspan=2>
+<B>integer</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
+:: i, first, last, rand_int, sumup, passes
+real(kind=kind(0.0d0)) :: rand_val
+! generate a lot of random integers from <B>-10</B> to 100 and add to sum
+! until upper limit is reached, for no reason
+first=<B>-10</B>
+last=100
+sumup=0
+passes=0
+do while (sumup &lt;= 1000000000)
+call random_number(rand_val)
+rand_int=first+floor((last+1-first)*rand_val)
+sumup=sumup+rand_int
+passes=passes+1
+enddo
+write(*,*)&#146;sumup=&#146;,sumup,&#146;passes=&#146;,passes
+end program example_random_number
+</TD></TR>
+<TR></TR></TABLE></BLOCKQUOTE>
+<A name=10>
+
+     <H3>ARRAY MASKING</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Logical arrays can be used as masks to selectively apply operations to
+elements of other arrays. This is particularly efficient for numerical
+computations.
+<P>
+<PRE>
+        integer,parameter       :: isz=10
+        real, dimension(isz)    :: a
+        logical, dimension(isz) :: mask
+<P>
+        mask = (a &gt; 5.0)
+        ! Double elements of &#146;a&#146; where &#146;a&#146; is greater than 5.0
+        a(mask) = a(mask) * 2.0
+<P>
+</PRE>
+A WHERE construct allows for multiple masks to be conditionally used.
+<P>
+<PRE>
+        WHERE(cond1)      
+           &#46;&#46;&#46;
+        ELSEWHERE(cond2)  
+           &#46;&#46;&#46;
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ELSEWHERE</H4>
+</A>
+<BLOCKQUOTE>
+&#46;&#46;&#46;
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END WHERE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+Examples of masked array assignment are:
+<P>
+<PRE>
+       WHERE (TEMP &gt; 100.0) TEMP = TEMP - REDUCE_TEMP
+<P>
+       WHERE (PRESSURE &lt;= 1.0)
+          PRESSURE = PRESSURE + INC_PRESSURE
+          TEMP = TEMP - 5.0
+</PRE>
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; ELSEWHERE</H4>
+</A>
+<BLOCKQUOTE>
+RAINING = .TRUE.
+</BLOCKQUOTE>
+<A name=>
+
+    <H4>&nbsp; &nbsp; END WHERE</H4>
+</A>
+<BLOCKQUOTE>
+<P>
+</BLOCKQUOTE>
+<A name=11>
+
+     <H3>LOGICAL OPERATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Intrinsic operators like .AND., .OR., .NOT., and .EQV. (equivalent) or
+[char46]NEQV. (not equivalent) are used to combine or negate logical
+expressions, creating more complex conditions.
+<P>
+<PRE>
+        LOGICAL :: condition1, condition2, result
+<P>
+        condition1 = (value1 == 10)
+        condition2 = (value2 /= 0)
+        result = condition1 .OR. condition2
+<P>
+</PRE>
+[verify] is very powerful when using expressions as masks for processing
+strings. For example, to determine if strings represent valid Fortran
+symbol names:
+<P>
+<PRE>
+       program fortran_symbol_name
+       implicit none
+       integer :: i
+       ! some strings to inspect for being valid symbol names
+       character(len=*),parameter :: symbols(*)=[character(len=10) :: &
+        &#146;A_ &#146;, &
+        &#146;10 &#146;, &
+        &#146;September &#146;, &
+        &#146;A B&#146;, &
+        &#146;_A &#146;, &
+        &#146; &#146;]
+<P>
+          write(*,&#146;("|",*(g0,"|"))&#146;) symbols
+          write(*,&#146;("|",*(1x,l1,8x,"|"))&#146;) fortran_name(symbols)
+<P>
+       contains
+<P>
+       elemental function fortran_name(line) result (lout)
+       ! determine if a string is a valid Fortran name
+       ! ignoring trailing spaces (but not leading spaces)
+       character(len=*),parameter   :: int=&#146;0123456789&#146;
+       character(len=*),parameter   :: lower=&#146;abcdefghijklmnopqrstuvwxyz&#146;
+       character(len=*),parameter   :: upper=&#146;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#146;
+       character(len=*),parameter   :: allowed=upper//lower//int//&#146;_&#146;
+       character(len=*),intent(in)  :: line
+       character(len=:),allocatable :: name
+       logical                      :: lout
+          name=trim(line)
+          if(len(name).ne.0)then
+             ! first character is alphameric
+             lout = verify(name(1:1), lower//upper) == 0  &
+              ! verify other characters allowed in a symbol name
+              & .and. verify(name,allowed) == 0           &
+              ! check conforms to allowable length
+              & .and. len(name) &lt;= 63
+          else
+             lout = .false.
+          endif
+       end function fortran_name
+<P>
+       end program fortran_symbol_name
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+     &gt; |A_        |10        |September |A B       |_A        |          |
+     &gt; | T        | F        | T        | F        | F        | F        |
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=12>
+
+     <H3>ARRAY REDUCTION FUNCTIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Intrinsic functions like ALL() and ANY() are used to check if all or any
+elements in a logical array satisfy a condition, often used in
+conjunction with array masking.
+<P>
+<PRE>
+        logical,parameter :: t=.true., f=.false.
+        logical, dimension(5) :: status = [ t, f, t, t, t ]
+<P>
+        if (all(status)) then
+           print *, "All statuses are true"
+        endif
+<P>
+        if (any(status)) then
+           print *, "At least one status is true"
+        endif
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=13>
+
+     <H3>BITWISE LOGICAL OPERATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+For handling individual bits within integer variables, Fortran offers
+intrinsic functions like IAND (bitwise AND), IOR (bitwise OR), IEOR
+(bitwise exclusive OR), and NOT (bitwise NOT). These are crucial in
+low-level programming and certain numerical algorithms.
+<P>
+<PRE>
+        integer :: a, b, c
+<P>
+        a = int(z&#146;0101&#146;)
+        b = int(z&#146;0011&#146;)
+        c = IAND(a, b) ! c will be 1 (0001)
+        write(*,&#146;*(g0,z0,1x)&#146;),&#146;a=&#146;,a,&#146;b=&#146;,b,&#146;c=&#146;,c
+<P>
+</PRE>
+but these return integer, not logical values and are mentioned only for
+reference.
+</BLOCKQUOTE>
+<A name=14>
+
+     <H3>CONDITIONAL EXPRESSIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+A conditional expression is related to logicals in that it is used to
+selectively evaluate a chosen subexpression.
+<P>
+<PRE>
+    scalar-logical-expr ? expr [ : scalar-logical-expr ? expr ]&#46;&#46;&#46; : expr )
+<P>
+</PRE>
+Each expr of a conditional-expr shall have the same declared type, kind
+type parameters, and rank.
+<P>
+Examples of a conditional expression are:
+<P>
+<PRE>
+       ( ABS(RESIDUAL)&lt;=TOLERANCE ? "ok" : "did not converge" )
+       ( I&gt;0 .AND. I&lt;=SIZE(A) ? A (I) : PRESENT(VAL) ? VAL : 0.0 )
+<P>
+</PRE>
+Conditional expressions are required to short-circuit (execute only the
+selected expression and not the other candidate) unlike the remainder of
+Fortran where short-circuiting behavior is typically left up to the
+processor.
+<P>
+That is, elsewhere in Fortran it is not necessary for a processor to
+evaluate all of the operands of an expression, or to evaluate entirely
+each operand -- but the processor is free to evaluate all of the
+operands. That is, all of the operands may or may not be evaluated.
+<P>
+This principle is most often applicable to logical expressions,
+zero-sized arrays, and zero-length strings, but it applies to all
+expressions.
+<P>
+For example, in evaluating the expression
+<P>
+<PRE>
+         X &gt; Y .OR. L(Z)
+<P>
+</PRE>
+L(Z) may or may not be evaluated assuming "L" is a procedure name when
+the first condition (X &gt; Y) is true.
+</BLOCKQUOTE>
+<A name=15>
+
+     <H3>LOGICALS CANNOT BE USED AS INTEGERS</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Logicals are not allowed in numeric expressions, as in common in several
+other languages. There is no automatic promotion of LOGICAL to INTEGER
+allowed by the standard or vice-versa. That being said, it is a common
+extension to cast .FALSE. to zero(0) and .TRUE. to some none-zero
+number; but what values are used and how many bits are significant in
+the values varies widely between current popular compilers and so the
+extension should be avoided.
+<P>
+Sample program:
+<P>
+<PRE>
+    program logical_integer
+    implicit none
+    character(len=*),parameter            :: all=&#146;(*(g0))&#146;
+    integer                               :: i1, i2
+    ! make T and F abbreviations for .TRUE. and .FALSE.
+    logical,parameter                     :: T=.true., F=.false.
+    logical                               :: l1, l2
+<P>
+      print all, &#146;MERGE() is one method for transposing logical and integer&#146;
+      ! converting a logical to an integer is not done
+      ! with LOGICAL(3) and INT(3) or promotion by assignment;
+      ! but can be done with MERGE(3) with scalars or arrays.
+       i1=merge(1,0,T)
+       i2=merge(1,0,F)
+       write(*,all)&#146;   T--&gt;&#146;,i1,&#146; F--&gt;&#146;,I2
+       l1=merge(T,F,i1.eq.0)
+       l2=merge(T,F,i2.eq.0)
+       write(*,all)&#146;   0--&gt;&#146;,l1,&#146; 1--&gt;&#146;,l2
+    end program logical_integer
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+     &gt; MERGE() is one method for transposing logical and integer
+     &gt;    T--&gt;1 F--&gt;0
+     &gt;    0--&gt;F 1--&gt;T
+<P>
+</PRE>
+</BLOCKQUOTE>
+<A name=16>
+
+     <H3>LOGICAL EDITING</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+The Lw edit descriptor indicates that the field occupies w positions.
+The input field so specified consists of optional blanks, optionally
+followed by a period, followed by a "T" for true or "F" for false. The
+"T" or "F" may be followed by additional characters in the field, which
+are ignored.
+<P>
+So, for example the strings ".TRUE." and ".FALSE." are acceptable input
+forms if "w" is sufficiently sized.
+<P>
+A lower-case letter is equivalent to the corresponding upper-case letter
+in a logical input field.
+<P>
+The output field consists of w-1 blanks followed by a T or F, depending
+on whether the internal value is true or false, respectively.
+<P>
+<PRE>
+    program logical_formatted
+    implicit none
+    character(len=*),parameter    :: all=&#146;(*(g0))&#146;
+    character(len=:),allocatable  :: line
+    logical                       :: array(8), p, q
+      print all, &#146;Logicals print as the right-justified string "T" or "F"&#146;
+      write(*,&#146;("[",l10,"]")&#146;) .TRUE.
+      write(*,&#146;("[",l0,"]")&#146;)  .FALSE.
+      print all, &#146;the first non-blank letter after an optional period&#146;
+      print all, &#146;determines the value on input&#146;
+      print all, repeat(&#146;1234567&#146;,8)
+      line=&#146;.false. .true.  T    F       TrustyFake!!!tr     fffffff&#146;
+      print all, line
+      read(line,&#146;(8(L7))&#146;) array
+      print all, array
+    end program logical_formatted
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+     &gt; Logicals print as the right-justified string "T" or "F"
+     &gt; [         T]
+     &gt; [F]
+     &gt; the first non-blank letter after an optional period
+     &gt; determines the value on input
+     &gt; 12345671234567123456712345671234567123456712345671234567
+     &gt; .false. .true.  T    F       TrustyFake!!!tr     fffffff
+     &gt; FTTFTFTF
+<P>
+</PRE>
+The G edit descriptor also may be used to edit logical data.
+</BLOCKQUOTE>
+<A name=17>
+
+     <H3>SEE ALSO</H3>
+
+</A>
+<BLOCKQUOTE>
+<P>
+Bit-level procedures
+<TABLE cellpadding=3><!-- tsb: Bit-level procedures
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+ieor(3), ior(3), ishftc(3), ishft(3), iand(3).
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+result = iall(array [,mask]) | iall(array ,dim [,mask])
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+result = iany(array [,mask]) | iany(array ,dim [,mask])
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+result = iparity( array [,mask] ) | iparity( array, dim [,mask] )
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+result = maskl( i [,kind] )
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+result = maskr( i [,kind] )
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+result = merge_bits(i, j, mask) ! Merge bits using a mask
+</TD></TR>
+<TR></TR></TABLE>Other
+<TABLE cellpadding=3><!-- tsb: Other
+ -->
+<TR></TR><TR></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+VERIFY(3) is very powerful when using expressions as masks for
+processing strings
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+[[iso_fortran_env]] module
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+iso_c_binding module
+</TD></TR>
+<TR valign=top><TD width=3%>
+o
+</TD><TD>
+TRANSFER(3) - Transfer bit patterns
+</TD></TR>
+<TR></TR></TABLE>Fortran Tutorials(license: MIT) @urbanjost
+</BLOCKQUOTE>
+<P><HR>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>logicals (5)</TD> <TD align=right width=33%><I>August 24, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from de236f56-3d04-4ac9-87f2-11cdf69647a0 using man macros.</FONT>
+<br><br><center><img src="images/logicals.5fortran.gif"></center>
+</div>
+</div>
+</body>
+</HTML>

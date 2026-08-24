@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 ! generic_list.f90 -- A Generic Linked List Implementation in Fortran 95
 !
 ! Copyright (C) 2009, 2012 Jason R. Blevins

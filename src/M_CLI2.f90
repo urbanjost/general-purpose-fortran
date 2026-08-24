@@ -1807,12 +1807,12 @@ character(len=:),allocatable          :: kludge(:)
       iilen=len_trim(val_local)
       call locate_key(long,place)                  ! find where string is or should be
       if(place < 1)then                                ! if string was not found insert it
-         call insert_(keywords,long,iabs(place))
-         call insert_(values,val_local,iabs(place))
-         call insert_(counts,iilen,iabs(place))
-         call insert_(shorts,short,iabs(place))
-         call insert_(present_in,.true.,iabs(place))
-         call insert_(mandatory,set_mandatory,iabs(place))
+         call insert_(keywords,long,abs(place))
+         call insert_(values,val_local,abs(place))
+         call insert_(counts,iilen,abs(place))
+         call insert_(shorts,short,abs(place))
+         call insert_(present_in,.true.,abs(place))
+         call insert_(mandatory,set_mandatory,abs(place))
       else
          if(present_in(place))then                      ! if multiple keywords append values with space between them
             if(G_append)then
@@ -5026,7 +5026,7 @@ integer                                 :: error
 
       if(imin > imax)then
          place=-imin
-         if(iabs(place) > arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
+         if(abs(place) > arraysize)then ! ran off end of list. Where new value should go or an unsorted input array'
             exit LOOP
          endif
          exit LOOP

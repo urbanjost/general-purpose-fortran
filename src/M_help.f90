@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 module M_help
 use,intrinsic :: iso_fortran_env, only : stderr=>error_unit, stdin=>input_unit, stdout=>output_unit
 use M_journal, only : journal

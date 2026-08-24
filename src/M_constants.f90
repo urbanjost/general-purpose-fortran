@@ -213,9 +213,10 @@ type(glyphs),public,parameter        :: lets=glyphs( )
 character(len=*),parameter           :: month_names(12)=[                         &
    &'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', &
    &'July     ', 'August   ', 'September', 'October  ', 'November ', 'December ']
+
 character(len=*),parameter           :: weekday_names(7)=[character(len=9) :: &
    & 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ]
-character(len=3),parameter           :: weekday_names_abbr(7)=weekday_names(:)(1:3)
+
 type calendar
    character(len=len(month_names))   :: months(size(month_names))=month_names
    character(len=3)                  :: mths(size(month_names))=month_names(:)(1:3)

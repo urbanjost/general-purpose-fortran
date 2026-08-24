@@ -248,7 +248,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)COPYRIGHT:      Copyright (C) 2009 John S. Urban>',&
 '@(#)LICENSE:        This is free software: you are free to change and redistribute it.>',&
 '@(#)                There is NO WARRANTY, to the extent permitted by law.>',&
-'@(#)COMPILED:       2026-08-19 15:12:03 UTC-240>',&
+'@(#)COMPILED:       2026-08-24 00:04:30 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

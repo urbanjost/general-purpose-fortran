@@ -42,17 +42,17 @@
          ! find where string is or should be
          call locate(keywords,key,place)
          ! if string was not found insert it
-         if(place.lt.1)then
-            call insert(keywords,key,iabs(place))
-            call insert(values,val,iabs(place))
-            call insert(counts,ilen,iabs(place))
+         if(place < 1)then
+            call insert(keywords,key,abs(place))
+            call insert(values,val,abs(place))
+            call insert(counts,ilen,abs(place))
          else
             call replace(values,val,place)
             call replace(counts,ilen,place)
          endif
       else
          call locate(keywords,key,place)
-         if(place.gt.0)then
+         if(place > 0)then
             call remove(keywords,place)
             call remove(values,place)
             call remove(counts,place)
@@ -65,7 +65,7 @@
       integer                       :: place
          ! find where string is or should be
          call locate(keywords,key,place)
-         if(place.lt.1)then
+         if(place < 1)then
             valout=''
          else
             valout=values(place)(:counts(place))

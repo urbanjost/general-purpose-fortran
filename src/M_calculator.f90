@@ -357,11 +357,11 @@ integer                                :: nchard
                   return
                endif
                if(indx.le.0)then                          ! if the variable needs added, add it
-                  istart=iabs(indx)
+                  istart=abs(indx)
                   call insert(keyr_q,varnam(:nchar2),istart)
                   call insert(values_d,0.0d0,istart)
                endif
-               call a_to_d_(last(1:nchard),values_d(iabs(indx)),ierr)  ! store a defined variable's value
+               call a_to_d_(last(1:nchard),values_d(abs(indx)),ierr)  ! store a defined variable's value
             elseif(nchar2.ne.0)then                       ! numeric value to string
                line(:)=' '
                line=varnam(:nchar2)//'="'//last(1:nchard)//'"'
@@ -379,7 +379,7 @@ integer                                :: nchard
                   mssg=mssge                              ! place internal message from GLOBAL into message returned to user
                   return
                endif
-               iplace=iabs(indx)
+               iplace=abs(indx)
                if(indx.le.0)then                             ! if the variable needs added, add it
                   call insert(keys_q,varnam(:nchar2),iplace) ! adding the new variable name to the variable name array
                   call insert(values,' '            ,iplace)
@@ -2822,7 +2822,7 @@ integer                                 :: kstrln
 !                                                    store the token name and value in the string variable arrays
       call locate(keys_q,toknam,indx,ier)         ! determine storage placement of the variable and whether it is new
       if(ier.eq.-1)return
-      iplace=iabs(indx)
+      iplace=abs(indx)
       if(indx.le.0)then                           ! check if the token name needs added or is already defined
          call insert(keys_q,toknam, iplace)   ! adding the new variable name to the variable name array
          call insert(values,' '   , iplace)
@@ -3177,7 +3177,7 @@ integer                               :: istart
 !-----------------------------------------------------------------------------------------------------------------------------------
    ierr=0
    call locate(keyr_q,varnam_local,index,ierr)
-   istart=iabs(index)
+   istart=abs(index)
    if(index.le.0)then   ! add entry to dictionary
       call insert(keyr_q,varnam_local,istart)
       call insert(values_d,0.0d0,istart)
@@ -3265,7 +3265,7 @@ integer                               :: ierr
 !-----------------------------------------------------------------------------------------------------------------------------------
    call locate(keys_q,varnam_local,indx,ierr)
    if(indx.le.0)then                                        ! variable name not in dictionary
-      indx=iabs(indx)
+      indx=abs(indx)
       call insert(keys_q,varnam_local,indx)                 ! adding the new variable name to the variable name array
       call insert(values,' '         ,indx)
       call insert(values_len,0       ,indx)

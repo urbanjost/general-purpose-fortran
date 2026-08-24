@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_framework__verify(3f) - [M_framework__verify::INTRO] unit test framework
@@ -316,8 +305,11 @@ end type prefix
 !   CHECK_END    =  'check_end:   '  &
 !&)
 
+!==========================
+! compiler bug
 !type(prefix),save :: CHECK_PREFIX=prefix( null(),null(),null(),null(),null())
 type(prefix),save :: CHECK_PREFIX
+!==========================
 
 public :: CHECK_PREFIX
 
@@ -1213,22 +1205,22 @@ end subroutine preset_globals
 subroutine cmdline_()
 ! define arguments and their default values
 ! use naming convention of global variables to make parsing easier
-logical             :: G_help
-integer,allocatable :: G_flags(:)
-integer             :: G_level
-integer,allocatable :: G_luns_hold(:)
+logical             :: L_help
+integer,allocatable :: L_flags(:)
+integer             :: L_level
+integer,allocatable :: L_luns_hold(:)
 
 ! NOTE: assume all names in namelist start with G_ or unit_test
 namelist /args/ G_match
-namelist /args/ G_level
+namelist /args/ L_level
 namelist /args/ G_debug                   ! debug mode
-namelist /args/ G_flags                   ! values that can be used to select different tests or any conditional integer test
+namelist /args/ L_flags                   ! values that can be used to select different tests or any conditional integer test
 namelist /args/ G_keep_going              ! logical variable that can be used to turn off program termination on errors.
 namelist /args/ G_command                 ! name of command to execute. Defaults to " ".
 namelist /args/ G_brief
 namelist /args/ G_luns
 namelist /args/ G_interactive
-namelist /args/ G_help
+namelist /args/ L_help
 namelist /args/ G_verbose
 namelist /args/ G_silent
 
@@ -1240,7 +1232,7 @@ character(len=4096), save :: input(3) = [character(len=4096) :: '&args', '', ' /
 character(len=256) :: message1, message2
 integer :: i, j, k, iostat, equal_pos, iend
 
-   G_help = .false.
+   L_help = .false.
 
    if (G_virgin%preset_globals) then
       call preset_globals()
@@ -1249,10 +1241,10 @@ integer :: i, j, k, iostat, equal_pos, iend
    if (G_virgin%cmdline) then
       G_virgin%cmdline = .false.
       ! read arguments from command line
-      G_level=-1
-      G_luns_hold=G_luns
+      L_level=-1
+      L_luns_hold=G_luns
       G_luns = [ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-      G_flags = [(-1, i=1, 1000)]
+      L_flags = [(-1, i=1, 1000)]
       do i = 1, command_argument_count()
          call get_command_argument(i, arg)
          do j = 1, len_trim(arg) ! blank out leading - or / so "--name=value" or "/name=value" works
@@ -1283,7 +1275,7 @@ integer :: i, j, k, iostat, equal_pos, iend
                G_luns=[integer ::]
             else
                G_luns = pack(G_luns, G_luns  /=  -1)     ! if G_luns is all negative at this point set it to [stderr]
-               if (size(G_luns)  ==  0) G_luns = G_luns_hold
+               if (size(G_luns)  ==  0) G_luns = L_luns_hold
             endif
             if (equal_pos  /=  0) then
                ! requote and try again
@@ -1297,7 +1289,7 @@ integer :: i, j, k, iostat, equal_pos, iend
                   call wrt(G_luns, 'ERROR QUOTED  :'//trim(message2)//': when reading '//trim(input(2)))
                   G_command=trim(G_command)
                   G_match=trim(G_match)
-                  if(G_level == -1) G_level=unit_test_level
+                  if(L_level == -1) L_level=unit_test_level
                   do k = 1, size(G_luns)
                      write (G_luns(k), nml=args, delim='quote')
                   enddo
@@ -1307,7 +1299,7 @@ integer :: i, j, k, iostat, equal_pos, iend
                call wrt(G_luns, 'ERROR:'//trim(message1)//': when reading '//trim(input(2)))
                G_command=trim(G_command)
                G_match=trim(G_match)
-               if(G_level == -1) G_level=unit_test_level
+               if(L_level == -1) L_level=unit_test_level
                do k = 1, size(G_luns)
                   write (G_luns(k), nml=args, delim='quote')
                enddo
@@ -1320,15 +1312,15 @@ integer :: i, j, k, iostat, equal_pos, iend
          G_luns=[integer ::]
       else
          G_luns = pack(G_luns, G_luns  /=  -1)     ! if G_luns is all negative at this point set it to [stderr]
-         if (size(G_luns)  ==  0) G_luns = G_luns_hold
+         if (size(G_luns)  ==  0) G_luns = L_luns_hold
       endif
       G_command = trim(G_command)
       G_match=trim(G_match)
-      G_flags = pack(G_flags, G_flags  >=  0)
-      if(G_verbose) G_flags=[G_flags,9997,9998,9999] ! turn on these flags if verbose mode
+      L_flags = pack(L_flags, L_flags  >=  0)
+      if(G_verbose) L_flags=[L_flags,9997,9998,9999] ! turn on these flags if verbose mode
       if(G_silent) G_luns=[999] ! turn on these flags if verbose mode
-      if (size(G_flags)  /=  0) unit_test_flags = G_flags
-      if(G_level /= -1) unit_test_level = G_level
+      if (size(L_flags)  /=  0) unit_test_flags = L_flags
+      if(L_level /= -1) unit_test_level = L_level
 
       ! some pre-defined level numbers
       if (any(unit_test_flags  ==  9997)) then
@@ -1348,7 +1340,7 @@ integer :: i, j, k, iostat, equal_pos, iend
       endif
    endif
 
-   if (G_help) then
+   if (L_help) then
       write (*, '(g0)') [character(len=80) :: &
       'NAME                                                                            ', &
       '    unit_tests(1f) -- unit test command line options                            ', &
@@ -1401,7 +1393,7 @@ integer :: i, j, k, iostat, equal_pos, iend
       '     --runner ''gdb -ex "list, 0" -ex run --quiet --args'' \                    ', &
       '     -- flags=9997,9998,9999 luns=6 level=3                                     ', &
       ' ']
-      G_help=.false.
+      L_help=.false.
       stop
    endif
 

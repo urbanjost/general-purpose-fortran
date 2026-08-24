@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!     M_framework__journal(3fm) - [M_framework__journal::INTRO] write

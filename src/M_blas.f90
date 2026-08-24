@@ -9965,7 +9965,7 @@ pure double precision function dasum(n,dx,incx)
       integer i,m,mp1,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dabs,mod
+      intrinsic abs,mod
 !     ..
       dasum = 0.0d0
       dtemp = 0.0d0
@@ -9979,7 +9979,7 @@ pure double precision function dasum(n,dx,incx)
          m = mod(n,6)
          if (m.ne.0) then
             do i = 1,m
-               dtemp = dtemp + dabs(dx(i))
+               dtemp = dtemp + abs(dx(i))
             enddo
             if (n.lt.6) then
                dasum = dtemp
@@ -9988,7 +9988,7 @@ pure double precision function dasum(n,dx,incx)
          endif
          mp1 = m + 1
          do i = mp1,n,6
-            dtemp = dtemp + dabs(dx(i)) + dabs(dx(i+1)) + dabs(dx(i+2)) + dabs(dx(i+3)) + dabs(dx(i+4)) + dabs(dx(i+5))
+            dtemp = dtemp + abs(dx(i)) + abs(dx(i+1)) + abs(dx(i+2)) + abs(dx(i+3)) + abs(dx(i+4)) + abs(dx(i+5))
          enddo
       else
 !
@@ -9996,7 +9996,7 @@ pure double precision function dasum(n,dx,incx)
 !
          nincx = n*incx
          do i = 1,nincx,incx
-            dtemp = dtemp + dabs(dx(i))
+            dtemp = dtemp + abs(dx(i))
          enddo
       endif
       dasum = dtemp
@@ -10185,7 +10185,8 @@ implicit none
       complex(kind=real64),intent(in) ::  z
 !     ..
 !  =====================================================================
-!
+      integer,parameter :: dp=kind(0.0d0)
+
 !     .. Intrinsic Functions ..
       intrinsic abs,dble,dimag
 !
@@ -12309,7 +12310,7 @@ end subroutine
       double precision dflag,dh11,dh12,dh21,dh22,dp1,dp2,dq1,dq2,dtemp, du
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dabs
+      intrinsic abs
 !     ..
 !     .. Data statements ..
 !
@@ -12346,7 +12347,7 @@ end subroutine
          dq2 = dp2*dy1
          dq1 = dp1*dx1
 !
-         if (dabs(dq1).gt.dabs(dq2)) then
+         if (abs(dq1).gt.abs(dq2)) then
             dh21 = -dy1/dx1
             dh12 = dp2/dp1
 !
@@ -12423,7 +12424,7 @@ end subroutine
          endif
 
          if (dd2.ne.zero) then
-            do while ( (dabs(dd2).le.rgamsq) .or. (dabs(dd2).ge.gamsq) )
+            do while ( (abs(dd2).le.rgamsq) .or. (abs(dd2).ge.gamsq) )
                if (dflag.eq.zero) then
                   dh11 = one
                   dh22 = one
@@ -12433,7 +12434,7 @@ end subroutine
                   dh12 = one
                   dflag = -one
                endif
-               if (dabs(dd2).le.rgamsq) then
+               if (abs(dd2).le.rgamsq) then
                   dd2 = dd2*gam**2
                   dh21 = dh21/gam
                   dh22 = dh22/gam
@@ -13007,6 +13008,8 @@ implicit none
 !  Kincaid, D. R., (U. of Texas), Krogh, F. T., (JPL)
 
 !  =====================================================================
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !     .. Local Scalars ..
       integer i,kx,ky,ns
@@ -18995,7 +18998,7 @@ pure integer function idamax(n,dx,incx)
       integer i,ix
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dabs
+      intrinsic abs
 !     ..
       idamax = 0
       if (n.lt.1 .or. incx.le.0) return
@@ -19005,11 +19008,11 @@ pure integer function idamax(n,dx,incx)
 !
 !        code for increment equal to 1
 !
-         dmax = dabs(dx(1))
+         dmax = abs(dx(1))
          do i = 2,n
-            if (dabs(dx(i)).gt.dmax) then
+            if (abs(dx(i)).gt.dmax) then
                idamax = i
-               dmax = dabs(dx(i))
+               dmax = abs(dx(i))
             endif
          enddo
       else
@@ -19017,12 +19020,12 @@ pure integer function idamax(n,dx,incx)
 !        code for increment not equal to 1
 !
          ix = 1
-         dmax = dabs(dx(1))
+         dmax = abs(dx(1))
          ix = ix + incx
          do i = 2,n
-            if (dabs(dx(ix)).gt.dmax) then
+            if (abs(dx(ix)).gt.dmax) then
                idamax = i
-               dmax = dabs(dx(ix))
+               dmax = abs(dx(ix))
             endif
             ix = ix + incx
          enddo
@@ -20241,6 +20244,7 @@ end function sdot
 !  =====================================================================
 pure real function sdsdot(n,sb,sx,incx,sy,incy)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
 !
 !  -- Reference BLAS level1 routine (version 3.8.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -28632,7 +28636,7 @@ pure complex(kind=real64) function zdotc(n,zx,incx,zy,incy)
       integer i,ix,iy
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg
+      intrinsic conjg
 !     ..
       ztemp = (0.0d0,0.0d0)
       zdotc = (0.0d0,0.0d0)
@@ -28642,7 +28646,7 @@ pure complex(kind=real64) function zdotc(n,zx,incx,zy,incy)
 !        code for both increments equal to 1
 !
          do i = 1,n
-            ztemp = ztemp + dconjg(zx(i))*zy(i)
+            ztemp = ztemp + conjg(zx(i))*zy(i)
          enddo
       else
 !
@@ -28654,7 +28658,7 @@ pure complex(kind=real64) function zdotc(n,zx,incx,zy,incy)
          if (incx.lt.0) ix = (-n+1)*incx + 1
          if (incy.lt.0) iy = (-n+1)*incy + 1
          do i = 1,n
-            ztemp = ztemp + dconjg(zx(ix))*zy(iy)
+            ztemp = ztemp + conjg(zx(ix))*zy(iy)
             ix = ix + incx
             iy = iy + incy
          enddo
@@ -28990,7 +28994,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
       integer i,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dcmplx
+      intrinsic cmplx
 !     ..
       if (n.le.0 .or. incx.le.0) return
       if (incx.eq.1) then
@@ -28998,7 +29002,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !        code for increment equal to 1
 !
          do i = 1,n
-            zx(i) = dcmplx(da,0.0d0)*zx(i)
+            zx(i) = cmplx(da,0.0d0)*zx(i)
          enddo
       else
 !
@@ -29006,7 +29010,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !
          nincx = n*incx
          do i = 1,nincx,incx
-            zx(i) = dcmplx(da,0.0d0)*zx(i)
+            zx(i) = cmplx(da,0.0d0)*zx(i)
          enddo
       endif
 
@@ -29211,7 +29215,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max,min
+      intrinsic conjg,max,min
 !     ..
 !
 !     Test the input parameters.
@@ -29337,7 +29341,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
                       enddo
                   else
                       do i = max(1,j-ku),min(m,j+kl)
-                          temp = temp + dconjg(a(k+i,j))*x(i)
+                          temp = temp + conjg(a(k+i,j))*x(i)
                       enddo
                   endif
                   y(jy) = y(jy) + alpha*temp
@@ -29355,7 +29359,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
                       enddo
                   else
                       do i = max(1,j-ku),min(m,j+kl)
-                          temp = temp + dconjg(a(k+i,j))*x(ix)
+                          temp = temp + conjg(a(k+i,j))*x(ix)
                           ix = ix + incx
                       enddo
                   endif
@@ -29556,7 +29560,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max
+      intrinsic conjg,max
 !     ..
 !     .. Local Scalars ..
       complex(kind=real64) :: temp
@@ -29660,7 +29664,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
                   do i = 1,m
                       temp = zero
                       do l = 1,k
-                          temp = temp + dconjg(a(l,i))*b(l,j)
+                          temp = temp + conjg(a(l,i))*b(l,j)
                       enddo
                       if (beta.eq.zero) then
                           c(i,j) = alpha*temp
@@ -29699,7 +29703,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
                       c(1:m,j) = beta*c(1:m,j)
                   endif
                   do l = 1,k
-                      temp = alpha*dconjg(b(j,l))
+                      temp = alpha*conjg(b(j,l))
                       do i = 1,m
                           c(i,j) = c(i,j) + temp*a(i,l)
                       enddo
@@ -29730,7 +29734,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
                   do i = 1,m
                       temp = zero
                       do l = 1,k
-                          temp = temp + dconjg(a(l,i))*dconjg(b(j,l))
+                          temp = temp + conjg(a(l,i))*conjg(b(j,l))
                       enddo
                       if (beta.eq.zero) then
                           c(i,j) = alpha*temp
@@ -29747,7 +29751,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
                   do i = 1,m
                       temp = zero
                       do l = 1,k
-                          temp = temp + dconjg(a(l,i))*b(j,l)
+                          temp = temp + conjg(a(l,i))*b(j,l)
                       enddo
                       if (beta.eq.zero) then
                           c(i,j) = alpha*temp
@@ -29766,7 +29770,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
                   do i = 1,m
                       temp = zero
                       do l = 1,k
-                          temp = temp + a(l,i)*dconjg(b(j,l))
+                          temp = temp + a(l,i)*conjg(b(j,l))
                       enddo
                       if (beta.eq.zero) then
                           c(i,j) = alpha*temp
@@ -29969,7 +29973,7 @@ implicit none
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max
+      intrinsic conjg,max
 !     ..
 !
 !     Test the input parameters.
@@ -30090,7 +30094,7 @@ implicit none
                       enddo
                   else
                       do i = 1,m
-                          temp = temp + dconjg(a(i,j))*x(i)
+                          temp = temp + conjg(a(i,j))*x(i)
                       enddo
                   endif
                   y(jy) = y(jy) + alpha*temp
@@ -30107,7 +30111,7 @@ implicit none
                       enddo
                   else
                       do i = 1,m
-                          temp = temp + dconjg(a(i,j))*x(ix)
+                          temp = temp + conjg(a(i,j))*x(ix)
                           ix = ix + incx
                       enddo
                   endif
@@ -30257,7 +30261,7 @@ end subroutine zgemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max
+      intrinsic conjg,max
 !     ..
 !
 !     Test the input parameters.
@@ -30294,7 +30298,7 @@ end subroutine zgemv
       if (incx.eq.1) then
           do j = 1,n
               if (y(jy).ne.zero) then
-                  temp = alpha*dconjg(y(jy))
+                  temp = alpha*conjg(y(jy))
                   a(1:m,j) = a(1:m,j) + x(1:m)*temp
               endif
               jy = jy + incy
@@ -30307,7 +30311,7 @@ end subroutine zgemv
           endif
           do j = 1,n
               if (y(jy).ne.zero) then
-                  temp = alpha*dconjg(y(jy))
+                  temp = alpha*conjg(y(jy))
                   ix = kx
                   do i = 1,m
                       a(i,j) = a(i,j) + x(ix)*temp
@@ -30667,6 +30671,8 @@ end subroutine zgemv
 !  =====================================================================
        subroutine zhbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -30703,7 +30709,7 @@ end subroutine zgemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg,max,min
+      intrinsic dble,conjg,max,min
 !     ..
 !
 !     Test the input parameters.
@@ -30784,7 +30790,7 @@ end subroutine zgemv
                   l = kplus1 - j
                   do i = max(1,j-k),j - 1
                       y(i) = y(i) + temp1*a(l+i,j)
-                      temp2 = temp2 + dconjg(a(l+i,j))*x(i)
+                      temp2 = temp2 + conjg(a(l+i,j))*x(i)
                   enddo
                   y(j) = y(j) + temp1*dble(a(kplus1,j)) + alpha*temp2
               enddo
@@ -30799,7 +30805,7 @@ end subroutine zgemv
                   l = kplus1 - j
                   do i = max(1,j-k),j - 1
                       y(iy) = y(iy) + temp1*a(l+i,j)
-                      temp2 = temp2 + dconjg(a(l+i,j))*x(ix)
+                      temp2 = temp2 + conjg(a(l+i,j))*x(ix)
                       ix = ix + incx
                       iy = iy + incy
                   enddo
@@ -30824,7 +30830,7 @@ end subroutine zgemv
                   l = 1 - j
                   do i = j + 1,min(n,j+k)
                       y(i) = y(i) + temp1*a(l+i,j)
-                      temp2 = temp2 + dconjg(a(l+i,j))*x(i)
+                      temp2 = temp2 + conjg(a(l+i,j))*x(i)
                   enddo
                   y(j) = y(j) + alpha*temp2
               enddo
@@ -30842,7 +30848,7 @@ end subroutine zgemv
                       ix = ix + incx
                       iy = iy + incy
                       y(iy) = y(iy) + temp1*a(l+i,j)
-                      temp2 = temp2 + dconjg(a(l+i,j))*x(ix)
+                      temp2 = temp2 + conjg(a(l+i,j))*x(ix)
                   enddo
                   y(jy) = y(jy) + alpha*temp2
                   jx = jx + incx
@@ -31020,6 +31026,8 @@ end subroutine zgemv
 !  =====================================================================
        subroutine zhemm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -31046,7 +31054,7 @@ end subroutine zgemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg,max
+      intrinsic dble,conjg,max
 !     ..
 !     .. Local Scalars ..
       complex(kind=real64) :: temp1,temp2
@@ -31120,7 +31128,7 @@ end subroutine zgemv
                       temp2 = zero
                       do k = 1,i - 1
                           c(k,j) = c(k,j) + temp1*a(k,i)
-                          temp2 = temp2 + b(k,j)*dconjg(a(k,i))
+                          temp2 = temp2 + b(k,j)*conjg(a(k,i))
                       enddo
                       if (beta.eq.zero) then
                           c(i,j) = temp1*dble(a(i,i)) + alpha*temp2
@@ -31136,7 +31144,7 @@ end subroutine zgemv
                       temp2 = zero
                       do k = i + 1,m
                           c(k,j) = c(k,j) + temp1*a(k,i)
-                          temp2 = temp2 + b(k,j)*dconjg(a(k,i))
+                          temp2 = temp2 + b(k,j)*conjg(a(k,i))
                       enddo
                       if (beta.eq.zero) then
                           c(i,j) = temp1*dble(a(i,i)) + alpha*temp2
@@ -31161,13 +31169,13 @@ end subroutine zgemv
                   if (upper) then
                       temp1 = alpha*a(k,j)
                   else
-                      temp1 = alpha*dconjg(a(j,k))
+                      temp1 = alpha*conjg(a(j,k))
                   endif
                   c(1:m,j) = c(1:m,j) + temp1*b(1:m,k)
               enddo
               do k = j + 1,n
                   if (upper) then
-                      temp1 = alpha*dconjg(a(j,k))
+                      temp1 = alpha*conjg(a(j,k))
                   else
                       temp1 = alpha*a(k,j)
                   endif
@@ -31310,6 +31318,8 @@ end subroutine zgemv
 !  =====================================================================
 subroutine zhemv(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
 implicit none
+integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -31346,7 +31356,7 @@ implicit none
 !      external xerbla
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg,max
+      intrinsic dble,conjg,max
 !     ..
 !
 !     Test the input parameters.
@@ -31424,7 +31434,7 @@ implicit none
                   temp2 = zero
                   do i = 1,j - 1
                       y(i) = y(i) + temp1*a(i,j)
-                      temp2 = temp2 + dconjg(a(i,j))*x(i)
+                      temp2 = temp2 + conjg(a(i,j))*x(i)
                   enddo
                   y(j) = y(j) + temp1*dble(a(j,j)) + alpha*temp2
               enddo
@@ -31438,7 +31448,7 @@ implicit none
                   iy = ky
                   do i = 1,j - 1
                       y(iy) = y(iy) + temp1*a(i,j)
-                      temp2 = temp2 + dconjg(a(i,j))*x(ix)
+                      temp2 = temp2 + conjg(a(i,j))*x(ix)
                       ix = ix + incx
                       iy = iy + incy
                   enddo
@@ -31458,7 +31468,7 @@ implicit none
                   y(j) = y(j) + temp1*dble(a(j,j))
                   do i = j + 1,n
                       y(i) = y(i) + temp1*a(i,j)
-                      temp2 = temp2 + dconjg(a(i,j))*x(i)
+                      temp2 = temp2 + conjg(a(i,j))*x(i)
                   enddo
                   y(j) = y(j) + alpha*temp2
               enddo
@@ -31475,7 +31485,7 @@ implicit none
                       ix = ix + incx
                       iy = iy + incy
                       y(iy) = y(iy) + temp1*a(i,j)
-                      temp2 = temp2 + dconjg(a(i,j))*x(ix)
+                      temp2 = temp2 + conjg(a(i,j))*x(ix)
                   enddo
                   y(jy) = y(jy) + alpha*temp2
                   jx = jx + incx
@@ -31615,6 +31625,8 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zher2(uplo,n,alpha,x,incx,y,incy,a,lda)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -31649,7 +31661,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg,max
+      intrinsic dble,conjg,max
 !     ..
 !
 !     Test the input parameters.
@@ -31704,8 +31716,8 @@ end subroutine zhemv
           if ((incx.eq.1) .and. (incy.eq.1)) then
               do j = 1,n
                   if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
-                      temp1 = alpha*dconjg(y(j))
-                      temp2 = dconjg(alpha*x(j))
+                      temp1 = alpha*conjg(y(j))
+                      temp2 = conjg(alpha*x(j))
                       a(1:j-1,j) = a(1:j-1,j) + x(1:j-1)*temp1 + y(1:j-1)*temp2
                       a(j,j) = dble(a(j,j)) + dble(x(j)*temp1+y(j)*temp2)
                   else
@@ -31715,8 +31727,8 @@ end subroutine zhemv
           else
               do j = 1,n
                   if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
-                      temp1 = alpha*dconjg(y(jy))
-                      temp2 = dconjg(alpha*x(jx))
+                      temp1 = alpha*conjg(y(jy))
+                      temp2 = conjg(alpha*x(jx))
                       ix = kx
                       iy = ky
                       do i = 1,j - 1
@@ -31739,8 +31751,8 @@ end subroutine zhemv
           if ((incx.eq.1) .and. (incy.eq.1)) then
               do j = 1,n
                   if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
-                      temp1 = alpha*dconjg(y(j))
-                      temp2 = dconjg(alpha*x(j))
+                      temp1 = alpha*conjg(y(j))
+                      temp2 = conjg(alpha*x(j))
                       a(j,j) = dble(a(j,j)) + dble(x(j)*temp1+y(j)*temp2)
                       do i = j + 1,n
                           a(i,j) = a(i,j) + x(i)*temp1 + y(i)*temp2
@@ -31752,8 +31764,8 @@ end subroutine zhemv
           else
               do j = 1,n
                   if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
-                      temp1 = alpha*dconjg(y(jy))
-                      temp2 = dconjg(alpha*x(jx))
+                      temp1 = alpha*conjg(y(jy))
+                      temp2 = conjg(alpha*x(jx))
                       a(j,j) = dble(a(j,j)) + dble(x(jx)*temp1+y(jy)*temp2)
                       ix = jx
                       iy = jy
@@ -31947,6 +31959,8 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zher2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -31974,7 +31988,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg,max
+      intrinsic dble,conjg,max
 !     ..
 !     .. Local Scalars ..
       complex(kind=real64) :: temp1,temp2
@@ -32070,8 +32084,8 @@ end subroutine zhemv
                   endif
                   do l = 1,k
                       if ((a(j,l).ne.zero) .or. (b(j,l).ne.zero)) then
-                          temp1 = alpha*dconjg(b(j,l))
-                          temp2 = dconjg(alpha*a(j,l))
+                          temp1 = alpha*conjg(b(j,l))
+                          temp2 = conjg(alpha*a(j,l))
                           do i = 1,j - 1
                               c(i,j) = c(i,j) + a(i,l)*temp1 + b(i,l)*temp2
                           enddo
@@ -32091,8 +32105,8 @@ end subroutine zhemv
                   endif
                   do l = 1,k
                       if ((a(j,l).ne.zero) .or. (b(j,l).ne.zero)) then
-                          temp1 = alpha*dconjg(b(j,l))
-                          temp2 = dconjg(alpha*a(j,l))
+                          temp1 = alpha*conjg(b(j,l))
+                          temp2 = conjg(alpha*a(j,l))
                           do i = j + 1,n
                               c(i,j) = c(i,j) + a(i,l)*temp1 + b(i,l)*temp2
                           enddo
@@ -32112,20 +32126,20 @@ end subroutine zhemv
                       temp1 = zero
                       temp2 = zero
                       do l = 1,k
-                          temp1 = temp1 + dconjg(a(l,i))*b(l,j)
-                          temp2 = temp2 + dconjg(b(l,i))*a(l,j)
+                          temp1 = temp1 + conjg(a(l,i))*b(l,j)
+                          temp2 = temp2 + conjg(b(l,i))*a(l,j)
                       enddo
                       if (i.eq.j) then
                           if (beta.eq.dble(zero)) then
-                              c(j,j) = dble(alpha*temp1+ dconjg(alpha)*temp2)
+                              c(j,j) = dble(alpha*temp1+ conjg(alpha)*temp2)
                           else
-                              c(j,j) = beta*dble(c(j,j)) + dble(alpha*temp1+ dconjg(alpha)*temp2)
+                              c(j,j) = beta*dble(c(j,j)) + dble(alpha*temp1+ conjg(alpha)*temp2)
                           endif
                       else
                           if (beta.eq.dble(zero)) then
-                              c(i,j) = alpha*temp1 + dconjg(alpha)*temp2
+                              c(i,j) = alpha*temp1 + conjg(alpha)*temp2
                           else
-                              c(i,j) = beta*c(i,j) + alpha*temp1 + dconjg(alpha)*temp2
+                              c(i,j) = beta*c(i,j) + alpha*temp1 + conjg(alpha)*temp2
                           endif
                       endif
                   enddo
@@ -32136,20 +32150,20 @@ end subroutine zhemv
                       temp1 = zero
                       temp2 = zero
                       do l = 1,k
-                          temp1 = temp1 + dconjg(a(l,i))*b(l,j)
-                          temp2 = temp2 + dconjg(b(l,i))*a(l,j)
+                          temp1 = temp1 + conjg(a(l,i))*b(l,j)
+                          temp2 = temp2 + conjg(b(l,i))*a(l,j)
                       enddo
                       if (i.eq.j) then
                           if (beta.eq.dble(zero)) then
-                              c(j,j) = dble(alpha*temp1+ dconjg(alpha)*temp2)
+                              c(j,j) = dble(alpha*temp1+ conjg(alpha)*temp2)
                           else
-                              c(j,j) = beta*dble(c(j,j)) + dble(alpha*temp1+ dconjg(alpha)*temp2)
+                              c(j,j) = beta*dble(c(j,j)) + dble(alpha*temp1+ conjg(alpha)*temp2)
                           endif
                       else
                           if (beta.eq.dble(zero)) then
-                              c(i,j) = alpha*temp1 + dconjg(alpha)*temp2
+                              c(i,j) = alpha*temp1 + conjg(alpha)*temp2
                           else
-                              c(i,j) = beta*c(i,j) + alpha*temp1 + dconjg(alpha)*temp2
+                              c(i,j) = beta*c(i,j) + alpha*temp1 + conjg(alpha)*temp2
                           endif
                       endif
                   enddo
@@ -32275,6 +32289,8 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zher(uplo,n,alpha,x,incx,a,lda)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -32309,7 +32325,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg,max
+      intrinsic dble,conjg,max
 !     ..
 !
 !     Test the input parameters.
@@ -32352,7 +32368,7 @@ end subroutine zhemv
           if (incx.eq.1) then
               do j = 1,n
                   if (x(j).ne.zero) then
-                      temp = alpha*dconjg(x(j))
+                      temp = alpha*conjg(x(j))
                       do i = 1,j - 1
                           a(i,j) = a(i,j) + x(i)*temp
                       enddo
@@ -32365,7 +32381,7 @@ end subroutine zhemv
               jx = kx
               do j = 1,n
                   if (x(jx).ne.zero) then
-                      temp = alpha*dconjg(x(jx))
+                      temp = alpha*conjg(x(jx))
                       ix = kx
                       do i = 1,j - 1
                           a(i,j) = a(i,j) + x(ix)*temp
@@ -32385,7 +32401,7 @@ end subroutine zhemv
           if (incx.eq.1) then
               do j = 1,n
                   if (x(j).ne.zero) then
-                      temp = alpha*dconjg(x(j))
+                      temp = alpha*conjg(x(j))
                       a(j,j) = dble(a(j,j)) + dble(temp*x(j))
                       do i = j + 1,n
                           a(i,j) = a(i,j) + x(i)*temp
@@ -32398,7 +32414,7 @@ end subroutine zhemv
               jx = kx
               do j = 1,n
                   if (x(jx).ne.zero) then
-                      temp = alpha*dconjg(x(jx))
+                      temp = alpha*conjg(x(jx))
                       a(j,j) = dble(a(j,j)) + dble(temp*x(jx))
                       ix = jx
                       do i = j + 1,n
@@ -32566,6 +32582,8 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zherk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -32592,7 +32610,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dcmplx,dconjg,max
+      intrinsic dble,cmplx,conjg,max
 !     ..
 !     .. Local Scalars ..
       complex(kind=real64) :: temp
@@ -32689,8 +32707,8 @@ end subroutine zhemv
                       c(j,j) = dble(c(j,j))
                   endif
                   do l = 1,k
-                      if (a(j,l).ne.dcmplx(zero)) then
-                          temp = alpha*dconjg(a(j,l))
+                      if (a(j,l).ne.cmplx(zero,kind=dp)) then
+                          temp = alpha*conjg(a(j,l))
                           do i = 1,j - 1
                               c(i,j) = c(i,j) + temp*a(i,l)
                           enddo
@@ -32711,8 +32729,8 @@ end subroutine zhemv
                       c(j,j) = dble(c(j,j))
                   endif
                   do l = 1,k
-                      if (a(j,l).ne.dcmplx(zero)) then
-                          temp = alpha*dconjg(a(j,l))
+                      if (a(j,l).ne.cmplx(zero,kind=dp)) then
+                          temp = alpha*conjg(a(j,l))
                           c(j,j) = dble(c(j,j)) + dble(temp*a(j,l))
                           do i = j + 1,n
                               c(i,j) = c(i,j) + temp*a(i,l)
@@ -32730,7 +32748,7 @@ end subroutine zhemv
                   do i = 1,j - 1
                       temp = zero
                       do l = 1,k
-                          temp = temp + dconjg(a(l,i))*a(l,j)
+                          temp = temp + conjg(a(l,i))*a(l,j)
                       enddo
                       if (beta.eq.zero) then
                           c(i,j) = alpha*temp
@@ -32740,7 +32758,7 @@ end subroutine zhemv
                   enddo
                   rtemp = zero
                   do l = 1,k
-                      rtemp = rtemp + dconjg(a(l,j))*a(l,j)
+                      rtemp = rtemp + conjg(a(l,j))*a(l,j)
                   enddo
                   if (beta.eq.zero) then
                       c(j,j) = alpha*rtemp
@@ -32752,7 +32770,7 @@ end subroutine zhemv
               do j = 1,n
                   rtemp = zero
                   do l = 1,k
-                      rtemp = rtemp + dconjg(a(l,j))*a(l,j)
+                      rtemp = rtemp + conjg(a(l,j))*a(l,j)
                   enddo
                   if (beta.eq.zero) then
                       c(j,j) = alpha*rtemp
@@ -32762,7 +32780,7 @@ end subroutine zhemv
                   do i = j + 1,n
                       temp = zero
                       do l = 1,k
-                          temp = temp + dconjg(a(l,i))*a(l,j)
+                          temp = temp + conjg(a(l,i))*a(l,j)
                       enddo
                       if (beta.eq.zero) then
                           c(i,j) = alpha*temp
@@ -32904,6 +32922,8 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zhpmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -32940,7 +32960,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg
+      intrinsic dble,conjg
 !     ..
 !
 !     Test the input parameters.
@@ -33017,7 +33037,7 @@ end subroutine zhemv
                   k = kk
                   do i = 1,j - 1
                       y(i) = y(i) + temp1*ap(k)
-                      temp2 = temp2 + dconjg(ap(k))*x(i)
+                      temp2 = temp2 + conjg(ap(k))*x(i)
                       k = k + 1
                   enddo
                   y(j) = y(j) + temp1*dble(ap(kk+j-1)) + alpha*temp2
@@ -33033,7 +33053,7 @@ end subroutine zhemv
                   iy = ky
                   do k = kk,kk + j - 2
                       y(iy) = y(iy) + temp1*ap(k)
-                      temp2 = temp2 + dconjg(ap(k))*x(ix)
+                      temp2 = temp2 + conjg(ap(k))*x(ix)
                       ix = ix + incx
                       iy = iy + incy
                   enddo
@@ -33055,7 +33075,7 @@ end subroutine zhemv
                   k = kk + 1
                   do i = j + 1,n
                       y(i) = y(i) + temp1*ap(k)
-                      temp2 = temp2 + dconjg(ap(k))*x(i)
+                      temp2 = temp2 + conjg(ap(k))*x(i)
                       k = k + 1
                   enddo
                   y(j) = y(j) + alpha*temp2
@@ -33074,7 +33094,7 @@ end subroutine zhemv
                       ix = ix + incx
                       iy = iy + incy
                       y(iy) = y(iy) + temp1*ap(k)
-                      temp2 = temp2 + dconjg(ap(k))*x(ix)
+                      temp2 = temp2 + conjg(ap(k))*x(ix)
                   enddo
                   y(jy) = y(jy) + alpha*temp2
                   jx = jx + incx
@@ -33211,6 +33231,8 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zhpr2(uplo,n,alpha,x,incx,y,incy,ap)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -33245,7 +33267,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg
+      intrinsic dble,conjg
 !     ..
 !
 !     Test the input parameters.
@@ -33298,8 +33320,8 @@ end subroutine zhemv
           if ((incx.eq.1) .and. (incy.eq.1)) then
               do j = 1,n
                   if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
-                      temp1 = alpha*dconjg(y(j))
-                      temp2 = dconjg(alpha*x(j))
+                      temp1 = alpha*conjg(y(j))
+                      temp2 = conjg(alpha*x(j))
                       k = kk
                       do i = 1,j - 1
                           ap(k) = ap(k) + x(i)*temp1 + y(i)*temp2
@@ -33314,8 +33336,8 @@ end subroutine zhemv
           else
               do j = 1,n
                   if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
-                      temp1 = alpha*dconjg(y(jy))
-                      temp2 = dconjg(alpha*x(jx))
+                      temp1 = alpha*conjg(y(jy))
+                      temp2 = conjg(alpha*x(jx))
                       ix = kx
                       iy = ky
                       do k = kk,kk + j - 2
@@ -33339,8 +33361,8 @@ end subroutine zhemv
           if ((incx.eq.1) .and. (incy.eq.1)) then
               do j = 1,n
                   if ((x(j).ne.zero) .or. (y(j).ne.zero)) then
-                      temp1 = alpha*dconjg(y(j))
-                      temp2 = dconjg(alpha*x(j))
+                      temp1 = alpha*conjg(y(j))
+                      temp2 = conjg(alpha*x(j))
                       ap(kk) = dble(ap(kk)) + dble(x(j)*temp1+y(j)*temp2)
                       k = kk + 1
                       do i = j + 1,n
@@ -33355,8 +33377,8 @@ end subroutine zhemv
           else
               do j = 1,n
                   if ((x(jx).ne.zero) .or. (y(jy).ne.zero)) then
-                      temp1 = alpha*dconjg(y(jy))
-                      temp2 = dconjg(alpha*x(jx))
+                      temp1 = alpha*conjg(y(jy))
+                      temp2 = conjg(alpha*x(jx))
                       ap(kk) = dble(ap(kk)) + dble(x(jx)*temp1+y(jy)*temp2)
                       ix = jx
                       iy = jy
@@ -33489,6 +33511,8 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zhpr(uplo,n,alpha,x,incx,ap)
       implicit none
+      integer,parameter :: dp=kind(0.0d0)
+
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -33523,7 +33547,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dconjg
+      intrinsic dble,conjg
 !     ..
 !
 !     Test the input parameters.
@@ -33564,7 +33588,7 @@ end subroutine zhemv
           if (incx.eq.1) then
               do j = 1,n
                   if (x(j).ne.zero) then
-                      temp = alpha*dconjg(x(j))
+                      temp = alpha*conjg(x(j))
                       k = kk
                       do i = 1,j - 1
                           ap(k) = ap(k) + x(i)*temp
@@ -33580,7 +33604,7 @@ end subroutine zhemv
               jx = kx
               do j = 1,n
                   if (x(jx).ne.zero) then
-                      temp = alpha*dconjg(x(jx))
+                      temp = alpha*conjg(x(jx))
                       ix = kx
                       do k = kk,kk + j - 2
                           ap(k) = ap(k) + x(ix)*temp
@@ -33601,7 +33625,7 @@ end subroutine zhemv
           if (incx.eq.1) then
               do j = 1,n
                   if (x(j).ne.zero) then
-                      temp = alpha*dconjg(x(j))
+                      temp = alpha*conjg(x(j))
                       ap(kk) = dble(ap(kk)) + dble(temp*x(j))
                       k = kk + 1
                       do i = j + 1,n
@@ -33617,7 +33641,7 @@ end subroutine zhemv
               jx = kx
               do j = 1,n
                   if (x(jx).ne.zero) then
-                      temp = alpha*dconjg(x(jx))
+                      temp = alpha*conjg(x(jx))
                       ap(kk) = dble(ap(kk)) + dble(temp*x(jx))
                       ix = jx
                       do k = kk + 1,kk + n - j
@@ -35239,7 +35263,7 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max,min
+      intrinsic conjg,max,min
 !     ..
 !
 !     Test the input parameters.
@@ -35365,9 +35389,9 @@ end subroutine
                               temp = temp + a(l+i,j)*x(i)
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(a(kplus1,j))
+                          if (nounit) temp = temp*conjg(a(kplus1,j))
                           do i = j - 1,max(1,j-k),-1
-                              temp = temp + dconjg(a(l+i,j))*x(i)
+                              temp = temp + conjg(a(l+i,j))*x(i)
                           enddo
                       endif
                       x(j) = temp
@@ -35387,9 +35411,9 @@ end subroutine
                               ix = ix - incx
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(a(kplus1,j))
+                          if (nounit) temp = temp*conjg(a(kplus1,j))
                           do i = j - 1,max(1,j-k),-1
-                              temp = temp + dconjg(a(l+i,j))*x(ix)
+                              temp = temp + conjg(a(l+i,j))*x(ix)
                               ix = ix - incx
                           enddo
                       endif
@@ -35408,9 +35432,9 @@ end subroutine
                               temp = temp + a(l+i,j)*x(i)
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(a(1,j))
+                          if (nounit) temp = temp*conjg(a(1,j))
                           do i = j + 1,min(n,j+k)
-                              temp = temp + dconjg(a(l+i,j))*x(i)
+                              temp = temp + conjg(a(l+i,j))*x(i)
                           enddo
                       endif
                       x(j) = temp
@@ -35429,9 +35453,9 @@ end subroutine
                               ix = ix + incx
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(a(1,j))
+                          if (nounit) temp = temp*conjg(a(1,j))
                           do i = j + 1,min(n,j+k)
-                              temp = temp + dconjg(a(l+i,j))*x(ix)
+                              temp = temp + conjg(a(l+i,j))*x(ix)
                               ix = ix + incx
                           enddo
                       endif
@@ -35646,7 +35670,7 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max,min
+      intrinsic conjg,max,min
 !     ..
 !
 !     Test the input parameters.
@@ -35773,9 +35797,9 @@ end subroutine
                           if (nounit) temp = temp/a(kplus1,j)
                       else
                           do i = max(1,j-k),j - 1
-                              temp = temp - dconjg(a(l+i,j))*x(i)
+                              temp = temp - conjg(a(l+i,j))*x(i)
                           enddo
-                          if (nounit) temp = temp/dconjg(a(kplus1,j))
+                          if (nounit) temp = temp/conjg(a(kplus1,j))
                       endif
                       x(j) = temp
                   enddo
@@ -35793,10 +35817,10 @@ end subroutine
                           if (nounit) temp = temp/a(kplus1,j)
                       else
                           do i = max(1,j-k),j - 1
-                              temp = temp - dconjg(a(l+i,j))*x(ix)
+                              temp = temp - conjg(a(l+i,j))*x(ix)
                               ix = ix + incx
                           enddo
-                          if (nounit) temp = temp/dconjg(a(kplus1,j))
+                          if (nounit) temp = temp/conjg(a(kplus1,j))
                       endif
                       x(jx) = temp
                       jx = jx + incx
@@ -35815,9 +35839,9 @@ end subroutine
                           if (nounit) temp = temp/a(1,j)
                       else
                           do i = min(n,j+k),j + 1,-1
-                              temp = temp - dconjg(a(l+i,j))*x(i)
+                              temp = temp - conjg(a(l+i,j))*x(i)
                           enddo
-                          if (nounit) temp = temp/dconjg(a(1,j))
+                          if (nounit) temp = temp/conjg(a(1,j))
                       endif
                       x(j) = temp
                   enddo
@@ -35836,10 +35860,10 @@ end subroutine
                           if (nounit) temp = temp/a(1,j)
                       else
                           do i = min(n,j+k),j + 1,-1
-                              temp = temp - dconjg(a(l+i,j))*x(ix)
+                              temp = temp - conjg(a(l+i,j))*x(ix)
                               ix = ix - incx
                           enddo
-                          if (nounit) temp = temp/dconjg(a(1,j))
+                          if (nounit) temp = temp/conjg(a(1,j))
                       endif
                       x(jx) = temp
                       jx = jx - incx
@@ -36008,7 +36032,7 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg
+      intrinsic conjg
 !     ..
 !
 !     Test the input parameters.
@@ -36134,9 +36158,9 @@ end subroutine
                               k = k - 1
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(ap(kk))
+                          if (nounit) temp = temp*conjg(ap(kk))
                           do i = j - 1,1,-1
-                              temp = temp + dconjg(ap(k))*x(i)
+                              temp = temp + conjg(ap(k))*x(i)
                               k = k - 1
                           enddo
                       endif
@@ -36155,10 +36179,10 @@ end subroutine
                               temp = temp + ap(k)*x(ix)
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(ap(kk))
+                          if (nounit) temp = temp*conjg(ap(kk))
                           do k = kk - 1,kk - j + 1,-1
                               ix = ix - incx
-                              temp = temp + dconjg(ap(k))*x(ix)
+                              temp = temp + conjg(ap(k))*x(ix)
                           enddo
                       endif
                       x(jx) = temp
@@ -36179,9 +36203,9 @@ end subroutine
                               k = k + 1
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(ap(kk))
+                          if (nounit) temp = temp*conjg(ap(kk))
                           do i = j + 1,n
-                              temp = temp + dconjg(ap(k))*x(i)
+                              temp = temp + conjg(ap(k))*x(i)
                               k = k + 1
                           enddo
                       endif
@@ -36200,10 +36224,10 @@ end subroutine
                               temp = temp + ap(k)*x(ix)
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(ap(kk))
+                          if (nounit) temp = temp*conjg(ap(kk))
                           do k = kk + 1,kk + n - j
                               ix = ix + incx
-                              temp = temp + dconjg(ap(k))*x(ix)
+                              temp = temp + conjg(ap(k))*x(ix)
                           enddo
                       endif
                       x(jx) = temp
@@ -36375,7 +36399,7 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg
+      intrinsic conjg
 !     ..
 !
 !     Test the input parameters.
@@ -36501,10 +36525,10 @@ end subroutine
                           if (nounit) temp = temp/ap(kk+j-1)
                       else
                           do i = 1,j - 1
-                              temp = temp - dconjg(ap(k))*x(i)
+                              temp = temp - conjg(ap(k))*x(i)
                               k = k + 1
                           enddo
-                          if (nounit) temp = temp/dconjg(ap(kk+j-1))
+                          if (nounit) temp = temp/conjg(ap(kk+j-1))
                       endif
                       x(j) = temp
                       kk = kk + j
@@ -36522,10 +36546,10 @@ end subroutine
                           if (nounit) temp = temp/ap(kk+j-1)
                       else
                           do k = kk,kk + j - 2
-                              temp = temp - dconjg(ap(k))*x(ix)
+                              temp = temp - conjg(ap(k))*x(ix)
                               ix = ix + incx
                           enddo
-                          if (nounit) temp = temp/dconjg(ap(kk+j-1))
+                          if (nounit) temp = temp/conjg(ap(kk+j-1))
                       endif
                       x(jx) = temp
                       jx = jx + incx
@@ -36546,10 +36570,10 @@ end subroutine
                           if (nounit) temp = temp/ap(kk-n+j)
                       else
                           do i = n,j + 1,-1
-                              temp = temp - dconjg(ap(k))*x(i)
+                              temp = temp - conjg(ap(k))*x(i)
                               k = k - 1
                           enddo
-                          if (nounit) temp = temp/dconjg(ap(kk-n+j))
+                          if (nounit) temp = temp/conjg(ap(kk-n+j))
                       endif
                       x(j) = temp
                       kk = kk - (n-j+1)
@@ -36568,10 +36592,10 @@ end subroutine
                           if (nounit) temp = temp/ap(kk-n+j)
                       else
                           do k = kk,kk - (n- (j+1)),-1
-                              temp = temp - dconjg(ap(k))*x(ix)
+                              temp = temp - conjg(ap(k))*x(ix)
                               ix = ix - incx
                           enddo
-                          if (nounit) temp = temp/dconjg(ap(kk-n+j))
+                          if (nounit) temp = temp/conjg(ap(kk-n+j))
                       endif
                       x(jx) = temp
                       jx = jx - incx
@@ -36763,7 +36787,7 @@ end subroutine
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max
+      intrinsic conjg,max
 !     ..
 !     .. Local Scalars ..
       complex(kind=real64) :: temp
@@ -36875,9 +36899,9 @@ end subroutine
                                   temp = temp + a(k,i)*b(k,j)
                               enddo
                           else
-                              if (nounit) temp = temp*dconjg(a(i,i))
+                              if (nounit) temp = temp*conjg(a(i,i))
                               do k = 1,i - 1
-                                  temp = temp + dconjg(a(k,i))*b(k,j)
+                                  temp = temp + conjg(a(k,i))*b(k,j)
                               enddo
                           endif
                           b(i,j) = alpha*temp
@@ -36893,9 +36917,9 @@ end subroutine
                                   temp = temp + a(k,i)*b(k,j)
                               enddo
                           else
-                              if (nounit) temp = temp*dconjg(a(i,i))
+                              if (nounit) temp = temp*conjg(a(i,i))
                               do k = i + 1,m
-                                  temp = temp + dconjg(a(k,i))*b(k,j)
+                                  temp = temp + conjg(a(k,i))*b(k,j)
                               enddo
                           endif
                           b(i,j) = alpha*temp
@@ -36944,7 +36968,7 @@ end subroutine
                               if (noconj) then
                                   temp = alpha*a(j,k)
                               else
-                                  temp = alpha*dconjg(a(j,k))
+                                  temp = alpha*conjg(a(j,k))
                               endif
                               b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
@@ -36954,7 +36978,7 @@ end subroutine
                           if (noconj) then
                               temp = temp*a(k,k)
                           else
-                              temp = temp*dconjg(a(k,k))
+                              temp = temp*conjg(a(k,k))
                           endif
                       endif
                       if (temp.ne.one) then
@@ -36968,7 +36992,7 @@ end subroutine
                               if (noconj) then
                                   temp = alpha*a(j,k)
                               else
-                                  temp = alpha*dconjg(a(j,k))
+                                  temp = alpha*conjg(a(j,k))
                               endif
                               b(1:m,j) = b(1:m,j) + temp*b(1:m,k)
                           endif
@@ -36978,7 +37002,7 @@ end subroutine
                           if (noconj) then
                               temp = temp*a(k,k)
                           else
-                              temp = temp*dconjg(a(k,k))
+                              temp = temp*conjg(a(k,k))
                           endif
                       endif
                       if (temp.ne.one) then
@@ -37151,7 +37175,7 @@ implicit none
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max
+      intrinsic conjg,max
 !     ..
 !
 !     Test the input parameters.
@@ -37266,9 +37290,9 @@ implicit none
                               temp = temp + a(i,j)*x(i)
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(a(j,j))
+                          if (nounit) temp = temp*conjg(a(j,j))
                           do i = j - 1,1,-1
-                              temp = temp + dconjg(a(i,j))*x(i)
+                              temp = temp + conjg(a(i,j))*x(i)
                           enddo
                       endif
                       x(j) = temp
@@ -37285,10 +37309,10 @@ implicit none
                               temp = temp + a(i,j)*x(ix)
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(a(j,j))
+                          if (nounit) temp = temp*conjg(a(j,j))
                           do i = j - 1,1,-1
                               ix = ix - incx
-                              temp = temp + dconjg(a(i,j))*x(ix)
+                              temp = temp + conjg(a(i,j))*x(ix)
                           enddo
                       endif
                       x(jx) = temp
@@ -37305,9 +37329,9 @@ implicit none
                               temp = temp + a(i,j)*x(i)
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(a(j,j))
+                          if (nounit) temp = temp*conjg(a(j,j))
                           do i = j + 1,n
-                              temp = temp + dconjg(a(i,j))*x(i)
+                              temp = temp + conjg(a(i,j))*x(i)
                           enddo
                       endif
                       x(j) = temp
@@ -37324,10 +37348,10 @@ implicit none
                               temp = temp + a(i,j)*x(ix)
                           enddo
                       else
-                          if (nounit) temp = temp*dconjg(a(j,j))
+                          if (nounit) temp = temp*conjg(a(j,j))
                           do i = j + 1,n
                               ix = ix + incx
-                              temp = temp + dconjg(a(i,j))*x(ix)
+                              temp = temp + conjg(a(i,j))*x(ix)
                           enddo
                       endif
                       x(jx) = temp
@@ -37522,7 +37546,7 @@ end subroutine ztrmv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max
+      intrinsic conjg,max
 !     ..
 !     .. Local Scalars ..
       complex(kind=real64) :: temp
@@ -37642,9 +37666,9 @@ end subroutine ztrmv
                               if (nounit) temp = temp/a(i,i)
                           else
                               do k = 1,i - 1
-                                  temp = temp - dconjg(a(k,i))*b(k,j)
+                                  temp = temp - conjg(a(k,i))*b(k,j)
                               enddo
-                              if (nounit) temp = temp/dconjg(a(i,i))
+                              if (nounit) temp = temp/conjg(a(i,i))
                           endif
                           b(i,j) = temp
                       enddo
@@ -37660,9 +37684,9 @@ end subroutine ztrmv
                               if (nounit) temp = temp/a(i,i)
                           else
                               do k = i + 1,m
-                                  temp = temp - dconjg(a(k,i))*b(k,j)
+                                  temp = temp - conjg(a(k,i))*b(k,j)
                               enddo
-                              if (nounit) temp = temp/dconjg(a(i,i))
+                              if (nounit) temp = temp/conjg(a(i,i))
                           endif
                           b(i,j) = temp
                       enddo
@@ -37728,7 +37752,7 @@ end subroutine ztrmv
                           if (noconj) then
                               temp = one/a(k,k)
                           else
-                              temp = one/dconjg(a(k,k))
+                              temp = one/conjg(a(k,k))
                           endif
                           do i = 1,m
                               b(i,k) = temp*b(i,k)
@@ -37739,7 +37763,7 @@ end subroutine ztrmv
                               if (noconj) then
                                   temp = a(j,k)
                               else
-                                  temp = dconjg(a(j,k))
+                                  temp = conjg(a(j,k))
                               endif
                               do i = 1,m
                                   b(i,j) = b(i,j) - temp*b(i,k)
@@ -37758,7 +37782,7 @@ end subroutine ztrmv
                           if (noconj) then
                               temp = one/a(k,k)
                           else
-                              temp = one/dconjg(a(k,k))
+                              temp = one/conjg(a(k,k))
                           endif
                           do i = 1,m
                               b(i,k) = temp*b(i,k)
@@ -37769,7 +37793,7 @@ end subroutine ztrmv
                               if (noconj) then
                                   temp = a(j,k)
                               else
-                                  temp = dconjg(a(j,k))
+                                  temp = conjg(a(j,k))
                               endif
                               do i = 1,m
                                   b(i,j) = b(i,j) - temp*b(i,k)
@@ -37944,7 +37968,7 @@ end subroutine ztrmv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dconjg,max
+      intrinsic conjg,max
 !     ..
 !
 !     Test the input parameters.
@@ -38059,9 +38083,9 @@ end subroutine ztrmv
                           if (nounit) temp = temp/a(j,j)
                       else
                           do i = 1,j - 1
-                              temp = temp - dconjg(a(i,j))*x(i)
+                              temp = temp - conjg(a(i,j))*x(i)
                           enddo
-                          if (nounit) temp = temp/dconjg(a(j,j))
+                          if (nounit) temp = temp/conjg(a(j,j))
                       endif
                       x(j) = temp
                   enddo
@@ -38078,10 +38102,10 @@ end subroutine ztrmv
                           if (nounit) temp = temp/a(j,j)
                       else
                           do i = 1,j - 1
-                              temp = temp - dconjg(a(i,j))*x(ix)
+                              temp = temp - conjg(a(i,j))*x(ix)
                               ix = ix + incx
                           enddo
-                          if (nounit) temp = temp/dconjg(a(j,j))
+                          if (nounit) temp = temp/conjg(a(j,j))
                       endif
                       x(jx) = temp
                       jx = jx + incx
@@ -38098,9 +38122,9 @@ end subroutine ztrmv
                           if (nounit) temp = temp/a(j,j)
                       else
                           do i = n,j + 1,-1
-                              temp = temp - dconjg(a(i,j))*x(i)
+                              temp = temp - conjg(a(i,j))*x(i)
                           enddo
-                          if (nounit) temp = temp/dconjg(a(j,j))
+                          if (nounit) temp = temp/conjg(a(j,j))
                       endif
                       x(j) = temp
                   enddo
@@ -38118,10 +38142,10 @@ end subroutine ztrmv
                           if (nounit) temp = temp/a(j,j)
                       else
                           do i = n,j + 1,-1
-                              temp = temp - dconjg(a(i,j))*x(ix)
+                              temp = temp - conjg(a(i,j))*x(ix)
                               ix = ix - incx
                           enddo
-                          if (nounit) temp = temp/dconjg(a(j,j))
+                          if (nounit) temp = temp/conjg(a(j,j))
                       endif
                       x(jx) = temp
                       jx = jx - incx

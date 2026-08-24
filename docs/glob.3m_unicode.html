@@ -194,108 +194,133 @@ a literal question mark and asterisk is problematic.
 Example program
 <P>
 <PRE>
-   program demo_glob
-   use M_unicode, only : glob, trim, unicode_type, len
-   use M_unicode, only : escape
-   use M_unicode, only : assignment(=)
-   implicit none
-   integer :: i
-   type(unicode_type),allocatable :: ufiles(:)
-   type(unicode_type),allocatable :: matched(:)
-   character(len=*),parameter :: &
-    filenames(*)= [character(len=256) :: &
-   & &#146;My_favorite_file.F90&#146;,    & ! English
-   & &#146;我最喜欢的文档.c&#146;,        & ! Mandarin_Chinese
-   & &#146;मेरी_पसंदीदा_फ़ाइल.f90&#146;,         & ! Hindu
-   & &#146;Mi_archivo_favorito.c&#146;,   & ! Spanish
-   & &#146;ملفي_المفضل.h&#146;,           & ! Modern_Standard_Arabic
-   & &#146;Mon_fichier_préféré.f90&#146;, & ! French
-   & &#146;আমার_প্রিয়_ফাইল&#146;,          & ! Bengali
-   & &#146;Meu_arquivo_favorito&#146;,    & ! Portuguese
-   & &#146;Мой_любимый_файл&#146;,        & ! Russian
-   & &#146;میری_پسندیدہ_فائل.pdf&#146;,   & ! Urdu
-   & &#146;src/M_modules.F90&#146;,       &
-   & &#146;src/subset.inc&#146;,          &
-   & &#146;test/check.f90 &#146;,         &
-   & &#146;app/main.f90 &#146;]
-   character(len=*),parameter :: &
-    encoded(*)= [character(len=256) :: &
-   & &#146;My_favorite_file.F90&#146;,                    & ! English
-   & &#146;\u6211\u6700\u559C\u6B22\u7684\u6587\u6863.c&#146;, & ! Mandarin_Chinese
-   & &#146;\u092E\u0947\u0930\u0940_&
-   &\u092A\u0938\u0902\u0926\u0940\u0926\u093E_&
-   &\u092B\u093C\u093E\u0907\u0932.f90&#146;,        & ! Hindu
-   & &#146;Mi_archivo_favorito.c&#146;,                   & ! Spanish
-   & &#146;\u0645\u0644\u0641\u064A_&
-   &\u0627\u0644\u0645\u0641\u0636\u0644.h &#146;,   & ! Modern_Standard_Arabic
-   & &#146;Mon_fichier_pr\xE9f\xE9r\xE9.f90&#146;,        & ! French
-   & &#146;\u0986\u09AE\u09BE\u09B0_\u09AA\u09CD\u09B0\u09BF\u09AF\u09BC_&
-   &\u09AB\u09BE\u0987\u09B2&#146;,                  & ! Bengali
-   & &#146;Meu_arquivo_favorito&#146;,                    & ! Portuguese
-   & &#146;\u041C\u043E\u0439_\u043B\u044E\u0431\u0438\u043C\u044B\u0439_&
-   &\u0444\u0430\u0439\u043B&#146;,                  & ! Russian
-   & &#146;\u0645\u06CC\u0631\u06CC_&
-   &\u067E\u0633\u0646\u062F\u06CC\u062F\u06C1_&
-   &\u0641\u0627\u0626\u0644.pdf&#146;,              & ! Urdu
-   & &#146;src/M_modules.F90&#146;, &
-   & &#146;src/subset.inc&#146;, &
-   & &#146;test/check.f90 &#146;, &
-   & &#146;app/main.f90 &#146;]
-   character(len=*),parameter :: &
-     g=&#146;(*(g0))&#146;, g1=&#146;(*(g0,1x))&#146;, comma=&#146;(*(g0:,", ",/))&#146;
+    program demo_glob
+    use M_unicode, only : glob, trim, unicode_type, len
+    use M_unicode, only : escape
+    use M_unicode, only : assignment(=)
+    implicit none
+    integer :: i
+    type(unicode_type),allocatable :: ufiles(:)
+    type(unicode_type),allocatable :: matched(:)
+    character(len=*),parameter :: &
+     filenames(*)= [character(len=256) :: &
+     & &#146;My_favorite_file.F90&#146;,    & ! English
+     & &#146;我最喜欢的文档.c&#146;,         & ! Mandarin_Chinese
+     & &#146;मरी_पसदीदा_फाइल.f90&#146;,       & ! Hindu
+     & &#146;Mi_archivo_favorito.c&#146;,   & ! Spanish
+     & &#146;ملفي_المفضل.h&#146;,         & ! Modern_Standard_Arabic
+     & &#146;Mon_fichier_préféré.f90&#146;, & ! French
+     & &#146;আমার_পরিয_ফাইল&#146;,          & ! Bengali
+     & &#146;Meu_arquivo_favorito&#146;,    & ! Portuguese
+     & &#146;Мой_любимый_файл&#146;,          & ! Russian
+     & &#146;میری_پسندیدہ_فائل.pdf&#146;,   & ! Urdu
+     & &#146;src/M_modules.F90&#146;,       &
+     & &#146;src/subset.inc&#146;,          &
+     & &#146;test/check.f90 &#146;,         &
+     & &#146;app/main.f90 &#146;]
+    character(len=*),parameter :: &
+     encoded(*)= [character(len=256) :: &
+     & &#146;My_favorite_file.F90&#146;,                    & ! English
+     & &#146;\u6211\u6700\u559C\u6B22\u7684\u6587\u6863.c&#146;, & ! Mandarin_Chinese
+     & &#146;\u092E\u0947\u0930\u0940_&
+     &\u092A\u0938\u0902\u0926\u0940\u0926\u093E_&
+     &\u092B\u093C\u093E\u0907\u0932.f90&#146;,        & ! Hindu
+     & &#146;Mi_archivo_favorito.c&#146;,                   & ! Spanish
+     & &#146;\u0645\u0644\u0641\u064A_&
+     &\u0627\u0644\u0645\u0641\u0636\u0644.h &#146;,   & ! Modern_Standard_Arabic
+     & &#146;Mon_fichier_pr\xE9f\xE9r\xE9.f90&#146;,        & ! French
+     & &#146;\u0986\u09AE\u09BE\u09B0_\u09AA\u09CD\u09B0\u09BF\u09AF\u09BC_&
+     &\u09AB\u09BE\u0987\u09B2&#146;,                  & ! Bengali
+     & &#146;Meu_arquivo_favorito&#146;,                    & ! Portuguese
+     & &#146;\u041C\u043E\u0439_\u043B\u044E\u0431\u0438\u043C\u044B\u0439_&
+     &\u0444\u0430\u0439\u043B&#146;,                  & ! Russian
+     & &#146;\u0645\u06CC\u0631\u06CC_&
+     &\u067E\u0633\u0646\u062F\u06CC\u062F\u06C1_&
+     &\u0641\u0627\u0626\u0644.pdf&#146;,              & ! Urdu
+     & &#146;src/M_modules.F90&#146;, &
+     & &#146;src/subset.inc&#146;, &
+     & &#146;test/check.f90 &#146;, &
+     & &#146;app/main.f90 &#146;]
+    character(len=*),parameter :: &
+        g=&#146;(*(g0))&#146;, g1=&#146;(*(g0,1x))&#146;, comma=&#146;(*(g0:,", ",/))&#146;
 <P>
-      ! some basic usage
-      write(*,g)merge(&#146;PASSED&#146;,&#146;FAILED&#146;,glob("mississipPI", "*issip*PI"))
-      write(*,g)merge(&#146;PASSED&#146;,&#146;FAILED&#146;,glob("bLah", "bL?h"))
-      write(*,g)merge(&#146;PASSED&#146;,&#146;FAILED&#146;,glob("bLaH", "?LaH"))
+       ! some basic usage
+       write(*,g)merge(&#146;PASSED&#146;,&#146;FAILED&#146;,glob("mississipPI", "*issip*PI"))
+       write(*,g)merge(&#146;PASSED&#146;,&#146;FAILED&#146;,glob("bLah", "bL?h"))
+       write(*,g)merge(&#146;PASSED&#146;,&#146;FAILED&#146;,glob("bLaH", "?LaH"))
 <P>
-      ! create a list of trimmed filenames
-      ufiles=unicode_type(filenames)
-      ufiles=trim(ufiles)
-      write(*,g)&#146;FILENAMES:&#146;
-      call show_filenames(ufiles)
+       ! create a list of trimmed filenames
+       ufiles=unicode_type(filenames)
+       ufiles=trim(ufiles)
+       write(*,g)&#146;FILENAMES:&#146;
+       call show_filenames(ufiles)
 <P>
-      ! create a list of trimmed filenames from encoded names
-      ufiles=escape(encoded)
-      ufiles=trim(ufiles)
-      write(*,g)&#146;ENCODED FILENAMES:&#146;
-      call show_filenames(ufiles)
+       ! create a list of trimmed filenames from encoded names
+       ufiles=escape(encoded)
+       ufiles=trim(ufiles)
+       write(*,g)&#146;ENCODED FILENAMES:&#146;
+       call show_filenames(ufiles)
 <P>
-      ! get filenames ending in ".f90"
-      matched=pack(ufiles,glob(ufiles,&#146;*.f90&#146;))
-      write(*,g)&#146;MATCHED *.f90:&#146;
-      call show_filenames(matched)
+       ! get filenames ending in ".f90"
+       matched=pack(ufiles,glob(ufiles,&#146;*.f90&#146;))
+       write(*,g)&#146;MATCHED *.f90:&#146;
+       call show_filenames(matched)
 <P>
-      ! get filenames ending in ".c"
-      matched=pack(ufiles,glob(ufiles,&#146;*.c&#146;))
-      write(*,g)&#146;MATCHED *.c:&#146;
-      call show_filenames(matched)
+       ! get filenames ending in ".c"
+       matched=pack(ufiles,glob(ufiles,&#146;*.c&#146;))
+       write(*,g)&#146;MATCHED *.c:&#146;
+       call show_filenames(matched)
 <P>
-   contains
-   subroutine show_filenames(names)
-   type(unicode_type),allocatable :: names(:)
-      write(*,g1)&#146;:SIZE:&#146;,size(names),&#146;:LEN:&#146;,len(names)
-      write(*,comma)(names(i)%character(),i=1,size(names))
-   end subroutine show_filenames
+       call oop()
 <P>
-   end program demo_glob
+    contains
+    subroutine show_filenames(names)
+       type(unicode_type),allocatable :: names(:)
+       write(*,g1)&#146;:SIZE:&#146;,size(names),&#146;:LEN:&#146;,len(names)
+       write(*,comma)(names(i)%character(),i=1,size(names))
+    end subroutine show_filenames
+<P>
+    subroutine oop()
+    use M_unicode, only : glob,ut=&gt;unicode_type
+    use M_unicode, only : write(formatted),ch=&gt;character
+    use M_unicode, only : assignment(=)
+    use M_unicode, only : operator(//)
+    implicit none
+    character(len=*),parameter :: u=&#146;(DT)&#146;
+    type(ut)  :: USTRING
+    !
+    ! ignoring ς for simplicity
+    USTRING=&#146;ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω&#146;
+<P>
+    print *,&#146;OOP! Remember to match entire string&#146;
+    print u,&#146; string is : &#146; // USTRING
+    ! pattern may be UTF-8 or ASCII
+    print *,merge(&#146;PASSED&#146;,&#146;FAILED&#146;,USTRING%glob(&#146;*Α*Ζ*Ω*&#146;))
+    print *,merge(&#146;PASSED&#146;,&#146;FAILED&#146;,.not.USTRING%glob(&#146;*Ω*Α*Ζ*&#146;))
+    ! pattern may be unicode_type
+    print *,merge(&#146;PASSED&#146;,&#146;FAILED&#146;,USTRING%glob(ut(&#146;*Α*Ζ*Ω*&#146;)))
+    print *,merge(&#146;PASSED&#146;,&#146;FAILED&#146;,.not.USTRING%glob(ut(&#146;*Ω*Α*Ζ*&#146;)))
+<P>
+    end subroutine oop
+    end program demo_glob
 <P>
 </PRE>
 Results:
 <P>
 <PRE>
+ &gt; Mi_archivo_favorito.c
  &gt; PASSED
  &gt; PASSED
  &gt; PASSED
  &gt; FILENAMES:
- &gt; :SIZE: 14 :LEN: 20 9 22 21 13 23 16 20 16 21 17 14 14 12
+ &gt; :SIZE: 14 :LEN: 20 9 19 21 13 23 14 20 16 21 17 14 14 12
  &gt; My_favorite_file.F90,
  &gt; 我最喜欢的文档.c,
- &gt; मेरी_पसंदीदा_फ़ाइल.f90,
+ &gt; मरी_पसदीदा_फाइल.f90,
  &gt; Mi_archivo_favorito.c,
  &gt; ملفي_المفضل.h,
  &gt; Mon_fichier_préféré.f90,
- &gt; আমার_প্রিয়_ফাইল,
+ &gt; আমার_পরিয_ফাইল,
  &gt; Meu_arquivo_favorito,
  &gt; Мой_любимый_файл,
  &gt; میری_پسندیدہ_فائل.pdf,
@@ -304,13 +329,13 @@ Results:
  &gt; test/check.f90,
  &gt; app/main.f90
  &gt; ENCODED FILENAMES:
- &gt; :SIZE: 14 :LEN: 20 9 22 21 13 23 16 20 16 21 17 14 14 12
+ &gt; :SIZE: 14 :LEN: 20 9 22 21 13 22 16 20 16 21 17 14 14 12
  &gt; My_favorite_file.F90,
  &gt; 我最喜欢的文档.c,
  &gt; मेरी_पसंदीदा_फ़ाइल.f90,
  &gt; Mi_archivo_favorito.c,
  &gt; ملفي_المفضل.h,
- &gt; Mon_fichier_préféré.f90,
+ &gt; Mon_fichier_prຟéré.f90,
  &gt; আমার_প্রিয়_ফাইল,
  &gt; Meu_arquivo_favorito,
  &gt; Мой_любимый_файл,
@@ -320,15 +345,21 @@ Results:
  &gt; test/check.f90,
  &gt; app/main.f90
  &gt; MATCHED *.f90:
- &gt; :SIZE: 4 :LEN: 22 23 14 12
+ &gt; :SIZE: 4 :LEN: 22 22 14 12
  &gt; मेरी_पसंदीदा_फ़ाइल.f90,
- &gt; Mon_fichier_préféré.f90,
+ &gt; Mon_fichier_prຟéré.f90,
  &gt; test/check.f90,
  &gt; app/main.f90
  &gt; MATCHED *.c:
  &gt; :SIZE: 2 :LEN: 9 21
  &gt; 我最喜欢的文档.c,
  &gt; Mi_archivo_favorito.c
+ &gt;  OOP! Remember to match entire string
+ &gt;  string is : ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω
+ &gt;  PASSED
+ &gt;  PASSED
+ &gt;  PASSED
+ &gt;  PASSED
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -363,7 +394,7 @@ in Dr Dobb&#146;s Journal, By Kirk J. Krauss, October 07, 2014
 <BLOCKQUOTE>
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>glob (3)</TD> <TD align=right width=33%><I>August 19, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 346150e2-2efb-45bf-b131-4f29c21c39b7 using man macros.</FONT>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>glob (3)</TD> <TD align=right width=33%><I>August 24, 2026</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 33c8fe4b-2a1d-43e2-98c5-539eec1dbc38 using man macros.</FONT>
 <br><br><center><img src="images/glob.3m_unicode.gif"></center>
 </div>
 </div>

@@ -6,7 +6,7 @@ use, intrinsic :: iso_fortran_env, only: iostat_end, iostat_eor
 use M_io, only: read_line
 use M_strings, only: split, lower
 implicit none
-integer                       :: stat, i, ios, icount
+integer                       :: stat, i, icount
 character(len=:), allocatable :: line, last, lastline, downword
 character(len=:), allocatable :: array(:) ! output array of tokens
 logical :: verbose
@@ -26,7 +26,7 @@ character,parameter :: &
    open (unit=stdin, pad='yes')
    call setup()
    if(debug)write(*,*)'<DEBUG> dw::'
-   INFINITE: do while (read_line(line, ios=stat) == 0)
+   INFINITE: do while (read_line(line, iostat=stat) == 0)
       if(debug)write(*,*)'<DEBUG> read line ::',icount,line
       icount = icount + 1
       call split(line, array, dw)

@@ -1,17 +1,30 @@
-
-
-
-
-
-
-
-
-
-
-
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __LFORTRAN          6
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   define __COMPILER__ __NVIDIA_COMP
+#elif __LFORTRAN__
+#   define __COMPILER__ __LFORTRAN_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
@@ -258,13 +271,11 @@ real(kind=realtime),save   :: duration_all=0.0d0
 integer,save               :: clicks=0.0d0
 integer,save               :: clicks_all=0.0d0
 
-logical,save ::  STOP_G=.true.                       ! global value indicating whether failed unit checks should stop program or not
 integer,save :: IPASSED_G=0                          ! counter of successes initialized by unit_test_start(3f)
 integer,save :: IFAILED_G=0                          ! counter of failures  initialized by unit_test_start(3f)
 integer,save :: IUNTESTED=0                          ! counter of untested  initialized by unit_test_start(3f)
 integer,save :: IPASSED_ALL_G=0                      ! counter of successes initialized at program start
 integer,save :: IFAILED_ALL_G=0                      ! counter of failures  initialized at program start
-integer,save :: IUNTESTED_ALL=0                      ! counter of untested  initialized at program start
 logical,save :: no_news_is_good_news=.false.         ! flag on whether to display SUCCESS: messages
 
 public stderr
@@ -745,7 +756,7 @@ end subroutine unit_test
 !!     call unit_test_start('myroutine_long',' &
 !!       & -section        3                    &
 !!       & -library        libGPF               &
-!!       & -filename       `pwd`/M_verify.FF     &
+!!       & --filename       `pwd`/M_verify.FF     &
 !!       & -documentation  y                    &
 !!       & -prep           y                    &
 !!       & -ccall          n                    &
@@ -1824,7 +1835,11 @@ END SUBROUTINE accdig
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
 SUBROUTINE dp_accdig(x,y,digi0,ACURCY,IND)
+#ifdef FLOAT128
 use,intrinsic :: iso_fortran_env, only : wp=>real64
+#else
+use,intrinsic :: iso_fortran_env, only : wp=>real128
+#endif
 use M_journal,  only : journal
 implicit none
 
@@ -2107,7 +2122,11 @@ end function significant
 !===================================================================================================================================
 pure elemental function anyscalar_to_realbig(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
+#ifdef FLOAT128
 use,intrinsic :: iso_fortran_env, only : wp=>real64
+#else
+use,intrinsic :: iso_fortran_env, only : wp=>real128
+#endif
 implicit none
 
 ! ident_21="@(#) M_verify anyscalar_to_realbig(3f) convert integer or real parameter of any kind to real128 or biggest available"
@@ -2122,6 +2141,10 @@ character(len=3)             :: readable
    type is (integer(kind=int64));  d_out=real(valuein,kind=wp)
    type is (real(kind=real32));    d_out=real(valuein,kind=wp)
    type is (real(kind=real64));    d_out=real(valuein,kind=wp)
+#ifdef FLOAT128
+#else
+   Type is (real(kind=real128));   d_out=valuein
+#endif
    type is (logical);              d_out=merge(0.0_wp,1.0_wp,valuein)
    type is (character(len=*));     read(valuein,*) d_out
    class default
@@ -2150,7 +2173,9 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
+#ifdef FLOAT128
    Type is (real(kind=real128))
+#endif
       !!if(valuein > big)then
       !!   write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
       !!endif

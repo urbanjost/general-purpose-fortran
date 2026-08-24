@@ -424,7 +424,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)VERSION:        1.0, 20180408>',&
 '@(#)AUTHOR:         John S. Urban>',&
 '@(#)HOME PAGE:      http://www.urbanjost.altervista.org/index.html>',&
-'@(#)COMPILED:       2026-08-19 15:08:25 UTC-240>',&
+'@(#)COMPILED:       2026-08-24 00:03:23 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
@@ -933,80 +933,59 @@ text=[ CHARACTER(LEN=128) :: &
 'alias fullback=''esc restore''       ',&
 '################################################################################',&
 '# some favorite terminal configurations as examples                             ',&
-'alias default="esc \                                                            ',&
-'   -fn ''*-cronyx-courier-medium-r-normal--17-120-100-100-m-90-koi8-r'' \       ',&
-'   -rows 36 -cols 132 \                                                         ',&
-'   -down 0 -right 0 \                                                           ',&
-'   -bg black -fg white -cr red \                                                ',&
-'   -cn \                                                                        ',&
-'      0  rgb:0000/0000/0000 \                                                   ',&
-'      1  rgb:cdcd/0000/0000 \                                                   ',&
-'      2  rgb:0000/cdcd/cdcd \                                                   ',&
-'      3  rgb:cdcd/cdcd/0000 \                                                   ',&
-'      4  rgb:0000/0000/eeee \                                                   ',&
-'      5  rgb:cdcd/0000/cdcd \                                                   ',&
-'      6  rgb:0000/cdcd/0000 \                                                   ',&
-'      7  rgb:e5e5/e5e5/e5e5 \                                                   ',&
-'      8  rgb:7f7f/7f7f/7f7f \                                                   ',&
-'      9  rgb:ffff/0000/0000 \                                                   ',&
-'      10 rgb:0000/ffff/0000 \                                                   ',&
-'      11 rgb:ffff/ffff/0000 \                                                   ',&
-'      12 rgb:5c5c/5c5c/ffff \                                                   ',&
-'      13 rgb:ffff/0000/ffff \                                                   ',&
-'      14 rgb:0000/ffff/ffff \                                                   ',&
-'      15 rgb:ffff/ffff/ffff                                                     ',&
-'"                                                                               ',&
-'alias green=''esc -rows 24 -cols 80 -fn huge -bg green4 -fg yellow -cr red''    ',&
-'alias brown=''esc -fn huge -bg brown4 -fg white -cr red''                       ',&
-'################################################################################',&
-'function ID(){                                                                  ',&
-'# color terminal according to which cluster logged onto                         ',&
-'case $(hostname) in                                                             ',&
-'b15*) set -bg yellow -fg black;;                                                ',&
-'b16*) set -bg brown  -fg white;;                                                ',&
-'b17*) set -bg white  -fg black;;                                                ',&
-'*) default;;                                                                    ',&
-'esac                                                                            ',&
-'}                                                                               ',&
-'################################################################################',&
-'function kolor(){                                                               ',&
-'   # set foreground and background color                                        ',&
-'   case $# in                                                                   ',&
-'   0) showrgb ;;                                                                ',&
-'   1) esc -bg $1        ;;                                                      ',&
-'   2) esc -bg $1 -fg $2 ;;                                                      ',&
-'   3) esc -bg $1 -fg $2 -cr $3;;                                                ',&
-'   *) esc -bg $1 -fg $2 -cr $3;;                                                ',&
-'   esac                                                                         ',&
-'}                                                                               ',&
-'################################################################################',&
-'function trykolor(){                                                            ',&
-'# try all named background colors                                               ',&
-'TTY=$(tty)                                                                      ',&
-'showrgb|while read R G B COLOR_NAME                                             ',&
-'do                                                                              ',&
-'   [ "$COLOR_NAME" = '''' ] && continue                                         ',&
-'   esc -bg $COLOR_NAME                                                          ',&
-'   printf ''\nColor %s Next ...'', "$COLOR_NAME"                                ',&
-'   read PAWS < $TTY                                                             ',&
-'done                                                                            ',&
-'}                                                                               ',&
-'################################################################################',&
-'tryfont(){                                                                      ',&
-'list and select all fixed-space fonts until prompted to stop                    ',&
-'export TTY="`tty`"                                                              ',&
-'(xlsfonts "*-${1}-*-c-*"; xlsfonts "*-${1}-*-m-*") 2>/dev/null| while read FONT ',&
-'do                                                                              ',&
-'   echo " $FONT"                                                                ',&
-'   esc -fn ''*''"$FONT"                                                         ',&
-'   printf ''Keep? (y or n):''                                                   ',&
-'   read PAUSE < $TTY                                                            ',&
-'   case "$PAUSE" in                                                             ',&
-'   y*|Y*) break;;                                                               ',&
-'   esac                                                                         ',&
-'done                                                                            ',&
-'}                                                                               ',&
-'################################################################################',&
+'alias default="esc    -fn ''*-cronyx-courier-medium-r-normal--17-120-100-100-m-90-koi8-r''    -rows 36 -cols 132    -down 0 -rig',&
+'"                                                                                                                               ',&
+'alias green=''esc -rows 24 -cols 80 -fn huge -bg green4 -fg yellow -cr red''                                                    ',&
+'alias brown=''esc -fn huge -bg brown4 -fg white -cr red''                                                                       ',&
+'################################################################################                                                ',&
+'function ID(){                                                                                                                  ',&
+'# color terminal according to which cluster logged onto                                                                         ',&
+'case $(hostname) in                                                                                                             ',&
+'b15*) set -bg yellow -fg black;;                                                                                                ',&
+'b16*) set -bg brown  -fg white;;                                                                                                ',&
+'b17*) set -bg white  -fg black;;                                                                                                ',&
+'*) default;;                                                                                                                    ',&
+'esac                                                                                                                            ',&
+'}                                                                                                                               ',&
+'################################################################################                                                ',&
+'function kolor(){                                                                                                               ',&
+'   # set foreground and background color                                                                                        ',&
+'   case $# in                                                                                                                   ',&
+'   0) showrgb ;;                                                                                                                ',&
+'   1) esc -bg $1        ;;                                                                                                      ',&
+'   2) esc -bg $1 -fg $2 ;;                                                                                                      ',&
+'   3) esc -bg $1 -fg $2 -cr $3;;                                                                                                ',&
+'   *) esc -bg $1 -fg $2 -cr $3;;                                                                                                ',&
+'   esac                                                                                                                         ',&
+'}                                                                                                                               ',&
+'################################################################################                                                ',&
+'function trykolor(){                                                                                                            ',&
+'# try all named background colors                                                                                               ',&
+'TTY=$(tty)                                                                                                                      ',&
+'showrgb|while read R G B COLOR_NAME                                                                                             ',&
+'do                                                                                                                              ',&
+'   [ "$COLOR_NAME" = '''' ] && continue                                                                                         ',&
+'   esc -bg $COLOR_NAME                                                                                                          ',&
+'   printf ''\nColor %s Next ...'', "$COLOR_NAME"                                                                                ',&
+'   read PAWS < $TTY                                                                                                             ',&
+'done                                                                                                                            ',&
+'}                                                                                                                               ',&
+'################################################################################                                                ',&
+'tryfont(){                                                                                                                      ',&
+'list and select all fixed-space fonts until prompted to stop                                                                    ',&
+'export TTY="`tty`"                                                                                                              ',&
+'(xlsfonts "*-${1}-*-c-*"; xlsfonts "*-${1}-*-m-*") 2>/dev/null| while read FONT                                                 ',&
+'do                                                                                                                              ',&
+'   echo " $FONT"                                                                                                                ',&
+'   esc -fn ''*''"$FONT"                                                                                                         ',&
+'   printf ''Keep? (y or n):''                                                                                                   ',&
+'   read PAUSE < $TTY                                                                                                            ',&
+'   case "$PAUSE" in                                                                                                             ',&
+'   y*|Y*) break;;                                                                                                               ',&
+'   esac                                                                                                                         ',&
+'done                                                                                                                            ',&
+'}                                                                                                                               ',&
+'################################################################################                                                ',&
 '']
 !!write(*,'(a)')text
 write(*,'(a)')(trim(text(i)),i=1,size(text))

@@ -195,7 +195,6 @@
 #include <pwd.h>
 #endif
 #include <math.h>
-#include <math.h>
 #include "draw.h"
 
 extern FILE     *_draw_outfile();

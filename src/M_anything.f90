@@ -1,22 +1,37 @@
-
-
-
-
-
-
-
-
-
-
-
 !===================================================================================================================================
 ! This module and the example function squarei() that uses it shows how you
 ! can use polymorphism to allow arguments of different types generically by casting
 !===================================================================================================================================
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   define __COMPILER__ __NVIDIA_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
+#ifdef Linux_ifx
+#ifndef __INTEL_LLVM_COMPILER
+#define __INTEL_LLVM_COMPILER  IFX
+#endif
+#endif
 !===================================================================================================================================
 !>
 !!##NAME
@@ -112,7 +127,9 @@ integer,parameter :: dp=kind(0.0d0)
 public anyscalar_to_string   ! convert integer parameter of any kind to string
 public anyscalar_to_int64    ! convert integer parameter of any kind to 64-bit integer
 public anyscalar_to_real     ! convert integer or real parameter of any kind to real
+#ifdef FLOAT128
 public anyscalar_to_real128  ! convert integer or real parameter of any kind to real128
+#endif
 public anyscalar_to_double   ! convert integer or real parameter of any kind to doubleprecision
 public anything_to_bytes
 public get_type
@@ -419,7 +436,9 @@ class(*),intent(out)        :: anything(:)
     type is (integer(kind=int64));  anything=transfer(chars,anything)
     type is (real(kind=real32));    anything=transfer(chars,anything)
     type is (real(kind=real64));    anything=transfer(chars,anything)
+#ifdef FLOAT128
     type is (real(kind=real128));   anything=transfer(chars,anything)
+#endif
     type is (logical);              anything=transfer(chars,anything)
     class default
       !anything=transfer(chars,anything)
@@ -446,7 +465,9 @@ class(*),intent(out)        :: anything
     type is (integer(kind=int64));  anything=transfer(chars,anything)
     type is (real(kind=real32));    anything=transfer(chars,anything)
     type is (real(kind=real64));    anything=transfer(chars,anything)
+#ifdef FLOAT128
     type is (real(kind=real128));   anything=transfer(chars,anything)
+#endif
     type is (logical);              anything=transfer(chars,anything)
     class default
       !anything=transfer(chars,anything)
@@ -560,7 +581,9 @@ character(len=1),allocatable :: chars(:)
     type is (integer(kind=int64));  chars=transfer(anything,chars)
     type is (real(kind=real32));    chars=transfer(anything,chars)
     type is (real(kind=real64));    chars=transfer(anything,chars)
+#ifdef FLOAT128
     type is (real(kind=real128));   chars=transfer(anything,chars)
+#endif
     type is (logical);              chars=transfer(anything,chars)
     class default
       !stop 'crud. anything_to_bytes_arr(1) does not know about this type'
@@ -588,10 +611,16 @@ character(len=1),allocatable :: chars(:)
     type is (integer(kind=int64));  chars=transfer(anything,chars)
     type is (real(kind=real32));    chars=transfer(anything,chars)
     type is (real(kind=real64));    chars=transfer(anything,chars)
+#ifdef FLOAT128
     type is (real(kind=real128));   chars=transfer(anything,chars)
+#endif
     type is (logical);              chars=transfer(anything,chars)
     class default
+#ifdef __INTEL_LLVM_COMPILER
+      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+#else
       chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+#endif
    end select
 
 end function  anything_to_bytes_scalar
@@ -680,6 +709,7 @@ end function  anything_to_bytes_scalar
 !!
 !!##LICENSE
 !!    MIT
+#ifdef FLOAT128
 pure elemental function anyscalar_to_real128(valuein) result(d_out)
 
 ! ident_3="@(#) M_anything anyscalar_to_real128(3f) convert integer or real parameter of any kind to real128"
@@ -703,6 +733,7 @@ character(len=3)             :: readable
     !!stop '*M_anything::anyscalar_to_real128: unknown type'
    end select
 end function anyscalar_to_real128
+#endif
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -784,7 +815,9 @@ pure elemental function anyscalar_to_double(valuein) result(d_out)
 
 class(*),intent(in)       :: valuein
 doubleprecision           :: d_out
+#ifdef FLOAT128
 doubleprecision,parameter :: big=huge(0.0d0)
+#endif
    select type(valuein)
    type is (integer(kind=int8));   d_out=dble(valuein)
    type is (integer(kind=int16));  d_out=dble(valuein)
@@ -792,11 +825,13 @@ doubleprecision,parameter :: big=huge(0.0d0)
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
+#ifdef FLOAT128
    Type is (real(kind=real128))
       !IMPURE! if(valuein > big)then
       !IMPURE!    write(stderr,'(*(g0,1x))')'*anyscalar_to_double* value too large ',valuein
       !IMPURE! endif
       d_out=dble(valuein)
+#endif
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));     read(valuein,*) d_out
    class default
@@ -887,11 +922,13 @@ real,parameter      :: big=huge(0.0)
       !!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
       !!endif
       r_out=real(valuein)
+#ifdef FLOAT128
    type is (real(kind=real128))
       !!if(valuein > big)then
       !!   write(stderr,*)'*anyscalar_to_real* value too large ',valuein
       !!endif
       r_out=real(valuein)
+#endif
    type is (logical);              r_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));     read(valuein,*) r_out
    end select
@@ -961,11 +998,11 @@ end function anyscalar_to_real
 !!
 !!   Results
 !!
-!!    16129.000000000000       127 !!    16129
-!!    1073676289.0000000       32767 !!    1073676289
-!!    4.6116860141324206E+018  2147483647 !!    4611686014132420609
-!!    8.5070591730234616E+037  9223372036854775807 !!    85070591730234615847396907784232501249
-!!    2.8948022309329049E+076 170141183460469231731687303715884105727 !!    28948022309329048855892746252171976962977213799489202546401021394546514198529
+!!    16129.000000000000       127    16129
+!!    1073676289.0000000       32767    1073676289
+!!    4.6116860141324206E+018  2147483647    4611686014132420609
+!!    8.5070591730234616E+037  9223372036854775807    85070591730234615847396907784232501249
+!!    2.8948022309329049E+076 170141183460469231731687303715884105727    28948022309329048855892746252171976962977213799489202546401021394546514198529
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -987,7 +1024,9 @@ class(*),intent(in)    :: valuein
    type is (integer(kind=int64));  ii38=valuein
    type is (real(kind=real32));    ii38=nint(valuein,kind=int64)
    type is (real(kind=real64));    ii38=nint(valuein,kind=int64)
+#ifdef FLOAT128
    Type is (real(kind=real128));   ii38=nint(valuein,kind=int64)
+#endif
    type is (logical);              ii38=merge(0_int64,1_int64,valuein)
    type is (character(len=*))   ;
       read(valuein,*,iostat=ios,iomsg=message)ii38
@@ -1149,7 +1188,9 @@ character(len=*),intent(in)       :: sep
       type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+#endif
       type is (logical);                write(line(istart:),'(l1)') generic
       type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
@@ -1323,7 +1364,9 @@ character(len=20)   :: chars
     type is (integer(kind=int64));  chars='int64'
     type is (real(kind=real32));    chars='real32'
     type is (real(kind=real64));    chars='real64'
+#ifdef FLOAT128
     type is (real(kind=real128));   chars='real128'
+#endif
     type is (logical);              chars='logical'
     class default
       stop 'crud. get_type_arr(1) does not know about this type'
@@ -1347,7 +1390,9 @@ character(len=20)   :: chars
     type is (integer(kind=int64));  chars='int64'
     type is (real(kind=real32));    chars='real32'
     type is (real(kind=real64));    chars='real64'
+#ifdef FLOAT128
     type is (real(kind=real128));   chars='real128'
+#endif
     type is (logical);              chars='logical'
     class default
       stop 'crud. get_type_scalar(1) does not know about this type'

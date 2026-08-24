@@ -579,8 +579,8 @@ subroutine store(name1,value1,allow1,ier)
          return
       endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-      values(iabs(indx))=value               ! store a defined variable's value
-      ivalue(iabs(indx))=len_trim(value)     ! store length of string
+      values(abs(indx))=value               ! store a defined variable's value
+      ivalue(abs(indx))=len_trim(value)     ! store length of string
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine store
 !===================================================================================================================================
@@ -619,7 +619,7 @@ subroutine bounce(varnam,indx,dictionary,ier,mssge)
          endif
          if(imin > imax)then
             indx=-imin
-            if(iabs(indx) > IPic)then
+            if(abs(indx) > IPic)then
                mssge="error 03 in bounce"
                ier=-1
                return
@@ -651,7 +651,7 @@ subroutine add_string(newnam,nchars,indx,ier)
       integer                           :: istart
       integer                           :: i10
 !=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-      istart=iabs(indx)
+      istart=abs(indx)
 !=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 !     if last position in the name array has already been used, then report no room is left and set error flag and error message.
       if(dict_verbs(IPic) /= " ")then                 ! check if dictionary full

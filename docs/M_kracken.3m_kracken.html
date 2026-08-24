@@ -101,7 +101,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 </p>
 
 <pre>
- mycode -r 333.333 -file /home/testin -l -i 300
+ mycode -r 333.333 --file /home/testin -l -i 300
 </pre>
 
 <p>
@@ -117,7 +117,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    <B><FONT COLOR="#228B22">character</FONT></B>(255) filename
    <B><FONT COLOR="#228B22">logical</FONT></B> lval
    !  define command arguments, default values and crack command line
-   <B><FONT COLOR="#A020F0">call</FONT></B> kracken(<B><FONT COLOR="#BC8F8F">'cmd'</FONT></B>,<B><FONT COLOR="#BC8F8F">'-i 10 -r 10e3 -d 4.1123344d0 -l .false. -file input'</FONT></B>)
+   <B><FONT COLOR="#A020F0">call</FONT></B> kracken(<B><FONT COLOR="#BC8F8F">'cmd'</FONT></B>,<B><FONT COLOR="#BC8F8F">'-i 10 -r 10e3 -d 4.1123344d0 -l .false. --file input'</FONT></B>)
    !  get values
    <B><FONT COLOR="#A020F0">call</FONT></B> retrev(<B><FONT COLOR="#BC8F8F">'cmd_f'</FONT></B>,filename,iflen,ier) ! get -f FILENAME
    lval = lget(<B><FONT COLOR="#BC8F8F">'cmd_l'</FONT></B>)                    ! get -l present?

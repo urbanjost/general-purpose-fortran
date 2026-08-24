@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !>
 !!##NAME
 !!    M_pixel(3f) - [M_pixel::INTRO] module for drawing into a pixel array
@@ -2501,7 +2490,7 @@ subroutine hershey(x,y,height,itext,theta,ntext)
 !  IXTRCT gets NBITS from IWORD starting at the NSTART bit from the right
       IXTRCT(NSTART,NBITS,IWORD)=MOD(IWORD/(2**(NSTART-NBITS)), &
      &                           2**NBITS)+((1-ISIGN(1,IWORD))/2)* &
-     &                           (2**NBITS-MIN0(1,MOD(-IWORD, &
+     &                           (2**NBITS-MIN(1,MOD(-IWORD, &
      &                           2**(NSTART-NBITS))))
 !-----------------------------------------------------------------------------------------------------------------------------------
       !-!write(*,*)'GOT HERE A','X=',x,'Y=',y,'HEIGHT=',height,'ITEXT=',itext,'THETA=',theta,'NTEXT=',ntext
@@ -2830,7 +2819,7 @@ data iglu/1,2,22,4,25,50,3,50,9,50,10,11,12,13,26,27,50,17,18,28,20,50,50,14,50,
          else
             !  GREEK CHARACTER OR INVALID CHARACTER
             ic=ichar(text(k:k))
-            igoff=min0(p_ioff, 120)
+            igoff=min(p_ioff, 120)
             if(p_ioff.eq.312)igoff=0
             if((ic.ge.ichar('A')).and.(ic.le.ichar('Z')))then
                !  UPPER CASE
@@ -7619,8 +7608,8 @@ integer :: status
    r=r0/100.0
    g=g0/100.0
    b=b0/100.0
-   clrmax=amax1(r,g,b)
-   clrmin=amin1(r,g,b)
+   clrmax=max(r,g,b)
+   clrmin=min(r,g,b)
    clrdel=clrmax-clrmin
    clrsum=clrmax+clrmin
    l=clrsum/2.0
@@ -7738,8 +7727,8 @@ real             :: clrmax,clrmin,clrdel,rr,gg,bb
    r=r/100.0
    g=g/100.0
    b=b/100.0
-   clrmax=amax1(r,g,b)
-   clrmin=amin1(r,g,b)
+   clrmax=max(r,g,b)
+   clrmin=min(r,g,b)
    clrdel=clrmax-clrmin
    v=clrmax
    if(clrmax /= 0.0 )then
@@ -8464,7 +8453,7 @@ character(len=20)                      :: newname
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! returns name in ECHONAME; which is usually not useful unless NAME represents an integer string.
 ! Note that an integer converted to a string can be used to go sequentially thru the names until NEWNAME="Unknown"
-! Color names can generally be listed using showrgb(1) in GNU/1 and Unix environments that support X11 Windows:
+! Color names can generally be listed using showrgb(1) in GNU/Linux and Unix environments that support X11 Windows:
 
 ! A structure would normally be used for the data; but a large SELECT is easy to maintain.
 ! a numeric name is an alias for each color to facilitate going thru them sequentially since they are not an array.

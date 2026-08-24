@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 ! ==================================================================================================================================
 module M_pixel__slices
 !
@@ -450,8 +439,8 @@ real :: aval
 integer :: ix
 integer :: iz
 integer :: nx
-   x=xscaleq*float(ix-1)*cos(alphq)+float(iz-1)*cos(betq)*zscaleq
-   y=yscaleq*(aval-aminq)+float(nx-ix+1)*sin(alphq)*xscaleq+float(iz-1)*sin(betq)*zscaleq
+   x=xscaleq*real(ix-1)*cos(alphq)+real(iz-1)*cos(betq)*zscaleq
+   y=yscaleq*(aval-aminq)+real(nx-ix+1)*sin(alphq)*xscaleq+real(iz-1)*sin(betq)*zscaleq
 end subroutine dl_vxpt3d
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -668,7 +657,7 @@ SUBROUTINE dl_axisb(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Nn,Ml,Ts,Nd,Sm,Icol)
       n2 = (abs(S0)+0.5) ! NUMBER OF MAJOR TICKS
       s1 = n2
       xl = 1.        ! INCREMENT BETWEEN MAJOR TICKS
-      n1 = iabs(N0)
+      n1 = abs(N0)
       color = .FALSE.
       IF ( n1>100000 ) THEN
          n1 = mod(n1,100000)
@@ -677,18 +666,18 @@ SUBROUTINE dl_axisb(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Nn,Ml,Ts,Nd,Sm,Icol)
       ENDIF
       IF ( n1>10000 ) THEN
          n1 = mod(n1,10000)
-         n2 = iabs(Ml)  ! NUMBER MAJOR TICKS
+         n2 = abs(Ml)  ! NUMBER MAJOR TICKS
          s1 = abs(S0)
          IF ( n2==0 ) n2 = 1
-         xl = abs(S0)/float(n2)
+         xl = abs(S0)/real(n2)
                               ! SPACING MAJOR TICKS
-         nm1 = iabs(Nm) + 1
+         nm1 = abs(Nm) + 1
                          ! NUMBER MINOR TICKS
          IF ( Ml<0 ) THEN
             cs = abs(Ts)
                         ! DIFFERENT TITLE SIZE
             IF ( cs==0. ) cs = .15
-            ndd = iabs(Nd)
+            ndd = abs(Nd)
             IF ( Ts<0 ) scale = .FALSE.
                                        ! DO NOT SCALE
             t5 = abs(Sm)  ! NEW TICK LENGTH
@@ -700,7 +689,7 @@ SUBROUTINE dl_axisb(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Nn,Ml,Ts,Nd,Sm,Icol)
                           ! VERTICAL NUMBERS ON HORIZONTAL AXIS
          vert = .TRUE.
          hor = 0.0
-         b4 = (abs(t5)*(1.+sign(1.,S0))/2.+.1)*sign(1.,float(N0))
+         b4 = (abs(t5)*(1.+sign(1.,S0))/2.+.1)*sign(1.,real(N0))
          b6 = .49*cs
       ENDIF
       IF ( n1>100 ) THEN
@@ -733,12 +722,12 @@ SUBROUTINE dl_axisb(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Nn,Ml,Ts,Nd,Sm,Icol)
                                         ! COLOR
       DO i = 1 , n2   ! MAJOR TICKS
          IF ( nm1/=0 ) THEN
-            xm = xl/float(nm1)
+            xm = xl/real(nm1)
                           ! SPACING MINOR TICKS
             DO k = 1 , nm1
                       ! DO MINOR TICKS
-               x2 = x1 + t3*float(k-1)*xm
-               y2 = y1 + t4*float(k-1)*xm
+               x2 = x1 + t3*real(k-1)*xm
+               y2 = y1 + t4*real(k-1)*xm
                IF ( k-1==Nn .AND. Nn/=0 ) THEN
                   hmt = 0.8
                ELSE
@@ -789,14 +778,14 @@ SUBROUTINE dl_axisb(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Nn,Ml,Ts,Nd,Sm,Icol)
          c2 = c1 - n2*d1
                         ! MAKE SPACE FOR VERTICAL NUMBERS
          ic = 1      ! ON HORIZONTAL AXIS
-         IF ( abs(c2)>=1.0 ) ic = ifix(alog10(abs(c2)))
+         IF ( abs(c2)>=1.0 ) ic = int(log10(abs(c2)))
          ic2 = 1
-         IF ( abs(c1)>=1.0 ) ic2 = ifix(alog10(abs(c1)))
+         IF ( abs(c1)>=1.0 ) ic2 = int(log10(abs(c1)))
          nc1 = max(ic,ic2) + 2
          IF ( c2<0.0 .OR. C0<0.0 ) nc1 = nc1 + 1
-         IF ( N0>0.0 ) b4 = b4 + float(nc1+ndd)*cs
+         IF ( N0>0.0 ) b4 = b4 + real(nc1+ndd)*cs
          b3 = 0.0
-         b8 = (.25+abs(t5)*(sign(1.,S0)+1.)/2.+float(nc1+ndd)*cs)*sign(1.,float(N0))
+         b8 = (.25+abs(t5)*(sign(1.,S0)+1.)/2.+real(nc1+ndd)*cs)*sign(1.,real(N0))
       ENDIF
       x2 = x1 - b4*t4 - b7*t3
                          ! LOCATE CENTER NUMBER LABELS
@@ -807,8 +796,8 @@ SUBROUTINE dl_axisb(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Nn,Ml,Ts,Nd,Sm,Icol)
       nddd = ndd
       IF ( ndd==0 ) nddd = -1
       DO i = 1 , n2  ! LABEL MAJOR TICKS
-         CALL dl_number(x2,y2,cs,c1,hor,float(nddd)/100.,-1)
-         c1 = c1 - d1*s1/float(n2-1)
+         CALL dl_number(x2,y2,cs,c1,hor,real(nddd)/100.,-1)
+         c1 = c1 - d1*s1/real(n2-1)
          x2 = x2 - t3*xl
          y2 = y2 - t4*xl
       ENDDO
@@ -841,7 +830,7 @@ SUBROUTINE dl_axisb(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Nn,Ml,Ts,Nd,Sm,Icol)
          x2 = x2 + 3.75*cs*t3 - cs*t4*0.4
          y2 = y2 + 3.75*cs*t4 + cs*t3*0.4
          CALL dl_number(x2,y2,cs,e1,t2,0.0,-1)
-         b2 = 0.8 + aint(alog10(abs(e1)))
+         b2 = 0.8 + aint(log10(abs(e1)))
          IF ( e1<0.0 ) b2 = b2 + 1
          x2 = x2 + b2*cs*t3 + cs*t4*0.4
          y2 = y2 + b2*cs*t4 - cs*t3*0.4
@@ -849,9 +838,6 @@ SUBROUTINE dl_axisb(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Nn,Ml,Ts,Nd,Sm,Icol)
       ENDIF
    ENDIF
 END SUBROUTINE dl_axisb
-!==================================================================================================================================!
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!==================================================================================================================================!
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!
@@ -892,8 +878,8 @@ DATA q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
    Xmin = xmax
    DO i = Ix , np , K
       xi = X(i)
-      xmax = amax1(xmax,xi)
-      Xmin = amin1(Xmin,xi)
+      xmax = max(xmax,xi)
+      Xmin = min(Xmin,xi)
    ENDDO
    xmm = Xmin
    IF ( S>0.0 ) THEN
@@ -901,7 +887,7 @@ DATA q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
       IF ( Dx>0.0 ) THEN
          sj = 0.0
          IF ( Dx<1.0 ) sj = -1.0
-         idx = alog10(Dx) + sj
+         idx = log10(Dx) + sj
          Dx = Dx/(10.0**idx)
          SPAG_Loop_1_1: DO i = 1 , 6
             xi = q(i)
@@ -918,10 +904,10 @@ DATA q/1.0 , 2.0 , 4.0 , 5.0 , 8.0 , 10.0/
             CALL spag_block_1
             RETURN
          ENDIF
-         idx = alog10(Xmin) + sj
+         idx = log10(Xmin) + sj
          Xmin = Xmin/(10.0**idx)
          Xmin = Xmin - sj
-         Xmin = ifix(Xmin)*si*(10.0**idx)
+         Xmin = int(Xmin)*si*(10.0**idx)
          CALL spag_block_1
          RETURN
       ENDIF
@@ -1277,11 +1263,11 @@ SUBROUTINE dl_axisa(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Ml,Icol)
       b7 = t5 + .08  ! NUMBER DISTANCE FROM AXIS
       b6 = b7
       b8 = 0.0
-      nm1 = 0        ! NUMBER MINOR TICKS
+      nm1 = 0            ! NUMBER MINOR TICKS
       n2 = (abs(S0)+0.5) ! NUMBER OF MAJOR TICKS
-      s1 = float(n2)
+      s1 = real(n2)
       xl = 1.0       ! INCREMENT BETWEEN MAJOR TICKS
-      n1 = iabs(N0)
+      n1 = abs(N0)
       color = .FALSE.
       IF ( n1>=100000 ) THEN
          n1 = mod(n1,100000)
@@ -1290,12 +1276,12 @@ SUBROUTINE dl_axisa(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Ml,Icol)
       ENDIF
       IF ( n1>=10000 ) THEN
          n1 = mod(n1,10000)
-         n2 = iabs(Ml)  ! NUMBER MAJOR TICKS
+         n2 = abs(Ml)  ! NUMBER MAJOR TICKS
          IF ( n2==0 ) n2 = 1
          s1 = abs(S0)
-         xl = abs(S0)/float(n2)
+         xl = abs(S0)/real(n2)
                               ! SPACING MAJOR TICKS
-         nm1 = iabs(Nm) + 1
+         nm1 = abs(Nm) + 1
                          ! NUMBER MINOR TICKS
       ENDIF
       IF ( N0<0 ) THEN
@@ -1315,7 +1301,7 @@ SUBROUTINE dl_axisa(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Ml,Icol)
                           ! VERTICAL NUMBERS ON HORIZONTAL AXIS
          vert = .TRUE.
          hor = 0.0
-         b4 = (abs(t5)*(1.+sign(1.,S0))/2.+.1)*sign(1.,float(N0))
+         b4 = (abs(t5)*(1.+sign(1.,S0))/2.+.1)*sign(1.,real(N0))
          b6 = .49*cs
       ENDIF
       IF ( n1>=100 ) THEN
@@ -1336,12 +1322,12 @@ SUBROUTINE dl_axisa(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Ml,Icol)
                                         ! COLOR
       DO i = 1 , n2   ! MAJOR TICKS
          IF ( nm1/=0 ) THEN
-            xm = xl/float(nm1)
+            xm = xl/real(nm1)
                           ! SPACING MINOR TICKS
             DO k = 1 , nm1
                       ! DO MINOR TICKS
-               x2 = x1 + t3*float(k-1)*xm
-               y2 = y1 + t4*float(k-1)*xm
+               x2 = x1 + t3*real(k-1)*xm
+               y2 = y1 + t4*real(k-1)*xm
                x3 = x2 - t5*.5
                y3 = y2 + t6*.5
                CALL dl_move(x2,y2)
@@ -1385,14 +1371,14 @@ SUBROUTINE dl_axisa(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Ml,Icol)
          c2 = c1 - n2*d1
                         ! MAKE SPACE FOR VERTICAL NUMBERS
          ic = 1      ! ON HORIZONTAL AXIS
-         IF ( abs(c2)>=1.0 ) ic = ifix(alog10(abs(c2)))
+         IF ( abs(c2)>=1.0 ) ic = int(log10(abs(c2)))
          ic2 = 1
-         IF ( abs(c1)>=1.0 ) ic2 = ifix(alog10(abs(c1)))
+         IF ( abs(c1)>=1.0 ) ic2 = int(log10(abs(c1)))
          nc1 = max(ic,ic2) + 2
          IF ( c2<0.0 .OR. C0<0.0 ) nc1 = nc1 + 1
-         IF ( N0>0.0 ) b4 = b4 + float(nc1)*cs
+         IF ( N0>0.0 ) b4 = b4 + real(nc1)*cs
          b3 = 0.0
-         b8 = (.25+abs(t5)*(sign(1.,S0)+1.)/2.+float(nc1)*cs)*sign(1.,float(N0))
+         b8 = (.25+abs(t5)*(sign(1.,S0)+1.)/2.+real(nc1)*cs)*sign(1.,real(N0))
       ENDIF
       x2 = x1 - b4*t4 - b7*t3
                          ! LOCATE CENTER NUMBER LABELS
@@ -1402,7 +1388,7 @@ SUBROUTINE dl_axisa(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Ml,Icol)
                                         ! COLOR
       DO i = 1 , n2  ! LABEL MAJOR TICKS
          CALL dl_number(x2,y2,cs,c1,hor,0.01,-1)
-         c1 = c1 - d1*s1/float(n2-1)
+         c1 = c1 - d1*s1/real(n2-1)
          x2 = x2 - t3*xl
          y2 = y2 - t4*xl
       ENDDO
@@ -1435,7 +1421,7 @@ SUBROUTINE dl_axisa(X0,Y0,A0,N0,S0,T0,C0,D0,Nm,Ml,Icol)
          x2 = x2 + cs*3.75*t3 - cs*t4*0.4
          y2 = y2 + cs*3.75*t4 + cs*t3*0.4
          CALL dl_number(x2,y2,cs,e1,t2,0.0,-1)
-         b2 = 0.8 + aint(alog10(abs(e1)))
+         b2 = 0.8 + aint(log10(abs(e1)))
          IF ( e1<0.0 ) b2 = b2 + 1
          x2 = x2 + b2*cs*t3 + cs*t4*0.4
          y2 = y2 + b2*cs*t4 - cs*t3*0.4
@@ -1531,7 +1517,7 @@ SUBROUTINE dl_number(X,Y,Hght,Z,T,F0,Ipf)
             nn = nd + 2
             IF ( Z==0 .AND. fa==0.0 ) nn = 1
             IF ( Z/=0.0 ) THEN
-               alg = alog10(abs(Z))
+               alg = log10(abs(Z))
                IF ( alg<0.0 ) alg = 0.0
                nn = nd + 2 + alg
                IF ( fa==0.0 ) nn = 1 + alg
@@ -1886,8 +1872,8 @@ SUBROUTINE dl_slices(A,Inx,Inz,Nx,Nz,Alpha,Beta,Xh,Yh,Zh,Iflag,Iaxis,Xt,Nxt,Xast
             DO iz = 1 , Nz
                          ! DETERMINE MAX,MIN ARRAY VALUES
                DO ix = 1 , Nx
-                  amax = amax1(amax,A(ix,iz))
-                  aminq = amin1(aminq,A(ix,iz))
+                  amax = max(amax,A(ix,iz))
+                  aminq = min(aminq,A(ix,iz))
                ENDDO
             ENDDO
          ENDIF
@@ -1902,11 +1888,11 @@ SUBROUTINE dl_slices(A,Inx,Inz,Nx,Nz,Alpha,Beta,Xh,Yh,Zh,Iflag,Iaxis,Xt,Nxt,Xast
          ENDIF
 !
          xlen = abs(Xh)
-         xscaleq = xlen/float(Nx-1)
+         xscaleq = xlen/real(Nx-1)
          zlen = abs(Zh)
-         zscaleq = zlen/float(Nz-1)
+         zscaleq = zlen/real(Nz-1)
          ylen = abs(Yh)
-         IF ( mod(iabs(Iaxis),10)==2 ) THEN
+         IF ( mod(abs(Iaxis),10)==2 ) THEN
                                          ! SMOOTH SCALE FACTORS
             as(1) = amax
             as(2) = aminq
@@ -1918,9 +1904,9 @@ SUBROUTINE dl_slices(A,Inx,Inz,Nx,Nz,Alpha,Beta,Xh,Yh,Zh,Iflag,Iaxis,Xt,Nxt,Xast
 !
 !     INITIALIZE PLOT PACKAGE
 !
-         iaf = iabs(Iaxis)/10
+         iaf = abs(Iaxis)/10
 
-         iflag1 = iabs(Iflag)
+         iflag1 = abs(Iflag)
          iflag10 = mod(iflag1,100)/10
          iflag1 = mod(iflag1,10)
 
@@ -1941,7 +1927,7 @@ SUBROUTINE dl_slices(A,Inx,Inz,Nx,Nz,Alpha,Beta,Xh,Yh,Zh,Iflag,Iaxis,Xt,Nxt,Xast
             IF ( Nyt>0 ) THEN
                              ! PLOT Y AXIS
                IF ( iaf==1 ) THEN
-                  CALL dl_axisb(xp,yp,Yt,Nyt+11000+nadd,ylen,90.,aminq,dy,Nmy,Nny,-iabs(Mly),Tsy,Ndy,Smy,ic)
+                  CALL dl_axisb(xp,yp,Yt,Nyt+11000+nadd,ylen,90.,aminq,dy,Nmy,Nny,-abs(Mly),Tsy,Ndy,Smy,ic)
                ELSE
                   CALL dl_axisa(xp,yp,Yt,Nyt+1000+nadd,ylen,90.,aminq,dy,n1,n2,ic)
                ENDIF
@@ -1952,7 +1938,7 @@ SUBROUTINE dl_slices(A,Inx,Inz,Nx,Nz,Alpha,Beta,Xh,Yh,Zh,Iflag,Iaxis,Xt,Nxt,Xast
             ang = atan2(yp1-yp,xp1-xp)*180./TPI
             IF ( Nxt>0 ) THEN
                IF ( iaf==1 ) THEN
-                  CALL dl_axisb(xp,yp,Xt,-Nxt-nadd-10000,xlen,ang,Xastart,dx,Nmx,Nnx,-iabs(Mlx),Tsx,Ndx,Smx,ic)
+                  CALL dl_axisb(xp,yp,Xt,-Nxt-nadd-10000,xlen,ang,Xastart,dx,Nmx,Nnx,-abs(Mlx),Tsx,Ndx,Smx,ic)
                ELSE
                   CALL dl_axisa(xp,yp,Xt,-Nxt-nadd,xlen,ang,Xastart,dx,n1,n2,ic)
                ENDIF
@@ -1960,7 +1946,7 @@ SUBROUTINE dl_slices(A,Inx,Inz,Nx,Nz,Alpha,Beta,Xh,Yh,Zh,Iflag,Iaxis,Xt,Nxt,Xast
             dz = (Zaend-Zastart)/zlen
             IF ( Nzt>0 ) THEN
                IF ( iaf==1 ) THEN
-                  CALL dl_axisb(xp1,yp1,Zt,-Nzt-nadd-10000,zlen,Beta,Zastart,dz,Nmz,Nnz,-iabs(Mlz),Tsz,Ndz,Smz,ic)
+                  CALL dl_axisb(xp1,yp1,Zt,-Nzt-nadd-10000,zlen,Beta,Zastart,dz,Nmz,Nnz,-abs(Mlz),Tsz,Ndz,Smz,ic)
                ELSE
                   CALL dl_axisa(xp1,yp1,Zt,-Nzt-nadd,zlen,Beta,Zastart,dz,n1,n2,ic)
                ENDIF
@@ -2566,7 +2552,7 @@ DATA ipt002/668 , 676 , 683 , 689 , 693 , 695 , 699 , 704 , 709 , 711 , 721 , 73
          i = 0    ! CHARACTER COUNTER
          SPAG_Loop_1_1: DO
             i = i + 1
-            IF ( i>iabs(n) ) EXIT SPAG_Loop_1_1
+            IF ( i>abs(n) ) EXIT SPAG_Loop_1_1
                                    ! END OF STRING COUNT
             icc = ichar(T(i:i))
                             ! GET ITH ASCII CHARACTER

@@ -2,7 +2,7 @@
       use M_io, only : filedelete, fileopen
       implicit none
       integer :: lun
-      integer :: ios
+      integer :: iostat
          lun=fileopen('<input.txt')
-         ios=filedelete(lun)
+         iostat=filedelete(lun)
       end program demo_filedelete

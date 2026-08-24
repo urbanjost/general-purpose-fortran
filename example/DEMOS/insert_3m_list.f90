@@ -28,7 +28,7 @@
       ! find where string is or should be
       call locate(arr,string,place)
       ! if string was not found insert it
-      if(place.lt.1)then
+      if(place < 1)then
          call insert(arr,string,abs(place))
       endif
       ! show array

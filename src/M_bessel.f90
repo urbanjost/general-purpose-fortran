@@ -220,7 +220,7 @@ integer                            :: i, i2, iend, ik, iloop, imo, j, jo, kend, 
       bigval = 1.0d307
       if ( kode<10 ) goto 1200
       sign = 1.0d0
-      ko = iabs(no) + 1
+      ko = abs(no) + 1
       xsqfr = 0.25d0*x*x
 !     ---------
 !     INITIAL CHECK OF ORDER-ARGUMENT RANGE TO DETERMINE IF ORDER IS OUT
@@ -234,7 +234,7 @@ integer                            :: i, i2, iend, ik, iloop, imo, j, jo, kend, 
                xx = x
                goto 100
             elseif ( xchk<=0.025d0 ) then
-               ano = iabs(no)
+               ano = abs(no)
                ax = ano*log(2.0d0*ano/xchk)                             &
      &              + 0.5d0*log(2.0d0*dble(pi)/ano)                     &
      &              - ano + 1.0d0/(12.0d0*ano) + log(xchk)/2.0d0
@@ -262,7 +262,7 @@ integer                            :: i, i2, iend, ik, iloop, imo, j, jo, kend, 
             ierr = 1
             return
          endif
-         if ( iabs(no)>largor ) goto 1400
+         if ( abs(no)>largor ) goto 1400
          xx = x
       endif
 !     ---------
@@ -340,7 +340,7 @@ integer                            :: i, i2, iend, ik, iloop, imo, j, jo, kend, 
          return
       endif
  600  continue
-      mo = iabs(no)
+      mo = abs(no)
       imo = mo
       if ( x>=1.0d0 ) then
          if ( mask2==0 ) then

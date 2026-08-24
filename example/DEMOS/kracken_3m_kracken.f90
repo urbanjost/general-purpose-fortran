@@ -6,7 +6,7 @@
         call kracken('cmd',              &
            &   '-int 20                  &
            &   -real 10e3                &
-           &   -file input               &
+           &   --file input               &
            &   -dble 4.11223344556677d0  &
            &   -help    .false.          &
            &   -version .false.         '&

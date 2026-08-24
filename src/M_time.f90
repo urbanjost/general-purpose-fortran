@@ -1,17 +1,30 @@
-
-
-
-
-
-
-
-
-
-
-
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __LFORTRAN_COMP     6
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   define __COMPILER__ __NVIDIA_COMP
+#elif __LFORTRAN__
+#   define __COMPILER__ __LFORTRAN_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -93,7 +106,7 @@ private
    private call_usleep
 !-----------------------------------------------------------------------------------------------------------------------------------
 integer,parameter          :: dp=kind(0.0d0)
-integer,parameter,public   :: realtime=kind(0.0d0)           ! type for 1 epoch time and julian days
+integer,parameter,public   :: realtime=kind(0.0d0)           ! type for unix epoch time and julian days
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! INTERNAL
 real(kind=realtime),parameter,private :: SECDAY=86400.0_dp    ! 24:00:00 hours as seconds
@@ -115,20 +128,16 @@ character(len=:),save,allocatable,public :: M_time_month_names(:)
 character(len=:),save,allocatable,public :: M_time_weekday_names_abbr(:)
 character(len=:),save,allocatable,public :: M_time_month_names_abbr(:)
 !-----------------------------------------------------------------------------------------------------------------------------------
-character(len=*),parameter   :: G_month_names(12)=[ &
+character(len=*),parameter   :: G_month_names(12)=[                               &
    &'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', &
    &'July     ', 'August   ', 'September', 'October  ', 'November ', 'December ']
 
-!bug!character(len=3),parameter   :: G_month_names_abbr(12)=G_month_names(:)(1:3)
-character(len=3),parameter   :: G_month_names_abbr(12)=[ &
-   &'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+character(len=3),parameter   :: G_month_names_abbr(12)=G_month_names(:)(1:3)
 
 character(len=*),parameter   :: G_weekday_names(7)=[character(len=9) :: &
    & 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ]
 
-!bug!character(len=3),parameter   :: G_weekday_names_abbr(7)=G_weekday_names(:)(1:3)
-character(len=3),parameter   :: G_weekday_names_abbr(7)=[character(len=3) :: &
-   & 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
+character(len=3),parameter   :: G_weekday_names_abbr(7)=G_weekday_names(:)(1:3)
 !-----------------------------------------------------------------------------------------------------------------------------------
 interface w2d
    module procedure w2d_numeric
@@ -392,18 +401,18 @@ integer                        :: jalpha,ja,jb,jc,jd,je,ijul
    endif
    tz=get_timezone()
 
-   ijul=int(julian)                             ! Integral Julian Date
-   second=real((julian-real(ijul,kind=dp))*secday)      ! Seconds from beginning of Jul. Day
+   ijul=int(julian)                                ! Integral Julian Date
+   second=real((julian-real(ijul,kind=dp))*secday) ! Seconds from beginning of Jul. Day
    second=second+(tz*60)
 
-   if(second>=(secday/2.0_dp)) then           ! In next calendar day
+   if(second>=(secday/2.0_dp)) then             ! In next calendar day
       ijul=ijul+1
       second=second-(secday/2.0_dp)             ! Adjust from noon to midnight
    else                                         ! In same calendar day
       second=second+(secday/2.0_dp)             ! Adjust from noon to midnight
    endif
 
-   if(second>=secday) then                    ! Final check to prevent time 24:00:00
+   if(second>=secday) then                      ! Final check to prevent time 24:00:00
       ijul=ijul+1
       second=second-secday
    endif
@@ -7346,6 +7355,15 @@ end SUBROUTINE system_sleep
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+#if __COMPILER__ == __INTEL_COMP
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine call_sleep(seconds)
+USE IFPORT
+integer,intent(in) :: seconds
+   CALL SLEEP(seconds)
+end subroutine call_sleep
+!-----------------------------------------------------------------------------------------------------------------------------------
+#else
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine call_sleep(wait_seconds)
 use,intrinsic                   :: iso_c_binding, only: c_int
@@ -7366,9 +7384,19 @@ end interface
    endif
 end subroutine call_sleep
 !-----------------------------------------------------------------------------------------------------------------------------------
+#endif
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+#if __COMPILER__ == __INTEL_COMP
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine call_usleep(milliseconds)
+USE IFPORT
+integer,intent(in) :: milliseconds
+   CALL SLEEPQQ(milliseconds)
+end subroutine call_usleep
+!-----------------------------------------------------------------------------------------------------------------------------------
+#else
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine call_usleep(milliseconds)
 
@@ -7389,6 +7417,7 @@ end interface
    endif
 end subroutine call_usleep
 !-----------------------------------------------------------------------------------------------------------------------------------
+#endif
 !==================================================================================================================================!
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !==================================================================================================================================!

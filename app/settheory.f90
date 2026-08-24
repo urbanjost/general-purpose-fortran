@@ -196,28 +196,23 @@ help_text=[ CHARACTER(LEN=128) :: &
 '    ISMEMBER     :  0 1 1                                                ',&
 '    SETXOR       :  five  four  one                                      ',&
 '                                                                         ',&
-'    settheory -a 7,23,14,15,9,12,8,24,35 -b 2,5,7,8,14,16,25,35,27 \     ',&
-'              --type integer                                             ',&
-'    A            :  7 23 14 15 9 12 8 24 35                              ',&
-'    B            :  2 5 7 8 14 16 25 35 27                               ',&
-'    UNIQUE A     :  7 8 9 12 14 15 23 24 35                              ',&
-'    UNIQUE B     :  2 5 7 8 14 16 25 27 35                               ',&
-'    UNION        :  2 5 7 8 9 12 14 15 16 23 24 25 27 35                 ',&
-'    INTERSECT    :  7 8 14 35                                            ',&
-'    SETDIFF      :  9 12 15 23 24                                        ',&
-'    ISMEMBER     :  1 0 1 0 0 0 1 0 1                                    ',&
-'    SETXOR       :  2 5 9 12 15 16 23 24 25 27                           ',&
-'    # or                                                                 ',&
-'    settheory --type integer \                                           ',&
-'    -a ''7 23 14 15 9 12 8 24 35'' \                                     ',&
-'    -b ''2 5 7 8 14 16 25 35 27''                                        ',&
-'    # or                                                                 ',&
-'    settheory --type integer \                                           ',&
-'    -a 7:23:14:15:9:12:8:24:35 \                                         ',&
-'    -b 2:5:7:8:14:16:25:35:27                                            ',&
-'                                                                         ',&
-'SEE ALSO                                                                 ',&
-'    diff(1),uniq(1),sort(1),comm(1),join(1)                              ',&
+'    settheory -a 7,23,14,15,9,12,8,24,35 -b 2,5,7,8,14,16,25,35,27               --type integer',&
+'    A            :  7 23 14 15 9 12 8 24 35                                                    ',&
+'    B            :  2 5 7 8 14 16 25 35 27                                                     ',&
+'    UNIQUE A     :  7 8 9 12 14 15 23 24 35                                                    ',&
+'    UNIQUE B     :  2 5 7 8 14 16 25 27 35                                                     ',&
+'    UNION        :  2 5 7 8 9 12 14 15 16 23 24 25 27 35                                       ',&
+'    INTERSECT    :  7 8 14 35                                                                  ',&
+'    SETDIFF      :  9 12 15 23 24                                                              ',&
+'    ISMEMBER     :  1 0 1 0 0 0 1 0 1                                                          ',&
+'    SETXOR       :  2 5 9 12 15 16 23 24 25 27                                                 ',&
+'    # or                                                                                       ',&
+'    settheory --type integer     -a ''7 23 14 15 9 12 8 24 35''     -b ''2 5 7 8 14 16 25 35 27''',&
+'    # or                                                                                         ',&
+'    settheory --type integer     -a 7:23:14:15:9:12:8:24:35     -b 2:5:7:8:14:16:25:35:27        ',&
+'                                                                                                 ',&
+'SEE ALSO                                                                                         ',&
+'    diff(1),uniq(1),sort(1),comm(1),join(1)                                                      ',&
 '']
 version_text=[ CHARACTER(LEN=128) :: &
 'PRODUCT:        GPF (General Purpose Fortran) utilities and examples',&

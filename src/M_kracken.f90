@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -1188,7 +1177,7 @@ end function sgets
 !!       call kracken('cmd',              &
 !!          &   '-int 20                  &
 !!          &   -real 10e3                &
-!!          &   -file input               &
+!!          &   --file input               &
 !!          &   -dble 4.11223344556677d0  &
 !!          &   -help    .false.          &
 !!          &   -version .false.         '&
@@ -1237,7 +1226,7 @@ end function sgets
 !!          filename=input
 !!          values= 10000.0000  4.1122334455667700  20
 !!
-!!   expected output from : "./cmd -file myfile -int 1234"
+!!   expected output from : "./cmd --file myfile -int 1234"
 !!
 !!          filename=myfile
 !!          values= 10000.0000  4.1122334455667700  1234
@@ -2048,7 +2037,7 @@ integer                            :: inew
    if(indx > 0)then                                       ! found the variable name
       new=1
    elseif( allow  ==  'add'.or. allow == 'define' )then   ! check if the name needs added and allow to add
-      inew=iabs(indx)                                     ! adding the new variable name in the variable name array
+      inew=abs(indx)                                     ! adding the new variable name in the variable name array
       call insert(dict_verbs,name,inew)                   ! pull down the dictionary arrays to make room for new value
       call insert(dict_vals," ",inew)
       call insert(dict_calls,0,inew)
@@ -2084,7 +2073,7 @@ integer                            :: inew
 !-----------------------------------------------------------------------------------------------------------------------------------
    ! ignore special value that means leave alone, used by 'set up' calls to leave a value alone
    ! note that this will prevent the keyword from being defined.
-   indx=iabs(indx)  ! entry existed or was added
+   indx=abs(indx)  ! entry existed or was added
    if(indx.eq.0)then
       write(*,*)'*store* error: INDEX=0'
    elseif(value(1:4)  ==  "@LV@")then
@@ -2776,7 +2765,7 @@ end module M_kracken
 ! HISTORY:
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! updated 20191018
-! added 'kracken_method' and the 'args' method for users that prefer a more 1-like feel requiring quoted arguments on input
+! added 'kracken_method' and the 'args' method for users that prefer a more unix-like feel requiring quoted arguments on input
 !-----------------------------------------------------------------------------------------------------------------------------------
 ! updated 20160414
 ! multiple uses of a keyword appends values together with a space in between rather than taking right-most definition

@@ -25,18 +25,18 @@
       call locate(arr,string,place)
       write(*,*)'for "'//string//'" index is ',place, size(arr)
       ! if string was not found insert it
-      if(place.lt.1)then
+      if(place < 1)then
          plus=abs(place)
          ii=len(arr)
          end=size(arr)
          ! empty array
-         if(end.eq.0)then
+         if(end == 0)then
             arr=[character(len=ii) :: string ]
          ! put in front of array
-         elseif(plus.eq.1)then
+         elseif(plus == 1)then
             arr=[character(len=ii) :: string, arr]
          ! put at end of array
-         elseif(plus.eq.end)then
+         elseif(plus == end)then
             arr=[character(len=ii) :: arr, string ]
          ! put in middle of array
          else

@@ -48,7 +48,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '   one at a time into dynamically allocated memory.                      ',&
 '                                                                         ',&
 'OPTIONS                                                                  ',&
-'    --help  Display this help text and exit                              ',&
+'   --help                                                                ',&
 '                                                                         ',&
 'EXAMPLES                                                                 ',&
 '   Sample commands                                                       ',&

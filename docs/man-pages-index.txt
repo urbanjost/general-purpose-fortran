@@ -344,9 +344,6 @@ dcopy (3m_blas)      - [BLAS:DOUBLE_BLAS_LEVEL1] copies elements of a vector, x,
 ddot (3m_blas)	     - [BLAS:DOUBLE_BLAS_LEVEL1] forms the dot product of two vectors.
 deallocate (7fortran) - [FORTRAN:STATEMENT] causes allocated variables and targets to be deallocated
 decode_base64 (3m_strings) - [M_strings:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
-decode_base64 (3m_unicode) - [M_unicode:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
-decode_base64_bytes (3m_strings) - [M_strings:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
-decode_base64_bytes (3m_unicode) - [M_unicode:ENCODE] decode data from base64 encoding as defined in RFC-4648 (LICENSE:MIT)
 decodebase (3m_strings) - [M_strings:BASE] convert whole number string in base [2-36] to base 10 number (LICENSE:PD)
 define (3m_datapac)  - [M_datapac:VECTOR_OPERATION] set all elements of a vector equal to a specified constant
 degrees (1)	     - [CONVERT] Convert between Fahrenheit and Celsius temperature values (LICENSE:PD)
@@ -448,8 +445,6 @@ elips (3m_calcomp)   - [M_calcomp:general] draw an elliptical arc (LICENSE:PD)
 ellipse (3m_drawplus) - [M_drawplus] draws an ellipse or elliptical arc. (LICENSE:MIT)
 empty (3m_anything)  - [M_anything] set an allocatable array to zero (LICENSE:MIT)
 encode_base64 (3m_strings) - [M_strings:ENCODE] encode data using base64 encoding as defined in RFC-4648 (LICENSE:MIT)
-encode_base64 (3m_unicode) - [M_unicode:ENCODE] encode data using base64 encoding as defined in RFC-4648 (LICENSE:MIT)
-encode_base64_bytes (3m_unicode) - [M_unicode:ENCODE] encode data using base64 encoding as defined in RFC-4648 (LICENSE:MIT)
 end_pause_watch (3m_stopwatch) - [M_stopwatch] resumes a paused M_StopWatch watch (LICENSE:PD)
 endfile (7fortran)   - [NUMERIC] Absolute value
 ends_with (3m_strings) - [M_strings:COMPARE] test if string ends with specified suffix(es) (LICENSE:PD)
@@ -1253,7 +1248,6 @@ regmatch (3m_regex)  - [M_regex] return selected substring defined by the MATCHE
 regsub (3m_regex)    - [M_regex] perform regex substitutions
 relsd (3m_datapac)   - [M_datapac:STATISTICS] compute the relative standard deviation of a vector of observations
 remove (3m_list)     - [M_list] remove entry from an allocatable array at specified position (LICENSE:PD)
-remove_backslash (3m_unicode) - [M_unicode:CONVERSION] expand C-like escape sequences (LICENSE:MIT)
 rename- (1)	     - [FUNIX:FILESYSTEM] rename files by replacing first occurrence of a string in a filename with new string (LICENSE:PD)
 replac (3m_datapac)  - [M_datapac:VECTOR_OPERATION] replace all observations in a vector within a given interval with a user-specified constant
 replace (3m_list)    - [M_list] replace entry in a string array at specified position (LICENSE:PD)

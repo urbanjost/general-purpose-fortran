@@ -1,18 +1,35 @@
-
-
-
-
-
-
-
-
-
-
-
 !-----------------------------------------------------------------------------------------------------------------------------------
+#define  __INTEL_COMP        1
+#define  __GFORTRAN_COMP     2
+#define  __NVIDIA_COMP       3
+#define  __NAG_COMP          4
+#define  __LLVM_FLANG_COMP   5
+#define  __UNKNOWN_COMP   9999
 
+#define FLOAT128
 
+#ifdef __INTEL_COMPILER
+#   define __COMPILER__ __INTEL_COMP
+#elif __GFORTRAN__ == 1
+#   define __COMPILER__ __GFORTRAN_COMP
+#elif __flang__
+#   undef FLOAT128
+#   warning  NOTE: REAL128 NOT SUPPORTED
+#   define __COMPILER__ __LLVM_FLANG_COMP
+#elif __NVCOMPILER
+#   undef FLOAT128
+#   warning  NOTE: REAL128 NOT SUPPORTED
+#   define __COMPILER__ __NVIDIA_COMP
+#else
+#   define __COMPILER__ __UNKNOWN_COMP
+#   warning  NOTE: UNKNOWN COMPILER
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
+#ifdef Linux_ifx
+#   ifndef __INTEL_LLVM_COMPILER
+#      define __INTEL_LLVM_COMPILER  IFX
+#   endif
+#endif
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -60,7 +77,9 @@ end interface
 interface sort_heap
    module procedure sort_heap_integer_int8, sort_heap_integer_int16, sort_heap_integer_int32, sort_heap_integer_int64
    module procedure sort_heap_real_real32, sort_heap_real_real64
+#ifdef FLOAT128
    module procedure sort_heap_real_real128
+#endif
    module procedure sort_heap_character_ascii
 end interface
 !===================================================================================================================================
@@ -71,7 +90,9 @@ interface sort_quick_compact
    module procedure sort_quick_compact_integer_int8,   sort_quick_compact_integer_int16,  &
           &         sort_quick_compact_integer_int32,  sort_quick_compact_integer_int64
    module procedure sort_quick_compact_real_real32,    sort_quick_compact_real_real64
+#ifdef FLOAT128
    module procedure sort_quick_compact_real_real128
+#endif
    module procedure sort_quick_compact_complex_real32, sort_quick_compact_complex_real64
    module procedure sort_quick_compact_character_ascii
 end interface
@@ -84,7 +105,9 @@ module procedure  unique_integer_int8,            unique_integer_int16,   unique
 module procedure  unique_real_real32,             unique_real_real64
 module procedure  unique_complex_real32,          unique_complex_real64
 module procedure  unique_strings_allocatable_len  !x!,unique_strings
+#ifdef FLOAT128
 module procedure  unique_real_real128,            unique_complex_real128
+#endif
 end interface
 !===================================================================================================================================
 
@@ -4127,6 +4150,7 @@ real(kind=real64)                   :: sorted(1:size(data))
    endif
 !     All done
 end function sort_quick_compact_real_real64
+#ifdef FLOAT128
 recursive function sort_quick_compact_real_real128(data) result(sorted)
 
 ! ident_46="@(#) M_sort sort_quick_compact_real_real128(3f) recursive quicksort of a real(kind=real128) array"
@@ -4149,6 +4173,7 @@ real(kind=real128)                   :: sorted(1:size(data))
    endif
 !     All done
 end function sort_quick_compact_real_real128
+#endif
 
 recursive function sort_quick_compact_complex_real32(data) result(sorted)
 
@@ -4194,6 +4219,7 @@ complex(kind=real64)                   :: sorted(1:size(data))
    endif
 !     All done
 end function sort_quick_compact_complex_real64
+#ifdef FLOAT128
 recursive function sort_quick_compact_complex_real128(data) result(sorted)
 
 ! ident_49="@(#) M_sort sort_quick_compact_complex_real128(3f) recursive quicksort of a complex(kind=real128) array"
@@ -4216,6 +4242,7 @@ complex(kind=real128)                   :: sorted(1:size(data))
    endif
 !     All done
 end function sort_quick_compact_complex_real128
+#endif
 
 recursive function sort_quick_compact_character_ascii(data) result(sorted)
 
@@ -4467,6 +4494,7 @@ integer             :: i,isize
 ! unique >>>>>>>>>>>
 end subroutine unique_real_real64
 ! unique_template >>>>>>>>>>>
+#ifdef FLOAT128
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4491,6 +4519,7 @@ integer             :: i,isize
 ! unique >>>>>>>>>>>
 end subroutine unique_real_real128
 ! unique_template >>>>>>>>>>>
+#endif
 
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -4540,6 +4569,7 @@ integer             :: i,isize
 ! unique >>>>>>>>>>>
 end subroutine unique_complex_real64
 ! unique_template >>>>>>>>>>>
+#ifdef FLOAT128
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -4564,6 +4594,7 @@ integer             :: i,isize
 ! unique >>>>>>>>>>>
 end subroutine unique_complex_real128
 ! unique_template >>>>>>>>>>>
+#endif
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -5470,7 +5501,9 @@ character(len=1),allocatable :: chars(:)
     type is (integer(kind=int64));  chars=transfer(anything,chars)
     type is (real(kind=real32));    chars=transfer(anything,chars)
     type is (real(kind=real64));    chars=transfer(anything,chars)
+#ifdef FLOAT128
     type is (real(kind=real128));   chars=transfer(anything,chars)
+#endif
     type is (logical);              chars=transfer(anything,chars)
     class default
       chars=transfer(anything,chars) ! should work for everything, does not with some compilers
@@ -5499,10 +5532,16 @@ character(len=1),allocatable :: chars(:)
     type is (integer(kind=int64));  chars=transfer(anything,chars)
     type is (real(kind=real32));    chars=transfer(anything,chars)
     type is (real(kind=real64));    chars=transfer(anything,chars)
+#ifdef FLOAT128
     type is (real(kind=real128));   chars=transfer(anything,chars)
+#endif
     type is (logical);              chars=transfer(anything,chars)
     class default
+#ifdef __INTEL_LLVM_COMPILER
+      stop 'crud. anything_to_bytes_arr(1) does not know about this type'
+#else
       chars=transfer(anything,chars) ! should work for everything, does not with some compilers
+#endif
    end select
 
 end function  anything_to_bytes_scalar
@@ -5589,7 +5628,9 @@ class(*)                     :: anything
     type is (integer(kind=int64));  anything=transfer(chars,anything)
     type is (real(kind=real32));    anything=transfer(chars,anything)
     type is (real(kind=real64));    anything=transfer(chars,anything)
+#ifdef FLOAT128
     type is (real(kind=real128));   anything=transfer(chars,anything)
+#endif
     type is (logical);              anything=transfer(chars,anything)
     class default
       stop 'crud. bytes_to_anything(1) does not know about this type'
@@ -5687,11 +5728,13 @@ real(kind=real64),intent(in) :: input(:)
 integer :: counts(size(input)), i
    counts=[(count(input(i) > input)+count(input(i) == input(:i)), i=1,size(input) )]
 end function sort_real64
+#ifdef FLOAT128
 function sort_real128(input) result(counts)
 real(kind=real128),intent(in) :: input(:)
 integer :: counts(size(input)), i
    counts=[(count(input(i) > input)+count(input(i) == input(:i)), i=1,size(input) )]
 end function sort_real128
+#endif
 function sort_character(input) result(counts)
 character(len=*),intent(in) :: input(:)
 integer :: counts(size(input)), i
@@ -6171,6 +6214,7 @@ integer :: i, j, k, l, it
 !<<<<<<<<< sort_heap_template
 end subroutine sort_heap_real_real64
 
+#ifdef FLOAT128
 subroutine sort_heap_real_real128(dat,indx)
 implicit none
 real(kind=real128),intent(in)  :: dat(:)
@@ -6228,6 +6272,7 @@ integer :: i, j, k, l, it
    enddo INFINITE
 !<<<<<<<<< sort_heap_template
 end subroutine sort_heap_real_real128
+#endif
 subroutine sort_heap_character_ascii(dat,indx)
 implicit none
 character(kind=ascii,len=*),intent(in)  :: dat(:)

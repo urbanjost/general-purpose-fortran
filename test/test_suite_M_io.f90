@@ -167,7 +167,7 @@ integer                      :: lun, ierr, stat, icount
    &'wxyz'])
    open(newunit=lun,file='_scratch_read_line.txt',pad='yes')
    icount=0
-   INFINITE: do while (read_line(line,lun,ios=stat) == 0)
+   INFINITE: do while (read_line(line,lun,iostat=stat) == 0)
       icount=icount+1
       last=line
       if(unit_test_level.gt.0) write (*, '(*(g0))') 'read_line>>>>',icount,' [',line,']'
@@ -500,7 +500,7 @@ end program runtest
 !integer                          :: stat
 !integer                          :: icount=0
 !         open(unit=stdin,pad='yes')
-!         INFINITE: do while (read_line(line,ios=stat) == 0)
+!         INFINITE: do while (read_line(line,iostat=stat) == 0)
 !            icount=icount
 !            write (*, '(*(g0))') icount,' [',line,']'
 !         enddo INFINITE

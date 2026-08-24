@@ -218,7 +218,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)                change and redistribute it.  There is NO WARRANTY;>',&
 '@(#)                without even the implied warranty of MERCHANTABILITY or>',&
 '@(#)                FITNESS FOR A PARTICULAR PURPOSE.>',&
-'@(#)COMPILED:       2026-08-19 10:20:09 UTC-240>',&
+'@(#)COMPILED:       2026-08-19 15:45:11 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -19,7 +19,6 @@ append("cpad.3m_strings.html");
 append("crop.3m_strings.html");
 append("dble.3m_strings.html");
 append("decode_base64.3m_strings.html");
-append("decode_base64_bytes.3m_strings.html");
 append("decodebase.3m_strings.html");
 append("delim.3m_strings.html");
 append("describe.3m_strings.html");

@@ -2,10 +2,10 @@
       use M_io, only : fileclose, fileopen
       implicit none
       integer :: lun
-      integer :: ios, ierr
-         lun=fileopen('<input.txt',ios=ierr)
+      integer :: iostat, ierr
+         lun=fileopen('<input.txt',iostat=ierr)
          if(ierr /= 0)then
             write(*,*)'<ERROR> opening file'
          endif
-         ios=fileclose(lun)
+         iostat=fileclose(lun)
       end program demo_fileclose
