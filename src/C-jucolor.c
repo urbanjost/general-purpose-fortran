@@ -83,30 +83,10 @@ char ident[] = "@(#)jucolor(3c):this procedure converts a color's components fro
    float c1   ,c2   ,c3;
    float r    ,g    ,b;
 
-/*
-   void hlsrgb(float hue, 
-               float lightness,
-               float saturation,
-               float *red,
-               float *green,
-               float *blue);
-   void hvsrgb(float h,
-               float v,
-               float s,
-               float *r,
-               float *g,
-               float *b);
-   void rgbhls(float r,
-               float g,
-               float b,
-               float *h,
-               float *l,
-               float *s);
-*/
-   void hlsrgb( );
-   void hvsrgb( );
-   void rgbhls( );
-   void rgbhvs( );
+   void hlsrgb(float hue, float lightness, float saturation, float *red, float *green, float *blue);
+   void hvsrgb(float h,   float v,         float s,          float *r,   float *g,     float *b);
+   void rgbhls(float r,   float g,         float b,          float *h,   float *l,     float *s);
+   void rgbhvs(float red, float green,     float blue,       float *hue, float *value, float *saturation);
 
    /* reset the status flag. */
    *status=0;

@@ -72,7 +72,7 @@ SRCS =  M_color.f90 C-getgp.c C-curl.c C-pcl5.c C-pbm.c  \
      M_steam67.f90 M_isolatin.f90 C-cgmt.c M_orderpack__unista.f90 M_getopt.F90 C-vml.c  \
      C-my_stopwatch_cpu_time.c my_stopwatch_cpu_time.c \
      M_unicode.F90 M_hashkeys__sha3.f90 M_framework.F90 C-draw.c M_flatten.f90 C-M_regex.c  \
-     M_msg.F90 M_graph.f90 M_framework__journal.F90 C-mysignal_.c M_orderpack__refpar.f90 C-curves.c  \
+     M_msg.F90 M_graph.f90 M_framework__journal.F90 M_orderpack__refpar.f90 C-curves.c  \
      M_orderpack__mulcnt.f90 M_overload.F90 M_orderpack__valmed.f90 C-matrix.c draw.h C-mapping.c  \
      C-points.c M_orderpack__unirnk.f90 C-pdf.c M_math.F90 M_xyplot.F90 paranoia.f90  \
      C-jucolor.c C-arcs.c C-buffer.c M_roman_numbers.f90 M_orderpack__refsor.f90 M_orderpack.f90  \
@@ -107,7 +107,7 @@ OBJS =  M_color.o C-getgp.o C-curl.o C-pcl5.o C-pbm.o  \
      C-hvsrgb.o M_stopwatch.o M_datapac__s.o M_list.o M_orderpack__ctrper.o M_steam67.o  \
      M_isolatin.o C-cgmt.o M_orderpack__unista.o M_getopt.o C-vml.o M_unicode.o  \
      M_hashkeys__sha3.o M_framework.o C-draw.o M_flatten.o C-M_regex.o M_msg.o  \
-     M_graph.o M_framework__journal.o C-mysignal_.o M_orderpack__refpar.o C-curves.o M_orderpack__mulcnt.o  \
+     M_graph.o M_framework__journal.o M_orderpack__refpar.o C-curves.o M_orderpack__mulcnt.o  \
      M_overload.o M_orderpack__valmed.o C-matrix.o C-mapping.o C-points.o M_orderpack__unirnk.o  \
      C-pdf.o M_math.o M_xyplot.o paranoia.o C-jucolor.o C-arcs.o  \
      C-buffer.o M_roman_numbers.o M_orderpack__refsor.o M_orderpack.o M_sort.o M_matrix.o  \
