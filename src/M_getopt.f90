@@ -81,10 +81,10 @@
 !!    type(option_s):: opts(2)
 !!       opts(1) = option_s( "alpha", .false., 'a' )
 !!       opts(2) = option_s( "beta",  .true.,  'b' )
-!!       do
+!!       INFINITE: do
 !!          PARSE: select case( getopt( OPTIONS, opts ))
 !!          case( char(0))
-!!             exit PARSE
+!!             exit INFINITE
 !!          case( 'a' )
 !!             print *, 'option alpha/a', optarg
 !!          case( 'b' )
@@ -95,7 +95,7 @@
 !!          case default
 !!             print *, 'unhandled option c ', optopt, ' (an intentional bug)'
 !!          end select PARSE
-!!       end do
+!!       end do INFINITE
 !!    end program demo_getopts
 !!
 !!##COPYRIGHT
@@ -119,18 +119,18 @@ use,intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit,
 implicit none
 
 private
-character(len=80)     :: optarg        ! Option's value
-character             :: optopt        ! Option's character
-integer               :: optind=1      ! Index of the next argument to process
-logical               :: opterr=.true. ! Errors are printed by default. Set opterr=.false. to suppress them
+character(len=80)      :: optarg        ! Option's value
+character              :: optopt        ! Option's character
+integer,save           :: optind=1      ! Index of the next argument to process
+logical,save           :: opterr=.true. ! Errors are printed by default. Set opterr=.false. to suppress them
 
 type option_s
-   character(len=80) :: name          ! Name of the option
-   logical           :: has_arg       ! Option has an argument (.true./.false.)
-   character         :: short         ! Option's short character equal to optopt
+   character(len=80)   :: name          ! Name of the option
+   logical             :: has_arg       ! Option has an argument (.true./.false.)
+   character           :: short         ! Option's short character equal to optopt
 end type option_s
 
-integer, private:: grpind=2            ! grpind is index of next option within group; always >= 2
+integer, private, save :: grpind=2      ! grpind is index of next option within group; always >= 2
 
 public getopt
 public option_s
@@ -169,7 +169,6 @@ character(len=80)                      :: arg
    if ( optind > command_argument_count()) then
        getopt = char(0)
    endif
-
    call get_command_argument( optind, arg )
 
    if ( present( longopts ) .and. arg(1:2) == '--' ) then
@@ -185,12 +184,13 @@ end function getopt
 character function process_long( longopts, arg )
 type(option_s), intent(in)   :: longopts(:)
 character(len=*), intent(in) :: arg
-integer                      :: i = 0
-integer                      :: j = 0
-integer                      :: len_arg = 0             ! length of arg
-logical                      :: has_equalsign = .false. ! arg contains equal sign?
+integer                      :: i
+integer                      :: j
+integer                      :: len_arg                 ! length of arg
+logical                      :: has_equalsign           ! arg contains equal sign?
 
   len_arg = len_trim(arg)
+  has_equalsign = .false.
 
   ! search for equal sign in arg and set flag "has_equalsign" and
   ! length of arg (till equal sign)
@@ -236,10 +236,9 @@ logical                      :: has_equalsign = .false. ! arg contains equal sig
       endif
   enddo
   ! else not found
-  process_long = char(0)
-  optopt='?'
+  process_long = '?'
   if ( opterr ) then
-      write(stderr, '(a,a,a)') "ERROR: Unrecognized option '", arg(1:len_arg), "'"
+      write(stderr, '(a,a,a)') "ERROR: *process_long* Unrecognized option '", arg(1:len_arg), "'"
   endif
 end function process_long
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -255,7 +254,7 @@ integer                      :: i, arglen
        ! unrecognized option
        process_short = '?'
        if ( opterr ) then
-           write(stderr, '(a,a,a)') "ERROR: Unrecognized option '-", optopt, "'"
+           write(stderr, '(a,a,a)') "ERROR: *process_short* Unrecognized option '-", optopt, "'"
        endif
    endif
 

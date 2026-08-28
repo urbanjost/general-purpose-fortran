@@ -28,12 +28,7 @@
 /*============================================================================*/
 #include <stdio.h>
 #include <string.h>
-void jucolor(modei,clr1i,clr2i,clr3i,modeo,clr1o,clr2o,clr3o,status)
-   char *modei ,*modeo;
-   float clr1i,clr2i,clr3i;
-   float *clr1o,*clr2o,*clr3o;
-   int *status;
-{
+void jucolor(char *modei,float clr1i,float clr2i,float clr3i,char *modeo,float *clr1o,float *clr2o,float *clr3o,int *status) {
 char ident[] = "@(#)jucolor(3c):this procedure converts a color's components from one color model to another";
    /*
    
@@ -84,9 +79,9 @@ char ident[] = "@(#)jucolor(3c):this procedure converts a color's components fro
    float r    ,g    ,b;
 
    void hlsrgb(float hue, float lightness, float saturation, float *red, float *green, float *blue);
-   void hvsrgb(float h,   float v,         float s,          float *r,   float *g,     float *b);
-   void rgbhls(float r,   float g,         float b,          float *h,   float *l,     float *s);
-   void rgbhvs(float red, float green,     float blue,       float *hue, float *value, float *saturation);
+   void hvsrgb(float h, float v, float s, float *r, float *g, float *b);
+   void rgbhls(float r, float g, float b, float *h, float *l, float *s);
+   void rgbhvs(float r, float g, float b, float *h, float *l, float *s);
 
    /* reset the status flag. */
    *status=0;

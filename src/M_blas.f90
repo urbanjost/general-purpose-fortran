@@ -1,5 +1,6 @@
 module M_blas
 use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
+implicit none
 !==============================================================================
 ! xerbla needs a special version for the test programs to run
 ! so it is a pointer to the standard procedure, but allows for
@@ -20,6 +21,8 @@ abstract interface
 end interface
 
 procedure(xerbla_interface),pointer :: xerbla => std_xerbla
+!==============================================================================
+integer,parameter :: dp=kind(0.0d0)
 !==============================================================================
 contains
 subroutine set_xerbla(proc)
@@ -181,7 +184,7 @@ end subroutine set_xerbla
 !!    http://www.netlib.org/lapack/explore-html/
 !  =====================================================================
  subroutine std_xerbla( srname, info )
-      implicit none
+implicit none
 !
 !  -- Reference BLAS level1 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -10185,8 +10188,6 @@ implicit none
       complex(kind=real64),intent(in) ::  z
 !     ..
 !  =====================================================================
-      integer,parameter :: dp=kind(0.0d0)
-
 !     .. Intrinsic Functions ..
       intrinsic abs,dble,dimag
 !
@@ -12231,7 +12232,7 @@ end subroutine
 !!##DEFINITION
 !!
 !!     CONSTRUCT THE MODIFIED GIVENS TRANSFORMATION MATRIX H WHICH ZEROS
-!!     THE SECOND COMPONENT OF THE 2-VECTOR (DSQRT(DD1)*DX1,DSQRT(DD2)*> DY2)**T.
+!!     THE SECOND COMPONENT OF THE 2-VECTOR (SQRT(DD1)*DX1,SQRT(DD2)*> DY2)**T.
 !!     WITH DPARAM(1)=DFLAG, H HAS ONE OF THE FOLLOWING FORMS..
 !!
 !!        DFLAG=-1.D0     DFLAG=0.D0        DFLAG=1.D0     DFLAG=-2.D0
@@ -13008,9 +13009,6 @@ implicit none
 !  Kincaid, D. R., (U. of Texas), Krogh, F. T., (JPL)
 
 !  =====================================================================
-      integer,parameter :: dp=kind(0.0d0)
-
-!
 !     .. Local Scalars ..
       integer i,kx,ky,ns
 !     ..
@@ -20244,8 +20242,6 @@ end function sdot
 !  =====================================================================
 pure real function sdsdot(n,sb,sx,incx,sy,incy)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-!
 !  -- Reference BLAS level1 routine (version 3.8.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
 !  -- Univ. of California Berkeley, Univ. of Colorado Denver and NAG Ltd..--
@@ -28994,7 +28990,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
       integer i,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic cmplx
+      intrinsic dcmplx
 !     ..
       if (n.le.0 .or. incx.le.0) return
       if (incx.eq.1) then
@@ -29002,7 +28998,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !        code for increment equal to 1
 !
          do i = 1,n
-            zx(i) = cmplx(da,0.0d0)*zx(i)
+            zx(i) = dcmplx(da,0.0d0)*zx(i)
          enddo
       else
 !
@@ -29010,7 +29006,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !
          nincx = n*incx
          do i = 1,nincx,incx
-            zx(i) = cmplx(da,0.0d0)*zx(i)
+            zx(i) = dcmplx(da,0.0d0)*zx(i)
          enddo
       endif
 
@@ -30671,8 +30667,6 @@ end subroutine zgemv
 !  =====================================================================
        subroutine zhbmv(uplo,n,k,alpha,a,lda,x,incx,beta,y,incy)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -31026,8 +31020,6 @@ end subroutine zgemv
 !  =====================================================================
        subroutine zhemm(side,uplo,m,n,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -31318,8 +31310,6 @@ end subroutine zgemv
 !  =====================================================================
 subroutine zhemv(uplo,n,alpha,a,lda,x,incx,beta,y,incy)
 implicit none
-integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -31625,8 +31615,6 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zher2(uplo,n,alpha,x,incx,y,incy,a,lda)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -31959,8 +31947,6 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zher2k(uplo,trans,n,k,alpha,a,lda,b,ldb,beta,c,ldc)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -32289,8 +32275,6 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zher(uplo,n,alpha,x,incx,a,lda)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -32582,8 +32566,6 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zherk(uplo,trans,n,k,alpha,a,lda,beta,c,ldc)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level3 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -32610,7 +32592,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,cmplx,conjg,max
+      intrinsic dble,dcmplx,conjg,max
 !     ..
 !     .. Local Scalars ..
       complex(kind=real64) :: temp
@@ -32707,7 +32689,7 @@ end subroutine zhemv
                       c(j,j) = dble(c(j,j))
                   endif
                   do l = 1,k
-                      if (a(j,l).ne.cmplx(zero,kind=dp)) then
+                      if (a(j,l).ne.dcmplx(zero)) then
                           temp = alpha*conjg(a(j,l))
                           do i = 1,j - 1
                               c(i,j) = c(i,j) + temp*a(i,l)
@@ -32729,7 +32711,7 @@ end subroutine zhemv
                       c(j,j) = dble(c(j,j))
                   endif
                   do l = 1,k
-                      if (a(j,l).ne.cmplx(zero,kind=dp)) then
+                      if (a(j,l).ne.dcmplx(zero)) then
                           temp = alpha*conjg(a(j,l))
                           c(j,j) = dble(c(j,j)) + dble(temp*a(j,l))
                           do i = j + 1,n
@@ -32922,8 +32904,6 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zhpmv(uplo,n,alpha,ap,x,incx,beta,y,incy)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -33231,8 +33211,6 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zhpr2(uplo,n,alpha,x,incx,y,incy,ap)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --
@@ -33511,8 +33489,6 @@ end subroutine zhemv
 !  =====================================================================
        subroutine zhpr(uplo,n,alpha,x,incx,ap)
       implicit none
-      integer,parameter :: dp=kind(0.0d0)
-
 !
 !  -- Reference BLAS level2 routine (version 3.7.0) --
 !  -- Reference BLAS is a software package provided by Univ. of Tennessee,    --

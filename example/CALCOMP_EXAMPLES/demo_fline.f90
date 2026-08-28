@@ -2,10 +2,12 @@
      use M_calcomp
      implicit none
      ! based on concepts of CALIFORNIA COMPUTER PRODUCTS, 1968
-     real :: xar(10)=[0.75,1.75,2.25,2.75,3.25,4.25,4.75,5.75,0.0,1.0]
-     real :: yar(10)=[3.25,2.00,5.25,6.50,6.75,6.25,3.25,4.25,0.0,1.0]
+     real              :: xar(10)
+     real              :: yar(10)
      character(len=50) :: ibcd
      integer           :: inteq
+        xar=[0.75,1.75,2.25,2.75,3.25,4.25,4.75,5.75,0.0,1.0]
+        yar=[3.25,2.00,5.25,6.50,6.75,6.25,3.25,4.25,0.0,1.0]
         call plots(0.0,10.0,0.0,10.0)
      !     DRAW FRAME
         call plot(7.0,0.0,2)

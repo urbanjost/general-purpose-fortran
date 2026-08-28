@@ -236,11 +236,9 @@ real,save    :: P_window_top=0.0
 real,save    :: P_a, P_b, P_c, P_d ! factors for mapping between viewport coordinates and world coordinates
 
 integer,save,public,allocatable :: P_pixel(:,:)
-integer,save,public :: P_ColorMap(3,0:255)
 logical,save,public :: P_debug=.false.
-
-!data P_ColorMap(1:3,0)     / 0,0,0 /
-data P_ColorMap(1:3,0:16) / &
+integer             :: i
+integer,save,public :: P_ColorMap(1:3,0:255)=reshape([ &
        255,255,255, &  !white
        255,  0,  0, &  !red
          0,255,  0, &  !green
@@ -257,8 +255,8 @@ data P_ColorMap(1:3,0:16) / &
        155,  0,155, &
          0,155,155, &
        100,100,100, &
-       155,100,100/, &
-     P_ColorMap(1:3,17:255) / 717*255 /
+       155,100,100, &
+       (255,i=1,717)],shape(P_colormap))
 !==================================================================================================================================!
 ! mapping
 public  :: viewport            ! define viewport into screen units
@@ -2489,7 +2487,7 @@ subroutine hershey(x,y,height,itext,theta,ntext)
    integer :: iword
 !  IXTRCT gets NBITS from IWORD starting at the NSTART bit from the right
       IXTRCT(NSTART,NBITS,IWORD)=MOD(IWORD/(2**(NSTART-NBITS)), &
-     &                           2**NBITS)+((1-ISIGN(1,IWORD))/2)* &
+     &                           2**NBITS)+((1-SIGN(1,IWORD))/2)* &
      &                           (2**NBITS-MIN(1,MOD(-IWORD, &
      &                           2**(NSTART-NBITS))))
 !-----------------------------------------------------------------------------------------------------------------------------------

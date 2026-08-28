@@ -814,7 +814,6 @@ log10 (3fortran)     - [MATHEMATICS] Base 10 or common logarithm
 log_gamma (3fortran) - [MATHEMATICS] Logarithm of the absolute value of the Gamma function
 logcdf (3m_datapac)  - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the logistic cumulative distribution function
 logical (3fortran)   - [TYPE:CONVERSION] Conversion between kinds of logical values
-logicals (5fortran)  - [SUMMARY] logical expressions and variables
 logname- (1)	     - [FUNIX] display login name (LICENSE:PD)
 logpdf (3m_datapac)  - [M_datapac:PROBABILITY_DENSITY] compute the logistic probability density function
 logplt (3m_datapac)  - [M_datapac:LINE_PLOT] generate a logistic probability plot
@@ -916,6 +915,7 @@ max (3m_datapac)     - [M_datapac:VECTOR_OPERATION] MAX compute the maximum of a
 maxexponent (3fortran) - [MODEL:NUMERIC] Maximum exponent of a real kind
 maxloc (3fortran)    - [ARRAY:LOCATION] Location of the maximum value within an array
 maxval (3fortran)    - [ARRAY:REDUCTION] Determines the maximum value in an array or row
+maxx (3m_datapac)    - [M_datapac:VECTOR_OPERATION] MAXX compute the maximum of a data vector
 mean (3m_datapac)    - [M_datapac:STATISTICS] compute the sample mean of a data vector
 median (3m_datapac)  - [M_datapac:STATISTICS] compute the median of a data vector
 median (3m_orderpack) - [M_orderpack:MEDIAN] Calculates median VALUE. If number of elements is even, returns average of the two "medians".
@@ -933,6 +933,7 @@ min (3m_datapac)     - [M_datapac:STATISTICS] compute the minimum of a data vect
 minefield (1m_draw)  - [M_draw] minefield game (LICENSE:PD)
 minexponent (3fortran) - [MODEL:NUMERIC] Minimum exponent of a real kind
 minloc (3fortran)    - [ARRAY:LOCATION] Location of the minimum value within an array
+minn (3m_datapac)    - [M_datapac:STATISTICS] compute the minimum of a data vector
 minval (3fortran)    - [ARRAY:REDUCTION] Minimum value of all the elements of ARRAY along dimension DIM corresponding to true elements of MASK.
 mkdir- (1)	     - [FUNIX:FILESYSTEM] call mkdir(3c) to make directories (LICENSE:PD)
 mkfifo- (1)	     - [FUNIX:FILESYSTEM] make a FIFO pipe by calling mkfifo(3c) (LICENSE:PD)

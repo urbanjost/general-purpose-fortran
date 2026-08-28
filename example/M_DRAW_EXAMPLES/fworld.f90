@@ -105,7 +105,7 @@ contains
       real i, inc
       integer j, i10
 
-      inc = 360.0/float(len_trim(str))
+      inc = 360.0/real(len_trim(str))
 
       j = 1
       i = 0

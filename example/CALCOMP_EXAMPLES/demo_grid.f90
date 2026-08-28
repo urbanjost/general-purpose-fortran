@@ -2,8 +2,10 @@
      use M_calcomp, only : plots, plot, newpen, grid
      use M_calcomp, only : END
      implicit none
-     real              :: xmax=8.5,ymax=11.0
+     real              :: xmax,ymax
      real              :: step
+        xmax=8.5
+        ymax=11.0
         call plots(0.0,xmax,0.0,ymax)  ! make a 8 1/2 x 11 inch page
         call newpen(1)                 ! red
         step=0.25                      ! make 1/4 inch grid

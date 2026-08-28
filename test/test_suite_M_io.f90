@@ -484,27 +484,3 @@ end program runtest
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-!function read_line(line,lun,ios) result(ier)
-!character(len=:),allocatable,intent(out) :: line
-!integer,intent(in),optional              :: lun
-!integer,optional                         :: ios
-!integer                                  :: ier
-!DESCRIPTION
-!  The input file must have a PAD attribute of YES for the function to work
-!  properly, which is typically true but can be set on an open file.
-!  •  Append lines that end in a backslash with next line
-!  •  Expand tabs
-!  •  Replace unprintable characters with spaces
-!  •  Remove trailing carriage return characters and white space
-!character (len =: ), allocatable :: line
-!integer                          :: stat
-!integer                          :: icount=0
-!         open(unit=stdin,pad='yes')
-!         INFINITE: do while (read_line(line,iostat=stat) == 0)
-!            icount=icount
-!            write (*, '(*(g0))') icount,' [',line,']'
-!         enddo INFINITE
-!         if ( .not.is_iostat_end(stat) ) then
-!            write (stderr, '(*(g0))') &
-!            & 'error: line ',icount,'==>',trim (line)
-!         endif

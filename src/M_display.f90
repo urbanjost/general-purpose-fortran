@@ -3471,7 +3471,11 @@ end subroutine getwid_int32
     integer,        intent(out)        :: nbl(size(x,2)) ! Blanks to trim from left of individual columns
     integer             :: expmax, expmin, ww, dd, dmx
     real(kind=real32)  :: xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
-    character(14),save  :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
+    !----------------------------------
+    ! compiler was doing compile-time checks on the format so needed to give it a good initial one
+   !character(len=14),save  :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
+    character(len=14),save  :: f1 = '(SS,ES14.05E4)'  ! could be ES99.89E4; default is ES14.05E4
+    !----------------------------------
     character(99)       :: s
     logical             :: xzero(size(x,2)), xallz(size(x,2)), xfinite(size(x,1),size(x,2)), xnonn(size(x,2)), xalln(size(x,2))
     !
@@ -3996,7 +4000,11 @@ end subroutine getwid_int32
     integer,        intent(out)        :: nbl(size(x,2)) ! Blanks to trim from left of individual columns
     integer             :: expmax, expmin, ww, dd, dmx
     real(kind=real64)  :: xmaxv(size(x,2)), xminv(size(x,2)), xp, xm, h
-    character(14),save  :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
+    !----------------------------------
+    ! compiler was doing compile-time checks on the format so needed to give it a good initial one
+   !character(len=14),save  :: f1 = '(SS,ESxx.xxE4)'  ! could be ES99.89E4; default is ES14.05E4
+    character(len=14),save  :: f1 = '(SS,ES14.05E4)'  ! could be ES99.89E4; default is ES14.05E4
+    !----------------------------------
     character(99)       :: s
     logical             :: xzero(size(x,2)), xallz(size(x,2)), xfinite(size(x,1),size(x,2)), xnonn(size(x,2)), xalln(size(x,2))
     !

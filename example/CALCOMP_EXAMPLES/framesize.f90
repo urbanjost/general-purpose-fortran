@@ -70,7 +70,7 @@ data yarray/0.0,-20.0,-48.0,-70.0,-98.0,-110.0,-125.0,-142.0, -130.0,-115.0,-80.
 !
    y = 0.
    do i = 19, 30
-      call mpset('TSIZ', float(i))
+      call mpset('TSIZ', real(i))
       call symbol(1., y, .2, 'TEST @@@@@\\\\\ END ', 999, 0., 20)
       y = y + .31
    enddo
@@ -100,7 +100,7 @@ data yarray/0.0,-20.0,-48.0,-70.0,-98.0,-110.0,-125.0,-142.0, -130.0,-115.0,-80.
 !
    y = 0.0
    do i = 1, 64
-      call mpset('TSIZ', float(i))
+      call mpset('TSIZ', real(i))
       call symbol(1., y, .2, 'TEST @@@@@\\\\\ END ', 999, 0., 20)
       y = y + .31
    enddo

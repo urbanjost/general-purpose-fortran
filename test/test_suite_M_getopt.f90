@@ -2,9 +2,8 @@ program test_suite_M_getopt
 use, intrinsic :: iso_fortran_env, only : ERROR_UNIT
 use :: M_framework__verify, only : unit_test, unit_test_good, unit_test_bad, unit_test_done, unit_test_start
 use :: M_framework__verify, only : unit_test_stop
-use :: M_args
+use :: M_getopt
 implicit none
-integer,parameter :: HT=9
 call unit_test_start('M_args')
 !! setup
    call test_getopt()

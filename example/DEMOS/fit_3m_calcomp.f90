@@ -5,7 +5,9 @@
      implicit none
      integer,parameter  :: MOVE=3, DRAW=2
      integer            :: i
-     real               :: x(3)=[-3.0,1.0,4.4],y(3)=[3.2,1.0,-4.0]
+     real               :: x(3),y(3)
+     x=[-3.0,1.0,4.4]
+     y=[3.2,1.0,-4.0]
      call plots(0.0,10.0,0.0,10.0)      ! initialize graphics
      call plot(5.0,5.0,-3)              ! set origin
      call newpen(green)

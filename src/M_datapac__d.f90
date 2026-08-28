@@ -17,7 +17,7 @@ ev2ran  ,  expcdf  ,  exppdf  ,  expplt  ,  expppf  ,  expran  ,  expsf   ,  ext
 fran    ,  freq    ,  gamcdf  ,  gamplt  ,  gamppf  ,  gamran  ,  geocdf  ,  geoplt  ,  geoppf  ,  georan  , &
 hfncdf  ,  hfnplt  ,  hfnppf  ,  hfnran  ,  hist    ,             lamcdf  ,  lampdf  ,  lamplt  ,  lamppf  , &
 lamran  ,  lamsf   ,  lgncdf  ,  lgnplt  ,  lgnppf  ,  lgnran  ,  loc     ,  logcdf  ,  logpdf  ,  logplt  , &
-logppf  ,  logran  ,  logsf   ,  max     ,  mean    ,  median  ,  midm    ,  midr    ,  min     ,  move    , &
+logppf  ,  logran  ,  logsf   ,  maxx    ,  mean    ,  median  ,  midm    ,  midr    ,  minn    ,  move    , &
 nbcdf   ,  nbppf   ,  nbran   ,  norcdf  ,  norout  ,  norpdf  ,  norplt  ,  norppf  ,  norran  ,  norsf   , &
 parcdf  ,  parplt  ,  parppf  ,  parran  ,  plot10  ,  plot6   ,  plot7   ,  plot8   ,  plot9   ,  plotc   , &
 plotco  ,  plotct  ,  plot    ,  plotsc  ,  plots   ,  plotsp  ,  plotst  ,  plott   ,  plotu   ,  plotx   , &
@@ -110,12 +110,12 @@ interface  logplt;  module  procedure  logplt  ;  end  interface
 interface  logppf;  module  procedure  logppf  ;  end  interface
 interface  logran;  module  procedure  logran  ;  end  interface
 interface  logsf;   module  procedure  logsf   ;  end  interface
-interface  max;     module  procedure  max     ;  end  interface
+interface  maxx;    module  procedure  maxx    ;  end  interface
 interface  mean;    module  procedure  mean    ;  end  interface
 interface  median;  module  procedure  median  ;  end  interface
 interface  midm;    module  procedure  midm    ;  end  interface
 interface  midr;    module  procedure  midr    ;  end  interface
-interface  min;     module  procedure  min     ;  end  interface
+interface  minn;    module  procedure  minn    ;  end  interface
 interface  move;    module  procedure  move    ;  end  interface
 interface  nbcdf;   module  procedure  nbcdf   ;  end  interface
 interface  nbppf;   module  procedure  nbppf   ;  end  interface
@@ -650,7 +650,7 @@ INTEGER          :: i, ievodd, iflag1, iflag2, imax, imin, intx, nu1, nu2
 DOUBLE PRECISION :: dx , anu1 , anu2 , z , sum , term , ai , coef1 , coef2 , arg
 DOUBLE PRECISION :: coef
 DOUBLE PRECISION :: theta , sinth , costh , a , b
-DOUBLE PRECISION :: DSQRT , DATAN
+intrinsic           SQRT , ATAN
 
 !     COMMENT--NOTE THAT EVEN THOUGH THE INPUT
 !              TO THIS CUMULATIVE
@@ -802,10 +802,10 @@ DOUBLE PRECISION :: DSQRT , DATAN
 !
             sum = 0.0D0
             term = 1.0D0
-            arg = DSQRT((anu1/anu2)*dx)
-            theta = DATAN(arg)
-            sinth = arg/DSQRT(1.0D0+arg*arg)
-            costh = 1.0D0/DSQRT(1.0D0+arg*arg)
+            arg = SQRT((anu1/anu2)*dx)
+            theta = ATAN(arg)
+            sinth = arg/SQRT(1.0D0+arg*arg)
+            costh = 1.0D0/SQRT(1.0D0+arg*arg)
             IF ( nu2/=1 ) THEN
                IF ( nu2/=3 ) THEN
                   imax = nu2 - 2
@@ -2282,8 +2282,8 @@ REAL(kind=wp) :: amean , anu , cdfn , danu , sd , spchi , u , z
 INTEGER :: i , ibran , ievodd , imax , imin , nucut
 DOUBLE PRECISION dx , chi , sum , term , ai , dcdfn
 DOUBLE PRECISION dnu
-DOUBLE PRECISION DSQRT , DEXP
-DOUBLE PRECISION DLOG
+intrinsic        SQRT , EXP
+intrinsic        LOG
 DOUBLE PRECISION dfact , dpower
 DOUBLE PRECISION dw
 DOUBLE PRECISION d1 , d2 , d3
@@ -2368,7 +2368,7 @@ DATA b43/17.0D0/
 !     METHOD UTILIZED--EXACT FINITE SUM
 !     (SEE AMS 55, page 941, FORMULAE 26.4.4 AND 26.4.5).
 !
-                        chi = DSQRT(dx)
+                        chi = SQRT(dx)
                         ievodd = Nu - 2*(Nu/2)
                         IF ( ievodd==0 ) THEN
 !
@@ -2392,9 +2392,9 @@ DATA b43/17.0D0/
                            ENDDO
                         ENDIF
 !
-                        sum = sum*DEXP(-dx/2.0D0)
+                        sum = sum*EXP(-dx/2.0D0)
                         IF ( ievodd/=0 ) THEN
-                           sum = (DSQRT(2.0D0/G_pi_dp))*sum
+                           sum = (SQRT(2.0D0/G_pi_dp))*sum
                            spchi = chi
                            CALL NORCDF(spchi,cdfn)
                            dcdfn = cdfn
@@ -2411,7 +2411,7 @@ DATA b43/17.0D0/
 !
                         dfact = 4.5D0*dnu
                         u = (((dx/dnu)**dpower)-1.0D0+(1.0D0/dfact))    &
-     &                      *DSQRT(dfact)
+     &                      *SQRT(dfact)
                         CALL NORCDF(u,cdfn)
                         Cdf = cdfn
                         RETURN
@@ -2423,8 +2423,8 @@ DATA b43/17.0D0/
 !     METHOD UTILIZED--HILL'S ASYMPTOTIC EXPANSION
 !     (SEE JOHNSON AND KOTZ, VOLUME 1, page 180, FORMULA 33.1).
 !
-                        dw = DSQRT(dx-dnu-dnu*DLOG(dx/dnu))
-                        danu = DSQRT(2.0D0/dnu)
+                        dw = SQRT(dx-dnu-dnu*LOG(dx/dnu))
+                        danu = SQRT(2.0D0/dnu)
                         d1 = dw
                         d2 = dw**2
                         d3 = dw**3
@@ -2761,7 +2761,7 @@ DOUBLE PRECISION :: z , z2 , z3 , z4 , z5 , den , a , b , c , d(10) , g
 DOUBLE PRECISION :: xmin0 , xmin , ai , xmax , dx , pcalc , xmid
 DOUBLE PRECISION :: xlower , xupper , xdel
 DOUBLE PRECISION :: sum , term , cut1 , cut2 , aj , cutoff , t
-DOUBLE PRECISION :: DEXP , DLOG
+intrinsic EXP, LOG
 
 DATA c/.918938533204672741D0/
 DATA d(1) , d(2) , d(3) , d(4) , d(5)/ + .833333333333333333D-1 , &
@@ -2824,11 +2824,11 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
          z3 = z*z2
          z4 = z2*z2
          z5 = z2*z3
-         a = (z-0.5D0)*DLOG(z) - z + c
+         a = (z-0.5D0)*LOG(z) - z + c
          b = d(1)/z + d(2)/z3 + d(3)/z5 + d(4)/(z2*z5) + d(5)/(z4*z5)   &
      &       + d(6)/(z*z5*z5) + d(7)/(z3*z5*z5) + d(8)/(z5*z5*z5) + d(9)&
      &       /(z2*z5*z5*z5)
-         g = DEXP(a+b)/den
+         g = EXP(a+b)/den
 !
 !     DETERMINE LOWER AND UPPER LIMITS ON THE DESIRED 100P
 !     PERCENT POINT.
@@ -2889,7 +2889,7 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
       RETURN
 !
  600  t = sum
-      pcalc = (dx**dgamma)*(DEXP(-dx))*t/g
+      pcalc = (dx**dgamma)*(EXP(-dx))*t/g
       IF ( iloop==1 ) THEN
          IF ( pcalc>=dp ) GOTO 200
          xmin = xmax
@@ -8511,7 +8511,7 @@ INTEGER          :: i , ibran , ievodd , iflag1 , iflag2 , imax , imin , m , n ,
 DOUBLE PRECISION :: dx , pi , anu1 , anu2 , z , sum , term , ai , coef1 , coef2 , arg
 DOUBLE PRECISION :: coef
 DOUBLE PRECISION :: theta , sinth , costh , a , b
-DOUBLE PRECISION :: DSQRT , DATAN
+intrinsic           SQRT , ATAN
 DOUBLE PRECISION :: dfact1 , dfact2 , dnum , dden
 DOUBLE PRECISION :: dpow1 , dpow2
 DOUBLE PRECISION :: dnu1 , dnu2
@@ -8658,10 +8658,10 @@ DATA nucut1 , nucut2/100 , 1000/
 !
                sum = 0.0D0
                term = 1.0D0
-               arg = DSQRT((anu1/anu2)*dx)
-               theta = DATAN(arg)
-               sinth = arg/DSQRT(1.0D0+arg*arg)
-               costh = 1.0D0/DSQRT(1.0D0+arg*arg)
+               arg = SQRT((anu1/anu2)*dx)
+               theta = ATAN(arg)
+               sinth = arg/SQRT(1.0D0+arg*arg)
+               costh = 1.0D0/SQRT(1.0D0+arg*arg)
                IF ( n/=1 ) THEN
                   IF ( n/=3 ) THEN
                      imax = n - 2
@@ -8780,7 +8780,7 @@ DATA nucut1 , nucut2/100 , 1000/
       dfact1 = 1.0D0/(4.5D0*dnu1)
       dfact2 = 1.0D0/(4.5D0*dnu2)
       dnum = ((1.0D0-dfact2)*(dx**dpow1)) - (1.0D0-dfact1)
-      dden = DSQRT((dfact2*(dx**dpow2))+dfact1)
+      dden = SQRT((dfact2*(dx**dpow2))+dfact1)
       u = dnum/dden
       CALL NORCDF(u,gcdf)
       Cdf = gcdf
@@ -9523,7 +9523,7 @@ REAL(kind=wp),intent(out) :: Cdf
 INTEGER :: i , maxit
 DOUBLE PRECISION dx , dgamma , ai , term , sum , cut1 , cut2 , cutoff , t
 DOUBLE PRECISION z , z2 , z3 , z4 , z5 , den , a , b , c , d , g
-DOUBLE PRECISION DEXP , DLOG
+intrinsic        EXP , DLOG
 DIMENSION d(10)
 DATA c/.918938533204672741D0/
 DATA d(1) , d(2) , d(3) , d(4) , d(5)/ + .833333333333333333D-1 , &
@@ -9577,7 +9577,7 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
          b = d(1)/z + d(2)/z3 + d(3)/z5 + d(4)/(z2*z5) + d(5)/(z4*z5)   &
      &       + d(6)/(z*z5*z5) + d(7)/(z3*z5*z5) + d(8)/(z5*z5*z5) + d(9)&
      &       /(z2*z5*z5*z5)
-         g = DEXP(a+b)/den
+         g = EXP(a+b)/den
 !
 !     COMPUTE T-SUB-Q AS DEFINED ON page 4 OF THE WILK, GNANADESIKAN,
 !     AND HUYETT REFERENCE
@@ -9607,7 +9607,7 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
          RETURN
 !
  50      t = sum
-         Cdf = (dx**dgamma)*(DEXP(-dx))*t/g
+         Cdf = (dx**dgamma)*(EXP(-dx))*t/g
       ENDIF
 99007 FORMAT (' ','***** THE VALUE OF THE ARGUMENT IS ',E15.8,' *****')
 !
@@ -9717,7 +9717,7 @@ REAL(kind=wp) :: yslope
 INTEGER i, icount, iloop, ip1, itail, iupper, j
 !---------------------------------------------------------------------
 DOUBLE PRECISION z, z2, z3, z4, z5, den, a, b, c, d
-DOUBLE PRECISION DEXP, DLOG
+intrinsic EXP, LOG
 DIMENSION d(10)
 DIMENSION Y(7500), W(7500)
 COMMON /BLOCK2_real64/ WS(15000)
@@ -9785,11 +9785,11 @@ DATA d(6), d(7), d(8), d(9), d(10)/ - .191752691752691753D-2,&
          z3 = z*z2
          z4 = z2*z2
          z5 = z2*z3
-         a = (z-0.5D0)*DLOG(z) - z + c
+         a = (z-0.5D0)*LOG(z) - z + c
          b = d(1)/z + d(2)/z3 + d(3)/z5 + d(4)/(z2*z5) + d(5)/(z4*z5)   &
      &       + d(6)/(z*z5*z5) + d(7)/(z3*z5*z5) + d(8)/(z5*z5*z5) + d(9)&
      &       /(z2*z5*z5*z5)
-         g = DEXP(a+b)/den
+         g = EXP(a+b)/den
 !
 !     SORT THE DATA
 !
@@ -10082,7 +10082,7 @@ DOUBLE PRECISION z , z2 , z3 , z4 , z5 , den , a , b , c , d , g
 DOUBLE PRECISION xmin0 , xmin , ai , xmax , dx , pcalc , xmid
 DOUBLE PRECISION xlower , xupper , xdel
 DOUBLE PRECISION sum , term , cut1 , cut2 , aj , cutoff , t
-DOUBLE PRECISION DEXP , DLOG
+intrinsic EXP , LOG
 DIMENSION d(10)
 DATA c/.918938533204672741D0/
 DATA d(1) , d(2) , d(3) , d(4) , d(5)/ + .833333333333333333D-1 , &
@@ -10130,11 +10130,11 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
          z3 = z*z2
          z4 = z2*z2
          z5 = z2*z3
-         a = (z-0.5D0)*DLOG(z) - z + c
+         a = (z-0.5D0)*LOG(z) - z + c
          b = d(1)/z + d(2)/z3 + d(3)/z5 + d(4)/(z2*z5) + d(5)/(z4*z5)   &
      &       + d(6)/(z*z5*z5) + d(7)/(z3*z5*z5) + d(8)/(z5*z5*z5) + d(9)&
      &       /(z2*z5*z5*z5)
-         g = DEXP(a+b)/den
+         g = EXP(a+b)/den
 !
 !     DETERMINE LOWER AND UPPER LIMITS ON THE DESIRED 100P
 !     PERCENT POINT.
@@ -10194,7 +10194,7 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
       RETURN
 !
  600  t = sum
-      pcalc = (dx**dgamma)*(DEXP(-dx))*t/g
+      pcalc = (dx**dgamma)*(EXP(-dx))*t/g
       IF ( iloop==1 ) THEN
          IF ( pcalc>=dp ) GOTO 200
          xmin = xmax
@@ -14804,19 +14804,19 @@ REAL(kind=wp),intent(out) :: Sf
 END SUBROUTINE LOGSF
 !>
 !!##NAME
-!!    max(3f) - [M_datapac:VECTOR_OPERATION] MAX compute the maximum of a
+!!    maxx(3f) - [M_datapac:VECTOR_OPERATION] MAXX compute the maximum of a
 !!    data vector
 !!
 !!##SYNOPSIS
 !!
-!!       SUBROUTINE MAX(X,N,Iwrite,Xmax)
+!!       SUBROUTINE MAXX(X,N,Iwrite,Xmax)
 !!
 !!        REAL(kind=wp) :: X(:) , Xmax
 !!        INTEGER :: Iwrite , N
 !!
 !!##DESCRIPTION
 !!
-!!    MAX(3f) computes the sample maximum of the data in the input vector x.
+!!    MAXX(3f) computes the sample maximum of the data in the input vector x.
 !!
 !!##INPUT ARGUMENTS
 !!
@@ -14839,14 +14839,13 @@ END SUBROUTINE LOGSF
 !!   Sample program:
 !!
 !!    program demo_max
-!!    !use M_datapac, only : max, label
-!!    use M_datapac, only : intel_max=>max, label !  ifort (IFORT) 2021.3.0 20210609 bug
+!!    !use M_datapac, only : maxx, label
+!!    use M_datapac, only : maxx, label !  ifort (IFORT) 2021.3.0 20210609 bug
 !!
 !!    implicit none
 !!    real :: xmax
-!!       call label('max')
-!!       call intel_max([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmax)
-!!       !call max([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmax)
+!!       call label('maxx')
+!!       call maxx([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmax)
 !!       write(*,*)xmax
 !!    end program demo_max
 !!
@@ -14870,7 +14869,7 @@ END SUBROUTINE LOGSF
 !     UPDATED         --NOVEMBER  1975.
 ! processed by SPAG 7.51RB at 12:54 on 18 Mar 2022
 
-SUBROUTINE MAX(X,N,Iwrite,Xmax)
+SUBROUTINE MAXX(X,N,Iwrite,Xmax)
 REAL(kind=wp) :: hold , X(:) , Xmax
 INTEGER i , Iwrite , N
 !---------------------------------------------------------------------
@@ -14879,14 +14878,14 @@ INTEGER i , Iwrite , N
 !
 IF ( N<1 ) THEN
    WRITE (G_IO,99001)
-   99001    FORMAT (' ***** FATAL ERROR--The second input argument to MAX(3f) is non-positive *****')
+   99001    FORMAT (' ***** FATAL ERROR--The second input argument to MAXX(3f) is non-positive *****')
    WRITE (G_IO,99002) N
    99002    FORMAT (' ','***** The value of the argument is ',I0,' *****')
    RETURN
 ELSE
    IF ( N==1 ) THEN
       WRITE (G_IO,99003)
-      99003 FORMAT (' ***** NON-FATAL DIAGNOSTIC--The second input argument to MAX(3f) has the value 1 *****')
+      99003 FORMAT (' ***** NON-FATAL DIAGNOSTIC--The second input argument to MAXX(3f) has the value 1 *****')
       Xmax = X(1)
    ELSE
       hold = X(1)
@@ -14894,7 +14893,7 @@ ELSE
          IF ( X(i)/=hold ) GOTO 50
       ENDDO
       WRITE (G_IO,99004) hold
-      99004 FORMAT (' ***** NON-FATAL DIAGNOSTIC--the first input argument (a vector) to MAX(3f) has all elements = ',g0,' *****')
+      99004 FORMAT (' ***** NON-FATAL DIAGNOSTIC--the first input argument (a vector) to MAXX(3f) has all elements = ',g0,' *****')
       Xmax = X(1)
    ENDIF
 
@@ -14912,7 +14911,7 @@ ENDIF
    99005 FORMAT (' ')
    WRITE (G_IO,99006) N , Xmax
    99006 FORMAT (' ','The maximum of the set of ',I0,' observations is ', e15.8)
-end subroutine max
+end subroutine maxx
 !>
 !!##NAME
 !!    mean(3f) - [M_datapac:STATISTICS] compute the sample mean of a data vector
@@ -15492,11 +15491,11 @@ INTEGER :: i
 END SUBROUTINE MIDR
 !>
 !!##NAME
-!!    min(3f) - [M_datapac:STATISTICS] compute the minimum of a data vector
+!!    minn(3f) - [M_datapac:STATISTICS] compute the minimum of a data vector
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE MIN(X,N,Iwrite,Xmin)
+!!     SUBROUTINE MINN(X,N,Iwrite,Xmin)
 !!
 !!      real(kind=wp),intent(in)  :: X(:)
 !!      integer,intent(in)        :: N
@@ -15504,7 +15503,7 @@ END SUBROUTINE MIDR
 !!      real(kind=wp),intent(out) :: Xmin
 !!
 !!##DESCRIPTION
-!!    MIN(3f) computes the sample minimum of the data in the input vector X.
+!!    MINN(3f) computes the sample minimum of the data in the input vector X.
 !!
 !!##INPUT ARGUMENTS
 !!
@@ -15526,11 +15525,11 @@ END SUBROUTINE MIDR
 !!   Sample program:
 !!
 !!    program demo_min
-!!    use M_datapac, only : min, label
+!!    use M_datapac, only : minn, label
 !!    implicit none
 !!    real :: xmin
-!!       call label('min')
-!!       call min([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmin)
+!!       call label('minn')
+!!       call minn([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmin)
 !!       write(*,*)xmin
 !!    end program demo_min
 !!
@@ -15548,7 +15547,7 @@ END SUBROUTINE MIDR
 !     UPDATED         --NOVEMBER  1975.
 ! processed by SPAG 7.51RB at 12:54 on 18 Mar 2022
 
-subroutine min(X,N,Iwrite,Xmin)
+subroutine minn(X,N,Iwrite,Xmin)
 real(kind=wp) :: hold , X(:) , Xmin
 integer       :: i , Iwrite , N
 !
@@ -15556,14 +15555,14 @@ integer       :: i , Iwrite , N
 !
       if ( N<1 ) then
          write (g_io,99001)
-         99001 format (' ***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO MIN(3f) IS NON-POSITIVE *****')
+         99001 format (' ***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO MINN(3f) IS NON-POSITIVE *****')
          write (g_io,99002) N
          99002 format (' ***** THE VALUE OF THE ARGUMENT IS ',I0,' *****')
          return
       else
          if ( N==1 ) then
             write (g_io,99003)
-            99003 format (' ***** NON-FATAL DIAGNOSTIC--THE SECOND INPUT ARGUMENT TO MIN(3f) HAS THE VALUE 1 *****')
+            99003 format (' ***** NON-FATAL DIAGNOSTIC--THE SECOND INPUT ARGUMENT TO MINN(3f) HAS THE VALUE 1 *****')
             Xmin = X(1)
          else
             hold = X(1)
@@ -15571,7 +15570,7 @@ integer       :: i , Iwrite , N
                if ( X(i) /= hold ) goto 50
             enddo
             write (g_io,99004) hold
-            99004 format (' ***** NON-FATAL DIAGNOSTIC--THE FIRST INPUT ARGUMENT (A VECTOR) TO MIN(3f) HAS ALL ELEMENTS = ', &
+            99004 format (' ***** NON-FATAL DIAGNOSTIC--THE FIRST INPUT ARGUMENT (A VECTOR) TO MINN(3f) HAS ALL ELEMENTS = ', &
             & g0, &
             & ' *****')
             Xmin = X(1)
@@ -15594,7 +15593,7 @@ integer       :: i , Iwrite , N
       write (g_io,99006) N , Xmin
       99006 format (' ','THE MINIMUM OF THE SET OF ',I0,' OBSERVATIONS IS ', g0)
 
-end subroutine min
+end subroutine minn
 !>
 !!##NAME
 !!
@@ -15899,7 +15898,7 @@ INTEGER          :: i, ievodd, iflag1, iflag2, imax, imin, intx, k, n2, nu1, nu2
 DOUBLE PRECISION :: dx2, pi, anu1, anu2, z, sum, term, ai, coef1, coef2, arg
 DOUBLE PRECISION :: coef
 DOUBLE PRECISION :: theta, sinth, costh, a, b
-DOUBLE PRECISION :: DSQRT, DATAN
+intrinsic           SQRT, ATAN
 DATA pi/3.14159265358979D0/
 !
 !     CHECK THE INPUT ARGUMENTS FOR ERRORS
@@ -16011,10 +16010,10 @@ DATA pi/3.14159265358979D0/
 !
             sum = 0.0D0
             term = 1.0D0
-            arg = DSQRT((anu1/anu2)*dx2)
-            theta = DATAN(arg)
-            sinth = arg/DSQRT(1.0D0+arg*arg)
-            costh = 1.0D0/DSQRT(1.0D0+arg*arg)
+            arg = SQRT((anu1/anu2)*dx2)
+            theta = ATAN(arg)
+            sinth = arg/SQRT(1.0D0+arg*arg)
+            costh = 1.0D0/SQRT(1.0D0+arg*arg)
             IF ( nu2/=1 ) THEN
                IF ( nu2/=3 ) THEN
                   imax = nu2 - 2
@@ -21248,7 +21247,7 @@ DATA blank, star, hyphen, alphai/' ', '*', '-', 'I'/
  50      ymin = -1.0_wp
          ymax = 1.0_wp
          DO i = 1 , 11
-            ylable(i) = FLOAT(6-i)/5.0_wp
+            ylable(i) = real(6-i)/5.0_wp
          ENDDO
 !
 !     DETERMINE DISTANCES BETWEEN HORIZONTAL PLOT POINTS AND DISTANCES BETWEEN
@@ -21342,8 +21341,8 @@ DATA blank, star, hyphen, alphai/' ', '*', '-', 'I'/
                my = ratioy*(Y(i)-ymin) + 0.5_wp
                my = 55 - my
                IGRaph(my,mx) = star
-               jmax = MAX0(my,30)
-               jmin = MIN0(my,30)
+               jmax = MAX(my,30)
+               jmin = MIN(my,30)
                DO j = jmin , jmax
                   IGRaph(j,mx) = star
                ENDDO
@@ -23150,7 +23149,7 @@ CHARACTER(len=4) :: blank , hyphen , alphai , alphax , dot
 !     DETERMINE THE 11 VALUES TO BE LISTED ON THE LEFT VERTICAL AXIS
 !
          DO i = 1 , 11
-            ylable(i) = ymax - ((FLOAT(i-1))/10.0_wp)*(ymax-ymin)
+            ylable(i) = ymax - ((real(i-1))/10.0_wp)*(ymax-ymin)
          ENDDO
 !
 !     BLANK OUT THE GRAPH
@@ -26255,7 +26254,7 @@ REAL(kind=wp) :: del, fintx, gcdf, spchi
 INTEGER       :: i, ievodd, imax, imin, intx, nu
 
 DOUBLE PRECISION dx, pi, chi, sum, term, ai, dgcdf
-DOUBLE PRECISION DSQRT, DEXP
+intrinsic        SQRT, EXP
 DATA pi/3.14159265358979D0/
 !
 !     CHECK THE INPUT ARGUMENTS FOR ERRORS
@@ -26296,7 +26295,7 @@ DATA pi/3.14159265358979D0/
          nu = X + 0.0001_wp
          nu = 2*(1+nu)
 !
-         chi = DSQRT(dx)
+         chi = SQRT(dx)
          ievodd = nu - 2*(nu/2)
          IF ( ievodd==0 ) THEN
 !
@@ -26320,9 +26319,9 @@ DATA pi/3.14159265358979D0/
             ENDDO
          ENDIF
 !
-         sum = sum*DEXP(-dx/2.0D0)
+         sum = sum*EXP(-dx/2.0D0)
          IF ( ievodd/=0 ) THEN
-            sum = (DSQRT(2.0D0/pi))*sum
+            sum = (SQRT(2.0D0/pi))*sum
             spchi = chi
             CALL NORCDF(spchi,gcdf)
             dgcdf = gcdf
@@ -31650,7 +31649,7 @@ DATA constn/.3989422804_wp/
                IF ( idis==21 ) idis2 = idis - 1
                IF ( 23<idis .AND. idis<33 ) idis2 = idis - 2
                IF ( 33<idis ) idis2 = idis - 3
-               alamba = -(0.1_wp)*FLOAT(idis2) + 2.1_wp
+               alamba = -(0.1_wp)*real(idis2) + 2.1_wp
                IF ( idis==1 ) THEN
                   DO i = 1 , nhalf
                      irev = N - i + 1
@@ -31936,7 +31935,7 @@ DATA constn/.3989422804_wp/
                IF ( idis==21 ) idis2 = idis - 1
                IF ( 23<idis .AND. idis<33 ) idis2 = idis - 2
                IF ( 33<idis ) idis2 = idis - 3
-               alamba = -(0.1)*FLOAT(idis2) + 2.1
+               alamba = -(0.1)*real(idis2) + 2.1
                WRITE (G_IO,99041) N, alamba, corr(idis), iflag1(idis), iflag2(idis), iflag3(idis)
                99041 FORMAT (' ','THE CORRELATION BETWEEN THE ',I0, &
                & ' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE LAMBDA = '&
@@ -32078,7 +32077,7 @@ REAL(kind=wp) :: Cdf
 REAL(kind=wp) :: anu , cdfn , sd , z
 INTEGER :: i , ievodd , imax , imin , nucut
 DOUBLE PRECISION dx , dnu , pi , c , csq , s , sum , term , ai
-DOUBLE PRECISION DSQRT , DATAN
+intrinsic        SQRT , ATAN, EXP
 DOUBLE PRECISION dconst
 DOUBLE PRECISION term1 , term2 , term3
 DOUBLE PRECISION dcdfn
@@ -32147,9 +32146,9 @@ DATA b32 , b33 , b34 , b35 , b36 , b37/1.0D0 , -11.0D0 , 14.0D0 , &
 !     METHOD UTILIZED--EXACT FINITE SUM
 !     (SEE AMS 55, page 948, FORMULAE 26.7.3 AND 26.7.4).
 !
-         c = DSQRT(dnu/(dx*dx+dnu))
+         c = SQRT(dnu/(dx*dx+dnu))
          csq = dnu/(dx*dx+dnu)
-         s = dx/DSQRT(dx*dx+dnu)
+         s = dx/SQRT(dx*dx+dnu)
          imax = Nu - 2
          ievodd = Nu - 2*(Nu/2)
          IF ( ievodd==0 ) THEN
@@ -32174,7 +32173,7 @@ DATA b32 , b33 , b34 , b35 , b36 , b37/1.0D0 , -11.0D0 , 14.0D0 , &
          ENDIF
 !
          sum = sum*s
-         IF ( ievodd/=0 ) sum = (2.0D0/pi)*(DATAN(dx/DSQRT(dnu))+sum)
+         IF ( ievodd/=0 ) sum = (2.0D0/pi)*(ATAN(dx/SQRT(dnu))+sum)
          Cdf = 0.5D0 + sum/2.0D0
          RETURN
       ELSE
@@ -32196,7 +32195,7 @@ DATA b32 , b33 , b34 , b35 , b36 , b37/1.0D0 , -11.0D0 , 14.0D0 , &
          term2 = b21*(b22*d7+b23*d5+b24*d3+b25*d1)/(dnu**2)
          term3 = b31*(b32*d11+b33*d9+b34*d7+b35*d5+b36*d3+b37*d1)/(dnu**3)
          dcdf = term1 + term2 + term3
-         dcdf = dcdfn - (dconst*(DEXP(-dx*dx/2.0D0)))*dcdf
+         dcdf = dcdfn - (dconst*(EXP(-dx*dx/2.0D0)))*dcdf
          Cdf = dcdf
       ENDIF
 !

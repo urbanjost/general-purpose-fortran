@@ -184,11 +184,11 @@ implicit none
 
    call test_copy()
    call test_dot()
-   call test_max()
+   call test_maxx()
    call test_mean()
    call test_midm()
    call test_midr()
-   call test_min()
+   call test_minn()
    call test_sort()
    call test_sortc()
    call test_unicdf()
@@ -718,22 +718,22 @@ subroutine test_logsf()
    call unit_test_done('logsf',msg='')
 end subroutine test_logsf
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_max()
-use M_datapac, only : intel_max=>max
+subroutine test_maxx()
+use M_datapac, only : maxx
 real :: xmax
 real(kind=real64) :: dmax
 
-   call unit_test_start('max',msg='')
+   call unit_test_start('maxx',msg='')
 
-   call intel_max([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmax)
-   call unit_test('max', xmax.eq.400.0, 'checking',xmax,400.0)
+   call maxx([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmax)
+   call unit_test('maxx', xmax.eq.400.0, 'checking',xmax,400.0)
 
-   call intel_max([-100.0d0, 200.0d0, 0.0d0, 400.0d0, -200.0d0],5,1,dmax)
-   call unit_test('max', dmax.eq.400.0d0, 'checking',dmax,400.0d0)
+   call maxx([-100.0d0, 200.0d0, 0.0d0, 400.0d0, -200.0d0],5,1,dmax)
+   call unit_test('maxx', dmax.eq.400.0d0, 'checking',dmax,400.0d0)
 
-   call unit_test_done('max',msg='')
+   call unit_test_done('maxx',msg='')
 
-end subroutine test_max
+end subroutine test_maxx
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_mean()
 real :: sp_mean
@@ -782,21 +782,21 @@ subroutine test_midr()
    call unit_test_done('midr',msg='')
 end subroutine test_midr
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_min()
+subroutine test_minn()
 real :: xmin
 real(kind=real64) :: dmin
 
-   call unit_test_start('min',msg='')
+   call unit_test_start('minn',msg='')
 
-   call min([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmin)
-   call unit_test('min', xmin.eq.-200.0, 'checking',xmin,-200.0)
+   call minn([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmin)
+   call unit_test('minn', xmin.eq.-200.0, 'checking',xmin,-200.0)
 
-   call min([-100.0d0, 200.0d0, 0.0d0, 400.0d0, -200.0d0],5,1,dmin)
-   call unit_test('min', dmin.eq.-200.0d0, 'checking',dmin,-200.0d0)
+   call minn([-100.0d0, 200.0d0, 0.0d0, 400.0d0, -200.0d0],5,1,dmin)
+   call unit_test('minn', dmin.eq.-200.0d0, 'checking',dmin,-200.0d0)
 
-   call unit_test_done('min',msg='')
+   call unit_test_done('minn',msg='')
 
-end subroutine test_min
+end subroutine test_minn
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_move()
    call unit_test_start('move',msg='')

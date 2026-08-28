@@ -2,10 +2,18 @@
      use M_calcomp, only : plots, plot, newpen, rect
      use M_calcomp, only : END,MOVE
      implicit none
-     real  :: xmax=8.5,ymax=7.0
-     real  :: xstart=2.5, ystart=1.0 ! lower left corner before rotation
-     real  :: height=3.0, wdth=5.0
+     real  :: xmax,ymax
+     real  :: xstart, ystart ! lower left corner before rotation
+     real  :: height, wdth
      real  :: angle
+
+        xmax=8.5
+        ymax=7.0
+        xstart=2.5
+        ystart=1.0
+        height=3.0
+        wdth=5.0
+
         call plots(0.0,xmax,0.0,ymax)
         ! (make a small dot at xstart,ystart>
         call rect(xstart,ystart,0.04,0.04,45.0,MOVE)

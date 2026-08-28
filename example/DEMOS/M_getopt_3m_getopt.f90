@@ -6,10 +6,10 @@
      type(option_s):: opts(2)
         opts(1) = option_s( "alpha", .false., 'a' )
         opts(2) = option_s( "beta",  .true.,  'b' )
-        do
+        INFINITE: do
            PARSE: select case( getopt( OPTIONS, opts ))
            case( char(0))
-              exit PARSE
+              exit INFINITE
            case( 'a' )
               print *, 'option alpha/a', optarg
            case( 'b' )
@@ -20,5 +20,5 @@
            case default
               print *, 'unhandled option c ', optopt, ' (an intentional bug)'
            end select PARSE
-        end do
+        end do INFINITE
      end program demo_getopts

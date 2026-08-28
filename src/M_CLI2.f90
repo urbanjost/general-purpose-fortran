@@ -5006,7 +5006,7 @@ integer                                 :: error
       maxtry=0
       place=-1
    else
-      maxtry=nint(log(float(arraysize))/log(2.0)+1.0)
+      maxtry=nint(log(real(arraysize))/log(2.0)+1.0)
       place=(arraysize+1)/2
    endif
    imin=1

@@ -891,13 +891,13 @@ integer, save                     :: c_q, direc_q, ii_q, ix_q, iy_q, ktsize_q, n
 integer, parameter                :: hxsz_q = 255, hysz_q = 255, limit_q = 2048
 real, dimension(255), save        :: hx_q, hy_q
 integer                           :: idata
-integer, dimension(4)             :: ixd_q = [0, -1, 0, 1], iyd_q = [1, 0, -1, 0]
+integer, parameter, dimension(4)  :: ixd_q = [0, -1, 0, 1], iyd_q = [1, 0, -1, 0]
 real :: maxq
 integer, target, save :: nn_q, ntrk_q
 integer, target, dimension(2048), save :: rec_q
 integer, dimension(700), save :: table_q
 integer, dimension(255), save :: trka_q, trk_q
-real :: xspc_q = 7.0, yspc_q = 7.0
+real,save :: xspc_q = 7.0, yspc_q = 7.0
 public :: axis, black, circl, cntour, curvx, curvy, cyan,   &
 &          dashl, dashp, draw, elips, end, factor, fit,     &
 &          fit4, fline, green, grid, lgaxs, lglin, line,    &
@@ -1370,7 +1370,7 @@ integer :: i, id, j, kk, nd, nm, no, np
 !     ASSURE DIVISOR NON ZERO
       if ( id<=0 ) id = 1
 !     DERIVE DASH LENGTH.
-      dds = ds/float(2*id+1)
+      dds = ds/real(2*id+1)
       dy = dds*dy/ds*y(nd)
       dx = dds*dx/ds*x(nd)
 !     SET XT/YT TO SEGMENT START POINT
@@ -1723,7 +1723,9 @@ end subroutine elips
 !!    implicit none
 !!    integer,parameter  :: MOVE=3, DRAW=2
 !!    integer            :: i
-!!    real               :: x(3)=[-3.0,1.0,4.4],y(3)=[3.2,1.0,-4.0]
+!!    real               :: x(3),y(3)
+!!    x=[-3.0,1.0,4.4]
+!!    y=[3.2,1.0,-4.0]
 !!    call plots(0.0,10.0,0.0,10.0)      ! initialize graphics
 !!    call plot(5.0,5.0,-3)              ! set origin
 !!    call newpen(green)
@@ -1770,17 +1772,19 @@ subroutine fit(xa,ya,xb,yb,xc,yc)
 !
 ! Local variable declarations rewritten by SPAG
 !
-      real :: a = 0.0, b = 0.0
-      real :: c, d, dx, dy, dz, fctr, x, y, z, z2, z3
-      integer :: i, ktra, m
+      real                 :: a, b
+      real                 :: c, d, dx, dy, dz, fctr, x, y, z, z2, z3
+      integer              :: i, ktra, m
       real, dimension(8,9) :: ss
-      real, dimension(2) :: theta
+      real, dimension(2)   :: theta
 !
 ! End of declarations rewritten by SPAG
 !
 
 ! ident_5="@(#) m_calcomp fit(3f) draws a semi-hyperbolic curve through three points"
 
+      a = 0.0
+      b = 0.0
       m = 2
       dy = yc - ya
       dx = xc - xa
@@ -1895,8 +1899,10 @@ end subroutine fit
 !!    use M_calcomp, only : plots, plot, newpen, grid
 !!    use M_calcomp, only : END
 !!    implicit none
-!!    real              :: xmax=8.5,ymax=11.0
+!!    real              :: xmax,ymax
 !!    real              :: step
+!!       xmax=8.5
+!!       ymax=11.0
 !!       call plots(0.0,xmax,0.0,ymax)  ! make a 8 1/2 x 11 inch page
 !!       call newpen(1)                 ! red
 !!       step=0.25                      ! make 1/4 inch grid
@@ -1938,7 +1944,7 @@ subroutine grid(x,y,xs,ys,m,n)
       y0 = y              ! n     is the number of divisions in y direction.
       x0 = x
       im = n + 1
-      xf = x0 + xs*float(m)
+      xf = x0 + xs*real(m)
       call plot(x0,y0,3)
       do i = 1, im
          call plot(x0,y0,2)
@@ -1951,7 +1957,7 @@ subroutine grid(x,y,xs,ys,m,n)
 
       x0 = x
       y0 = y
-      xf = y + ys*float(n)
+      xf = y + ys*real(n)
       im = m + 1
       do i = 1, im
          call plot(x0,xf,2)
@@ -2122,10 +2128,18 @@ end subroutine poly
 !!    use M_calcomp, only : plots, plot, newpen, rect
 !!    use M_calcomp, only : END,MOVE
 !!    implicit none
-!!    real  :: xmax=8.5,ymax=7.0
-!!    real  :: xstart=2.5, ystart=1.0 ! lower left corner before rotation
-!!    real  :: height=3.0, wdth=5.0
+!!    real  :: xmax,ymax
+!!    real  :: xstart, ystart ! lower left corner before rotation
+!!    real  :: height, wdth
 !!    real  :: angle
+!!
+!!       xmax=8.5
+!!       ymax=7.0
+!!       xstart=2.5
+!!       ystart=1.0
+!!       height=3.0
+!!       wdth=5.0
+!!
 !!       call plots(0.0,xmax,0.0,ymax)
 !!       ! (make a small dot at xstart,ystart>
 !!       call rect(xstart,ystart,0.04,0.04,45.0,MOVE)
@@ -2567,12 +2581,21 @@ subroutine fit4(px1,py1,px2,py2,vecx1,vecy1,vecx3,vecy3)
 !
 ! Local variable declarations rewritten by SPAG
 !
-      real :: ax, ay, bx, by, d, d1, d2, dv, t, uux1, uux2,  uuy1, uuy2, x, x1, y, y1
-      real :: d3 = 0.0, ux1 = 0.0, ux2 = 0.0, uy1 = 0.0, uy2 = 0.0 , vx2 = 0.0, vx3 = 0.0, vy2 = 0.0, vy3 = 0.0
+      real :: ax, ay, bx, by, d, d1, d2, dv, t, uux1, uux2, uuy1, uuy2, x, x1, y, y1
+      real :: d3, ux1, ux2, uy1, uy2, vx2, vx3, vy2, vy3
       integer :: i, n
 !
 ! End of declarations rewritten by SPAG
 !
+      d3 = 0.0
+      ux1 = 0.0
+      ux2 = 0.0
+      uy1 = 0.0
+      uy2 = 0.0
+      vx2 = 0.0
+      vx3 = 0.0
+      vy2 = 0.0
+      vy3 = 0.0
 
       x1 = px1
       y1 = py1
@@ -2626,7 +2649,7 @@ subroutine fit4(px1,py1,px2,py2,vecx1,vecy1,vecx3,vecy3)
       ay = uuy2 + uuy1 - vy2 - vy2
       by = vy2 - uuy1 - ay
       n = 10.*d + 1.0
-      d = 1.0/float(n)
+      d = 1.0/real(n)
       do i = 1, n
          t = t + d
          x = ((ax*t+bx)*t+uux1)*t + x1
@@ -2712,10 +2735,12 @@ end subroutine fit4
 !!    use M_calcomp
 !!    implicit none
 !!    ! based on concepts of CALIFORNIA COMPUTER PRODUCTS, 1968
-!!    real :: xar(10)=[0.75,1.75,2.25,2.75,3.25,4.25,4.75,5.75,0.0,1.0]
-!!    real :: yar(10)=[3.25,2.00,5.25,6.50,6.75,6.25,3.25,4.25,0.0,1.0]
+!!    real              :: xar(10)
+!!    real              :: yar(10)
 !!    character(len=50) :: ibcd
 !!    integer           :: inteq
+!!       xar=[0.75,1.75,2.25,2.75,3.25,4.25,4.75,5.75,0.0,1.0]
+!!       yar=[3.25,2.00,5.25,6.50,6.75,6.25,3.25,4.25,0.0,1.0]
 !!       call plots(0.0,10.0,0.0,10.0)
 !!    !     DRAW FRAME
 !!       call plot(7.0,0.0,2)
@@ -3011,8 +3036,9 @@ end subroutine fline
 !!    real              :: x
 !!    real              :: xx
 !!    real              :: xa,ya, xb,yb, xc,yc, xd,yd
-!!    real              :: xar(8)= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
-!!    real              :: yar(8)= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
+!!    real              :: xar(8), yar(8)
+!!       xar= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
+!!       yar= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
 !!       call plots(0.0,10.0,0.0,10.0)
 !!    ! DRAW FRAME
 !!       call plot(7.0,0.0,2)
@@ -3144,7 +3170,7 @@ subroutine lgaxs(xo,yo,ibcd,n,dist,theta,vorg,delta)
 !  STORE LOGS OF INTEGERS 2-10
       eto10 = 0.4342945
       do i = 1, 9
-         blog(i) = eto10*log(float(i))
+         blog(i) = eto10*log(real(i))
       enddo
 !  SET FXMN TO GREATEST INTEGER POWER OF TEN LESS THAN OR EQUAL TO LOG
 !     OF XMIN.
@@ -3166,8 +3192,8 @@ subroutine lgaxs(xo,yo,ibcd,n,dist,theta,vorg,delta)
          nc = -nc
          sont = sint
          cist = cost
-         bcdx = x + (size-0.12*float(nc))/2.*cost + 0.48*sint
-         bcdy = y + (size-0.12*float(nc))/2.*sint - 0.48*cost
+         bcdx = x + (size-0.12*real(nc))/2.*cost + 0.48*sint
+         bcdy = y + (size-0.12*real(nc))/2.*sint - 0.48*cost
       elseif ( nc/=0 ) then
          d1 = (-0.1)*sint
          d2 = 0.1*cost
@@ -3177,8 +3203,8 @@ subroutine lgaxs(xo,yo,ibcd,n,dist,theta,vorg,delta)
          d4 = 0.22*cost + 0.24*sint
          d5 = d1 - 0.03*cost
          d6 = d2 - 0.03*sint
-         bcdx = x + (size-0.12*float(nc))/2.*cost - 0.34*sint
-         bcdy = y + (size-0.12*float(nc))/2.*sint + 0.34*cost
+         bcdx = x + (size-0.12*real(nc))/2.*cost - 0.34*sint
+         bcdy = y + (size-0.12*real(nc))/2.*sint + 0.34*cost
       endif
 !  CALCULATE COORDINATES OF START OF CYCLE CONTAINING VORG,
 !     AND STORE IN X0, Y0 .
@@ -3234,7 +3260,7 @@ subroutine lgaxs(xo,yo,ibcd,n,dist,theta,vorg,delta)
 !  IF CYCLE LENGTH IS LESS THAN 2 INCHES, GO TO NEXT TIC MARK.
                elseif ( delta<=0.5 ) then
 !  ANNOTATE INTERMEDIATE TIC MARK.
-                  call number(x0+blen*cost+d5,y0+blen*sint+d6,0.105, float(i),theta,-1)
+                  call number(x0+blen*cost+d5,y0+blen*sint+d6,0.105, real(i),theta,-1)
                endif
             endif
          enddo
@@ -3351,8 +3377,10 @@ end subroutine lgaxs
 !!    real              :: x
 !!    real              :: xx
 !!    real              :: xa,ya, xb,yb, xc,yc, xd,yd
-!!    real              :: xar(8)= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
-!!    real              :: yar(8)= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
+!!    real              :: xar(8)
+!!    real              :: yar(8)
+!!       xar= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
+!!       yar= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
 !!       call plots(0.0,10.0,0.0,10.0)
 !!    ! DRAW FRAME
 !!       call plot(7.0,0.0,2)
@@ -3682,8 +3710,10 @@ end subroutine lglin
 !!    real              :: x
 !!    real              :: xx
 !!    real              :: xa,ya, xb,yb, xc,yc, xd,yd
-!!    real              :: xar(8)= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
-!!    real              :: yar(8)= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
+!!    real              :: xar(8)
+!!    real              :: yar(8)
+!!       xar= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
+!!       yar= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
 !!       call plots(0.0,10.0,0.0,10.0)
 !!    ! DRAW FRAME
 !!       call plot(7.0,0.0,2)
@@ -4091,8 +4121,10 @@ end subroutine reflx
 !!    real              :: x
 !!    real              :: xx
 !!    real              :: xa,ya, xb,yb, xc,yc, xd,yd
-!!    real              :: xar(8)= [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
-!!    real              :: yar(8)= [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
+!!    real              :: xar(8)
+!!    real              :: yar(8)
+!!       xar = [ 1.00, 2.00, 3.00, 4.00, 5.00, 6.00       , 0.0, 0.0 ]
+!!       yar = [ 250.0, 110.0, 500.0, 900.0, 200.0, 140.0 , 0.0, 1.0 ]
 !!       call plots(0.0,10.0,0.0,10.0)
 !!    ! DRAW FRAME
 !!       call plot(7.0,0.0,2)
@@ -4314,10 +4346,11 @@ end subroutine scalg
 !!    use M_calcomp
 !!    implicit none
 !!    ! based on concepts of CALIFORNIA COMPUTER PRODUCTS, 1968
-!!    real :: xar(10)=[0.75,1.75,2.25,2.75,3.25,4.25,4.75,5.75,0.0,1.0]
-!!    real :: yar(10)=[3.25,2.00,5.25,6.50,6.75,6.25,3.25,4.25,0.0,1.0]
-!!    character(len=50) :: ibcd
+!!    real              :: xar(10), yar(10)
 !!    integer           :: inteq
+!!    character(len=50) :: ibcd
+!!       xar=[0.75,1.75,2.25,2.75,3.25,4.25,4.75,5.75,0.0,1.0]
+!!       yar=[3.25,2.00,5.25,6.50,6.75,6.25,3.25,4.25,0.0,1.0]
 !!       call plots(0.0,10.0,0.0,10.0)
 !!    !     DRAW FRAME
 !!       call plot(7.0,0.0,2)
@@ -4525,7 +4558,7 @@ subroutine smoot(xn,yn,ic)
             ay = uuy2 + uuy1 - vy2 - vy2
             by = vy2 - uuy1 - ay
             n = 10.0*d + 1.0
-            d = 1./float(n)
+            d = 1./real(n)
             do i = 1, n
                t = t + d
                x = ((ax*t+bx)*t+uux1)*t + x1
@@ -5701,7 +5734,7 @@ subroutine number(xpage,ypage,height,fpn,angle,ndec)
             ii = ii + 1
             kk = ichar(izero) + k
             num(ii:ii) = char(kk)
-            fpv = fpv - (float(k)*10.**(i-j))
+            fpv = fpv - (real(k)*10.**(i-j))
          enddo
       endif
       if ( n>=0 ) then
@@ -5714,7 +5747,7 @@ subroutine number(xpage,ypage,height,fpn,angle,ndec)
                ii = ii + 1
                kk = ichar(izero) + k
                num(ii:ii) = char(kk)
-               fpv = fpv*10. - float(k)
+               fpv = fpv*10. - real(k)
             enddo
          endif
       endif
@@ -5918,9 +5951,10 @@ integer, intent(in) :: ipen
 !
 ! Local variable declarations rewritten by SPAG
 !
-real :: dx = 1.0, dy = 1.0, penx = 0.0, peny = 0.0, xlast = 0.0, xoff = 0.0, xorg = 0.0, ylast = 0.0, yorg = 0.0, ys = 0.0
-logical :: noend = .false.
-real :: x, y
+real,save    :: dx = 1.0, dy = 1.0, penx = 0.0, peny = 0.0, xoff = 0.0, xorg = 0.0, yorg = 0.0, ys = 0.0
+real,save    :: xlast = 0.0, ylast = 0.0
+logical,save :: noend = .false.
+real         :: x, y
 !
 ! End of declarations rewritten by SPAG
 !
@@ -6171,7 +6205,7 @@ real :: x, y
       xlast = x
       ylast = y
       noend = .true.
-      return
+
 end subroutine plot
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
@@ -6244,7 +6278,7 @@ subroutine plots(xmin,xmax,ymin,ymax)
 ! 'primitive__start_plotting' INITIALIZES THE METALANGUAGE ELEMENTS.
       call primitive__start_plotting(xmin,xmax,ymin,ymax)
       call plot(0.0,0.0,1007)
-      call mpset('TSIZ',float(ktsize_q))
+      call mpset('TSIZ',real(ktsize_q))
 
 end subroutine plots
 !===================================================================================================================================
@@ -7456,7 +7490,7 @@ integer      :: i, inteq, ipjb, it
 !
             inteq = 999
             call symbol(0.26,dis,0.14,'SCALE = 10',inteq,0.0,10)
-            call number(1.66,dis+0.07,0.07,float(it),0.0,-1)
+            call number(1.66,dis+0.07,0.07,real(it),0.0,-1)
             dis = dis - 0.25
          endif
 !
@@ -7503,13 +7537,13 @@ integer      :: i, inteq, ipjb, it
 !  SUBROUTINE WAS CONVERTED TO THE CRAY. THE STATEMENT ORIGINALLY
 !  READ
 !
-!     CALL NUMBER(0.42-RT,DIS,0.14,FLOAT(I),0.0,-1)
+!     CALL NUMBER(0.42-RT,DIS,0.14,real(I),0.0,-1)
 !
 !  THE CHARACTER SIZE WAS ADJUSTED TO PERMIT 10 LINES OF INFORMATION
 !  TO APPEAR IN THE LEGEND. THE INFLUENCE OF THE DISPLACEMENT
 !  FACTOR HAS ALSO BEEN INCLUDED.
 !
-            call number(0.42-rt+xdisp,dis,0.09,float(i),0.0,-1)
+            call number(0.42-rt+xdisp,dis,0.09,real(i),0.0,-1)
             tem = cv(i)*scale
             it = tem + 00.5
             rt = 3.0
@@ -7881,7 +7915,7 @@ logical :: first
       if ( first ) then
          fplotx = plotx*ratio_q
          fploty = ploty*ratio_q
-         call number(fplotx+.02,fploty-.15,0.14,float(ii_q),0.0,-1)
+         call number(fplotx+.02,fploty-.15,0.14,real(ii_q),0.0,-1)
          call plot(fplotx,fploty,3)
          first = .false.
       else

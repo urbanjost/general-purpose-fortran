@@ -25,9 +25,10 @@
           nearest(tiny(0.0),-1.0),   &
           nearest(tiny(0.0),1.0) -nearest(tiny(0.0),-1.0)
 
-         !write (*,lim) 'For HUGE()', &
-         ! nearest(huge(0.0),1.0),    &
-         ! nearest(huge(0.0),-1.0),   &
-         ! nearest(huge(0.0),1.0)- nearest(huge(0.0),-1.0)
+        ! check for potential overflow
+!         write (*,lim) 'For HUGE()', &
+!          nearest(huge(0.0),1.0),    &
+!          nearest(huge(0.0),-1.0),   &
+!          nearest(huge(0.0),1.0)- nearest(huge(0.0),-1.0)
 
       end program demo_nearest

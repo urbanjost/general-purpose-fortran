@@ -62,6 +62,8 @@ integer,parameter,private:: sp=kind(1.0),dp=kind(1.0d0)
 
 integer,save             :: la_flop_counter(2)=[0,0]
 
+intrinsic :: sign, sqrt, abs, atan, atan2, max, dble
+
 interface linspace
    module procedure  &
    & linspace_real128, linspace_real64, linspace_real32, &
@@ -2484,7 +2486,7 @@ doubleprecision :: z
    c = 1.0d0
    s = 0.0d0
    z = 1.0d0
-   r = mat_flop(dsign(mat_pythag(da,db),rho))
+   r = mat_flop(sign(mat_pythag(da,db),rho))
    if (r .ne. 0.0d0) c = mat_flop(da/r)
    if (r .ne. 0.0d0) s = mat_flop(db/r)
    if ( abs(da) .gt. abs(db) ) z = s
@@ -4277,7 +4279,7 @@ integer          :: spag_nextblock_2
 !     .......... FORM SHIFT ..........
                         g = mat_flop((d(l+1)-p)/(2.0d0*e(l)))
                         r = mat_flop(sqrt(g*g+1.0d0))
-                        g = mat_flop(d(m)-p+e(l)/(g+dsign(r,g)))
+                        g = mat_flop(d(m)-p+e(l)/(g+sign(r,g)))
                         s = 1.0d0
                         c = 1.0d0
                         p = 0.0d0

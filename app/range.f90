@@ -73,7 +73,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    expand list of whole numbers where negative curve numbers designate ranges (1 -10 means 1 thru 10)>',&
 '@(#)VERSION:        1.0, 20170812>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2026-08-24 00:04:57 UTC-240>',&
+'@(#)COMPILED:       2026-08-28 12:12:50 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop

@@ -87,7 +87,7 @@ help_text=[ CHARACTER(LEN=128) :: &
 '@(#)DESCRIPTION:    do nothing, successfully>',&
 '@(#)VERSION:        1.0, 20170125>',&
 '@(#)AUTHOR:         John S. Urban>',&
-'@(#)COMPILED:       2026-08-24 00:02:31 UTC-240>',&
+'@(#)COMPILED:       2026-08-28 12:10:23 UTC-240>',&
 '']
    WRITE(*,'(a)')(trim(help_text(i)(5:len_trim(help_text(i))-1)),i=1,size(help_text))
    stop ! if --version was specified, stop
