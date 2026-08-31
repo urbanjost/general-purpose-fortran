@@ -7042,7 +7042,7 @@ class(*),intent(in) :: generic
       type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
    end select
-   line=line(:istart-1)//sep_local
+   line=trim(line)//sep_local
    istart=len_trim(line)+increment
 end subroutine print_generic
 !===================================================================================================================================
