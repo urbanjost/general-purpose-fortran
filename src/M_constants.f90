@@ -214,15 +214,22 @@ character(len=*),parameter           :: month_names(12)=[                       
    &'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', &
    &'July     ', 'August   ', 'September', 'October  ', 'November ', 'December ']
 
+character(len=3),parameter           :: mths(12)=[ &
+   &'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', &
+   &'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
 character(len=*),parameter           :: weekday_names(7)=[character(len=9) :: &
    & 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ]
 
+character(len=3),parameter           :: wkds(7)=[character(len=3) :: &
+   & 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
+
 type calendar
    character(len=len(month_names))   :: months(size(month_names))=month_names
-   character(len=3)                  :: mths(size(month_names))=month_names(:)(1:3)
    character(len=len(weekday_names)) :: weekdays(size(weekday_names))=weekday_names
-   character(len=3)                  :: wkds(size(weekday_names))=weekday_names(:)(1:3)
+   character(len=3)                  :: mths(size(month_names))=mths
+   character(len=3)                  :: wkds(size(weekday_names))=wkds
 end type calendar
-type(calendar),public,parameter      :: calen=calendar( )
+type(calendar),public,parameter      :: calen=calendar(mths=mths,months=month_names,weekdays=weekday_names,wkds=wkds)
 
 end module M_constants

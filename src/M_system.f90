@@ -6105,7 +6105,7 @@ integer                                 :: ierr
 contains
 
 function printdat()
-character(len=len(epoch_to_calendar)) :: printdat
+character(len=28) :: printdat
 character(len=*),parameter :: fmt='(i4.4,2("-",i2.2),1x,2(i2.2,":"),i2.2," UTC",sp,i5.4)'
    associate (                                            &
      year => dat(1), month => dat(2), day => dat(3),      &

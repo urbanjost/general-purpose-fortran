@@ -8525,11 +8525,8 @@ end type MATRIX
    interface
       subroutine rcurve_F(GEOM) bind(C,NAME='draw_rcurve')
          use ISO_C_BINDING
+         import MATRIX
          implicit none
-         type, bind(C) :: MATRIX
-            real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-         end type MATRIX
-         !real(KIND=C_FLOAT),intent(in),dimension(4,4) :: GEOM
          type(MATRIX),intent(in) :: GEOM
       end subroutine rcurve_F
    end interface
@@ -8550,11 +8547,8 @@ end type MATRIX
    interface
       subroutine curvebasis_F(BASIS) bind(C,NAME='draw_curvebasis')
          use ISO_C_BINDING
+         import MATRIX
          implicit none
-         type, bind(C) :: MATRIX
-            real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-         end type MATRIX
-         !real(KIND=C_FLOAT),intent(in),dimension(4,4) :: BASIS
          type(MATRIX),intent(in) :: BASIS
       end subroutine curvebasis_F
    end interface
@@ -8967,10 +8961,8 @@ end type MATRIX
    interface
       subroutine patch_F(GEOMX,GEOMY,GEOMZ) bind(C,NAME='draw_patch')
          use ISO_C_BINDING
+         import MATRIX
          implicit none
-         type, bind(C) :: MATRIX
-            real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-         end type MATRIX
          type(MATRIX),intent(inout) :: GEOMX
          type(MATRIX),intent(inout) :: GEOMY
          type(MATRIX),intent(inout) :: GEOMZ
@@ -8981,10 +8973,8 @@ end type MATRIX
    interface
       subroutine rpatch_F(GEOMX,GEOMY,GEOMZ) bind(C,NAME='draw_rpatch')
          use ISO_C_BINDING
+         import MATRIX
          implicit none
-         type, bind(C) :: MATRIX
-            real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-         end type MATRIX
          type(MATRIX),intent(inout) :: GEOMX
          type(MATRIX),intent(inout) :: GEOMY
          type(MATRIX),intent(inout) :: GEOMZ
@@ -8997,10 +8987,8 @@ end type MATRIX
    interface
       subroutine patchbasis_F(TB,UB) bind(C,NAME='draw_patchbasis')
          use ISO_C_BINDING
+         import MATRIX
          implicit none
-         type, bind(C) :: MATRIX
-            real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-         end type MATRIX
          type(MATRIX),intent(inout) :: TB
          type(MATRIX),intent(inout) :: UB
       end subroutine patchbasis_F
@@ -9846,10 +9834,8 @@ end type MATRIX
    interface
       subroutine getmatrix_F(M) bind(C,NAME='draw_getmatrix')
          use ISO_C_BINDING
+         import MATRIX
          implicit none
-         type, bind(C) :: MATRIX
-            real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-         end type MATRIX
          !real(KIND=C_FLOAT),intent(out),dimension(4,4) :: M
          type(MATRIX),intent(out) :: M
       end subroutine getmatrix_F
@@ -9859,11 +9845,8 @@ end type MATRIX
    interface
       subroutine loadmatrix_F(M) bind(C,NAME='draw_loadmatrix')
          use ISO_C_BINDING
+         import MATRIX
          implicit none
-         type, bind(C) :: MATRIX
-            real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-         end type MATRIX
-         !real(KIND=C_FLOAT),intent(in),dimension(4,4) :: M
          type(MATRIX),intent(in) :: M
       end subroutine loadmatrix_F
    end interface
@@ -9872,10 +9855,8 @@ end type MATRIX
    interface
       subroutine multmatrix_F(M) bind(C,NAME='draw_multmatrix')
          use ISO_C_BINDING
+         import MATRIX
          implicit none
-         type, bind(C) :: MATRIX
-            real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-         end type MATRIX
          !real(KIND=C_FLOAT),intent(inout),dimension(4,4) :: M
          type(MATRIX),intent(inout) :: M
       end subroutine multmatrix_F
@@ -10255,9 +10236,6 @@ end subroutine boxtext
  subroutine rcurve(GEOM)
     use ISO_C_BINDING
     implicit none
-    type, bind(C) :: MATRIX
-       real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-    end type MATRIX
     real(KIND=C_FLOAT),intent(in),dimension(4,4) :: GEOM
     type(MATRIX) :: GEOM_matrix
     GEOM_matrix%array=geom
@@ -10267,9 +10245,6 @@ end subroutine boxtext
  subroutine curvebasis(BASIS)
     use ISO_C_BINDING
     implicit none
-    type, bind(C) :: MATRIX
-       real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-    end type MATRIX
     real(KIND=C_FLOAT),intent(in),dimension(4,4) :: BASIS
     type(MATRIX) :: basis_matrix
     basis_matrix%array=basis
@@ -10282,9 +10257,6 @@ end subroutine boxtext
     real(KIND=C_FLOAT),intent(in),dimension(4,4) :: GEOMX
     real(KIND=C_FLOAT),intent(in),dimension(4,4) :: GEOMY
     real(KIND=C_FLOAT),intent(in),dimension(4,4) :: GEOMZ
-    type, bind(C) :: MATRIX
-       real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-    end type MATRIX
     type(MATRIX) :: GEOMX_matrix
     type(MATRIX) :: GEOMY_matrix
     type(MATRIX) :: GEOMZ_matrix
@@ -10297,9 +10269,6 @@ end subroutine boxtext
   subroutine patchbasis(TB,UB)
     use ISO_C_BINDING
     implicit none
-    type, bind(C) :: MATRIX
-       real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-    end type MATRIX
     real(KIND=C_FLOAT),intent(inout),dimension(4,4) :: TB
     real(KIND=C_FLOAT),intent(inout),dimension(4,4) :: UB
     type(MATRIX) :: TB_matrix
@@ -10312,9 +10281,6 @@ end subroutine boxtext
  subroutine getmatrix(M)
     use ISO_C_BINDING
     implicit none
-    type, bind(C) :: MATRIX
-       real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-    end type MATRIX
     real(KIND=C_FLOAT),intent(out),dimension(4,4) :: M
     type(MATRIX) :: M_matrix
     call getmatrix_F(m_matrix)
@@ -10324,9 +10290,6 @@ end subroutine boxtext
   subroutine loadmatrix(M)
     use ISO_C_BINDING
     implicit none
-    type, bind(C) :: MATRIX
-       real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-    end type MATRIX
     real(KIND=C_FLOAT),intent(in),dimension(4,4) :: M
     type(MATRIX) :: M_matrix
     M_matrix%array=M
@@ -10336,9 +10299,6 @@ end subroutine boxtext
   subroutine multmatrix(M)
     use ISO_C_BINDING
     implicit none
-    type, bind(C) :: MATRIX
-       real(KIND=C_FLOAT),dimension(4,4) :: ARRAY
-    end type MATRIX
     real(KIND=C_FLOAT),intent(inout),dimension(4,4) :: M
     type(MATRIX) :: M_matrix
     M_matrix%array=M

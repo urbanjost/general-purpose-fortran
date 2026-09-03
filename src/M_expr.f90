@@ -534,7 +534,8 @@ character(len=7)             :: temp
 character(len=G_line_length) :: newl
 integer                      :: i,j,k,l
 character(len=6),parameter   :: ops(6)= (/'.NOT. ','.AND. ','.OR.  ','.EQV. ','.NEQV.','.DEF. '/)
-integer,parameter            :: opl(6)= [(len_trim(ops(i)),i=1,size(ops))]
+!LFORTRAN! integer,parameter            :: opl(6)= [(len_trim(ops(i)),i=1,size(ops))]
+integer,parameter            :: opl(6)= [5,5,4,5,6,5]
 integer                      :: ieqv
 integer                      :: ineqv
 integer                      :: i1

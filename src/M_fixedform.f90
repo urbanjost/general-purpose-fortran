@@ -1244,7 +1244,8 @@ subroutine buttons() ! create and show buttons on last five lines of display
    endif
    page_ptr=>buffer
    icount_ptr=>icount_buffer
-   page_ptr(:)(:)=' '
+   !page_ptr(:)(:)=' '
+   page_ptr=' '
    if(COLS.ge.66)then
       istart=(COLS-66)/2+1
                              ! 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
@@ -1307,7 +1308,8 @@ subroutine buttons() ! create and show buttons on last five lines of display
    ierr=wattron(botwin,A_BOLD)
    call user_to_screen(botwin)  ! use data in page_ptr(*) to build ncurses window
    ierr=wattroff(botwin,A_BOLD)
-   page_ptr(:)(:)=' '
+   !page_ptr(:)(:)=' '
+   page_ptr=' '
    page_ptr=>page_pd
    icount_ptr=>icount_pd
    ierr=wrefresh(botwin)

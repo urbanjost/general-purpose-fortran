@@ -180,6 +180,7 @@
 !===================================================================================================================================
 module M_units
 use M_anything,only : anyscalar_to_real, anyscalar_to_double
+use, intrinsic :: ieee_arithmetic
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 implicit none                        ! require all variables to be declared
 private
@@ -218,12 +219,12 @@ private
       public is_nan
       public inf
       interface inf
-         module procedure inf32, inf64, inf128
+         module procedure inf32, inf64
       end interface inf
 
       public nan
       interface nan
-         module procedure nan32, nan64, nan128
+         module procedure nan32, nan64
       end interface nan
 !===================================================================================================================================
 !  constants
@@ -1921,14 +1922,14 @@ real(kind=real64)     :: inf64,value
    read(STRING,*)inf64
 end function inf64
 !===================================================================================================================================
-function inf128(value)
-
-! ident_32="@(#) M_units inf128(3fp) Returns an inf (Infinity) of type real128"
-
-character(len=3),save :: STRING='inf'
-real(kind=real128)    :: inf128,value
-   read(STRING,*)inf128
-end function inf128
+!function inf128(value)
+!
+!! ident_32="@(#) M_units inf128(3fp) Returns an inf (Infinity) of type real128"
+!
+!character(len=3),save :: STRING='inf'
+!real(kind=real128)    :: inf128,value
+!   read(STRING,*)inf128
+!end function inf128
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2060,19 +2061,19 @@ real(kind=real64)     :: nan64,value
    !endif
 end function nan64
 !===================================================================================================================================
-function nan128(value)
-
-!$@(#) M_units:: nan128(3fp): Returns a NAN (Not a number) of type real128
-
-character(len=3),save :: STRING='NaN'
-real(kind=real128)    :: nan128,value
-   read(STRING,*)nan128
-   ! (if X is NaN the comparison with 0. is always false.)
-   !if ( (nan128<=0.0_real128) .or. (nan128>=0.0_real128) )then
-   !   write(*,*)'nan(3f) did not produce a nan'
-   !   stop
-   !endif
-end function nan128
+!function nan128(value)
+!
+!!$@(#) M_units:: nan128(3fp): Returns a NAN (Not a number) of type real128
+!
+!character(len=3),save :: STRING='NaN'
+!real(kind=real128)    :: nan128,value
+!   read(STRING,*)nan128
+!   ! (if X is NaN the comparison with 0. is always false.)
+!   !if ( (nan128<=0.0_real128) .or. (nan128>=0.0_real128) )then
+!   !   write(*,*)'nan(3f) did not produce a nan'
+!   !   stop
+!   !endif
+!end function nan128
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -2182,6 +2183,7 @@ end function is_even
 elemental pure function is_nan(x)
 !!use IEEE_EXCEPTIONS, only : ieee_support_nan ! is IEEE NaNs supported?
 use,intrinsic :: ieee_arithmetic, only : IEEE_IS_NAN       ! Determine if value is IEEE Not-a-Number.
+use, intrinsic :: ieee_arithmetic
 
 ! ident_36="@(#) M_units is_nan(3f) determine if value is IEEE Not-a-Number"
 
@@ -2190,7 +2192,7 @@ logical             :: is_nan
    select type(x)
       type is (real(kind=real32));      is_nan=ieee_is_nan(x)
       type is (real(kind=real64));      is_nan=ieee_is_nan(x)
-      type is (real(kind=real128));     is_nan=ieee_is_nan(x)
+!      type is (real(kind=real128));     is_nan=ieee_is_nan(x)
       type is (complex);                is_nan=ieee_is_nan(real(x)).and.ieee_is_nan(aimag(x))
       !!type is (complex);                is_nan=ieee_is_nan(x%re).and.ieee_is_nan(x%im)
    end select

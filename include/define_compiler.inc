@@ -38,6 +38,7 @@
 #   define __COMPILER__ __NVIDIA_COMP
 #elif __LFORTRAN
 #   define __COMPILER__ __LFORTRAN_COMP
+#   undef FLOAT128
 #elif __NVCOMPILER
 #   undef FLOAT128
 #   warning  NOTE: FLOAT128 not supported

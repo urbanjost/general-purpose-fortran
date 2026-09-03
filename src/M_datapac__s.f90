@@ -1,12 +1,12 @@
 module M_datapac__s
 ! build real32 version
-use,intrinsic :: iso_fortran_env, only : wp=>real32
+use,intrinsic :: iso_fortran_env, only : wp=>real32, real64
 use,intrinsic :: iso_fortran_env, only : stdin=>input_unit,  stdout=>output_unit, stderr=>error_unit
 implicit none
 private
-integer, save           :: G_IO=stdout  ! IO LUN for all write statements
+integer,parameter       :: G_IO=stdout  ! IO LUN for all write statements
 real(kind=wp),parameter :: G_pi = 3.14159265358979_wp
-real(kind=wp),parameter :: G_pi_dp = 3.14159265358979d0
+real(kind=real64),parameter :: G_pi_dp = 3.14159265358979d0
 private invxwx
 public :: &
 autoco  ,  betran  ,  bincdf  ,  binppf  ,  binran  ,  caucdf  ,  caupdf  ,  cauplt  ,  cauppf  ,  cauran  , &
@@ -17,7 +17,7 @@ ev2ran  ,  expcdf  ,  exppdf  ,  expplt  ,  expppf  ,  expran  ,  expsf   ,  ext
 fran    ,  freq    ,  gamcdf  ,  gamplt  ,  gamppf  ,  gamran  ,  geocdf  ,  geoplt  ,  geoppf  ,  georan  , &
 hfncdf  ,  hfnplt  ,  hfnppf  ,  hfnran  ,  hist    ,             lamcdf  ,  lampdf  ,  lamplt  ,  lamppf  , &
 lamran  ,  lamsf   ,  lgncdf  ,  lgnplt  ,  lgnppf  ,  lgnran  ,  loc     ,  logcdf  ,  logpdf  ,  logplt  , &
-logppf  ,  logran  ,  logsf   ,  maxx    ,  mean    ,  median  ,  midm    ,  midr    ,  minn    ,  move    , &
+logppf  ,  logran  ,  logsf   ,  max     ,  mean    ,  median  ,  midm    ,  midr    ,  min     ,  move    , &
 nbcdf   ,  nbppf   ,  nbran   ,  norcdf  ,  norout  ,  norpdf  ,  norplt  ,  norppf  ,  norran  ,  norsf   , &
 parcdf  ,  parplt  ,  parppf  ,  parran  ,  plot10  ,  plot6   ,  plot7   ,  plot8   ,  plot9   ,  plotc   , &
 plotco  ,  plotct  ,  plot    ,  plotsc  ,  plots   ,  plotsp  ,  plotst  ,  plott   ,  plotu   ,  plotx   , &
@@ -110,12 +110,12 @@ interface  logplt;  module  procedure  logplt  ;  end  interface
 interface  logppf;  module  procedure  logppf  ;  end  interface
 interface  logran;  module  procedure  logran  ;  end  interface
 interface  logsf;   module  procedure  logsf   ;  end  interface
-interface  maxx;    module  procedure  maxx    ;  end  interface
+interface  max;     module  procedure  max     ;  end  interface
 interface  mean;    module  procedure  mean    ;  end  interface
 interface  median;  module  procedure  median  ;  end  interface
 interface  midm;    module  procedure  midm    ;  end  interface
 interface  midr;    module  procedure  midr    ;  end  interface
-interface  minn;    module  procedure  minn    ;  end  interface
+interface  min;     module  procedure  min     ;  end  interface
 interface  move;    module  procedure  move    ;  end  interface
 interface  nbcdf;   module  procedure  nbcdf   ;  end  interface
 interface  nbppf;   module  procedure  nbppf   ;  end  interface
@@ -650,7 +650,7 @@ INTEGER          :: i, ievodd, iflag1, iflag2, imax, imin, intx, nu1, nu2
 DOUBLE PRECISION :: dx , anu1 , anu2 , z , sum , term , ai , coef1 , coef2 , arg
 DOUBLE PRECISION :: coef
 DOUBLE PRECISION :: theta , sinth , costh , a , b
-intrinsic           SQRT , ATAN
+intrinsic        :: DSQRT , DATAN
 
 !     COMMENT--NOTE THAT EVEN THOUGH THE INPUT
 !              TO THIS CUMULATIVE
@@ -802,10 +802,10 @@ intrinsic           SQRT , ATAN
 !
             sum = 0.0D0
             term = 1.0D0
-            arg = SQRT((anu1/anu2)*dx)
-            theta = ATAN(arg)
-            sinth = arg/SQRT(1.0D0+arg*arg)
-            costh = 1.0D0/SQRT(1.0D0+arg*arg)
+            arg = DSQRT((anu1/anu2)*dx)
+            theta = DATAN(arg)
+            sinth = arg/DSQRT(1.0D0+arg*arg)
+            costh = 1.0D0/DSQRT(1.0D0+arg*arg)
             IF ( nu2/=1 ) THEN
                IF ( nu2/=3 ) THEN
                   imax = nu2 - 2
@@ -1149,7 +1149,7 @@ DOUBLE PRECISION :: dppar
 !     AND UPPER BOUND ARE EXACTLY 1 UNIT APART.
 !     CHECK TO SEE IF IX1 = IX0 + 1;
 !     IF SO, THE ITERATIONS ARE COMPLETE;
-!     IF NOT, THEN BISECT, COMPUTE PROBABILITIES,
+!     IF NOT, THEN BISECT, COMPUTE PROBABILIIES,
 !     CHECK PROBABILITIES, AND CONTINUE ITERATING
 !     UNTIL IX1 = IX0 + 1.
 !
@@ -1367,7 +1367,7 @@ INTEGER       :: i , ig , isum , j
 !
 !   NOTE THAT EVEN THOUGH THE OUTPUT FROM THIS DISCRETE RANDOM NUMBER
 !   GENERATOR MUST NECESSARILY BE A SEQUENCE OF ***INTEGER*** VALUES,
-!   THE OUTPUT VECTOR X IS SINGLE PRECISION IN MODE. X HAS BEEN SPECIFIED
+!   THE OUTPUT VECTOR X IS SINGLE PRECISION IN MODE.  X HAS BEEN SPECIFIED
 !   AS SINGLE PRECISION SO AS TO CONFORM WITH THE DATAPAC CONVENTION THAT
 !   ALL OUTPUT VECTORS FROM ALL THIS CONVENTION IS BASED ON THE BELIEF THAT
 !
@@ -1548,7 +1548,7 @@ subroutine caucdf(X,Cdf)
 real(kind=wp),intent(in)  :: X
 real(kind=wp),intent(out) :: Cdf
 
-   ! CHECK THE INPUT ARGUMENTS FOR ERRORS ... NO INPUT ARGUMENT ERRORS POSSIBLE FOR THIS DISTRIBUTION.
+   ! CHECK THE INPUT ARGUMENTS FOR ERRORS ...  NO INPUT ARGUMENT ERRORS POSSIBLE FOR THIS DISTRIBUTION.
 
    Cdf = 0.5_wp + ((1.0_wp/G_pi)*atan(X))
 
@@ -1754,8 +1754,8 @@ REAL(kind=wp)            :: Y(7500), W(7500)
 INTEGER                  :: i, iupper
 
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (W(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),W(1))
 
 DATA tau/10.02040649_wp/
 
@@ -2282,8 +2282,8 @@ REAL(kind=wp) :: amean , anu , cdfn , danu , sd , spchi , u , z
 INTEGER :: i , ibran , ievodd , imax , imin , nucut
 DOUBLE PRECISION dx , chi , sum , term , ai , dcdfn
 DOUBLE PRECISION dnu
-intrinsic        SQRT , EXP
-intrinsic        LOG
+intrinsic        DSQRT , DEXP
+intrinsic        DLOG
 DOUBLE PRECISION dfact , dpower
 DOUBLE PRECISION dw
 DOUBLE PRECISION d1 , d2 , d3
@@ -2368,7 +2368,7 @@ DATA b43/17.0D0/
 !     METHOD UTILIZED--EXACT FINITE SUM
 !     (SEE AMS 55, page 941, FORMULAE 26.4.4 AND 26.4.5).
 !
-                        chi = SQRT(dx)
+                        chi = DSQRT(dx)
                         ievodd = Nu - 2*(Nu/2)
                         IF ( ievodd==0 ) THEN
 !
@@ -2392,9 +2392,9 @@ DATA b43/17.0D0/
                            ENDDO
                         ENDIF
 !
-                        sum = sum*EXP(-dx/2.0D0)
+                        sum = sum*DEXP(-dx/2.0D0)
                         IF ( ievodd/=0 ) THEN
-                           sum = (SQRT(2.0D0/G_pi_dp))*sum
+                           sum = (DSQRT(2.0D0/G_pi_dp))*sum
                            spchi = chi
                            CALL NORCDF(spchi,cdfn)
                            dcdfn = cdfn
@@ -2411,7 +2411,7 @@ DATA b43/17.0D0/
 !
                         dfact = 4.5D0*dnu
                         u = (((dx/dnu)**dpower)-1.0D0+(1.0D0/dfact))    &
-     &                      *SQRT(dfact)
+     &                      *DSQRT(dfact)
                         CALL NORCDF(u,cdfn)
                         Cdf = cdfn
                         RETURN
@@ -2423,8 +2423,8 @@ DATA b43/17.0D0/
 !     METHOD UTILIZED--HILL'S ASYMPTOTIC EXPANSION
 !     (SEE JOHNSON AND KOTZ, VOLUME 1, page 180, FORMULA 33.1).
 !
-                        dw = SQRT(dx-dnu-dnu*LOG(dx/dnu))
-                        danu = SQRT(2.0D0/dnu)
+                        dw = DSQRT(dx-dnu-dnu*DLOG(dx/dnu))
+                        danu = DSQRT(2.0D0/dnu)
                         d1 = dw
                         d2 = dw**2
                         d3 = dw**3
@@ -2459,7 +2459,8 @@ DATA b43/17.0D0/
  100  Cdf = 1.0D0 - sum
       RETURN
 !
-99999 END SUBROUTINE CHSCDF
+99999 continue
+END SUBROUTINE CHSCDF
 !>
 !!##NAME
 !!    chsplt(3f) - [M_datapac:LINE_PLOT] generate a Chi-square probability
@@ -2477,7 +2478,7 @@ DATA b43/17.0D0/
 !!    Chsplt(3f) generates a Chi-squared probability plot (with integer
 !!    degrees of freedom parameter value = NU).
 !!
-!!    The prototype Chi-squared distribution used herein is defined for all
+!!    The prototype Chi-squared distribution used herein is defIned for all
 !!    non-negative X, and its probability density function is given in the
 !!    references below.
 !!
@@ -2560,8 +2561,8 @@ INTEGER       :: i, iupper
 !---------------------------------------------------------------------
 DIMENSION Y(7500) , W(7500)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (W(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),W(1))
 
    iupper = 7500
    !
@@ -2706,7 +2707,7 @@ END SUBROUTINE CHSPLT
 !!##ACCURACY
 !!    (On the UNIVAC 1108, EXEC 8 System at NBS) Compared to the known NU
 !!    = 2 (exponential) results, agreement was had out to 6 significant
-!!    digits for all tested P in the range P = .001 to P = .999. For P =
+!!    digits for all tested P in the range P = .001 to P = .999.  for P =
 !!    .95 And smaller, The agreement was even better--7 significant digits.
 !!    (Note that the tabulated values given in the Wilk, Gnanadesikan,
 !!    and Huyett reference below, page 20, are in error for at least the
@@ -2761,7 +2762,7 @@ DOUBLE PRECISION :: z , z2 , z3 , z4 , z5 , den , a , b , c , d(10) , g
 DOUBLE PRECISION :: xmin0 , xmin , ai , xmax , dx , pcalc , xmid
 DOUBLE PRECISION :: xlower , xupper , xdel
 DOUBLE PRECISION :: sum , term , cut1 , cut2 , aj , cutoff , t
-intrinsic EXP, LOG
+intrinsic        :: DEXP , DLOG
 
 DATA c/.918938533204672741D0/
 DATA d(1) , d(2) , d(3) , d(4) , d(5)/ + .833333333333333333D-1 , &
@@ -2824,11 +2825,11 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
          z3 = z*z2
          z4 = z2*z2
          z5 = z2*z3
-         a = (z-0.5D0)*LOG(z) - z + c
+         a = (z-0.5D0)*DLOG(z) - z + c
          b = d(1)/z + d(2)/z3 + d(3)/z5 + d(4)/(z2*z5) + d(5)/(z4*z5)   &
      &       + d(6)/(z*z5*z5) + d(7)/(z3*z5*z5) + d(8)/(z5*z5*z5) + d(9)&
      &       /(z2*z5*z5*z5)
-         g = EXP(a+b)/den
+         g = DEXP(a+b)/den
 !
 !     DETERMINE LOWER AND UPPER LIMITS ON THE DESIRED 100P
 !     PERCENT POINT.
@@ -2889,7 +2890,7 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
       RETURN
 !
  600  t = sum
-      pcalc = (dx**dgamma)*(EXP(-dx))*t/g
+      pcalc = (dx**dgamma)*(DEXP(-dx))*t/g
       IF ( iloop==1 ) THEN
          IF ( pcalc>=dp ) GOTO 200
          xmin = xmax
@@ -3147,9 +3148,9 @@ END SUBROUTINE CHSRAN
 !!        to the observations in the vector X. It must be at least as large
 !!        as X.
 !!
-!!          o All occurrences of the minimum are coded as 1.0;
-!!          o All occurrences of the next larger value are coded as 2.0;
-!!          o All occurrences of the next larger value are coded as 3.0, etc.
+!!          o All occurrances of the minimum are coded as 1.0;
+!!          o All occurances of the next larger value are coded as 2.0;
+!!          o All occurances of the next larger value are coded as 3.0, etc.
 !!
 !!##EXAMPLES
 !!
@@ -3250,7 +3251,7 @@ INTEGER i , iupper , j , numdis
 !---------------------------------------------------------------------
 DIMENSION DISt(15000)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (DISt(1),WS(1))
+EQUIVALENCE (WS(1),DISt(1))
 !
    iupper = 15000
 !
@@ -3824,10 +3825,10 @@ LOGICAL fsum
 DIMENSION Q(10000) , R(2500) , D(50) , IPIvot(50)
 COMMON /BLOCK2_real32/ WS(15000)
 COMMON /BLOCK3_real32/ DUM1(3000) , DUM2(3000)
-EQUIVALENCE (Q(1),WS(1))          !     Q--USED AND CHANGED
-EQUIVALENCE (R(1),WS(10001))      !     R--DEFINED
-EQUIVALENCE (D(1),WS(12501))      !     D--PERMANENTLY DEFINED
-EQUIVALENCE (IPIvot(1),WS(12551)) !     IPIVOT--PERMANENTLY DEFINED
+EQUIVALENCE (WS(1),Q(1))          !     Q--USED AND CHANGED
+EQUIVALENCE (WS(10001),R(1))      !     R--DEFINED
+EQUIVALENCE (WS(12501),D(1))      !     D--PERMANENTLY DEFINED
+EQUIVALENCE (WS(12551),IPIvot(1)) !     IPIVOT--PERMANENTLY DEFINED
 !
 !-----START POINT-----------------------------------------------------
 !
@@ -3954,7 +3955,7 @@ EQUIVALENCE (IPIvot(1),WS(12551)) !     IPIVOT--PERMANENTLY DEFINED
          ENDIF
       ENDDO
 !
-!     END STEP NUMBER     IS     IN THE DECOMPOSITION
+!     END STEP NUMBER     IS     INTHE DECOMPOSITION
 !
       Insing = 1
 END SUBROUTINE DECOMP
@@ -4169,7 +4170,7 @@ INTEGER :: i , k , N , ndel , Newn , newnp1 , nold
 !              LOCATIONS IN X, WHILE THE REMAINDER
 !              OF THE N LOCATIONS IN X WILL BE ZERO-FILLED.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
+!              PERMISSABLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE FIFTH ARGUMENT AS USED IN THE SECOND
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -4409,9 +4410,9 @@ INTEGER :: i, iend, iendp1, iflag, ilower, imax1, imax2, imax2m, ip1, istart, iu
       DIMENSION X(:)
       DIMENSION Y1(5000) , Y2(5000) , Z(5000)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y1(1),WS(1))
-      EQUIVALENCE (Y2(1),WS(5001))
-      EQUIVALENCE (Z(1),WS(10001))
+      EQUIVALENCE (WS(1),Y1(1))
+      EQUIVALENCE (WS(5001),Y2(1))
+      EQUIVALENCE (WS(10001),Z(1))
       DATA pi/3.141592653_wp/
 !
       ilower = 3
@@ -4893,8 +4894,8 @@ INTEGER :: i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       DATA tau/1.76862179_wp/
 !
@@ -5241,7 +5242,7 @@ end subroutine dexran
 !!   * Filliben, Simple and Robust Linear Estimation of the Location
 !!     Parameter of a Symmetric Distribution (Unpublished PH.D. Dissertation,
 !!     Princeton University), 1969, pages 21-44, 229-231.
-!!   * Filliben, 'The Percent Point Function', (Unpublished Manuscript),
+!!   * Filliben, 'The Percent Point Function', (UNpublished Manuscript),
 !!     1970, pages 28-31.
 !!   * Johnson and Kotz, Continuous Univariate Distributions--2, 1970,
 !!     pages 22-36.
@@ -5366,13 +5367,13 @@ INTEGER i , icount , ip , iupncl , N , Numcla
 !     MODE OF INTERNAL OPERATIONS--.
 !     COMMENT--THIS SUBROUTINE DIFFERS FROM THE DISCR3
 !              SUBROUTINE INASMUCH AS THIS SUBROUTINE
-!              PERFORMS ITS DISCRETIZATION BY OUTPUTTING
+!              PERFORMS ITS DISCRETIZATION BY OUTPUTING
 !              CLASS MIDPOINTS, WHEREAS THE DISCR3
 !              SUBROUTINE OUTPUTS CLASS NUMBERS
 !              (1, 2, ... , NUMCLA).
 !     COMMENT--THE INPUT VECTOR X REMAINS UNALTERED.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
+!              PERMISSABLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE FOURTH ARGUMENT AS USED IN THE FIRST
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -5619,13 +5620,13 @@ INTEGER i , icount , ip , iupncl , N , Numcla
 !     MODE OF INTERNAL OPERATIONS--.
 !     COMMENT--THIS SUBROUTINE DIFFERS FROM THE DISCR2
 !              SUBROUTINE INASMUCH AS THIS SUBROUTINE
-!              PERFORMS ITS DISCRETIZATION BY OUTPUTTING
+!              PERFORMS ITS DISCRETIZATION BY OUTPUTING
 !              CLASS NUMBERS (1, 2,, ..., NUMCLA);
 !              WHEREAS THE DISCR2 SUBROUTINE
 !              OUTPUTS CLASS MIDPOINTS.
 !     COMMENT--THE INPUT VECTOR X REMAINS UNALTERED.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
+!              PERMISSABLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE FOURTH ARGUMENT AS USED IN THE FIRST
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -5875,7 +5876,7 @@ INTEGER :: i , icounl , icount , icounu , ip , N , numcla
 !              EXACTLY ON THE BOUNDARY POINT
 !              BETWEEN 2 ADJACENT CLASSES.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
+!              PERMISSABLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE SIXTH ARGUMENT AS USED IN THE FIRST
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -6305,8 +6306,8 @@ INTEGER :: i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       DATA tau/1.56186687_wp/
 !
@@ -6842,8 +6843,8 @@ INTEGER i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       iupper = 7500
 !
@@ -6897,7 +6898,7 @@ INTEGER i , iupper , N
 !
          CALL UNIMED(N,W)
 !
-!     COMPUTE EXTREME VALUE TYPE 2 DISTRIBUTION ORDER STATISTIC MEDIANS
+!     COMPUTE EXREME VALUE TYPE 2 DISTRIBUTION ORDER STATISTIC MEDIANS
 !
          DO i = 1 , N
             W(i) = (-LOG(W(i)))**(-1.0_wp/Gamma)
@@ -7529,8 +7530,8 @@ INTEGER i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       DATA tau/1.63473745_wp/
 !
@@ -8082,8 +8083,8 @@ CHARACTER(len=4) :: iflag3
       DIMENSION aindex(50)
       DIMENSION h(60,2)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (Z(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),Z(1))
       DATA blank , alpham , alphaa , alphax/' ' , 'M' , 'A' , 'X'/
       DATA alphai , alphan , alphaf , alphat , alphay/'I' , 'N' , 'F' , &
      &     'T' , 'Y'/
@@ -8426,7 +8427,8 @@ CHARACTER(len=4) :: iflag3
 99029 FORMAT (' ')
 99030 FORMAT (' ',2X,F9.1,13X,F10.2,17X,F10.2)
 !
-99999 END SUBROUTINE EXTREM
+99999 continue
+END SUBROUTINE EXTREM
 !>
 !!##NAME
 !!    fcdf(3f) - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the F cumulative distribution
@@ -8511,7 +8513,7 @@ INTEGER          :: i , ibran , ievodd , iflag1 , iflag2 , imax , imin , m , n ,
 DOUBLE PRECISION :: dx , pi , anu1 , anu2 , z , sum , term , ai , coef1 , coef2 , arg
 DOUBLE PRECISION :: coef
 DOUBLE PRECISION :: theta , sinth , costh , a , b
-intrinsic           SQRT , ATAN
+intrinsic        :: DSQRT , DATAN
 DOUBLE PRECISION :: dfact1 , dfact2 , dnum , dden
 DOUBLE PRECISION :: dpow1 , dpow2
 DOUBLE PRECISION :: dnu1 , dnu2
@@ -8658,10 +8660,10 @@ DATA nucut1 , nucut2/100 , 1000/
 !
                sum = 0.0D0
                term = 1.0D0
-               arg = SQRT((anu1/anu2)*dx)
-               theta = ATAN(arg)
-               sinth = arg/SQRT(1.0D0+arg*arg)
-               costh = 1.0D0/SQRT(1.0D0+arg*arg)
+               arg = DSQRT((anu1/anu2)*dx)
+               theta = DATAN(arg)
+               sinth = arg/DSQRT(1.0D0+arg*arg)
+               costh = 1.0D0/DSQRT(1.0D0+arg*arg)
                IF ( n/=1 ) THEN
                   IF ( n/=3 ) THEN
                      imax = n - 2
@@ -8780,14 +8782,15 @@ DATA nucut1 , nucut2/100 , 1000/
       dfact1 = 1.0D0/(4.5D0*dnu1)
       dfact2 = 1.0D0/(4.5D0*dnu2)
       dnum = ((1.0D0-dfact2)*(dx**dpow1)) - (1.0D0-dfact1)
-      dden = SQRT((dfact2*(dx**dpow2))+dfact1)
+      dden = DSQRT((dfact2*(dx**dpow2))+dfact1)
       u = dnum/dden
       CALL NORCDF(u,gcdf)
       Cdf = gcdf
       RETURN
 99006 FORMAT (' ','***** THE VALUE OF THE ARGUMENT IS ',I0,' *****')
 !
-99999 END SUBROUTINE FCDF
+99999 continue
+END SUBROUTINE FCDF
 !>
 !!##NAME
 !!    fourie(3f) - [M_datapac:ANALYSIS] perform a Fourier analysis of a data set
@@ -8846,7 +8849,7 @@ DATA nucut1 , nucut2/100 , 1000/
 !!    replaced by the rule that the maximum number of lags listed = 800
 !!    (which corresponds to an 8-page listing of Fourier coefficients.
 !!    If more pages are desired, change the value of the variable MAXPAG
-!!    within this subroutine from 8 to whatever is desired.).
+!!    within this subroutine from 8 to whatever is desired.
 !!
 !!    If the input observations in X are considered to have been collected
 !!    1 second apart in time, then the frequency axis of the resulting
@@ -8866,6 +8869,7 @@ DATA nucut1 , nucut2/100 , 1000/
 !!    X   The vector of (unsorted) observations.
 !!
 !!    N   The integer number of observations in the vector X.
+!!        The maximum allowable value of N for this subroutine is 15000.
 !!        The sample size N must be greater than or equal to 3.
 !!
 !!##OUTPUT
@@ -8892,17 +8896,10 @@ DATA nucut1 , nucut2/100 , 1000/
 !!    program demo_fourie
 !!    use M_datapac, only : fourie
 !!    implicit none
-!!    real :: x(100)
-!!    integer :: i
-!!    x=0.0
-!!    do i=1,size(x)
-!!       x(i)=200.0*sin(real(i))*i
-!!       x(i)=x(i)+cos(2.4*x(i))
-!!       x(i)=x(i)+3.1
-!!    enddo
-!!    write(*,*)x
-!!    call fourie(x,size(x))
+!!    ! call fourie(x,y)
 !!    end program demo_fourie
+!!
+!!   Results:
 !!
 !!##AUTHOR
 !!    The original DATAPAC library was written by James Filliben of the
@@ -8922,18 +8919,21 @@ DATA nucut1 , nucut2/100 , 1000/
 !     UPDATED         --FEBRUARY  1976.
 ! processed by SPAG 7.51RB at 12:54 on 18 Mar 2022
 SUBROUTINE FOURIE(X,N)
-REAL(kind=wp),intent(in)    :: X(:)
-INTEGER,intent(in)          :: N
+REAL(kind=wp),intent(in) :: X(:)
+INTEGER                  :: N
 REAL(kind=wp)    :: ai, amp, an, angdeg, angrad, conmsq, del, ffreq, hold, percon, period, phase1, phase2, pi, sum, suma, sumb, t
-REAL(kind=wp)    :: A(N), B(N) ! work directories
+REAL(kind=wp)    :: A(7500), B(7500)
 REAL(kind=wp)    :: vbias, WS, xbar
 INTEGER          :: i, ievodd, ilower, ipage, iskip, iupper, j, maxpag, nhalf, nnpage
 CHARACTER(len=4) :: alperc
+COMMON /BLOCK2_real32/ WS(15000)
+EQUIVALENCE (WS(1),A(1))
+EQUIVALENCE (WS(7501),B(1))
 DATA pi/3.14159265358979_wp/
 DATA alperc/'%'/
 !
       ilower = 3
-      iupper = huge(n)
+      iupper = 15000
       maxpag = 8
 !
 !     CHECK THE INPUT ARGUMENTS FOR ERRORS
@@ -8941,9 +8941,8 @@ DATA alperc/'%'/
       IF ( N<ilower .OR. N>iupper ) THEN
          WRITE (G_IO,99001) ilower , iupper
 99001    FORMAT (' ',                                                   &
-     &'***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE FOURIE SUBROUTINE IS OUTSIDE THE ALLOWABLE (',&
-     & I0,',',I0, &
-     & ') INTERVAL *****')
+     &'***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO THE FOURIE SUBROU&
+     &TINE IS OUTSIDE THE ALLOWABLE (',I0,',',I0,') INTERVAL *****')
          WRITE (G_IO,99002) N
 99002    FORMAT (' ','***** THE VALUE OF THE ARGUMENT IS ',I0,' *****')
          RETURN
@@ -8961,8 +8960,7 @@ DATA alperc/'%'/
 !
 !-----START POINT-----------------------------------------------------
 !
- 100  continue
-      an = N
+ 100  an = N
 !
 !     DETERMINE IF N IS ODD OR EVEN
 !
@@ -9043,7 +9041,7 @@ DATA alperc/'%'/
 !
       nnpage = 50
       i = 0
-      PAGES: DO ipage = 1 , maxpag
+      DO ipage = 1 , maxpag
          WRITE (G_IO,99013)
          WRITE (G_IO,99008)
 99008    FORMAT (' ','     I   FOURIER   PERIOD      FOURIER  ',        &
@@ -9077,11 +9075,11 @@ DATA alperc/'%'/
      &                        phase1 , phase2 , conmsq , percon , alperc
 99011       FORMAT (' ',I0,2X,F8.6,1X,F8.2,6(1X,E14.7),2X,F6.2,A1)
             A(i) = percon
-            IF ( i>=nhalf ) exit PAGES
+            IF ( i>=nhalf ) GOTO 200
             iskip = i - 10*(i/10)
             IF ( iskip==0 ) WRITE (G_IO,99014)
          ENDDO
-      ENDDO PAGES
+      ENDDO
 !
 !     PLOT OUT THE PERCENTAGE CONTRIBUTIONS
 !     TO THE TOTAL VARIANCE AT
@@ -9090,7 +9088,7 @@ DATA alperc/'%'/
 !     THIS WILL CORRESPOND TO A SPECTRAL
 !     PLOT IN SPECTRAL ANALYSIS.
 !
-      CALL PLOTSP(A,nhalf,0)
+ 200  CALL PLOTSP(A,nhalf,0)
       WRITE (G_IO,99012)
 99012 FORMAT (' ',40X,                                                  &
      &        'PERIODOGRAM = FOURIER LINE SPECTRUM OF THE ORIGINAL DATA'&
@@ -9291,7 +9289,7 @@ END SUBROUTINE FRAN
 !!    Several (for large data sets) pages of automatic plots (with
 !!    approximately 55 values per page) consisting of an ordered listing
 !!    of each distinct value in the data set along with the frequency of
-!!    occurrence of that value and the cumulative frequency.
+!!    occurance of that value and the cumulative frequency.
 !!
 !!##EXAMPLES
 !!
@@ -9328,7 +9326,7 @@ REAL(kind=wp) :: an, cfreq, dvalue, frq, hold, pcfreq, pfreq, s, sum, WS, xbar, 
 INTEGER i, icfreq, iflag, ifreq, ip1, iupper, ndv, nm1, numseq
 DIMENSION Y(15000)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
+EQUIVALENCE (WS(1),Y(1))
 !
       iupper = 15000
 !
@@ -9466,7 +9464,7 @@ END SUBROUTINE FREQ
 !!   (On the UNIVAC 1108, EXEC 8 system at NBS)
 !!
 !!    Compared to the known GAMMA = 1 (exponential) results, agreement
-!!    was had out to 7 significant digits for all tested X. The tested X
+!!    was had out to 7 significant digits for all tested X.  The tested X
 !!    values covered the entire range of the distribution--from the 0.00001
 !!    percent point up to the 99.99999 percent point of the distribution.
 !!
@@ -9523,7 +9521,7 @@ REAL(kind=wp),intent(out) :: Cdf
 INTEGER :: i , maxit
 DOUBLE PRECISION dx , dgamma , ai , term , sum , cut1 , cut2 , cutoff , t
 DOUBLE PRECISION z , z2 , z3 , z4 , z5 , den , a , b , c , d , g
-intrinsic        EXP , DLOG
+intrinsic        DEXP , DLOG
 DIMENSION d(10)
 DATA c/.918938533204672741D0/
 DATA d(1) , d(2) , d(3) , d(4) , d(5)/ + .833333333333333333D-1 , &
@@ -9577,7 +9575,7 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
          b = d(1)/z + d(2)/z3 + d(3)/z5 + d(4)/(z2*z5) + d(5)/(z4*z5)   &
      &       + d(6)/(z*z5*z5) + d(7)/(z3*z5*z5) + d(8)/(z5*z5*z5) + d(9)&
      &       /(z2*z5*z5*z5)
-         g = EXP(a+b)/den
+         g = DEXP(a+b)/den
 !
 !     COMPUTE T-SUB-Q AS DEFINED ON page 4 OF THE WILK, GNANADESIKAN,
 !     AND HUYETT REFERENCE
@@ -9607,7 +9605,7 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
          RETURN
 !
  50      t = sum
-         Cdf = (dx**dgamma)*(EXP(-dx))*t/g
+         Cdf = (dx**dgamma)*(DEXP(-dx))*t/g
       ENDIF
 99007 FORMAT (' ','***** THE VALUE OF THE ARGUMENT IS ',E15.8,' *****')
 !
@@ -9717,12 +9715,12 @@ REAL(kind=wp) :: yslope
 INTEGER i, icount, iloop, ip1, itail, iupper, j
 !---------------------------------------------------------------------
 DOUBLE PRECISION z, z2, z3, z4, z5, den, a, b, c, d
-intrinsic EXP, LOG
+intrinsic        DEXP, DLOG
 DIMENSION d(10)
 DIMENSION Y(7500), W(7500)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (W(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),W(1))
 DATA c/.918938533204672741D0/
 DATA d(1), d(2), d(3), d(4), d(5)/ + .833333333333333333D-1, &
      &     -.277777777777777778D-2, +.793650793650793651D-3,          &
@@ -9785,11 +9783,11 @@ DATA d(6), d(7), d(8), d(9), d(10)/ - .191752691752691753D-2,&
          z3 = z*z2
          z4 = z2*z2
          z5 = z2*z3
-         a = (z-0.5D0)*LOG(z) - z + c
+         a = (z-0.5D0)*DLOG(z) - z + c
          b = d(1)/z + d(2)/z3 + d(3)/z5 + d(4)/(z2*z5) + d(5)/(z4*z5)   &
      &       + d(6)/(z*z5*z5) + d(7)/(z3*z5*z5) + d(8)/(z5*z5*z5) + d(9)&
      &       /(z2*z5*z5*z5)
-         g = EXP(a+b)/den
+         g = DEXP(a+b)/den
 !
 !     SORT THE DATA
 !
@@ -9805,11 +9803,11 @@ DATA d(6), d(7), d(8), d(9), d(10)/ - .191752691752691753D-2,&
 !     ORDER STATISTIC MEDIAN.
 !     FOR EACH I, A LOWER BOUND IS GIVEN BY
 !     (Y(I)*GAMMA*THE GAMMA FUNCTION OF GAMMA)**(1.0/GAMMA)
-!     WHERE Y(I) IS THE CORRESPONDING UNIFORM (0,1) ORDER STATISTIC
+!     WHERE Y(I) IS THE CORRESPONDING UNIFORM (0,1) ORDER STATISIC
 !     MEDIAN.
 !     FOR EACH I EXCEPT I = N, AN UPPER BOUND IS GIVEN BY THE
 !     (I+1)-ST GAMMA ORDER STATISTIC MEDIAN (ASSUMEDLY ALREADY
-!     CALCULATED).
+!     CALCULTATED).
 !     FOR I = N, AN UPPER BOUND IS DETERMINED BY COMPUTING
 !     MULTIPLES OF THE LOWER BOUND FOR I = N UNTIL A LARGER
 !     VALUE IS OBTAINED.
@@ -9819,7 +9817,7 @@ DATA d(6), d(7), d(8), d(9), d(10)/ - .191752691752691753D-2,&
 !     NOTE ALSO THAT 1) THE CODE IS COMPLICATED SLIGHTLY BY THE
 !     FACT THAT PERCENT POINT VALUES INVOLVED IN THE CALCULATION OF
 !     THE TAIL LENGTH MEASURE TAU (SEE LABEL 605) ARE GOING ON
-!     'SIMULTANEOUSLY'. AND 2) THE VECTOR W WILL AT VARIOUS TIMES
+!     'SIMULATNEOUSLY'. AND 2) THE VECTOR W WILL AT VARIOUS TIMES
 !     IN THE PROGRAM HAVE UNIFORM ORDER STATISTIC MEDIANS AND
 !     THEN LATER GRADUALLY FILL UP WITH GAMMA ORDER STATISTIC
 !     MEDIANS.
@@ -9846,9 +9844,9 @@ DATA d(6), d(7), d(8), d(9), d(10)/ - .191752691752691753D-2,&
  300  xmid = (xmin+xmax)/2.0_wp
 !
 !     AT THIS STAGE WE NOW HAVE LOWER AND UPPER LIMITS ON
-!     THE DESIRED I-TH GAMMA ORDER STATISTIC MEDIAN W(I).
+!     THE DESIRED I-TH GAMMA ORDER STATISITC MEDIAN W(I).
 !     NOW ITERATE BY BISECTION UNTIL THE DESIRED ACCURACY IS ACHIEVED
-!     FOR THE I-TH GAMMA ORDER STATISTIC MEDIAN.
+!     FOR THE I-TH GAMMA ORDER STATISITIC MEDIAN.
 !
       iloop = 2
       xlower = xmin
@@ -10066,7 +10064,7 @@ INTEGER :: icount , iloop , j , maxit
 !               COMPARED TO THE KNOWN GAMMA = 1 (EXPONENTIAL)
 !               RESULTS, AGREEMENT WAS HAD OUT TO 6 SIGNIFICANT
 !               DIGITS FOR ALL TESTED P IN THE RANGE P = .001 TO
-!               P = .999. FOR P = .95 AND SMALLER, THE AGREEMENT
+!               P = .999.  FOR P = .95 AND SMALLER, THE AGREEMENT
 !               WAS EVEN BETTER--7 SIGNIFICANT DIGITS.
 !               (NOTE THAT THE TABULATED VALUES GIVEN IN THE WILK,
 !               GNANADESIKAN, AND HUYETT REFERENCE BELOW, page 20,
@@ -10082,7 +10080,7 @@ DOUBLE PRECISION z , z2 , z3 , z4 , z5 , den , a , b , c , d , g
 DOUBLE PRECISION xmin0 , xmin , ai , xmax , dx , pcalc , xmid
 DOUBLE PRECISION xlower , xupper , xdel
 DOUBLE PRECISION sum , term , cut1 , cut2 , aj , cutoff , t
-intrinsic EXP , LOG
+intrinsic        DEXP , DLOG
 DIMENSION d(10)
 DATA c/.918938533204672741D0/
 DATA d(1) , d(2) , d(3) , d(4) , d(5)/ + .833333333333333333D-1 , &
@@ -10130,11 +10128,11 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
          z3 = z*z2
          z4 = z2*z2
          z5 = z2*z3
-         a = (z-0.5D0)*LOG(z) - z + c
+         a = (z-0.5D0)*DLOG(z) - z + c
          b = d(1)/z + d(2)/z3 + d(3)/z5 + d(4)/(z2*z5) + d(5)/(z4*z5)   &
      &       + d(6)/(z*z5*z5) + d(7)/(z3*z5*z5) + d(8)/(z5*z5*z5) + d(9)&
      &       /(z2*z5*z5*z5)
-         g = EXP(a+b)/den
+         g = DEXP(a+b)/den
 !
 !     DETERMINE LOWER AND UPPER LIMITS ON THE DESIRED 100P
 !     PERCENT POINT.
@@ -10194,7 +10192,7 @@ DATA d(6) , d(7) , d(8) , d(9) , d(10)/ - .191752691752691753D-2 ,&
       RETURN
 !
  600  t = sum
-      pcalc = (dx**dgamma)*(EXP(-dx))*t/g
+      pcalc = (dx**dgamma)*(DEXP(-dx))*t/g
       IF ( iloop==1 ) THEN
          IF ( pcalc>=dp ) GOTO 200
          xmin = xmax
@@ -10514,7 +10512,7 @@ END SUBROUTINE GAMRAN
 !!    X      The value at which the cumulative distribution function is
 !!           to be evaluated. X should be non-negative and integral-valued.
 !!    P      The value of the 'Bernoulli probability' parameter for the
-!!           geometric distribution. P should be between 0.0 (exclusively)
+!!           geometric distribution.  P should be between 0.0 (exclusively)
 !!           and 1.0 (exclusively).
 !!
 !!##OUTPUT ARGUMENTS
@@ -10695,8 +10693,8 @@ INTEGER i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       iupper = 7500
 !
@@ -10961,7 +10959,8 @@ INTEGER iratio
       RETURN
 99003 FORMAT (' ','***** THE VALUE OF THE ARGUMENT IS ',E15.8,' *****')
 !
-99999 END SUBROUTINE GEOPPF
+99999 continue
+END SUBROUTINE GEOPPF
 !>
 !!##NAME
 !!    georan(3f) - [M_datapac:RANDOM] generate geometric random numbers
@@ -11192,9 +11191,8 @@ END SUBROUTINE GEORAN
 !!##SYNOPSIS
 !!
 !!       SUBROUTINE HFNCDF(X,Cdf)
-!!
-!!        REAL(kind=wp),intent(in) :: X
-!!        REAL(kind=wp),intent(out) :: Cdf
+!!       REAL(kind=wp),intent(in) :: X
+!!       REAL(kind=wp),intent(out) :: Cdf
 !!
 !!##DESCRIPTION
 !!    HFNCDF(3f) computes the cumulative distribution function value for
@@ -11215,7 +11213,7 @@ END SUBROUTINE GEORAN
 !!##INPUT ARGUMENTS
 !!
 !!    X     The value at which the cumulative distribution function is
-!!          to be evaluated. X should be non-negative.
+!!          to be evaluated.  X should be non-negative.
 !!
 !!##OUTPUT ARGUMENTS
 !!
@@ -11393,7 +11391,7 @@ end subroutine hfncdf
 !!     Eighteenth Conference on the Design of Experiments in Army Research
 !!     Development and Testing (Aberdeen, Maryland, October, 1972), pages
 !!     425-450.
-!!   * Hahn and Shapiro, Statistical Methods in Engineering, 1967, pages
+!!   * Hahn anD Shapiro, Statistical Methods in Engineering, 1967, pages
 !!     260-308.
 !!   * Johnson and Kotz, Continuous Univariate Distributions--1, 1970,
 !!     pages 53, 59, 81, 83.
@@ -11411,8 +11409,8 @@ REAL(kind=wp)            :: an , cc , hold , q , sum1 , sum2 , sum3 , tau , wbar
 INTEGER                  :: i , iupper
 
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (W(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),W(1))
 !
       DATA tau/1.41223913_wp/
 !
@@ -11745,7 +11743,7 @@ end subroutine hfnran
 !!
 !!##OUTPUT
 !!    One page of automatic printout consisting of 2 half-page histograms (with
-!!    class widths = 0.1 and 0.2 sample standard deviations, respectively)
+!!    class widths = 0.1 and 0.2 sAmple standard deviations, respectively)
 !!    of the data in the input vector X.
 !!
 !!
@@ -12079,10 +12077,10 @@ INTEGER i, ii, im1, ip1, IPIvot, irarg, irarg1, irarg2, irarg3, j, jj, K, l, N
       DIMENSION Q(10000) , R(2500) , D(50) , IPIvot(50)
       COMMON /BLOCK2_real32/ WS(15000)
       COMMON /BLOCK3_real32/ DUM1(3000) , DUM2(3000)
-      EQUIVALENCE (Q(1),WS(1))
-      EQUIVALENCE (R(1),WS(10001))
-      EQUIVALENCE (D(1),WS(12501))
-      EQUIVALENCE (IPIvot(1),WS(12551))
+      EQUIVALENCE (WS(1),Q(1))
+      EQUIVALENCE (WS(10001),R(1))
+      EQUIVALENCE (WS(12501),D(1))
+      EQUIVALENCE (WS(12551),IPIvot(1))
       DIMENSION dum3(200)
 !
 !-----START POINT-----------------------------------------------------
@@ -12255,7 +12253,7 @@ END SUBROUTINE INVXWX
 !!    CC0-1.0
 !!
 !!##REFERENCES
-!!   * Hastings, Mosteller, Tukey, and Windsor, 'Low Moments for Small
+!!   * Hastings, Mosteller, Tukey, and windsor, 'Low MOments for Small
 !!     Samples:  A Comparative Study of Order Statistics', Annals of
 !!     Mathematical Statistics, 18, 1947, pages 413-426.
 !!   * Filliben, Simple and Robust Linear Estimation of the Location
@@ -12344,7 +12342,8 @@ INTEGER       :: icount
       RETURN
    ENDIF
 !
-99999 END SUBROUTINE LAMCDF
+99999 continue
+END SUBROUTINE LAMCDF
 !>
 !!##NAME
 !!    lampdf(3f) - [M_datapac:PROBABILITY_DENSITY] compute the Tukey-Lambda
@@ -12453,7 +12452,7 @@ INTEGER       :: icount
 !!
 !!##REFERENCES
 !!  * Hastings, Mosteller, Tukey, and Windsor, 'Low Moments for Small
-!!    Samples:  A Comparative Study of Order Statistics', Annals of Mathematical
+!!    Samples:  A Comparative Study of Order Statistics', Annals of MAthematical
 !!    Statistics, 18, 1947, pages 413-426.
 !!  * Filliben, Simple and Robust Linear Estimation of the Location Parameter
 !!    of a Symmetric Distribution (Unpublished PH.D. Dissertation, Princeton
@@ -12611,8 +12610,8 @@ INTEGER :: i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       iupper = 7500
 !
@@ -12871,7 +12870,8 @@ REAL(kind=wp),intent(out) :: Ppf
       99002 FORMAT (' ***** The value of the argument is ',E15.8,' *****')
       RETURN
 !
-99999 END SUBROUTINE LAMPPF
+99999 continue
+END SUBROUTINE LAMPPF
 !>
 !!##NAME
 !!    lamran(3f) - [M_datapac:RANDOM] generate Tukey-Lambda random numbers
@@ -13163,7 +13163,8 @@ REAL(kind=wp),intent(out) :: Sf
    99002 FORMAT (' ***** the value of the argument is ',E15.8,' *****')
    RETURN
 
-99999 END SUBROUTINE LAMSF
+99999 continue
+END SUBROUTINE LAMSF
 !>
 !!##NAME
 !!    lgncdf(3f) - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the lognormal
@@ -13384,8 +13385,8 @@ INTEGER :: i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       DATA tau/2.37134890_wp/
 !
@@ -13807,7 +13808,7 @@ INTEGER i, ip1
          !     GENERATE N LOGNORMAL RANDOM NUMBERS
          !     USING THE DEFINITION THAT
          !     A LOGNORMAL VARIATE
-         !     EQUALS AN EXPONENTIATED NORMAL VARIATE.
+         !     EQUALS AN EXPONETIATED NORMAL VARIATE.
          !
          DO i = 1 , N
             X(i) = EXP(X(i))
@@ -14330,8 +14331,8 @@ REAL(kind=wp) :: an, cc, hold, sum1, sum2, sum3, tau, W, wbar, WS, Y, ybar, yint
 INTEGER :: i, iupper
 DIMENSION Y(7500), W(7500)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (W(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),W(1))
 !
 DATA tau/1.63473745_wp/
 !
@@ -14804,19 +14805,19 @@ REAL(kind=wp),intent(out) :: Sf
 END SUBROUTINE LOGSF
 !>
 !!##NAME
-!!    maxx(3f) - [M_datapac:VECTOR_OPERATION] MAXX compute the maximum of a
+!!    max(3f) - [M_datapac:VECTOR_OPERATION] MAX compute the maximum of a
 !!    data vector
 !!
 !!##SYNOPSIS
 !!
-!!       SUBROUTINE MAXX(X,N,Iwrite,Xmax)
+!!       SUBROUTINE MAX(X,N,Iwrite,Xmax)
 !!
 !!        REAL(kind=wp) :: X(:) , Xmax
 !!        INTEGER :: Iwrite , N
 !!
 !!##DESCRIPTION
 !!
-!!    MAXX(3f) computes the sample maximum of the data in the input vector x.
+!!    MAX(3f) computes the sample maximum of the data in the input vector x.
 !!
 !!##INPUT ARGUMENTS
 !!
@@ -14839,13 +14840,14 @@ END SUBROUTINE LOGSF
 !!   Sample program:
 !!
 !!    program demo_max
-!!    !use M_datapac, only : maxx, label
-!!    use M_datapac, only : maxx, label !  ifort (IFORT) 2021.3.0 20210609 bug
+!!    !use M_datapac, only : max, label
+!!    use M_datapac, only : intel_max=>max, label !  ifort (IFORT) 2021.3.0 20210609 bug
 !!
 !!    implicit none
 !!    real :: xmax
-!!       call label('maxx')
-!!       call maxx([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmax)
+!!       call label('max')
+!!       call intel_max([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmax)
+!!       !call max([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmax)
 !!       write(*,*)xmax
 !!    end program demo_max
 !!
@@ -14869,7 +14871,7 @@ END SUBROUTINE LOGSF
 !     UPDATED         --NOVEMBER  1975.
 ! processed by SPAG 7.51RB at 12:54 on 18 Mar 2022
 
-SUBROUTINE MAXX(X,N,Iwrite,Xmax)
+SUBROUTINE MAX(X,N,Iwrite,Xmax)
 REAL(kind=wp) :: hold , X(:) , Xmax
 INTEGER i , Iwrite , N
 !---------------------------------------------------------------------
@@ -14878,14 +14880,14 @@ INTEGER i , Iwrite , N
 !
 IF ( N<1 ) THEN
    WRITE (G_IO,99001)
-   99001    FORMAT (' ***** FATAL ERROR--The second input argument to MAXX(3f) is non-positive *****')
+   99001    FORMAT (' ***** FATAL ERROR--The second input argument to MAX(3f) is non-positive *****')
    WRITE (G_IO,99002) N
    99002    FORMAT (' ','***** The value of the argument is ',I0,' *****')
    RETURN
 ELSE
    IF ( N==1 ) THEN
       WRITE (G_IO,99003)
-      99003 FORMAT (' ***** NON-FATAL DIAGNOSTIC--The second input argument to MAXX(3f) has the value 1 *****')
+      99003 FORMAT (' ***** NON-FATAL DIAGNOSTIC--The second input argument to MAX(3f) has the value 1 *****')
       Xmax = X(1)
    ELSE
       hold = X(1)
@@ -14893,7 +14895,7 @@ ELSE
          IF ( X(i)/=hold ) GOTO 50
       ENDDO
       WRITE (G_IO,99004) hold
-      99004 FORMAT (' ***** NON-FATAL DIAGNOSTIC--the first input argument (a vector) to MAXX(3f) has all elements = ',g0,' *****')
+      99004 FORMAT (' ***** NON-FATAL DIAGNOSTIC--the first input argument (a vector) to MAX(3f) has all elements = ',g0,' *****')
       Xmax = X(1)
    ENDIF
 
@@ -14911,7 +14913,7 @@ ENDIF
    99005 FORMAT (' ')
    WRITE (G_IO,99006) N , Xmax
    99006 FORMAT (' ','The maximum of the set of ',I0,' observations is ', e15.8)
-end subroutine maxx
+end subroutine max
 !>
 !!##NAME
 !!    mean(3f) - [M_datapac:STATISTICS] compute the sample mean of a data vector
@@ -15131,7 +15133,7 @@ REAL(kind=wp) :: hold , WS , X(:) , Xmed , Y(15000)
 INTEGER :: i , iflag , iupper , Iwrite , N , nmid , nmidp1
 
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
+EQUIVALENCE (WS(1),Y(1))
 !
       iupper = 15000
 !
@@ -15491,11 +15493,11 @@ INTEGER :: i
 END SUBROUTINE MIDR
 !>
 !!##NAME
-!!    minn(3f) - [M_datapac:STATISTICS] compute the minimum of a data vector
+!!    min(3f) - [M_datapac:STATISTICS] compute the minimum of a data vector
 !!
 !!##SYNOPSIS
 !!
-!!     SUBROUTINE MINN(X,N,Iwrite,Xmin)
+!!     SUBROUTINE MIN(X,N,Iwrite,Xmin)
 !!
 !!      real(kind=wp),intent(in)  :: X(:)
 !!      integer,intent(in)        :: N
@@ -15503,7 +15505,7 @@ END SUBROUTINE MIDR
 !!      real(kind=wp),intent(out) :: Xmin
 !!
 !!##DESCRIPTION
-!!    MINN(3f) computes the sample minimum of the data in the input vector X.
+!!    MIN(3f) computes the sample minimum of the data in the input vector X.
 !!
 !!##INPUT ARGUMENTS
 !!
@@ -15525,11 +15527,11 @@ END SUBROUTINE MIDR
 !!   Sample program:
 !!
 !!    program demo_min
-!!    use M_datapac, only : minn, label
+!!    use M_datapac, only : min, label
 !!    implicit none
 !!    real :: xmin
-!!       call label('minn')
-!!       call minn([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmin)
+!!       call label('min')
+!!       call min([-100.0, 200.0, 0.0, 400.0, -200.0],5,1,xmin)
 !!       write(*,*)xmin
 !!    end program demo_min
 !!
@@ -15547,7 +15549,7 @@ END SUBROUTINE MIDR
 !     UPDATED         --NOVEMBER  1975.
 ! processed by SPAG 7.51RB at 12:54 on 18 Mar 2022
 
-subroutine minn(X,N,Iwrite,Xmin)
+subroutine min(X,N,Iwrite,Xmin)
 real(kind=wp) :: hold , X(:) , Xmin
 integer       :: i , Iwrite , N
 !
@@ -15555,14 +15557,14 @@ integer       :: i , Iwrite , N
 !
       if ( N<1 ) then
          write (g_io,99001)
-         99001 format (' ***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO MINN(3f) IS NON-POSITIVE *****')
+         99001 format (' ***** FATAL ERROR--THE SECOND INPUT ARGUMENT TO MIN(3f) IS NON-POSITIVE *****')
          write (g_io,99002) N
          99002 format (' ***** THE VALUE OF THE ARGUMENT IS ',I0,' *****')
          return
       else
          if ( N==1 ) then
             write (g_io,99003)
-            99003 format (' ***** NON-FATAL DIAGNOSTIC--THE SECOND INPUT ARGUMENT TO MINN(3f) HAS THE VALUE 1 *****')
+            99003 format (' ***** NON-FATAL DIAGNOSTIC--THE SECOND INPUT ARGUMENT TO MIN(3f) HAS THE VALUE 1 *****')
             Xmin = X(1)
          else
             hold = X(1)
@@ -15570,7 +15572,7 @@ integer       :: i , Iwrite , N
                if ( X(i) /= hold ) goto 50
             enddo
             write (g_io,99004) hold
-            99004 format (' ***** NON-FATAL DIAGNOSTIC--THE FIRST INPUT ARGUMENT (A VECTOR) TO MINN(3f) HAS ALL ELEMENTS = ', &
+            99004 format (' ***** NON-FATAL DIAGNOSTIC--THE FIRST INPUT ARGUMENT (A VECTOR) TO MIN(3f) HAS ALL ELEMENTS = ', &
             & g0, &
             & ' *****')
             Xmin = X(1)
@@ -15593,7 +15595,7 @@ integer       :: i , Iwrite , N
       write (g_io,99006) N , Xmin
       99006 format (' ','THE MINIMUM OF THE SET OF ',I0,' OBSERVATIONS IS ', g0)
 
-end subroutine minn
+end subroutine min
 !>
 !!##NAME
 !!
@@ -15796,7 +15798,7 @@ END SUBROUTINE MOVE
 !!          P should be between 0.0 (exclusively) and 1.0 (exclusively).
 !!
 !!    N     The integer value of the 'number of successes in Bernoulli
-!!          trials' parameter. N should be a positive integer.
+!!          trials' parameter.  N should be a positive integer.
 !!
 !!##OUTPUT ARGUMENTS
 !!
@@ -15898,7 +15900,7 @@ INTEGER          :: i, ievodd, iflag1, iflag2, imax, imin, intx, k, n2, nu1, nu2
 DOUBLE PRECISION :: dx2, pi, anu1, anu2, z, sum, term, ai, coef1, coef2, arg
 DOUBLE PRECISION :: coef
 DOUBLE PRECISION :: theta, sinth, costh, a, b
-intrinsic           SQRT, ATAN
+intrinsic        :: DSQRT, DATAN
 DATA pi/3.14159265358979D0/
 !
 !     CHECK THE INPUT ARGUMENTS FOR ERRORS
@@ -16010,10 +16012,10 @@ DATA pi/3.14159265358979D0/
 !
             sum = 0.0D0
             term = 1.0D0
-            arg = SQRT((anu1/anu2)*dx2)
-            theta = ATAN(arg)
-            sinth = arg/SQRT(1.0D0+arg*arg)
-            costh = 1.0D0/SQRT(1.0D0+arg*arg)
+            arg = DSQRT((anu1/anu2)*dx2)
+            theta = DATAN(arg)
+            sinth = arg/DSQRT(1.0D0+arg*arg)
+            costh = 1.0D0/DSQRT(1.0D0+arg*arg)
             IF ( nu2/=1 ) THEN
                IF ( nu2/=3 ) THEN
                   imax = nu2 - 2
@@ -16386,7 +16388,7 @@ INTEGER :: i , isd , ix0 , ix0p1 , ix1 , ix2 , N
 !     AND UPPER BOUND ARE EXACTLY 1 UNIT APART.
 !     CHECK TO SEE IF IX1 = IX0 + 1;
 !     IF SO, THE ITERATIONS ARE COMPLETE;
-!     IF NOT, THEN BISECT, COMPUTE PROBABILITIES,
+!     IF NOT, THEN BISECT, COMPUTE PROBABILIIES,
 !     CHECK PROBABILITIES, AND CONTINUE ITERATING
 !     UNTIL IX1 = IX0 + 1.
 !
@@ -16745,7 +16747,8 @@ INTEGER,save :: iseed=1
    RETURN
 99005 FORMAT (' ','***** The value of the argument is ',I0,' *****')
 !
-99999 END SUBROUTINE NBRAN
+99999 continue
+END SUBROUTINE NBRAN
 !>
 !!##NAME
 !!    norcdf(3f) - [M_datapac:CUMULATIVE_DISTRIBUTION] compute the normal cumulative
@@ -16958,8 +16961,8 @@ DIMENSION Y(7500) , XPOs(7500)
 DIMENSION iline1(130) , iline2(130)
 DIMENSION xline(13)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (XPOs(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),XPOs(1))
 !
 DATA blank , hyphen , alphai , alphax/' ' , '-' , 'I' , 'X'/
 !
@@ -17482,8 +17485,8 @@ INTEGER :: i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       DATA tau/1.43218641_wp/
 !
@@ -17666,7 +17669,7 @@ REAL(kind=wp) :: aden , anum , P , p0 , p1 , p2 , p3 , p4 , Ppf , q0 , q1 , q2 ,
 !               MINOR STYLISTIC CHANGES.
 !             --AS POINTED OUT BY ODEH AND EVANS
 !               IN APPLIED STATISTICS,
-!               THEIR ALGORITHM REPRESENTS A
+!               THEIR ALGORITHM REPRESENTES A
 !               SUBSTANTIAL IMPROVEMENT OVER THE
 !               PREVIOUSLY EMPLOYED
 !               HASTINGS APPROXIMATION FOR THE
@@ -17710,7 +17713,8 @@ REAL(kind=wp) :: aden , anum , P , p0 , p1 , p2 , p3 , p4 , Ppf , q0 , q1 , q2 ,
       Ppf = 0.0_wp
       RETURN
 !
-99999 END SUBROUTINE NORPPF
+99999 continue
+END SUBROUTINE NORPPF
 !>
 !!##NAME
 !!    norran(3f) - [M_datapac:RANDOM] generate normal random numbers
@@ -18235,8 +18239,8 @@ INTEGER       :: i, iupper, N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       iupper = 7500
 !
@@ -21247,7 +21251,7 @@ DATA blank, star, hyphen, alphai/' ', '*', '-', 'I'/
  50      ymin = -1.0_wp
          ymax = 1.0_wp
          DO i = 1 , 11
-            ylable(i) = real(6-i)/5.0_wp
+            ylable(i) = FLOAT(6-i)/5.0_wp
          ENDDO
 !
 !     DETERMINE DISTANCES BETWEEN HORIZONTAL PLOT POINTS AND DISTANCES BETWEEN
@@ -21341,8 +21345,8 @@ DATA blank, star, hyphen, alphai/' ', '*', '-', 'I'/
                my = ratioy*(Y(i)-ymin) + 0.5_wp
                my = 55 - my
                IGRaph(my,mx) = star
-               jmax = MAX(my,30)
-               jmin = MIN(my,30)
+               jmax = MAX0(my,30)
+               jmin = MIN0(my,30)
                DO j = jmin , jmax
                   IGRaph(j,mx) = star
                ENDDO
@@ -21501,7 +21505,7 @@ INTEGER :: i , ia , icol , icolmx , irow , ixdel , N , n2 ,    &
 !              THEY WILL SUBSEQUENTLY BE IGNORED IN THE PLOTC
 !              SUBROUTINE.
 !            --NOTE THAT THE STORAGE REQUIREMENTS FOR THIS
-!              (AND THE OTHER) TERMINAL PLOT SUBROUTINES ARE .
+!              (AND THE OTHER) TERMINAL PLOT SUBROUTINESS ARE .
 !              VERY SMALL.
 !              THIS IS DUE TO THE 'ONE LINE AT A TIME' ALGORITHM
 !              EMPLOYED FOR THE PLOT.
@@ -21806,8 +21810,8 @@ END SUBROUTINE PLOTCT
 !!
 !!     Subroutine plot (X, Y, N)
 !!
-!!      Real(kind=wp) :: (In) ::  X(:)
-!!      Real(kind=wp) :: (In) ::  Y(:)
+!!    Real(kind=wp) :: (In) ::  X(:)
+!!    Real(kind=wp) :: (In) ::  Y(:)
 !!      Integer, Intent (In) ::  N
 !!
 !!##DESCRIPTION
@@ -23149,7 +23153,7 @@ CHARACTER(len=4) :: blank , hyphen , alphai , alphax , dot
 !     DETERMINE THE 11 VALUES TO BE LISTED ON THE LEFT VERTICAL AXIS
 !
          DO i = 1 , 11
-            ylable(i) = ymax - ((real(i-1))/10.0_wp)*(ymax-ymin)
+            ylable(i) = ymax - ((FLOAT(i-1))/10.0_wp)*(ymax-ymin)
          ENDDO
 !
 !     BLANK OUT THE GRAPH
@@ -23324,7 +23328,7 @@ INTEGER :: i , icol , icolmx , irow , ixdel , N , n2 , numcol ,&
 !              THEY WILL SUBSEQUENTLY BE IGNORED IN THE PLOT
 !              SUBROUTINE.
 !            --NOTE THAT THE STORAGE REQUIREMENTS FOR THIS
-!              (AND THE OTHER) TERMINAL PLOT SUBROUTINES ARE .
+!              (AND THE OTHER) TERMINAL PLOT SUBROUTINESS ARE .
 !              VERY SMALL.
 !              THIS IS DUE TO THE 'ONE LINE AT A TIME' ALGORITHM
 !              EMPLOYED FOR THE PLOT.
@@ -24085,8 +24089,8 @@ CHARACTER(len=4) :: alpham , alphaa , alphad , alphan , equal
       COMMON /BLOCK1/ IGRaph(55,130)
       COMMON /BLOCK2_real32/ WS(15000)
 !CCCC COMMON IGRAPH(45,110)
-      EQUIVALENCE (X2(1),WS(1))
-      EQUIVALENCE (Y2(1),WS(7501))
+      EQUIVALENCE (WS(1),X2(1))
+      EQUIVALENCE (WS(7501),Y2(1))
 !
       DATA blank , hyphen , alphai , alphax/' ' , '-' , 'I' , 'X'/
       DATA alpham , alphaa , alphad , alphan , equal/'M' , 'A' , 'D' ,  &
@@ -24132,7 +24136,7 @@ CHARACTER(len=4) :: alpham , alphaa , alphad , alphan , equal
 !
 !     DETERMINE THE VERTICAL AXIS VECTOR Y2, THE HORIZONTAL
 !     AXIS VECTOR X2, AND THE PLOT SAMPLE SIZE N2 FOR THIS
-!     PARTICULAR PLOT.
+!     PARTICUAR PLOT.
 !
  100  n2 = N
       DO i = 1 , n2
@@ -24349,7 +24353,7 @@ CHARACTER(len=4) :: alpham , alphaa , alphad , alphan , equal
 !
 !     DETERMINE THE VERTICAL AXIS VECTOR Y2, THE HORIZONTAL
 !     AXIS VECTOR X2, AND THE PLOT SAMPLE SIZE N2 FOR THIS
-!     PARTICULAR PLOT.
+!     PARTICUAR PLOT.
 !
          n2 = N
          CALL SORT(X,N,Y2)
@@ -24831,7 +24835,7 @@ END SUBROUTINE PLOTX
 !!    ignored in the PLOTXT(3f) subroutine.
 !!
 !!    Note that the storage requirements for this (and the other) terminal
-!!    plot subroutines are very small. This is due to the 'one line at a
+!!    plot subroutiness are very small. This is due to the 'one line at a
 !!    time' algorithm employed for the plot.
 !!
 !!##INPUT ARGUMENTS
@@ -25918,7 +25922,7 @@ INTEGER :: i , icol , icolmx , im1 , irow , ixdel , N ,        &
 !              THEY WILL SUBSEQUENTLY BE IGNORED IN THE PLTXXT
 !              SUBROUTINE.
 !            --NOTE THAT THE STORAGE REQUIREMENTS FOR THIS
-!              (AND THE OTHER) TERMINAL PLOT SUBROUTINES ARE .
+!              (AND THE OTHER) TERMINAL PLOT SUBROUTINESS ARE .
 !              VERY SMALL.
 !              THIS IS DUE TO THE 'ONE LINE AT A TIME' ALGORITHM
 !              EMPLOYED FOR THE PLOT.
@@ -26254,7 +26258,7 @@ REAL(kind=wp) :: del, fintx, gcdf, spchi
 INTEGER       :: i, ievodd, imax, imin, intx, nu
 
 DOUBLE PRECISION dx, pi, chi, sum, term, ai, dgcdf
-intrinsic        SQRT, EXP
+intrinsic        DSQRT, DEXP
 DATA pi/3.14159265358979D0/
 !
 !     CHECK THE INPUT ARGUMENTS FOR ERRORS
@@ -26295,7 +26299,7 @@ DATA pi/3.14159265358979D0/
          nu = X + 0.0001_wp
          nu = 2*(1+nu)
 !
-         chi = SQRT(dx)
+         chi = DSQRT(dx)
          ievodd = nu - 2*(nu/2)
          IF ( ievodd==0 ) THEN
 !
@@ -26319,9 +26323,9 @@ DATA pi/3.14159265358979D0/
             ENDDO
          ENDIF
 !
-         sum = sum*EXP(-dx/2.0D0)
+         sum = sum*DEXP(-dx/2.0D0)
          IF ( ievodd/=0 ) THEN
-            sum = (SQRT(2.0D0/pi))*sum
+            sum = (DSQRT(2.0D0/pi))*sum
             spchi = chi
             CALL NORCDF(spchi,gcdf)
             dgcdf = gcdf
@@ -26455,9 +26459,9 @@ INTEGER :: i , iarg2 , ilamba , imax , irev , iupper , j ,     &
       DIMENSION Y(5000) , W(5000)
       DIMENSION Z(5000)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(5001))
-      EQUIVALENCE (Z(1),WS(10001))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(5001),W(1))
+      EQUIVALENCE (WS(10001),Z(1))
 !
       iupper = 5000
 !
@@ -26894,7 +26898,7 @@ INTEGER :: i, isd, ix0, ix0p1, ix1, ix2
 !     AND UPPER BOUND ARE EXACTLY 1 UNIT APART.
 !     CHECK TO SEE IF IX1 = IX0 + 1;
 !     IF SO, THE ITERATIONS ARE COMPLETE;
-!     IF NOT, THEN BISECT, COMPUTE PROBABILITIES,
+!     IF NOT, THEN BISECT, COMPUTE PROBABILIIES,
 !     CHECK PROBABILITIES, AND CONTINUE ITERATING
 !     UNTIL IX1 = IX0 + 1.
 !
@@ -27018,7 +27022,7 @@ END SUBROUTINE POIPPF
 !!
 !!    X has been specified as REAL so as to conform with the DATAPAC
 !!    convention that all output vectors from all DATAPAC subroutines
-!!    are REAL. This convention is based on the belief that
+!!    are REAL.  this convention is based on the belief that
 !!
 !!    1. A mixture of modes (floating point versus integer) is inconsistent
 !!       and an unnecessary complication in a data analysis; and
@@ -27516,12 +27520,12 @@ END SUBROUTINE RANGE
 !!   vector X will be placed in the second position of the vector XR, etc.
 !!
 !!   The smallest element in the vector X will have a rank of 1 (unless
-!!   ties exist). The largest element in the vector X will have a rank of N
+!!   ties exist).  the largest element in the vector X will have a rank of N
 !!   (unless ties exist).
 !!
 !!   Although ranks are usually (unless ties exist) integral values from
 !!   1 to N, it is to be noted that they are outputted as REAL values in
-!!   the vector XR. XR is so as to be consistent with the fact that all
+!!   the vector XR.  XR is so as to be consistent with the fact that all
 !!   vector arguments in all other datapac subroutines are REAL; but more
 !!   importantly, because ties frequently do exist in data sets and so some
 !!   of the resulting ranks will be non-integral and so the output vector
@@ -27538,10 +27542,10 @@ END SUBROUTINE RANGE
 !!   that is, an 'in place' ranking is permitted. The calling sequence
 !!   call RANK(X,N,X) is valid, if desired.
 !!
-!!   The sorting algorithm used herein is the binary sort. This algorithm
-!!   is extremely fast as the following time trials indicate. These time
+!!   The sorting algorthm used herein is the binary sort. This algorthim
+!!   is extremely fast as the following time trials indicate.  These time
 !!   trials were carried out on the UNIVAC 1108 EXEC 8 system at NBS in
-!!   August of 1974. By way of comparison, the time trial values for the
+!!   August of 1974.  by way of comparison, the time trial values for the
 !!   easy-to-program but extremely inefficient bubble sort algorithm have
 !!   also been included--
 !!
@@ -28089,7 +28093,7 @@ INTEGER :: i , k , N , ndel
 !              BY SOME LARGE VALUE (LIKE, SAY, 10.0**10) AND
 !              THEY WILL SUBSEQUENTLY BE IGNORED IN THE PLOTTING
 !              SUBROUTINES.
-!     COMMENT--THIS IS ONE OF THE FEW SUBROUTINES IN DATAPAC
+!     COMMENT--THIS IS ONE OF THE FEW SUBRUTINES IN DATAPAC
 !              IN WHICH THE INPUT VECTOR X IS ALTERED.
 !     ORIGINAL VERSION--NOVEMBER  1972.
 !     UPDATED         --NOVEMBER  1975.
@@ -28258,7 +28262,7 @@ INTEGER :: i , k , N , ndel , Newn , newnp1 , nold
 !              LOCATIONS IN X, WHILE THE REMAINDER
 !              OF THE N LOCATIONS IN X WILL BE ZERO-FILLED.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
+!              PERMISSABLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE FIFTH ARGUMENT AS USED IN THE SECOND
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -28429,7 +28433,7 @@ DIMENSION c1(15) , c2(15) , c3(15) , c4(15)
 DIMENSION anrul(16) , anrdl(16) , anrtl(16)
 DIMENSION anrulg(16) , anrdlg(16) , anrtlg(16)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
+EQUIVALENCE (WS(1),Y(1))
 
       DATA c1(1) , c1(2) , c1(3) , c1(4) , c1(5) , c1(6) , c1(7) ,      &
      &     c1(8) , c1(9) , c1(10) , c1(11) , c1(12) , c1(13) , c1(14) , &
@@ -28561,7 +28565,7 @@ EQUIVALENCE (Y(1),WS(1))
          ENDDO
 !
 !     DETERMINE THE NUMBER OF POSITIVE, ZERO, AND NEGATIVE ENTRIES
-!     IN THE DIFFERENCE TABLE. IF RANDOM, THE NUMBER OF POSITIVE SHOULD BE
+!     IN THE DIFFERENCE TABLE.  IF RANDOM, THE NUMBER OF POSITIVE SHOULD BE
 !     APPROXIMATELY EQUAL TO THE NUMBER OF NEGATIVE
 !
          nneg = 0
@@ -28865,7 +28869,7 @@ INTEGER :: i , iupper , Iwrite , j , jp1 , N
 DIMENSION X(:)
 DIMENSION Y(15000)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
+EQUIVALENCE (WS(1),Y(1))
 !
       iupper = 15000
 !
@@ -29078,7 +29082,7 @@ INTEGER i , N
             xrange = xmax - xmin
 !
 !     COMPUTE THE SAMPLE VARIANCE,
-!     AND THEN THE SAMPLE STANDARD DEVIATION.
+!     AND THEN THE SAMPLE STANDARDD DEVIATION.
 !
             sum = 0.0_wp
             DO i = 1 , N
@@ -29688,9 +29692,9 @@ DIMENSION iu(36), il(36)
 !              CALL SORT(X,N,X)
 !              IS ALLOWABLE AND WILL RESULT IN
 !              THE DESIRED 'IN-PLACE' SORT.
-!     COMMENT--THE SORTING ALGORITHM USED HEREIN
+!     COMMENT--THE SORTING ALGORTHM USED HEREIN
 !              IS THE BINARY SORT.
-!              THIS ALGORITHM IS EXTREMELY FAST AS THE
+!              THIS ALGORTHIM IS EXTREMELY FAST AS THE
 !              FOLLOWING TIME TRIALS INDICATE.
 !              THESE TIME TRIALS WERE CARRIED OUT ON THE
 !              UNIVAC 1108 EXEC 8 SYSTEM AT NBS
@@ -29957,7 +29961,7 @@ INTEGER :: i , il , ip1 , itt , iu , j , jmi , jmk , k , l ,lmi , m , mid , N , 
 !              ETC.
 !              ALTHOUGH THESE POSITIONS ARE NECESSARILY
 !              INTEGRAL VALUES FROM 1 TO N, IT IS TO BE
-!              NOTED THAT THEY ARE OUTPUTTED AS SINGLE
+!              NOTED THAT THEY ARE OUTPUTED AS SINGLE
 !              PRECISION INTEGERS IN THE
 !              VECTOR XPOS.
 !              XPOS IS  SO AS TO BE
@@ -29972,9 +29976,9 @@ INTEGER :: i , il , ip1 , itt , iu , j , jmi , jmk , k , l ,lmi , m , mid , N , 
 !              CALL SORTP(X,N,X,XPOS)
 !              IS ALLOWABLE AND WILL RESULT IN
 !              THE DESIRED 'IN-PLACE' SORT.
-!     COMMENT--THE SORTING ALGORITHM USED HEREIN
+!     COMMENT--THE SORTING ALGORTHM USED HEREIN
 !              IS THE BINARY SORT.
-!              THIS ALGORITHM IS EXTREMELY FAST AS THE
+!              THIS ALGORTHIM IS EXTREMELY FAST AS THE
 !              FOLLOWING TIME TRIALS INDICATE.
 !              THESE TIME TRIALS WERE CARRIED OUT ON THE
 !              UNIVAC 1108 EXEC 8 SYSTEM AT NBS
@@ -30245,8 +30249,8 @@ INTEGER       :: i, iflag, iupper, Iwrite, N
       DIMENSION X(:) , Y(:)
       DIMENSION XR(7500) , YR(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (XR(1),WS(1))
-      EQUIVALENCE (YR(1),WS(7501))
+      EQUIVALENCE (WS(1),XR(1))
+      EQUIVALENCE (WS(7501),YR(1))
 !
       iupper = 7500
 !
@@ -30722,11 +30726,11 @@ INTEGER i , k , N , ndel , Ny
 !              LOCATIONS IN Y, WHILE THE REMAINDER
 !              OF THE N LOCATIONS IN Y WILL BE ZERO-FILLED.
 !     COMMENT--ALTHOUGH THERE
-!              MAY BE A CORRESPONDENCE BETWEEN THE
+!              MAY BE A CORRESPONDANCE BETWEEN THE
 !              ELEMENTS OF THE X AND D VECTORS
 !              BEFORE APPLICATION OF
 !              THIS SUBROUTINE, THERE WILL
-!              BE NO CORRESPONDENCE BETWEEN
+!              BE NO CORRESPONDANCE BETWEEN
 !              Y AND D (DUE TO THE PACKING OF
 !              THE RETAINED ELEMENTS IN Y)
 !              AFTER APPLICATION OF THIS SUBROUTINE.
@@ -30945,12 +30949,12 @@ INTEGER       :: i, k, N, ndel, Ny
 !              LOCATIONS IN Y, WHILE THE REMAINDER
 !              OF THE N LOCATIONS IN Y WILL BE ZERO-FILLED.
 !     COMMENT--ALTHOUGH THERE
-!              MAY BE A CORRESPONDENCE BETWEEN
+!              MAY BE A CORRESPONDANCE BETWEEN
 !              THE ELEMENTS OF THE X AND D1 VECTORS
 !              AND ELEMENTS OF THE X AND D2 VECTORS
 !              BEFORE APPLICATION OF
 !              THIS SUBROUTINE, THERE WILL
-!              BE NO CORRESPONDENCE BETWEEN
+!              BE NO CORRESPONDANCE BETWEEN
 !              Y AND D1, AND Y AND D2
 !              (DUE TO THE PACKING OF
 !              THE RETAINED ELEMENTS IN Y)
@@ -31153,11 +31157,11 @@ INTEGER :: i , k , N , ndel , Newn , newnp1 , nold
 !              FOLLOWING REASON--THE INPUT VECTOR X
 !              IS IRREVOCABLY ALTERED BY APPLICATION
 !              OF THIS SUBROUTINE.  ALTHOUGH THERE
-!              MAY BE A CORRESPONDENCE BETWEEN THE
+!              MAY BE A CORRESPONDANCE BETWEEN THE
 !              ELEMENTS OF THE X AND D VECTORS
 !              BEFORE APPLICATION OF
 !              THIS SUBROUTINE, THERE WILL
-!              BE NO CORRESPONDENCE BETWEEN
+!              BE NO CORRESPONDANCE BETWEEN
 !              X AND D (DUE TO THE PACKING OF
 !              THE RETAINED ELEMENTS OF X)
 !              AFTER APPLICATION OF THIS SUBROUTINE.
@@ -31171,7 +31175,7 @@ INTEGER :: i , k , N , ndel , Newn , newnp1 , nold
 !              RETAINED ELEMENTS IN A
 !              SEPARATE SECOND VECTOR Y.
 !     COMMENT--IN THE MAIN (CALLING) ROUTINE, IT IS
-!              PERMISSIBLE (IF THE ANALYST SO DESIRES)
+!              PERMISSABLE (IF THE ANALYST SO DESIRES)
 !              TO USE THE SAME VARIABLE NAME
 !              IN THE SIXTH ARGUMENT AS USED IN THE SECOND
 !              ARGUMENT IN THE CALLING SEQUENCE TO THIS
@@ -31403,11 +31407,11 @@ DIMENSION corr(50) , iflag1(50) , iflag2(50) , iflag3(50)
 DIMENSION iline1(130) , iline2(130)
 DIMENSION xline(13)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (Z(1),WS(3001))
-EQUIVALENCE (YM(1),WS(6001))
-EQUIVALENCE (P(1),WS(9001))
-EQUIVALENCE (PTEnth(1),WS(12001))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(3001),Z(1))
+EQUIVALENCE (WS(6001),YM(1))
+EQUIVALENCE (WS(9001),P(1))
+EQUIVALENCE (WS(12001),PTEnth(1))
 !
 DATA alpham , alphaa/'M' , 'A'/
 DATA blank , hyphen , alphai , alphax/' ' , '-' , 'I' , 'X'/
@@ -31603,7 +31607,7 @@ DATA constn/.3989422804_wp/
          zwilks = (wilksh-ewilks)/sdwilk
 !
 !     COMPUTE THE CORRELATION COEFFICIENT BETWEEN THE ORDERED OBSERVATIONS
-!     AND THE ORDER STATISTIC MEDIANS FROM 44 DIFFERENT SYMMETRIC DISTRIBUTIONS
+!     AND THE ORDER STATISIC MEDIANS FROM 44 DIFFERENT SYMMETRIC DISTRIBUTIONS
 !
          numdis = 44
          nhalf = N/2
@@ -31649,7 +31653,7 @@ DATA constn/.3989422804_wp/
                IF ( idis==21 ) idis2 = idis - 1
                IF ( 23<idis .AND. idis<33 ) idis2 = idis - 2
                IF ( 33<idis ) idis2 = idis - 3
-               alamba = -(0.1_wp)*real(idis2) + 2.1_wp
+               alamba = -(0.1_wp)*FLOAT(idis2) + 2.1_wp
                IF ( idis==1 ) THEN
                   DO i = 1 , nhalf
                      irev = N - i + 1
@@ -31921,11 +31925,11 @@ DATA constn/.3989422804_wp/
             ELSEIF ( idis==22 ) THEN
                WRITE (G_IO,99038) N , corr(idis) , iflag1(idis) , iflag2(idis) , iflag3(idis)
                99038 FORMAT (' ','THE CORRELATION BETWEEN THE ',I0, &
-               &' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE LOGISTIC DIST. IS ',F8.5,1X,3A1)
+               &' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE LOGISTIC DIST.      IS ',F8.5,1X,3A1)
             ELSEIF ( idis==23 ) THEN
                WRITE (G_IO,99039) N , corr(idis) , iflag1(idis) , iflag2(idis) , iflag3(idis)
                99039 FORMAT (' THE CORRELATION BETWEEN THE ',I0, &
-               & ' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE DOUBLE EXP. DIST. IS ',F8.5,1X,3A1)
+               & ' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE DOUBLE EXP. DIST.   IS ',F8.5,1X,3A1)
             ELSEIF ( idis==33 ) THEN
                WRITE (G_IO,99040) N , corr(idis) , iflag1(idis) , iflag2(idis) , iflag3(idis)
                99040 FORMAT (' ','THE CORRELATION BETWEEN THE ',I0, &
@@ -31935,7 +31939,7 @@ DATA constn/.3989422804_wp/
                IF ( idis==21 ) idis2 = idis - 1
                IF ( 23<idis .AND. idis<33 ) idis2 = idis - 2
                IF ( 33<idis ) idis2 = idis - 3
-               alamba = -(0.1)*real(idis2) + 2.1
+               alamba = -(0.1)*FLOAT(idis2) + 2.1
                WRITE (G_IO,99041) N, alamba, corr(idis), iflag1(idis), iflag2(idis), iflag3(idis)
                99041 FORMAT (' ','THE CORRELATION BETWEEN THE ',I0, &
                & ' ORDERED OBS. AND THE ORDER STAT. MEDIANS FROM THE LAMBDA = '&
@@ -32077,7 +32081,7 @@ REAL(kind=wp) :: Cdf
 REAL(kind=wp) :: anu , cdfn , sd , z
 INTEGER :: i , ievodd , imax , imin , nucut
 DOUBLE PRECISION dx , dnu , pi , c , csq , s , sum , term , ai
-intrinsic        SQRT , ATAN, EXP
+intrinsic        DSQRT , DATAN
 DOUBLE PRECISION dconst
 DOUBLE PRECISION term1 , term2 , term3
 DOUBLE PRECISION dcdfn
@@ -32146,9 +32150,9 @@ DATA b32 , b33 , b34 , b35 , b36 , b37/1.0D0 , -11.0D0 , 14.0D0 , &
 !     METHOD UTILIZED--EXACT FINITE SUM
 !     (SEE AMS 55, page 948, FORMULAE 26.7.3 AND 26.7.4).
 !
-         c = SQRT(dnu/(dx*dx+dnu))
+         c = DSQRT(dnu/(dx*dx+dnu))
          csq = dnu/(dx*dx+dnu)
-         s = dx/SQRT(dx*dx+dnu)
+         s = dx/DSQRT(dx*dx+dnu)
          imax = Nu - 2
          ievodd = Nu - 2*(Nu/2)
          IF ( ievodd==0 ) THEN
@@ -32173,7 +32177,7 @@ DATA b32 , b33 , b34 , b35 , b36 , b37/1.0D0 , -11.0D0 , 14.0D0 , &
          ENDIF
 !
          sum = sum*s
-         IF ( ievodd/=0 ) sum = (2.0D0/pi)*(ATAN(dx/SQRT(dnu))+sum)
+         IF ( ievodd/=0 ) sum = (2.0D0/pi)*(DATAN(dx/DSQRT(dnu))+sum)
          Cdf = 0.5D0 + sum/2.0D0
          RETURN
       ELSE
@@ -32195,7 +32199,7 @@ DATA b32 , b33 , b34 , b35 , b36 , b37/1.0D0 , -11.0D0 , 14.0D0 , &
          term2 = b21*(b22*d7+b23*d5+b24*d3+b25*d1)/(dnu**2)
          term3 = b31*(b32*d11+b33*d9+b34*d7+b35*d5+b36*d3+b37*d1)/(dnu**3)
          dcdf = term1 + term2 + term3
-         dcdf = dcdfn - (dconst*(EXP(-dx*dx/2.0D0)))*dcdf
+         dcdf = dcdfn - (dconst*(DEXP(-dx*dx/2.0D0)))*dcdf
          Cdf = dcdf
       ENDIF
 !
@@ -32583,7 +32587,7 @@ INTEGER :: maxlag, N, n2, ndiv, nmk, numout, numsp
 !     COMPUTE BANDWIDTHS
 !     REFERENCE--JENKINS AND WATTS, pages 257 AND 252
 !
-!     COMPUTE DEGREES OF FREEDOM FOR THE SPECTRAL DENSITY ESTIMATE AT INDIVIDUAL
+!     COMPUTE DEGREES OF FREEDOM FOR THE SPECTAL DENSITY ESTIMATE AT INDIVIDUAL
 !     FREQUENCIES
 !     REFERENCE--JENKINS AND WATTS, pages 254 AND 252
 !
@@ -33081,7 +33085,7 @@ END SUBROUTINE TOL
 !!   * Hahn and Shapiro, Statistical Methods in Engineering, 1967, pages
 !!     260-308.
 !!   * National Bureau of Standards Applied Mathematics Series 55, 1964,
-!!     page 949, Formula 26.7.5.
+!!     page 949, FormulA 26.7.5.
 !!   * Johnson and Kotz, Continuous Univariate Distributions--2, 1970,
 !!     page 102, Formula 11.
 !!   * Federighi, 'Extended Tables of the Percentage Points of Student's
@@ -33104,8 +33108,8 @@ REAL(kind=wp) :: an, cc, hold, pp0025, pp025, pp975, pp9975, q, sum1, sum2, sum3
 INTEGER :: i, iupper
 
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (W(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),W(1))
 !
       iupper = 7500
 !
@@ -33450,7 +33454,8 @@ REAL(kind=wp) :: P , Ppf , ppfn
       ENDIF
       RETURN
 !
-99999 END SUBROUTINE TPPF
+99999 continue
+END SUBROUTINE TPPF
 !>
 !!##NAME
 !!    tran(3f) - [M_datapac:RANDOM] a random sample of size n from the
@@ -33750,7 +33755,7 @@ REAL(kind=wp) :: ak, an, hold, perp1, perp2, perp3, psum,sum, WS, Y
 INTEGER i, istart, istop, iupper, k, np1, np2
 DIMENSION Y(15000)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
+EQUIVALENCE (WS(1),Y(1))
 !---------------------------------------------------------------------
       iupper = 15000
 !
@@ -34309,7 +34314,7 @@ END SUBROUTINE UNIPDF
 !!
 !!##REFERENCES
 !!   * Filliben, 'Techniques for Tail Length Analysis', Proceedings of the
-!!     Eighteenth Conference on the Design of Experiments in Army Research
+!!     Eighteenth Conference on the Design of Experiments in Army REsearch
 !!     Development and Testing (Aberdeen, Maryland, October, 1972), pages
 !!     425-450.
 !!   * Hahn and Shapiro, Statistical Methods in Engineering, 1967, pages
@@ -34329,8 +34334,8 @@ REAL(kind=wp) :: an, cc, hold, sum1, sum2, sum3, tau, W, wbar, WS, Y, ybar, yint
 INTEGER       :: i, iupper
 DIMENSION Y(7500) , W(7500)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (W(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),W(1))
 !
 DATA tau/1.04736842_wp/
 !
@@ -34741,7 +34746,7 @@ INTEGER m(17)
 !     NOTE--THE SEED MAY BE ANY POSITIVE INTEGER.
 !           NO APPRECIABLE DIFFERENCE IN THE QUALITY
 !           OF THE RANDOM NUMBERS HAS BEEN NOTED
-!           BY THE CHOICE OF THE SEED. THERE IS NO
+!           BY THE CHOICE OF THE SEED.  THERE IS NO
 !           NEED TO USE PRIMES, NOR TO USE EXCEPTIONALLY
 !           LARGE NUMBERS, ETC.
 !
@@ -34785,8 +34790,8 @@ DATA m1 , m2 , i , j/32767 , 256 , 5 , 17/
 !
             m1 = 2**(mdig-2) + (2**(mdig-2)-1)
             m2 = 2**(mdig/2)
-            iseed3 = IABS(Iseed)
-            IF ( m1<IABS(Iseed) ) iseed3 = m1
+            iseed3 = ABS(Iseed)
+            IF ( m1<ABS(Iseed) ) iseed3 = m1
             IF ( MOD(iseed3,2)==0 ) iseed3 = iseed3 - 1
             k0 = MOD(9069,m2)
             k1 = 9069/m2
@@ -34911,7 +34916,7 @@ END SUBROUTINE UNIRAN
 !!
 !!##REFERENCES
 !!   * Filliben, Simple and Robust Linear Estimation of the Location
-!!     Parameter of a Symmetric Distribution (Unpublished PH.D. Dissertation,
+!!     Parameter of a Symmetric Distribution (Unpublished PH.D. DIssertation,
 !!     Princeton University), 1969, pages 21-44, 229-231.
 !!   * Filliben, 'The Percent Point Function', (Unpublished Manuscript),
 !!     1970, pages 28-31.
@@ -35134,7 +35139,7 @@ END SUBROUTINE VAR
 !!   * Filliben (1972), 'Techniques for Tail Length Analysis', Proceedings
 !!     of the Eighteenth Conference on the Design of Experiments in Army
 !!     Research and Testing, pages 425-450.
-!!   * Filliben, 'The Percent Point Function', Unpublished Manuscript.
+!!   * Filliben, 'The Percent Point Function', UNpublished Manuscript.
 !!   * Johnson and Kotz (1970), Continuous Univariate Distributions-1,
 !!     pages 250-271.
 !     ORIGINAL VERSION--JUNE      1972.
@@ -35184,8 +35189,8 @@ DIMENSION yi(50) , ys(50) , t(50)
 DIMENSION iflag1(50) , iflag2(50) , iflag3(50)
 DIMENSION aindex(50)
 COMMON /BLOCK2_real32/ WS(15000)
-EQUIVALENCE (Y(1),WS(1))
-EQUIVALENCE (Z(1),WS(7501))
+EQUIVALENCE (WS(1),Y(1))
+EQUIVALENCE (WS(7501),Z(1))
 DATA blank , alpham , alphaa , alphax/' ' , 'M' , 'A' , 'X'/
 DATA alphai , alphan , alphaf , alphat , alphay/'I' , 'N' , 'F' , &
      &     'T' , 'Y'/
@@ -35658,8 +35663,8 @@ INTEGER i , iupper , N
       DIMENSION X(:)
       DIMENSION Y(7500) , W(7500)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
-      EQUIVALENCE (W(1),WS(7501))
+      EQUIVALENCE (WS(1),Y(1))
+      EQUIVALENCE (WS(7501),W(1))
 !
       iupper = 7500
 !
@@ -36018,7 +36023,7 @@ INTEGER       :: i
 END SUBROUTINE WEIRAN
 !>
 !!##NAME
-!!    wind(3f) - [M_datapac:STATISTICS] compute the sample Windsorized mean
+!!    wind(3f) - [M_datapac:STATISTICS] compute the sample Winsorized mean
 !!    of a vector of observations
 !!
 !!##SYNOPSIS
@@ -36109,7 +36114,7 @@ INTEGER i , istart , istop , iupper , Iwrite , k , N , np1 , np2
 !                                WHERE 100*P1 % OF THE SMALLEST
 !                                AND 100*P2 % OF THE LARGEST
 !                                ORDERED OBSERVATIONS HAVE BEEN
-!                                WINDSORIZED BEFORE COMPUTING THE
+!                                WINSORIZED BEFORE COMPUTING THE
 !                                MEAN.
 !     OUTPUT--THE COMPUTED VALUE OF THE
 !             SAMPLE WINDSORIZED MEAN
@@ -36134,7 +36139,7 @@ INTEGER i , istart , istop , iupper , Iwrite , k , N , np1 , np2
       DIMENSION X(:)
       DIMENSION Y(15000)
       COMMON /BLOCK2_real32/ WS(15000)
-      EQUIVALENCE (Y(1),WS(1))
+      EQUIVALENCE (WS(1),Y(1))
 !
       iupper = 15000
 !

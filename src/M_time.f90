@@ -132,12 +132,16 @@ character(len=*),parameter   :: G_month_names(12)=[                             
    &'January  ', 'February ', 'March    ', 'April    ', 'May      ', 'June     ', &
    &'July     ', 'August   ', 'September', 'October  ', 'November ', 'December ']
 
-character(len=3),parameter   :: G_month_names_abbr(12)=G_month_names(:)(1:3)
+character(len=3),parameter   :: G_month_names_abbr(12)=[                               &
+   &'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', &
+   &'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 character(len=*),parameter   :: G_weekday_names(7)=[character(len=9) :: &
    & 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ]
 
-character(len=3),parameter   :: G_weekday_names_abbr(7)=G_weekday_names(:)(1:3)
+character(len=3),parameter   :: G_weekday_names_abbr(7)=[character(len=3) :: &
+   & 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
+
 !-----------------------------------------------------------------------------------------------------------------------------------
 interface w2d
    module procedure w2d_numeric
