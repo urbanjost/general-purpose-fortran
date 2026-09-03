@@ -97,7 +97,7 @@ end subroutine testit_p
 subroutine test_nan()
 real(kind=real32) :: r32
 real(kind=real64) :: r64
-real(kind=real128) :: r128
+!real(kind=real128) :: r128
    call unit_test_start('nan',msg='')
    ! (if X is NaN the comparison with 0.0 is always false.)
    r32=nan(0.0_real32)
@@ -106,8 +106,8 @@ real(kind=real128) :: r128
    r64=nan(0.0_real64)
    call unit_test('nan',.not.(r64<=0.0_real64) .and. .not.(r64>=0.0_real64),msg='real64')
 
-   r128=nan(0.0_real128)
-   call unit_test('nan',.not.(r128<=0.0_real128) .and. .not.(r128>=0.0_real128),msg='real128')
+!   r128=nan(0.0_real128)
+!   call unit_test('nan',.not.(r128<=0.0_real128) .and. .not.(r128>=0.0_real128),msg='real128')
 
    call unit_test_done('nan',msg='')
 end subroutine test_nan

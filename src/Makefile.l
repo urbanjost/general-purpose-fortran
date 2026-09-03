@@ -1306,14 +1306,15 @@ OBJS =  M_color.o C-getgp.o C-curl.o C-pcl5.o C-pbm.o  \
 LIBRARY := libGPF.a
 LIB := GPF
 LIBS := $(shell bash ../scripts/if_library_found ncurses curl tinfo sqlite3 readline X11)
-#CC := icx
 CC := cc
 CFLAGS := -O
-FC := ifx
-FFLAGS := -O -coarray=single
-F90 := ifx
-F90FLAGS := -coarray=single
+FC := lfortran
+FFLAGS := -O
+F90 := lfortran
+F90FLAGS := --no-style-suggestions --realloc-lhs-arrays --print-leading-space --std f23 --use-loop-variable-after-loop --cpp --legacy-array-sections
 LDFLAGS :=
+#export LFORTRAN_LINKER=gcc
+#export LFORTRAN_LINKER=clang
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 all: $(PROG) $(CPROG) $(TPROG)
 	@test -f test_suite_log.txt || $(MAKE) test
