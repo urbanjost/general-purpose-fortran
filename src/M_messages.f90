@@ -869,23 +869,25 @@ implicit none
 
 character(len=*),parameter :: ident="@(#)M_messages::tabgraph(3f): write columns of numbers with a text scale to the right"
 
-character*(*) cc ! assumed big enough
+character(len=*)    :: cc ! assumed big enough
 real                :: array(*)
 character(len=1000) :: yvalue
 character(len=80)   :: format
 character(len=1)    :: fill
+integer             :: ilen0
+
 integer,parameter   :: icmin=15
 real                :: delta
 real                :: rmin, rmax
 integer             :: ilet
 integer             :: ivalues0
 integer             :: ivalues
-integer             :: ilen0
 integer             :: ilen
 integer             :: i
 integer             :: i10
 integer             :: istart
 integer             :: ipos
+character(len=256)  :: iomsg
 
       delta=rmax-rmin
       if(delta.eq.0)then
@@ -916,7 +918,7 @@ integer             :: ipos
       endif
       !================================================================--------
       write(format,101)ivalues
-101   format("(",i10,"(1x,g14.7)1h#,a,1h#)")
+101   format("(",i0,"(1x,g14.7),'#',a,'#')")
       !================================================================--------
       if(fill.eq.' ')then
          yvalue=' '
@@ -938,11 +940,11 @@ integer             :: ipos
          if(ilet.gt.127)ilet=127
       enddo
       !================================================================--------
-      write(cc,fmt=format,err=999)(array(i),i=1,ivalues),yvalue(1:ilen)
+      write(cc,fmt=format,err=999,iomsg=iomsg)(array(i),i=1,ivalues),yvalue(1:ilen)
       return
       !================================================================--------
 999   continue
-      call journal('*tabgraph* write error')
+      call journal('*tabgraph* write error'//trim(iomsg))
 end subroutine tabgraph
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=

@@ -20,7 +20,8 @@
 #elif HPUX
 #include <sys/termio.h>
 #else
-#include <termio.h>
+//#include <termio.h>
+#include <termios.h>
 #endif
 #include "draw.h"
 
@@ -160,7 +161,8 @@ static int HPGT_getkey(void) {
 
         ioctl(0, TIOCSETP, &oldtty);
 #else
-        struct termio   oldtty, newtty;
+        //struct termio   oldtty, newtty;
+        struct termios   oldtty, newtty;
         char            c;
 
         fflush(draw_fp);

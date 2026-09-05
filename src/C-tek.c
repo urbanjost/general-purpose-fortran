@@ -17,7 +17,7 @@
 #elif HPUX
 #include <sys/termio.h>
 #else
-#include <termio.h>
+#include <termios.h>
 #endif
 /*--------------------------*/
 #include "draw.h"
@@ -214,7 +214,8 @@ static int TEK_getkey(void) {
 
         ioctl(0, TIOCSETP, &oldtty);
 #else
-        struct termio   oldtty, newtty;
+        //struct termio   oldtty, newtty;
+        struct termios   oldtty, newtty;
         char            c;
 
         if(xterm==0 )XTERM_4010();
@@ -251,7 +252,8 @@ static int TEK_locator(int *x, int *y) {
 #ifdef BSD
         struct sgttyb   oldtty, newtty;
 #else
-        struct termio   oldtty, newtty;
+        //struct termio   oldtty, newtty;
+        struct termios   oldtty, newtty;
 #endif
 
         if (click) {                    /* for compatibility with other devs */

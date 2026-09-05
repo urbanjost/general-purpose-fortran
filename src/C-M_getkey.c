@@ -17,12 +17,14 @@
 #ifdef HPUX
 #include <sys/termio.h>
 #else
-#include <termio.h>
+//#include <termio.h>
+#include <termios.h>
 #endif
 #include <signal.h>
 /* return the next key typed in hot (raw I/O) mode.  */
 char Fgetkey (void) {
-   struct termio oldtty, newtty;
+   //struct termio oldtty, newtty;
+   struct termios oldtty, newtty;
    char c;
    ioctl (0, TCGETA, &oldtty);
    newtty = oldtty;
@@ -123,11 +125,13 @@ char Fgetkey (void){
 #ifdef HPUX
 #include <sys/termio.h>
 #else
-#include <termio.h>
+//#include <termio.h>
+#include <termios.h>
 #endif
 /* Ftimeout_getkey return the next key typed with a timeout. */
 char Ftimeout_getkey (int delay) {
-   struct termio oldtty, newtty;
+   //struct termio oldtty, newtty;
+   struct termios oldtty, newtty;
    char c;
    ioctl (0, TCGETA, &oldtty);
    newtty = oldtty;

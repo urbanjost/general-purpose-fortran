@@ -1,30 +1,5 @@
 !-----------------------------------------------------------------------------------------------------------------------------------
-#define  __INTEL_COMP        1
-#define  __GFORTRAN_COMP     2
-#define  __NVIDIA_COMP       3
-#define  __NAG_COMP          4
-#define  __LLVM_FLANG_COMP   5
-#define  __LFORTRAN          6
-#define  __UNKNOWN_COMP   9999
-
-#define FLOAT128
-
-#ifdef __INTEL_COMPILER
-#   define __COMPILER__ __INTEL_COMP
-#elif __GFORTRAN__ == 1
-#   define __COMPILER__ __GFORTRAN_COMP
-#elif __flang__
-#   undef FLOAT128
-#   define __COMPILER__ __LLVM_FLANG_COMP
-#elif __NVCOMPILER
-#   undef FLOAT128
-#   define __COMPILER__ __NVIDIA_COMP
-#elif __LFORTRAN__
-#   define __COMPILER__ __LFORTRAN_COMP
-#else
-#   define __COMPILER__ __UNKNOWN_COMP
-#   warning  NOTE: UNKNOWN COMPILER
-#endif
+#include "../include/define_compiler.inc"
 !-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME

@@ -1255,7 +1255,7 @@ SRCS =  M_color.f90 C-getgp.c C-curl.c C-pcl5.c C-pbm.c  \
      C-tensor.c C-objects.c dparanoia.f90 M_io.F90 M_sets.f90 C-tek.c  \
      C-polygons.c M_orderpack__unipar.f90 M_orderpack__uniinv.f90 M_factor.F90 M_xterm.F90 C-hlsrgb.c  \
      C-M_draw.c M_anything.F90 M_history.F90 calc_NC.f90 M_bessel.f90 M_compiler.f90  \
-     M_orderpack__inssor.f90 M_random.F90 M_framework__approx.F90 M_csv.F90 M_LA.F90  \
+     M_orderpack__inssor.f90 M_random.F90 M_framework__approx.F90 M_csv.F90 M_LA.F90 \
      C-rgbhls.c M_framework__verify.F90 M_CLI2.f90 M_pixel.F90 M_blas.f90 C-rgbmono.c  \
      C-M_sqlite.c M_big_integer.F90 C-newtokens.c M_process.f90 C-getstring.c C-macros.c  \
      M_namelist.f90 C-X11.c M_time.F90 M_contourplot.f90 C-canvas.c M_kracken95.f90  \
@@ -1309,10 +1309,10 @@ LIBS := $(shell bash ../scripts/if_library_found ncurses curl tinfo sqlite3 read
 CC := cc
 CFLAGS := -O
 FC := gfortran
-FFLAGS := -O
+FFLAGS := -O -fcoarray=single
 F90 := gfortran
-F90FLAGS := -fno-range-check
-LDFLAGS :=
+F90FLAGS := -fno-range-check -fcoarray=single
+LDFLAGS := -fcoarray=single
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 all: $(PROG) $(CPROG) $(TPROG)
 	@test -f test_suite_log.txt || $(MAKE) test
