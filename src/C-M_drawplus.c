@@ -206,6 +206,55 @@ void barcode_sun_f(
 #endif
 
 /*============================================================================*/
+void spirograph(
+ float xcenter,
+ float ycenter,
+ float sun_radius,
+ float planet_radius,
+ float planet_offset,
+ float radius,
+ int ilines) {
+   long int i;
+   float a, b, c, con1, con2, factor, rlines, u ;
+
+   float   polyxy[5000][2];
+
+   fprintf(stderr,"CENTER = %f %f\n",xcenter,ycenter);
+   fprintf(stderr,"CONFIGURATION RADIUS = %f %f %f\n",sun_radius,planet_radius,planet_offset);
+   fprintf(stderr,"FIT RADIUS = %f \n",radius);
+   fprintf(stderr,"LINES = %ld\n",ilines);
+   c = sun_radius;
+   b = planet_offset;
+   a = planet_radius;
+   rlines = ilines;
+   factor = radius/(c - a + b);
+   c = factor*c;
+   a = factor*a;
+   b = factor*b;
+   ilines = rlines;
+   con1 = PI*2.*(c/a)/rlines;
+   u = 0;
+   con2 = (1 - a/c)*u;
+   polyxy[0][0] = (c - a)*cos( a*u/c ) + b*cos( con2 ) + xcenter;
+   polyxy[0][1] = (c - a)*sin( a*u/c ) - b*sin( con2 ) + ycenter;
+
+   for ( i = 1; i <= ilines; i++ )
+   {
+      u = con1*i;
+      con2 = (1 - a/c)*u;
+      if( con2 >=  16777216. )
+      {
+         con2 = fmod( con2, PI );
+      }
+      polyxy[i][0] = (c - a)*cos( a*u/c ) + b*cos( con2 ) + xcenter;
+      polyxy[i][1] = (c - a)*sin( a*u/c ) - b*sin( con2 ) + ycenter;
+   }
+   if (ilines >= 0){
+        draw_poly2(ilines,polyxy);
+   }
+   return;
+}
+/*============================================================================*/
 #ifdef TESTPRGC
 void main()
 {
@@ -268,48 +317,3 @@ void main()
    draw_vexit();
 }
 #endif
-/*============================================================================*/
-void spirograph(xcenter, ycenter, sun_radius, planet_radius, planet_offset, radius, ilines)
-float xcenter, ycenter, sun_radius, planet_radius, planet_offset, radius;
-long int ilines;
-{
-   long int i;
-   float a, b, c, con1, con2, factor, rlines, u ;
-
-   float   polyxy[5000][2];
-
-   fprintf(stderr,"CENTER = %f %f\n",xcenter,ycenter);
-   fprintf(stderr,"CONFIGURATION RADIUS = %f %f %f\n",sun_radius,planet_radius,planet_offset);
-   fprintf(stderr,"FIT RADIUS = %f \n",radius);
-   fprintf(stderr,"LINES = %ld\n",ilines);
-   c = sun_radius;
-   b = planet_offset;
-   a = planet_radius;
-   rlines = ilines;
-   factor = radius/(c - a + b);
-   c = factor*c;
-   a = factor*a;
-   b = factor*b;
-   ilines = rlines;
-   con1 = PI*2.*(c/a)/rlines;
-   u = 0;
-   con2 = (1 - a/c)*u;
-   polyxy[0][0] = (c - a)*cos( a*u/c ) + b*cos( con2 ) + xcenter;
-   polyxy[0][1] = (c - a)*sin( a*u/c ) - b*sin( con2 ) + ycenter;
-
-   for ( i = 1; i <= ilines; i++ )
-   {
-      u = con1*i;
-      con2 = (1 - a/c)*u;
-      if( con2 >=  16777216. )
-      {
-         con2 = fmod( con2, PI );
-      }
-      polyxy[i][0] = (c - a)*cos( a*u/c ) + b*cos( con2 ) + xcenter;
-      polyxy[i][1] = (c - a)*sin( a*u/c ) - b*sin( con2 ) + ycenter;
-   }
-   if (ilines >= 0){
-        draw_poly2(ilines,polyxy);
-   }
-   return;
-}

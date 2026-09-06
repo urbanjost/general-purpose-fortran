@@ -390,7 +390,6 @@ PROGFILES = ../app/tabulate.f90 ../app/colors.f90 ../app/alphabet.f90 ../app/tab
 ../example/DEMOS/expran_3m_datapac.f90 \
 ../example/DEMOS/expression_3m_calculator.f90 \
 ../example/DEMOS/expsf_3m_datapac.f90 \
-../example/DEMOS/extends_type_of_3fortran.f90 \
 ../example/DEMOS/extrem_3m_datapac.f90 \
 ../example/DEMOS/extremum_3m_math.f90 \
 ../example/DEMOS/f2c_3m_units.f90 \
