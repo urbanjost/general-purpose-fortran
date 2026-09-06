@@ -9,20 +9,27 @@
      ! basics
      write(*,*) sign(1234), sign(-1234), sign(huge(0.0)), sign(-huge(0.0))
      ! any type of integer or real
-     write(*,*) merge('sign works','sign fails', sign(10_int8).eq.1         &
-     & .and. sign(-10_int8).eq.-1        )
-     write(*,*) merge('sign works','sign fails', sign(10_int16).eq.1        &
-     & .and. sign(-10_int16).eq.-1       )
-     write(*,*) merge('sign works','sign fails', sign(10_int32).eq.1        &
-     & .and. sign(-10_int32).eq.-1       )
-     write(*,*) merge('sign works','sign fails', sign(10_int64).eq.1        &
-     & .and. sign(-10_int64).eq.-1       )
-     write(*,*) merge('sign works','sign fails', sign(10.0_real32).eq.1.0   &
-     & .and. sign(-10.0_real32).eq.-1.0  )
-     write(*,*) merge('sign works','sign fails', sign(10.0_real64).eq.1.0d0 &
-     & .and. sign(-10.0_real64).eq.-1.0d0 )
-     write(*,*) merge('sign works','sign fails', sign(10.0_real128).eq.1.0  &
-     & .and. sign(-10.0_real128).eq.-1.0 )
+     write(*,*) merge('PASSED','FAILED', &
+      & sign( 10_int8) == 1 .and. &
+      & sign(-10_int8) == -1 )
+     write(*,*) merge('PASSED','FAILED', &
+      & sign( 10_int16) == 1 .and. &
+      & sign(-10_int16) == -1       )
+     write(*,*) merge('PASSED','FAILED', &
+      & sign( 10_int32) == 1 .and. &
+      & sign(-10_int32) == -1       )
+     write(*,*) merge('PASSED','FAILED', &
+      & sign( 10_int64) == 1 .and. &
+      & sign(-10_int64) == -1       )
+     write(*,*) merge('PASSED','FAILED', &
+      & sign( 10.0_real32) == 1.0 .and. &
+      & sign(-10.0_real32) == -1.0  )
+     write(*,*) merge('PASSED','FAILED', &
+      & sign( 10.0_real64) == 1.0d0 .and. &
+      & sign(-10.0_real64) == -1.0d0 )
+     write(*,*) merge('PASSED','FAILED', &
+      & sign( 10.0_real128) == 1.0 .and. &
+      & sign(-10.0_real128) == -1.0 )
      !
      !write (*, *) sign(10 < 20)
      !
