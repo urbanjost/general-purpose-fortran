@@ -8,7 +8,8 @@
      real              :: point(3)=[10.0,20.0,30.0]
      character(len=80) :: title=" "
      logical           :: l=.false., l_=.false.
-     logical           :: help=.false., version=.false., v=.false., h=.false.
+     logical           :: help=.false., version=.false.
+     logical           :: v, h
      equivalence       (help,h),(version,v)
      namelist /args/ x,y,z,point,title,help,h,version,v,l,l_
      ! << END OF CHANGES

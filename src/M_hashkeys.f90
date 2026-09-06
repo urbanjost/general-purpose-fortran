@@ -1,3 +1,6 @@
+!-----------------------------------------------------------------------------------------------------------------------------------
+#include "../include/define_compiler.inc"
+!-----------------------------------------------------------------------------------------------------------------------------------
 module M_hashkeys__public
 use,intrinsic :: ISO_FORTRAN_ENV, only : int8,int16,int32,int64,real32,real64,real128
 use,intrinsic :: iso_c_binding
@@ -1604,7 +1607,9 @@ character(len=1),allocatable :: chars(:)
     type is (integer(kind=int64));  chars=transfer(anything,chars)
     type is (real(kind=real32));    chars=transfer(anything,chars)
     type is (real(kind=real64));    chars=transfer(anything,chars)
+#ifdef FLOAT128
     type is (real(kind=real128));   chars=transfer(anything,chars)
+#endif
     type is (logical);              chars=transfer(anything,chars)
     class default
       stop 'crud. anything_to_bytes_arr(1) does not know about this type'
@@ -1630,7 +1635,9 @@ character(len=1),allocatable :: chars(:)
     type is (integer(kind=int64));  chars=transfer(anything,chars)
     type is (real(kind=real32));    chars=transfer(anything,chars)
     type is (real(kind=real64));    chars=transfer(anything,chars)
+#ifdef FLOAT128
     type is (real(kind=real128));   chars=transfer(anything,chars)
+#endif
     type is (logical);              chars=transfer(anything,chars)
     class default
       stop 'crud. anything_to_bytes_scalar(1) does not know about this type'

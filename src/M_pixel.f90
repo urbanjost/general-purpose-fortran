@@ -1,3 +1,6 @@
+!-----------------------------------------------------------------------------------------------------------------------------------
+#include "../include/define_compiler.inc"
+!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    M_pixel(3f) - [M_pixel::INTRO] module for drawing into a pixel array
@@ -7037,7 +7040,9 @@ class(*),intent(in) :: generic
       type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+#endif
       type is (logical);                write(line(istart:),'(l1)') generic
       type is (character(len=*));       write(line(istart:),'(a)') trim(generic)
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
@@ -7100,7 +7105,9 @@ integer :: i
       type is (integer(kind=int64));    write(line(istart:),'("[",*(i0,1x))') generic
       type is (real(kind=real32));      write(line(istart:),'("[",*(1pg0,1x))') generic
       type is (real(kind=real64));      write(line(istart:),'("[",*(1pg0,1x))') generic
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line(istart:),'("[",*(1pg0,1x))') generic
+#endif
       !type is (real(kind=real256));     write(error_unit,'(1pg0)',advance='no') generic
       type is (logical);                write(line(istart:),'("[",*(l1,1x))') generic
       type is (character(len=*));       write(line(istart:),'("[",:*("""",a,"""",1x))') (trim(generic(i)),i=1,size(generic))
@@ -7162,11 +7169,13 @@ real                :: r_out
       !-!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
       !-!endif
       r_out=real(valuein)
+#ifdef FLOAT128
    type is (real(kind=real128))
       !-!if(valuein.gt.big)then
       !-!   write(error_unit,*)'*anyscalar_to_real* value too large ',valuein
       !-!endif
       r_out=real(valuein)
+#endif
    type is (logical);              r_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));     read(valuein,*) r_out
    !type is (real(kind=real128));  r_out=real(valuein)
@@ -7278,11 +7287,13 @@ doubleprecision           :: d_out
    type is (integer(kind=int64));  d_out=dble(valuein)
    type is (real(kind=real32));    d_out=dble(valuein)
    type is (real(kind=real64));    d_out=dble(valuein)
+#ifdef FLOAT128
    Type is (real(kind=real128))
       !-!if(valuein.gt.big)then
       !-!   write(error_unit,*)'*anyscalar_to_double* value too large ',valuein
       !-!endif
       d_out=dble(valuein)
+#endif
    type is (logical);              d_out=merge(0.0d0,1.0d0,valuein)
    type is (character(len=*));      read(valuein,*) d_out
    !-!type is (real(kind=real128))

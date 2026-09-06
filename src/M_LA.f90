@@ -1,3 +1,6 @@
+!-----------------------------------------------------------------------------------------------------------------------------------
+#include "../include/define_compiler.inc"
+!-----------------------------------------------------------------------------------------------------------------------------------
 module m_la
 use,intrinsic :: iso_fortran_env, only : stderr=>error_unit, stdin=>input_unit, stdout=>output_unit
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
@@ -64,13 +67,19 @@ integer,save             :: la_flop_counter(2)=[0,0]
 
 interface linspace
    module procedure  &
-   & linspace_real128, linspace_real64, linspace_real32, &
+#ifdef FLOAT128
+   & linspace_real128, &
+#endif
+   & linspace_real64, linspace_real32, &
    & linspace_int64,   linspace_int32,  linspace_int16,  linspace_int8
 end interface linspace
 
 interface elementcopy
    module procedure  &
-   & elementcopy_real128, elementcopy_real64, elementcopy_real32, &
+#ifdef FLOAT128
+   & elementcopy_real128, &
+#endif
+   & elementcopy_real64, elementcopy_real32, &
    & elementcopy_int64,   elementcopy_int32,  elementcopy_int16,  elementcopy_int8
 end interface elementcopy
 
@@ -667,6 +676,7 @@ end subroutine ecopy
 
 end subroutine elementcopy_real64
 
+#ifdef FLOAT128
 subroutine elementcopy_real128(a1,a2) ! using assumed rank
 real(kind=real128),intent(in) :: a1(..)
 real(kind=real128)            :: a2(..)
@@ -784,6 +794,7 @@ integer :: ismall
 end subroutine ecopy
 
 end subroutine elementcopy_real128
+#endif
 
 subroutine elementcopy_int8(a1,a2) ! using assumed rank
 integer(kind=int8),intent(in) :: a1(..)
@@ -1312,6 +1323,7 @@ end subroutine elementcopy_int64
 !!    11.1000004 11.3500004 11.6000004 11.8500004 12.1000004
 !!
 !!   Results:
+#ifdef FLOAT128
 function linspace_real128(x1,x2,n)
 integer,intent(in)               :: n
 real(kind=real128),intent(in) :: x1,x2
@@ -1323,6 +1335,7 @@ integer(kind=int64)              :: i
       linspace_real128=[(x1+i*(x2-x1)/(n-1),i=0,n-1)]
    endif
 end function linspace_real128
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 function linspace_real64(x1,x2,n)
 integer,intent(in)               :: n

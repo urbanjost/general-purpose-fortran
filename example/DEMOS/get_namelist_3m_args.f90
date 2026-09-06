@@ -9,8 +9,9 @@
       real              :: x=111.1, y=222.2, z=333.3
       real              :: point(3)=[10.0,20.0,30.0]
       character(len=80) :: title=" "
-      logical           :: help=.false., version=.false.
-      logical           :: l=.false., l_=.false., v=.false., h=.false.
+      logical,save      :: help=.false., version=.false.
+      logical,save      :: l=.false., l_=.false.
+      logical           :: v, h
       ! you can equivalence short and long options
       equivalence       (help,h),(version,v)
       ! just add a variable here and it is a new parameter !!

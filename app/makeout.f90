@@ -615,6 +615,7 @@ function scanfile(filename) result (depends)
 implicit none
 character(len=*),intent(in) :: filename
    character(len=:),allocatable      :: array_split(:) ! output array of tokens
+   integer,parameter               :: maxlen=IPvalue
    character(len=maxlen),allocatable :: array(:) ! output array of tokens
    character(len=:),allocatable      :: line
    character(len=:),allocatable      :: depends
@@ -625,7 +626,6 @@ character(len=*),intent(in) :: filename
    integer                         :: lun
    integer                         :: ifound
    character(len=256)              :: message
-   integer,parameter               :: maxlen=IPvalue
    character(len=maxlen)           :: dirname
    character(len=maxlen)           :: name
    character(len=maxlen)           :: basename

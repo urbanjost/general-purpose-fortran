@@ -1,3 +1,6 @@
+!-----------------------------------------------------------------------------------------------------------------------------------
+#include "../include/define_compiler.inc"
+!-----------------------------------------------------------------------------------------------------------------------------------
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
@@ -164,7 +167,9 @@ end interface invert_4x4
 interface bound
    module procedure bound_r32
    module procedure bound_r64
+#ifdef FLOAT128
    module procedure bound_r128
+#endif
    module procedure bound_i8
    module procedure bound_i16
    module procedure bound_i32
@@ -174,7 +179,9 @@ end interface bound
 interface in
    module procedure in_r32
    module procedure in_r64
+#ifdef FLOAT128
    module procedure in_r128
+#endif
    module procedure in_i8
    module procedure in_i16
    module procedure in_i32
@@ -6281,11 +6288,13 @@ logical         :: in_r64
    in_r64=middle.ge.bottom.and.middle.le.top
 end function in_r64
 !-----------------------------------------------------------------------------------------------------------------------------------
+#ifdef FLOAT128
 elemental function in_r128(bottom,middle,top)
 real(kind=real128),intent(in) :: bottom, middle, top
 logical         :: in_r128
    in_r128=middle.ge.bottom.and.middle.le.top
 end function in_r128
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -6359,11 +6368,13 @@ real(kind=real64)            :: bound_r64
    bound_r64=min(max(bottom,middle),top)
 end function bound_r64
 !-----------------------------------------------------------------------------------------------------------------------------------
+#ifdef FLOAT128
 elemental pure function bound_r128(bottom,middle,top)
 real(kind=real128),intent(in) :: bottom, middle, top
 real(kind=real128)            :: bound_r128
    bound_r128=min(max(bottom,middle),top)
 end function bound_r128
+#endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 elemental pure function bound_i8(bottom,middle,top)
 integer(kind=int8),intent(in) :: bottom, middle, top

@@ -1811,9 +1811,9 @@ END SUBROUTINE accdig
 !-----------------------------------------------------------------------------------------------------------------------------------
 SUBROUTINE dp_accdig(x,y,digi0,ACURCY,IND)
 #ifdef FLOAT128
-use,intrinsic :: iso_fortran_env, only : wp=>real64
-#else
 use,intrinsic :: iso_fortran_env, only : wp=>real128
+#else
+use,intrinsic :: iso_fortran_env, only : wp=>real64
 #endif
 use M_journal,  only : journal
 implicit none
@@ -2098,9 +2098,9 @@ end function significant
 pure elemental function anyscalar_to_realbig(valuein) result(d_out)
 use, intrinsic :: iso_fortran_env, only : error_unit !! ,input_unit,output_unit
 #ifdef FLOAT128
-use,intrinsic :: iso_fortran_env, only : wp=>real64
-#else
 use,intrinsic :: iso_fortran_env, only : wp=>real128
+#else
+use,intrinsic :: iso_fortran_env, only : wp=>real64
 #endif
 implicit none
 
@@ -2117,7 +2117,6 @@ character(len=3)             :: readable
    type is (real(kind=real32));    d_out=real(valuein,kind=wp)
    type is (real(kind=real64));    d_out=real(valuein,kind=wp)
 #ifdef FLOAT128
-#else
    Type is (real(kind=real128));   d_out=valuein
 #endif
    type is (logical);              d_out=merge(0.0_wp,1.0_wp,valuein)

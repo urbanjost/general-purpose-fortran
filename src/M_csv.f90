@@ -1,3 +1,6 @@
+!-----------------------------------------------------------------------------------------------------------------------------------
+#include "../include/define_compiler.inc"
+!-----------------------------------------------------------------------------------------------------------------------------------
 module M_csv
 implicit none
 private
@@ -279,7 +282,6 @@ integer,parameter             :: increment=2
 contains
 !===================================================================================================================================
 subroutine print_g(generic)
-!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 class(*),intent(in) :: generic
 
@@ -292,7 +294,9 @@ class(*),intent(in) :: generic
       type is (integer(kind=int64));    write(line(istart:),'(i0)') generic
       type is (real(kind=real32));      write(line(istart:),'(1pg0)') generic
       type is (real(kind=real64));      write(line(istart:),'(1pg0)') generic
+#ifdef FLOAT128
       type is (real(kind=real128));     write(line(istart:),'(1pg0)') generic
+#endif
       type is (logical);                write(line(istart:),'(a)') trim(merge(CSV_true,CSV_false,generic))
       type is (character(len=*));       write(line(istart:),'(a)') quote(generic)
       type is (complex);                write(line(istart:),'(1pg0,a,1pg0)') real(generic),CSV_separator,aimag(generic)

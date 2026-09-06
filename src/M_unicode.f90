@@ -500,7 +500,6 @@ interface glob
    module procedure :: glob_uu, glob_ua, glob_aa, glob_au
 end interface glob
 
-
 ! INTRINSIC COMPATIBILITY
 interface adjustl;   module procedure :: adjustl_str;   end interface adjustl
 interface adjustr;   module procedure :: adjustr_str;   end interface adjustr
@@ -5675,7 +5674,6 @@ integer,allocatable            :: line(:)
              case default
                 write(*,*)'UNEXPECTED CONFIGURATION',i,j
             end select
-
 
          case('double')
             select case(isum)
@@ -12313,7 +12311,7 @@ end function concat_u_u
 !
 impure elemental function concat_g_g(lhs,rhs) result (string)
 
-! ident_29="@(#) M_overload g_g(3f) convert two single intrinsic values or strings to a string"
+! ident_29="@(#) M_unicode g_g(3f) convert two single intrinsic values or strings to a string"
 !
 ! use this instead of str() so character variables are not trimmed and/or spaces are not added
 class(*),intent(in) :: lhs, rhs

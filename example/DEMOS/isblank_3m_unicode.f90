@@ -11,5 +11,5 @@
          string_u=unicode%SPACES
          write(*,'(*(g0,1x))')'ISBLANK PASSED TYPE(UNICODE_TYPE): ',isblank(string_u)
          write(*,'(*(g0))')'BLANKS: ',ch(string_u)
-         write(*,'(*(g0),1x)')'BLANKS: ',string_u%codepoint()
+         write(*,'(*(g0))')'BLANKS: ',string_u%codepoint()
       end program demo_isblank

@@ -115,7 +115,7 @@ module M_uuid
 !!     > urn:uuid:fe86c986-31ae-4b34-4e2e-beaed6f7391b
 !!     > /tmp/scratch_fee7cac1-5756-4195-4102-2d34fd966af9
 !===================================================================================================================================
-use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, dp=>real128
+use, intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, dp=>real64
 use M_random, only : mtprng_state, mtprng_init, mtprng_rand64
 use M_time, only : date_to_unix, realtime
 implicit none

@@ -1,3 +1,6 @@
+!-----------------------------------------------------------------------------------------------------------------------------------
+#include "../include/define_compiler.inc"
+!-----------------------------------------------------------------------------------------------------------------------------------
 !>
 !!##NAME
 !!    M_matrix(3f) - [M_matrix::INTRO] The Los Alamos-inspired Linear Algebra Fortran Facility (LALA)
@@ -483,7 +486,9 @@ interface get_from_lala
    module procedure get_fixed_array_from_lala_cmplx
    module procedure get_fixed_array_from_lala_real32
    module procedure get_fixed_array_from_lala_real64
+#ifdef FLOAT128
    module procedure get_fixed_array_from_lala_real128
+#endif
    module procedure get_fixed_array_from_lala_int8
    module procedure get_fixed_array_from_lala_int16
    module procedure get_fixed_array_from_lala_int32
@@ -495,7 +500,9 @@ interface get_from_lala
    module procedure get_fixed_vector_from_lala_cmplx
    module procedure get_fixed_vector_from_lala_real32
    module procedure get_fixed_vector_from_lala_real64
+#ifdef FLOAT128
    module procedure get_fixed_vector_from_lala_real128
+#endif
    module procedure get_fixed_vector_from_lala_int8
    module procedure get_fixed_vector_from_lala_int16
    module procedure get_fixed_vector_from_lala_int32
@@ -509,7 +516,9 @@ interface get_from_lala
    module procedure get_array_from_lala_cmplx
    module procedure get_array_from_lala_real32
    module procedure get_array_from_lala_real64
+#ifdef FLOAT128
    module procedure get_array_from_lala_real128
+#endif
    module procedure get_array_from_lala_int8
    module procedure get_array_from_lala_int16
    module procedure get_array_from_lala_int32
@@ -521,7 +530,9 @@ interface get_from_lala
    module procedure get_vector_from_lala_cmplx
    module procedure get_vector_from_lala_real32
    module procedure get_vector_from_lala_real64
+#ifdef FLOAT128
    module procedure get_vector_from_lala_real128
+#endif
    module procedure get_vector_from_lala_int8
    module procedure get_vector_from_lala_int16
    module procedure get_vector_from_lala_int32
@@ -533,7 +544,9 @@ interface get_from_lala
    module procedure get_scalar_from_lala_cmplx
    module procedure get_scalar_from_lala_real32
    module procedure get_scalar_from_lala_real64
+#ifdef FLOAT128
    module procedure get_scalar_from_lala_real128
+#endif
    module procedure get_scalar_from_lala_int8
    module procedure get_scalar_from_lala_int16
    module procedure get_scalar_from_lala_int32
@@ -8737,7 +8750,9 @@ integer,intent(out)          :: ierr
    type is (integer(kind=int64));  call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
    type is (real(kind=real32));    call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
    type is (real(kind=real64));    call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
+#ifdef FLOAT128
    type is (real(kind=real128));   call store_double_into_lala(varname,real(anything,kind=dp),ierr=ierr)
+#endif
    ! arbitrarily, 0 is false and not 0 is true, although I prefer the opposite
    type is (logical);              call store_double_into_lala(varname,merge(0.1d0,0.0d0,anything),ierr=ierr)
    class default
@@ -8779,8 +8794,10 @@ integer                      :: i
        call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
     type is (real(kind=real64))
        call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+#ifdef FLOAT128
     type is (real(kind=real128))
        call store_double_into_lala(varname,reshape(real(anything,kind=dp),[1,size(anything)]),ierr=ierr)
+#endif
     type is (logical)
        call store_double_into_lala(varname,reshape(merge(0.1d0,0.0d0,anything),[1,size(anything)]),ierr=ierr)
     class default
@@ -8810,7 +8827,9 @@ logical,parameter            :: T=.true.
     type is (integer(kind=int64)); call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
     type is (real(kind=real32));   call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
     type is (real(kind=real64));   call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+#ifdef FLOAT128
     type is (real(kind=real128));  call store_double_into_lala(varname,reshape([real(anything,kind=dp)],[1,1]),ierr=ierr)
+#endif
     ! arbitrarily, 0 is false and not 0 is true, although I prefer the opposite
     type is (logical);             call store_double_into_lala(varname,reshape([merge(1.0d0,0.0d0,anything)],[1,1]),ierr=ierr)
     class default
@@ -8886,6 +8905,7 @@ logical,intent(in)                         :: fixed
    out=real(double,kind=real64)
 end subroutine get_fixed_array_from_lala_real64
 !===================================================================================================================================
+#ifdef FLOAT128
 subroutine get_fixed_array_from_lala_real128(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 real(kind=real128),intent(out)  :: out(:,:)
@@ -8896,6 +8916,7 @@ logical,intent(in)                         :: fixed
    if(ierr.ne.0)return
    out=real(double,kind=real128)
 end subroutine get_fixed_array_from_lala_real128
+#endif
 !===================================================================================================================================
 subroutine get_fixed_array_from_lala_logical(varname,out,ierr,fixed)
 character(len=*),intent(in)      :: varname
@@ -9016,6 +9037,7 @@ logical,intent(in)                         :: fixed
    out=real(rowpack(double),kind=real64)
 end subroutine get_fixed_vector_from_lala_real64
 !===================================================================================================================================
+#ifdef FLOAT128
 subroutine get_fixed_vector_from_lala_real128(varname,out,ierr,fixed)
 character(len=*),intent(in)                 :: varname
 real(kind=real128),intent(out)  :: out(:)
@@ -9026,6 +9048,7 @@ logical,intent(in)                         :: fixed
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=real128)
 end subroutine get_fixed_vector_from_lala_real128
+#endif
 !===================================================================================================================================
 subroutine get_fixed_vector_from_lala_logical(varname,out,ierr,fixed)
 character(len=*),intent(in)      :: varname
@@ -9150,6 +9173,7 @@ integer,intent(out)                       :: ierr
    out=real(double,kind=real64)
 end subroutine get_array_from_lala_real64
 !===================================================================================================================================
+#ifdef FLOAT128
 subroutine get_array_from_lala_real128(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 real(kind=real128),allocatable,intent(out)  :: out(:,:)
@@ -9160,6 +9184,7 @@ integer,intent(out)                         :: ierr
    if(ierr.ne.0)return
    out=real(double,kind=real128)
 end subroutine get_array_from_lala_real128
+#endif
 !===================================================================================================================================
 subroutine get_array_from_lala_logical(varname,out,ierr)
 character(len=*),intent(in)      :: varname
@@ -9281,6 +9306,7 @@ integer,intent(out)                       :: ierr
    out=real(rowpack(double),kind=real64)
 end subroutine get_vector_from_lala_real64
 !===================================================================================================================================
+#ifdef FLOAT128
 subroutine get_vector_from_lala_real128(varname,out,ierr)
 character(len=*),intent(in)                 :: varname
 real(kind=real128),allocatable,intent(out)  :: out(:)
@@ -9291,6 +9317,7 @@ integer,intent(out)                         :: ierr
    if(ierr.ne.0)return
    out=real(rowpack(double),kind=real128)
 end subroutine get_vector_from_lala_real128
+#endif
 !===================================================================================================================================
 subroutine get_vector_from_lala_logical(varname,out,ierr)
 character(len=*),intent(in)      :: varname
@@ -9414,6 +9441,7 @@ integer,intent(out)           :: ierr
    out=real(double(1,1),kind=real64)
 end subroutine get_scalar_from_lala_real64
 !===================================================================================================================================
+#ifdef FLOAT128
 subroutine get_scalar_from_lala_real128(varname,out,ierr)
 character(len=*),intent(in)    :: varname
 real(kind=real128),intent(out) :: out
@@ -9424,6 +9452,7 @@ integer,intent(out)            :: ierr
    if(size(double).ne.1)call journal('sc','warning: returned scalar does not have size 1 but size',size(double))
    out=real(double(1,1),kind=real128)
 end subroutine get_scalar_from_lala_real128
+#endif
 !===================================================================================================================================
 subroutine get_scalar_from_lala_logical(varname,out,ierr)
 character(len=*),intent(in)   :: varname

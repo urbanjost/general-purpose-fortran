@@ -1273,9 +1273,9 @@ save
 !-----------------------------------------------------------------------------------------------------------------------------------
    do kk = 1, 10
       if(iout.ge.0)then
-         write (*,'(1x,*(a12):)') (alf(kk,l(mm)), mm = 1, lstr)
+         write (*,'(1x,*(a12))') (alf(kk,l(mm)), mm = 1, lstr)
       else
-         write (LINE, '(1x,*(a12):)') (alf(kk,l(mm)), mm = 1, lstr)
+         write (LINE, '(1x,*(a12))') (alf(kk,l(mm)), mm = 1, lstr)
          call journal(LINE)
       endif
    enddo

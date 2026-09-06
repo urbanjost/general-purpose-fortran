@@ -19,34 +19,28 @@
 #   define HAS_DT
 #elif __FLANG
 #   undef FLOAT128
-#   warning  NOTE: FLOAT128 not supported
 #   undef HAS_DT
 #   define __COMPILER__ __FLANG_COMP
 #elif __flang__
 #   undef FLOAT128
-#   warning  NOTE: FLOAT128 not supported
-#   undef HAS_DT
+! the LLVM Flang Fortran compiler supports the DT edit descriptor for user-defined derived type formatting (DTIO).
+#   define HAS_DT
 #   define __COMPILER__ __LLVM_FLANG_COMP
 #elif __NVCOMPILER
 #   undef HAS_DT
 #   undef FLOAT128
-#   warning  NOTE: FLOAT128 not supported
 #   define __COMPILER__ __NVIDIA_COMP
 #elif __NVCOMPILER_LLVM__
 #   undef FLOAT128
-#   warning  NOTE: FLOAT128 not supported
 #   define __COMPILER__ __NVIDIA_COMP
 #elif __LFORTRAN
 #   define __COMPILER__ __LFORTRAN_COMP
 #   undef FLOAT128
 #elif __NVCOMPILER
 #   undef FLOAT128
-#   warning  NOTE: FLOAT128 not supported
 #   define __COMPILER__ __NVIDIA_COMP
 #else
 #   undef FLOAT128
-#   warning  NOTE: FLOAT128 not supported
 #   define __COMPILER__ __UNKNOWN_COMP
-#   warning  NOTE: UNKNOWN COMPILER
 #endif
 #endif
