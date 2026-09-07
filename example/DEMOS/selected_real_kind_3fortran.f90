@@ -9,8 +9,8 @@
       real(kind=r400) :: z
 
          write(*,*) 'real_kinds    =', real_kinds(:)
-         write(*,*) 'real constants=', &
-         & real16, real32, real64, real128 !, bfloat16
+         !write(*,*) 'real constants=', &
+         !& real16, real32, real64, real128 !, bfloat16
          write(*,*) 'integer_kinds=', integer_kinds(:)
          write(*,*) 'int constants=', &
          & int8, int16, int32, int64  !, int128

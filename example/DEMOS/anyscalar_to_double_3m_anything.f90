@@ -9,7 +9,7 @@
          write(*,*)sqrtany(2_int64)
          write(*,*)sqrtany(2.0_real32)
          write(*,*)sqrtany(2.0_real64)
-         write(*,*)sqrtany(2.0_real128)
+         !write(*,*)sqrtany(2.0_real128)
       contains
 
       function sqrtany(invalue) result (value)

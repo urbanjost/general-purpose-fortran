@@ -9,7 +9,7 @@
          write(*,*)squarei(2_int64)
          write(*,*)squarei(2.0_real32)
          write(*,*)squarei(2.0_real64)
-         write(*,*)squarei(2.0_real128)
+         !write(*,*)squarei(2.0_real128)
       contains
 
       function squarei(invalue) result (dvalue)

@@ -27,9 +27,9 @@
      write(*,*) merge('PASSED','FAILED', &
       & sign( 10.0_real64) == 1.0d0 .and. &
       & sign(-10.0_real64) == -1.0d0 )
-     write(*,*) merge('PASSED','FAILED', &
-      & sign( 10.0_real128) == 1.0 .and. &
-      & sign(-10.0_real128) == -1.0 )
+     !write(*,*) merge('PASSED','FAILED', &
+     ! & sign( 10.0_real128) == 1.0 .and. &
+     ! & sign(-10.0_real128) == -1.0 )
      !
      !write (*, *) sign(10 < 20)
      !

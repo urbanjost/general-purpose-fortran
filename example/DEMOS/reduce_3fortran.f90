@@ -1,6 +1,6 @@
          program demo_reduce
          implicit none
-         character(len=*),parameter :: f='("[",*(g0,",",1x),"]")'
+         character(len=*),parameter :: f='("[",*(g0:,",",1x))'
          integer,allocatable :: arr(:), b(:,:)
 
          ! Basic usage:
@@ -27,9 +27,9 @@
          !  If B is the array   1 3 5
          !                      2 4 6
             b=reshape([1,2,3,4,5,6],[2,3])
-            write(*,f) REDUCE(B, MY_MULT),'should be [720]'
-            write(*,f) REDUCE(B, MY_MULT, DIM=1),'should be [2,12,30]'
-            write(*,f) REDUCE(B, MY_MULT, DIM=2),'should be [15, 48]'
+            write(*,f) REDUCE(B, MY_MULT),'] should be [720]'
+            write(*,f) REDUCE(B, MY_MULT, DIM=1),'] should be [2,12,30]'
+            write(*,f) REDUCE(B, MY_MULT, DIM=2),'] should be [15, 48]'
 
          contains
 

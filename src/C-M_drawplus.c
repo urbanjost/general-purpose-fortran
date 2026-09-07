@@ -269,10 +269,14 @@ void main()
 }
 #endif
 /*============================================================================*/
-void spirograph(xcenter, ycenter, sun_radius, planet_radius, planet_offset, radius, ilines)
-float xcenter, ycenter, sun_radius, planet_radius, planet_offset, radius;
-long int ilines;
-{
+void spirograph(
+ float xcenter,
+ float ycenter,
+ float sun_radius,
+ float planet_radius,
+ float planet_offset,
+ float radius,
+ long int ilines) {
    long int i;
    float a, b, c, con1, con2, factor, rlines, u ;
 

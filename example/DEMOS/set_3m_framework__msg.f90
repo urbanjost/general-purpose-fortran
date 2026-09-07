@@ -5,7 +5,8 @@
      implicit none
      real(kind=real32)    :: a; namelist /all/a
      real(kind=real64)    :: b; namelist /all/b
-     real(kind=real128)   :: c; namelist /all/c
+     !real(kind=real128)   :: c; namelist /all/c
+     real(kind=real64)    :: c; namelist /all/c
      integer(kind=int8)   :: i; namelist /all/i
      integer(kind=int16)  :: j; namelist /all/j
      integer(kind=int32)  :: k; namelist /all/k
