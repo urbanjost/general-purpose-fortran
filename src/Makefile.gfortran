@@ -1258,7 +1258,7 @@ SRCS =  M_color.f90 C-getgp.c C-curl.c C-pcl5.c C-pbm.c  \
      M_orderpack__inssor.f90 M_random.F90 M_framework__approx.F90 M_csv.F90 M_LA.F90 \
      C-rgbhls.c M_framework__verify.F90 M_CLI2.f90 M_pixel.F90 M_blas.f90 C-rgbmono.c  \
      C-M_sqlite.c M_big_integer.F90 C-newtokens.c M_process.f90 C-getstring.c C-macros.c  \
-     M_namelist.f90 C-X11.c M_time.F90 M_contourplot.f90 C-canvas.c M_kracken95.f90  \
+     M_namelist.f90 M_time.F90 M_contourplot.f90 C-canvas.c M_kracken95.f90  \
      M_strings__oop.F90 M_draw.F90 M_readline.f90 C-gnu.c M_orderpack__mrgrnk.f90 M_drawplus.F90  \
      M_orderpack__indnth.f90 C-vog.c C-svg.c C-trans.c C-M_getkey.c M_framework__attr.F90  \
      M_intrinsics.f90 M_orderpack__fndnth.f90 M_calcomp.F90 M_pixel__writegif_animated.f90 M_ncurses.f90 M_orderpack__rinpar.f90  \
@@ -1292,7 +1292,7 @@ OBJS =  M_color.o C-getgp.o C-curl.o C-pcl5.o C-pbm.o  \
      M_history.o calc_NC.o M_bessel.o M_compiler.o M_orderpack__inssor.o \
      M_random.o M_framework__approx.o M_csv.o M_LA.o C-rgbhls.o M_framework__verify.o  \
      M_CLI2.o M_pixel.o M_blas.o C-rgbmono.o C-M_sqlite.o M_big_integer.o  \
-     C-newtokens.o M_process.o C-getstring.o C-macros.o M_namelist.o C-X11.o  \
+     C-newtokens.o M_process.o C-getstring.o C-macros.o M_namelist.o \
      M_time.o M_contourplot.o C-canvas.o M_kracken95.o M_strings__oop.o M_draw.o  \
      M_readline.o C-gnu.o M_orderpack__mrgrnk.o M_drawplus.o M_orderpack__indnth.o C-vog.o  \
      C-svg.o C-trans.o C-M_getkey.o M_framework__attr.o M_intrinsics.o M_orderpack__fndnth.o  \

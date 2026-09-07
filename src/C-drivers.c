@@ -27,9 +27,9 @@
 #define NIL
 #define GNU
 
-#define TEK
-#define XTEK
-#define X11
+#undef TEK
+#undef XTEK
+#undef X11
 /*
 #define XT
 #define PC
