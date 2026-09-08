@@ -1313,7 +1313,7 @@ FC := ifx
 FFLAGS := -O -coarray=single
 F90 := ifx
 F90FLAGS := -coarray=single
-LDFLAGS :=
+LDFLAGS := -coarray=single
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 all: $(PROG) $(CPROG) $(TPROG)
 	@test -f test_suite_log.txt || $(MAKE) test

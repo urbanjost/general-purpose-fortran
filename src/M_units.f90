@@ -2182,7 +2182,7 @@ end function is_even
 !!    Public Domain
 elemental pure function is_nan(x)
 !!use IEEE_EXCEPTIONS, only : ieee_support_nan ! is IEEE NaNs supported?
-use,intrinsic :: ieee_arithmetic, only : IEEE_IS_NAN       ! Determine if value is IEEE Not-a-Number.
+!use,intrinsic :: ieee_arithmetic, only : IEEE_IS_NAN       ! Determine if value is IEEE Not-a-Number.
 use, intrinsic :: ieee_arithmetic
 
 ! ident_36="@(#) M_units is_nan(3f) determine if value is IEEE Not-a-Number"
