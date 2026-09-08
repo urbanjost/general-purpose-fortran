@@ -10,7 +10,7 @@ categories = ["fortran", "POSIX"]
 keywords = ["fortran", "POSIX", "graphics", "strings", "unit tests"]
 homepage = "https://github.com/urbanjost/GPF"
 [build]
-   link = ["curl", "ncurses", "sqlite3", "readline", "X11"]
+   link = ["curl", "ncurses", "sqlite3", "readline"]
    auto-executables = true
    auto-tests = true
    auto-examples = true
