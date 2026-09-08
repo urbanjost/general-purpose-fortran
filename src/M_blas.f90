@@ -10189,9 +10189,9 @@ implicit none
 !     ..
 !  =====================================================================
 !     .. Intrinsic Functions ..
-      intrinsic abs,dble,dimag
+      intrinsic abs,dble,aimag
 !
-      dcabs1 = abs(dble(z)) + abs(dimag(z))
+      dcabs1 = abs(dble(z)) + abs(aimag(z))
 
 end function dcabs1
 !>
@@ -28990,7 +28990,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
       integer i,nincx
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dcmplx
+      intrinsic cmplx
 !     ..
       if (n.le.0 .or. incx.le.0) return
       if (incx.eq.1) then
@@ -28998,7 +28998,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !        code for increment equal to 1
 !
          do i = 1,n
-            zx(i) = dcmplx(da,0.0d0)*zx(i)
+            zx(i) = cmplx(da,0.0d0,kind=real64)*zx(i)
          enddo
       else
 !
@@ -29006,7 +29006,7 @@ pure complex(kind=real64) function zdotu(n,zx,incx,zy,incy)
 !
          nincx = n*incx
          do i = 1,nincx,incx
-            zx(i) = dcmplx(da,0.0d0)*zx(i)
+            zx(i) = cmplx(da,0.0d0,kind=real64)*zx(i)
          enddo
       endif
 
@@ -32592,7 +32592,7 @@ end subroutine zhemv
 !      EXTERNAL XERBLA
 !     ..
 !     .. Intrinsic Functions ..
-      intrinsic dble,dcmplx,conjg,max
+      intrinsic dble,cmplx,conjg,max
 !     ..
 !     .. Local Scalars ..
       complex(kind=real64) :: temp
@@ -32689,7 +32689,7 @@ end subroutine zhemv
                       c(j,j) = dble(c(j,j))
                   endif
                   do l = 1,k
-                      if (a(j,l).ne.dcmplx(zero)) then
+                      if (a(j,l).ne.cmplx(zero,kind=real64)) then
                           temp = alpha*conjg(a(j,l))
                           do i = 1,j - 1
                               c(i,j) = c(i,j) + temp*a(i,l)
@@ -32711,7 +32711,7 @@ end subroutine zhemv
                       c(j,j) = dble(c(j,j))
                   endif
                   do l = 1,k
-                      if (a(j,l).ne.dcmplx(zero)) then
+                      if (a(j,l).ne.cmplx(zero,kind=real64)) then
                           temp = alpha*conjg(a(j,l))
                           c(j,j) = dble(c(j,j)) + dble(temp*a(j,l))
                           do i = j + 1,n
