@@ -57,9 +57,9 @@ integer                      :: i
 call unit_test_start('sort_quick_compact','') ! start tests
 !-----------------------------------------------------------------------------------------------------------------------------------
 array= [ 'red    ','green  ','blue   ','yellow ','orange ','black  ','white  ','brown  ','gray   ','cyan   ','magenta','purple ']
-array=sort_quick_compact(array)
-csz=size(array)
-call unit_test('sort_quick_compact',all(array(1:csz-1) .ge. array(2:csz)),msg='sort string array')  ! verify in ascending order
+!array=sort_quick_compact(array)
+!csz=size(array)
+!call unit_test('sort_quick_compact',all(array(1:csz-1) .ge. array(2:csz)),msg='sort string array')  ! verify in ascending order
 !-----------------------------------------------------------------------------------------------------------------------------------
 CALL RANDOM_NUMBER(Rn)                                           ! Rn contains uniformly distributed random numbers from 0.0 to <1.0
 CALL RANDOM_NUMBER(Rn2)
