@@ -6004,7 +6004,7 @@ end SUBROUTINE system_sleep
 !-----------------------------------------------------------------------------------------------------------------------------------
 #if __COMPILER__ == __INTEL_COMP
 subroutine call_sleep(wait_seconds)
-__ADD_IFPORT
+use ifport
 integer(kind=c_int),intent(in)  :: wait_seconds
    CALL SLEEP(int(wait_seconds))
 end subroutine call_sleep
@@ -6038,7 +6038,7 @@ end subroutine call_sleep
 #if __COMPILER__ == __INTEL_COMP
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine call_usleep(microseconds)
-__ADD_IFPORT
+use ifport 
 integer(kind=c_int),intent(in)  :: microseconds
    CALL SLEEPQQ(int(microseconds))
 end subroutine call_usleep

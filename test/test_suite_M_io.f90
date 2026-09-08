@@ -14,6 +14,7 @@ use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
 character(len=:),allocatable :: tmsg
 
 !! setup
+   unit_test_level=5
 
    call test_dirname()
    call test_get_tmp()

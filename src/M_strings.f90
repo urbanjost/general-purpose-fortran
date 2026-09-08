@@ -5560,7 +5560,7 @@ integer                               :: icount
    allocate(character(len=(len(instr)+8*icount)) :: outstr_)
 !===================================================================================================================================
    ipos=1                                     ! where to put next character in output string OUTSTR_
-   lenin=len_trim(instr( 1:len(instr) ))      ! length of INSTR trimmed of trailing spaces
+   lenin=len_trim(instr)                      ! length of INSTR trimmed of trailing spaces
    lenout=len(outstr)                         ! number of characters output string OUTSTR_ can hold
    outstr_(:)=" "                             ! this SHOULD blank-fill string, a buggy machine required a loop to set all characters
 !===================================================================================================================================
@@ -5583,9 +5583,8 @@ integer                               :: icount
          end select EXPAND_TABS
       enddo SCAN_LINE
 !===================================================================================================================================
-      ipos=min(ipos,lenout)                   ! tabs or newline or return characters or last character might have gone too far
       if(present(lgth))then
-         lgth=len_trim(outstr_(:ipos))        ! trim trailing spaces
+         lgth=len_trim(outstr)        ! trim trailing spaces
       endif
       if(present(outstr))then
          outstr=outstr_
