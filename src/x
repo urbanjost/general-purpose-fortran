@@ -1,0 +1,7 @@
+	git rm -f     M_overload.f90
+	git rm -f     Makefile.flang
+	git rm -f     Makefile.gfortran
+	git rm -f     Makefile.ifx
+	git rm -f     Makefile.lfortran
+	git rm -f     Makefile.new
+	git add define_compiler.inc
