@@ -9,7 +9,7 @@ uint64_t djb2_64 = 5381;
 int c;
 
    fprintf(stdout,"*djb2 C*              hashing string=");
-   while (c = *str++){
+   while ( (c = *str++) ){
       djb2_64 = ((djb2_64 << 5) + djb2_64) + c; /* equivalent to djb2_64 * 33 + c */
       /*
       fprintf(stdout,"%c",c);
@@ -81,7 +81,7 @@ static unsigned long sdbm (unsigned char *str) {
    uint64_t hash = 0; /* unsigned long hash = 0; */
    int c;
 
-   while (c = *str++){
+   while ( (c = *str++) ){
       hash = c + (hash << 6) + (hash << 16) - hash;
    }
 
