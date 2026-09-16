@@ -6040,7 +6040,7 @@ end subroutine call_sleep
 subroutine call_usleep(microseconds)
 use ifport 
 integer(kind=c_int),intent(in)  :: microseconds
-   CALL SLEEPQQ(int(microseconds))
+   CALL SLEEPQQ(int(microseconds/1000))
 end subroutine call_usleep
 !-----------------------------------------------------------------------------------------------------------------------------------
 #else
